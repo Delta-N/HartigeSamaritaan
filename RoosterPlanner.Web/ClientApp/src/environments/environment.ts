@@ -6,13 +6,12 @@ export const environment = {
   baseUrl: 'https://localhost:54971/api',
   production: false,
   options: {
-    redirectUri: "http://localhost:4200/",
+    redirectUri: 'http://localhost:4200/',
     protectedResourceMap: [],
-    appId: "2eb090db-afb8-4deb-b7b4-03e649e15ca5",
-    authority: "https://login.microsoftonline.com/tfp/DeltanHackaton.onmicrosoft.com/B2C_1_susi/"
-  }
-}; 
-
+    appId: '2eb090db-afb8-4deb-b7b4-03e649e15ca5',
+    authority: 'https://login.microsoftonline.com/tfp/DeltanHackaton.onmicrosoft.com/B2C_1_susi/'
+  },
+};
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
