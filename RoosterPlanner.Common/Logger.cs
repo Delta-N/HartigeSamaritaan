@@ -10,7 +10,7 @@ namespace RoosterPlanner.Common
     {
         void SetSessionId(string sessionId);
 
-        void Error(string message, Exception ex);
+        void Error(Exception ex, string message);
 
         void LogException(Exception ex, IDictionary<string, string> properties = null);
 
@@ -50,7 +50,7 @@ namespace RoosterPlanner.Common
         }
 
         #region Logging Methods
-        public void Error(string message, Exception ex)
+        public void Error(Exception ex, string message)
         {
             Dictionary<string, string> properties = new Dictionary<string, string>();
             properties.Add("Message", message);

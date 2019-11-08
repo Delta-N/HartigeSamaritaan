@@ -4,7 +4,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [],
@@ -14,15 +16,18 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,
-    MatButtonModule
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule
   ],
   exports: [
     MatToolbarModule,
     FlexLayoutModule,
     MatSidenavModule,
     MatIconModule,
-    MatIconModule,
-    MatButtonModule
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule
   ]
 })
 export class MaterialModule {}

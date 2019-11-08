@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
@@ -48,7 +48,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Fout bij het ophalen van actieve projecten.");
+                logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -71,7 +71,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Fout bij het ophalen van actieve projecten.");
+                logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
                 taskResult.Error = ex;
             }
             return taskResult;
