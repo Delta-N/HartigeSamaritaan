@@ -38,11 +38,12 @@ namespace RoosterPlanner.Api
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(jwtOptions => {
-                jwtOptions.Authority = "https://login.microsoftonline.com/tfp/DeltanHackaton.onmicrosoft.com/B2C_1_susi/";
+                jwtOptions.Authority = $"https://login.microsoftonline.com/tfp/{Configuration["AzureAuthentication: TenantId"]}/{Configuration["AzureAuthentication:SignUpSignInPolicyId"]}/";
                 jwtOptions.TokenValidationParameters = new TokenValidationParameters {
                     ValidateIssuer = false,
                     ValidAudiences = new List<string> {
-                        "c832c923-37c6-4145-8c75-a023ecc7a98f"
+                        Configuration["TokenValidation:ClientIdWeb"],
+                        Configuration["TokenValidation:ClientIdHook"]
                     }
                 };
                 jwtOptions.Audience = "c832c923-37c6-4145-8c75-a023ecc7a98f";
@@ -107,9 +108,9 @@ namespace RoosterPlanner.Api
 
             app.UseCors(i => i.WithOrigins(Configuration.GetSection("AllowedHosts").Value).AllowAnyMethod().AllowAnyHeader());
 
+            app.UseHttpsRedirection();
             app.UseAuthentication();
 
-            app.UseHttpsRedirection();
             app.UseMvc();
         }
 

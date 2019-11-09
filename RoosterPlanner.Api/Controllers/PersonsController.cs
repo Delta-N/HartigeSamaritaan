@@ -16,7 +16,7 @@ namespace RoosterPlanner.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonController : ControllerBase
+    public class PersonsController : ControllerBase
     {
         private readonly IMapper mapper = null;
         private readonly IPersonService personService = null;
@@ -24,7 +24,7 @@ namespace RoosterPlanner.Api.Controllers
         private readonly ILogger logger = null;
 
         //Constructor
-        public PersonController(IMapper mapper, IPersonService personService, IProjectService projectService, ILogger logger)
+        public PersonsController(IMapper mapper, IPersonService personService, IProjectService projectService, ILogger logger)
         {
             this.mapper = mapper;
             this.personService = personService;
@@ -61,7 +61,6 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-
                 TaskListResult<Person> result = await this.personService.GetB2cMembers();
                 if (result.Succeeded)
                 {

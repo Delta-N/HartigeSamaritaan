@@ -72,7 +72,7 @@ namespace RoosterPlanner.Service
                 string userData = JsonConvert.SerializeObject(b2cUser, JsonSerializerSettingsExtensions.DefaultSettings());
 
                 string resourcePath = $"{this.azureB2cConfig.ResourcePathUsers}?api-version={this.azureB2cConfig.AzureADApiVersion}";
-                Uri requestUri = new Uri(this.azureB2cConfig.AzureADBaseUrl).AddPath(this.azureB2cConfig.AzureTenantId, resourcePath);
+                Uri requestUri = new Uri(this.azureB2cConfig.AzureADBaseUrl).AddPath(this.azureB2cConfig.TenantId, resourcePath);
 
                 HttpResponseMessage response = await SendRequestAsync(HttpMethod.Post, requestUri, accessToken, userData);
                 result.StatusCode = response.StatusCode;
@@ -114,7 +114,7 @@ namespace RoosterPlanner.Service
                     return new TaskResult<AppUser> { StatusCode = HttpStatusCode.Unauthorized, Message = "Failed to get authentication token." };
 
                 UriBuilder builder = new UriBuilder(this.azureB2cConfig.AzureADBaseUrl);
-                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.AzureTenantId, this.azureB2cConfig.ResourcePathUsers, userId.ToString());
+                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.TenantId, this.azureB2cConfig.ResourcePathUsers, userId.ToString());
                 builder.Query = $"api-version={this.azureB2cConfig.AzureADApiVersion}";
 
                 HttpResponseMessage responseMessage = await SendRequestAsync(HttpMethod.Get, builder.Uri, accessToken, null);
@@ -169,7 +169,7 @@ namespace RoosterPlanner.Service
                     return new TaskResult<List<AppUser>> { StatusCode = HttpStatusCode.Unauthorized, Message = "Failed to get authentication token.", Data = new List<AppUser>() };
 
                 UriBuilder builder = new UriBuilder(this.azureB2cConfig.AzureADBaseUrl);
-                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.AzureTenantId, this.azureB2cConfig.ResourcePathUsers);
+                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.TenantId, this.azureB2cConfig.ResourcePathUsers);
                 builder.Query = $"api-version={this.azureB2cConfig.AzureADApiVersion}&$top={blockSize}";
 
                 HttpResponseMessage responseMessage = await SendRequestAsync(HttpMethod.Get, builder.Uri, accessToken, null);
@@ -254,7 +254,7 @@ namespace RoosterPlanner.Service
                     return new TaskResult<List<AppUser>> { StatusCode = HttpStatusCode.Unauthorized, Message = "Failed to get authentication token.", Data = new List<AppUser>() };
 
                 UriBuilder builder = new UriBuilder(this.azureB2cConfig.AzureADBaseUrl);
-                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.AzureTenantId, this.azureB2cConfig.ResourcePathUsers);
+                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.TenantId, this.azureB2cConfig.ResourcePathUsers);
                 builder.Query = $"api-version={this.azureB2cConfig.AzureADApiVersion}&$top={blockSize}";
 
                 HttpResponseMessage responseMessage = await SendRequestAsync(HttpMethod.Get, builder.Uri, accessToken, null);
@@ -347,7 +347,7 @@ namespace RoosterPlanner.Service
                     return new TaskResult<AppUser> { StatusCode = HttpStatusCode.Unauthorized, Message = "Failed to get authentication token." };
 
                 UriBuilder builder = new UriBuilder(this.azureB2cConfig.AzureADBaseUrl);
-                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.AzureTenantId, this.azureB2cConfig.ResourcePathUsers, user.Id.ToString());
+                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.TenantId, this.azureB2cConfig.ResourcePathUsers, user.Id.ToString());
                 builder.Query = $"api-version={this.azureB2cConfig.AzureADApiVersion}";
 
                 JObject updateData = new JObject();
@@ -529,12 +529,12 @@ namespace RoosterPlanner.Service
             string token = null;
             Dictionary<string, string> loginValues = new Dictionary<string, string> {
                     { "grant_type", "client_credentials" },
-                    { "client_id", azureB2cConfig.AzureADApplicationId },
-                    { "client_secret", azureB2cConfig.AzureADClientSecret },
+                    { "client_id", azureB2cConfig.ClientId },
+                    { "client_secret", azureB2cConfig.ClientSecret },
                     { "scope", azureB2cConfig.GraphApiScopes }
                 };
 
-            string azureADUrl = String.Format(azureB2cConfig.AzureADTokenUrl, azureB2cConfig.AzureTenantId);
+            string azureADUrl = String.Format(azureB2cConfig.AzureADTokenUrl, azureB2cConfig.TenantId);
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, azureADUrl)
             {
                 Content = new FormUrlEncodedContent(loginValues)
@@ -568,7 +568,7 @@ namespace RoosterPlanner.Service
             if (azureB2cConfig == null)
                 throw new ArgumentNullException("azureB2cConfig");
 
-            string authority = $"https://login.microsoftonline.com/{azureB2cConfig.AzureTenantId}/oauth2/v2.0/token";
+            string authority = $"https://login.microsoftonline.com/{azureB2cConfig.TenantId}/oauth2/v2.0/token";
             string[] scopes = { "https://graph.microsoft.com/.default" };
 
             IPublicClientApplication app;
@@ -589,7 +589,7 @@ namespace RoosterPlanner.Service
             if (azureB2cConfig == null)
                 throw new ArgumentNullException("azureB2cConfig");
 
-            string authority = $"https://login.microsoftonline.com/{azureB2cConfig.AzureTenantId}/oauth2/v2.0/token";
+            string authority = $"https://login.microsoftonline.com/{azureB2cConfig.TenantId}/oauth2/v2.0/token";
             string[] scopes = { "https://graph.microsoft.com/.default" };
 
             IConfidentialClientApplication app;
@@ -601,7 +601,7 @@ namespace RoosterPlanner.Service
             return await app.AcquireTokenOnBehalfOf(scopes, new UserAssertion(userToken)).ExecuteAsync();
         }
 
-       private async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method, Uri apiUrl, string accessToken, string data)
+        private async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method, Uri apiUrl, string accessToken, string data)
         {
             HttpResponseMessage response = null;
 
