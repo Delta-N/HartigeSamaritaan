@@ -18,6 +18,10 @@ namespace RoosterPlanner.Service
 
         Task<TaskResult<Project>> GetProjectDetails(Guid id);
 
+        TaskResult<Project> CreateProject(Project project);
+
+        TaskResult<Project> UpdateProject(Project project)
+
         TaskResult<Project> CloseProject(Project project);
     }
 
@@ -94,6 +98,46 @@ namespace RoosterPlanner.Service
             {
                 taskResult.Data = await this.projectRepository.GetProjectDetails(id);
                 taskResult.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                taskResult.Error = ex;
+            }
+            return taskResult;
+        }
+
+        public TaskResult<Project> CreateProject(Project project)
+        {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
+            TaskResult<Project> taskResult = new TaskResult<Project>();
+
+            try
+            {
+                taskResult.Data = this.projectRepository.Add(project);
+                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                taskResult.Error = ex;
+            }
+            return taskResult;
+        }
+
+        public TaskResult<Project> UpdateProject(Project project)
+        {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
+            TaskResult<Project> taskResult = new TaskResult<Project>();
+
+            try
+            {
+                taskResult.Data = this.projectRepository.Update(project);
+                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
             }
             catch (Exception ex)
             {

@@ -89,5 +89,41 @@ namespace RoosterPlanner.Api.Controllers
             }
             return NoContent();
         }
+
+        [HttpPost()]
+        public ActionResult Save(ProjectDetailsViewModel projectDetails)
+        {
+            if (projectDetails == null)
+                return BadRequest("Er is geen geldig project ontvangen.");
+
+            if (String.IsNullOrEmpty(projectDetails.Name))
+                return BadRequest("De projectnaam mag niet leeg zijn.");
+
+            TaskResult<Project> result = new TaskResult<Project>();
+
+            try
+            {
+                Project project = mapper.Map<Project>(projectDetails);
+                if (project != null && project.Id == Guid.Empty)
+                {
+                    result = this.projectService.CreateProject(project);
+                }
+                else if (project.Id != Guid.Empty)
+                {
+                    result = this.projectService.UpdateProject(project);
+                }
+
+                if (result.Succeeded)
+                    return Ok(this.mapper.Map<ProjectDetailsViewModel>(result.Data));
+                else
+                    return UnprocessableEntity(projectDetails);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "ProjectController: Error occured.");
+                this.Response.Headers.Add("message", ex.Message);
+            }
+            return NoContent();
+        }
     }
 }
