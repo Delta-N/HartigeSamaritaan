@@ -12,6 +12,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [],
@@ -28,7 +29,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatFormFieldModule,
     MatOptionModule,
     MatSelectModule,
-    MatMenuModule
+    MatMenuModule,
+    MatListModule
   ],
   exports: [
     MatToolbarModule,
@@ -42,7 +44,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatFormFieldModule,
     MatOptionModule,
     MatSelectModule,
-    MatMenuModule
+    MatMenuModule,
+    MatListModule
   ]
 })
 export class MaterialModule {}

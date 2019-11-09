@@ -52,6 +52,8 @@ namespace RoosterPlanner.Api.Controllers
             return NoContent();
         }
 
+        //[HttpGet("user/{id}")]
+
         [HttpGet()]
         public async Task<ActionResult<List<ProjectViewModel>>> Search(string name,
             string city,

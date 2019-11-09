@@ -24,7 +24,7 @@ export class ProjectService {
     return this.apiService.get(`${this.controllerName}/${projectId}`);
   }
 
-  public getAllProjects(): Observable<HttpResponse<Array<Project>>> {
+  public getAllProjects(): Observable<Array<Project>> {
     return this.apiService.get(`${this.controllerName}?name=&city=`);
   }
 }

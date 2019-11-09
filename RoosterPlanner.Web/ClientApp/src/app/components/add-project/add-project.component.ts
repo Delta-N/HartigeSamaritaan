@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from '../../models/project';
 import { ProjectService } from '../../core/project/project.service';
 import { Router } from '@angular/router';
+import { Project } from '../../models/project';
 
 @Component({
-  selector: 'app-project-overview',
-  templateUrl: './project-overview.component.html',
-  styleUrls: ['./project-overview.component.less']
+  selector: 'app-add-project',
+  templateUrl: './add-project.component.html',
+  styleUrls: ['./add-project.component.less']
 })
-export class ProjectOverviewComponent implements OnInit {
+export class AddProjectComponent implements OnInit {
   projects = new Array<Project>();
   constructor(private projectService: ProjectService, private router: Router) {}
 
@@ -16,8 +16,8 @@ export class ProjectOverviewComponent implements OnInit {
     this.getProjects();
   }
 
-  addProject() {
-    this.router.navigateByUrl('project/add');
+  addUserToProject() {
+
   }
 
   private getProjects() {
