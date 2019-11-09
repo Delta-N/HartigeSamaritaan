@@ -8,8 +8,13 @@ export const environment = {
   options: {
     redirectUri: 'http://localhost:4200/',
     protectedResourceMap: [],
-    appId: '2eb090db-afb8-4deb-b7b4-03e649e15ca5',
-    authority: 'https://login.microsoftonline.com/tfp/DeltanHackaton.onmicrosoft.com/B2C_1_susi/'
+    appId: 'c832c923-37c6-4145-8c75-a023ecc7a98f',
+    authority: 'https://login.microsoftonline.com/tfp/DeltanHackaton.onmicrosoft.com/B2C_1_susi/',
+    passwordResetPolicy: 'B2C_1_reset_pwd',
+    consentScopes: [
+      'openid',
+      'https://deltanhackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_edit'
+    ],
   },
 };
 /*
