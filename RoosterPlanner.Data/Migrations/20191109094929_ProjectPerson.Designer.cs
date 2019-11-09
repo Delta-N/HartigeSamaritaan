@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoosterPlanner.Data.Context;
 
 namespace RoosterPlanner.Data.Migrations
 {
     [DbContext(typeof(RoosterPlannerContext))]
-    partial class RoosterPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20191109094929_ProjectPerson")]
+    partial class ProjectPerson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,26 +50,26 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("58a2bb8c-5e0e-4b24-8cec-adcd1b5654de"),
+                            Id = new Guid("e1e4a380-029b-4950-a1e9-9c5e936c5ccc"),
                             Code = "KEUKEN",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5168),
+                            LastEditDate = new DateTime(2019, 11, 9, 9, 49, 28, 878, DateTimeKind.Utc).AddTicks(7963),
                             Name = "Keuken"
                         },
                         new
                         {
-                            Id = new Guid("9c4835cf-221a-42c5-9c7c-82dc83265aa8"),
+                            Id = new Guid("a00f6de4-dcda-4ac9-8e75-086fd0d21097"),
                             Code = "BEDIENING",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5172),
+                            LastEditDate = new DateTime(2019, 11, 9, 9, 49, 28, 878, DateTimeKind.Utc).AddTicks(7967),
                             Name = "Bediening"
                         },
                         new
                         {
-                            Id = new Guid("aa5b1f28-672b-4dee-a73f-d6e4b4e31937"),
+                            Id = new Guid("b6a0b994-4a33-40c5-b113-84b9aa748141"),
                             Code = "LOGISTIEK",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5173),
+                            LastEditDate = new DateTime(2019, 11, 9, 9, 49, 28, 878, DateTimeKind.Utc).AddTicks(7977),
                             Name = "Logistiek"
                         });
                 });
@@ -150,6 +152,9 @@ namespace RoosterPlanner.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Oid")
+                        .IsUnique();
+
                     b.ToTable("Persons");
 
                     b.HasData(
@@ -157,7 +162,7 @@ namespace RoosterPlanner.Data.Migrations
                         {
                             Id = new Guid("25e5b0e6-82ef-45fe-bbde-ef76021ec531"),
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5376),
+                            LastEditDate = new DateTime(2019, 11, 9, 9, 49, 28, 878, DateTimeKind.Utc).AddTicks(8249),
                             Name = "Grace Hopper",
                             Oid = new Guid("b691f9f7-c404-4d52-a34f-c90702ca7138")
                         },
@@ -165,7 +170,7 @@ namespace RoosterPlanner.Data.Migrations
                         {
                             Id = new Guid("7f66fc12-b1c0-481f-851b-3cc1f65fd20e"),
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5389),
+                            LastEditDate = new DateTime(2019, 11, 9, 9, 49, 28, 878, DateTimeKind.Utc).AddTicks(8264),
                             Name = "John Wick",
                             Oid = new Guid("e2a94901-6942-4cfb-83fa-60343c0de219")
                         });
@@ -213,6 +218,33 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("RoosterPlanner.Models.ProjectPerson", b =>
+                {
+                    b.Property<Guid>("ProjectId");
+
+                    b.Property<Guid>("PersonId");
+
+                    b.Property<Guid>("Id");
+
+                    b.Property<string>("LastEditBy")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.HasKey("ProjectId", "PersonId");
+
+                    b.HasAlternateKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("ProjectPerson");
+                });
+
             modelBuilder.Entity("RoosterPlanner.Models.ProjectTask", b =>
                 {
                     b.Property<Guid>("ProjectId");
@@ -244,9 +276,6 @@ namespace RoosterPlanner.Data.Migrations
                 {
                     b.Property<Guid>("Id");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("date");
-
                     b.Property<TimeSpan>("EndTime");
 
                     b.Property<string>("LastEditBy")
@@ -261,7 +290,7 @@ namespace RoosterPlanner.Data.Migrations
 
                     b.Property<TimeSpan>("StartTime");
 
-                    b.Property<Guid>("TaskId");
+                    b.Property<Guid?>("TaskId");
 
                     b.HasKey("Id");
 
@@ -331,6 +360,19 @@ namespace RoosterPlanner.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("RoosterPlanner.Models.ProjectPerson", b =>
+                {
+                    b.HasOne("RoosterPlanner.Models.Person", "Person")
+                        .WithMany("ProjectsPersons")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RoosterPlanner.Models.Project", "Project")
+                        .WithMany("ProjectPersons")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("RoosterPlanner.Models.ProjectTask", b =>
                 {
                     b.HasOne("RoosterPlanner.Models.Project", "Project")
@@ -346,10 +388,9 @@ namespace RoosterPlanner.Data.Migrations
 
             modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
                 {
-                    b.HasOne("RoosterPlanner.Models.Task", "Task")
+                    b.HasOne("RoosterPlanner.Models.Task")
                         .WithMany("Shifts")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TaskId");
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
