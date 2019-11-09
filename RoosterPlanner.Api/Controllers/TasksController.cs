@@ -23,6 +23,7 @@ namespace RoosterPlanner.Api.Controllers
         //Constructor
         public TasksController(IMapper mapper, ITaskService taskService, ILogger logger)
         {
+            this.mapper = mapper;
             this.taskService = taskService;
             this.logger = logger;
         }
@@ -38,6 +39,7 @@ namespace RoosterPlanner.Api.Controllers
             return UnprocessableEntity();
         }
 
+        [HttpDelete()]
         public async Task<ActionResult> DeleteTask(Guid id)
         {
             if (id != Guid.Empty)
