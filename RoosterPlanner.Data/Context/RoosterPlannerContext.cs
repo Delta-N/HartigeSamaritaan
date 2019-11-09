@@ -20,6 +20,8 @@ namespace RoosterPlanner.Data.Context
 
         public DbSet<Participation> Participations { get; set; }
 
+        public DbSet<Match> Matches { get; set; }
+
         //Constructor
         public RoosterPlannerContext(DbContextOptions<RoosterPlannerContext> options) : base(options)
         {
