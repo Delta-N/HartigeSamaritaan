@@ -10,8 +10,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatOptionModule } from '@angular/material/core';
-import {MatSelectModule} from '@angular/material/select';
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [],
@@ -27,7 +27,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatStepperModule,
     MatFormFieldModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatMenuModule
   ],
   exports: [
     MatToolbarModule,
@@ -40,7 +41,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatStepperModule,
     MatFormFieldModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatMenuModule
   ]
 })
-export class MaterialModule { }
+export class MaterialModule {}

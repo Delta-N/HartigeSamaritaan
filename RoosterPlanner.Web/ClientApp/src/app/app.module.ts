@@ -1,12 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import { LogLevel } from 'msal';
-
 import { environment } from '../environments/environment';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -14,7 +11,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './modules/material/material.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AdminComponent } from './pages/admin/admin.component';
-import { TaskComponent } from './pages/task/task.component';
 import { NgxTuiCalendarModule } from 'ngx-tui-calendar';
 import { QuestionsComponent } from './components/questions/questions.component';
 import { ProjectOverviewComponent } from './components/project-overview/project-overview.component';
@@ -24,7 +20,6 @@ import { ProjectOverviewComponent } from './components/project-overview/project-
     AppComponent,
     HomeComponent,
     AdminComponent,
-    TaskComponent,
     QuestionsComponent,
     ProjectOverviewComponent
   ],
@@ -48,14 +43,15 @@ import { ProjectOverviewComponent } from './components/project-overview/project-
     BrowserAnimationsModule,
     ReactiveFormsModule
   ],
-  entryComponents: [ ],
+  entryComponents: [],
   exports: [],
   providers: [
     {
-    provide: HTTP_INTERCEPTORS,
-    useClass: MsalInterceptor,
-    multi: true
-  }],
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
