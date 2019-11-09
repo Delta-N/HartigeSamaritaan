@@ -42,10 +42,10 @@ namespace RoosterPlanner.Api
                 jwtOptions.TokenValidationParameters = new TokenValidationParameters {
                     ValidateIssuer = false,
                     ValidAudiences = new List<string> {
-                        "2eb090db-afb8-4deb-b7b4-03e649e15ca5"
+                        "c832c923-37c6-4145-8c75-a023ecc7a98f"
                     }
                 };
-                jwtOptions.Audience = "2eb090db-afb8-4deb-b7b4-03e649e15ca5";
+                jwtOptions.Audience = "c832c923-37c6-4145-8c75-a023ecc7a98f";
                 jwtOptions.Events = new JwtBearerEvents {
                     OnAuthenticationFailed = AuthenticationFailedAsync
                 };

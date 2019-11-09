@@ -8,16 +8,16 @@ import { ProjectService } from 'src/app/core/project/project.service';
   styleUrls: ['./project.component.less']
 })
 export class ProjectComponent implements OnInit {
-  projects: Project[];
+  projects: any;
 
   constructor(private projectService: ProjectService) { }
 
   ngOnInit() {
     this.projectService.getAllProjects().subscribe((response) => {
       console.log(response);
-      if (response && response.ok) {
-        this.projects = response.body;
-        console.log(this.projects)
+      if (response) {
+        this.projects = response;
+        console.log(this.projects);
       }
     });
   }
