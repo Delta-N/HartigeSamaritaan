@@ -34,7 +34,7 @@ namespace RoosterPlanner.Api.Controllers
             TaskListResult<RoosterPlanner.Models.Task> taskListResult = await this.taskService.GetActiveTasksAsync();
             if (taskListResult.Succeeded)
             {
-                return taskListResult.Data.Select(t => mapper.Map<TaskViewModel>(t)).ToList();
+                return Ok(taskListResult.Data.Select(t => mapper.Map<TaskViewModel>(t)).ToList());
             }
             return UnprocessableEntity();
         }

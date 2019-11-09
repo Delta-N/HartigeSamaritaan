@@ -24,7 +24,7 @@ export class TaskService {
     return this.apiService.get(`${this.controllerName}/${taskId}`);
   }
 
-  public getAll(): Observable<HttpResponse<Array<Task>>> {
-    return this.apiService.get(`${this.controllerName}`);
+  public getAll(): Observable<Array<Task>> {
+    return this.apiService.get(`${this.controllerName}/active`);
   }
 }
