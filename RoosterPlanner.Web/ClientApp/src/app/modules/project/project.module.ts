@@ -4,9 +4,10 @@ import { MaterialModule } from '../material/material.module';
 import { ProjectComponent } from 'src/app/pages/project/project.component';
 import { ProjectRoutingModule } from './project-routing.module';
 import { AddProjectComponent } from '../../components/add-project/add-project.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AddProjectComponent, ProjectComponent],
-  imports: [CommonModule, MaterialModule, ProjectRoutingModule]
+  imports: [CommonModule, FormsModule, MaterialModule, ProjectRoutingModule]
 })
 export class ProjectModule {}

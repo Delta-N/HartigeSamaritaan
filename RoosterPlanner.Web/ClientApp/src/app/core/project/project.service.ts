@@ -24,6 +24,10 @@ export class ProjectService {
     return this.apiService.get(`${this.controllerName}/${projectId}`);
   }
 
+  public addPersonToProject(id: string, personId: string): Observable<any> {
+    return this.apiService.post(`${this.controllerName}/${id}/addperson/${personId}`, {});
+  }
+
   public getAllProjects(): Observable<Array<Project>> {
     return this.apiService.get(`${this.controllerName}?name=&city=`);
   }
