@@ -36,52 +36,52 @@ namespace RoosterPlanner.Data.Context
             modelBuilder.Entity<ProjectTask>()
                 .HasKey(pt => new { pt.ProjectId, pt.TaskId });
             modelBuilder.Entity<ProjectTask>()
-                .HasOne<Project>(pt => pt.Project)
+                .HasOne(pt => pt.Project)
                 .WithMany(p => p.ProjectTasks)
                 .HasForeignKey(pt => pt.ProjectId);
             modelBuilder.Entity<ProjectTask>()
-                .HasOne<Task>(pt => pt.Task)
+                .HasOne(pt => pt.Task)
                 .WithMany(t => t.TaskProjects)
                 .HasForeignKey(pt => pt.TaskId);
 
             modelBuilder.Entity<Project>(pro => {
-                pro.HasMany<ProjectTask>(pt => pt.ProjectTasks).WithOne(p => p.Project);
+                pro.HasMany(pt => pt.ProjectTasks).WithOne(p => p.Project);
             });
 
             modelBuilder.Entity<ProjectPerson>()
                 .HasKey(pt => new { pt.ProjectId, pt.PersonId });
             modelBuilder.Entity<ProjectPerson>()
-                .HasOne<Project>(pt => pt.Project)
+                .HasOne(pt => pt.Project)
                 .WithMany(p => p.ProjectPersons)
                 .HasForeignKey(pt => pt.ProjectId);
             modelBuilder.Entity<ProjectPerson>()
-                .HasOne<Person>(pt => pt.Person)
+                .HasOne(pt => pt.Person)
                 .WithMany(t => t.ProjectsPersons)
                 .HasForeignKey(pt => pt.PersonId);
 
             modelBuilder.Entity<Project>(pro => {
-                pro.HasMany<ProjectPerson>(pp => pp.ProjectPersons).WithOne(p => p.Project);
+                pro.HasMany(pp => pp.ProjectPersons).WithOne(p => p.Project);
             });
 
             modelBuilder.Entity<Person>().HasIndex(p => p.Oid).IsUnique();
 
             modelBuilder.Entity<Task>(tsk => {
-                tsk.HasMany<ProjectTask>(t => t.TaskProjects).WithOne(t => t.Task);
+                tsk.HasMany(t => t.TaskProjects).WithOne(t => t.Task);
             });
 
             modelBuilder.Entity<Participation>(par => {
-                par.HasMany<Match>(m => m.Matches).WithOne(p => p.Participation);
+                par.HasMany(m => m.Matches).WithOne(p => p.Participation);
             });
 
             modelBuilder.Entity<Shift>(tsk => {
-                tsk.HasMany<Match>(m => m.Matches).WithOne(t => t.Shift);
+                tsk.HasMany(m => m.Matches).WithOne(t => t.Shift);
             });
 
-            CategorySeed categorySeed = new CategorySeed(modelBuilder);
-            List<Category> categorieList = categorySeed.Seed();
+            var categorySeed = new CategorySeed(modelBuilder);
+            var categorieList = categorySeed.Seed();
 
-            PersonSeed personSeed = new PersonSeed(modelBuilder);
-            List<Person> personList = personSeed.Seed();
+            var personSeed = new PersonSeed(modelBuilder);
+            var personList = personSeed.Seed();
         }
     }
 }
