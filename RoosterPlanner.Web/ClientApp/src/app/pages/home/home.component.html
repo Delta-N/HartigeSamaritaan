@@ -1,2 +1,6 @@
-<!-- <ngx-tui-calendar #calendarView id="example-calendar"></ngx-tui-calendar> -->
-<app-questions></app-questions>
+<ngx-tui-calendar *ngIf="!showNewUser" #calendarView [schedules]="schedules" (scheduleClicked)="onSchedule($event)"></ngx-tui-calendar>
+<button (click)="setView('day')">day</button>
+<button (click)="setView('week')">week</button>
+<button (click)="setView('month')">month</button>
+
+<app-questions *ngIf="showNewUser"></app-questions>
