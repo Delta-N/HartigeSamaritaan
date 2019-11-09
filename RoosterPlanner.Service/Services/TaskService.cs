@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
@@ -20,7 +18,6 @@ namespace RoosterPlanner.Service
     {
         #region Fields
         private readonly IUnitOfWork unitOfWork = null;
-        private readonly ITaskRepository taskRepository = null;
         private readonly ILogger logger = null;
         #endregion
 
@@ -28,17 +25,16 @@ namespace RoosterPlanner.Service
         public TaskService(IUnitOfWork unitOfWork, ILogger logger)
         {
             this.unitOfWork = unitOfWork;
-            this.taskRepository = unitOfWork.TaskRepository;
             this.logger = logger;
         }
 
         public async Task<TaskListResult<Models.Task>> GetActiveTasksAsync()
         {
-            TaskListResult<Models.Task> taskResult = TaskListResult<Models.Task>.CreateDefault();
+            var taskResult = TaskListResult<Models.Task>.CreateDefault();
 
             try
             {
-                taskResult.Data = await this.taskRepository.GetActiveTasksAsync();
+                taskResult.Data = await unitOfWork.TaskRepository.GetActiveTasksAsync();
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)
@@ -51,14 +47,14 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult> SetTaskDeleteAsync(Guid id)
         {
-            TaskResult result = new TaskResult { StatusCode = HttpStatusCode.NoContent };
+            var result = new TaskResult { StatusCode = HttpStatusCode.NoContent };
             if (id != Guid.Empty)
             {
-                Models.Task task = await this.taskRepository.FindAsync(id);
+                var task = await unitOfWork.TaskRepository.FindAsync(id);
                 task.DeletedDateTime = DateTime.UtcNow;
-                this.taskRepository.Update(task);
+                unitOfWork.TaskRepository.Update(task);
 
-                result.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+                result.Succeeded = unitOfWork.SaveChanges() == 1;
             }
             return result;
         }

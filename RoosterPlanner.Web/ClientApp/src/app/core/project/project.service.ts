@@ -12,7 +12,7 @@ export class ProjectService {
 
   constructor(private apiService: ApiService) {}
 
-  public createOrUpdateProject(project: Project): Observable<HttpResponse<Project>> {
+  public createOrUpdateProject(project: Project): Observable<Project> {
     return this.apiService.post(`${this.controllerName}`, project);
   }
 
@@ -24,7 +24,11 @@ export class ProjectService {
     return this.apiService.get(`${this.controllerName}/${projectId}`);
   }
 
-  public getAllProjects(): Observable<HttpResponse<Array<Project>>> {
+  public addPersonToProject(id: string, personId: string): Observable<any> {
+    return this.apiService.post(`${this.controllerName}/${id}/addperson/${personId}`, {});
+  }
+
+  public getAllProjects(): Observable<Array<Project>> {
     return this.apiService.get(`${this.controllerName}?name=&city=`);
   }
 }

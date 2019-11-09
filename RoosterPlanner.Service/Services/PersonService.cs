@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.DataModels.B2C;
@@ -53,9 +52,9 @@ namespace RoosterPlanner.Service
         /// Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskListResult<Project>> UpdatePersonName(Guid oid, string name)
+        public async Task<TaskResult<Project>> UpdatePersonName(Guid oid, string name)
         {
-            TaskListResult<Project> taskResult = TaskListResult<Project>.CreateDefault();
+            var taskResult = new TaskResult<Project>();
 
             try
             {
@@ -67,7 +66,8 @@ namespace RoosterPlanner.Service
                 }
 
                 person.Name = name;
-                
+
+                taskResult.Succeeded = (await unitOfWork.SaveChangesAsync() == 1);
                 await unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)

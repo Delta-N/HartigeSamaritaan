@@ -23,6 +23,8 @@ namespace RoosterPlanner.Data.Common
 
         ICategoryRepository CategoryRepository { get; }
 
+        IMatchRepository MatchRepository { get; }
+
         /// <summary>
         /// Saves the changes.
         /// </summary>
@@ -55,6 +57,8 @@ namespace RoosterPlanner.Data.Common
         private ITaskRepository taskRepository;
         private ICategoryRepository categoryRepository;
 
+        private IMatchRepository matchRepository;
+
         private IShiftRepository shiftRepository;
         #endregion
 
@@ -78,6 +82,17 @@ namespace RoosterPlanner.Data.Common
                 return this.shiftRepository;
             }
         }
+
+        public IMatchRepository MatchRepository
+        {
+            get
+            {
+                if (matchRepository == null)
+                    this.matchRepository = new MatchRepository(this.DataContext, null);
+                return this.matchRepository;
+            }
+        }
+
 
         public IProjectPersonRepository ProjectPersonRepository
         {

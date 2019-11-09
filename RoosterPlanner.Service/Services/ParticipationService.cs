@@ -11,15 +11,13 @@ namespace RoosterPlanner.Service
 {
     public interface IParticipationService
     {
-        Task<TaskListResult<Project>> AddParticipationAsync(Guid Oid, Guid projectId);
+        Task<TaskResult<Participation>> AddParticipationAsync(Guid Oid, Guid projectId);
     }
 
     public class ParticipationService : IParticipationService
     {
         #region Fields
         private readonly IUnitOfWork unitOfWork = null;
-        private readonly IParticipationRepository participationRepository = null;
-        private readonly IPersonRepository personRepository = null;
         private readonly ILogger logger = null;
         #endregion
 
@@ -29,7 +27,6 @@ namespace RoosterPlanner.Service
         public ParticipationService(IUnitOfWork unitOfWork, ILogger logger)
         {
             this.unitOfWork = unitOfWork;
-            this.participationRepository = unitOfWork.ParticipationRepository;
             this.logger = logger;
         }
 
@@ -37,9 +34,9 @@ namespace RoosterPlanner.Service
         /// Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskListResult<Project>> AddParticipationAsync(Guid Oid, Guid projectId)
+        public async Task<TaskResult<Participation>> AddParticipationAsync(Guid Oid, Guid projectId)
         {
-            TaskListResult<Project> taskResult = TaskListResult<Project>.CreateDefault();
+            var taskResult = new TaskResult<Participation>();
             
             try
             {
@@ -60,8 +57,9 @@ namespace RoosterPlanner.Service
                     ProjectId = projectId,
                     PersonId = person.Id
                 };
-                participationRepository.Add(participation);
-                await unitOfWork.SaveChangesAsync();
+
+                taskResult.Data = unitOfWork.ParticipationRepository.Add(participation);
+                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
