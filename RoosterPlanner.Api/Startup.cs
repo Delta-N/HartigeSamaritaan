@@ -74,7 +74,7 @@ namespace RoosterPlanner.Api
                 options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
             });
 
-            services.AddAutoMapper(typeof(AutoMapperProfiles.ProjectProfile));
+            services.AddAutoMapper(typeof(AutoMapperProfiles.AutoMapperProfile));
 
             services.Configure<AzureAuthenticationConfig>(Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
 

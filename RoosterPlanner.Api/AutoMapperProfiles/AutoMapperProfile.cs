@@ -3,9 +3,9 @@ using RoosterPlanner.Api.Models;
 
 namespace RoosterPlanner.Api.AutoMapperProfiles
 {
-    public class ProjectProfile : Profile
+    public class AutoMapperProfile : Profile
     {
-        public ProjectProfile()
+        public AutoMapperProfile()
         {
             CreateMap<RoosterPlanner.Models.Project, ProjectViewModel>();
 
