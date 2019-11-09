@@ -55,6 +55,11 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("triggerupdate/{oid}")]
         public async Task<ActionResult> TriggerUpdate(Guid oid)
         {
+            if (oid == Guid.Empty)
+            {
+                return BadRequest("No valid id.");
+            }
+
             var user = await AzureB2CService.GetUserAsync(oid);
 
             await PersonService.UpdatePersonName(oid, user.Data.DisplayName);
