@@ -12,19 +12,19 @@ export class TaskService {
 
   constructor(private apiService: ApiService) {}
 
-  public createOrUpdateTask(task: Task): Observable<HttpResponse<Task>> {
+  public createOrUpdate(task: Task): Observable<HttpResponse<Task>> {
     return this.apiService.post(`${this.controllerName}`, task);
   }
 
-  public deleteTask(taskId: string): Observable<HttpResponse<Task>> {
+  public delete(taskId: string): Observable<HttpResponse<Task>> {
     return this.apiService.delete(`${this.controllerName}/${taskId}`);
   }
 
-  public getTask(taskId: string): Observable<HttpResponse<Task>> {
+  public get(taskId: string): Observable<HttpResponse<Task>> {
     return this.apiService.get(`${this.controllerName}/${taskId}`);
   }
 
-  public getAllTasks(): Observable<HttpResponse<Array<Task>>> {
-    return this.apiService.get(`${this.controllerName}/all`);
+  public getAll(): Observable<HttpResponse<Array<Task>>> {
+    return this.apiService.get(`${this.controllerName}`);
   }
 }

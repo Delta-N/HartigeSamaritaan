@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpEvent, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,6 @@ export class ApiService {
   private onErrorResponse(e: HttpErrorResponse): Observable<never> {
     console.log('error has occured');
     console.log(e);
-    return Observable.throw(e);
+    return throwError(e);
   }
 }
