@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
-using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {
@@ -24,7 +23,7 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<List<Models.Task>> GetActiveTasksAsync()
         {
-            return this.EntitySet.Where(t => !t.DeletedDateTime.HasValue || t.DeletedDateTime >= DateTime.UtcNow)
+            return EntitySet.Where(t => !t.DeletedDateTime.HasValue || t.DeletedDateTime >= DateTime.UtcNow)
                 .Include(t => t.Category)
                 .OrderBy(x => x.Name)
                 .ToListAsync();
