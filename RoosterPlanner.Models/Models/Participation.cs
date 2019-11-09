@@ -19,12 +19,16 @@ namespace RoosterPlanner.Models
         [ForeignKey("ProjectId")]
         public Project Project { get; set; }
 
+        public List<Match> Matches { get; set; }
+
         //Constructor
         public Participation() : base()
         {
+            Matches = new List<Match>();
         }
         public Participation(Guid id) : base(id)
         {
+            Matches = new List<Match>();
         }
     }
 }
