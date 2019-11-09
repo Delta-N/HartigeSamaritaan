@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 import { UserAgentApplication } from 'msal';
 import { ProjectService } from './core/project/project.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-root',

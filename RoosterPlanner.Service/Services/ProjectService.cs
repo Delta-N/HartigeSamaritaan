@@ -23,6 +23,8 @@ namespace RoosterPlanner.Service
         TaskResult<Project> UpdateProject(Project project);
 
         TaskResult<Project> CloseProject(Project project);
+
+        int AddPersonToProject(Guid projectId, Guid personId);
     }
 
     public class ProjectService : IProjectService
@@ -30,6 +32,7 @@ namespace RoosterPlanner.Service
         #region Fields
         private readonly IUnitOfWork unitOfWork = null;
         private readonly IProjectRepository projectRepository = null;
+        private readonly IProjectPersonRepository projectPersonRepository = null;
         private readonly ILogger logger = null;
         #endregion
 
@@ -38,6 +41,7 @@ namespace RoosterPlanner.Service
         {
             this.unitOfWork = unitOfWork;
             this.projectRepository = unitOfWork.ProjectRepository;
+            this.projectPersonRepository = unitOfWork.ProjectPersonRepository;
             this.logger = logger;
         }
 
@@ -168,6 +172,19 @@ namespace RoosterPlanner.Service
                 taskResult.Error = ex;
             }
             return taskResult;
+        }
+
+        public int AddPersonToProject(Guid projectId, Guid personId)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentException("projectId");
+            if (personId == Guid.Empty)
+                throw new ArgumentException("personId");
+
+            ProjectPerson projectPerson = new ProjectPerson { ProjectId = projectId, PersonId = personId };
+            projectPerson = this.projectPersonRepository.Add(projectPerson);
+
+            return this.unitOfWork.SaveChanges();
         }
     }
 }

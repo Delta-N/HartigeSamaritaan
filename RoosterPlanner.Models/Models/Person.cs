@@ -8,7 +8,6 @@ namespace RoosterPlanner.Models
     public class Person : Entity
     {
         [Column(Order = 0)]
-        [Required]
         public Guid Oid { get; set; }
 
         [Column(Order = 1)]
@@ -17,15 +16,18 @@ namespace RoosterPlanner.Models
 
         public List<Participation> Participations { get; set; }
 
+        public List<ProjectPerson> ProjectsPersons { get; set; }
+
         //Constructor
-        public Person() : base()
+        public Person() : base(Guid.Empty)
         {
-            Participations = new List<Participation>();
         }
+
         //Constructor
         public Person(Guid id) : base(id)
         {
             Participations = new List<Participation>();
+            ProjectsPersons = new List<ProjectPerson>();
         }
     }
 }

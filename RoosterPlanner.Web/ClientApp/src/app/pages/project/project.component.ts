@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from 'src/app/models/project';
-import { ProjectService } from 'src/app/core/project/project.service';
+import { ProjectService } from '../../core/project/project.service';
 
 @Component({
   selector: 'app-project',
@@ -10,10 +9,10 @@ import { ProjectService } from 'src/app/core/project/project.service';
 export class ProjectComponent implements OnInit {
   projects: any;
 
-  constructor(private projectService: ProjectService) { }
+  constructor(private projectService: ProjectService) {}
 
   ngOnInit() {
-    this.projectService.getAllProjects().subscribe((response) => {
+    this.projectService.getAllProjects().subscribe(response => {
       console.log(response);
       if (response) {
         this.projects = response;
@@ -21,5 +20,4 @@ export class ProjectComponent implements OnInit {
       }
     });
   }
-
 }

@@ -48,6 +48,23 @@ namespace RoosterPlanner.Data.Context
                 pro.HasMany<ProjectTask>(pt => pt.ProjectTasks).WithOne(p => p.Project);
             });
 
+            modelBuilder.Entity<ProjectPerson>()
+                .HasKey(pt => new { pt.ProjectId, pt.PersonId });
+            modelBuilder.Entity<ProjectPerson>()
+                .HasOne<Project>(pt => pt.Project)
+                .WithMany(p => p.ProjectPersons)
+                .HasForeignKey(pt => pt.ProjectId);
+            modelBuilder.Entity<ProjectPerson>()
+                .HasOne<Person>(pt => pt.Person)
+                .WithMany(t => t.ProjectsPersons)
+                .HasForeignKey(pt => pt.PersonId);
+
+            modelBuilder.Entity<Project>(pro => {
+                pro.HasMany<ProjectPerson>(pp => pp.ProjectPersons).WithOne(p => p.Project);
+            });
+
+            modelBuilder.Entity<Person>().HasIndex(p => p.Oid).IsUnique();
+
             modelBuilder.Entity<Task>(tsk => {
                 tsk.HasMany<ProjectTask>(t => t.TaskProjects).WithOne(t => t.Task);
             });
@@ -61,8 +78,9 @@ namespace RoosterPlanner.Data.Context
             });
 
             CategorySeed categorySeed = new CategorySeed(modelBuilder);
-            PersonSeed personSeed = new PersonSeed(modelBuilder);
             List<Category> categorieList = categorySeed.Seed();
+
+            PersonSeed personSeed = new PersonSeed(modelBuilder);
             List<Person> personList = personSeed.Seed();
         }
     }
