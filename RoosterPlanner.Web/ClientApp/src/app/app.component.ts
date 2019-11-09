@@ -16,8 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private broadcastService: BroadcastService,
     private msalService: MsalService,
-    private router: Router,
-    private projectService: ProjectService
+    private router: Router
   ) {}
   title = 'hartige-samaritaan-ui';
   projects: any;
@@ -26,14 +25,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private refreshTokenSubscription: Subscription;
 
   ngOnInit(): void {
-    console.log('log');
-    this.projectService.getAllProjects().subscribe(response => {
-      console.log(response);
-      if (response) {
-        this.projects = response;
-      }
-    });
-
     this.subscribeMsalBroadcastEvents();
   }
   delay(ms: number) {

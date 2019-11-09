@@ -13,6 +13,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [],
@@ -30,6 +31,7 @@ import { MatTableModule } from '@angular/material/table';
     MatOptionModule,
     MatSelectModule,
     MatMenuModule,
+    MatListModule
     MatTableModule
   ],
   exports: [
@@ -45,6 +47,7 @@ import { MatTableModule } from '@angular/material/table';
     MatOptionModule,
     MatSelectModule,
     MatMenuModule,
+    MatListModule
     MatTableModule
   ]
 })

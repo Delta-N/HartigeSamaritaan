@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     if (idToken && idToken.newUser) {
       this.showNewUser = true;
     }
-    this.exampleCalendar.changeView('day');
+    // this.exampleCalendar.changeView('day');
 
   }
 

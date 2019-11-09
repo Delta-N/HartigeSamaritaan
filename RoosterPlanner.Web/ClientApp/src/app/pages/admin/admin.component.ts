@@ -23,8 +23,8 @@ export class AdminComponent implements OnInit {
     project.pictureUri = 'www.delta-n.nl';
     project.websiteUrl = 'www.delta-n.nl';
     this.projectService.createOrUpdateProject(project).subscribe(result => {
-      if (result && result.status === 200) {
-        console.log(result.body);
+      if (result) {
+        console.log(result);
       }
     });
 
