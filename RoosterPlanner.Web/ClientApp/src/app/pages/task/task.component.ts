@@ -8,6 +8,7 @@ import { Task } from '../../models/task.model';
   styleUrls: ['./task.component.less']
 })
 export class TaskComponent implements OnInit {
+  public dataColumns = ['name', 'color', 'documentUri'];
   public tasks: Array<Task>;
 
   constructor(private taskService: TaskService) {}
@@ -15,7 +16,9 @@ export class TaskComponent implements OnInit {
   ngOnInit() {
     this.tasks = new Array<Task>();
     this.taskService.getAll().subscribe(result => {
-      this.tasks = result.body;
+      if (result) {
+        this.tasks = result;
+      }
     });
   }
 }
