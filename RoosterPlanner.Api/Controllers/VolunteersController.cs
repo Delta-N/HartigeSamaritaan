@@ -22,13 +22,15 @@ namespace RoosterPlanner.Api.Controllers
         public IPersonService PersonService { get; set; }
 
         public IShiftService ShiftService { get; set; }
+        public IMatchService MatchService { get; set; }
 
         public VolunteersController(IMapper mapper, 
                                     IProjectService projectService, 
                                     IParticipationService participationService, 
                                     IAzureB2CService azureB2CService, 
                                     IPersonService personService,
-                                    IShiftService shiftService)
+                                    IShiftService shiftService,
+                                    IMatchService matchService)
         {
             Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             ProjectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
@@ -36,6 +38,7 @@ namespace RoosterPlanner.Api.Controllers
             AzureB2CService = azureB2CService ?? throw new ArgumentNullException(nameof(azureB2CService));
             PersonService = personService ?? throw new ArgumentNullException(nameof(personService));
             ShiftService = shiftService ?? throw new ArgumentNullException(nameof(shiftService));
+            MatchService = matchService ?? throw new ArgumentNullException(nameof(matchService));
         }
 
         [HttpGet("getprojects")]
@@ -67,6 +70,16 @@ namespace RoosterPlanner.Api.Controllers
         {
             var shifts = await ShiftService.GetActiveShiftsForProjectAsync(projectId);
             return shifts.Data.Select(i => Mapper.Map<ShiftViewModel>(i)).ToList();
+        }
+
+        [HttpGet("setshift/{participateId}/{shiftId}")]
+        public async Task<ActionResult> SetShift(Guid participateId, Guid shiftId)
+        {
+            var result = await MatchService.SetMatchForParticipateAsync(participateId, shiftId);
+            //var shifts = await ShiftService.GetActiveShiftsForProjectAsync(projectId);
+            //return shifts.Data.Select(i => Mapper.Map<ShiftViewModel>(i)).ToList();
+
+            return Ok();
         }
     }
 }
