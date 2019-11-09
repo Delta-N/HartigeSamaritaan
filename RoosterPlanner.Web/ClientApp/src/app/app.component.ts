@@ -1,23 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 import { UserAgentApplication } from 'msal';
 import { ProjectService } from './core/project/project.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-
 export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private broadcastService: BroadcastService,
     private msalService: MsalService,
     private router: Router,
-    private projectService: ProjectService) { }
+    private projectService: ProjectService
+  ) {}
   title = 'hartige-samaritaan-ui';
   projects: any;
 
@@ -25,12 +26,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private refreshTokenSubscription: Subscription;
 
   ngOnInit(): void {
-    console.log("log");
-    this.projectService.getAllProjects().subscribe((response) => {
+    console.log('log');
+    this.projectService.getAllProjects().subscribe(response => {
       console.log(response);
       if (response) {
         this.projects = response;
-        console.log(this.projects);
       }
     });
 
@@ -94,7 +94,6 @@ export class AppComponent implements OnInit, OnDestroy {
       const clientApp = window.msal as UserAgentApplication;
       clientApp.authority = authority;
       clientApp.loginRedirect(environment.options.consentScopes);
-
     }
   }
 }
