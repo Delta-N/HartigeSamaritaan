@@ -12,7 +12,7 @@ export class ProjectService {
 
   constructor(private apiService: ApiService) {}
 
-  public createOrUpdateProject(project: Project): Observable<HttpResponse<Project>> {
+  public createOrUpdateProject(project: Project): Observable<Project> {
     return this.apiService.post(`${this.controllerName}`, project);
   }
 
@@ -24,7 +24,7 @@ export class ProjectService {
     return this.apiService.get(`${this.controllerName}/${projectId}`);
   }
 
-  public getAllProjects(): Observable<HttpResponse<Array<Project>>> {
+  public getAllProjects(): Observable<Array<Project>> {
     return this.apiService.get(`${this.controllerName}/getprojects`);
     // return this.apiService.get('../../../assets/Mock-data/projects.json');
   }

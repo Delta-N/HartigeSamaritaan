@@ -11,13 +11,12 @@ import { ProjectService } from './core/project/project.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-
 export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private broadcastService: BroadcastService,
     private msalService: MsalService,
-    private router: Router,
-    private projectService: ProjectService) { }
+    private router: Router
+  ) {}
   title = 'hartige-samaritaan-ui';
   projects: any;
 
@@ -25,15 +24,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private refreshTokenSubscription: Subscription;
 
   ngOnInit(): void {
-    console.log("log");
-    this.projectService.getAllProjects().subscribe((response) => {
-      console.log(response);
-      if (response) {
-        this.projects = response;
-        console.log(this.projects);
-      }
-    });
-
     this.subscribeMsalBroadcastEvents();
   }
   delay(ms: number) {
@@ -94,7 +84,6 @@ export class AppComponent implements OnInit, OnDestroy {
       const clientApp = window.msal as UserAgentApplication;
       clientApp.authority = authority;
       clientApp.loginRedirect(environment.options.consentScopes);
-
     }
   }
 }

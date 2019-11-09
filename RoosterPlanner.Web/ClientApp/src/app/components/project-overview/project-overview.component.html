@@ -1,1 +1,24 @@
-<p>project-overview works!</p>
+<div class="project-list">
+  <div class="project-content" *ngFor="let project of projects">
+    <h3 class="project-title">
+      {{ project.name }}
+    </h3>
+    <small class="project-title">{{project.startDate | date: 'dd-MM-yyyy'}} - {{project.endDate ? (project.endDate | date: 'dd-MM-yyyy') : 'Onbekend'}}</small>
+    <small class="project-title">{{project.closed ? 'Open' : 'Gesloten'}}</small>
+
+    <div class="project-links">
+      <a [routerLink]="">Beschikbaarheid</a>
+      <a [routerLink]="">Agenda</a>
+      <a [routerLink]="">Mijn shifts</a>
+      <a [routerLink]=""></a>
+    </div>
+  </div>
+  <div class="project-content">
+    <h3 class="project-title">
+      Aanmelden voor een project
+    </h3>
+    <button class="add-button" mat-icon-button>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
