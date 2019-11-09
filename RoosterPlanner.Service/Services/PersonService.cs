@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
+using RoosterPlanner.Service.DataModels.B2C;
 
 namespace RoosterPlanner.Service
 {
     public interface IPersonService
     {
+        Task<TaskListResult<Person>> GetB2cMembers();
+
         Task<TaskListResult<Project>> UpdatePersonName(Guid oid, string name);
     }
 
@@ -19,16 +23,30 @@ namespace RoosterPlanner.Service
         #region Fields
         private readonly IUnitOfWork unitOfWork = null;
         private readonly IPersonRepository personRepository = null;
+        private readonly IAzureB2CService azureB2CService = null;
         private readonly ILogger logger = null;
         #endregion
 
-        private readonly Data.Context.RoosterPlannerContext dataContext = null;
-
         //Constructor
-        public PersonService(IUnitOfWork unitOfWork, ILogger logger)
+        public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger logger)
         {
             this.unitOfWork = unitOfWork;
+            this.personRepository = unitOfWork.PersonRepository;
+            this.azureB2CService = azureB2CService;
             this.logger = logger;
+        }
+
+        public async Task<TaskListResult<Person>> GetB2cMembers()
+        {
+            TaskListResult<Person> result = TaskListResult<Person>.CreateDefault();
+
+            TaskResult<List<AppUser>> b2cUsersResult = await this.azureB2CService.GetAllUsersAsync();
+            if (b2cUsersResult.Succeeded)
+            {
+                result.Data = b2cUsersResult.Data.Select(x => new Person { Oid = x.Id, Name = x.DisplayName }).ToList();
+                result.Succeeded = true;
+            }
+            return result;
         }
 
         /// <summary>
