@@ -21,13 +21,21 @@ namespace RoosterPlanner.Api.Controllers
         public IAzureB2CService AzureB2CService { get; set; }
         public IPersonService PersonService { get; set; }
 
-        public VolunteersController(IMapper mapper, IProjectService projectService, IParticipationService participationService, IAzureB2CService azureB2CService, IPersonService personService)
+        public IShiftService ShiftService { get; set; }
+
+        public VolunteersController(IMapper mapper, 
+                                    IProjectService projectService, 
+                                    IParticipationService participationService, 
+                                    IAzureB2CService azureB2CService, 
+                                    IPersonService personService,
+                                    IShiftService shiftService)
         {
             Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             ProjectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
             ParticipationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             AzureB2CService = azureB2CService ?? throw new ArgumentNullException(nameof(azureB2CService));
             PersonService = personService ?? throw new ArgumentNullException(nameof(personService));
+            ShiftService = shiftService ?? throw new ArgumentNullException(nameof(shiftService));
         }
 
         [HttpGet("getprojects")]
@@ -52,6 +60,13 @@ namespace RoosterPlanner.Api.Controllers
             await PersonService.UpdatePersonName(oid, user.Data.DisplayName);
 
             return Ok();
+        }
+
+        [HttpGet("getshifts/{projectId}")]
+        public async Task<ActionResult<List<ShiftViewModel>>> GetShifts(Guid projectId)
+        {
+            var shifts = await ShiftService.GetActiveShiftsForProjectAsync(projectId);
+            return shifts.Data.Select(i => Mapper.Map<ShiftViewModel>(i)).ToList();
         }
     }
 }

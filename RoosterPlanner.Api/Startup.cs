@@ -87,6 +87,7 @@ namespace RoosterPlanner.Api
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IParticipationService, ParticipationService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IShiftService, ShiftService>();
 
             ServiceContainer.Register(services, this.Configuration);
         }
