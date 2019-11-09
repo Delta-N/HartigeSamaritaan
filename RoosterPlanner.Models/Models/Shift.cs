@@ -12,6 +12,8 @@ namespace RoosterPlanner.Models
         [Column(Order = 2)]
         public TimeSpan EndTime { get; set; }
 
+        public List<Match> Matches { get; set; }
+
         //Constructor
         public Shift() : base()
         {

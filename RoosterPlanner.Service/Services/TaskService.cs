@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
-using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
@@ -12,6 +12,8 @@ namespace RoosterPlanner.Service
     public interface ITaskService
     {
         Task<TaskListResult<Models.Task>> GetActiveTasksAsync();
+
+        Task<TaskResult> SetTaskDeleteAsync(Guid id);
     }
 
     public class TaskService : ITaskService
@@ -44,6 +46,20 @@ namespace RoosterPlanner.Service
                 taskResult.Error = ex;
             }
             return taskResult;
+        }
+
+        public async Task<TaskResult> SetTaskDeleteAsync(Guid id)
+        {
+            TaskResult result = new TaskResult { StatusCode = HttpStatusCode.NoContent };
+            if (id != Guid.Empty)
+            {
+                Models.Task task = await this.taskRepository.FindAsync(id);
+                task.DeletedDateTime = DateTime.UtcNow;
+                this.taskRepository.Update(task);
+
+                result.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+            }
+            return result;
         }
     }
 }

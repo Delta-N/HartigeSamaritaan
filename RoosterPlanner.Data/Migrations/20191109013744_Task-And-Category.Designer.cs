@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoosterPlanner.Data.Context;
 
 namespace RoosterPlanner.Data.Migrations
 {
     [DbContext(typeof(RoosterPlannerContext))]
-    partial class RoosterPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20191109013744_Task-And-Category")]
+    partial class TaskAndCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,35 +74,6 @@ namespace RoosterPlanner.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Match", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.Property<string>("LastEditBy")
-                        .HasMaxLength(128);
-
-                    b.Property<DateTime>("LastEditDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ParticipationId");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<Guid>("ShiftId");
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParticipationId");
-
-                    b.HasIndex("ShiftId");
-
-                    b.ToTable("Matches");
-                });
-
             modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
                 {
                     b.Property<Guid>("Id");
@@ -151,24 +124,6 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Persons");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("25e5b0e6-82ef-45fe-bbde-ef76021ec531"),
-                            LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 7, 4, 59, 461, DateTimeKind.Utc).AddTicks(4156),
-                            Name = "Grace Hopper",
-                            Oid = new Guid("b691f9f7-c404-4d52-a34f-c90702ca7138")
-                        },
-                        new
-                        {
-                            Id = new Guid("7f66fc12-b1c0-481f-851b-3cc1f65fd20e"),
-                            LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 7, 4, 59, 461, DateTimeKind.Utc).AddTicks(4168),
-                            Name = "John Wick",
-                            Oid = new Guid("e2a94901-6942-4cfb-83fa-60343c0de219")
-                        });
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Project", b =>
@@ -240,33 +195,6 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("ProjectTasks");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.Property<TimeSpan>("EndTime");
-
-                    b.Property<string>("LastEditBy")
-                        .HasMaxLength(128);
-
-                    b.Property<DateTime>("LastEditDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<TimeSpan>("StartTime");
-
-                    b.Property<Guid?>("TaskId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("Shift");
-                });
-
             modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
                 {
                     b.Property<Guid>("Id");
@@ -302,19 +230,6 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Match", b =>
-                {
-                    b.HasOne("RoosterPlanner.Models.Participation", "Participation")
-                        .WithMany("Matches")
-                        .HasForeignKey("ParticipationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RoosterPlanner.Models.Shift", "Shift")
-                        .WithMany("Matches")
-                        .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
                 {
                     b.HasOne("RoosterPlanner.Models.Person", "Person")
@@ -347,13 +262,6 @@ namespace RoosterPlanner.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
-                {
-                    b.HasOne("RoosterPlanner.Models.Task")
-                        .WithMany("Shifts")
-                        .HasForeignKey("TaskId");
                 });
 #pragma warning restore 612, 618
         }

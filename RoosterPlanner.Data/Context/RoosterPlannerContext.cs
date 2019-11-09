@@ -20,6 +20,8 @@ namespace RoosterPlanner.Data.Context
 
         public DbSet<Participation> Participations { get; set; }
 
+        public DbSet<Match> Matches { get; set; }
+
         //Constructor
         public RoosterPlannerContext(DbContextOptions<RoosterPlannerContext> options) : base(options)
         {
@@ -50,12 +52,18 @@ namespace RoosterPlanner.Data.Context
                 tsk.HasMany<ProjectTask>(t => t.TaskProjects).WithOne(t => t.Task);
             });
 
+            modelBuilder.Entity<Participation>(par => {
+                par.HasMany<Match>(m => m.Matches).WithOne(p => p.Participation);
+            });
+
+            modelBuilder.Entity<Shift>(tsk => {
+                tsk.HasMany<Match>(m => m.Matches).WithOne(t => t.Shift);
+            });
+
             CategorySeed categorySeed = new CategorySeed(modelBuilder);
             PersonSeed personSeed = new PersonSeed(modelBuilder);
             List<Category> categorieList = categorySeed.Seed();
             List<Person> personList = personSeed.Seed();
-
-
         }
     }
 }

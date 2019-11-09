@@ -27,7 +27,7 @@ namespace RoosterPlanner.Api
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
-        readonly string MyAllowSpecificOrigins = "GlobalAllowSpecificOrigins";
+        //readonly string MyAllowSpecificOrigins = "GlobalAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -56,14 +56,14 @@ namespace RoosterPlanner.Api
             // Enable Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(MyAllowSpecificOrigins,
-                builder =>
-                {
-                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-                });
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(MyAllowSpecificOrigins,
+            //    builder =>
+            //    {
+            //        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            //    });
+            //});
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options => {
@@ -104,7 +104,7 @@ namespace RoosterPlanner.Api
                 app.UseHsts();
             }
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors(i => i.WithOrigins(Configuration.GetSection("AllowedHosts").Value).AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthentication();
 

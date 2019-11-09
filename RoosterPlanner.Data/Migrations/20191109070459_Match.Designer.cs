@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoosterPlanner.Data.Context;
 
 namespace RoosterPlanner.Data.Migrations
 {
     [DbContext(typeof(RoosterPlannerContext))]
-    partial class RoosterPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20191109070459_Match")]
+    partial class Match
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,26 +50,26 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c661cf62-0c96-4c0e-b9bd-2f5b9de04034"),
+                            Id = new Guid("5295f5e4-d2fd-4248-a4e6-706b14f406bf"),
                             Code = "KEUKEN",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 1, 37, 44, 486, DateTimeKind.Utc).AddTicks(2848),
+                            LastEditDate = new DateTime(2019, 11, 9, 7, 4, 59, 461, DateTimeKind.Utc).AddTicks(3868),
                             Name = "Keuken"
                         },
                         new
                         {
-                            Id = new Guid("fab511b4-fa8e-400d-939d-f03a87830976"),
+                            Id = new Guid("4d291fad-43d3-43a4-96dc-091b4238cd8d"),
                             Code = "BEDIENING",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 1, 37, 44, 486, DateTimeKind.Utc).AddTicks(2852),
+                            LastEditDate = new DateTime(2019, 11, 9, 7, 4, 59, 461, DateTimeKind.Utc).AddTicks(3871),
                             Name = "Bediening"
                         },
                         new
                         {
-                            Id = new Guid("65aef8f8-1c7e-4fd8-834b-f3eb622b8c89"),
+                            Id = new Guid("f143dd50-2a9a-454b-8f46-aaac7dfb0f29"),
                             Code = "LOGISTIEK",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 1, 37, 44, 486, DateTimeKind.Utc).AddTicks(2854),
+                            LastEditDate = new DateTime(2019, 11, 9, 7, 4, 59, 461, DateTimeKind.Utc).AddTicks(3873),
                             Name = "Logistiek"
                         });
                 });
@@ -271,15 +273,7 @@ namespace RoosterPlanner.Data.Migrations
                 {
                     b.Property<Guid>("Id");
 
-                    b.Property<Guid>("CategoryId");
-
-                    b.Property<string>("Color")
-                        .HasMaxLength(12);
-
                     b.Property<DateTime?>("DeletedDateTime");
-
-                    b.Property<string>("DocumentUri")
-                        .HasMaxLength(128);
 
                     b.Property<string>("LastEditBy")
                         .HasMaxLength(128);
@@ -296,8 +290,6 @@ namespace RoosterPlanner.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Tasks");
                 });
@@ -338,14 +330,6 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("TaskProjects")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
-                {
-                    b.HasOne("RoosterPlanner.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
