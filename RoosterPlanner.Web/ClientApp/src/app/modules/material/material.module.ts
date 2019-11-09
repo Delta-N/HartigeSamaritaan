@@ -31,7 +31,7 @@ import {MatListModule} from '@angular/material/list';
     MatOptionModule,
     MatSelectModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
     MatTableModule
   ],
   exports: [
@@ -47,7 +47,7 @@ import {MatListModule} from '@angular/material/list';
     MatOptionModule,
     MatSelectModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
     MatTableModule
   ]
 })
