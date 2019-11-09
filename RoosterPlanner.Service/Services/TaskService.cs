@@ -34,7 +34,7 @@ namespace RoosterPlanner.Service
 
             try
             {
-                taskResult.Data = await this.taskRepository.GetActiveTasksAsync();
+                taskResult.Data = await unitOfWork.TaskRepository.GetActiveTasksAsync();
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)
