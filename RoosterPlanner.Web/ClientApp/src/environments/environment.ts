@@ -6,7 +6,7 @@ export const environment = {
   baseUrl: 'https://localhost:54971/api',
   production: false,
   options: {
-    redirectUri: 'http://localhost:4200/',
+    redirectUri: 'https://localhost:4200/',
     protectedResourceMap: [],
     appId: 'c832c923-37c6-4145-8c75-a023ecc7a98f',
     authority: 'https://login.microsoftonline.com/tfp/DeltanHackaton.onmicrosoft.com/B2C_1_susi/',

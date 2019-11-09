@@ -13,7 +13,7 @@ import { UserAgentApplication } from 'msal';
 export class ProfileComponent implements OnInit {
   userInfo: User;
   disabled = true;
-  redirectUri = `https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_edit&client_id=${environment.options.appId}&nonce=defaultNonce&redirect_uri=${environment.options.redirectUri}profile&scope=openid&response_type=id_token&prompt=login`;
+  redirectUri = `https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_edit&client_id=${environment.options.appId}&nonce=defaultNonce&redirect_uri=${environment.options.redirectUri}profile/updated&scope=openid&response_type=id_token&prompt=login`;
   constructor(private router: Router, private route: ActivatedRoute) {
   }
 
@@ -22,7 +22,6 @@ export class ProfileComponent implements OnInit {
       this.refreshTokenSilent();
     }
 
-    // this.refreshTokenSilent();
     const idToken = JwtHelper.decodeToken(
       sessionStorage.getItem('msal.idtoken')
     );
