@@ -14,7 +14,7 @@ namespace RoosterPlanner.Service
     {
         Task<TaskListResult<Person>> GetB2cMembers();
 
-        Task<TaskListResult<Project>> UpdatePersonName(Guid oid, string name);
+        public async Task<TaskResult<Project>> UpdatePersonName(Guid oid, string name);
     }
 
     public class PersonService : IPersonService
