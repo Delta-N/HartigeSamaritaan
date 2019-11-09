@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
@@ -34,7 +31,7 @@ namespace RoosterPlanner.Service
 
             try
             {
-                taskResult.Data = await this.unitOfWork.ShiftRepository.GetActiveShiftsForProjectAsync(projectId);
+                taskResult.Data = await unitOfWork.ShiftRepository.GetActiveShiftsForProjectAsync(projectId);
             }
             catch (Exception ex)
             {

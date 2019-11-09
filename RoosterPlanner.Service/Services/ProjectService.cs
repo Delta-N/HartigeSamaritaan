@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
@@ -96,7 +95,7 @@ namespace RoosterPlanner.Service
             if (id == Guid.Empty)
                 return null;
 
-            TaskResult<Project> taskResult = new TaskResult<Project>();
+            var taskResult = new TaskResult<Project>();
 
             try
             {
@@ -116,7 +115,7 @@ namespace RoosterPlanner.Service
             if (project == null)
                 throw new ArgumentNullException("project");
 
-            TaskResult<Project> taskResult = new TaskResult<Project>();
+            var taskResult = new TaskResult<Project>();
 
             try
             {
@@ -134,14 +133,16 @@ namespace RoosterPlanner.Service
         public TaskResult<Project> UpdateProject(Project project)
         {
             if (project == null)
+            {
                 throw new ArgumentNullException("project");
+            }
 
-            TaskResult<Project> taskResult = new TaskResult<Project>();
+            var taskResult = new TaskResult<Project>();
 
             try
             {
-                taskResult.Data = this.projectRepository.Update(project);
-                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+                taskResult.Data = projectRepository.Update(project);
+                taskResult.Succeeded = unitOfWork.SaveChanges() == 1;
             }
             catch (Exception ex)
             {
@@ -163,8 +164,8 @@ namespace RoosterPlanner.Service
             try
             {
                 project.Closed = true;
-                taskResult.Data = this.projectRepository.AddOrUpdate(project);
-                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+                taskResult.Data = projectRepository.AddOrUpdate(project);
+                taskResult.Succeeded = unitOfWork.SaveChanges() == 1;
             }
             catch (Exception ex)
             {
@@ -182,9 +183,9 @@ namespace RoosterPlanner.Service
                 throw new ArgumentException("personId");
 
             ProjectPerson projectPerson = new ProjectPerson { ProjectId = projectId, PersonId = personId };
-            projectPerson = this.projectPersonRepository.Add(projectPerson);
+            projectPerson = projectPersonRepository.Add(projectPerson);
 
-            return this.unitOfWork.SaveChanges();
+            return unitOfWork.SaveChanges();
         }
     }
 }
