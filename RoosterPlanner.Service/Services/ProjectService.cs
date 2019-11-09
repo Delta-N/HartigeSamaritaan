@@ -20,7 +20,7 @@ namespace RoosterPlanner.Service
 
         TaskResult<Project> CreateProject(Project project);
 
-        TaskResult<Project> UpdateProject(Project project)
+        TaskResult<Project> UpdateProject(Project project);
 
         TaskResult<Project> CloseProject(Project project);
     }
