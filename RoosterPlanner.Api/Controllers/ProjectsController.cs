@@ -125,5 +125,17 @@ namespace RoosterPlanner.Api.Controllers
             }
             return NoContent();
         }
+
+        [HttpPost("{id}/addperson/{personId}")]
+        public ActionResult AddPerson(Guid id, Guid personId)
+        {
+            if (id == Guid.Empty)
+                return BadRequest("id");
+
+            if (this.projectService.AddPersonToProject(id, personId) == 1)
+                return Ok();
+            else
+                return UnprocessableEntity();
+        }
     }
 }

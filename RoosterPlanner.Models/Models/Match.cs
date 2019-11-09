@@ -23,9 +23,10 @@ namespace RoosterPlanner.Models
         public MatchType Type { get; set; }
 
         //Constructor
-        public Match() : base()
+        public Match() : this(Guid.Empty)
         {
         }
+
         //Constructor
         public Match(Guid id) : base(id)
         {
