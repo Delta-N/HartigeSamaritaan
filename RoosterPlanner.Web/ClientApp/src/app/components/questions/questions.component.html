@@ -1,6 +1,6 @@
-<mat-horizontal-stepper [linear]="true" #stepper>
+<mat-horizontal-stepper id="stepper" [linear]="true" #stepper>
   <mat-step [stepControl]="firstFormGroup">
-    <form  [formGroup]="firstFormGroup">
+    <form class="stepper" [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Algemeen</ng-template>
       <label id="example-radio-group-label"
         >Ben je als vluchteling naar Nederland gekomen?</label
@@ -72,8 +72,8 @@
           No
         </mat-radio-button>
       </mat-radio-group>
-      <div>
-        <button mat-button matStepperNext>Volgende</button>
+      <div class="stepper-button">
+        <button mat-raised-button color="warn" matStepperNext>Volgende</button>
       </div>
     </form>
   </mat-step>
@@ -140,18 +140,17 @@
           No
         </mat-radio-button>
       </mat-radio-group>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+      <div class="stepper-button">
+          <button mat-raised-button matStepperPrevious>Vorige</button>
+        <button mat-raised-button color="warn" matStepperNext>Volgende</button>
       </div>
     </form>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    You are now done.
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+    Bedankt voor het invullen van uw gegevens!
+    <div class="stepper-button">
+        <button mat-raised-button matStepperPrevious>Vorige</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

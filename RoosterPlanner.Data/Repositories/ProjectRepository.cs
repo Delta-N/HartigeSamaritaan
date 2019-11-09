@@ -32,7 +32,7 @@ namespace RoosterPlanner.Data.Repositories
         /// <returns>List of projects that are not closed.</returns>
         public Task<List<Project>> GetActiveProjectsAsync()
         {
-            return this.EntitySet.Where(p => !p.Closed).ToListAsync();
+            return this.EntitySet.Where(p => !p.Closed).OrderBy(p => p.StartDate).ToListAsync();
         }
     }
 }

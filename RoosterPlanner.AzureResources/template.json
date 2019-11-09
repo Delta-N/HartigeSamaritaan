@@ -1,0 +1,448 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentname": {
+      "type": "string",
+      "defaultValue": "dev",
+      "metadata": {
+        "description": "Environment that the ARM will be deployed to."
+      }
+    },
+    "sites_gapapp_ivs_name": {
+      "defaultValue": "[concat('gapapp-ivs-', parameters('environmentname'))]",
+      "type": "String"
+    },
+    "sites_gapapp_ivs_functions_name": {
+      "defaultValue": "[concat('gapapp-ivs-functions-', parameters('environmentname'))]",
+      "type": "String"
+    },
+    "serverfarms_gapapp_sp_web_name": {
+      "defaultValue": "[concat('gapapp-sp-web-', parameters('environmentname'))]",
+      "type": "String"
+    },
+    //"accounts_gapapp_cv_eun_name": {
+    //  "defaultValue": "[concat('gapapp-ivs-cv-eun-', parameters('environmentname'))]",
+    //  "type": "String"
+    //},
+    "accounts_gapapp_cv_euw_name": {
+      "defaultValue": "[concat('gapapp-ivs-cv-euw-', parameters('environmentname'))]",
+      "type": "String"
+    },
+    "storageAccounts_gapappportalstorage_name": {
+      "defaultValue": "[concat('gapappportalstorage', parameters('environmentname'))]",
+      "type": "String"
+    },
+    "databaseAccounts_gapapp_ivs_cosdb_name": {
+      "defaultValue": "[concat('gapapp-ivs-cosdb-', parameters('environmentname'))]",
+      "type": "String"
+    }
+  },
+  "variables": {
+    "storageTypeEnvironment": {
+      "dev": "Standard_LRS",
+      "tst": "Standard_ZRS",
+      "prd": "Standard_RAGRS"
+    },
+    "servicePlanTierEnvironment": {
+      "dev": "Basic",
+      "tst": "Basic",
+      "prd": "Standard"
+    },
+    "servicePlanSizeEnvironment": {
+      "dev": "B1",
+      "tst": "B1",
+      "prd": "S1"
+    },
+    "servicePlanFamilyEnvironment": {
+      "dev": "B",
+      "tst": "B",
+      "prd": "S"
+    },
+    "servicePlanSettings": {
+      "name": "[parameters('serverfarms_gapapp_sp_web_name')]",
+      "SKUTier": "[variables('servicePlanTierEnvironment')[parameters('environmentname')]]",
+      "SKUSize": "[variables('servicePlanSizeEnvironment')[parameters('environmentname')]]",
+      "SKUFamily": "[variables('servicePlanFamilyEnvironment')[parameters('environmentname')]]",
+      "SKUCapacity": 1
+    }
+  },
+  "resources": [
+
+    // Cognitive services
+    //{ GAPAPP PROD does not support NorthEurope
+    //  "type": "Microsoft.CognitiveServices/accounts",
+    //  "apiVersion": "2016-02-01-preview",
+    //  "name": "[parameters('accounts_gapapp_cv_eun_name')]",
+    //  "location": "northeurope",
+    //  "sku": {
+    //    "name": "F0"
+    //  },
+    //  "kind": "ComputerVision",
+    //  "properties": {}
+    //},
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2016-02-01-preview",
+      "name": "[parameters('accounts_gapapp_cv_euw_name')]",
+      //"dependsOn": [
+      //  "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_gapapp_cv_eun_name'))]"
+      //],
+      "location": "westeurope",
+      "sku": {
+        "name": "F0"
+      },
+      "kind": "ComputerVision",
+      "properties": {}
+    },
+
+    // Database - Cosmos
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "apiVersion": "2015-04-08",
+      "name": "[parameters('databaseAccounts_gapapp_ivs_cosdb_name')]",
+      "location": "West Europe",
+      "tags": {
+        "defaultExperience": "Core (SQL)"
+      },
+      "kind": "GlobalDocumentDB",
+      "properties": {
+        "enableAutomaticFailover": false,
+        "enableMultipleWriteLocations": false,
+        "isVirtualNetworkFilterEnabled": false,
+        "virtualNetworkRules": [],
+        "databaseAccountOfferType": "Standard",
+        "consistencyPolicy": {
+          "defaultConsistencyLevel": "Session",
+          "maxIntervalInSeconds": 5,
+          "maxStalenessPrefix": 100
+        },
+        "locations": [
+          {
+            "locationName": "West Europe",
+            "provisioningState": "Succeeded",
+            "failoverPriority": 0
+          }
+        ],
+        "capabilities": []
+      }
+    },
+
+    // Storage account
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[parameters('storageAccounts_gapappportalstorage_name')]",
+      "location": "westeurope",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "[variables('storageTypeEnvironment')[parameters('environmentname')]]"
+      },
+      "properties": {
+        "accessTier": "Hot"
+      }
+    },
+
+    // Serviceplan
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[variables('servicePlanSettings').name]",
+      "location": "West Europe",
+      "sku": {
+        "name": "[variables('servicePlanSettings').SKUSize]", //name == size
+        "tier": "[variables('servicePlanSettings').SKUTier]",
+        "size": "[variables('servicePlanSettings').SKUSize]",
+        "family": "[variables('servicePlanSettings').SKUFamily]",
+        "capacity": "[variables('servicePlanSettings').SKUCapacity]"
+      },
+      "kind": "app",
+      "properties": {
+        "name": "[parameters('serverfarms_gapapp_sp_web_name')]",
+        "perSiteScaling": false,
+        "reserved": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0,
+        "numberOfWorkers": 1
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices",
+      "apiVersion": "2019-04-01",
+      "name": "[concat(parameters('storageAccounts_gapappportalstorage_name'), '/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_gapappportalstorage_name'))]"
+      ],
+      "properties": {
+        "cors": {
+          "corsRules": []
+        },
+        "deleteRetentionPolicy": {
+          "enabled": false
+        }
+      }
+    },
+
+    // Webapplication
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[parameters('sites_gapapp_ivs_name')]",
+      "location": "West Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_gapapp_sp_web_name'))]"
+      ],
+      "kind": "app",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('sites_gapapp_ivs_name'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('sites_gapapp_ivs_name'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_gapapp_sp_web_name'))]",
+        "reserved": false,
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": true,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 0,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": false
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "appsettings",
+          "type": "config",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('sites_gapapp_ivs_name'))]",
+            //"[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_gapapp_cv_eun_name'))]",
+            "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_gapapp_cv_euw_name'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_gapappportalstorage_name'))]",
+            "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_gapapp_ivs_cosdb_name'))]"
+          ],
+          "properties": {
+            "AzureStorageConfig:StorageConnectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_gapappportalstorage_name'), ';AccountKey=', listkeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_gapappportalstorage_name')), '2015-05-01-preview').key1)]",
+            "AzureStorageConfig:BlobSharedAccessTimeSpan": 120,
+
+            "AzureCognitiveConfig:SubscriptionKey": "[listkeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_gapapp_cv_euw_name')), '2017-04-18').key1]",
+            "AzureCognitiveConfig:CognitiveEndpoint": "https://westeurope.api.cognitive.microsoft.com/vision/v2.0",
+            //"AzureCognitiveConfig:SubscriptionKeyBackup": "[listkeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_gapapp_cv_eun_name')), '2017-04-18').key1]",
+            //"AzureCognitiveConfig:CognitiveEndpointBackup": "https://northeurope.api.cognitive.microsoft.com/vision/v2.0",
+
+            "AzureAuthentication:Instance": "https://login.microsoftonline.com/",
+            "AzureAuthentication:ClientId": "e8a5289c-439e-43e8-b484-a7d96974cac5",
+            "AzureAuthentication:TenantId": "948963c4-bcbf-4799-9a1d-992489644f84",
+
+            "DocumentDbConfig:MasterKey": "[listkeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_gapapp_ivs_cosdb_name')), '2015-04-08').primaryMasterKey]",
+            "DocumentDbConfig:ServiceEndpoint": "[concat('https://',parameters('databaseAccounts_gapapp_ivs_cosdb_name'),'.documents.azure.com:443/')]",
+            "DocumentDbConfig:CollectionName": "webapp",
+            "DocumentDbConfig:DatabaseName": "gapappivs",
+            "DocumentDbConfig:QueryMaxItemCount": 7000,
+
+            "CtgbApiConfig:ApiBaseUrl": "https://public.mst.ctgb.nl/public-api/1.0/"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2016-08-01",
+      "name": "[concat(parameters('sites_gapapp_ivs_name'), '/web')]",
+      "location": "West Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_gapapp_ivs_name'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php",
+          "hostingstart.html"
+        ],
+        "netFrameworkVersion": "v4.0",
+        "phpVersion": "5.6",
+        "pythonVersion": "",
+        "nodeVersion": "",
+        "linuxFxVersion": "",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "remoteDebuggingVersion": "VS2017",
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$gapapp-ivs-dev",
+        "scmType": "VSTSRM",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": false,
+        "alwaysOn": false,
+        "appCommandLine": "",
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false,
+            "virtualDirectories": null
+          }
+        ],
+        "winAuthAdminState": 0,
+        "winAuthTenantState": 0,
+        "customAppPoolIdentityAdminState": false,
+        "customAppPoolIdentityTenantState": false,
+        "loadBalancing": "LeastRequests",
+        "routingRules": [],
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "vnetName": "",
+        "siteAuthEnabled": false,
+        "siteAuthSettings": {
+          "enabled": null,
+          "unauthenticatedClientAction": null,
+          "tokenStoreEnabled": null,
+          "allowedExternalRedirectUrls": null,
+          "defaultProvider": null,
+          "clientId": null,
+          "clientSecret": null,
+          "clientSecretCertificateThumbprint": null,
+          "issuer": null,
+          "allowedAudiences": null,
+          "additionalLoginParams": null,
+          "isAadAutoProvisioned": false,
+          "googleClientId": null,
+          "googleClientSecret": null,
+          "googleOAuthScopes": null,
+          "facebookAppId": null,
+          "facebookAppSecret": null,
+          "facebookOAuthScopes": null,
+          "twitterConsumerKey": null,
+          "twitterConsumerSecret": null,
+          "microsoftAccountClientId": null,
+          "microsoftAccountClientSecret": null,
+          "microsoftAccountOAuthScopes": null
+        },
+        "localMySqlEnabled": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2016-08-01",
+      "name": "[concat(parameters('sites_gapapp_ivs_name'), '/', parameters('sites_gapapp_ivs_name'), '.azurewebsites.net')]",
+      "location": "West Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_gapapp_ivs_name'))]"
+      ],
+      "properties": {
+        "siteName": "gapapp-ivs-dev",
+        "hostNameType": "Verified"
+      }
+    },
+
+    // Functions
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[parameters('sites_gapapp_ivs_functions_name')]",
+      "location": "West Europe",
+      "kind": "functionapp",
+      "properties": {
+        "enabled": true,
+        "siteConfig": {
+          "alwaysOn": true
+        },
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('sites_gapapp_ivs_functions_name'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('sites_gapapp_ivs_functions_name'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_gapapp_sp_web_name'))]",
+        "reserved": false,
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": false
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "appsettings",
+          "type": "config",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('sites_gapapp_ivs_functions_name'))]",
+            "[resourceId('Microsoft.Web/Sites', parameters('sites_gapapp_ivs_name'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_gapappportalstorage_name'))]"
+          ],
+          "properties": {
+            "FUNCTIONS_EXTENSION_VERSION": "~2",
+            "WEBSITE_NODE_DEFAULT_VERSION": "10.14.1",
+            "WEBSITE_RUN_FROM_PACKAGE": 1,
+
+            // Storage 
+            "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_gapappportalstorage_name'), ';AccountKey=', listkeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_gapappportalstorage_name')), '2015-05-01-preview').key1)]",
+
+            // Authentication
+            "ClientId": "e8a5289c-439e-43e8-b484-a7d96974cac5",
+            "ClientSecret": "PyE=[+0/w2B07NdD.hU93:i-plT]bHOi",
+            "TentantId": "948963c4-bcbf-4799-9a1d-992489644f84",
+            "AzureADTokenUrl": "https://login.microsoftonline.com/{0}/oauth2/token",
+
+            "AuthorisationsEndpoint": "[concat('https://',parameters('sites_gapapp_ivs_name'),'.azurewebsites.net/api/Ctgb/Authorisations/Update')]"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2016-08-01",
+      "name": "[concat(parameters('sites_gapapp_ivs_functions_name'), '/', parameters('sites_gapapp_ivs_functions_name'), '.azurewebsites.net')]",
+      "location": "West Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_gapapp_ivs_functions_name'))]"
+      ],
+      "properties": {
+        "siteName": "gapapp-ivs-functions",
+        "hostNameType": "Verified"
+      }
+    }
+  ],
+  "outputs": {
+    "sites_gapapp_ivs_name": {
+      "type": "string",
+      "value": "[parameters('sites_gapapp_ivs_name')]"
+    },
+    "sites_gapapp_ivs_functions_name": {
+      "type": "string",
+      "value": "[parameters('sites_gapapp_ivs_functions_name')]"
+    }
+  }
+}

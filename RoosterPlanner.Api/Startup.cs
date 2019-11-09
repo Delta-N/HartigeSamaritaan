@@ -75,6 +75,7 @@ namespace RoosterPlanner.Api
 
             services.AddScoped<IAzureB2CService, AzureB2CService>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<ITaskService, TaskService>();
 
             ServiceContainer.Register(services, this.Configuration);
         }

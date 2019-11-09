@@ -20,7 +20,6 @@ namespace RoosterPlanner.Service
             services.BuildServiceProvider().GetService<RoosterPlannerContext>().Database.Migrate();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IProjectRepository, ProjectRepository>();
         }
     }
 }

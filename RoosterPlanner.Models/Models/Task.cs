@@ -17,7 +17,12 @@ namespace RoosterPlanner.Models
         public List<ProjectTask> TaskProjects { get; set; }
 
         //Constructor
-        public Task() : base()
+        public Task() : this(Guid.Empty)
+        {
+        }
+
+        //Constructor
+        public Task(Guid id) : base(id)
         {
             this.TaskProjects = new List<ProjectTask>();
         }

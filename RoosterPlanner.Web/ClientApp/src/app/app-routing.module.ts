@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MsalGuard } from '@azure/msal-angular';
 import { HomeComponent } from './pages/home/home.component';
+import { AdminComponent } from './pages/admin/admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -11,6 +12,7 @@ const routes: Routes = [
     loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule),
     canActivate: [MsalGuard]
   },
+  { path: 'admin', component: AdminComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '/' }
 ];
 

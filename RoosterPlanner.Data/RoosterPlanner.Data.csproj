@@ -14,8 +14,4 @@
     <ProjectReference Include="..\RoosterPlanner.Models\RoosterPlanner.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>

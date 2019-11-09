@@ -24,8 +24,6 @@ namespace RoosterPlanner.Service
         private readonly ILogger logger = null;
         #endregion
 
-        private readonly Data.Context.RoosterPlannerContext dataContext = null;
-
         //Constructor
         public ProjectService(IUnitOfWork unitOfWork, ILogger logger)
         {
@@ -67,7 +65,7 @@ namespace RoosterPlanner.Service
             {
                 project.Closed = true;
                 taskResult.Data = this.projectRepository.AddOrUpdate(project);
-                taskResult.Succeeded = (this.dataContext.SaveChanges() == 1);
+                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
             }
             catch (Exception ex)
             {

@@ -11,10 +11,14 @@ namespace RoosterPlanner.Data.Common
     {
         IProjectRepository ProjectRepository { get; }
 
+        ITaskRepository TaskRepository { get; }
+
+        ICategoryRepository CategoryRepository { get; }
+
         /// <summary>
         /// Saves the changes.
         /// </summary>
-        void SaveChanges();
+        int SaveChanges();
 
         /// <summary>
         /// Saves the changes.
@@ -37,6 +41,8 @@ namespace RoosterPlanner.Data.Common
         protected ILogger Logger { get; private set; }
 
         private IProjectRepository projectRepository;
+        private ITaskRepository taskRepository;
+        private ICategoryRepository categoryRepository;
         #endregion
 
         public IProjectRepository ProjectRepository
@@ -46,6 +52,26 @@ namespace RoosterPlanner.Data.Common
                 if (projectRepository == null)
                     this.projectRepository = new ProjectRepository(this.DataContext, null);
                 return this.projectRepository;
+            }
+        }
+
+        public ITaskRepository TaskRepository
+        {
+            get
+            {
+                if (taskRepository == null)
+                    this.taskRepository = new TaskRepository(this.DataContext, null);
+                return this.taskRepository;
+            }
+        }
+
+        public ICategoryRepository CategoryRepository
+        {
+            get
+            {
+                if (categoryRepository == null)
+                    this.categoryRepository = new CategoryRepository(this.DataContext, null);
+                return this.categoryRepository;
             }
         }
 
@@ -65,9 +91,9 @@ namespace RoosterPlanner.Data.Common
         /// <summary>
         /// Saves the changes.
         /// </summary>
-        public void SaveChanges()
+        public int SaveChanges()
         {
-            DataContext.SaveChanges();
+            return DataContext.SaveChanges();
         }
 
         /// <summary>
