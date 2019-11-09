@@ -4,6 +4,7 @@ import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserAgentApplication } from 'msal';
+import { ProjectService } from './core/project/project.service';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +16,24 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private broadcastService: BroadcastService,
     private msalService: MsalService,
-    private router: Router) { }
+    private router: Router,
+    private projectService: ProjectService) { }
   title = 'hartige-samaritaan-ui';
+  projects: any;
 
   private failureSubscription: Subscription;
   private refreshTokenSubscription: Subscription;
 
   ngOnInit(): void {
+    console.log("log");
+    this.projectService.getAllProjects().subscribe((response) => {
+      console.log(response);
+      if (response) {
+        this.projects = response;
+        console.log(this.projects);
+      }
+    });
+
     this.subscribeMsalBroadcastEvents();
   }
   delay(ms: number) {

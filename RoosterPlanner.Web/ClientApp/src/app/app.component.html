@@ -9,6 +9,14 @@
     <a mat-button class="companyName" routerLink="/">
       <img src="../assets/Logo.png" alt="Hartige Samaritaan">
     </a>
+    <mat-form-field>
+      <mat-label>Selecteer project</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let project of projects" [value]="project.id">
+          {{project.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <span class="example-spacer"></span>
     <div fxShow="true" fxHide.lt-md="true">
       <a mat-button routerLink="/profile">Profiel</a>
