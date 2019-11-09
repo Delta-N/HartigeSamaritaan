@@ -14,7 +14,7 @@ namespace RoosterPlanner.Models
         public Project Project { get; set; }
 
         [Column(Order = 1)]
-        public int TaskId { get; set; }
+        public Guid TaskId { get; set; }
 
         [ForeignKey("TaskId")]
         public Task Task { get; set; }

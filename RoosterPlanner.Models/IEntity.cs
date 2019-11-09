@@ -2,7 +2,7 @@
 
 namespace RoosterPlanner.Models
 {
-    public interface IEntity<TKey> where TKey : struct
+    public interface IEntity
     {
         /// <summary>
         /// Gets or sets the id.
@@ -10,7 +10,7 @@ namespace RoosterPlanner.Models
         /// <value>
         /// The id.
         /// </value>
-        TKey Id { get; set; }
+        Guid Id { get; }
 
         /// <summary>
         /// Gets or sets the LastEditBy.
@@ -28,9 +28,9 @@ namespace RoosterPlanner.Models
         byte[] RowVersion { get; set; }
 
         /// <summary>
-        /// Generates or set a new key for this entity.
+        /// Sets the Id of the entity when it is Guid.Empty.
         /// </summary>
-        /// <returns></returns>
-        TKey SetNewKey();
+        /// <param name="id">The Id to set.</param>
+        void SetKey(Guid id);
     }
 }

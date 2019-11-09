@@ -12,12 +12,12 @@ namespace RoosterPlanner.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VolunteerController : ControllerBase
+    public class VolunteersController : ControllerBase
     {
         protected IMapper Mapper { get; set; }
         public IProjectService ProjectService { get; set; }
 
-        public VolunteerController(IMapper mapper, IProjectService projectService)
+        public VolunteersController(IMapper mapper, IProjectService projectService)
         {
             Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             ProjectService = projectService ?? throw new ArgumentNullException(nameof(projectService));

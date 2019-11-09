@@ -12,7 +12,7 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Common
 {
-    public abstract class Repository<TKey, TEntity> : IRepository<TKey, TEntity> where TKey : struct where TEntity : class, IEntity<TKey>, new()
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity, new()
     {
         protected DbContext DataContext { get; private set; }
         protected virtual DbSet<TEntity> EntitySet { get; private set; }
@@ -42,9 +42,9 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns>The entity that matched the id or <c>null</c> if no match has been found.</returns>
-        public virtual TEntity Get(TKey id)
+        public virtual TEntity Get(Guid id)
         {
-            return this.EntitySet.FirstOrDefault(x => x.Id.Equals(id));
+            return this.EntitySet.FirstOrDefault(x => x.Id == id);
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns>The entity that matched the id or <c>null</c> if no match has been found.</returns>
-        public virtual Task<TEntity> GetAsync(TKey id)
+        public virtual Task<TEntity> GetAsync(Guid id)
         {
-            return this.EntitySet.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return this.EntitySet.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         /// <param name="ids">The primary keys of the entity.</param>
         /// <returns>The entity that matched the id's.</returns>
-        public virtual TEntity Find(params TKey[] ids)
+        public virtual TEntity Find(params Guid[] ids)
         {
             return this.EntitySet.Find(ids);
         }
@@ -72,9 +72,83 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         /// <param name="ids">The ids.</param>
         /// <returns>The list of records that matched one of the id's.</returns>
-        public virtual async Task<TEntity> FindAsync(params TKey[] ids)
+        public virtual async Task<TEntity> FindAsync(params Guid[] ids)
         {
             return await this.EntitySet.FindAsync(ids);
+        }
+
+        /// <summary>
+        /// Adds the specified entity. This will update the whole object graph.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>The added entity.</returns>
+        /// <exception cref="System.ArgumentNullException">entity</exception>
+        public virtual TEntity Add(TEntity entity)
+        {
+            if (entity == null)
+                return null;
+
+            try
+            {
+                ValidationContext validationContext = new ValidationContext(entity);
+                Validator.ValidateObject(entity, validationContext, true);
+            }
+            catch (ValidationException valEx)
+            {
+                //Log
+                logger.LogException(valEx, new Dictionary<string, string> { { "Message", valEx.Message }, { "FieldValue", valEx.Value.ToString() } });
+                if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
+                {
+                    throw new ValidationException(ComposeErrorMessage(valEx), valEx);
+                }
+                throw valEx;
+            }
+
+            EntityEntry<TEntity> entry = this.DataContext.Entry(entity);
+            if (entity.Id == Guid.Empty)
+                entity.SetKey(Guid.NewGuid());
+
+            entity.LastEditBy = "System";
+            entity.LastEditDate = DateTime.UtcNow;
+
+            entry = this.EntitySet.Add(entity);
+
+            return entry.Entity;
+        }
+
+        /// <summary>
+        /// Updates the specified entity. This will update the whole object graph.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>The modified entity.</returns>
+        public virtual TEntity Update(TEntity entity)
+        {
+            if (entity == null)
+                return null;
+
+            try
+            {
+                ValidationContext validationContext = new ValidationContext(entity);
+                Validator.ValidateObject(entity, validationContext, true);
+            }
+            catch (ValidationException valEx)
+            {
+                //Log
+                logger.LogException(valEx, new Dictionary<string, string> { { "Message", valEx.Message }, { "FieldValue", valEx.Value.ToString() } });
+                if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
+                {
+                    throw new ValidationException(ComposeErrorMessage(valEx), valEx);
+                }
+                throw valEx;
+            }
+
+            entity.LastEditBy = "System";
+            entity.LastEditDate = DateTime.UtcNow;
+
+            EntityEntry<TEntity> entry = this.EntitySet.Attach(entity);
+            entry.State = EntityState.Modified;
+
+            return entry.Entity;
         }
 
         /// <summary>
@@ -107,12 +181,10 @@ namespace RoosterPlanner.Data.Common
             EntityEntry<TEntity> entry = this.DataContext.Entry(entity);
 
             TEntity attachedEntity = null;
-            if ((entity.Id is Guid && entity.Id.Equals(Guid.Empty))
-                || (entity.Id is int && entity.Id.Equals(0))
-                || (entity.Id is DateTime && entity.Id.Equals(new DateTime())))
+            if (entity.Id == Guid.Empty)
             {
                 //Insert
-                entity.SetNewKey();
+                entity.SetKey(Guid.NewGuid());
                 entry = this.EntitySet.Add(entity);
             }
             else if (entry.State == EntityState.Detached)
@@ -151,9 +223,9 @@ namespace RoosterPlanner.Data.Common
         /// <param name="id">The id.</param>
         /// <param name="rowversion">The rowversion of the entity.</param>
         /// <returns>The entity in deleted state.</returns>
-        public virtual TEntity Remove(TKey id, byte[] rowversion)
+        public virtual TEntity Remove(Guid id, byte[] rowversion)
         {
-            return this.Remove(new TEntity() { Id = id, RowVersion = rowversion });
+            return this.Remove(new { Id = id, RowVersion = rowversion } as TEntity);
         }
 
         /// <summary>
@@ -167,6 +239,19 @@ namespace RoosterPlanner.Data.Common
             if (entity != null)
                 return this.EntitySet.Remove(entity).Entity;
             return entity;
+        }
+
+        /// <summary>
+        /// Immediately deletes the entity from the database.
+        /// </summary>
+        /// <remarks>The entity is not removed, but immediately deleted without the need to call SaveChanges.</remarks>
+        /// <param name="id">The id of the entity.</param>
+        /// <returns>The number of affected rows.</returns>
+        public int Delete(Guid id)
+        {
+            if (id != Guid.Empty)
+                return this.DataContext.Database.ExecuteSqlCommand($"DELETE FROM [{nameof(TEntity)}] WHERE[AuthorId] = @p0;", id);
+            return 0;
         }
 
         #region Private Methods

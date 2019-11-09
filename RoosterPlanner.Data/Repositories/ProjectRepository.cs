@@ -10,7 +10,7 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {
-    public interface IProjectRepository : IRepository<Guid, Project>
+    public interface IProjectRepository : IRepository<Project>
     {
         /// <summary>
         /// Returns a list of open projects.
@@ -19,7 +19,7 @@ namespace RoosterPlanner.Data.Repositories
         Task<List<Project>> GetActiveProjectsAsync();
     }
 
-    public class ProjectRepository : Repository<Guid, Project>, IProjectRepository
+    public class ProjectRepository : Repository<Project>, IProjectRepository
     {
         //Constructor
         public ProjectRepository(RoosterPlannerContext dataContext, ILogger logger) : base(dataContext, logger)

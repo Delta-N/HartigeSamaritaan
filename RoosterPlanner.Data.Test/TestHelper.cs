@@ -13,7 +13,7 @@ namespace RoosterPlanner.Data
         {
             return new ConfigurationBuilder()
                 .SetBasePath(outputPath)
-                .AddJsonFile("appsettingsTest.json", optional: true)
+                .AddJsonFile("appsettings.Test.json", optional: true)
                 .Build();
         }
 

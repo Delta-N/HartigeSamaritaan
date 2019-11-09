@@ -5,42 +5,54 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RoosterPlanner.Models
 {
-    public class Project : Entity<Guid>
+    public class Project : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Key]
-        [Column(Order = 0)]
-        public override Guid Id { get; set; }
-
         [Column(Order = 1)]
         [Required, MaxLength(64)]
         public string Name { get; set; }
 
         [Column(Order = 2)]
-        public DateTime StartDate { get; set; }
+        [MaxLength(64)]
+        public string Address { get; set; }
 
         [Column(Order = 3)]
-        public DateTime? EndDate { get; set; }
+        [MaxLength(64)]
+        public string City { get; set; }
 
         [Column(Order = 4)]
+        [MaxLength(512)]
+        public string Description { get; set; }
+
+        [Column(Order = 5)]
+        public DateTime StartDate { get; set; }
+
+        [Column(Order = 6)]
+        public DateTime? EndDate { get; set; }
+
+        [Column(Order = 7)]
+        public string PictureUri { get; set; }
+
+        [Column(Order = 8)]
+        public string WebsiteUrl { get; set; }
+
+        [Column(Order = 9)]
         public bool Closed { get; set; }
 
         public List<ProjectTask> ProjectTasks { get; set; }
 
+        public List<Participation> Participations { get; set; }
+
         //Constructor
-        public Project() : base()
+        public Project() : this(Guid.Empty)
         {
             this.ProjectTasks = new List<ProjectTask>();
+            Participations = new List<Participation>();
         }
 
-        /// <summary>
-        /// Generated a new key and sets this as the Id value.
-        /// </summary>
-        /// <returns></returns>
-        public override Guid SetNewKey()
+        //Constructor
+        public Project(Guid id) : base(id)
         {
-            this.Id = Guid.NewGuid();
-            return this.Id;
+            this.ProjectTasks = new List<ProjectTask>();
         }
     }
 }

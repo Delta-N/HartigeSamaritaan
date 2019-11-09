@@ -14,8 +14,7 @@ namespace RoosterPlanner.Data.Repositories
     {
         private Project CreateProjectObject(Guid id, string name = null)
         {
-            Project project = new Project {
-                Id = id,
+            Project project = new Project(id) {
                 Name = name ?? $"Project_{DateTime.Now.ToString("yyyyddMM-HHmm")}",
                 StartDate = DateTime.Today.AddDays(-7),
                 LastEditBy = "System",
@@ -65,8 +64,7 @@ namespace RoosterPlanner.Data.Repositories
         {
             //Arrange
             Guid projectId = Guid.NewGuid();
-            Project project = new Project {
-                Id = projectId,
+            Project project = new Project(projectId) {
                 Name = $"Project_{DateTime.Now.ToString("yyyyddMM-HHmm")}",
                 StartDate = DateTime.Today.AddDays(-7),
                 LastEditBy = "System",

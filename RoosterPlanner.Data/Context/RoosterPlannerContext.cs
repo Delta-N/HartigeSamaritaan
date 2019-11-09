@@ -13,6 +13,10 @@ namespace RoosterPlanner.Data.Context
 
         public DbSet<Task> Tasks { get; set; }
 
+        public DbSet<Person> Persons { get; set; }
+
+        public DbSet<Participation> Participations { get; set; }
+
         //Constructor
         public RoosterPlannerContext(DbContextOptions<RoosterPlannerContext> options) : base(options)
         {

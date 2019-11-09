@@ -5,31 +5,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RoosterPlanner.Models
 {
     [Serializable]
-    public abstract class Entity<TKey> : Entity, IEntity<TKey> where TKey : struct
+    public abstract class Entity : IEntity
     {
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        /// <value>
-        /// The id.
-        /// </value>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column(Order = 0)]
-        public virtual TKey Id { get; set; }
+        public virtual Guid Id { get; private set; }
 
-        //Constructor
-        public Entity()
-        {
-            this.Id = default(TKey);
-        }
 
-        public abstract TKey SetNewKey();
-    }
-
-    [Serializable]
-    public abstract class Entity
-    {
         /// <summary>
         /// Gets or sets the LastEditBy.
         /// </summary>
@@ -53,8 +39,24 @@ namespace RoosterPlanner.Models
         public byte[] RowVersion { get; set; }
 
         //Constructor
-        public Entity()
+        public Entity() : this(Guid.Empty)
         {
+        }
+
+        //Constructor - Overload
+        public Entity(Guid Id)
+        {
+            this.Id = Id;
+        }
+
+        /// <summary>
+        /// Sets the Id of the entity when it is Guid.Empty.
+        /// </summary>
+        /// <param name="id">The Id to set.</param>
+        public void SetKey(Guid id)
+        {
+            if (this.Id == Guid.Empty)
+                this.Id = id;
         }
     }
 }
