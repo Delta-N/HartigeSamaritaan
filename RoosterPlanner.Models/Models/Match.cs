@@ -15,10 +15,10 @@ namespace RoosterPlanner.Models
         public Participation Participation { get; set; }
 
         [Column(Order = 2)]
-        public Guid TaskId { get; set; }
+        public Guid ShiftId { get; set; }
 
-        [ForeignKey("TaskId")]
-        public Participation Task { get; set; }
+        [ForeignKey("ShiftId")]
+        public Shift Shift { get; set; }
 
         public MatchType Type { get; set; }
 
