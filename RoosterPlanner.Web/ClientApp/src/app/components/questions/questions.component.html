@@ -1,0 +1,157 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form  [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Algemeen</ng-template>
+      <label id="example-radio-group-label"
+        >Ben je als vluchteling naar Nederland gekomen?</label
+      >
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        required
+        formControlName="refugee"
+        [(ngModel)]="answers.refugee"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Yes
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          No
+        </mat-radio-button>
+      </mat-radio-group>
+      <label id="example-radio-group-label"
+        >Woon je momenteel in het AZC Rijswijk?</label
+      >
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        required
+        formControlName="azc"
+        [(ngModel)]="answers.azcRijswijk"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Yes
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          No
+        </mat-radio-button>
+      </mat-radio-group>
+      <label id="example-radio-group-label"
+        >Ga je voor de middelbare school een maatschappelijke stage volgen bij
+        Hartige Samaritaan?</label
+      >
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        required
+        formControlName="internship"
+        [(ngModel)]="answers.internship"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Yes
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          No
+        </mat-radio-button>
+      </mat-radio-group>
+      <label id="example-radio-group-label"
+        >Bent u in het bezit van een Rijbewijs B en ziet u het zitten om met een
+        6-persoons bus te rijden?</label
+      >
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        required
+        formControlName="driver"
+        [(ngModel)]="answers.driversLicense"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Yes
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          No
+        </mat-radio-button>
+      </mat-radio-group>
+      <div>
+        <button mat-button matStepperNext>Volgende</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Voorkeuren</ng-template>
+      <label id="example-radio-group-label">Wil jij achter de bar staan?</label>
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        required
+        formControlName="barStaff"
+        [(ngModel)]="answers.barStaff"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Yes
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          No
+        </mat-radio-button>
+      </mat-radio-group>
+      <label id="example-radio-group-label">Wil jij in de bediening werken?</label>
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        required
+        formControlName="staff"
+        [(ngModel)]="answers.staff"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Yes
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          No
+        </mat-radio-button>
+      </mat-radio-group>
+      <label id="example-radio-group-label">Wil jij gastheer of gastvrouw zijn?</label>
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        required
+        formControlName="host"
+        [(ngModel)]="answers.host"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Yes
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          No
+        </mat-radio-button>
+      </mat-radio-group>
+      <label id="example-radio-group-label">Wil jij in de keuken staan?</label>
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        required
+        formControlName="cook"
+        [(ngModel)]="answers.cook"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Yes
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          No
+        </mat-radio-button>
+      </mat-radio-group>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

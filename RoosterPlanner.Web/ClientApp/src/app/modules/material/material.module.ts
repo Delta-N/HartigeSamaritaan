@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
   declarations: [],
@@ -17,7 +19,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatSidenavModule,
     MatIconModule,
     MatInputModule,
+    MatRadioModule,
     MatButtonModule,
+    MatStepperModule,
     MatFormFieldModule
   ],
   exports: [
@@ -26,7 +30,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatSidenavModule,
     MatIconModule,
     MatInputModule,
+    MatRadioModule,
     MatButtonModule,
+    MatStepperModule,
     MatFormFieldModule
   ]
 })
