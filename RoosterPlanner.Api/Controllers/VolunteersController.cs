@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Service;
@@ -16,11 +15,9 @@ namespace RoosterPlanner.Api.Controllers
     {
         protected IMapper Mapper { get; set; }
         public IProjectService ProjectService { get; set; }
-
         public IParticipationService ParticipationService { get; set; }
         public IAzureB2CService AzureB2CService { get; set; }
         public IPersonService PersonService { get; set; }
-
         public IShiftService ShiftService { get; set; }
         public IMatchService MatchService { get; set; }
 
@@ -68,6 +65,12 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("getshifts/{projectId}")]
         public async Task<ActionResult<List<ShiftViewModel>>> GetShifts(Guid projectId)
         {
+            if (projectId == Guid.Empty)
+            {
+                return BadRequest("No valid id.");
+            }
+
+
             var shifts = await ShiftService.GetActiveShiftsForProjectAsync(projectId);
             return shifts.Data.Select(i => Mapper.Map<ShiftViewModel>(i)).ToList();
         }
@@ -75,11 +78,21 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("setshift/{participateId}/{shiftId}")]
         public async Task<ActionResult> SetShift(Guid participateId, Guid shiftId)
         {
-            var result = await MatchService.SetMatchForParticipateAsync(participateId, shiftId);
-            //var shifts = await ShiftService.GetActiveShiftsForProjectAsync(projectId);
-            //return shifts.Data.Select(i => Mapper.Map<ShiftViewModel>(i)).ToList();
+            if (participateId == Guid.Empty || shiftId == Guid.Empty)
+            {
+                return BadRequest("No valid id.");
+            }
 
-            return Ok();
+            var result = await MatchService.SetMatchForParticipateAsync(participateId, shiftId);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return UnprocessableEntity(result.Message);
+            }
         }
     }
 }

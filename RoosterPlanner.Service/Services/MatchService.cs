@@ -28,8 +28,17 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult<Match>> SetMatchForParticipateAsync(Guid participateId, Guid shiftId)
         {
+            if(participateId == Guid.Empty)
+            {
+                throw new ArgumentNullException("participateId");
+            }
+
+            if (shiftId == Guid.Empty)
+            {
+                throw new ArgumentNullException("shiftId");
+            }
+
             var taskResult = new TaskResult<Match>();
-            //TODO: add validation of the input.
             try
             {
                 var match = new Match
@@ -40,11 +49,11 @@ namespace RoosterPlanner.Service
                 };
                 
                 taskResult.Data = unitOfWork.MatchRepository.AddOrUpdate(match);
-                taskResult.Succeeded = (await unitOfWork.SaveChangesAsync() == 1);
+                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het setten van Matches.");
+                logger.Error(ex, "Fout bij het updaten van match.");
                 taskResult.Error = ex;
             }
             return taskResult;
