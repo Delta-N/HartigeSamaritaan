@@ -17,6 +17,8 @@ namespace RoosterPlanner.Data.Common
 
         ITaskRepository TaskRepository { get; }
 
+        IShiftRepository ShiftRepository { get; }
+
         ICategoryRepository CategoryRepository { get; }
 
         /// <summary>
@@ -51,6 +53,8 @@ namespace RoosterPlanner.Data.Common
         private IPersonRepository personRepository;
         private ITaskRepository taskRepository;
         private ICategoryRepository categoryRepository;
+
+        private IShiftRepository shiftRepository;
         #endregion
 
         public IProjectRepository ProjectRepository
@@ -63,6 +67,16 @@ namespace RoosterPlanner.Data.Common
             }
         }
 
+
+        public IShiftRepository ShiftRepository
+        {
+            get
+            {
+                if (shiftRepository == null)
+                    this.shiftRepository = new ShiftRepository(this.DataContext, null);
+                return this.shiftRepository;
+            }
+        }
         public ITaskRepository TaskRepository
         {
             get
