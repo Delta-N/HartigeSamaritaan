@@ -6,6 +6,16 @@
       "type": "string",
       "minLength": 1
     },
+    "environment": {
+      "type": "string",
+      "minLength": 3,
+      "defaultValue": "dev",
+      "allowedValues": [
+        "dev",
+        "tst",
+        "prd"
+      ]
+    },
     "skuName": {
       "type": "string",
       "defaultValue": "F1",
@@ -76,11 +86,23 @@
       "metadata": {
         "description": "Describes the performance level for Edition"
       }
+    },
+    "hackatonstoragedevType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
     }
   },
   "variables": {
-    "webSiteName": "[concat('webSite', uniqueString(resourceGroup().id))]",
-    "sqlserverName": "[concat('sqlserver', uniqueString(resourceGroup().id))]"
+    "webSiteName": "[concat('roosterplanner-api-', parameters('environment'))]",
+    "sqlserverName": "[concat('roosterplanner-sqlserver-', parameters('environment'))]",
+    "hackatonstoragedevName": "[concat('hackatonstorage', parameters('environment'))]"
   },
   "resources": [
     {
@@ -245,10 +267,10 @@
       }
     },
     {
-      "apiVersion": "2014-04-01",
+      "apiVersion": "2015-05-01",
       "name": "[variables('webSiteName')]",
       "type": "Microsoft.Insights/components",
-      "location": "East US",
+      "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]"
       ],
@@ -258,6 +280,95 @@
       },
       "properties": {
         "ApplicationId": "[variables('webSiteName')]"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('hackatonstoragedevName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Hot"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices",
+      "apiVersion": "2019-04-01",
+      "name": "[concat(variables('hackatonstoragedevName'), '/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('hackatonstoragedevName'))]"
+      ],
+      "properties": {
+        "cors": {
+          "corsRules": [
+            {
+              "allowedOrigins": [
+                "*"
+              ],
+              "allowedMethods": [
+                "GET",
+                "OPTIONS"
+              ],
+              "maxAgeInSeconds": 0,
+              "exposedHeaders": [
+                "*"
+              ],
+              "allowedHeaders": [
+                "*"
+              ]
+            }
+          ]
+        },
+        "deleteRetentionPolicy": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2019-04-01",
+      "name": "[concat(variables('hackatonstoragedevName'), '/default/$web')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('hackatonstoragedevName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('hackatonstoragedevName'))]"
+      ],
+      "properties": {
+        "publicAccess": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2019-04-01",
+      "name": "[concat(variables('hackatonstoragedevName'), '/default/azureb2c')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('hackatonstoragedevName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('hackatonstoragedevName'))]"
+      ],
+      "properties": {
+        "publicAccess": "Blob"
       }
     }
   ]

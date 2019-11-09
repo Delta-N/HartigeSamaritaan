@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://website4sbyrgd5tky7e.azurewebsites.net/api',
+  baseUrl: 'https://roosterplan-api-dev.azurewebsites.net/api',
   options: {
     redirectUri: "https://hackatonstoragedev.z6.web.core.windows.net/",
     protectedResourceMap: [],

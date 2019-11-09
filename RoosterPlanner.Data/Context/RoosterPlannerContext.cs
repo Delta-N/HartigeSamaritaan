@@ -51,7 +51,11 @@ namespace RoosterPlanner.Data.Context
             });
 
             CategorySeed categorySeed = new CategorySeed(modelBuilder);
+            PersonSeed personSeed = new PersonSeed(modelBuilder);
             List<Category> categorieList = categorySeed.Seed();
+            List<Person> personList = personSeed.Seed();
+
+
         }
     }
 }

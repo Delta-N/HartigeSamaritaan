@@ -11,6 +11,10 @@ namespace RoosterPlanner.Data.Common
     {
         IProjectRepository ProjectRepository { get; }
 
+        IParticipationRepository ParticipationRepository { get; }
+
+        IPersonRepository PersonRepository { get; }
+
         ITaskRepository TaskRepository { get; }
 
         ICategoryRepository CategoryRepository { get; }
@@ -41,6 +45,10 @@ namespace RoosterPlanner.Data.Common
         protected ILogger Logger { get; private set; }
 
         private IProjectRepository projectRepository;
+
+        private IParticipationRepository participationRepository;
+
+        private IPersonRepository personRepository;
         private ITaskRepository taskRepository;
         private ICategoryRepository categoryRepository;
         #endregion
@@ -72,6 +80,26 @@ namespace RoosterPlanner.Data.Common
                 if (categoryRepository == null)
                     this.categoryRepository = new CategoryRepository(this.DataContext, null);
                 return this.categoryRepository;
+            }
+        }
+
+        public IParticipationRepository ParticipationRepository
+        {
+            get
+            {
+                if (participationRepository == null)
+                    this.participationRepository = new ParticipationRepository(this.DataContext, null);
+                return this.participationRepository;
+            }
+        }
+
+        public IPersonRepository PersonRepository
+        {
+            get
+            {
+                if (personRepository == null)
+                    this.personRepository = new PersonRepository(this.DataContext, null);
+                return this.personRepository;
             }
         }
 

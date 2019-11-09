@@ -52,6 +52,26 @@ namespace RoosterPlanner.Service
             return taskResult;
         }
 
+        ///// <summary>
+        ///// Returns a list of open projects.
+        ///// </summary>
+        ///// <returns>List of projects that are not closed.</returns>
+        //public async Task<TaskListResult<Project>> GetActiveProjectsByUserAsync(Guid Oid)
+        //{
+        //    var taskResult = TaskListResult<Project>.CreateDefault();
+
+        //    try
+        //    {
+        //        taskResult.Data = await projectRepository.GetActiveProjectsForUserAsync(Oid);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
+        //        taskResult.Error = ex;
+        //    }
+        //    return taskResult;
+        //}
+
         /// <summary>
         /// Closes the project.
         /// </summary>

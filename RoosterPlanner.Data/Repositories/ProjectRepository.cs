@@ -17,6 +17,7 @@ namespace RoosterPlanner.Data.Repositories
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
         Task<List<Project>> GetActiveProjectsAsync();
+        //Task<List<Project>> GetActiveProjectsForUserAsync(Guid Oid);
     }
 
     public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -34,5 +35,14 @@ namespace RoosterPlanner.Data.Repositories
         {
             return this.EntitySet.Where(p => !p.Closed).OrderBy(p => p.StartDate).ToListAsync();
         }
+
+        ///// <summary>
+        ///// Returns a list of open projects.
+        ///// </summary>
+        ///// <returns>List of projects that are not closed.</returns>
+        //public Task<List<Project>> GetActiveProjectsForUserAsync(Guid Oid)
+        //{
+        //    return this.EntitySet.Where(p => !p.Closed && !p.Participations.Any(pt => pt.Person.Oid == Oid)).ToListAsync();
+        //}
     }
 }
