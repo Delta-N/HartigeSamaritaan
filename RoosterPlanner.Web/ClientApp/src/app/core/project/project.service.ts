@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../http/api.service';
+import { Project } from 'src/app/models/project';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { Project } from '../../models/project.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  private controllerName = 'project';
+  private controllerName = 'volunteers';
 
   constructor(private apiService: ApiService) {}
 
-  public createOrUpdateProject(
-    project: Project
-  ): Observable<HttpResponse<Project>> {
+  public createOrUpdateProject(project: Project): Observable<HttpResponse<Project>> {
     return this.apiService.post(`${this.controllerName}`, project);
   }
 
@@ -27,6 +25,7 @@ export class ProjectService {
   }
 
   public getAllProjects(): Observable<HttpResponse<Array<Project>>> {
-    return this.apiService.get(`${this.controllerName}`);
+    return this.apiService.get(`${this.controllerName}/getprojects`);
+    // return this.apiService.get('../../../assets/Mock-data/projects.json');
   }
 }

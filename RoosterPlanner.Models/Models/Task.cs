@@ -30,6 +30,8 @@ namespace RoosterPlanner.Models
 
         public List<ProjectTask> TaskProjects { get; set; }
 
+        public List<Shift> Shifts { get; set; }
+
         //Constructor
         public Task() : this(Guid.Empty)
         {

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgxTuiCalendarComponent } from 'ngx-tui-calendar';
+import { JwtHelper } from 'src/app/utilities/jwt-helper';
+import { Schedule } from 'ngx-tui-calendar/lib/Models/Schedule';
 
 @Component({
   selector: 'app-home',
@@ -7,17 +9,50 @@ import { NgxTuiCalendarComponent } from 'ngx-tui-calendar';
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
-  @ViewChild('exampleCalendar', { static: false })
+  @ViewChild('calendarView', { static: true })
   exampleCalendar: NgxTuiCalendarComponent;
+  showNewUser = false;
+
+  schedules: Schedule[];
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const idToken = JwtHelper.decodeToken(
+      sessionStorage.getItem('msal.idtoken')
+    );
+    if (idToken && idToken.newUser) {
+      this.showNewUser = true;
+    }
+    this.exampleCalendar.changeView('day');
 
-  onTuiCalendarCreate($event) {
-    /* at this point the calendar has been created and it's methods are available via the ViewChild defined above, so for example you can do: */
-    this.exampleCalendar.createSchedules([
-      /* populated schedules array goes here*/
-    ]);
   }
+
+  // onTuiCalendarCreate($event) {
+
+
+  //   this.exampleCalendar.createSchedules([
+  //     /* populated schedules array goes here*/
+  //   ]);
+
+  //   this.exampleCalendar.changeView('day');
+
+  //   this.exampleCalendar.setOptions(
+  //     { taskView: true, defaultView: 'day', scheduleView: true },
+  //     false
+  //   );
+  // }
+
+  // public setView(): void {
+  //   this.exampleCalendar.changeView('day');
+
+  //   this.exampleCalendar.setOptions(
+  //     { taskView: true, defaultView: 'day', scheduleView: true },
+  //     false
+  //   );
+  // }
+
+  // onSchedule(schedule) {
+  //   console.log('schedule', schedule);
+  // }
 }
