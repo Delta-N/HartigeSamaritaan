@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TaskService } from '../../core/task/task.service';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-task',
@@ -6,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./task.component.less']
 })
 export class TaskComponent implements OnInit {
+  public tasks: Array<Task>;
 
-  constructor() { }
+  constructor(private taskService: TaskService) {}
 
   ngOnInit() {
+    this.tasks = new Array<Task>();
+    this.taskService.getAll().subscribe(result => {
+      this.tasks = result.body;
+    });
   }
-
 }

@@ -5,11 +5,24 @@ import { HomeComponent } from './pages/home/home.component';
 import { AdminComponent } from './pages/admin/admin.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full'},
-  { path: 'home', component: HomeComponent, canActivate: [MsalGuard]},
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent, canActivate: [MsalGuard] },
   {
     path: 'profile',
-    loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule),
+    loadChildren: () =>
+      import('./modules/profile/profile.module').then(m => m.ProfileModule),
+    canActivate: [MsalGuard]
+  },
+  {
+    path: 'project',
+    loadChildren: () =>
+      import('./modules/project/project.module').then(m => m.ProjectModule),
+    canActivate: [MsalGuard]
+  },
+  {
+    path: 'task',
+    loadChildren: () =>
+      import('./modules/task/task.module').then(m => m.TaskModule),
     canActivate: [MsalGuard]
   },
   { path: 'admin', component: AdminComponent, pathMatch: 'full' },
@@ -20,4 +33,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
