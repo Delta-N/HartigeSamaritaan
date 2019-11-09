@@ -8,7 +8,7 @@ import { HttpResponse } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ProjectService {
-  private controllerName = 'volunteers';
+  private controllerName = 'projects';
 
   constructor(private apiService: ApiService) {}
 
@@ -25,7 +25,6 @@ export class ProjectService {
   }
 
   public getAllProjects(): Observable<HttpResponse<Array<Project>>> {
-    return this.apiService.get(`${this.controllerName}/getprojects`);
-    // return this.apiService.get('../../../assets/Mock-data/projects.json');
+    return this.apiService.get(`${this.controllerName}?name=&city=`);
   }
 }
