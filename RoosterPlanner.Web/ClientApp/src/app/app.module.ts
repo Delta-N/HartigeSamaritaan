@@ -17,6 +17,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { TaskComponent } from './pages/task/task.component';
 import { NgxTuiCalendarModule } from 'ngx-tui-calendar';
 import { QuestionsComponent } from './components/questions/questions.component';
+import { ProjectOverviewComponent } from './components/project-overview/project-overview.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { QuestionsComponent } from './components/questions/questions.component';
     HomeComponent,
     AdminComponent,
     TaskComponent,
-    QuestionsComponent
+    QuestionsComponent,
+    ProjectOverviewComponent
   ],
   imports: [
     BrowserModule,
