@@ -22,7 +22,7 @@ import { QuestionsComponent } from './components/questions/questions.component';
     AppComponent,
     HomeComponent,
     AdminComponent,
-    QuestionsComponent
+    QuestionsComponent,
   ],
   imports: [
     BrowserModule,
