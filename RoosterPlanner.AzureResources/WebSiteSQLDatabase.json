@@ -25,13 +25,7 @@
         "B1",
         "B2",
         "B3",
-        "S1",
-        "S2",
-        "S3",
-        "P1",
-        "P2",
-        "P3",
-        "P4"
+        "S1"
       ],
       "metadata": {
         "description": "Describes plan's pricing tier and instance size. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
@@ -63,8 +57,7 @@
       "defaultValue": "Basic",
       "allowedValues": [
         "Basic",
-        "Standard",
-        "Premium"
+        "Standard"
       ]
     },
     "maxSizeBytes": {
@@ -78,10 +71,7 @@
         "Basic",
         "S0",
         "S1",
-        "S2",
-        "P1",
-        "P2",
-        "P3"
+        "S2"
       ],
       "metadata": {
         "description": "Describes the performance level for Edition"
@@ -93,9 +83,7 @@
       "allowedValues": [
         "Standard_LRS",
         "Standard_ZRS",
-        "Standard_GRS",
-        "Standard_RAGRS",
-        "Premium_LRS"
+        "Standard_GRS"
       ]
     }
   },
