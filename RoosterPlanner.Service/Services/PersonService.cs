@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
+using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.DataModels.B2C;
@@ -14,7 +15,7 @@ namespace RoosterPlanner.Service
     {
         Task<TaskListResult<Person>> GetB2cMembers();
 
-        public async Task<TaskResult<Project>> UpdatePersonName(Guid oid, string name);
+        Task<TaskResult<Project>> UpdatePersonName(Guid oid, string name);
     }
 
     public class PersonService : IPersonService
