@@ -69,7 +69,16 @@
   <ItemGroup>
     <Content Include="ClientApp\e2e\protractor.conf.js" />
     <Content Include="ClientApp\src\app\app.component.html" />
+    <Content Include="ClientApp\src\app\components\add-project\add-project.component.html" />
+    <Content Include="ClientApp\src\app\components\project-overview\project-overview.component.html" />
+    <Content Include="ClientApp\src\app\components\questions\questions.component.html" />
     <Content Include="ClientApp\src\app\modules\home\home.component.html" />
+    <Content Include="ClientApp\src\app\pages\admin\admin.component.html" />
+    <Content Include="ClientApp\src\app\pages\home\home.component.html" />
+    <Content Include="ClientApp\src\app\pages\profile\profile.component.html" />
+    <Content Include="ClientApp\src\app\pages\project\project.component.html" />
+    <Content Include="ClientApp\src\app\pages\task\task.component.html" />
+    <Content Include="ClientApp\src\assets\Logo.png" />
     <Content Include="ClientApp\src\favicon.ico" />
     <Content Include="ClientApp\src\index.html" />
     <Content Include="ClientApp\src\karma.conf.js" />
@@ -102,10 +111,40 @@
     <TypeScriptCompile Include="ClientApp\src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\add-project\add-project.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\add-project\add-project.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\project-overview\project-overview.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\project-overview\project-overview.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\questions\questions.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\questions\questions.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\core\http\api.service.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\core\http\api.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\entity.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\project.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\project.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\questionair-answers.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\task.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\modules\home\home.component.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\modules\home\home.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\material\material.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\profile\profile-routing.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\profile\profile.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\project\project-routing.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\project\project.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\task\task-routing.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\task\task.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\admin\admin.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\admin\admin.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\home\home.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\home\home.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\profile\profile.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\profile\profile.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\project\project.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\project\project.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\task\task.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pages\task\task.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\utilities\jwt-helper.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.ts" />
     <TypeScriptCompile Include="ClientApp\src\main.ts" />
@@ -116,6 +155,15 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientApp\src\app\components\add-project\add-project.component.less" />
+    <Content Include="ClientApp\src\app\components\project-overview\project-overview.component.less" />
+    <Content Include="ClientApp\src\app\components\questions\questions.component.less" />
+    <Content Include="ClientApp\src\app\pages\admin\admin.component.less" />
+    <Content Include="ClientApp\src\app\pages\home\home.component.less" />
+    <Content Include="ClientApp\src\app\pages\profile\profile.component.less" />
+    <Content Include="ClientApp\src\app\pages\project\project.component.less" />
+    <Content Include="ClientApp\src\app\pages\task\task.component.less" />
+    <Content Include="ClientApp\src\assets\Mock-data\projects.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
@@ -166,13 +214,11 @@
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
   </Target>
-
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
-
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
