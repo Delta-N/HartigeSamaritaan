@@ -3,14 +3,36 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './pages/home/home.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './modules/material/material.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatCardModule} from "@angular/material/card";
+import { ProjectCardComponent } from './components/project-card/project-card.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { ProjectOverviewCardComponent } from './components/project-overview-card/project-overview-card.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    NotFoundComponent,
+    ProjectCardComponent,
+    AdminComponent,
+    ProjectOverviewCardComponent,
+
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    NgbModule,
+    MatSidenavModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

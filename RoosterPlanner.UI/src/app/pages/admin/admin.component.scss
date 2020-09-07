@@ -1,0 +1,26 @@
+*{
+  text-align: left;
+  font: normal normal normal 35px/50px Segoe UI;
+  letter-spacing: 0px;
+  color: #434343;
+  opacity: 1;
+}
+
+
+
+.cardholder {
+  display: flex;
+  align-items: flex-start;
+  padding: 30px;
+  justify-content: space-between;
+
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-top: 10px;
+  border-bottom: 1px solid gray;
+
+}

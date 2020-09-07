@@ -1,0 +1,47 @@
+.mat-icon-button{
+  text-align: left;
+  font: normal normal 400 18px/27px Segoe UI;
+  letter-spacing: 0px;
+  color: #434343;
+  opacity: 1;
+  padding: 20px;
+}
+
+.mat-card-title{
+  border-bottom: 1px solid gray;
+  text-align: left;
+  font: normal normal bold 21px/31px Segoe UI;
+  letter-spacing: 0px;
+  color: #434343;
+  opacity: 1;
+  margin-left:10px;
+  padding-left: 10px;
+}
+.mat-card{
+  background: #E8E8E8 0% 0% no-repeat padding-box;
+  box-shadow: 3px 3px 6px #0000001A;
+  border: 1px solid #D1D1D1;
+  opacity: 1;
+  text-align: left;
+  font: normal normal bold 21px/31px Segoe UI;
+  letter-spacing: 0px;
+  color: #434343;
+  min-width: 325px;
+}
+.mat-card-content{
+  font: normal normal 400 18px/27px Segoe UI;
+  color: #434343;
+  min-height:300px ;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+.mat-card-content.h6{
+  margin-top: 25px;
+}
+
+.mat-card-actions{
+  border: none;
+  color: red;
+
+}

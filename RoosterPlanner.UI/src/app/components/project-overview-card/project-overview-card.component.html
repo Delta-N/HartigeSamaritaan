@@ -1,0 +1,14 @@
+<mat-card>
+  <div>
+    <mat-card-title>Projecten</mat-card-title>
+  </div>
+  <mat-card-content>
+    <span *ngFor="let item of projects">
+      <p>{{item.name}}</p>
+    </span>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-icon-button (click)="addProject()">+ nieuw project toevoegen</button>
+  </mat-card-actions>
+</mat-card>

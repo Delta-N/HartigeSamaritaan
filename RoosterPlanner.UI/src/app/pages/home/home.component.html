@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="bar">
+    <h1>Dashboard</h1>
+    <h5 id="push" routerLink="aanmelden-project">Aanmelden bij project</h5>
+  </div>
+
+
+  <div class="cardholder">
+    <span *ngFor="let item of projects">
+      <app-project-card [project]="item"></app-project-card>
+    </span>
+  </div>
+</div>
+
+
+
