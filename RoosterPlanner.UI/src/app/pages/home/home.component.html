@@ -6,7 +6,7 @@
 
 
   <div class="cardholder" *ngIf="projects.length > 0">
-      <span *ngFor="let item of projects">
+      <span *ngFor="let item of projects" id="card">
       <app-project-card [project]="item"></app-project-card>
       </span>
   </div>

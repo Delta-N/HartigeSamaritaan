@@ -1,8 +1,3 @@
-* {
-  //font-family: 'Comfortaa',sans-serif;
-  font-family: Segoe UI, Frutiger, Frutiger Linotype, Dejavu Sans, Helvetica Neue, Arial, sans-serif;
-}
-
 .mat-toolbar {
   height: 7vh;
   background-color: #E74B3B;
@@ -35,7 +30,7 @@ button {
 .example-container {
   position: absolute;
   top: 60px;
-  bottom: 60px;
+  bottom: 1px;
   left: 0;
   right: 0;
 }
@@ -85,3 +80,4 @@ img {
   font: normal normal normal 20px/28px Segoe UI;
   margin-left: auto;
 }
+

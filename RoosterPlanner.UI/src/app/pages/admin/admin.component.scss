@@ -46,7 +46,8 @@
   letter-spacing: 0px;
   color: #434343;
   min-width: 325px;
-  min-height:350px ;
+  min-height:375px ;
+  max-height:375px ;
 }
 .mat-card-content{
   font: normal normal 400 18px/27px Segoe UI;
@@ -77,4 +78,17 @@ h1{
   letter-spacing: 0px;
   color: #434343;
   opacity: 1;
+}
+
+@media only screen and (max-width:450px) {
+  .cardholder{
+    display:flex;
+    flex-direction: column;
+  }
+  .card{
+    margin-bottom: 30px;
+  }
+  .bar{
+    display:block;
+  }
 }
