@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="bar">
+    <h1>Profiel</h1>
+    <a id="push" mat-button (click)="logout()">Uitloggen</a>
+  </div>
+</div>
+<div class="container" style="min-height: 65vh;">
+  <div>
+    <div style="display: flex; margin-top:36px"><div class="row-name">Naam:</div><div class="user-data">{{user.name}}</div></div>
+    <div style="display: flex; margin-top:36px"><div class="row-name">Leeftijd:</div><div class="user-data">{{user.age}}</div></div>
+    <div style="display: flex; margin-top:36px"><div class="row-name">Stad:</div><div class="user-data">{{user.city}}</div></div>
+  </div>
+</div>
+<div class="container">
+  <a mat-button (click)="edit(null)" style="background-color: #DDFCE0">Profiel wijzigen</a>
+</div>

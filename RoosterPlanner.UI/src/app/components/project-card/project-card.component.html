@@ -3,11 +3,12 @@
     <mat-card-title>{{project.name}}</mat-card-title>
   </div>
   <mat-card-content>
-    <p>Beschikbaarheid</p>
-    <p>Agenda</p>
-    <p>Mijn Shifts</p>
+    <a routerLink="/project/{{project.GUID}}/beschikbaarheid"><p>Beschikbaarheid</p></a>
+    <a routerLink="/project/{{project.GUID}}/agenda"><p>Agenda</p></a>
+    <a routerLink="/project/{{project.GUID}}/shifts"><p>Mijn Shifts</p></a>
+
   </mat-card-content>
   <mat-card-actions>
-    <button mat-icon-button (click)="removeProject(null)">Verwijderen</button>
+    <button mat-button (click)="removeProject(project.GUID)">Verwijderen</button>
   </mat-card-actions>
 </mat-card>

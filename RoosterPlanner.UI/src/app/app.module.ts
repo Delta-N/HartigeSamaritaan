@@ -12,6 +12,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatCardModule} from "@angular/material/card";
 import { ProjectCardComponent } from './components/project-card/project-card.component';
 import { AdminComponent } from './pages/admin/admin.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { AdminComponent } from './pages/admin/admin.component';
     NotFoundComponent,
     ProjectCardComponent,
     AdminComponent,
+    ProfileComponent,
 
   ],
   imports: [

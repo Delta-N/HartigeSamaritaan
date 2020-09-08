@@ -1,17 +1,18 @@
-.mat-icon-button{
+.mat-button{
   text-align: left;
   font: normal normal 400 18px/27px Segoe UI;
   letter-spacing: 0px;
   color: #434343;
   opacity: 1;
-  padding: 20px;
+  margin-bottom: 5px;
+  margin-left: 20px;
 }
 
 .mat-card-title{
   border-bottom: 1px solid gray;
   text-align: left;
   font: normal normal bold 21px/31px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #434343;
   opacity: 1;
   margin-left:10px;
@@ -44,5 +45,12 @@
 .mat-card-actions{
   border: none;
   color: red;
+}
 
+a:hover{
+  color: #434343;
+  text-decoration-line: none;
+}
+a{
+  color:#434343;
 }

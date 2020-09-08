@@ -15,6 +15,6 @@ export class ProjectCardComponent implements OnInit {
   }
   removeProject(id: any) {
     //todo
-    window.alert("Deze functie moet nog gemaakt worden")
+    window.alert("Deze functie moet nog gemaakt worden "+ id)
   }
 }
