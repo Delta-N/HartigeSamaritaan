@@ -12,7 +12,6 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatCardModule} from "@angular/material/card";
 import { ProjectCardComponent } from './components/project-card/project-card.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import { ProjectOverviewCardComponent } from './components/project-overview-card/project-overview-card.component';
 
 
 @NgModule({
@@ -22,7 +21,6 @@ import { ProjectOverviewCardComponent } from './components/project-overview-card
     NotFoundComponent,
     ProjectCardComponent,
     AdminComponent,
-    ProjectOverviewCardComponent,
 
   ],
   imports: [

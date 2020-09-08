@@ -1,7 +1,8 @@
-*{
+* {
   //font-family: 'Comfortaa',sans-serif;
-  font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+  font-family: Segoe UI, Frutiger, Frutiger Linotype, Dejavu Sans, Helvetica Neue, Arial, sans-serif;
 }
+
 .mat-toolbar {
   height: 7vh;
   background-color: #E74B3B;
@@ -11,12 +12,6 @@ div {
   overflow: inherit;
 }
 
-
-
-.mat-sidenav-container {
-  background-color: white;
-  min-height: 10vh !important;
-}
 
 a {
   text-decoration: none;
@@ -37,8 +32,56 @@ button {
   flex: 1 1 auto;
 }
 
+.example-container {
+  position: absolute;
+  top: 60px;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+}
+
+.example-sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  background: rgba(255, 0, 0, 0.5);
+}
+
+
 img {
   width: 50%;
   max-width: 300px;
   height: auto;
+}
+
+.toolbarbutton {
+  text-align: right;
+  font: normal normal normal 18px/28px Segoe UI;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  opacity: 1;
+}
+.sidenav-button {
+  text-align: right;
+  letter-spacing: 0px;
+  color: black;
+  opacity: 1;
+}
+
+.logo {
+  display: flex;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  border-bottom: 1px solid gray;
+
+}
+
+#push {
+  font: normal normal normal 20px/28px Segoe UI;
+  margin-left: auto;
 }

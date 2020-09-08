@@ -14,7 +14,9 @@ export class AdminComponent implements OnInit {
     ];
 
   constructor() { }
-
+  addProject() {
+    window.alert("Deze functie moet nog geschreven worden...")
+  }
   ngOnInit(): void {
   }
 
