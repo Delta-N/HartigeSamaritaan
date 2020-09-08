@@ -17,4 +17,8 @@ export class HomeComponent implements OnInit {
 
   ];
 
+
+  addProject() {
+    window.alert("Deze functie moet nog geschreven worden...")
+  }
 }
