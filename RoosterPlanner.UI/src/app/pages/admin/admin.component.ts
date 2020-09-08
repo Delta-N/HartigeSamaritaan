@@ -7,11 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
   data= [
-    { name: "Restaurant Delft 2019" },
-    { name: "Restaurant Delft 2016" },
-    { name: "Restaurant Den Haag 2019" },
-    { name: "Restaurant Almere 2078" }
+    { name: "Restaurant Delft 2019", GUID:"1" },
+    { name: "Restaurant Delft 2016", GUID:"2" },
+    { name: "Restaurant Den Haag 2019", GUID:"3" },
+    { name: "Restaurant Almere 2078", GUID:"4" }
     ];
+
+  administrators=[
+    {name: "Corné"},
+    {name: "JW"},
+    {name: "Yannick"},
+    {name: "Joanne"},
+  ]
 
   constructor() { }
   addProject() {
@@ -20,4 +27,7 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  addAdministrator() {
+    window.alert("Deze functie moet nog geschreven worden...")
+  }
 }
