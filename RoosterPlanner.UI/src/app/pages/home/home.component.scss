@@ -10,9 +10,11 @@
 
 .cardholder {
   display: flex;
+  overflow-x:auto;
   align-items: flex-start;
   padding: 30px;
   justify-content: space-between;
+
 
 }
 
