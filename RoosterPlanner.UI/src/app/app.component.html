@@ -16,16 +16,16 @@
       <a mat-button class="toolbarbutton" routerLink="/profile">Profiel</a>
 
     </div>
-<!--    <mat-menu #adminMenu="matMenu" xPosition="before">
-      <a mat-menu-item routerLink="/project">Projecten</a>
-      <a mat-menu-item routerLink="/task">Taken</a>
-    </mat-menu>-->
+    <!--    <mat-menu #adminMenu="matMenu" xPosition="before">
+          <a mat-menu-item routerLink="/project">Projecten</a>
+          <a mat-menu-item routerLink="/task">Taken</a>
+        </mat-menu>-->
   </mat-toolbar>
 
 
-  <div >
-    <mat-sidenav-container class="example-container" >
-      <mat-sidenav #sidenav mode="side" opened="false"  fxShow="true" fxHide.gt-sm="true">
+  <div>
+    <mat-sidenav-container class="example-container">
+      <mat-sidenav #sidenav mode="side" opened="false" fxShow="true" fxHide.gt-sm="true">
         <div fxLayout="column">
           <a mat-button class="sidenav-button" routerLink="/profile">Profiel</a>
           <a mat-button class="sidenav-button" routerLink="/admin">Admin</a>
@@ -33,12 +33,11 @@
       </mat-sidenav>
 
       <mat-sidenav-content>
-        <router-outlet ></router-outlet>
+        <router-outlet></router-outlet>
       </mat-sidenav-content>
 
     </mat-sidenav-container>
   </div>
-
 
 
 </div>

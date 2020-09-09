@@ -10,9 +10,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatCardModule} from "@angular/material/card";
+import {MatDialogModule} from "@angular/material/dialog";
 import { ProjectCardComponent } from './components/project-card/project-card.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { AddProjectComponent } from './components/add-project/add-project.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 @NgModule({
@@ -23,6 +26,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     ProjectCardComponent,
     AdminComponent,
     ProfileComponent,
+    AddProjectComponent,
 
   ],
   imports: [
@@ -32,9 +36,12 @@ import { ProfileComponent } from './pages/profile/profile.component';
     MaterialModule,
     NgbModule,
     MatSidenavModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatCheckboxModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[AddProjectComponent]
 })
 export class AppModule { }

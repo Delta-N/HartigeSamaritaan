@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [],
@@ -34,7 +35,8 @@ import {MatCardModule} from '@angular/material/card';
     MatMenuModule,
     MatListModule,
     MatTableModule,
-    MatCardModule
+    MatCardModule,
+    MatCheckboxModule
   ],
   exports: [
     MatToolbarModule,
