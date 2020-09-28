@@ -24,7 +24,7 @@ const routes: Routes = [
     component: ProfileComponent
   },
   {
-    path: 'project/shift',
+    path: 'shift',
     component: ShiftComponent
   },
   {
