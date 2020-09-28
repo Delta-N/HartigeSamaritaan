@@ -4,6 +4,7 @@ import {HomeComponent} from "./pages/home/home.component";
 import {NotFoundComponent} from "./pages/not-found/not-found.component";
 import {AdminComponent} from "./pages/admin/admin.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
+import {ShiftComponent} from "./pages/shift/shift.component";
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent
+  },
+  {
+    path: 'project/shift',
+    component: ShiftComponent
   },
   {
     path:'**',

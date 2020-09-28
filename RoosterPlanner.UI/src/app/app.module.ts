@@ -16,6 +16,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AddProjectComponent } from './components/add-project/add-project.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { ShiftComponent } from './pages/shift/shift.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     AdminComponent,
     ProfileComponent,
     AddProjectComponent,
+    ShiftComponent,
 
   ],
   imports: [
