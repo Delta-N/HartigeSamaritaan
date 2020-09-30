@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -62,9 +63,10 @@ namespace RoosterPlanner.Api
             services.AddApplicationInsightsTelemetry();
 
 
-            services.AddRazorPages().AddJsonOptions(options =>
+            services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.IgnoreNullValues = false;
+                options.JsonSerializerOptions.PropertyNamingPolicy=JsonNamingPolicy.CamelCase;
             });
                 
             
@@ -104,8 +106,8 @@ namespace RoosterPlanner.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
