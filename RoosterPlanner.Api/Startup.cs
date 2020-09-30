@@ -6,7 +6,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
@@ -22,11 +25,25 @@ namespace RoosterPlanner.Api
     {
         public Startup(IWebHostEnvironment env)
         {
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            var keyVaultClient = new KeyVaultClient(
+                new KeyVaultClient.AuthenticationCallback(
+                    azureServiceTokenProvider.KeyVaultTokenCallback));
+
+
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
+               
+            
+            Configuration = builder.Build();
+            builder.AddAzureKeyVault( //$"https://{Environment.GetEnvironmentVariable("KeyVaultName")}.vault.azure.net/",
+                 $"https://{Configuration["KeyVaultName"]}.vault.azure.net/",
+                 keyVaultClient,
+                new DefaultKeyVaultSecretManager());
             Configuration = builder.Build();
         }
 
