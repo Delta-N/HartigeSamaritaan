@@ -5,10 +5,10 @@ on:
     branches: [ refactor-ui ]
 
 env:
-  BUILD_CONFIGURATION: 'Release'
-  DOTNET_VERSION: '3.1.x'
-  AZURE_WEBAPP_PACKAGE_PATH: './RoosterPlanner.UI/'
-  AZURE_WEBAPP_NAME: 'RoosterPlanner.UI'
+  BUILD_CONFIGURATION: Release
+  DOTNET_VERSION: 3.1.x
+  AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
+  AZURE_WEBAPP_NAME: RoosterPlanner.UI
 
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET core
         uses: actions/setup-dotnet@v1
         with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+        dotnet-version: ${{env.DOTNET_VERSION}}
 
       - name: Setup Node
         uses: actions/setup-node@v1
