@@ -8,7 +8,7 @@ env:
   BUILD_CONFIGURATION: Release
   DOTNET_VERSION: 3.1.x
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
-  AZURE_WEBAPP_NAME: RoosterPlanner.UI
+  AZURE_WEBAPP_NAME: roosterplanner-web-dev
 
 
 jobs:
