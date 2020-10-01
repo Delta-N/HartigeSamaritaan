@@ -31,8 +31,7 @@ jobs:
       - name: npm    
         run: | 
           npm install     
-          npm run build:prod --if-present
-          npm run test --if-present
+          ng build --prod
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
         
       
@@ -49,7 +48,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}src
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}dist
           
       #api project
 
