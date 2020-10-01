@@ -31,11 +31,11 @@ jobs:
       - name: cache NPM     
         uses: actions/cache@v1 
         with:
-          path: ~/.npm
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
+
       
       - name: npm    
         run: | 
