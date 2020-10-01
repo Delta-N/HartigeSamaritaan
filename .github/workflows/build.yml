@@ -27,10 +27,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.18.3
-          
-      - run: npm install ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      - run: npm run build:prod --if-present --prefix ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      - run: npm run test --if-present --prefix ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      
+      - name: npm    
+        run: | 
+          npm install     
+          npm run build:prod --if-present
+          npm run test --if-present
+        working-directory: ${{AZURE_WEBAPP_PACKAGE_PATH}}
         
       
 
