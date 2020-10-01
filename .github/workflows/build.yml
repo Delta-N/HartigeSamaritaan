@@ -27,10 +27,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.18.3
+          
+      - uses: actions/cache@v1 
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+          working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
       
       - name: npm    
         run: | 
-          npm install     
+          npm install
+          npm install -g @angular/cli > /dev/null
           ng build --prod
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
         
