@@ -29,9 +29,14 @@ jobs:
           node-version: 12.18.3
       
       - name: cache NPM     
-        uses: actions/cache@v1 
+        uses: actions/cache@v2 
         with:
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}/.npm
+          path: |
+            ~/.npm
+            ~/cache
+            !~/cache/exclude
+            **/node_modules
+            ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}/.node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
