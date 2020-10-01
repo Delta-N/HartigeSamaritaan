@@ -27,14 +27,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.18.3
-          
-      - uses: actions/cache@v1 
+      
+      - name: cache NPM     
+        uses: actions/cache@v1 
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-          working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
       
       - name: npm    
         run: | 
@@ -57,7 +58,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}dist
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}dist/src
           
       #api project
 
