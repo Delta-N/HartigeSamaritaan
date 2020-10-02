@@ -62,8 +62,8 @@ jobs:
       - name: build API
         run: |
           dotnet restore
-          dotnet build --configuration ${{ BUILD_CONFIGURATION  }}
-          dotnet publish -c ${{ BUILD_CONFIGURATION  }} -o output ./staging/api
+          dotnet build --configuration ${{ env.BUILD_CONFIGURATION  }}
+          dotnet publish -c ${{ env.BUILD_CONFIGURATION  }} -o output ./staging/api
           
       - name: publish api
         uses: azure/webapps-deploy@v2
