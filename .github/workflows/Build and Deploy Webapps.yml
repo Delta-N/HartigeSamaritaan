@@ -54,7 +54,7 @@ jobs:
         
       - name: move staging
         run: |
-          mv ${{AZURE_WEBAPP_PACKAGE_PATH}}staging ./
+          mv ${{env.AZURE_WEBAPP_PACKAGE_PATH}}staging ./
         
       - name: publish front-end
         uses: azure/webapps-deploy@v2
