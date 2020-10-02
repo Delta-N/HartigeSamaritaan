@@ -55,7 +55,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: front-end
-          path: ./staging
+          path: ./
         
       - name: publish front-end
         uses: azure/webapps-deploy@v2
