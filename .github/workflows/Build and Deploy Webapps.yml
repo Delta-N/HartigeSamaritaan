@@ -9,7 +9,7 @@ env:
   DOTNET_VERSION: 3.1.x
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_WEBAPP_NAME: roosterplanner-web-dev
-  #AZURE_API_PACKAGE_PATH: ./RoosterPlanner.UI/
+  AZURE_API_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_API_NAME: roosterplanner-api-dev
 
   #Todo: Create resource groups and resources
@@ -45,25 +45,26 @@ jobs:
         with:
           node-version: 12.18.3
       
-      - name: build front-end    
-        run: | 
-          npm install
-          npm install -g @angular/cli > /dev/null
-          ng build --prod
-        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
-                
-      - name: publish front-end
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}dist/src
+#      - name: build front-end    
+#        run: | 
+#          npm install
+#          npm install -g @angular/cli > /dev/null
+#          ng build --prod
+#        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
+#                
+#      - name: publish front-end
+#        uses: azure/webapps-deploy@v2
+#        with:
+#          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+#          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
+#          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}dist/src
           
       - name: build API
         run: |
           dotnet restore
-          dotnet build --configuration ${{ env.BUILD_CONFIGURATION  }}
-          dotnet publish -c ${{ env.BUILD_CONFIGURATION  }} -o output ./staging/api
+          dotnet build --c ${{ env.BUILD_CONFIGURATION  }}
+          dotnet publish --c ${{ env.BUILD_CONFIGURATION  }} -o ../staging/api
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
           
       - name: publish api
         uses: azure/webapps-deploy@v2
@@ -71,10 +72,3 @@ jobs:
           app-name: ${{ env.AZURE_API_NAME }}
           publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE  }}
           package: ./staging/api
-        
-
-        
-
-
-  
-
