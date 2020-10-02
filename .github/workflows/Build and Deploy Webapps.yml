@@ -50,6 +50,10 @@ jobs:
           npm install
           npm install -g @angular/cli > /dev/null
           ng build --prod --outputPath=$GITHUB_WORKSPACE/staging/web
+          echo $GITHUB_WORKSPACE/staging/web
+          echo ${{GITHUB_WORKSPACE}}/staging/web
+          echo $GITHUB_WORKSPACE/staging/
+          echo ${{GITHUB_WORKSPACE}}/staging/
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
         
       - name: publish front-end
