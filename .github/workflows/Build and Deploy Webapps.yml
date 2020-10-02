@@ -52,9 +52,10 @@ jobs:
           ng build --prod --outputPath=./staging
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
         
-      - name: move staging
-        run: |
-          mv ./${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}staging ./
+      - uses: actions/upload-artifact@v2
+        with:
+          name: front-end
+          path: ./staging
         
       - name: publish front-end
         uses: azure/webapps-deploy@v2
