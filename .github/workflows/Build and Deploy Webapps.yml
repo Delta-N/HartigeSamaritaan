@@ -10,7 +10,7 @@ env:
   NODE_VERSION: 12.18.3
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_WEBAPP_NAME: roosterplanner-web-dev
-  AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api.net /
+  AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
   AZURE_API_NAME: roosterplanner-api-dev
 
   #Todo: Create resource groups and resources
