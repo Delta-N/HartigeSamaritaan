@@ -7,9 +7,9 @@ on:
 env:
   BUILD_CONFIGURATION: Release
   DOTNET_VERSION: 3.1.x
-  AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.Api/
+  AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_WEBAPP_NAME: roosterplanner-web-dev
-  AZURE_API_PACKAGE_PATH: ./RoosterPlanner.UI/
+  AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
   AZURE_API_NAME: roosterplanner-api-dev
 
   #Todo: Create resource groups and resources
