@@ -52,6 +52,11 @@ jobs:
           npm install -g @angular/cli > /dev/null
           ng build --prod --outputPath=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
+        
+      - uses: actions/upload-artifact@v2
+        with:
+          name: web
+          path: ./staging
                 
       - name: publish front-end
         uses: azure/webapps-deploy@v2
@@ -59,7 +64,7 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
           package: ./staging/web/dist/src
-          
+
       - name: build API
         run: |
           dotnet restore
