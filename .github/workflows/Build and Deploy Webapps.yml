@@ -2,7 +2,13 @@ name: Build and publish
 
 on:
   push:
-    branches: [ refactor-ui ]
+    branches: 
+      - refactor-ui
+      - master
+  pull_request:
+    branches:
+      - refactor-ui
+      - master
 
 env:
   BUILD_CONFIGURATION: Release
