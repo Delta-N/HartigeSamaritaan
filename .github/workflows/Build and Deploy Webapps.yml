@@ -64,7 +64,7 @@ jobs:
           dotnet restore
           dotnet build -c ${{ env.BUILD_CONFIGURATION  }}
           dotnet publish -c ${{ env.BUILD_CONFIGURATION  }} -o ../staging/api
-        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
+        working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
           
       - name: publish api
         uses: azure/webapps-deploy@v2
