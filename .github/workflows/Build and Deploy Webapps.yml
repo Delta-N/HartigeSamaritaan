@@ -56,14 +56,14 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: web
-          path: ./staging
+          path: ./staging/web
                 
       - name: publish front-end
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-          package: ./staging/web/dist/src
+          package: ./staging/web/
 
       - name: build API
         run: |
@@ -71,6 +71,11 @@ jobs:
           dotnet build -c ${{ env.BUILD_CONFIGURATION  }}
           dotnet publish -c ${{ env.BUILD_CONFIGURATION  }} -o ../staging/api
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
+        
+      - uses: actions/upload-artifact@v2
+        with:
+          name: api
+          path: ./staging/api  
           
       - name: publish api
         uses: azure/webapps-deploy@v2
