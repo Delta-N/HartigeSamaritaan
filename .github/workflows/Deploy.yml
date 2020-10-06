@@ -25,13 +25,13 @@ jobs:
         with:
           workflow: Build.yml
           name: "Web Artifact"
-          path: ./staging
+          path: ./staging/web
           
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
           workflow: Build.yml
           name: "Api Artifact"
-          path: ./staging
+          path: ./staging/api
                 
       - name: publish front-end
         uses: azure/webapps-deploy@v2
