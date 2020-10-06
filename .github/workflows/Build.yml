@@ -18,7 +18,7 @@ env:
   AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
 
 jobs:
-  build:
+  build-front-end: 
     runs-on: ubuntu-latest
 
     steps:
@@ -35,29 +35,35 @@ jobs:
             ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}/.node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-    
-
-      - name: Setup .NET core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{env.DOTNET_VERSION}}
-
+            ${{ runner.os }}-node-
+            
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: ${{env.NODE_VERSION}}
-      
-      - name: build front-end    
-        run: | 
+
+      - name: build front-end
+        run: |
           npm install
           npm install --global @angular/cli > /dev/null
           ng build --prod --outputPath=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
-        
+
       - uses: actions/upload-artifact@v2
         with:
           name: "Web Artifact"
           path: ./staging/web
+  
+  build-back-end:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Setup .NET core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{env.DOTNET_VERSION}}
 
       - name: build API
         run: |
