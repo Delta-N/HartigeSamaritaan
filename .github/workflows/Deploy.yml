@@ -3,7 +3,6 @@ name: Deploy
 on:
   workflow_run:
     workflows: ["Build the project"]
-    branch: [refactor-ui]
     types:
       - completed
 
