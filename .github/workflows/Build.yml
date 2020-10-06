@@ -79,11 +79,7 @@ jobs:
         
       - name: publish API
         run: |
-          dotnet publish 
-          --configuration ${{ env.BUILD_CONFIGURATION  }}
-          --no-build
-          --no-resotre
-          --output ../staging/api
+          dotnet publish --configuration ${{ env.BUILD_CONFIGURATION  }} --no-build --no-restore --output ../staging/api
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
         
       - uses: actions/upload-artifact@v2
