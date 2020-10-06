@@ -3,7 +3,9 @@ name: Deploy
 on:
   workflow_run:
     workflows: ["Build"]
-    branches: [refactor-ui]
+    branches:
+      - refactor-ui
+      - master
     types:
       - completed
 
