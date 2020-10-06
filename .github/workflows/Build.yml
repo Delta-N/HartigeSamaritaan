@@ -73,8 +73,7 @@ jobs:
 
       - name: build API
         run: |
-          dotnet build 
-          --configuration ${{ env.BUILD_CONFIGURATION  }}
+          dotnet build --configuration ${{ env.BUILD_CONFIGURATION  }}
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
         
       - name: publish API
