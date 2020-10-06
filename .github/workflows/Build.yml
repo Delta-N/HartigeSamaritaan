@@ -17,9 +17,6 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
 
-  #Todo: Create resource groups and resources
-  
-
 jobs:
   build:
     runs-on: ubuntu-latest
