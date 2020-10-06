@@ -1,4 +1,4 @@
-name: Build and publish
+name: Build
 
 on:
   push:
@@ -55,8 +55,11 @@ jobs:
       - name: build front-end    
         run: | 
           npm install
-          npm install -g @angular/cli > /dev/null
-          ng build --prod --outputPath=../staging/web
+          npm install 
+          --global @angular/cli > /dev/null
+          ng build 
+          --prod 
+          --outputPath=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
         
       - uses: actions/upload-artifact@v2
@@ -73,9 +76,17 @@ jobs:
 
       - name: build API
         run: |
-          dotnet restore
-          dotnet build -c ${{ env.BUILD_CONFIGURATION  }}
-          dotnet publish -c ${{ env.BUILD_CONFIGURATION  }} -o ../staging/api
+          dotnet build 
+          --configuration ${{ env.BUILD_CONFIGURATION  }}
+        working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
+        
+      - name: publish API
+        run: |
+          dotnet publish 
+          --configuration ${{ env.BUILD_CONFIGURATION  }}
+          --no-build
+          --no-resotre
+          --output ../staging/api
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
         
       - uses: actions/upload-artifact@v2

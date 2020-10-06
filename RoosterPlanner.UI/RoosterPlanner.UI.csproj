@@ -4,8 +4,4 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="staging\web\assets\Mock-data" />
-    </ItemGroup>
-
 </Project>
