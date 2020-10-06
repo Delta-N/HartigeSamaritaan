@@ -55,11 +55,8 @@ jobs:
       - name: build front-end    
         run: | 
           npm install
-          npm install 
-          --global @angular/cli > /dev/null
-          ng build 
-          --prod 
-          --outputPath=../staging/web
+          npm install --global @angular/cli > /dev/null
+          ng build --prod --outputPath=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
         
       - uses: actions/upload-artifact@v2
