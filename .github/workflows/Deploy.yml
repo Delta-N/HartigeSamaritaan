@@ -2,8 +2,7 @@ name: Deploy
 
 on:
   workflow_run:
-    workflows: ["Build the project"]
-    branch: [refactor-ui]
+    workflows: ["Build"]
     types:
       - completed
 
