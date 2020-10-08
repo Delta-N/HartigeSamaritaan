@@ -2,13 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import {b2cPolicies} from "../app/app-config";
 
 export const environment = {
   production: false,
   auth: {
     clientId: "a6ca557c-9d83-4867-a02d-99c5fbd159a5",
-    authority: b2cPolicies.authorities.signUpSignIn.authority,
+    authority: "https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/b2c_1_susi",
     redirectUri: "http://localhost:4200/",
     postLogoutRedirectUri: "http://localhost:4200/",
     navigateToLoginRequestUrl: true,
