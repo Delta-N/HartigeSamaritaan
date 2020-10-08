@@ -1,5 +1,6 @@
 ﻿import { Configuration } from 'msal';
 import { MsalAngularConfiguration } from '@azure/msal-angular';
+import {environment} from "../environments/environment";
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -38,14 +39,7 @@ export const protectedResourceMap: [string, string[]][] = [
 //
 
 export const msalConfig: Configuration = {
-  auth: {
-    clientId: "a6ca557c-9d83-4867-a02d-99c5fbd159a5",
-    authority: b2cPolicies.authorities.signUpSignIn.authority,
-    redirectUri: "http://localhost:4200/",
-    postLogoutRedirectUri: "http://localhost:4200/",
-    navigateToLoginRequestUrl: true,
-    validateAuthority: false,
-  },
+  auth: environment.auth,
   cache: {
     cacheLocation: "localStorage",
     storeAuthStateInCookie: isIE, // Set this to "true" to save cache in cookies to address trusted zones limitations in IE
