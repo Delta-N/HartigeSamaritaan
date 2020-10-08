@@ -1,5 +1,18 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { Configuration } from 'msal';
+
+import {
+  MsalModule,
+  MsalInterceptor,
+  MSAL_CONFIG,
+  MSAL_CONFIG_ANGULAR,
+  MsalService,
+  MsalAngularConfiguration
+} from '@azure/msal-angular';
+
+import { msalConfig, msalAngularConfig } from './app-config';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +31,13 @@ import { AddProjectComponent } from './components/add-project/add-project.compon
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { ShiftComponent } from './pages/shift/shift.component';
 
+function MSALConfigFactory(): Configuration {
+  return msalConfig;
+}
+
+function MSALAngularConfigFactory(): MsalAngularConfiguration {
+  return msalAngularConfig;
+}
 
 @NgModule({
   declarations: [
@@ -40,9 +60,26 @@ import { ShiftComponent } from './pages/shift/shift.component';
     MatSidenavModule,
     MatCardModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    HttpClientModule,
+    MsalModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
+    },
+    {
+      provide: MSAL_CONFIG,
+      useFactory: MSALConfigFactory
+    },
+    {
+      provide: MSAL_CONFIG_ANGULAR,
+      useFactory: MSALAngularConfigFactory
+    },
+    MsalService
+  ],
   bootstrap: [AppComponent],
   entryComponents:[AddProjectComponent]
 })

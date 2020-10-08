@@ -5,27 +5,44 @@ import {NotFoundComponent} from "./pages/not-found/not-found.component";
 import {AdminComponent} from "./pages/admin/admin.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {ShiftComponent} from "./pages/shift/shift.component";
+import {MsalGuard} from "@azure/msal-angular";
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [
+      MsalGuard
+    ]
+
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [
+      MsalGuard
+    ]
   },
   {
     path: 'admin',
-    component: AdminComponent
+    component: AdminComponent,
+    canActivate: [
+      MsalGuard
+    ]
   },
   {
     path: 'profile',
-    component: ProfileComponent
+    component: ProfileComponent,
+    canActivate: [
+      MsalGuard
+    ]
   },
   {
     path: 'shift',
-    component: ShiftComponent
+    component: ShiftComponent,
+    canActivate: [
+      MsalGuard
+    ]
   },
   {
     path:'**',
