@@ -5,11 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
@@ -23,31 +19,14 @@ namespace RoosterPlanner.Api
 {
     public class Startup
     {
-        public Startup(IWebHostEnvironment env)
+        public IConfiguration Configuration { get; }
+        readonly string AllowOrigins = "_allowOrigins";
+
+        public Startup(IConfiguration configuration)
         {
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            var keyVaultClient = new KeyVaultClient(
-                new KeyVaultClient.AuthenticationCallback(
-                    azureServiceTokenProvider.KeyVaultTokenCallback));
-
-
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-                .AddEnvironmentVariables();
-               
-            
-            Configuration = builder.Build();
-            builder.AddAzureKeyVault( //$"https://{Environment.GetEnvironmentVariable("KeyVaultName")}.vault.azure.net/",
-                 $"https://{Configuration["KeyVaultName"]}.vault.azure.net/",
-                 keyVaultClient,
-                new DefaultKeyVaultSecretManager());
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -73,44 +52,52 @@ namespace RoosterPlanner.Api
                         OnAuthenticationFailed = AuthenticationFailedAsync
                     };
                 });
-            services.AddCors();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigins", builder =>
+                {
+                    builder.WithOrigins(Configuration.GetSection("AllowedHosts").Value)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
             services.AddAuthorization();
 
             // Enable Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
-
-
+            
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.IgnoreNullValues = false;
-                options.JsonSerializerOptions.PropertyNamingPolicy=JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
-                
-            
-
-            services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.Configure<AzureAuthenticationConfig>(
                 Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
+            
+            services.AddTransient<IAzureB2CService, AzureB2CService>();
+            services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<IPersonService, PersonService>();
+            services.AddTransient<IParticipationService, ParticipationService>();
+            services.AddTransient<ITaskService, TaskService>();
+            services.AddTransient<IShiftService, ShiftService>();
+            services.AddTransient<IMatchService, MatchService>();
 
+            //dit moet nog omgebouwd worden
+            services.AddAutoMapper(typeof(AutoMapperProfile));
+            
             services.AddSingleton<ILogger, Logger>(l =>
             {
                 return Logger.Create(Configuration["ApplicationInsight:InstrumentationKey"]);
             });
 
-            services.AddScoped<IAzureB2CService, AzureB2CService>();
-            services.AddScoped<IProjectService, ProjectService>();
-            services.AddScoped<IPersonService, PersonService>();
-            services.AddScoped<IParticipationService, ParticipationService>();
-            services.AddScoped<ITaskService, TaskService>();
-            services.AddScoped<IShiftService, ShiftService>();
-            services.AddScoped<IMatchService, MatchService>();
-
             ServiceContainer.Register(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -118,9 +105,7 @@ namespace RoosterPlanner.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
 
-            app.UseCors(i =>
-                i.WithOrigins(Configuration.GetSection("AllowedHosts").Value).AllowAnyMethod().AllowAnyHeader());
-
+            app.UseCors(AllowOrigins);
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
