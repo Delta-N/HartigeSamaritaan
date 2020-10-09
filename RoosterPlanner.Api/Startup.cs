@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Identity.Web;
 using RoosterPlanner.Api.AutoMapperProfiles;
 using RoosterPlanner.Common;
 using RoosterPlanner.Common.Config;
@@ -32,7 +33,12 @@ namespace RoosterPlanner.Api
         public void ConfigureServices(IServiceCollection services)
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
-            services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
+
+            services.AddMicrosoftIdentityWebApiAuthentication(Configuration, "AzureAd");
+            
+            /*services.AddAuthentication(options => {
+             options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; 
+             })
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.Authority =
@@ -51,7 +57,7 @@ namespace RoosterPlanner.Api
                     {
                         OnAuthenticationFailed = AuthenticationFailedAsync
                     };
-                });
+                });*/
 
             services.AddCors(options =>
             {
