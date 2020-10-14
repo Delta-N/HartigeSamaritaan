@@ -21,25 +21,26 @@ namespace RoosterPlanner.Models.Models
         [Column(Order = 3)]
         public int MaxWorkingHoursPerWeek { get; set; }
 
+        [Column(Order = 4)]
+        public Guid FriendsId { get; set; }
+
         public List<Availability> Availabilities { get; set; }
 
-        public List<Collaboration> WantsToWorkWith { get; set; }
-        public List<Collaboration> IsWantedBy { get; set; }
+        [ForeignKey("FriendsId")]
+        public List<Participation> Friends { get; set; }
 
 
         //Constructor
         public Participation() : base()
         {
             Availabilities = new List<Availability>();
-            WantsToWorkWith = new List<Collaboration>();
-            IsWantedBy = new List<Collaboration>();
+            Friends = new List<Participation>();
         }
 
         public Participation(Guid id) : base(id)
         {
             Availabilities = new List<Availability>();
-            WantsToWorkWith = new List<Collaboration>();
-            IsWantedBy = new List<Collaboration>();
+            Friends = new List<Participation>();
         }
     }
 }

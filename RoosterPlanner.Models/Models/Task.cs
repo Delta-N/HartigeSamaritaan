@@ -29,7 +29,7 @@ namespace RoosterPlanner.Models.Models
         public Category Category { get; set; }
 
         public List<ProjectTask> ProjectTasks { get; set; }
-
+        public List<Requirement> Requirements { get; set; }
         public List<Shift> Shifts { get; set; }
 
         //Constructor
@@ -37,6 +37,7 @@ namespace RoosterPlanner.Models.Models
         {
             ProjectTasks = new List<ProjectTask>();
             Shifts = new List<Shift>();
+            Requirements=new List<Requirement>(); 
         }
 
         //Constructor
@@ -44,6 +45,7 @@ namespace RoosterPlanner.Models.Models
         {
             ProjectTasks = new List<ProjectTask>();
             Shifts = new List<Shift>();
+            Requirements=new List<Requirement>();
         }
     }
 }
