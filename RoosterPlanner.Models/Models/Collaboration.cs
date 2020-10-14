@@ -8,12 +8,12 @@ namespace RoosterPlanner.Models.Models
 
         [Column(Order = 1)]
         public Guid WantsToWorkWithId { get; set; }
-        [ForeignKey("WantsToWorkWith")]
+        [ForeignKey("WantsToWorkWithId")]
         public Participation WantsToWorkWith { get; set; }
 
         [Column(Order = 2)]
         public Guid IsWantedById { get; set; }
-        [ForeignKey("IsWantedBy")]
+        [ForeignKey("IsWantedById")]
         public Participation IsWantedBy { get; set; }
         
 

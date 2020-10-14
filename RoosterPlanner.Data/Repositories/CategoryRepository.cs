@@ -7,6 +7,7 @@ using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {

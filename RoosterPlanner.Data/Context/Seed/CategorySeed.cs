@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Data.Context.Seed
 {

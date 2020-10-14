@@ -28,6 +28,7 @@ namespace RoosterPlanner.Models
         //Constructor
         public Availability() : this(Guid.Empty)
         {
+            
         }
 
         //Constructor

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Category : Entity
     {

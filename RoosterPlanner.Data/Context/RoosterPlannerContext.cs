@@ -20,7 +20,7 @@ namespace RoosterPlanner.Data.Context
         public DbSet<Participation> Participations { get; set; }
         public DbSet<Availability> Availabilities { get; set; }
         public DbSet<Shift> Shifts { get; set; }
-        //public DbSet<Collaboration> Collaborations { get; set; }
+        public DbSet<Collaboration> Collaborations { get; set; }
 
 
         //Constructor
@@ -83,17 +83,19 @@ namespace RoosterPlanner.Data.Context
             modelBuilder.Entity<Person>()
                 .HasIndex(p => p.Oid)
                 .IsUnique();
-            
 
-            /*modelBuilder.Entity<Availability>()
+
+            modelBuilder.Entity<Availability>()
                 .HasOne(p => p.Participation)
                 .WithMany(a => a.Availabilities)
-                .HasForeignKey(a => a.Participation);
+                .HasForeignKey(a => a.ParticipationId)
+                .OnDelete(DeleteBehavior.Restrict);
+                
             modelBuilder.Entity<Availability>()
                 .HasOne(s => s.Shift)
-                .WithMany(a=>a.Availabilities)
-                .HasForeignKey(a=>a.Shift);
-            
+                .WithMany(a => a.Availabilities)
+                .HasForeignKey(a => a.ShiftId)
+                .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Participation>(par =>
             {
                 par.HasMany(m => m.Availabilities)
@@ -104,9 +106,9 @@ namespace RoosterPlanner.Data.Context
             {
                 tsk.HasMany(m => m.Availabilities)
                     .WithOne(t => t.Shift);
-            });*/
+            });
             
-            /*modelBuilder.Entity<Certificate>()
+            modelBuilder.Entity<Certificate>()
                 .HasOne(p => p.Person)
                 .WithMany(c => c.Certificates)
                 .HasForeignKey(c => c.PersonId);
@@ -144,10 +146,21 @@ namespace RoosterPlanner.Data.Context
             {
                 pr.HasMany(p => p.Participations)
                     .WithOne(x => x.Project);
-            });*/
+            });
 
-            /*modelBuilder.Entity<Participation>()
-                .HasMany(p=>p.Friends)*/
+
+            modelBuilder.Entity<Collaboration>()
+                .HasOne(p => p.WantsToWorkWith)
+                .WithMany(c => c.WantsToWorkWith)
+                .HasForeignKey(p => p.WantsToWorkWithId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Collaboration>()
+                .HasOne(p => p.IsWantedBy)
+                .WithMany(c => c.IsWantedBy)
+                .HasForeignKey(p => p.IsWantedById)
+                .OnDelete(DeleteBehavior.Restrict);
+            
                 
 
             
@@ -157,6 +170,9 @@ namespace RoosterPlanner.Data.Context
 
             var personSeed = new PersonSeed(modelBuilder);
             var personList = personSeed.Seed();
+            
+            var projectseed = new ProjectSeed(modelBuilder);
+            var projectList = projectseed.Seed();
         }
     }
 }
