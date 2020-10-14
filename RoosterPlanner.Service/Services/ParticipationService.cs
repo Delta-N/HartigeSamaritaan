@@ -5,6 +5,7 @@ using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service

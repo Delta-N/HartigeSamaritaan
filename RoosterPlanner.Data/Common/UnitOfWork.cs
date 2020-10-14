@@ -15,8 +15,6 @@ namespace RoosterPlanner.Data.Common
 
         IPersonRepository PersonRepository { get; }
 
-        IProjectPersonRepository ProjectPersonRepository { get; }
-
         ITaskRepository TaskRepository { get; }
 
         IShiftRepository ShiftRepository { get; }
@@ -52,7 +50,6 @@ namespace RoosterPlanner.Data.Common
 
         private IProjectRepository projectRepository;
         private IParticipationRepository participationRepository;
-        private IProjectPersonRepository projectPersonRepository;
         private IPersonRepository personRepository;
         private ITaskRepository taskRepository;
         private ICategoryRepository categoryRepository;
@@ -90,17 +87,6 @@ namespace RoosterPlanner.Data.Common
                 if (matchRepository == null)
                     this.matchRepository = new MatchRepository(this.DataContext, null);
                 return this.matchRepository;
-            }
-        }
-
-
-        public IProjectPersonRepository ProjectPersonRepository
-        {
-            get
-            {
-                if (projectPersonRepository == null)
-                    projectPersonRepository = new ProjectPersonRepository(this.DataContext, this.Logger);
-                return projectPersonRepository;
             }
         }
 

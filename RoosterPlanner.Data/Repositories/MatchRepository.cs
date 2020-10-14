@@ -10,11 +10,11 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {
-    public interface IMatchRepository : IRepository<Match>
+    public interface IMatchRepository : IRepository<Availability>
     {
     }
 
-    public class MatchRepository : Repository<Match>, IMatchRepository
+    public class MatchRepository : Repository<Availability>, IMatchRepository
     {
         //Constructor
         public MatchRepository(RoosterPlannerContext dataContext, ILogger logger) : base(dataContext, logger)

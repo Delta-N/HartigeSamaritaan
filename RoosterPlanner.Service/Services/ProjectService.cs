@@ -5,6 +5,7 @@ using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
@@ -31,7 +32,6 @@ namespace RoosterPlanner.Service
         #region Fields
         private readonly IUnitOfWork unitOfWork = null;
         private readonly IProjectRepository projectRepository = null;
-        private readonly IProjectPersonRepository projectPersonRepository = null;
         private readonly ILogger logger = null;
         #endregion
 
@@ -40,7 +40,6 @@ namespace RoosterPlanner.Service
         {
             this.unitOfWork = unitOfWork;
             this.projectRepository = unitOfWork.ProjectRepository;
-            this.projectPersonRepository = unitOfWork.ProjectPersonRepository;
             this.logger = logger;
         }
 
@@ -177,13 +176,6 @@ namespace RoosterPlanner.Service
 
         public int AddPersonToProject(Guid projectId, Guid personId)
         {
-            if (projectId == Guid.Empty)
-                throw new ArgumentException("projectId");
-            if (personId == Guid.Empty)
-                throw new ArgumentException("personId");
-
-            ProjectPerson projectPerson = new ProjectPerson { ProjectId = projectId, PersonId = personId };
-            projectPerson = projectPersonRepository.Add(projectPerson);
 
             return unitOfWork.SaveChanges();
         }

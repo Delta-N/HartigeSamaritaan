@@ -9,6 +9,7 @@ using RoosterPlanner.Api.Models;
 using RoosterPlanner.Common;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
+using Task = RoosterPlanner.Models.Models.Task;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -31,7 +32,7 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("active")]
         public async Task<ActionResult<IEnumerable<TaskViewModel>>> GetActiveTasks()
         {
-            TaskListResult<RoosterPlanner.Models.Task> taskListResult = await this.taskService.GetActiveTasksAsync();
+            TaskListResult<Task> taskListResult = await this.taskService.GetActiveTasksAsync();
             if (taskListResult.Succeeded)
             {
                 return Ok(taskListResult.Data.Select(t => mapper.Map<TaskViewModel>(t)).ToList());

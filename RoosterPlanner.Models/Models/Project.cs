@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Models
 {
@@ -40,21 +41,24 @@ namespace RoosterPlanner.Models
 
         public List<ProjectTask> ProjectTasks { get; set; }
 
-        public List<ProjectPerson> ProjectPersons { get; set; }
-
         public List<Participation> Participations { get; set; }
+        
+        public List<Shift> Shifts { get; set; }
 
         //Constructor
         public Project() : this(Guid.Empty)
         {
+            ProjectTasks = new List<ProjectTask>();
+            Participations = new List<Participation>();
+            Shifts=new List<Shift>();
         }
 
         //Constructor
         public Project(Guid id) : base(id)
         {
-            this.ProjectTasks = new List<ProjectTask>();
-            this.ProjectPersons = new List<ProjectPerson>();
-            this.Participations = new List<Participation>();
+            ProjectTasks = new List<ProjectTask>();
+            Participations = new List<Participation>();
+            Shifts=new List<Shift>();
         }
     }
 }

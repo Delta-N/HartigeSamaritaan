@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
 {
     public interface IShiftService
     {
-        Task<TaskListResult<Models.Shift>> GetActiveShiftsForProjectAsync(Guid projectId);
+        Task<TaskListResult<Shift>> GetActiveShiftsForProjectAsync(Guid projectId);
     }
 
     public class ShiftService : IShiftService
@@ -25,9 +26,9 @@ namespace RoosterPlanner.Service
             this.logger = logger;
         }
 
-        public async Task<TaskListResult<Models.Shift>> GetActiveShiftsForProjectAsync(Guid projectId)
+        public async Task<TaskListResult<Shift>> GetActiveShiftsForProjectAsync(Guid projectId)
         {
-            TaskListResult<Models.Shift> taskResult = TaskListResult<Models.Shift>.CreateDefault();
+            TaskListResult<Shift> taskResult = TaskListResult<Shift>.CreateDefault();
 
             try
             {

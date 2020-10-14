@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Models
 {
@@ -21,6 +20,10 @@ namespace RoosterPlanner.Models
 
         //Constructor
         public ProjectTask() : base()
+        {
+        }
+
+        public ProjectTask(Guid id) : base(id)
         {
         }
     }

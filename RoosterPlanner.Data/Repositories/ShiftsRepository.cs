@@ -7,6 +7,7 @@ using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {
@@ -26,7 +27,7 @@ namespace RoosterPlanner.Data.Repositories
         {
             return EntitySet.Where(i => i.Date > DateTime.Now
             && i.Task.DeletedDateTime == null
-            && i.Task.TaskProjects.Any(x => x.ProjectId == projectId))
+            && i.Task.ProjectTasks.Any(x => x.ProjectId == projectId))
             .OrderBy(i => i.Date).ThenBy(i => i.StartTime)
                 .Include(t => t.Task)
                 .Include("Task.Category").ToListAsync();

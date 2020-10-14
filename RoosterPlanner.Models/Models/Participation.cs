@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Participation : Entity
     {
@@ -19,16 +18,28 @@ namespace RoosterPlanner.Models
         [ForeignKey("ProjectId")]
         public Project Project { get; set; }
 
-        public List<Match> Matches { get; set; }
+        [Column(Order = 3)]
+        public int MaxWorkingHoursPerWeek { get; set; }
+
+        public List<Availability> Availabilities { get; set; }
+
+        public List<Collaboration> WantsToWorkWith { get; set; }
+        public List<Collaboration> IsWantedBy { get; set; }
+
 
         //Constructor
         public Participation() : base()
         {
-            Matches = new List<Match>();
+            Availabilities = new List<Availability>();
+            WantsToWorkWith = new List<Collaboration>();
+            IsWantedBy = new List<Collaboration>();
         }
+
         public Participation(Guid id) : base(id)
         {
-            Matches = new List<Match>();
+            Availabilities = new List<Availability>();
+            WantsToWorkWith = new List<Collaboration>();
+            IsWantedBy = new List<Collaboration>();
         }
     }
 }

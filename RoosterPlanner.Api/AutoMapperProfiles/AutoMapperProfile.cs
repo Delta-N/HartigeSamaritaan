@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RoosterPlanner.Api.Models;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Api.AutoMapperProfiles
 {
@@ -11,9 +12,9 @@ namespace RoosterPlanner.Api.AutoMapperProfiles
 
             CreateMap<RoosterPlanner.Models.Project, ProjectDetailsViewModel>();
 
-            CreateMap<RoosterPlanner.Models.Task, TaskViewModel>();
+            CreateMap<Task, TaskViewModel>();
 
-            CreateMap<RoosterPlanner.Models.Shift, ShiftViewModel>()
+            CreateMap<Shift, ShiftViewModel>()
                 .ForMember(i => i.Category, opt => opt.MapFrom(src => src.Task.Category.Name))
                 .ForMember(i => i.Name, opt => opt.MapFrom(src => src.Task.Name));
         }

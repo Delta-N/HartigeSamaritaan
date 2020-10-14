@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Api.Models
 {
@@ -16,12 +17,12 @@ namespace RoosterPlanner.Api.Models
         public string PictureUri { get; set; }
         public string WebsiteUrl { get; set; }
         public bool Closed { get; set; }
-        public List<RoosterPlanner.Models.Task> Tasks { get; set; }
+        public List<Task> Tasks { get; set; }
 
         //Constructor
         public ProjectDetailsViewModel()
         {
-            this.Tasks = new List<RoosterPlanner.Models.Task>();
+            this.Tasks = new List<Task>();
         }
     }
 }

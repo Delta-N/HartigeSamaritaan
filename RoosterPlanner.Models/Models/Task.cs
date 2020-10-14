@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Task : Entity
     {
@@ -28,19 +28,22 @@ namespace RoosterPlanner.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        public List<ProjectTask> TaskProjects { get; set; }
+        public List<ProjectTask> ProjectTasks { get; set; }
 
         public List<Shift> Shifts { get; set; }
 
         //Constructor
         public Task() : this(Guid.Empty)
         {
+            ProjectTasks = new List<ProjectTask>();
+            Shifts = new List<Shift>();
         }
 
         //Constructor
         public Task(Guid id) : base(id)
         {
-            this.TaskProjects = new List<ProjectTask>();
+            ProjectTasks = new List<ProjectTask>();
+            Shifts = new List<Shift>();
         }
     }
 }
