@@ -15,6 +15,7 @@ using RoosterPlanner.Common;
 using RoosterPlanner.Common.Config;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.DataModels.B2C;
+using RoosterPlanner.Service.Helpers;
 
 namespace RoosterPlanner.Service
 {
@@ -22,7 +23,7 @@ namespace RoosterPlanner.Service
     {
         Task<TaskResult<AppUser>> CreateUserAsync(B2cUser b2cUser);
 
-        Task<TaskResult<AppUser>> GetUserAsync(Guid userId);
+        Task<User> GetUserAsync(Guid userId);
 
         Task<TaskResult<List<AppUser>>> GetAllUsersAsync();
 
@@ -40,7 +41,12 @@ namespace RoosterPlanner.Service
     public class AzureB2CService : IAzureB2CService
     {
         #region Fields
-        private readonly AzureAuthenticationConfig azureB2cConfig;
+
+        private readonly AzureAuthenticationConfig azureB2cConfig = null;
+        private GraphServiceClient graphServiceClient = null;
+        private DateTime graphServiceClientTimestamp = new DateTime();
+        private const string graphSelectList = "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
+
         #endregion
 
         //Registered B2C ApplicationId in Azure AD
@@ -99,60 +105,37 @@ namespace RoosterPlanner.Service
             return result;
         }
 
-        public async Task<TaskResult<AppUser>> GetUserAsync(Guid userId)
+        public async Task<User> GetUserAsync(Guid userId)
         {
             if (userId == Guid.Empty)
                 throw new ArgumentNullException("userId");
 
-            TaskResult<AppUser> result = new TaskResult<AppUser> { StatusCode = HttpStatusCode.NoContent, Succeeded = false };
+            User user = null;
 
             try
             {
-                //Get token for access to Microsoft Graph as this application
-                string accessToken = await GetAzureADTokenAsync(this.azureB2cConfig);
-                if (String.IsNullOrEmpty(accessToken))
-                    return new TaskResult<AppUser> { StatusCode = HttpStatusCode.Unauthorized, Message = "Failed to get authentication token." };
+                B2cCustomAttributeHelper helper = new B2cCustomAttributeHelper(azureB2cConfig.B2CExtentionApplicationId);
+                GraphServiceClient graphService = this.GetGraphServiceClient(this.azureB2cConfig);
+                string userRole = helper.GetCompleteAttributeName("UserRole");
+                string dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
+                string phoneNumber = helper.GetCompleteAttributeName("PhoneNumber");
 
-                UriBuilder builder = new UriBuilder(this.azureB2cConfig.AzureADBaseUrl);
-                builder.Path = UriExtensions.CombinePath(this.azureB2cConfig.TenantId, this.azureB2cConfig.ResourcePathUsers, userId.ToString());
-                builder.Query = $"api-version={this.azureB2cConfig.AzureADApiVersion}";
-
-                HttpResponseMessage responseMessage = await SendRequestAsync(HttpMethod.Get, builder.Uri, accessToken, null);
-                result.Succeeded = responseMessage.IsSuccessStatusCode;
-                result.StatusCode = responseMessage.StatusCode;
-                if (responseMessage.IsSuccessStatusCode)
-                {
-                    string data = await responseMessage.Content.ReadAsStringAsync();
-                    result.Data = JsonConvert.DeserializeObject<AppUser>(data);
-
-                    if (result.Data.OtherMails != null && result.Data.OtherMails.Length != 0)
-                        result.Data.Email = result.Data.OtherMails[0];
-                    else
-                        result.Data.Email = result.Data.SignInName;
-                }
-                else
-                {
-                    result.Message = await responseMessage.Content.ReadAsStringAsync();
-                }
+                user = await graphService.Users[userId.ToString()].Request()
+                    .Select($"{graphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
+                Console.WriteLine(JsonConvert.SerializeObject(user.AdditionalData));
             }
+
+
             catch (ServiceException graphEx)
             {
-                result.Succeeded = false;
-                if (graphEx.IsMatch("Request_ResourceNotFound"))
-                    result.StatusCode = HttpStatusCode.NotFound;
-                else
-                    result.StatusCode = graphEx.StatusCode;
-
-                result.Message = graphEx.Error?.Message ?? graphEx.Message;
-                result.Error = graphEx;
+                throw graphEx;
             }
             catch (Exception ex)
             {
-                result.StatusCode = HttpStatusCode.InternalServerError;
-                result.Message = ex.Message;
-                result.Error = ex;
+                throw ex;
             }
-            return result;
+
+            return user;
         }
 
         public async Task<TaskResult<List<AppUser>>> GetAllUsersAsync()
@@ -658,5 +641,48 @@ namespace RoosterPlanner.Service
             [JsonProperty("value")]
             public List<AppUser> Value { get; set; }
         }
+        
+        
+        private GraphServiceClient GetGraphServiceClient(AzureAuthenticationConfig azureB2cConfig)
+        {
+            if (graphServiceClient == null)
+            {
+                graphServiceClient = this.CreateGraphServiceClient(azureB2cConfig);
+                graphServiceClientTimestamp = DateTime.UtcNow;
+            }
+            else if (DateTime.UtcNow.Subtract(graphServiceClientTimestamp).TotalMinutes > 30)
+            {
+                graphServiceClient = this.CreateGraphServiceClient(azureB2cConfig);
+                graphServiceClientTimestamp = DateTime.UtcNow;
+            }
+            return graphServiceClient;
+        }
+        
+        
+        /// <summary>
+        /// Builds a GraphServiceClient object with bearer token added as Authorization header.
+        /// </summary>
+        /// <param name="identityManagerConfig"></param>
+        /// <returns>GraphServiceClient object.</returns>
+        private GraphServiceClient CreateGraphServiceClient(AzureAuthenticationConfig azureB2cConfig)
+        {
+            IConfidentialClientApplication confidentialClientApplication = ConfidentialClientApplicationBuilder
+                .Create(this.azureB2cConfig.ClientId)
+                .WithTenantId(this.azureB2cConfig.TenantId)
+                .WithClientSecret(this.azureB2cConfig.ClientSecret)
+                .Build();
+
+            string[] scopes = this.azureB2cConfig.GraphApiScopes.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            GraphServiceClient graphService = new GraphServiceClient(new DelegateAuthenticationProvider(async (requestMessage) => {
+                // Retrieve an access token for Microsoft Graph (gets a fresh token if needed).
+                AuthenticationResult authResult = await confidentialClientApplication.AcquireTokenForClient(scopes).ExecuteAsync();
+
+                // Add the access token in the Authorization header of the API request.
+                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+            }));
+
+            return graphService;
+        }
+        
     }
 }

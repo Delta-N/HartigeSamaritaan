@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Common;
 using RoosterPlanner.Models;
-using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 
@@ -39,16 +35,20 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                TaskResult<Person> result = null;//await this.personService.Get(id);
+                TaskResult<Person> result = await this.personService.GetUser(id);
+                personVm = null;
                 if (result.Succeeded)
                 {
-                    //projectDetailsVm = this.mapper.Map<ProjectDetailsViewModel>(result.Data);
+                    personVm = new PersonViewModel
+                    {
+                        Name = result.Data.Name, 
+                        Id = result.Data.Oid
+                    };
                 }
                 return Ok(personVm);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "PersonController: Error occured.");
                 this.Response.Headers.Add("message", ex.Message);
             }
             return NoContent();

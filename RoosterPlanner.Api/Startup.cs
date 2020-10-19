@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Identity.Web;
 using RoosterPlanner.Api.AutoMapperProfiles;
 using RoosterPlanner.Common;
 using RoosterPlanner.Common.Config;
@@ -34,30 +33,24 @@ namespace RoosterPlanner.Api
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
 
-            services.AddMicrosoftIdentityWebApiAuthentication(Configuration, "AzureAd");
-            
-            /*services.AddAuthentication(options => {
+            services.AddAuthentication(options => {
              options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; 
              })
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.Authority =
-                        $"https://login.microsoftonline.com/tfp/{Configuration["AzureAuthentication: TenantId"]}/{Configuration["AzureAuthentication:SignUpSignInPolicyId"]}/";
+                        $"{Configuration["AzureAD:Instance"]}/tfp/{Configuration["AzureAD:TenantId"]}/{Configuration["AzureAD:SignUpSignInPolicyId"]}/v2.0/";
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
-                        ValidAudiences = new List<string>
-                        {
-                            Configuration["TokenValidation:ClientIdWeb"],
-                            Configuration["TokenValidation:ClientIdHook"]
-                        }
+                        ValidateIssuer = true,
+                        
                     };
-                    jwtOptions.Audience = "c832c923-37c6-4145-8c75-a023ecc7a98f";
+                    jwtOptions.Audience = Configuration["AzureAD:Audience"];
                     jwtOptions.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = AuthenticationFailedAsync
                     };
-                });*/
+                });
 
             services.AddCors(options =>
             {
@@ -73,7 +66,7 @@ namespace RoosterPlanner.Api
 
             // Enable Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
-            
+
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.IgnoreNullValues = false;
@@ -82,7 +75,7 @@ namespace RoosterPlanner.Api
 
             services.Configure<AzureAuthenticationConfig>(
                 Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
-            
+
             services.AddTransient<IAzureB2CService, AzureB2CService>();
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<IPersonService, PersonService>();
@@ -93,7 +86,7 @@ namespace RoosterPlanner.Api
 
             //dit moet nog omgebouwd worden
             services.AddAutoMapper(typeof(AutoMapperProfile));
-            
+
             services.AddSingleton<ILogger, Logger>(l =>
             {
                 return Logger.Create(Configuration["ApplicationInsight:InstrumentationKey"]);
