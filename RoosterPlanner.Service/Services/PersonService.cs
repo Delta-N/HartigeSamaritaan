@@ -17,7 +17,7 @@ namespace RoosterPlanner.Service
 {
     public interface IPersonService
     {
-        Task<TaskResult<Person>> GetUser(Guid id);
+        Task<TaskResult<User>> GetUser(Guid id);
         Task<TaskListResult<Person>> GetB2cMembers();
 
         Task<TaskResult<Project>> UpdatePersonName(Guid oid, string name);
@@ -43,9 +43,9 @@ namespace RoosterPlanner.Service
             this.logger = logger;
         }
 
-        public async Task<TaskResult<Person>> GetUser(Guid id)
+        public async Task<TaskResult<User>> GetUser(Guid id)
         {
-            TaskResult<Person> taskResult = new TaskResult<Person>();
+            TaskResult<User> taskResult = new TaskResult<User>();
             try
             {
                 User person = await azureB2CService.GetUserAsync(id);
@@ -53,7 +53,7 @@ namespace RoosterPlanner.Service
                 if (taskResult.Succeeded)
                 {
                     taskResult.StatusCode = HttpStatusCode.OK;
-                    if (person != null) taskResult.Data = new Person {Name = person.DisplayName, Oid = new Guid(person.Id)};
+                    if (person != null) taskResult.Data = person;
                 }
                 else
                 {

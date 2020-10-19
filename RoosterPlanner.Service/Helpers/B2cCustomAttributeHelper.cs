@@ -18,5 +18,16 @@
 
             return $"extension_{_b2cExtensionAppClientId}_{attributeName}";
         }
+
+        //nog te testen
+        internal string GetAttributeName(string CompleteAttributeName)
+        {
+            if (string.IsNullOrWhiteSpace(CompleteAttributeName))
+            {
+                throw new System.ArgumentException("Parameter cannot be null", nameof(CompleteAttributeName));
+            }
+
+            return CompleteAttributeName.Replace($"extension_{_b2cExtensionAppClientId}","");
+        }
     }
 }
