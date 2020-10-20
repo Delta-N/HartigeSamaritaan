@@ -6,7 +6,8 @@ namespace RoosterPlanner.Api.Models.Enums
     {
         Boardmember=1,
         Committeemember,
-        Volunteer
+        Volunteer,
+        None
     }
     
 
