@@ -11,27 +11,28 @@ env:
   AZURE_API_NAME: roosterplanner-api-dev
 
   #Todo: Create resource groups and resources
-  
+
 
 jobs:
-  build:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
- 
+
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
           workflow: Build.yml
           name: "Web Artifact"
           path: ./staging/web
-          
+
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
           workflow: Build.yml
           name: "Api Artifact"
           path: ./staging/api
-                
+
       - name: publish front-end
         uses: azure/webapps-deploy@v2
         with:
