@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
@@ -12,6 +13,7 @@ using Person = RoosterPlanner.Models.Person;
 
 namespace RoosterPlanner.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PersonsController : ControllerBase
@@ -34,41 +36,14 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
-            PersonViewModel personVm = new PersonViewModel();
+            PersonViewModel personVm = null;
 
             try
             {
                 TaskResult<User> result = await this.personService.GetUser(id);
-                personVm = null;
                 if (result.Succeeded)
                 {
-                    personVm = new PersonViewModel
-                    {
-                        Id = new Guid(result.Data.Id),
-                        FirstName = result.Data.GivenName,
-                        LastName = result.Data.Surname,
-                        Email = result.Data.Mail,
-                        StreetAddress = result.Data.StreetAddress,
-                        PostalCode = result.Data.PostalCode,
-                        City = result.Data.City,
-                        Country = result.Data.Country,
-                    };
-                    //todo deze hardcoded referenties laten verwijzen naar 
-                    if (result.Data.AdditionalData.ContainsKey($"extension_4e6dae7dd1c74eac85fefc6da42e7b61_UserRole")){
-                        UserRole role;
-                        Enum.TryParse(
-                            result.Data.AdditionalData[$"extension_4e6dae7dd1c74eac85fefc6da42e7b61_UserRole"]
-                                .ToString(), out role);
-                        personVm.UserRole = role.ToString();
-                    }
-                    
-                    if (result.Data.AdditionalData.ContainsKey("extension_4e6dae7dd1c74eac85fefc6da42e7b61_DateOfBirth")){
-                        personVm.DateOfBirth = result.Data.AdditionalData["extension_4e6dae7dd1c74eac85fefc6da42e7b61_DateOfBirth"].ToString();
-                    } 
-                    if (result.Data.AdditionalData.ContainsKey("extension_4e6dae7dd1c74eac85fefc6da42e7b61_PhoneNumber")){
-                        personVm.PhoneNumber = result.Data.AdditionalData["extension_4e6dae7dd1c74eac85fefc6da42e7b61_PhoneNumber"].ToString();
-                    }
-
+                    personVm = PersonViewModel.CreateVm(result.Data);
                 }
 
 
