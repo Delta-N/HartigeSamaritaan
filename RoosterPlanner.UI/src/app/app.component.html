@@ -11,12 +11,12 @@
     </a>
     <span class="example-spacer"></span>
     <div fxShow="true" fxHide.lt-md="true">
-      <a mat-button class="toolbarbutton" routerLink="/admin">Admin</a>
+      <a mat-button class="toolbarbutton" *ngIf="isAdmin" routerLink="/admin">Admin</a>
       <a mat-button class="toolbarbutton" routerLink="/home">Dashboard</a>
       <a mat-button class="toolbarbutton" routerLink="/profile">Profiel</a>
-      <button mat-button class="toolbarbutton" *ngIf="loggedIn" (click)="editProfile()">Edit Profile</button>
+      <button mat-button class="toolbarbutton" *ngIf="loggedIn" (click)="testButton()">Test Button</button>
       <button mat-button class="toolbarbutton" *ngIf="!loggedIn" (click)="login()">Login</button>
-      <button mat-button class="toolbarbutton"  *ngIf="loggedIn" (click)="logout()">Logout</button>
+      <button mat-button class="toolbarbutton" *ngIf="loggedIn" (click)="logout()">Logout</button>
 
     </div>
   </mat-toolbar>

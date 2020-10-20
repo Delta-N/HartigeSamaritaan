@@ -15,23 +15,29 @@ export class UserService {
   constructor(private apiService: ApiService) {
   }
 
-  async getUser(guid:string):Promise<User> {
+  async getUser(guid: string): Promise<User> {
     await this.apiService.get<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/${guid}`).toPromise().then(response => {
       this.user = response.body
     }).catch();
-      return this.user
+    return this.user
   }
 
   //todo deze variablen zijn hardcoded
-  userIsAdminBackend(user:User):boolean{
-    if(user == null || user.userRole==null){return false;}
-    if(user.userRole=='Boardmember' || user.userRole=='Committeemember'){
+  userIsAdminBackend(user: User): boolean {
+    if (user == null || user.userRole == null) {
+      return false;
+    }
+    if (user.userRole == 'Boardmember' || user.userRole == 'Committeemember') {
       return true;
     }
     return false;
   }
-  userIsAdminFrontEnd():boolean{
+
+  userIsAdminFrontEnd(): boolean {
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
-    return ((idToken.extension_UserRole==1) || (idToken.extension_UserRole==2))
+    if (idToken == null) {
+      return false;
+    }
+    return ((idToken.extension_UserRole == 1) || (idToken.extension_UserRole == 2))
   }
 }

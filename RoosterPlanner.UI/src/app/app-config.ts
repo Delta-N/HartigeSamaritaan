@@ -1,4 +1,4 @@
-﻿import { Configuration } from 'msal';
+﻿import {CacheLocation, Configuration} from 'msal';
 import { MsalAngularConfiguration } from '@azure/msal-angular';
 import {environment} from "../environments/environment";
 
@@ -41,7 +41,7 @@ export const protectedResourceMap: [string, string[]][] = [
 export const msalConfig: Configuration = {
   auth: environment.auth,
   cache: {
-    cacheLocation: "localStorage",
+    cacheLocation: 'sessionStorage' as CacheLocation,
     storeAuthStateInCookie: isIE, // Set this to "true" to save cache in cookies to address trusted zones limitations in IE
   },}
 
@@ -49,7 +49,10 @@ export const loginRequest: {scopes: string[]} = {
   scopes: [
     'openid',
     'profile',
-    'https://deltanhackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_edit'],
+
+    'offline_access',
+    'https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read'
+    ],
 };
 
 export const msalAngularConfig: MsalAngularConfiguration = {
@@ -59,7 +62,10 @@ export const msalAngularConfig: MsalAngularConfiguration = {
     ...tokenRequest.scopes,
   ],
   unprotectedResources: [], // API calls to these coordinates will NOT activate MSALGuard
-  protectedResourceMap,     // API calls to these coordinates will activate MSALGuard
+  protectedResourceMap: [
+    ['https://localhost:5001/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read', 'offline_access', 'openid']],
+    ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read', 'offline_access', 'openid']]
+  ],     // API calls to these coordinates will activate MSALGuard
   extraQueryParameters: {}
 }
 

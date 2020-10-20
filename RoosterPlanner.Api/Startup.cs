@@ -20,7 +20,6 @@ namespace RoosterPlanner.Api
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        readonly string AllowOrigins = "_allowOrigins";
 
         public Startup(IConfiguration configuration)
         {
@@ -33,9 +32,7 @@ namespace RoosterPlanner.Api
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
 
-            services.AddAuthentication(options => {
-             options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; 
-             })
+            services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.Authority =
@@ -43,12 +40,11 @@ namespace RoosterPlanner.Api
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        
                     };
                     jwtOptions.Audience = Configuration["AzureAD:Audience"];
                     jwtOptions.Events = new JwtBearerEvents
                     {
-                        OnAuthenticationFailed = AuthenticationFailedAsync
+                        //OnAuthenticationFailed = AuthenticationFailedAsync
                     };
                 });
 
@@ -56,7 +52,8 @@ namespace RoosterPlanner.Api
             {
                 options.AddPolicy("AllowOrigins", builder =>
                 {
-                    builder.WithOrigins(Configuration.GetSection("AllowedHosts").Value)
+                    builder
+                        .WithOrigins(Configuration.GetSection("AllowedHosts").Value)
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
@@ -104,7 +101,7 @@ namespace RoosterPlanner.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
 
-            app.UseCors(AllowOrigins);
+            app.UseCors("AllowOrigins");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
@@ -112,7 +109,7 @@ namespace RoosterPlanner.Api
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
-        private Task AuthenticationFailedAsync(AuthenticationFailedContext arg)
+        /*private Task AuthenticationFailedAsync(AuthenticationFailedContext arg)
         {
             // For debugging purposes only!
             var s = $"AuthenticationFailed: {arg.Exception.Message}";
@@ -120,6 +117,6 @@ namespace RoosterPlanner.Api
             arg.Response.Body.Write(Encoding.UTF8.GetBytes(s), 0, s.Length);
 
             return Task.FromResult(0);
-        }
+        }*/
     }
 }

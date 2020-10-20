@@ -52,7 +52,7 @@ export class AuthenticationService {
   }
 
   // other methods
-  checkAccount():boolean {
+  checkAccount(): boolean {
     this.loggedIn = !!this.authService.getAccount();
     return this.loggedIn;
   }
