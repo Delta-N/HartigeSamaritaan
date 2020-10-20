@@ -1,7 +1,5 @@
 ﻿import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
-import {JwtHelper} from "../helpers/jwt-helper";
-import {AuthenticationService} from "../services/authentication.service";
 import {UserService} from "../services/user.service";
 
 
