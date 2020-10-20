@@ -1,7 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { Configuration } from 'msal';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {Configuration} from 'msal';
 
 import {
   MsalModule,
@@ -12,24 +12,25 @@ import {
   MsalAngularConfiguration
 } from '@azure/msal-angular';
 
-import { msalConfig, msalAngularConfig } from './app-config';
+import {msalConfig, msalAngularConfig} from './app-config';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './pages/home/home.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from './modules/material/material.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {HomeComponent} from './pages/home/home.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MaterialModule} from './modules/material/material.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NotFoundComponent} from './pages/not-found/not-found.component';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatCardModule} from "@angular/material/card";
 import {MatDialogModule} from "@angular/material/dialog";
-import { ProjectCardComponent } from './components/project-card/project-card.component';
-import { AdminComponent } from './pages/admin/admin.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { AddProjectComponent } from './components/add-project/add-project.component';
+import {ProjectCardComponent} from './components/project-card/project-card.component';
+import {AdminComponent} from './pages/admin/admin.component';
+import {ProfileComponent} from './pages/profile/profile.component';
+import {AddProjectComponent} from './components/add-project/add-project.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import { ShiftComponent } from './pages/shift/shift.component';
+import {ShiftComponent} from './pages/shift/shift.component';
+import {AuthorizationGuard} from "./guards/authorization.guard";
 
 function MSALConfigFactory(): Configuration {
   return msalConfig;
@@ -78,9 +79,11 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
       provide: MSAL_CONFIG_ANGULAR,
       useFactory: MSALAngularConfigFactory
     },
-    MsalService
+    MsalService,
+    AuthorizationGuard
   ],
   bootstrap: [AppComponent],
-  entryComponents:[AddProjectComponent]
+  entryComponents: [AddProjectComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
