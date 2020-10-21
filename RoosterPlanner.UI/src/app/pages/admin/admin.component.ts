@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ProjectService} from "../../services/project.service";
+import {Project} from "../../models/project";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-admin',
@@ -6,26 +9,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-  data= [
-    { name: "Restaurant Delft 2019", GUID:"1" },
-    { name: "Restaurant Delft 2016", GUID:"2" },
-    { name: "Restaurant Den Haag 2019", GUID:"3" },
-    { name: "Restaurant Almere 2078", GUID:"4" }
-    ];
+  projects: Project[] = [];
+  loaded: boolean = false;
 
-  administrators=[
+  administrators = [
     {name: "Corné"},
     {name: "JW"},
     {name: "Yannick"},
     {name: "Joanne"},
   ]
 
-  constructor() { }
+  constructor(private projectService: ProjectService, private router: Router) {
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this.projectService.getProject().then(x => {
+      this.projects = x;
+      this.loaded = true;
+    });
+  }
+
   addProject() {
-    window.alert("Deze functie moet nog geschreven worden...")
+    this.router.navigateByUrl('create-project').then();
   }
-  ngOnInit(): void {
-  }
+
 
   addAdministrator() {
     window.alert("Deze functie moet nog geschreven worden...")

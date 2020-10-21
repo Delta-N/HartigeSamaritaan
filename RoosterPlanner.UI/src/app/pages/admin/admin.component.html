@@ -2,21 +2,22 @@
   <div class="bar">
     <h1>Admin</h1>
   </div>
+</div>
 
-
-  <div class="cardholder">
+<div class="container">
+  <div class="cardholder" *ngIf="loaded==true">
 
     <mat-card class="card">
       <div>
         <mat-card-title>Projecten</mat-card-title>
       </div>
       <mat-card-content>
-    <span *ngFor="let item of data">
-      <a routerLink="/projects/{{item.GUID}}"><p>{{item.name}}</p></a>
+    <span *ngFor="let item of projects">
+      <a routerLink="/projects/{{item.id}}"><p>{{item.name}}</p></a>
     </span>
 
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions class="action-anchor">
         <button mat-button (click)="addProject()">+ nieuw project toevoegen</button>
       </mat-card-actions>
     </mat-card>
@@ -27,11 +28,11 @@
       </div>
       <mat-card-content>
     <span *ngFor="let item of administrators">
-      <p>{{item.name}}</p>
+      {{item.name}}
     </span>
 
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions class="action-anchor">
         <button mat-button (click)="addAdministrator()">+ nieuwe toevoegen</button>
       </mat-card-actions>
     </mat-card>
@@ -41,12 +42,10 @@
         <mat-card-title>Gegevens</mat-card-title>
       </div>
       <mat-card-content>
-        <a routerLink = "/employees"><p>Lijst medewerkers</p></a>
-      <a routerLink = "/statistieken"><p>Statistieken exporteren</p></a>
-      <mat-card-actions></mat-card-actions>
+        <a routerLink="/employees"><p>Lijst medewerkers</p></a>
+        <a routerLink="/statistieken"><p>Statistieken exporteren</p></a>
+        <mat-card-actions class="action-anchor"></mat-card-actions>
       </mat-card-content>
     </mat-card>
-
-
   </div>
 </div>

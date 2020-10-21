@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Common;
@@ -21,9 +19,9 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly IMapper mapper = null;
-        private readonly IProjectService projectService = null;
-        private readonly ILogger logger = null;
+        private readonly IMapper mapper;
+        private readonly IProjectService projectService;
+        private readonly ILogger logger;
 
         //Constructor
         public ProjectController(IMapper mapper, IProjectService projectService, ILogger logger)
@@ -66,11 +64,13 @@ namespace RoosterPlanner.Api.Controllers
             int offset = 0,
             int pageSize = 20)
         {
-            ProjectFilter filter = new ProjectFilter(offset, pageSize);
-            filter.Name = name;
-            filter.City = city;
-            filter.StartDate = startDateFrom;
-            filter.Closed = closed;
+            ProjectFilter filter = new ProjectFilter(offset, pageSize)
+            {
+                Name = name, 
+                City = city, 
+                StartDate = startDateFrom, 
+                Closed = closed
+            };
 
             List<ProjectViewModel> projectVmList = new List<ProjectViewModel>();
 
@@ -112,7 +112,20 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                Project project = mapper.Map<Project>(projectDetails);
+                //Dit is niet zo handig hierzo. Waar wel? binnen project (kan geen referentie maken naar API project). 
+                Project project = new Project(projectDetails.Id)
+                {
+                    Name = projectDetails.Name,
+                    Address = projectDetails.Address,
+                    City = projectDetails.City,
+                    Description = projectDetails.Description,
+                    PictureUri = projectDetails.PictureUri,
+                    WebsiteUrl = projectDetails.WebsiteUrl,
+                    StartDate = projectDetails.StartDate,
+                    EndDate = projectDetails.EndDate,
+                    Closed = projectDetails.Closed
+                };
+                
                 if (project != null && project.Id == Guid.Empty)
                 {
                     result = this.projectService.CreateProject(project);

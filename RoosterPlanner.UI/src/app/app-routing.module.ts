@@ -5,6 +5,7 @@ import {NotFoundComponent} from "./pages/not-found/not-found.component";
 import {AdminComponent} from "./pages/admin/admin.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {ShiftComponent} from "./pages/shift/shift.component";
+import {CreateProjectComponent} from "./pages/create-project/create-project.component";
 import {MsalGuard} from "@azure/msal-angular";
 import {AuthorizationGuard} from "./guards/authorization.guard";
 
@@ -47,9 +48,18 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'create-project',
+    component: CreateProjectComponent,
+    canActivate: [
+      MsalGuard,
+      AuthorizationGuard
+    ]
+  },
+  {
     path: '**',
     component: NotFoundComponent
   }
+
 
 ];
 

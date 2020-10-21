@@ -26,4 +26,26 @@ export class ProjectService {
     }
     return this.projects
   }
+
+  postProject(project: Project) {
+    if(project==null){
+      window.alert("Leeg project in project service");
+      return;
+    }
+    if(project.id==null || project.id==""){
+      project.id="00000000-0000-0000-0000-000000000000"
+    }
+    if(project.endDate!=null && project.endDate.toString() == "" ){
+      project.endDate=null;
+    }
+    if(project.startDate.toString()!=""){
+      try{
+        project.startDate=new Date(project.startDate);
+      }catch (e) {
+        console.error(e)
+        project.startDate=null;
+      }
+    }
+    return this.apiService.post<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`,project).toPromise();
+  }
 }

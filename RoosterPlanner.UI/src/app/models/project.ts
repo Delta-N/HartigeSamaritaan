@@ -5,11 +5,11 @@ export class Project {
     public city: string;
     public description:string;
     public startDate: Date;
-    public endDate: Date;
-    public pictureUri:string;
+    public endDate?: Date;
+    public pictureUri?:string;
     //waarom websiteUri?
-    public websiteUri: string;
-    public closed: boolean;
+    public websiteUri?: string;
+    public closed?: boolean;
 
 
   constructor(id: string, name?: string, address?: string, city?: string, description?: string, startDate?: Date, endDate?: Date, pictureUri?: string, websiteUri?: string, closed?: boolean) {

@@ -1,7 +1,7 @@
-*{
+h1{
   text-align: left;
   font: normal normal normal 35px/50px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #434343;
   opacity: 1;
 }
@@ -21,8 +21,7 @@
 .bar {
   display: flex;
   align-items: center;
-  padding: 10px;
-  padding-top: 15px;
+  padding: 15px 10px 10px;
   border-bottom: 1px solid gray;
 
 }
@@ -34,18 +33,17 @@
 #flavortext{
   text-align: left;
   font: normal normal normal 18px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #434343;
   opacity: 1;
-  margin:auto;
   padding:10px;
   width:fit-content;
-  margin-top:25vh;
+  margin: 25vh auto auto;
 }
 #big-button{
   text-align: left;
   font: normal normal bold 53px/70px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #434343;
   opacity: 1;
   margin: auto;

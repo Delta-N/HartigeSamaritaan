@@ -31,6 +31,8 @@ import {AddProjectComponent} from './components/add-project/add-project.componen
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ShiftComponent} from './pages/shift/shift.component';
 import {AuthorizationGuard} from "./guards/authorization.guard";
+import { CreateProjectComponent } from './pages/create-project/create-project.component';
+import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
 
 function MSALConfigFactory(): Configuration {
   return msalConfig;
@@ -50,6 +52,7 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     ProfileComponent,
     AddProjectComponent,
     ShiftComponent,
+    CreateProjectComponent,
 
   ],
   imports: [
@@ -63,7 +66,8 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     MatDialogModule,
     MatCheckboxModule,
     HttpClientModule,
-    MsalModule
+    MsalModule,
+    ReactiveFormsModule
   ],
   providers: [
     {
@@ -80,7 +84,8 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
       useFactory: MSALAngularConfigFactory
     },
     MsalService,
-    AuthorizationGuard
+    AuthorizationGuard,
+    FormBuilder
   ],
   bootstrap: [AppComponent],
   entryComponents: [AddProjectComponent]
