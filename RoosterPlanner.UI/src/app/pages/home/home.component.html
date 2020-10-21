@@ -10,11 +10,11 @@
       <app-project-card [project]="item"></app-project-card>
       </span>
   </div>
-  <div *ngIf="projects.length == 0">
+  <div *ngIf="projects.length == 0&& loaded==true">
     <div class="container" style="min-height: 65vh;">
       <div>
         <div class="row"><p id="flavortext">Nog niet aangemeld bij een project</p></div>
-        <div class="row" ><a mat-button id="big-button" (click)="addProject()">Aanmelden</a></div>
+        <div class="row"><a mat-button id="big-button" (click)="addProject()">Aanmelden</a></div>
       </div>
     </div>
   </div>

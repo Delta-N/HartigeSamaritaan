@@ -18,14 +18,14 @@ namespace RoosterPlanner.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectsController : ControllerBase
+    public class ProjectController : ControllerBase
     {
         private readonly IMapper mapper = null;
         private readonly IProjectService projectService = null;
         private readonly ILogger logger = null;
 
         //Constructor
-        public ProjectsController(IMapper mapper, IProjectService projectService, ILogger logger)
+        public ProjectController(IMapper mapper, IProjectService projectService, ILogger logger)
         {
             this.mapper = mapper;
             this.projectService = projectService;
@@ -42,7 +42,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<Project> result = await this.projectService.GetProjectDetails(id);
                 if (result.Succeeded)
                 {
-                    projectDetailsVm = this.mapper.Map<ProjectDetailsViewModel>(result.Data);
+                    projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
                 }
                 return Ok(projectDetailsVm);
             }
@@ -53,8 +53,6 @@ namespace RoosterPlanner.Api.Controllers
             }
             return NoContent();
         }
-
-        //[HttpGet("user/{id}")]
 
         [HttpGet()]
         public async Task<ActionResult<List<ProjectViewModel>>> Search(string name,
@@ -78,7 +76,7 @@ namespace RoosterPlanner.Api.Controllers
                 if (result.Succeeded)
                 {
                     Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
-                    projectVmList = result.Data.Select(x => this.mapper.Map<ProjectViewModel>(x)).ToList();
+                    projectVmList = result.Data.Select(ProjectViewModel.CreateVm).ToList();
                     return Ok(projectVmList);
                 }
                 else

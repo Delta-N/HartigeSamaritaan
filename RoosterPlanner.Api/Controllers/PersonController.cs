@@ -16,7 +16,7 @@ namespace RoosterPlanner.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonsController : ControllerBase
+    public class PersonController : ControllerBase
     {
         private readonly IMapper mapper = null;
         private readonly IPersonService personService = null;
@@ -24,7 +24,7 @@ namespace RoosterPlanner.Api.Controllers
         private readonly ILogger logger = null;
 
         //Constructor
-        public PersonsController(IMapper mapper, IPersonService personService, IProjectService projectService,
+        public PersonController(IMapper mapper, IPersonService personService, IProjectService projectService,
             ILogger logger)
         {
             this.mapper = mapper;

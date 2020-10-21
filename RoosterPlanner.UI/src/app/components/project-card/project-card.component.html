@@ -3,12 +3,12 @@
     <mat-card-title>{{project.name}}</mat-card-title>
   </div>
   <mat-card-content>
-    <a routerLink="/project/beschikbaarheid/{{project.GUID}}"><p>Beschikbaarheid</p></a>
-    <a routerLink="/project/agenda/{{project.GUID}}"><p>Agenda</p></a>
-    <a routerLink="/project/shifts/{{project.GUID}}"><p>Mijn Shifts</p></a>
+    <a routerLink="/project/beschikbaarheid/{{project.id}}"><p>Beschikbaarheid</p></a>
+    <a routerLink="/project/agenda/{{project.id}}"><p>Agenda</p></a>
+    <a routerLink="/project/shifts/{{project.id}}"><p>Mijn Shifts</p></a>
 
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button (click)="removeProject(project.GUID)">Verwijderen</button>
+    <button mat-button (click)="removeProject(project.id)">Verwijderen</button>
   </mat-card-actions>
 </mat-card>

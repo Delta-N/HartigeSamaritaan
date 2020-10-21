@@ -11,7 +11,7 @@ namespace RoosterPlanner.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VolunteersController : ControllerBase
+    public class VolunteerController : ControllerBase
     {
         protected IMapper Mapper { get; set; }
         public IProjectService ProjectService { get; set; }
@@ -21,7 +21,7 @@ namespace RoosterPlanner.Api.Controllers
         public IShiftService ShiftService { get; set; }
         public IMatchService MatchService { get; set; }
 
-        public VolunteersController(IMapper mapper, 
+        public VolunteerController(IMapper mapper, 
                                     IProjectService projectService, 
                                     IParticipationService participationService, 
                                     IAzureB2CService azureB2CService, 

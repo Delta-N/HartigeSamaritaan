@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RoosterPlanner.Models;
 using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Api.Models
@@ -23,6 +24,22 @@ namespace RoosterPlanner.Api.Models
         public ProjectDetailsViewModel()
         {
             this.Tasks = new List<Task>();
+        }
+        public static ProjectDetailsViewModel CreateVm(Project project)
+        {
+            return new ProjectDetailsViewModel
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Address = project.Address,
+                City = project.City,
+                Description = project.Description,
+                PictureUri = project.PictureUri,
+                WebsiteUrl = project.WebsiteUrl,
+                StartDate = project.StartDate,
+                EndDate = project.EndDate,
+                Closed = project.Closed
+            };
         }
     }
 }
