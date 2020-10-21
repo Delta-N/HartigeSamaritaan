@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,8 @@ namespace RoosterPlanner.Api.Controllers
             this.projectService = projectService;
             this.logger = logger;
         }
-        
+
+
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
@@ -44,6 +46,7 @@ namespace RoosterPlanner.Api.Controllers
                 {
                     projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
                 }
+
                 return Ok(projectDetailsVm);
             }
             catch (Exception ex)
@@ -51,6 +54,7 @@ namespace RoosterPlanner.Api.Controllers
                 logger.Error(ex, "ProjectController: Error occured.");
                 this.Response.Headers.Add("message", ex.Message);
             }
+
             return NoContent();
         }
 
@@ -89,9 +93,12 @@ namespace RoosterPlanner.Api.Controllers
                 logger.Error(ex, "ProjectController: Error occured.");
                 this.Response.Headers.Add("message", ex.Message);
             }
+
             return NoContent();
         }
 
+        //alleen een bestuurslid kan projecten aanmaken of wijzigen
+        [Authorize(Policy = "Boardmember")]
         [HttpPost()]
         public ActionResult Save(ProjectDetailsViewModel projectDetails)
         {
@@ -125,6 +132,7 @@ namespace RoosterPlanner.Api.Controllers
                 logger.Error(ex, "ProjectController: Error occured.");
                 this.Response.Headers.Add("message", ex.Message);
             }
+
             return NoContent();
         }
 

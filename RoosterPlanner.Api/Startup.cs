@@ -32,7 +32,10 @@ namespace RoosterPlanner.Api
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
 
-            services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.Authority =
@@ -46,6 +49,7 @@ namespace RoosterPlanner.Api
                     {
                         //OnAuthenticationFailed = AuthenticationFailedAsync
                     };
+                    
                 });
 
             services.AddCors(options =>
@@ -59,7 +63,17 @@ namespace RoosterPlanner.Api
                 });
             });
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Boardmember", policy =>
+                    policy.RequireClaim("extension_UserRole", "1"));
+                
+                options.AddPolicy("Committeemember", policy =>
+                    policy.RequireClaim("extension_UserRole", "2"));
+                
+                options.AddPolicy("Boardmember&Committeemember", policy =>
+                    policy.RequireClaim("extension_UserRole", "1","2"));
+            });
 
             // Enable Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
