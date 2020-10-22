@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
-using RoosterPlanner.Api.Models.Enums;
 using RoosterPlanner.Common;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
@@ -16,7 +15,7 @@ namespace RoosterPlanner.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonController : ControllerBase
+    public class PersonsController : ControllerBase
     {
         private readonly IMapper mapper = null;
         private readonly IPersonService personService = null;
@@ -24,7 +23,7 @@ namespace RoosterPlanner.Api.Controllers
         private readonly ILogger logger = null;
 
         //Constructor
-        public PersonController(IMapper mapper, IPersonService personService, IProjectService projectService,
+        public PersonsController(IMapper mapper, IPersonService personService, IProjectService projectService,
             ILogger logger)
         {
             this.mapper = mapper;

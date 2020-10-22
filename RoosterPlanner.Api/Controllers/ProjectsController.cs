@@ -17,14 +17,14 @@ namespace RoosterPlanner.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController : ControllerBase
+    public class ProjectsController : ControllerBase
     {
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly ILogger logger;
 
         //Constructor
-        public ProjectController(IMapper mapper, IProjectService projectService, ILogger logger)
+        public ProjectsController(IMapper mapper, IProjectService projectService, ILogger logger)
         {
             this.mapper = mapper;
             this.projectService = projectService;

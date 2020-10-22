@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace RoosterPlanner.Api.Models.Enums
+﻿namespace RoosterPlanner.Api.Models.Enums
 {
     public enum UserRole
     {

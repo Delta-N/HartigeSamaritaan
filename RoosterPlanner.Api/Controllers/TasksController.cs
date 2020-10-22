@@ -14,14 +14,14 @@ namespace RoosterPlanner.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskController : ControllerBase
+    public class TasksController : ControllerBase
     {
         private readonly IMapper mapper;
         private readonly ITaskService taskService;
         private readonly ILogger logger;
 
         //Constructor
-        public TaskController(IMapper mapper, ITaskService taskService, ILogger logger)
+        public TasksController(IMapper mapper, ITaskService taskService, ILogger logger)
         {
             this.mapper = mapper;
             this.taskService = taskService;
