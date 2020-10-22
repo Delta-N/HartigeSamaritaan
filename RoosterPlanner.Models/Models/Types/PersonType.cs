@@ -1,4 +1,4 @@
-﻿namespace RoosterPlanner.Models.Models.Types
+﻿namespace RoosterPlanner.Models.Types
 {
     public enum PersonType
     {

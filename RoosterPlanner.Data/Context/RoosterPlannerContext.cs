@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Context.Seed;
 using RoosterPlanner.Models;
-using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Data.Context
 {

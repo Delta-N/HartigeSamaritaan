@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
-using Task = RoosterPlanner.Models.Models.Task;
+using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Data.Repositories
 {

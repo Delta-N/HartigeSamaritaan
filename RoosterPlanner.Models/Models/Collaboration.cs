@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RoosterPlanner.Models.Models
+namespace RoosterPlanner.Models
 {
     public class Collaboration : Entity
     {

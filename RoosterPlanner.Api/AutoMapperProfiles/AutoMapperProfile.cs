@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using RoosterPlanner.Api.Models;
-using RoosterPlanner.Models.Models;
+using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.AutoMapperProfiles
 {
@@ -8,9 +8,9 @@ namespace RoosterPlanner.Api.AutoMapperProfiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<RoosterPlanner.Models.Project, ProjectViewModel>();
+            CreateMap<Project, ProjectViewModel>();
 
-            CreateMap<RoosterPlanner.Models.Project, ProjectDetailsViewModel>();
+            CreateMap<Project, ProjectDetailsViewModel>();
 
             CreateMap<Task, TaskViewModel>();
 

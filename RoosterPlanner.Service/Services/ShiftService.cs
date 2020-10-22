@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Models.Models;
+using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
@@ -15,8 +15,8 @@ namespace RoosterPlanner.Service
     public class ShiftService : IShiftService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor

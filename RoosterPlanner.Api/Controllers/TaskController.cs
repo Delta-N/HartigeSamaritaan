@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Common;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
-using Task = RoosterPlanner.Models.Models.Task;
+using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -17,9 +16,9 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        private readonly IMapper mapper = null;
-        private readonly ITaskService taskService = null;
-        private readonly ILogger logger = null;
+        private readonly IMapper mapper;
+        private readonly ITaskService taskService;
+        private readonly ILogger logger;
 
         //Constructor
         public TaskController(IMapper mapper, ITaskService taskService, ILogger logger)

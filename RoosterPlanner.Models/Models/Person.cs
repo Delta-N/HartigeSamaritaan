@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using RoosterPlanner.Models.Models;
-using RoosterPlanner.Models.Models.Types;
+using RoosterPlanner.Models.Types;
 
 namespace RoosterPlanner.Models
 {

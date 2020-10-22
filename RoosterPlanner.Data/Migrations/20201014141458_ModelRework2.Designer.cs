@@ -59,7 +59,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Availabilities");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Category", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -120,7 +120,7 @@ namespace RoosterPlanner.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Certificate", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Certificate", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -158,7 +158,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Certificates");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.CertificateType", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.CertificateType", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -190,7 +190,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("CertificateTypes");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Collaboration", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Collaboration", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -222,7 +222,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Collaborations");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Participation", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -257,7 +257,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Participations");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Requirement", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Requirement", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -289,7 +289,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Requirements");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Shift", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -330,7 +330,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Shifts");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Task", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -541,22 +541,22 @@ namespace RoosterPlanner.Data.Migrations
 
             modelBuilder.Entity("RoosterPlanner.Models.Availability", b =>
                 {
-                    b.HasOne("RoosterPlanner.Models.Models.Participation", "Participation")
+                    b.HasOne("RoosterPlanner.Models.Participation", "Participation")
                         .WithMany("Availabilities")
                         .HasForeignKey("ParticipationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("RoosterPlanner.Models.Models.Shift", "Shift")
+                    b.HasOne("RoosterPlanner.Models.Shift", "Shift")
                         .WithMany("Availabilities")
                         .HasForeignKey("ShiftId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Certificate", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Certificate", b =>
                 {
-                    b.HasOne("RoosterPlanner.Models.Models.CertificateType", "CertificateType")
+                    b.HasOne("RoosterPlanner.Models.CertificateType", "CertificateType")
                         .WithMany("Certificates")
                         .HasForeignKey("CertificateTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -569,22 +569,22 @@ namespace RoosterPlanner.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Collaboration", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Collaboration", b =>
                 {
-                    b.HasOne("RoosterPlanner.Models.Models.Participation", "IsWantedBy")
+                    b.HasOne("RoosterPlanner.Models.Participation", "IsWantedBy")
                         .WithMany("IsWantedBy")
                         .HasForeignKey("IsWantedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("RoosterPlanner.Models.Models.Participation", "WantsToWorkWith")
+                    b.HasOne("RoosterPlanner.Models.Participation", "WantsToWorkWith")
                         .WithMany("WantsToWorkWith")
                         .HasForeignKey("WantsToWorkWithId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Participation", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
                 {
                     b.HasOne("RoosterPlanner.Models.Person", "Person")
                         .WithMany("Participations")
@@ -599,22 +599,22 @@ namespace RoosterPlanner.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Requirement", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Requirement", b =>
                 {
-                    b.HasOne("RoosterPlanner.Models.Models.CertificateType", "CertificateType")
+                    b.HasOne("RoosterPlanner.Models.CertificateType", "CertificateType")
                         .WithMany("Requirements")
                         .HasForeignKey("CertificateTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoosterPlanner.Models.Models.Task", "Task")
+                    b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("Requirements")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Shift", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
                 {
                     b.HasOne("RoosterPlanner.Models.Project", "Project")
                         .WithMany("Shifts")
@@ -622,16 +622,16 @@ namespace RoosterPlanner.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoosterPlanner.Models.Models.Task", "Task")
+                    b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("Shifts")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Models.Task", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
                 {
-                    b.HasOne("RoosterPlanner.Models.Models.Category", "Category")
+                    b.HasOne("RoosterPlanner.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -646,7 +646,7 @@ namespace RoosterPlanner.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoosterPlanner.Models.Models.Task", "Task")
+                    b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("ProjectTasks")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)

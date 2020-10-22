@@ -5,7 +5,6 @@ using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
-using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
@@ -30,9 +29,9 @@ namespace RoosterPlanner.Service
     public class ProjectService : IProjectService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly IProjectRepository projectRepository = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IProjectRepository projectRepository;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor

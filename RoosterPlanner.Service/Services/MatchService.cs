@@ -15,8 +15,9 @@ namespace RoosterPlanner.Service
     public class MatchService : IMatchService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly ILogger logger = null;
+
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor
@@ -45,7 +46,7 @@ namespace RoosterPlanner.Service
                 {
                     ParticipationId = participateId,
                     ShiftId = shiftId,
-                    Type = Models.Models.Types.AvailibilityType.Ok
+                    Type = Models.Types.AvailibilityType.Ok
                 };
                 
                 taskResult.Data = unitOfWork.MatchRepository.AddOrUpdate(match);

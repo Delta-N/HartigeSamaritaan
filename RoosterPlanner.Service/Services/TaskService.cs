@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Service.DataModels;
-using Task = RoosterPlanner.Models.Models.Task;
+using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Service
 {
@@ -18,8 +18,8 @@ namespace RoosterPlanner.Service
     public class TaskService : ITaskService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor
