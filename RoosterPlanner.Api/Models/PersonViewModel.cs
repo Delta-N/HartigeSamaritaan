@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models.Enums;
+using RoosterPlanner.Api.Models.Constants;
 
 namespace RoosterPlanner.Api.Models
 {
@@ -20,15 +21,7 @@ namespace RoosterPlanner.Api.Models
 
         public static PersonViewModel CreateVm(User user)
         {
-            UserRole role = Enums.UserRole.None;
-            if (user.AdditionalData.ContainsKey($"extension_4e6dae7dd1c74eac85fefc6da42e7b61_UserRole"))
-            {
-                Enum.TryParse(
-                    user.AdditionalData[$"extension_4e6dae7dd1c74eac85fefc6da42e7b61_UserRole"]
-                        .ToString(), out role);
-            }
-
-            return new PersonViewModel
+            PersonViewModel personViewModel = new PersonViewModel
             {
                 Id = new Guid(user.Id),
                 FirstName = user.GivenName,
@@ -38,10 +31,33 @@ namespace RoosterPlanner.Api.Models
                 PostalCode = user.PostalCode,
                 City = user.City,
                 Country = user.Country,
-                UserRole = role.ToString(),
-                DateOfBirth = user.AdditionalData["extension_4e6dae7dd1c74eac85fefc6da42e7b61_DateOfBirth"].ToString(),
-                PhoneNumber = user.AdditionalData["extension_4e6dae7dd1c74eac85fefc6da42e7b61_PhoneNumber"].ToString()
             };
+            if (user.AdditionalData != null)
+            {
+                UserRole role;
+                if (user.AdditionalData.ContainsKey(Extensions.UserRoleExtension))
+                {
+                    Enum.TryParse(
+                        user.AdditionalData[Extensions.UserRoleExtension]
+                            .ToString(), out role);
+                    personViewModel.UserRole = role.ToString();
+                }
+
+                if (user.AdditionalData.ContainsKey(Extensions.DateOfBirthExtension))
+                {
+                    personViewModel.DateOfBirth = user
+                        .AdditionalData[Extensions.DateOfBirthExtension]
+                        .ToString();
+                }
+
+                if (user.AdditionalData.ContainsKey(Extensions.PhoneNumberExtension))
+                {
+                    personViewModel.PhoneNumber = user
+                        .AdditionalData[Extensions.PhoneNumberExtension]
+                        .ToString();
+                }
+            }
+            return personViewModel;
         }
     }
 }

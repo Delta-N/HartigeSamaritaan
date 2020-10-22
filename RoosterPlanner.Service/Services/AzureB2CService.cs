@@ -25,7 +25,7 @@ namespace RoosterPlanner.Service
 
         Task<User> GetUserAsync(Guid userId);
 
-        Task<TaskResult<List<AppUser>>> GetAllUsersAsync();
+        Task<TaskResult<IEnumerable<User>>> GetAllUsersAsync();
 
         Task<TaskResult<List<AppUser>>> GetUsersAsync(string displayName, int offset, int pageSize);
 
@@ -123,8 +123,7 @@ namespace RoosterPlanner.Service
 
             try
             {
-                B2cCustomAttributeHelper
-                    helper = new B2cCustomAttributeHelper(azureB2cConfig.B2CExtentionApplicationId);
+                B2cCustomAttributeHelper helper = new B2cCustomAttributeHelper(azureB2cConfig.B2CExtentionApplicationId);
                 GraphServiceClient graphService = this.GetGraphServiceClient(this.azureB2cConfig);
                 string userRole = helper.GetCompleteAttributeName("UserRole");
                 string dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
@@ -147,92 +146,54 @@ namespace RoosterPlanner.Service
             return user;
         }
 
-        public async Task<TaskResult<List<AppUser>>> GetAllUsersAsync()
+        public async Task<TaskResult<IEnumerable<User>>> GetAllUsersAsync()
         {
-            TaskResult<List<AppUser>> result = new TaskResult<List<AppUser>>
-                {StatusCode = HttpStatusCode.NoContent, Succeeded = false, Data = new List<AppUser>()};
-
-            int blockSize = 100;
+            TaskResult<IEnumerable<User>> result = new TaskResult<IEnumerable<User>> 
+                {StatusCode = HttpStatusCode.NoContent, Succeeded = false, Data = new List<User>()};;
+            IEnumerable<User> users = null;
 
             try
             {
-                //Get token for access to Microsoft Graph as this application
-                string accessToken = await GetAzureADTokenAsync(this.azureB2cConfig);
-                if (String.IsNullOrEmpty(accessToken))
-                    return new TaskResult<List<AppUser>>
-                    {
-                        StatusCode = HttpStatusCode.Unauthorized, Message = "Failed to get authentication token.",
-                        Data = new List<AppUser>()
-                    };
-
-                UriBuilder builder = new UriBuilder(this.azureB2cConfig.AzureADBaseUrl);
-                builder.Path =
-                    UriExtensions.CombinePath(this.azureB2cConfig.TenantId, this.azureB2cConfig.ResourcePathUsers);
-                builder.Query = $"api-version={this.azureB2cConfig.AzureADApiVersion}&$top={blockSize}";
-
-                HttpResponseMessage responseMessage =
-                    await SendRequestAsync(HttpMethod.Get, builder.Uri, accessToken, null);
-                result.Succeeded = responseMessage.IsSuccessStatusCode;
-                result.StatusCode = responseMessage.StatusCode;
-                if (responseMessage.IsSuccessStatusCode)
+                if (string.IsNullOrEmpty(azureB2cConfig.B2CExtentionApplicationId))
                 {
-                    string data = await responseMessage.Content.ReadAsStringAsync();
-                    GraphUserData userData = JsonConvert.DeserializeObject<GraphUserData>(data);
-                    result.Data.AddRange(userData.Value);
-
-                    //Retrieve more data?
-                    while (!String.IsNullOrEmpty(userData.odataNextLink))
-                    {
-                        UriBuilder nextLinkBuilder = new UriBuilder(userData.odataNextLink);
-                        builder.Query = $"{nextLinkBuilder.Query}&api-version={this.azureB2cConfig.AzureADApiVersion}";
-
-                        responseMessage = await SendRequestAsync(HttpMethod.Get, builder.Uri, accessToken, null);
-                        result.Succeeded = responseMessage.IsSuccessStatusCode;
-                        result.StatusCode = responseMessage.StatusCode;
-                        if (responseMessage.IsSuccessStatusCode)
-                        {
-                            data = await responseMessage.Content.ReadAsStringAsync();
-                            userData = JsonConvert.DeserializeObject<GraphUserData>(data);
-                            result.Data.AddRange(userData.Value);
-                        }
-                        else
-                        {
-                            userData.odataNextLink = null;
-                        }
-                    }
-
-                    string roleKey = $"extension_{AzureB2cApplicationId}_UserRole";
-                    string companyId = $"extension_{AzureB2cApplicationId}_UserDepartment";
-
-                    Parallel.ForEach<AppUser>(result.Data, usr =>
-                    {
-                        if (usr.OtherMails != null && usr.OtherMails.Length != 0)
-                            usr.Email = usr.OtherMails[0];
-                        else
-                            usr.Email = usr.SignInName;
-                    });
+                    throw new ArgumentException(("B2CExtentionApplicationId is null"));
                 }
-                else
+                B2cCustomAttributeHelper helper = new B2cCustomAttributeHelper(azureB2cConfig.B2CExtentionApplicationId);
+                GraphServiceClient graphService = this.GetGraphServiceClient(this.azureB2cConfig);
+                string userRole = helper.GetCompleteAttributeName("UserRole");
+                string dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
+                string phoneNumber = helper.GetCompleteAttributeName("PhoneNumber");
+
+                users = await graphService.Users
+                    .Request()
+                    .Select($"{graphSelectList},{userRole},{dateOfBirth},{phoneNumber}")
+                    .GetAsync();
+               
+                if (users == null)
                 {
-                    result.Message = await responseMessage.Content.ReadAsStringAsync();
+                    throw new NullReferenceException("No users found");
                 }
+
+                result.StatusCode = HttpStatusCode.OK;
+                result.Succeeded = true;
+                result.Data = users;
+                return result;
             }
+
+
             catch (ServiceException graphEx)
             {
                 result.Succeeded = false;
-                if (graphEx.IsMatch("Request_ResourceNotFound"))
-                    result.StatusCode = HttpStatusCode.NotFound;
-                else
-                    result.StatusCode = graphEx.StatusCode;
-
-                result.Message = graphEx.Error?.Message ?? graphEx.Message;
-                result.Error = graphEx;
+                result.StatusCode = graphEx.StatusCode;
+                result.Message = graphEx.Message;
+                throw graphEx;
             }
             catch (Exception ex)
             {
+                result.Succeeded = false;
                 result.StatusCode = HttpStatusCode.InternalServerError;
                 result.Message = ex.Message;
-                result.Error = ex;
+                throw ex;
             }
 
             return result;

@@ -39,5 +39,21 @@ namespace RoosterPlanner.Api.Models
                 Closed = project.Closed
             };
         }
+
+        public static Project CreateProject(ProjectDetailsViewModel projectDetailsViewModel)
+        {
+            return new Project(projectDetailsViewModel.Id)
+            {
+                Name = projectDetailsViewModel.Name,
+                Address = projectDetailsViewModel.Address,
+                City = projectDetailsViewModel.City,
+                Description = projectDetailsViewModel.Description,
+                PictureUri = projectDetailsViewModel.PictureUri,
+                WebsiteUrl = projectDetailsViewModel.WebsiteUrl,
+                StartDate = projectDetailsViewModel.StartDate,
+                EndDate = projectDetailsViewModel.EndDate,
+                Closed = projectDetailsViewModel.Closed
+            };
+        }
     }
 }

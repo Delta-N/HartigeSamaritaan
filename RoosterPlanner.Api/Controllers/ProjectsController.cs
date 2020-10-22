@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoosterPlanner.Api.Models;
@@ -19,14 +18,12 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly ILogger logger;
 
         //Constructor
-        public ProjectsController(IMapper mapper, IProjectService projectService, ILogger logger)
+        public ProjectsController(IProjectService projectService, ILogger logger)
         {
-            this.mapper = mapper;
             this.projectService = projectService;
             this.logger = logger;
         }
@@ -35,17 +32,23 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
-            ProjectDetailsViewModel projectDetailsVm = new ProjectDetailsViewModel();
+            ProjectDetailsViewModel projectDetailsVm;
 
             try
             {
-                TaskResult<Project> result = await this.projectService.GetProjectDetails(id);
-                if (result.Succeeded)
+                if (id != Guid.Empty)
                 {
-                    projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
+                    TaskResult<Project> result = await this.projectService.GetProjectDetails(id);
+                    if (result.Succeeded)
+                    {
+                        projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
+                        return Ok(projectDetailsVm);
+                    }
+
+                    return UnprocessableEntity();
                 }
 
-                return Ok(projectDetailsVm);
+                return BadRequest("No valid id.");
             }
             catch (Exception ex)
             {
@@ -66,13 +69,13 @@ namespace RoosterPlanner.Api.Controllers
         {
             ProjectFilter filter = new ProjectFilter(offset, pageSize)
             {
-                Name = name, 
-                City = city, 
-                StartDate = startDateFrom, 
+                Name = name,
+                City = city,
+                StartDate = startDateFrom,
                 Closed = closed
             };
 
-            List<ProjectViewModel> projectVmList = new List<ProjectViewModel>();
+            List<ProjectViewModel> projectVmList;
 
             try
             {
@@ -80,13 +83,11 @@ namespace RoosterPlanner.Api.Controllers
                 if (result.Succeeded)
                 {
                     Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
-                    projectVmList = result.Data.Select(ProjectViewModel.CreateVm).ToList();
+                    projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
+                        .ToList();
                     return Ok(projectVmList);
                 }
-                else
-                {
-                    return UnprocessableEntity(result.Message);
-                }
+                return UnprocessableEntity(result.Message);
             }
             catch (Exception ex)
             {
@@ -106,39 +107,26 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("Er is geen geldig project ontvangen.");
 
             if (String.IsNullOrEmpty(projectDetails.Name))
-                return BadRequest("De projectnaam mag niet leeg zijn.");
+                return BadRequest("De naam van het project mag niet leeg zijn.");
 
             TaskResult<Project> result = new TaskResult<Project>();
 
             try
             {
-                //Dit is niet zo handig hierzo. Waar wel? binnen project (kan geen referentie maken naar API project). 
-                Project project = new Project(projectDetails.Id)
-                {
-                    Name = projectDetails.Name,
-                    Address = projectDetails.Address,
-                    City = projectDetails.City,
-                    Description = projectDetails.Description,
-                    PictureUri = projectDetails.PictureUri,
-                    WebsiteUrl = projectDetails.WebsiteUrl,
-                    StartDate = projectDetails.StartDate,
-                    EndDate = projectDetails.EndDate,
-                    Closed = projectDetails.Closed
-                };
-                
+                Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
+
                 if (project != null && project.Id == Guid.Empty)
                 {
                     result = this.projectService.CreateProject(project);
                 }
-                else if (project.Id != Guid.Empty)
+                else if (project != null && project.Id != Guid.Empty)
                 {
                     result = this.projectService.UpdateProject(project);
                 }
 
                 if (result.Succeeded)
-                    return Ok(this.mapper.Map<ProjectDetailsViewModel>(result.Data));
-                else
-                    return UnprocessableEntity(projectDetails);
+                    return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
+                return UnprocessableEntity(projectDetails);
             }
             catch (Exception ex)
             {

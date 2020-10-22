@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
@@ -8,7 +8,7 @@ using RoosterPlanner.Api.Models;
 using RoosterPlanner.Common;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
-using Person = RoosterPlanner.Models.Person;
+
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -17,16 +17,14 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
-        private readonly IMapper mapper = null;
         private readonly IPersonService personService = null;
         private readonly IProjectService projectService = null;
         private readonly ILogger logger = null;
 
         //Constructor
-        public PersonsController(IMapper mapper, IPersonService personService, IProjectService projectService,
+        public PersonsController(IPersonService personService, IProjectService projectService,
             ILogger logger)
         {
-            this.mapper = mapper;
             this.personService = personService;
             this.projectService = projectService;
             this.logger = logger;
@@ -35,21 +33,27 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
-            PersonViewModel personVm = null;
+            PersonViewModel personVm = new PersonViewModel();
 
             try
             {
-                TaskResult<User> result = await this.personService.GetUser(id);
-                if (result.Succeeded)
+                if (id != Guid.Empty)
                 {
-                    personVm = PersonViewModel.CreateVm(result.Data);
+                    TaskResult<User> result = await this.personService.GetUser(id);
+                    if (result.Succeeded)
+                    {
+                        personVm = PersonViewModel.CreateVm(result.Data);
+                        return Ok(personVm);
+                    }
+
+                    return UnprocessableEntity();
                 }
 
-
-                return Ok(personVm);
+                return BadRequest("No valid id.");
             }
             catch (Exception ex)
             {
+                logger.Error(ex, "PersonController - Get(Guid id): Error occured.");
                 this.Response.Headers.Add("message", ex.Message);
             }
 
@@ -59,21 +63,26 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            PersonViewModel personVm = new PersonViewModel();
+            List<PersonViewModel> personViewModels = new List<PersonViewModel>();
 
             try
             {
-                TaskListResult<Person> result = await this.personService.GetB2cMembers();
+                TaskListResult<User> result = await this.personService.GetB2cMembers();
                 if (result.Succeeded)
                 {
-                    //projectDetailsVm = this.mapper.Map<ProjectDetailsViewModel>(result.Data);
+                    foreach (User user in result.Data)
+                    {
+                        personViewModels.Add(PersonViewModel.CreateVm(user));
+                    }
+
+                    return Ok(personViewModels);
                 }
 
-                return Ok(result.Data);
+                return UnprocessableEntity();
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "PersonController: Error occured.");
+                logger.Error(ex, "PersonController - Get(): Error occured.");
                 this.Response.Headers.Add("message", ex.Message);
             }
 

@@ -31,7 +31,7 @@ namespace RoosterPlanner.Api
                         keyVaultClient,
                         new DefaultKeyVaultSecretManager());
                 })
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseIISIntegration().UseStartup<Startup>(); });
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
         }
     }
 }

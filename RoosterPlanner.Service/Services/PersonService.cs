@@ -15,10 +15,13 @@ using Person = RoosterPlanner.Models.Person;
 
 namespace RoosterPlanner.Service
 {
+    //todo user bevat meer informatie dan in het person model kan.
+    //Nu worden users teruggegeven aan controller waarin vervolgens viewmodels gemaakt worden
+    //zodra we gaan editen moet een viewmodel weer omgezet kunnen worden naar een person (create person methode in personviewmodel?)
     public interface IPersonService
     {
         Task<TaskResult<User>> GetUser(Guid id);
-        Task<TaskListResult<Person>> GetB2cMembers();
+        Task<TaskListResult<User>> GetB2cMembers();
 
         Task<TaskResult<Project>> UpdatePersonName(Guid oid, string name);
     }
@@ -63,7 +66,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception e)
             {
-                //loggen?
+                logger.Error(e, $"Fout bij het ophalen van gebruiker met id {id}");
                 taskResult.Error = e;
                 taskResult.Succeeded = false;
             }
@@ -71,17 +74,33 @@ namespace RoosterPlanner.Service
             return taskResult;
         }
 
-        public async Task<TaskListResult<Person>> GetB2cMembers()
+        public async Task<TaskListResult<User>> GetB2cMembers()
         {
-            TaskListResult<Person> result = TaskListResult<Person>.CreateDefault();
-
-            TaskResult<List<AppUser>> b2cUsersResult = await this.azureB2CService.GetAllUsersAsync();
-            if (b2cUsersResult.Succeeded)
+            TaskListResult<User> result = TaskListResult<User>.CreateDefault();
+            try
             {
-                result.Data = b2cUsersResult.Data.Select(x => new Person {Oid = x.Id, Name = x.DisplayName}).ToList();
-                result.Succeeded = true;
+                TaskResult<IEnumerable<User>> b2CUsersResult = await this.azureB2CService.GetAllUsersAsync();
+                if (b2CUsersResult.Succeeded)
+                {
+                    result.Data = new List<User>();
+                    foreach (User user in b2CUsersResult.Data)
+                    {
+                        result.Data.Add(user);
+                    }
+                    result.Succeeded = true;
+                }
+                else
+                {
+                    result.StatusCode = b2CUsersResult.StatusCode;
+                    result.Message = b2CUsersResult.Message;
+                }
             }
-
+            catch (Exception e)
+            {
+                logger.Error(e, "Fout bij het ophalen van alle gebruikers");
+                result.Error = e;
+                result.Succeeded = false;
+            }
             return result;
         }
 
