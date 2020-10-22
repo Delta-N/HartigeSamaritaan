@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.isIframe = window !== window.parent && !window.opener;
-    this.checkAccount();
+    this.checkAccount().then();
   }
 
   // other methods

@@ -32,6 +32,17 @@ namespace RoosterPlanner.Api.Models
                 City = user.City,
                 Country = user.Country,
             };
+            if (user.Identities != null && personViewModel.Email == null)
+            {
+                foreach (ObjectIdentity objectIdentity in user.Identities)
+                {
+                    if (objectIdentity.SignInType == "emailAddress")
+                    {
+                        personViewModel.Email = objectIdentity.IssuerAssignedId;
+                    }
+                }
+            }
+
             if (user.AdditionalData != null)
             {
                 UserRole role;

@@ -145,7 +145,7 @@ namespace RoosterPlanner.Service
 
             return user;
         }
-
+        //todo pagination inbouwen
         public async Task<TaskResult<IEnumerable<User>>> GetAllUsersAsync()
         {
             TaskResult<IEnumerable<User>> result = new TaskResult<IEnumerable<User>> 
