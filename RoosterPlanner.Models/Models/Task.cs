@@ -28,19 +28,24 @@ namespace RoosterPlanner.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        public List<ProjectTask> TaskProjects { get; set; }
-
+        public List<ProjectTask> ProjectTasks { get; set; }
+        public List<Requirement> Requirements { get; set; }
         public List<Shift> Shifts { get; set; }
 
         //Constructor
         public Task() : this(Guid.Empty)
         {
+            ProjectTasks = new List<ProjectTask>();
+            Shifts = new List<Shift>();
+            Requirements=new List<Requirement>(); 
         }
 
         //Constructor
         public Task(Guid id) : base(id)
         {
-            this.TaskProjects = new List<ProjectTask>();
+            ProjectTasks = new List<ProjectTask>();
+            Shifts = new List<Shift>();
+            Requirements=new List<Requirement>();
         }
     }
 }

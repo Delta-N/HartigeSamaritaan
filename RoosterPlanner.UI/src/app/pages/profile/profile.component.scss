@@ -1,7 +1,7 @@
 *{
   text-align: left;
   font: normal normal normal 35px/50px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #434343;
   opacity: 1;
 }
@@ -9,8 +9,7 @@
 .bar {
   display: flex;
   align-items: center;
-  padding: 10px;
-  padding-top: 15px;
+  padding: 15px 10px 10px;
   border-bottom: 1px solid gray;
 
 }
@@ -40,9 +39,9 @@ background: #F1F1F1 0 0 no-repeat padding-box;
   opacity: 1;
 }
 .row-name{  text-align: left;
-  min-width: 150px;
+  min-width: 250px;
   font: normal normal normal 30px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #707070;
   opacity: 1;
 
@@ -50,7 +49,7 @@ background: #F1F1F1 0 0 no-repeat padding-box;
 .user-data{
   text-align: left;
   font: normal normal normal 24px/45px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #000000;
   opacity: 1;
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +13,9 @@ namespace RoosterPlanner.Models
         [Column(Order = 2)]
         [Required, MaxLength(32)]
         public string Name { get; set; }
+
+        [Column(Order = 3)]
+        public string UrlPdf { get; set; }
 
         //Constructor
         public Category() : this(Guid.Empty)

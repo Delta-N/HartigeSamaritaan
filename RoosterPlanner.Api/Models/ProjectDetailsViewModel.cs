@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
@@ -16,12 +16,44 @@ namespace RoosterPlanner.Api.Models
         public string PictureUri { get; set; }
         public string WebsiteUrl { get; set; }
         public bool Closed { get; set; }
-        public List<RoosterPlanner.Models.Task> Tasks { get; set; }
+        public List<Task> Tasks { get; set; }
 
         //Constructor
         public ProjectDetailsViewModel()
         {
-            this.Tasks = new List<RoosterPlanner.Models.Task>();
+            this.Tasks = new List<Task>();
+        }
+        public static ProjectDetailsViewModel CreateVm(Project project)
+        {
+            return new ProjectDetailsViewModel
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Address = project.Address,
+                City = project.City,
+                Description = project.Description,
+                PictureUri = project.PictureUri,
+                WebsiteUrl = project.WebsiteUrl,
+                StartDate = project.StartDate,
+                EndDate = project.EndDate,
+                Closed = project.Closed
+            };
+        }
+
+        public static Project CreateProject(ProjectDetailsViewModel projectDetailsViewModel)
+        {
+            return new Project(projectDetailsViewModel.Id)
+            {
+                Name = projectDetailsViewModel.Name,
+                Address = projectDetailsViewModel.Address,
+                City = projectDetailsViewModel.City,
+                Description = projectDetailsViewModel.Description,
+                PictureUri = projectDetailsViewModel.PictureUri,
+                WebsiteUrl = projectDetailsViewModel.WebsiteUrl,
+                StartDate = projectDetailsViewModel.StartDate,
+                EndDate = projectDetailsViewModel.EndDate,
+                Closed = projectDetailsViewModel.Closed
+            };
         }
     }
 }

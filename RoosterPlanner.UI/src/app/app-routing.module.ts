@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import {HomeComponent} from "./pages/home/home.component";
 import {NotFoundComponent} from "./pages/not-found/not-found.component";
 import {AdminComponent} from "./pages/admin/admin.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {ShiftComponent} from "./pages/shift/shift.component";
 import {MsalGuard} from "@azure/msal-angular";
+import {AuthorizationGuard} from "./guards/authorization.guard";
 
 const routes: Routes = [
   {
@@ -27,7 +28,8 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [
-      MsalGuard
+      MsalGuard,
+      AuthorizationGuard
     ]
   },
   {
@@ -45,9 +47,10 @@ const routes: Routes = [
     ]
   },
   {
-    path:'**',
+    path: '**',
     component: NotFoundComponent
   }
+
 
 ];
 
@@ -55,4 +58,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

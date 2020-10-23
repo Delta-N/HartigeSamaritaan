@@ -54,9 +54,9 @@ namespace RoosterPlanner.Data.Repositories
 
             //Assert
             Assert.IsNotNull(addedProject);
-            Assert.AreNotEqual<Guid>(Guid.Empty, addedProject.Id);
+            Assert.AreNotEqual(Guid.Empty, addedProject.Id);
             Assert.IsTrue(addedProject.LastEditDate > DateTime.UtcNow.Date);
-            Assert.AreEqual<int>(1, rowsAffected);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
@@ -90,7 +90,7 @@ namespace RoosterPlanner.Data.Repositories
 
             //Assert
             Assert.IsNotNull(loadedProject);
-            Assert.AreEqual<Guid>(projectId, loadedProject.Id);
+            Assert.AreEqual(projectId, loadedProject.Id);
             Assert.IsNotNull(loadedProject.Name);
             Assert.IsTrue(loadedProject.StartDate > new DateTime(2019, 1, 1));
         }

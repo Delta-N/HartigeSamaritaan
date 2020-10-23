@@ -1,15 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
@@ -23,94 +16,95 @@ namespace RoosterPlanner.Api
 {
     public class Startup
     {
-        public Startup(IWebHostEnvironment env)
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
         {
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            var keyVaultClient = new KeyVaultClient(
-                new KeyVaultClient.AuthenticationCallback(
-                    azureServiceTokenProvider.KeyVaultTokenCallback));
-
-
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-                .AddEnvironmentVariables();
-               
-            
-            Configuration = builder.Build();
-            builder.AddAzureKeyVault( //$"https://{Environment.GetEnvironmentVariable("KeyVaultName")}.vault.azure.net/",
-                 $"https://{Configuration["KeyVaultName"]}.vault.azure.net/",
-                 keyVaultClient,
-                new DefaultKeyVaultSecretManager());
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
-            services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.Authority =
-                        $"https://login.microsoftonline.com/tfp/{Configuration["AzureAuthentication: TenantId"]}/{Configuration["AzureAuthentication:SignUpSignInPolicyId"]}/";
+                        $"{Configuration["AzureAD:Instance"]}/tfp/{Configuration["AzureAD:TenantId"]}/{Configuration["AzureAD:SignUpSignInPolicyId"]}/v2.0/";
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
-                        ValidAudiences = new List<string>
-                        {
-                            Configuration["TokenValidation:ClientIdWeb"],
-                            Configuration["TokenValidation:ClientIdHook"]
-                        }
+                        ValidateIssuer = true,
                     };
-                    jwtOptions.Audience = "c832c923-37c6-4145-8c75-a023ecc7a98f";
+                    jwtOptions.Audience = Configuration["AzureAD:Audience"];
                     jwtOptions.Events = new JwtBearerEvents
                     {
-                        OnAuthenticationFailed = AuthenticationFailedAsync
+                        //OnAuthenticationFailed = AuthenticationFailedAsync
                     };
+                    
                 });
-            services.AddCors();
-            services.AddAuthorization();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigins", builder =>
+                {
+                    builder
+                        .WithOrigins(Configuration.GetSection("AllowedHosts").Value)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Boardmember", policy =>
+                    policy.RequireClaim("extension_UserRole", "1"));
+                
+                options.AddPolicy("Committeemember", policy =>
+                    policy.RequireClaim("extension_UserRole", "2"));
+                
+                options.AddPolicy("Boardmember&Committeemember", policy =>
+                    policy.RequireClaim("extension_UserRole", "1","2"));
+            });
 
             // Enable Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
-
-
+            
             services.AddControllers().AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.IgnoreNullValues = false;
-                options.JsonSerializerOptions.PropertyNamingPolicy=JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
-                
-            
-
-            services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.Configure<AzureAuthenticationConfig>(
                 Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
+
+            services.AddTransient<IAzureB2CService, AzureB2CService>();
+            services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<IPersonService, PersonService>();
+            services.AddTransient<IParticipationService, ParticipationService>();
+            services.AddTransient<ITaskService, TaskService>();
+            services.AddTransient<IShiftService, ShiftService>();
+            services.AddTransient<IMatchService, MatchService>();
+
+            //dit moet nog omgebouwd worden
+            services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddSingleton<ILogger, Logger>(l =>
             {
                 return Logger.Create(Configuration["ApplicationInsight:InstrumentationKey"]);
             });
 
-            services.AddScoped<IAzureB2CService, AzureB2CService>();
-            services.AddScoped<IProjectService, ProjectService>();
-            services.AddScoped<IPersonService, PersonService>();
-            services.AddScoped<IParticipationService, ParticipationService>();
-            services.AddScoped<ITaskService, TaskService>();
-            services.AddScoped<IShiftService, ShiftService>();
-            services.AddScoped<IMatchService, MatchService>();
-
             ServiceContainer.Register(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -118,9 +112,7 @@ namespace RoosterPlanner.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
 
-            app.UseCors(i =>
-                i.WithOrigins(Configuration.GetSection("AllowedHosts").Value).AllowAnyMethod().AllowAnyHeader());
-
+            app.UseCors("AllowOrigins");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
@@ -128,7 +120,7 @@ namespace RoosterPlanner.Api
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
-        private Task AuthenticationFailedAsync(AuthenticationFailedContext arg)
+        /*private Task AuthenticationFailedAsync(AuthenticationFailedContext arg)
         {
             // For debugging purposes only!
             var s = $"AuthenticationFailed: {arg.Exception.Message}";
@@ -136,6 +128,6 @@ namespace RoosterPlanner.Api
             arg.Response.Body.Write(Encoding.UTF8.GetBytes(s), 0, s.Length);
 
             return Task.FromResult(0);
-        }
+        }*/
     }
 }

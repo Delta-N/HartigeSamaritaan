@@ -8,4 +8,5 @@ export const environment = {
     navigateToLoginRequestUrl: true,
     validateAuthority: false,
   },
+  backendUrl: "https://roosterplanner-api-dev.azurewebsites.net/"
 };

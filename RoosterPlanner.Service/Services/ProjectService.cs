@@ -29,10 +29,9 @@ namespace RoosterPlanner.Service
     public class ProjectService : IProjectService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly IProjectRepository projectRepository = null;
-        private readonly IProjectPersonRepository projectPersonRepository = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IProjectRepository projectRepository;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor
@@ -40,7 +39,6 @@ namespace RoosterPlanner.Service
         {
             this.unitOfWork = unitOfWork;
             this.projectRepository = unitOfWork.ProjectRepository;
-            this.projectPersonRepository = unitOfWork.ProjectPersonRepository;
             this.logger = logger;
         }
 
@@ -177,13 +175,6 @@ namespace RoosterPlanner.Service
 
         public int AddPersonToProject(Guid projectId, Guid personId)
         {
-            if (projectId == Guid.Empty)
-                throw new ArgumentException("projectId");
-            if (personId == Guid.Empty)
-                throw new ArgumentException("personId");
-
-            ProjectPerson projectPerson = new ProjectPerson { ProjectId = projectId, PersonId = personId };
-            projectPerson = projectPersonRepository.Add(projectPerson);
 
             return unitOfWork.SaveChanges();
         }

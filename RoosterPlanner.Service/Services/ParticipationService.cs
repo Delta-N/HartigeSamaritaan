@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 
@@ -11,17 +9,17 @@ namespace RoosterPlanner.Service
 {
     public interface IParticipationService
     {
-        Task<TaskResult<Participation>> AddParticipationAsync(Guid Oid, Guid projectId);
+        Task<TaskResult<Participation>> AddParticipationAsync(Guid oid, Guid projectId);
     }
 
     public class ParticipationService : IParticipationService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILogger logger;
         #endregion
 
-        private readonly Data.Context.RoosterPlannerContext dataContext = null;
+        //private readonly Data.Context.RoosterPlannerContext dataContext = null;
 
         //Constructor
         public ParticipationService(IUnitOfWork unitOfWork, ILogger logger)
@@ -34,13 +32,13 @@ namespace RoosterPlanner.Service
         /// Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskResult<Participation>> AddParticipationAsync(Guid Oid, Guid projectId)
+        public async Task<TaskResult<Participation>> AddParticipationAsync(Guid oid, Guid projectId)
         {
             var taskResult = new TaskResult<Participation>();
             
             try
             {
-                var person = await unitOfWork.PersonRepository.GetPersonByOidAsync(Oid);
+                var person = await unitOfWork.PersonRepository.GetPersonByOidAsync(oid);
                 if(person == null)
                 {
                     //TODO: change exception

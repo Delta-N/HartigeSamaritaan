@@ -28,8 +28,8 @@ export class AddProjectComponent implements OnInit {
   }
 
   addToArray(parameter: string) {
-    var present = false;
-    for (var i = 0; i < this.selectedProjects.length; i++) {
+    let present = false;
+    for (let i = 0; i < this.selectedProjects.length; i++) {
       if (this.selectedProjects[i] === parameter) {
         present = true;
       }
@@ -45,8 +45,7 @@ export class AddProjectComponent implements OnInit {
   }
 
   printArray() {
-    for (var i = 0; i < this.selectedProjects.length; i++) {
-      console.log(this.selectedProjects[i])
+    for (let i = 0; i < this.selectedProjects.length; i++) {
     }
   }
 

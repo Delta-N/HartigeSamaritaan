@@ -1,7 +1,12 @@
+.action-anchor{
+  position: absolute;
+  bottom: 15px;
+}
+
 .mat-button{
   text-align: left;
   font: normal normal 400 18px/27px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #434343;
   opacity: 1;
   margin-bottom: 5px;
@@ -21,13 +26,13 @@
 .mat-card{
   margin-right: 30px;
   border-radius: 20px;
-  background: #E8E8E8 0% 0% no-repeat padding-box;
+  background: #E8E8E8 0 0 no-repeat padding-box;
   box-shadow: 3px 3px 6px #0000001A;
   border: 1px solid #D1D1D1;
   opacity: 1;
   text-align: left;
   font: normal normal bold 21px/31px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #434343;
   min-width: 325px;
   min-height:375px;

@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoosterPlanner.Data.Context;
 
 namespace RoosterPlanner.Data.Migrations
@@ -15,19 +14,60 @@ namespace RoosterPlanner.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("RoosterPlanner.Models.Availability", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ParticipationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Preference")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParticipationId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.ToTable("Availabilities");
+                });
+
             modelBuilder.Entity("RoosterPlanner.Models.Category", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<DateTime>("LastEditDate")
@@ -35,11 +75,16 @@ namespace RoosterPlanner.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(32)")
                         .HasMaxLength(32);
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("UrlPdf")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -48,76 +93,157 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("58a2bb8c-5e0e-4b24-8cec-adcd1b5654de"),
+                            Id = new Guid("88eebbcf-11c2-458c-8769-8e6cd3f6a6aa"),
                             Code = "KEUKEN",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5168),
+                            LastEditDate = new DateTime(2019, 1, 22, 8, 1, 1, 0, DateTimeKind.Unspecified),
                             Name = "Keuken"
                         },
                         new
                         {
-                            Id = new Guid("9c4835cf-221a-42c5-9c7c-82dc83265aa8"),
+                            Id = new Guid("3d578493-149c-4e7d-b112-c096f5b8504d"),
                             Code = "BEDIENING",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5172),
+                            LastEditDate = new DateTime(2019, 1, 18, 16, 55, 29, 0, DateTimeKind.Unspecified),
                             Name = "Bediening"
                         },
                         new
                         {
-                            Id = new Guid("aa5b1f28-672b-4dee-a73f-d6e4b4e31937"),
+                            Id = new Guid("2eb2c6fa-bffc-4c8e-83ce-42103da372fc"),
                             Code = "LOGISTIEK",
                             LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5173),
+                            LastEditDate = new DateTime(2019, 1, 15, 2, 22, 55, 0, DateTimeKind.Unspecified),
                             Name = "Logistiek"
                         });
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Match", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Certificate", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CertificateTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateExpired")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateIssued")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ParticipationId");
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<Guid>("ShiftId");
-
-                    b.Property<int>("Type");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParticipationId");
+                    b.HasIndex("CertificateTypeId");
 
-                    b.HasIndex("ShiftId");
+                    b.HasIndex("PersonId");
 
-                    b.ToTable("Matches");
+                    b.ToTable("Certificates");
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.CertificateType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CertificateTypes");
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.Collaboration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IsWantedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid>("WantsToWorkWithId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsWantedById");
+
+                    b.HasIndex("WantsToWorkWithId");
+
+                    b.ToTable("Collaborations");
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PersonId");
+                    b.Property<int>("MaxWorkingHoursPerWeek")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ProjectId");
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -128,163 +254,100 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Participations");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Person", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Requirement", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CertificateTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
-
-                    b.Property<Guid>("Oid");
-
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("25e5b0e6-82ef-45fe-bbde-ef76021ec531"),
-                            LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5376),
-                            Name = "Grace Hopper",
-                            Oid = new Guid("b691f9f7-c404-4d52-a34f-c90702ca7138")
-                        },
-                        new
-                        {
-                            Id = new Guid("7f66fc12-b1c0-481f-851b-3cc1f65fd20e"),
-                            LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 11, 9, 9, 7, 39, 773, DateTimeKind.Utc).AddTicks(5389),
-                            Name = "John Wick",
-                            Oid = new Guid("e2a94901-6942-4cfb-83fa-60343c0de219")
-                        });
-                });
-
-            modelBuilder.Entity("RoosterPlanner.Models.Project", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(64);
-
-                    b.Property<string>("City")
-                        .HasMaxLength(64);
-
-                    b.Property<bool>("Closed");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(512);
-
-                    b.Property<DateTime?>("EndDate");
-
-                    b.Property<string>("LastEditBy")
-                        .HasMaxLength(128);
-
-                    b.Property<DateTime>("LastEditDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(64);
-
-                    b.Property<string>("PictureUri");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<string>("WebsiteUrl");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("RoosterPlanner.Models.ProjectTask", b =>
-                {
-                    b.Property<Guid>("ProjectId");
-
-                    b.Property<Guid>("TaskId");
-
-                    b.Property<Guid>("Id");
-
-                    b.Property<string>("LastEditBy")
-                        .HasMaxLength(128);
-
-                    b.Property<DateTime>("LastEditDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.HasKey("ProjectId", "TaskId");
-
-                    b.HasAlternateKey("Id");
+                    b.HasIndex("CertificateTypeId");
 
                     b.HasIndex("TaskId");
 
-                    b.ToTable("ProjectTasks");
+                    b.ToTable("Requirements");
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
-                    b.Property<TimeSpan>("EndTime");
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<TimeSpan>("StartTime");
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
 
-                    b.Property<Guid>("TaskId");
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProjectId");
+
                     b.HasIndex("TaskId");
 
-                    b.ToTable("Shift");
+                    b.ToTable("Shifts");
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Color")
+                        .HasColumnType("nvarchar(12)")
                         .HasMaxLength(12);
 
-                    b.Property<DateTime?>("DeletedDateTime");
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DocumentUri")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<DateTime>("LastEditDate")
@@ -292,11 +355,13 @@ namespace RoosterPlanner.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -305,17 +370,215 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.Match", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Person", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("Oid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Oid")
+                        .IsUnique();
+
+                    b.ToTable("Persons");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("25e5b0e6-82ef-45fe-bbde-ef76021ec531"),
+                            LastEditBy = "System",
+                            LastEditDate = new DateTime(2019, 1, 1, 12, 34, 28, 0, DateTimeKind.Unspecified),
+                            Name = "Grace Hopper",
+                            Oid = new Guid("b691f9f7-c404-4d52-a34f-c90702ca7138"),
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("7f66fc12-b1c0-481f-851b-3cc1f65fd20e"),
+                            LastEditBy = "System",
+                            LastEditDate = new DateTime(2019, 1, 2, 12, 45, 1, 0, DateTimeKind.Unspecified),
+                            Name = "John Wick",
+                            Oid = new Guid("e2a94901-6942-4cfb-83fa-60343c0de219"),
+                            Type = 0
+                        });
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.Project", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<bool>("Closed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("PictureUri")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WebsiteUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Projects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f7e48ae8-e384-4852-adc6-1769bf622b33"),
+                            Address = "Stationsplein 2",
+                            City = "Voorburg",
+                            Closed = false,
+                            Description = "Leuk project in Voorburg",
+                            EndDate = new DateTime(2020, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Voorburg 2020",
+                            StartDate = new DateTime(2020, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = new Guid("1c52b2e9-aa97-493b-a0e0-0062cb0dead1"),
+                            Address = "Laan van Waalhaven 450",
+                            City = "Den Haag",
+                            Closed = false,
+                            Description = "Leuk project in Den Haag",
+                            EndDate = new DateTime(2018, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Den Haag 2018",
+                            StartDate = new DateTime(2018, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.ProjectTask", b =>
+                {
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("ProjectId", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("ProjectTasks");
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.Availability", b =>
                 {
                     b.HasOne("RoosterPlanner.Models.Participation", "Participation")
-                        .WithMany("Matches")
+                        .WithMany("Availabilities")
                         .HasForeignKey("ParticipationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("RoosterPlanner.Models.Shift", "Shift")
-                        .WithMany("Matches")
+                        .WithMany("Availabilities")
                         .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.Certificate", b =>
+                {
+                    b.HasOne("RoosterPlanner.Models.CertificateType", "CertificateType")
+                        .WithMany("Certificates")
+                        .HasForeignKey("CertificateTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RoosterPlanner.Models.Person", "Person")
+                        .WithMany("Certificates")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.Collaboration", b =>
+                {
+                    b.HasOne("RoosterPlanner.Models.Participation", "IsWantedBy")
+                        .WithMany("IsWantedBy")
+                        .HasForeignKey("IsWantedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RoosterPlanner.Models.Participation", "WantsToWorkWith")
+                        .WithMany("WantsToWorkWith")
+                        .HasForeignKey("WantsToWorkWithId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
@@ -323,33 +586,44 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.Person", "Person")
                         .WithMany("Participations")
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RoosterPlanner.Models.Project", "Project")
                         .WithMany("Participations")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("RoosterPlanner.Models.ProjectTask", b =>
+            modelBuilder.Entity("RoosterPlanner.Models.Requirement", b =>
                 {
-                    b.HasOne("RoosterPlanner.Models.Project", "Project")
-                        .WithMany("ProjectTasks")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("RoosterPlanner.Models.CertificateType", "CertificateType")
+                        .WithMany("Requirements")
+                        .HasForeignKey("CertificateTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RoosterPlanner.Models.Task", "Task")
-                        .WithMany("TaskProjects")
+                        .WithMany("Requirements")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
                 {
+                    b.HasOne("RoosterPlanner.Models.Project", "Project")
+                        .WithMany("Shifts")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("Shifts")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
@@ -357,7 +631,23 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.ProjectTask", b =>
+                {
+                    b.HasOne("RoosterPlanner.Models.Project", "Project")
+                        .WithMany("ProjectTasks")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RoosterPlanner.Models.Task", "Task")
+                        .WithMany("ProjectTasks")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -10,13 +10,15 @@
 
         public string ClientSecret { get; set; }
 
-        public string AzureTenantName { get; set; }
+        public string AzureTenantName { get; set; }//tenentname
 
-        public string AzureADApiVersion { get; set; }
+        public string AzureADApiVersion { get; set; }//
 
         public string AzureADTokenUrl { get; set; }
 
-        public string AzureADBaseUrl { get; set; }
+        public string AzureADBaseUrl { get; set; }//
+
+        public string B2CExtentionApplicationId { get; set; }
 
         public string GraphApiBaseUrl { get; set; }
 

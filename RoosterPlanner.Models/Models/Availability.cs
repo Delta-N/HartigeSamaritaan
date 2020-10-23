@@ -1,12 +1,11 @@
-﻿using RoosterPlanner.Models.Models.Types;
+﻿using RoosterPlanner.Models.Types;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace RoosterPlanner.Models
 {
-    public class Match : Entity
+    public class Availability : Entity
     {
         [Column(Order = 1)]
         public Guid ParticipationId { get; set; }
@@ -20,15 +19,20 @@ namespace RoosterPlanner.Models
         [ForeignKey("ShiftId")]
         public Shift Shift { get; set; }
 
-        public MatchType Type { get; set; }
+        [Column(Order = 3)]
+        public AvailibilityType Type { get; set; }
+
+        [Column(Order = 4)]
+        public bool Preference { get; set; }
 
         //Constructor
-        public Match() : this(Guid.Empty)
+        public Availability() : this(Guid.Empty)
         {
+            
         }
 
         //Constructor
-        public Match(Guid id) : base(id)
+        public Availability(Guid id) : base(id)
         {
         }
     }

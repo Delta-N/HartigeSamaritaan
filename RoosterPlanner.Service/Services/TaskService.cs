@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Service.DataModels;
+using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Service
 {
     public interface ITaskService
     {
-        Task<TaskListResult<Models.Task>> GetActiveTasksAsync();
+        Task<TaskListResult<Task>> GetActiveTasksAsync();
 
         Task<TaskResult> SetTaskDeleteAsync(Guid id);
     }
@@ -17,8 +18,8 @@ namespace RoosterPlanner.Service
     public class TaskService : ITaskService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor
@@ -28,9 +29,9 @@ namespace RoosterPlanner.Service
             this.logger = logger;
         }
 
-        public async Task<TaskListResult<Models.Task>> GetActiveTasksAsync()
+        public async Task<TaskListResult<Task>> GetActiveTasksAsync()
         {
-            var taskResult = TaskListResult<Models.Task>.CreateDefault();
+            var taskResult = TaskListResult<Task>.CreateDefault();
 
             try
             {

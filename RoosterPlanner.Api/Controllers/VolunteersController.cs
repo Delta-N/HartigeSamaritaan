@@ -61,8 +61,8 @@ namespace RoosterPlanner.Api.Controllers
             }
 
             var user = await AzureB2CService.GetUserAsync(oid);
-
-            await PersonService.UpdatePersonName(oid, user.Data.DisplayName);
+            //TODO: NODIG?
+            //await PersonService.UpdatePersonName(oid, user.Data.DisplayName);
 
             return Ok();
         }

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {AddProjectComponent} from "../../components/add-project/add-project.component";
+import {Project} from "../../models/project";
+import {ProjectService} from "../../services/project.service";
 
 @Component({
   selector: 'app-home',
@@ -8,22 +10,24 @@ import {AddProjectComponent} from "../../components/add-project/add-project.comp
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  projects: Project[] = [];
+  loaded: boolean = false;
 
-  constructor(public dialog:MatDialog) { }
 
-  ngOnInit(): void {
+  constructor(public dialog: MatDialog, private projectService: ProjectService) {
   }
-  projects= [
-    { name: "Restaurant Delft 2019",GUID:1 },
-    { name: "Restaurant Delft 2016",GUID:2 },
-    { name: "Restaurant Den Haag 2019",GUID:3 },
-  ];
+
+  async ngOnInit(): Promise<void> {
+    await this.projectService.getProject().then(response => {
+      this.projects = response;
+      this.loaded = true;
+    });
+  }
 
   addProject() {
-    let dialogRef = this.dialog.open(AddProjectComponent,{data: this.projects,panelClass:'custom-dialog-container'});
+    let dialogRef = this.dialog.open(AddProjectComponent, {data: this.projects, panelClass: 'custom-dialog-container'});
 
-    dialogRef.afterClosed().subscribe(result=>{
-      console.log(result)
+    dialogRef.afterClosed().subscribe(result => {
     })
   }
 }

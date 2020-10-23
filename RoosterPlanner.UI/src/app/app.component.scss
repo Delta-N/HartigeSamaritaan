@@ -29,7 +29,7 @@ button {
 
 .example-container {
   position: absolute;
-  top: 60px;
+  top: 7vh;
   bottom: 1px;
   left: 0;
   right: 0;
@@ -53,19 +53,20 @@ img {
 .toolbarbutton {
   text-align: right;
   font: normal normal normal 18px/28px Segoe UI;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #FFFFFF;
   opacity: 1;
 }
 .sidenav-button {
   text-align: right;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: black;
   opacity: 1;
 }
 
 .logo {
   display: flex;
+  min-width: 150px;
 }
 
 .bar {
