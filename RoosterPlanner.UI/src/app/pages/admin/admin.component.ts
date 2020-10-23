@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {ProjectService} from "../../services/project.service";
 import {Project} from "../../models/project";
-import {Router} from "@angular/router";
+import {Router} from "@angular/router"
+import {MatDialog} from '@angular/material/dialog';
+import{CreateProjectComponent} from "../../components/create-project/create-project.component";
+
 
 @Component({
   selector: 'app-admin',
@@ -19,7 +22,7 @@ export class AdminComponent implements OnInit {
     {name: "Joanne"},
   ]
 
-  constructor(private projectService: ProjectService, private router: Router) {
+  constructor(public dialog:MatDialog,private projectService: ProjectService, private router: Router) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -30,7 +33,13 @@ export class AdminComponent implements OnInit {
   }
 
   addProject() {
-    this.router.navigateByUrl('create-project').then();
+    const dialogRef = this.dialog.open(CreateProjectComponent, {
+      width: '500px',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.router.navigateByUrl('/admin').then();
+    });
+
   }
 
 

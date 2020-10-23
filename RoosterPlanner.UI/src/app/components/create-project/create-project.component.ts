@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {Project} from "../../models/project";
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ProjectService} from "../../services/project.service";
 import {Validators} from '@angular/forms';
-import {DateValidator} from "../../helpers/datevalidator"
+import {DateValidator} from "../../helpers/date-validator"
 
 @Component({
   selector: 'app-create-project',

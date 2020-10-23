@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 import {JwtHelper} from "../../helpers/jwt-helper";
+import {AuthenticationService} from "../../services/authentication.service";
+import {DateConverter} from "../../helpers/date-converter";
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +15,7 @@ export class ProfileComponent implements OnInit {
   age:number;
   loaded:boolean=false;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private authenticationService: AuthenticationService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -27,7 +29,7 @@ export class ProfileComponent implements OnInit {
   }
 
   logout() {
-    window.alert("Deze functie moet nog geschreven worden")
+    this.authenticationService.logout();
   }
 
   edit(GUID: any) {
@@ -35,12 +37,11 @@ export class ProfileComponent implements OnInit {
   }
 
   calculateAge(dateOfBirth:string): number {
-    const toDate = (str) => {
-      const [day, month, year] = str.split("-")
-      return new Date(year, month - 1, day)
-    }
+    if(dateOfBirth==null)
+      return 0;
+
     const today = new Date();
-    const birthDate = toDate(dateOfBirth);
+    const birthDate = DateConverter.toDate(dateOfBirth);
     let age = today.getFullYear() - birthDate.getFullYear();
     const m = today.getMonth() - birthDate.getMonth();
 
