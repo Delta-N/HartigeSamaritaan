@@ -4,13 +4,15 @@
     <h5 id="push" (click)="addProject()">Aanmelden bij project</h5>
   </div>
 
+  <span *ngIf="projects.length > 0">
+       <div class="cardholder">
+       <span *ngFor="let item of projects" class="mobilecard">
+        <app-project-card [project]="item"></app-project-card>
+       </span>
+        </div>
+</span>
 
-  <div class="cardholder" *ngIf="projects.length > 0">
-      <span *ngFor="let item of projects" id="card">
-      <app-project-card [project]="item"></app-project-card>
-      </span>
-  </div>
-  <div *ngIf="projects.length == 0&& loaded==true">
+  <div *ngIf="projects.length === 0&& loaded===true">
     <div class="container" style="min-height: 65vh;">
       <div>
         <div class="row"><p id="flavortext">Nog niet aangemeld bij een project</p></div>

@@ -12,18 +12,18 @@ import {DateConverter} from "../../helpers/date-converter";
 })
 export class ProfileComponent implements OnInit {
   user: User;
-  age:number;
-  loaded:boolean=false;
+  age: number;
+  loaded: boolean = false;
 
   constructor(private userService: UserService, private authenticationService: AuthenticationService) {
   }
 
   async ngOnInit(): Promise<void> {
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
-    await this.userService.getUser(idToken.oid).then(x=>{
-      this.user=x;
-      this.age=this.calculateAge(this.user.dateOfBirth);
-      this.loaded=true;
+    await this.userService.getUser(idToken.oid).then(x => {
+      this.user = x;
+      this.age = this.calculateAge(this.user.dateOfBirth);
+      this.loaded = true;
     });
 
   }
@@ -32,12 +32,12 @@ export class ProfileComponent implements OnInit {
     this.authenticationService.logout();
   }
 
-  edit(GUID: any) {
+  edit() {
     window.alert("Deze functie moet nog geschreven worden")
   }
 
-  calculateAge(dateOfBirth:string): number {
-    if(dateOfBirth==null)
+  calculateAge(dateOfBirth: string): number {
+    if (dateOfBirth === null || dateOfBirth === undefined)
       return 0;
 
     const today = new Date();

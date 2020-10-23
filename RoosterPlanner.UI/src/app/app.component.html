@@ -26,6 +26,7 @@
     <mat-sidenav-container class="example-container">
       <mat-sidenav #sidenav mode="side" opened="false" fxShow="true" fxHide.gt-sm="true">
         <div fxLayout="column">
+          <a mat-button class="sidenav-button" routerLink="/home">Dashboard</a>
           <a mat-button class="sidenav-button" routerLink="/profile">Profiel</a>
           <a mat-button class="sidenav-button" *ngIf="isAdmin" routerLink="/admin">Admin</a>
         </div>

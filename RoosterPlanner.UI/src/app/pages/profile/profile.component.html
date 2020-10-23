@@ -5,14 +5,35 @@
   </div>
 </div>
 <div class="container" style="min-height: 65vh;">
-  <div *ngIf="loaded==true">
-    <div style="display: flex; margin-top:36px"><div class="row-name">Naam:</div><div class="user-data">{{user.firstName+" "+user.lastName}}</div></div>
-    <div style="display: flex; margin-top:36px"><div class="row-name">Leeftijd:</div><div class="user-data">{{age}}</div></div>
-    <div style="display: flex; margin-top:36px"><div class="row-name">Email:</div><div class="user-data">{{user.email}}</div></div>
-    <div style="display: flex; margin-top:36px"><div class="row-name">Adres:</div><div class="user-data">{{user.streetAddress}}</div></div>
-    <div style="display: flex; margin-top:36px"><div class="row-name">Postcode:</div><div class="user-data">{{user.postalCode}}</div></div>
-    <div style="display: flex; margin-top:36px"><div class="row-name">Stad:</div><div class="user-data">{{user.city}}</div></div>
-    <div style="display: flex; margin-top:36px"><div class="row-name">Telefoonnummer:</div><div class="user-data">{{user.phoneNumber}}</div></div>
+  <div *ngIf="loaded===true">
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Naam:</div>
+      <div class="user-data">{{user.firstName + " " + user.lastName}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Leeftijd:</div>
+      <div class="user-data">{{age}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Email:</div>
+      <div class="user-data">{{user.email}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Adres:</div>
+      <div class="user-data">{{user.streetAddress}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Postcode:</div>
+      <div class="user-data">{{user.postalCode}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Stad:</div>
+      <div class="user-data">{{user.city}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Telefoonnummer:</div>
+      <div class="user-data">{{user.phoneNumber}}</div>
+    </div>
   </div>
 </div>
 <div class="container">

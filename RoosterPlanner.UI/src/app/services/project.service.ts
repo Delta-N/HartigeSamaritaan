@@ -29,23 +29,23 @@ export class ProjectService {
   }
 
   postProject(project: Project) {
-    if (project == null) {
+    if (project === null) {
       window.alert("Leeg project in project service");
       return;
     }
-    if (project.id == null || project.id == "") {
+    if (project.id === null || project.id === "") {
       project.id = "00000000-0000-0000-0000-000000000000"
     }
-    if (project.endDate != null) {
-      if (project.endDate.toString() == "") {
+    if (project.endDate !== null) {
+      if (project.endDate.toString() === "") {
         project.endDate = null;
-      }else {
-        project.endDate=DateConverter.toDate(project.endDate);
+      } else {
+        project.endDate = DateConverter.toDate(project.endDate);
       }
     }
 
 
-    if (project.startDate.toString() != "") {
+    if (project.startDate.toString() !== "") {
       try {
 
         project.startDate = DateConverter.toDate(project.startDate);

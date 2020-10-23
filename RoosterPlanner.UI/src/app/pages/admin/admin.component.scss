@@ -6,8 +6,9 @@
   display: flex;
   overflow-x:auto;
   align-items: flex-start;
-  padding: 30px;
-  justify-content: space-between;
+  padding-top: 30px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .bar {
@@ -82,6 +83,22 @@ h1{
   color: #434343;
   opacity: 1;
 }
+
+.mat-card{
+margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+@media only screen and (max-width:1200px) {
+  .cardholder{
+    display:flex;
+    justify-content: center;
+  }
+  .mat-card{
+    margin:15px;
+  }
+}
+
 
 @media only screen and (max-width:450px) {
   .cardholder{

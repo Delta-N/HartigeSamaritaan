@@ -35,7 +35,7 @@ export class CreateProjectComponent implements OnInit {
 
   saveProject(value: Project) {
     this.project = value
-    if (this.checkoutForm.status == 'INVALID') {
+    if (this.checkoutForm.status === 'INVALID') {
       window.alert("Not all fields are correct");
     } else {
       this.projectService.postProject(this.project).then();

@@ -24,10 +24,10 @@ export class UserService {
 
   //todo deze variablen zijn hardcoded
   userIsAdminBackend(user: User): boolean {
-    if (user == null || user.userRole == null) {
+    if (user === null || user.userRole === null) {
       return false;
     }
-    if (user.userRole == 'Boardmember' || user.userRole == 'Committeemember') {
+    if (user.userRole === 'Boardmember' || user.userRole === 'Committeemember') {
       return true;
     }
     return false;
@@ -35,9 +35,9 @@ export class UserService {
 
   userIsAdminFrontEnd(): boolean {
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
-    if (idToken == null) {
+    if (idToken === null) {
       return false;
     }
-    return ((idToken.extension_UserRole == 1) || (idToken.extension_UserRole == 2))
+    return ((idToken.extension_UserRole === 1) || (idToken.extension_UserRole === 2))
   }
 }

@@ -13,6 +13,8 @@ import{CreateProjectComponent} from "../../components/create-project/create-proj
 })
 export class AdminComponent implements OnInit {
   projects: Project[] = [];
+  listOfProjects:Project[][]=[]
+  tempList:Project[]=[];
   loaded: boolean = false;
 
   administrators = [
@@ -28,6 +30,14 @@ export class AdminComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.projectService.getProject().then(x => {
       this.projects = x;
+
+      for(let i=0; i<this.projects.length; i++){
+        this.tempList.push(this.projects[i])
+        if(this.tempList.length===5||i===this.projects.length-1){
+          this.listOfProjects.push(this.tempList);
+          this.tempList=[];
+        }
+      }
       this.loaded = true;
     });
   }
