@@ -195,8 +195,6 @@ namespace RoosterPlanner.Service
                 result.Message = ex.Message;
                 throw ex;
             }
-
-            return result;
         }
 
         public async Task<TaskResult<List<AppUser>>> GetUsersAsync(string search, int offset, int pageSize)

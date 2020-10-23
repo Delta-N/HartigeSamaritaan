@@ -61,13 +61,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isIframe = window !== window.parent && !window.opener;
-    this.subscribeMsalBroadcastEvents();
     this.isAuthenticated();
     this.checkAccount().then();
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeMsalBroadcastEvents();
+    //this.unsubscribeMsalBroadcastEvents();
   }
 
   private isAuthenticated(): void {
@@ -75,33 +74,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.hasUser = !!account;
   }
 
-
-  /* Subscribe on event for password reset and logout. */
-  private subscribeMsalBroadcastEvents(): void {
-    this.failureSubscription = this.broadcastService.subscribe(
-      'msal:loginFailure', payload => {
-        if (payload._errorDesc.indexOf('AADB2C90118') > -1) {
-          this.passwordRedirect(b2cPolicies.authorities.resetPassword.authority);
-        } else if (payload._errorDesc.indexOf('AADB2C90091') > -1) {
-          this.router.navigateByUrl('/').then();
-        }
-      });
-    this.refreshTokenSubscription = this.broadcastService.subscribe(
-      'msal:acquireTokenFailure', payload => {
-        this.logout();
-      });
-  }
-
-  /* Unsubscribe from broadcast events when component is destoryed */
-  private unsubscribeMsalBroadcastEvents(): void {
-    this.broadcastService.getMSALSubject().next(1);
-    if (this.failureSubscription) {
-      this.failureSubscription.unsubscribe();
-    }
-    if (this.refreshTokenSubscription) {
-      this.refreshTokenSubscription.unsubscribe();
-    }
-  }
 
   private passwordRedirect(policyURL: string): void {
     if (policyURL && policyURL.length > 0) {
@@ -130,7 +102,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    this.authenticationService.logout()
+    this.authenticationService.login()
   }
 }
 

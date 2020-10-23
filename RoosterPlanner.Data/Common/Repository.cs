@@ -250,7 +250,7 @@ namespace RoosterPlanner.Data.Common
         public int Delete(Guid id)
         {
             if (id != Guid.Empty)
-                return this.DataContext.Database.ExecuteSqlCommand($"DELETE FROM [{nameof(TEntity)}] WHERE[AuthorId] = @p0;", id);
+                return this.DataContext.Database.ExecuteSqlRaw($"DELETE FROM [{nameof(TEntity)}] WHERE[AuthorId] = @p0;", id);
             return 0;
         }
 
