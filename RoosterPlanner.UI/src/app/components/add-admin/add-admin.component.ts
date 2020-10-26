@@ -16,6 +16,7 @@ export class AddAdminComponent implements OnInit {
   displayUsers: User[] = []
   loaded: boolean;
   searchText: string = '';
+  title:string;
 
 
 
@@ -42,7 +43,7 @@ export class AddAdminComponent implements OnInit {
     })
     this.users.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
     this.fillDisplayUsers();
-
+    this.data.addAdminType?this.title = 'toevoegen':this.title='verwijderen';
   }
 
   fillDisplayUsers() {

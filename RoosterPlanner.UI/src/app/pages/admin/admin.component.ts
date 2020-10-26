@@ -37,6 +37,7 @@ export class AdminComponent implements OnInit {
       this.administrators = x;
       this.spitAdministrators();
       this.loaded = true;
+
     });
 
   }
@@ -45,7 +46,9 @@ export class AdminComponent implements OnInit {
     for (let i = 0; i < this.administrators.length; i++) {
       this.tempListAdmins.push(this.administrators[i])
       if (this.tempListAdmins.length === 5 || i === this.administrators.length - 1) {
+        this.tempListAdmins.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
         this.listOfAdmins.push(this.tempListAdmins);
+        this.tempListAdmins.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
         this.tempListAdmins = [];
       }
     }
@@ -55,6 +58,7 @@ export class AdminComponent implements OnInit {
     for (let i = 0; i < this.projects.length; i++) {
       this.tempListProjects.push(this.projects[i])
       if (this.tempListProjects.length === 5 || i === this.projects.length - 1) {
+        this.tempListProjects.sort((a, b) => a.name > b.name ? 1 : -1);
         this.listOfProjects.push(this.tempListProjects);
         this.tempListProjects = [];
       }
