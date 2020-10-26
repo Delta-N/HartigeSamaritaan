@@ -1,0 +1,22 @@
+<div *ngIf="loaded">
+  <h2 mat-dialog-title>Administrator toevoegen</h2>
+
+  <div class="search">
+    <input class="form-control" type="text" name="search" [(ngModel)]="searchText" (ngModelChange)="resetPage()" autocomplete="off"
+           placeholder="Zoek gebruiker">
+    <br>
+  </div>
+
+  <mat-dialog-content>
+<span *ngFor="let user of users| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
+  <a mat-dialog-close="" (click)="modAdmin(user.id)">{{user.firstName}} {{user.lastName}}</a>
+  <br>
+</span>
+    <br>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-raised-button (click)="prevPage()"><</button>
+    <button mat-raised-button (click)="nextPage()">></button>
+  </mat-dialog-actions>
+</div>

@@ -70,5 +70,23 @@ namespace RoosterPlanner.Api.Models
             }
             return personViewModel;
         }
+        public static User CreateUser(PersonViewModel vm)
+        {
+            User user = new User()
+            {
+                Id = vm.Id.ToString(),
+                GivenName = vm.FirstName,
+                Surname = vm.LastName,
+                Mail = vm.Email,
+                StreetAddress = vm.StreetAddress,
+                PostalCode = vm.PostalCode,
+                City = vm.City,
+                Country = vm.Country,
+            };
+            user.AdditionalData.Add(Extensions.UserRoleExtension,vm.UserRole);
+            user.AdditionalData.Add(Extensions.DateOfBirthExtension,vm.DateOfBirth);
+            user.AdditionalData.Add(Extensions.PhoneNumberExtension,vm.PhoneNumber);
+            return user;
+        }
     }
 }

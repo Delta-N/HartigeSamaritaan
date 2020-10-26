@@ -24,20 +24,23 @@
     </mat-card>
     </span>
 
+    <span *ngFor="let currentAdminPage of listOfAdmins">
     <mat-card class="card">
       <div>
         <mat-card-title>Administrators</mat-card-title>
       </div>
       <mat-card-content>
-    <span *ngFor="let item of administrators">
-      {{item.name}}<br><br>
+    <span *ngFor="let item of currentAdminPage">
+      <a routerLink="/profile?id={{item.id}}"><p>{{item.firstName}} {{item.lastName}}</p></a>
     </span>
 
       </mat-card-content>
       <mat-card-actions class="action-anchor">
         <button mat-button (click)="addAdministrator()">+ nieuwe toevoegen</button>
+        <button mat-button (click)="removeAdministrator()">verwijderen</button>
       </mat-card-actions>
     </mat-card>
+      </span>
 
     <mat-card class="card">
       <div>

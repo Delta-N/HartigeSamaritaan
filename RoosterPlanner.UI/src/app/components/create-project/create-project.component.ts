@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Project} from "../../models/project";
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";

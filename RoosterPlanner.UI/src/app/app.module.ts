@@ -32,7 +32,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ShiftComponent} from './pages/shift/shift.component';
 import {AuthorizationGuard} from "./guards/authorization.guard";
 import {CreateProjectComponent} from "./components/create-project/create-project.component";
-import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { AddAdminComponent } from './components/add-admin/add-admin.component';
+import {FilterPipe} from "./helpers/filter.pipe";
 
 function MSALConfigFactory(): Configuration {
   return msalConfig;
@@ -53,6 +55,8 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     AddProjectComponent,
     ShiftComponent,
     CreateProjectComponent,
+    AddAdminComponent,
+    FilterPipe
 
   ],
   imports: [
@@ -67,7 +71,8 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     MatCheckboxModule,
     HttpClientModule,
     MsalModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [
     {
