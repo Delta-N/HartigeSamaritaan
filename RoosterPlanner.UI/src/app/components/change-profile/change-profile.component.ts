@@ -20,13 +20,13 @@ export class ChangeProfileComponent implements OnInit {
     this.user = data;
     this.checkoutForm = this.formBuilder.group({
       id: this.user.id,
-      firstName: [this.user.firstName, Validators.required],
-      lastName: [this.user.lastName, Validators.required],
-      dateOfBirth: [this.user.dateOfBirth, Validators.compose([Validators.required, Validator.date])],
-      streetAddress: [this.user.streetAddress, Validators.required],
-      postalCode: [this.user.postalCode, Validator.postalCode],
-      city: [this.user.city, Validators.required],
-      phoneNumber: [this.user.phoneNumber, Validator.phoneNumber],
+      firstName: [this.user.firstName!=null?this.user.firstName:'', Validators.required],
+      lastName: [this.user.lastName!=null?this.user.lastName:'', Validators.required],
+      dateOfBirth: [this.user.dateOfBirth!=null?this.user.dateOfBirth:'', Validators.compose([Validators.required, Validator.date])],
+      streetAddress: [this.user.streetAddress!=null?this.user.streetAddress:'', Validators.required],
+      postalCode: [this.user.postalCode!=null?this.user.postalCode:'', Validator.postalCode],
+      city: [this.user.city!=null?this.user.city:'', Validators.required],
+      phoneNumber: [this.user.phoneNumber!=null?this.user.phoneNumber:'', Validator.phoneNumber],
     })
   }
 

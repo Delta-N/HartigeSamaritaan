@@ -4,6 +4,9 @@
 export class Validator {
 
   static date(control: FormControl): { [key: string]: any } {
+    if(control==null||control.value===null||control.value.match===null){
+      return {"date":true};
+    }
     let datePattern = /^(0[1-9]|[12][0-9]|3[01])[-](0[1-9]|1[012])[-](19|20)\d\d$/g;
 
     if (!control.value.match(datePattern))
@@ -20,6 +23,9 @@ export class Validator {
   }
 
   static phoneNumber(control: FormControl): { [key: string]: any } {
+    if(control==null||control.value===null||control.value.match===null){
+      return {"phoneNumber":true};
+    }
     let numberPattern = "^((\\+|00(\\s|\\s?\\-\\s?)?)31(\\s|\\s?\\-\\s?)?(\\(0\\)[\\-\\s]?)?|0)[1-9]((\\s|\\s?\\-\\s?)?[0-9])((\\s|\\s?-\\s?)?[0-9])((\\s|\\s?-\\s?)?[0-9])\\s?[0-9]\\s?[0-9]\\s?[0-9]\\s?[0-9]\\s?[0-9]$";
 
     if (!control.value.match(numberPattern))
@@ -29,6 +35,9 @@ export class Validator {
   }
 
   static postalCode(control: FormControl): { [key: string]: any } {
+    if(control==null||control.value===null||control.value.match===null){
+      return {"postalCode":true};
+    }
     let postalCodePattern = /^[1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2}$/i;
 
     if (!control.value.match(postalCodePattern))
