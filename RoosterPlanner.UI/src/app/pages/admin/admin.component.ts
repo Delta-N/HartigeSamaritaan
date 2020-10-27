@@ -78,7 +78,7 @@ export class AdminComponent implements OnInit {
 
   }
 
-
+//todo herlade van administratoren werkt nog niet lekker
   async addAdministrator() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '500px',

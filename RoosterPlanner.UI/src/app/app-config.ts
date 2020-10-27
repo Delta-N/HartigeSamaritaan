@@ -47,10 +47,6 @@ export const msalConfig: Configuration = {
 
 export const loginRequest: {scopes: string[]} = {
   scopes: [
-    'openid',
-    'profile',
-
-    'offline_access',
     'https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read'
     ],
 };
