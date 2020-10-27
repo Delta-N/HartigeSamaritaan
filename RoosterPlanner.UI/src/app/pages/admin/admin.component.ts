@@ -7,6 +7,7 @@ import {CreateProjectComponent} from "../../components/create-project/create-pro
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 import {AddAdminComponent} from "../../components/add-admin/add-admin.component";
+import {ToastrService} from "ngx-toastr";
 
 
 @Component({
@@ -24,7 +25,7 @@ export class AdminComponent implements OnInit {
 
   administrators: User[] = []
 
-  constructor(public dialog: MatDialog, private projectService: ProjectService, private router: Router, private userService: UserService) {
+  constructor(public dialog: MatDialog, private projectService: ProjectService, private router: Router, private userService: UserService, private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -72,21 +73,30 @@ export class AdminComponent implements OnInit {
     const dialogRef = this.dialog.open(CreateProjectComponent, {
       width: '500px',
     });
+    dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      this.router.navigateByUrl('/admin').then();
+      setTimeout(x => {
+        this.listOfProjects = []
+        this.getProjects().then()
+        if (result !== "false") {
+          this.toastr.success(result + " is toegevoegd als nieuw project")
+        }
+      }, 500);
     });
 
   }
 
-//todo herlade van administratoren werkt nog niet lekker
   async addAdministrator() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '500px',
       data: {addAdminType: true}
     });
     dialogRef.afterClosed().subscribe(async result => {
-      this.listOfAdmins=[];
-      this.getAdministrators().then();
+      this.listOfAdmins = [];
+      setTimeout(x => {
+        this.getAdministrators().then()
+        this.toastr.success(result + " is toegevoegd als administrator")
+      }, 500);
     })
   }
 
@@ -96,8 +106,11 @@ export class AdminComponent implements OnInit {
       data: {addAdminType: false}
     });
     dialogRef.afterClosed().subscribe(async result => {
-      this.listOfAdmins=[];
-      this.getAdministrators().then();
+      this.listOfAdmins = [];
+      setTimeout(x => {
+        this.getAdministrators().then()
+        this.toastr.success(result + " is verwijderd als administrator")
+      }, 500);
     });
 
 

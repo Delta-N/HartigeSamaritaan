@@ -4,6 +4,7 @@ import {Validator} from "../../helpers/validators"
 import {User} from "../../models/user";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {UserService} from "../../services/user.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-change-profile',
@@ -15,7 +16,7 @@ export class ChangeProfileComponent implements OnInit {
   updateUser: User;
   checkoutForm;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private userService: UserService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private userService: UserService, private toastr:ToastrService) {
     this.user = data;
     this.checkoutForm = this.formBuilder.group({
       id: this.user.id,
@@ -35,10 +36,9 @@ export class ChangeProfileComponent implements OnInit {
   saveProfile(value: User) {
     this.updateUser = value
     if (this.checkoutForm.status === 'INVALID') {
-      window.alert("Not all fields are correct");
+      this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
       this.userService.updateUser(this.updateUser).then();
     }
   }
-
 }

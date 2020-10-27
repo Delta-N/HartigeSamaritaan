@@ -4,6 +4,7 @@ import {Project} from "../models/project";
 import {HttpResponse} from "@angular/common/http";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {DateConverter} from "../helpers/date-converter";
+import {ToastrService} from "ngx-toastr";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import {DateConverter} from "../helpers/date-converter";
 export class ProjectService {
   projects: Project[] = [];
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private toastr:ToastrService) {
   }
 
   async getProject(guid?: string) {
@@ -30,7 +31,7 @@ export class ProjectService {
 
   postProject(project: Project) {
     if (project === null) {
-      window.alert("Leeg project in project service");
+      this.toastr.error("Leeg project in project service")
       return;
     }
     if (project.id === null || project.id === "") {

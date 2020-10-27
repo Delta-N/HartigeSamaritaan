@@ -3,6 +3,8 @@ import {Project} from "../../models/project";
 import {FormBuilder, Validators} from "@angular/forms";
 import {ProjectService} from "../../services/project.service";
 import {Validator} from "../../helpers/validators"
+import {ToastrService} from "ngx-toastr";
+import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-create-project',
@@ -13,7 +15,7 @@ export class CreateProjectComponent implements OnInit {
   project: Project = new Project('');
   checkoutForm;
 
-  constructor(private formBuilder: FormBuilder, private projectService: ProjectService) {
+  constructor(private formBuilder: FormBuilder, private projectService: ProjectService, private toastr: ToastrService, public dialogRef: MatDialogRef<CreateProjectComponent>) {
     this.checkoutForm = this.formBuilder.group({
       id: '',
       name: ['', Validators.required],
@@ -34,9 +36,10 @@ export class CreateProjectComponent implements OnInit {
   saveProject(value: Project) {
     this.project = value
     if (this.checkoutForm.status === 'INVALID') {
-      window.alert("Not all fields are correct");
+      this.toastr.error("Niet alle velden zijn correct ingevuld");
     } else {
       this.projectService.postProject(this.project).then();
+      this.dialogRef.close(value.name);
     }
   }
 }

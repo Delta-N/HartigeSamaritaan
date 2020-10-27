@@ -2,6 +2,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Configuration} from 'msal';
+import {CommonModule} from "@angular/common";
+import {ToastrModule} from "ngx-toastr";
 
 import {
   MSAL_CONFIG,
@@ -62,6 +64,7 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
 
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -75,6 +78,7 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     MsalModule,
     ReactiveFormsModule,
     FormsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     {

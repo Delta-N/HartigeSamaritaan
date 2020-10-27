@@ -9,7 +9,7 @@
 
   <mat-dialog-content>
 <span *ngFor="let user of users| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
-  <a mat-dialog-close="" (click)="modAdmin(user.id)">{{user.firstName}} {{user.lastName}}</a>
+  <a (click)="modAdmin(user.id)" mat-dialog-close="{{user.firstName}}">{{user.firstName}} {{user.lastName}} </a>
   <br>
 </span>
     <br>
