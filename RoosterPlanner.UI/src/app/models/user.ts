@@ -1,6 +1,8 @@
-export class User {
-public id: string;
-  public  firstName: string;
+import {Entity} from "./entity.model";
+
+export class User extends Entity {
+  public id: string;
+  public firstName: string;
   public lastName: string;
   public email: string;
   public streetAddress: string;
@@ -12,7 +14,8 @@ public id: string;
   public userRole: string;
 
   constructor(id:string,firstName?:string,lastName?:string,email?:string,streetAddress?:string,postalCode?:string,city?:string,country?:string,dateOfBirth?:string,phoneNumber?:string,userRole?:string) {
-    this.id=id;
+    super();
+    this.id = id;
     this.firstName=firstName;
     this.lastName=lastName;
     this.email=email;

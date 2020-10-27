@@ -10,8 +10,8 @@ import {JwtHelper} from "../helpers/jwt-helper";
 })
 export class UserService {
   user: User = new User('');
-  administrators:User[]=[];
-  allUsers:User[]=[];
+  administrators: User[] = [];
+  allUsers: User[] = [];
 
   constructor(private apiService: ApiService) {
   }
@@ -23,36 +23,28 @@ export class UserService {
     return this.user
   }
 
-  async getAdministrators():Promise<User[]>{
+  async getAdministrators(): Promise<User[]> {
     await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}?Userrole=1`).toPromise().then(response => {
       this.administrators = response.body
     }).catch();
     return this.administrators;
   }
 
-  async makeAdmin(GUID:string){
-    await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/1`).toPromise().then(response=>{
-    }).catch();
-  }
-  async removeAdmin(GUID:string){
-    await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/4`).toPromise().then(response=>{
+  async makeAdmin(GUID: string) {
+    await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/1`).toPromise().then(response => {
     }).catch();
   }
 
-  async getAllUsers():Promise<User[]>{
+  async removeAdmin(GUID: string) {
+    await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/4`).toPromise().then(response => {
+    }).catch();
+  }
+
+  async getAllUsers(): Promise<User[]> {
     await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}`).toPromise().then(response => {
       this.allUsers = response.body
     }).catch();
     return this.allUsers;
-  }
-
-  //todo deze variablen zijn hardcoded
-  userIsAdminBackend(user: User): boolean {
-    if (user === null || user.userRole === null) {
-      return false;
-    }
-    return user.userRole === 'Boardmember' || user.userRole === 'Committeemember';
-
   }
 
   userIsAdminFrontEnd(): boolean {
@@ -61,5 +53,11 @@ export class UserService {
       return false;
     }
     return ((idToken.extension_UserRole === 1) || (idToken.extension_UserRole === 2))
+  }
+
+  async updateUser(updateUser: User) {
+    await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/`, updateUser).toPromise().then(response => {
+
+    }).catch()
   }
 }

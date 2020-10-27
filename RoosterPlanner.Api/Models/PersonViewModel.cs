@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Graph;
-using RoosterPlanner.Api.Models.Enums;
 using RoosterPlanner.Api.Models.Constants;
+using RoosterPlanner.Api.Models.Enums;
 
 namespace RoosterPlanner.Api.Models
 {
@@ -21,7 +22,7 @@ namespace RoosterPlanner.Api.Models
 
         public static PersonViewModel CreateVm(User user)
         {
-            PersonViewModel personViewModel = new PersonViewModel
+            var personViewModel = new PersonViewModel
             {
                 Id = new Guid(user.Id),
                 FirstName = user.GivenName,
@@ -30,49 +31,37 @@ namespace RoosterPlanner.Api.Models
                 StreetAddress = user.StreetAddress,
                 PostalCode = user.PostalCode,
                 City = user.City,
-                Country = user.Country,
+                Country = user.Country
             };
             if (user.Identities != null && personViewModel.Email == null)
-            {
-                foreach (ObjectIdentity objectIdentity in user.Identities)
-                {
+                foreach (var objectIdentity in user.Identities)
                     if (objectIdentity.SignInType == "emailAddress")
-                    {
                         personViewModel.Email = objectIdentity.IssuerAssignedId;
-                    }
-                }
-            }
 
-            if (user.AdditionalData != null)
+            if (user.AdditionalData == null) return personViewModel;
+            if (user.AdditionalData.ContainsKey(Extensions.UserRoleExtension))
             {
-                UserRole role;
-                if (user.AdditionalData.ContainsKey(Extensions.UserRoleExtension))
-                {
-                    Enum.TryParse(
-                        user.AdditionalData[Extensions.UserRoleExtension]
-                            .ToString(), out role);
-                    personViewModel.UserRole = role.ToString();
-                }
-
-                if (user.AdditionalData.ContainsKey(Extensions.DateOfBirthExtension))
-                {
-                    personViewModel.DateOfBirth = user
-                        .AdditionalData[Extensions.DateOfBirthExtension]
-                        .ToString();
-                }
-
-                if (user.AdditionalData.ContainsKey(Extensions.PhoneNumberExtension))
-                {
-                    personViewModel.PhoneNumber = user
-                        .AdditionalData[Extensions.PhoneNumberExtension]
-                        .ToString();
-                }
+                Enum.TryParse(
+                    user.AdditionalData[Extensions.UserRoleExtension]
+                        .ToString(), out UserRole role);
+                personViewModel.UserRole = role.ToString();
             }
+
+            if (user.AdditionalData.ContainsKey(Extensions.DateOfBirthExtension))
+                personViewModel.DateOfBirth = user
+                    .AdditionalData[Extensions.DateOfBirthExtension]
+                    .ToString();
+
+            if (user.AdditionalData.ContainsKey(Extensions.PhoneNumberExtension))
+                personViewModel.PhoneNumber = user
+                    .AdditionalData[Extensions.PhoneNumberExtension]
+                    .ToString();
             return personViewModel;
         }
+
         public static User CreateUser(PersonViewModel vm)
         {
-            User user = new User()
+            var user = new User
             {
                 Id = vm.Id.ToString(),
                 GivenName = vm.FirstName,
@@ -82,10 +71,12 @@ namespace RoosterPlanner.Api.Models
                 PostalCode = vm.PostalCode,
                 City = vm.City,
                 Country = vm.Country,
+                AdditionalData = new Dictionary<string, object>
+                {
+                    {Extensions.DateOfBirthExtension, vm.DateOfBirth},
+                    {Extensions.PhoneNumberExtension, vm.PhoneNumber}
+                }
             };
-            user.AdditionalData.Add(Extensions.UserRoleExtension,vm.UserRole);
-            user.AdditionalData.Add(Extensions.DateOfBirthExtension,vm.DateOfBirth);
-            user.AdditionalData.Add(Extensions.PhoneNumberExtension,vm.PhoneNumber);
             return user;
         }
     }

@@ -1,18 +1,20 @@
-export class Project {
-    public id: string;
-    public name: string;
-    public address: string;
-    public city: string;
-    public description:string;
-    public startDate: Date;
-    public endDate?: Date;
-    public pictureUri?:string;
-    //waarom websiteUri?
-    public websiteUri?: string;
-    public closed?: boolean;
+import {Entity} from "./entity.model";
+
+export class Project extends Entity {
+  public id: string;
+  public name: string;
+  public address: string;
+  public city: string;
+  public description: string;
+  public startDate: Date;
+  public endDate?: Date;
+  public pictureUri?: string;
+  public websiteUri?: string;     //TODO waarom websiteUri?
+  public closed?: boolean;
 
 
-  constructor(id: string, name?: string, address?: string, city?: string, description?: string, startDate?: Date, endDate?: Date, pictureUri?: string, websiteUri?: string, closed?: boolean) {
+  constructor(id: string, name?: string, address?: string, city?: string, description?: string, startDate?: Date, endDate?: Date, pictureUri?: string, websiteUri?: string, closed?: boolean,) {
+    super();
     this.id = id;
     this.name = name;
     this.address = address;

@@ -7,14 +7,8 @@
         public static string UserRoleExtension =>
             "extension_4e6dae7dd1c74eac85fefc6da42e7b61_UserRole";
 
-        public static string DateOfBirthExtension
-        {
-            get { return "extension_4e6dae7dd1c74eac85fefc6da42e7b61_DateOfBirth"; }
-        }
-        
-        public static string PhoneNumberExtension
-        {
-            get { return "extension_4e6dae7dd1c74eac85fefc6da42e7b61_PhoneNumber"; }
-        }
+        public static string DateOfBirthExtension => "extension_4e6dae7dd1c74eac85fefc6da42e7b61_DateOfBirth";
+
+        public static string PhoneNumberExtension => "extension_4e6dae7dd1c74eac85fefc6da42e7b61_PhoneNumber";
     }
 }

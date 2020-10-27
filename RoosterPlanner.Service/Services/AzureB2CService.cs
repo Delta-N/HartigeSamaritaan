@@ -11,7 +11,6 @@ using RoosterPlanner.Common.Config;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using User = Microsoft.Graph.User;
 
 namespace RoosterPlanner.Service
 {
@@ -26,17 +25,6 @@ namespace RoosterPlanner.Service
 
     public class AzureB2CService : IAzureB2CService
     {
-        #region Fields
-
-        private readonly AzureAuthenticationConfig azureB2CConfig;
-        private GraphServiceClient graphServiceClient;
-        private DateTime graphServiceClientTimestamp;
-
-        private const string GraphSelectList =
-            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
-
-        #endregion
-
         //Constructor
         public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig)
         {
@@ -53,12 +41,12 @@ namespace RoosterPlanner.Service
 
             try
             {
-                B2cCustomAttributeHelper
+                var
                     helper = new B2cCustomAttributeHelper(azureB2CConfig.B2CExtentionApplicationId);
-                GraphServiceClient graphService = this.GetGraphServiceClient();
-                string userRole = helper.GetCompleteAttributeName("UserRole");
-                string dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
-                string phoneNumber = helper.GetCompleteAttributeName("PhoneNumber");
+                var graphService = GetGraphServiceClient();
+                var userRole = helper.GetCompleteAttributeName("UserRole");
+                var dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
+                var phoneNumber = helper.GetCompleteAttributeName("PhoneNumber");
 
                 user = await graphService.Users[userId.ToString()].Request()
                     .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
@@ -75,76 +63,67 @@ namespace RoosterPlanner.Service
             return user;
         }
 
-        //todo pagination inbouwen
         public async Task<TaskResult<IEnumerable<User>>> GetAllUsersAsync(PersonFilter filter)
         {
-            TaskResult<IEnumerable<User>> result = new TaskResult<IEnumerable<User>>
+            var result = new TaskResult<IEnumerable<User>>
                 {StatusCode = HttpStatusCode.NoContent, Succeeded = false, Data = new List<User>()};
 
             try
             {
                 if (string.IsNullOrEmpty(azureB2CConfig.B2CExtentionApplicationId))
-                {
-                    throw new ArgumentException(("B2CExtensionApplicationId is null"));
-                }
+                    throw new ArgumentException("B2CExtensionApplicationId is null");
 
-                B2cCustomAttributeHelper
+                var
                     helper = new B2cCustomAttributeHelper(azureB2CConfig.B2CExtentionApplicationId);
-                GraphServiceClient graphService = this.GetGraphServiceClient();
-                string userRole = helper.GetCompleteAttributeName("UserRole");
-                string dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
-                string phoneNumber = helper.GetCompleteAttributeName("PhoneNumber");
-                string tenant = helper.GetTenant();
+                var graphService = GetGraphServiceClient();
+                var userRole = helper.GetCompleteAttributeName("UserRole");
+                var dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
+                var phoneNumber = helper.GetCompleteAttributeName("PhoneNumber");
+                var tenant = helper.GetTenant();
 
-                String filterString = "";
+                var filterString = "";
 
-                if (!String.IsNullOrEmpty(filter.Email))
+                if (!string.IsNullOrEmpty(filter.Email))
                 {
                     filterString +=
                         $" or identities/any(c:c/issuerAssignedId eq '{filter.Email}' and c/issuer eq '{tenant}')";
                 }
                 else
                 {
-                    if (!String.IsNullOrEmpty(filter.FirstName))
-                    {
+                    if (!string.IsNullOrEmpty(filter.FirstName))
                         filterString +=
                             $" or startswith(displayName, '{filter.FirstName}') or startswith(givenName,'{filter.FirstName}')";
-                    }
 
-                    if (!String.IsNullOrEmpty(filter.LastName))
-                    {
+                    if (!string.IsNullOrEmpty(filter.LastName))
                         filterString +=
                             $" or startswith(surname, '{filter.LastName}')";
-                    }
 
-                    if (!String.IsNullOrEmpty(filter.UserRole))
-                    {
+                    if (!string.IsNullOrEmpty(filter.UserRole))
                         filterString +=
                             $" or {userRole} eq {filter.UserRole}";
-                    }
 
-                    if (!String.IsNullOrEmpty(filter.City))
-                    {
+                    if (!string.IsNullOrEmpty(filter.City))
                         filterString +=
                             $" or startswith(city, '{filter.City}')";
-                    }
                 }
 
-                if (filterString.StartsWith(" or "))
-                {
-                    filterString = filterString.Substring(4);
-                }
-
-                IEnumerable<User> users = await graphService.Users
+                if (filterString.StartsWith(" or ")) filterString = filterString.Substring(4);
+                var users = new List<User>();
+                var currentUsers = await graphService.Users
                     .Request()
                     .Filter(filterString)
                     .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}")
                     .GetAsync();
-                if (users == null)
+                while (currentUsers.Count > 0)
                 {
-                    throw new NullReferenceException("No users found");
+                    users.AddRange(currentUsers);
+                    if (currentUsers.NextPageRequest != null)
+                        currentUsers = await currentUsers.NextPageRequest.GetAsync();
+                    else
+                        break;
                 }
 
+                if (users.Count == 0) throw new NullReferenceException("No users found");
 
                 result.StatusCode = HttpStatusCode.OK;
                 result.Succeeded = true;
@@ -174,10 +153,10 @@ namespace RoosterPlanner.Service
             if (user == null || guid == Guid.Empty)
                 throw new ArgumentNullException(nameof(user));
 
-            TaskResult<User> updatedUser = new TaskResult<User>();
+            var updatedUser = new TaskResult<User>();
             try
             {
-                GraphServiceClient graphService = GetGraphServiceClient();
+                var graphService = GetGraphServiceClient();
                 updatedUser.Data = await graphService.Users[guid.ToString()].Request().UpdateAsync(user);
                 updatedUser.Succeeded = true;
             }
@@ -195,16 +174,6 @@ namespace RoosterPlanner.Service
             }
 
             return updatedUser;
-        }
-
-
-        public class GraphUserData
-        {
-            [JsonProperty("odata.metadata")] public string OdataMetadata { get; set; }
-
-            [JsonProperty("odata.nextLink")] public string OdataNextLink { get; set; }
-
-            [JsonProperty("value")] public List<User> Value { get; set; }
         }
 
         private GraphServiceClient GetGraphServiceClient()
@@ -225,24 +194,24 @@ namespace RoosterPlanner.Service
 
 
         /// <summary>
-        /// Builds a GraphServiceClient object with bearer token added as Authorization header.
+        ///     Builds a GraphServiceClient object with bearer token added as Authorization header.
         /// </summary>
         /// <returns>GraphServiceClient object.</returns>
         private GraphServiceClient CreateGraphServiceClient()
         {
-            IConfidentialClientApplication confidentialClientApplication = ConfidentialClientApplicationBuilder
-                .Create(this.azureB2CConfig.ClientId)
-                .WithTenantId(this.azureB2CConfig.TenantId)
-                .WithClientSecret(this.azureB2CConfig.ClientSecret)
+            var confidentialClientApplication = ConfidentialClientApplicationBuilder
+                .Create(azureB2CConfig.ClientId)
+                .WithTenantId(azureB2CConfig.TenantId)
+                .WithClientSecret(azureB2CConfig.ClientSecret)
                 .Build();
 
-            string[] scopes =
-                this.azureB2CConfig.GraphApiScopes.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            GraphServiceClient graphService = new GraphServiceClient(new DelegateAuthenticationProvider(
-                async (requestMessage) =>
+            var scopes =
+                azureB2CConfig.GraphApiScopes.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var graphService = new GraphServiceClient(new DelegateAuthenticationProvider(
+                async requestMessage =>
                 {
                     // Retrieve an access token for Microsoft Graph (gets a fresh token if needed).
-                    AuthenticationResult authResult =
+                    var authResult =
                         await confidentialClientApplication.AcquireTokenForClient(scopes).ExecuteAsync();
 
                     // Add the access token in the Authorization header of the API request.
@@ -252,5 +221,26 @@ namespace RoosterPlanner.Service
 
             return graphService;
         }
+
+
+        public class GraphUserData
+        {
+            [JsonProperty("odata.metadata")] public string OdataMetadata { get; set; }
+
+            [JsonProperty("odata.nextLink")] public string OdataNextLink { get; set; }
+
+            [JsonProperty("value")] public List<User> Value { get; set; }
+        }
+
+        #region Fields
+
+        private readonly AzureAuthenticationConfig azureB2CConfig;
+        private GraphServiceClient graphServiceClient;
+        private DateTime graphServiceClientTimestamp;
+
+        private const string GraphSelectList =
+            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
+
+        #endregion
     }
 }
