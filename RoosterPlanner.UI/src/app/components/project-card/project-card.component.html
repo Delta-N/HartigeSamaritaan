@@ -1,6 +1,6 @@
 <mat-card>
   <div>
-    <mat-card-title>{{project.name}}</mat-card-title>
+    <mat-card-title><a [routerLink]="['/project', project.id]">{{project.name}}</a></mat-card-title>
   </div>
   <mat-card-content>
     <a routerLink="/project/beschikbaarheid/{{project.id}}"><p>Beschikbaarheid</p></a>

@@ -100,12 +100,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 if (personViewModel == null) return BadRequest("Invalid User");
 
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                string oid = null;
-                if (identity != null)
-                    oid = identity.Claims.FirstOrDefault(c =>
-                            c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
-                        ?.Value;
+                var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
                 if (oid == null) return BadRequest("Invalid User");
 
@@ -135,6 +130,17 @@ namespace RoosterPlanner.Api.Controllers
             }
 
             return NoContent();
+        }
+
+        public static string GetOid(ClaimsIdentity claimsIdentity)
+        {
+            var identity = claimsIdentity;
+            string oid = null;
+            if (identity != null)
+                oid = identity.Claims.FirstOrDefault(c =>
+                        c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
+                    ?.Value;
+            return oid;
         }
 
         [Authorize(Policy = "Boardmember")]

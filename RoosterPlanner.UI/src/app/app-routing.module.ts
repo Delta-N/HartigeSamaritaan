@@ -7,6 +7,7 @@ import {ProfileComponent} from "./pages/profile/profile.component";
 import {ShiftComponent} from "./pages/shift/shift.component";
 import {MsalGuard} from "@azure/msal-angular";
 import {AuthorizationGuard} from "./guards/authorization.guard";
+import {ProjectComponent} from "./pages/project/project.component";
 
 const routes: Routes = [
   {
@@ -47,11 +48,16 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'project/:id',
+    component: ProjectComponent,
+    canActivate: [
+      MsalGuard
+    ]
+  },
+  {
     path: '**',
     component: NotFoundComponent
   }
-
-
 ];
 
 @NgModule({

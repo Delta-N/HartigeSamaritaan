@@ -11,19 +11,23 @@ import {ToastrService} from "ngx-toastr";
 })
 export class ProjectService {
   projects: Project[] = [];
+  project: any;
 
-  constructor(private apiService: ApiService, private toastr:ToastrService) {
+  constructor(private apiService: ApiService, private toastr: ToastrService) {
   }
 
-  async getProject(guid?: string) {
+  async getProject(guid?: string): Promise<Project[]> {
     if (guid == null) {
       //return all projects
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}`).toPromise().then(response => {
+        this.projects=[]
         this.projects = response.body;
       });
     } else {
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}/${guid}`).toPromise().then(response => {
-        this.projects = response.body;
+        this.projects=[]
+        this.project = response.body
+        this.projects.push(this.project)
       });
     }
     return this.projects
@@ -45,7 +49,6 @@ export class ProjectService {
       }
     }
 
-
     if (project.startDate.toString() !== "") {
       try {
 
@@ -56,5 +59,34 @@ export class ProjectService {
       }
     }
     return this.apiService.post<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise();
+  }
+
+  patchProject(project: Project) {
+    if (project === null) {
+      this.toastr.error("Leeg project in project service")
+      return;
+    }
+    if (project.id === null || project.id === "") {
+      this.toastr.error("ProjectId is leeg")
+      return;
+    }
+    if (project.endDate !== null) {
+      if (project.endDate.toString() === "") {
+        project.endDate = null;
+      } else {
+        project.endDate = DateConverter.toDate(project.endDate);
+      }
+
+      if (project.startDate.toString() !== "") {
+        try {
+
+          project.startDate = DateConverter.toDate(project.startDate);
+        } catch (e) {
+          console.error(e)
+          project.startDate = null;
+        }
+      }
+      return this.apiService.patch<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise();
+    }
   }
 }

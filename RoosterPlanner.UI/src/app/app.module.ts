@@ -38,6 +38,7 @@ import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AddAdminComponent} from './components/add-admin/add-admin.component';
 import {FilterPipe} from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
+import {ProjectComponent} from './pages/project/project.component';
 
 function MSALConfigFactory(): Configuration {
   return msalConfig;
@@ -60,7 +61,8 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     CreateProjectComponent,
     AddAdminComponent,
     FilterPipe,
-    ChangeProfileComponent
+    ChangeProfileComponent,
+    ProjectComponent
 
   ],
   imports: [

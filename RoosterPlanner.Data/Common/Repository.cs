@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -141,7 +142,8 @@ namespace RoosterPlanner.Data.Common
                 }
                 throw valEx;
             }
-
+            //todo lastedit by aanpassen naar OID gebruiker
+            //var oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
             entity.LastEditBy = "System";
             entity.LastEditDate = DateTime.UtcNow;
 

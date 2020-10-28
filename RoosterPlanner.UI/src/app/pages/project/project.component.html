@@ -1,0 +1,48 @@
+<div *ngIf="loaded===true">
+  <div class="container">
+    <div class="bar">
+      <h1>{{project.name}}</h1>
+    </div>
+  </div>
+
+  <div class="container" style="min-height: 65vh;">
+
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Adres:</div>
+      <div class="user-data">{{project.address}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Stad:</div>
+      <div class="user-data">{{project.city}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Omschrijving:</div>
+      <div class="user-data">{{project.description}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Start datum:</div>
+      <div class="user-data">{{startDate}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Eind datum:</div>
+      <div class="user-data">{{endDate}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Gesloten:</div>
+      <div class="user-data">{{project.closed}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Afbeelding URL:</div>
+      <div class="user-data">{{project.pictureUri}}</div>
+    </div>
+    <div style="display: flex; margin-top:36px">
+      <div class="row-name">Website:</div>
+      <div class="user-data">{{project.websiteUrl}}</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <a (click)="editProject()" mat-button style="background-color: #DDFCE0">Project wijzigen</a>
+    <a (click)="closeProject()" mat-button style="background-color: #DDFCE0">Project sluiten</a>
+  </div>
+</div>

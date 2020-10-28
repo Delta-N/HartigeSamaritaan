@@ -9,11 +9,11 @@ export class Project extends Entity {
   public startDate: Date;
   public endDate?: Date;
   public pictureUri?: string;
-  public websiteUri?: string;     //TODO waarom websiteUri?
+  public websiteUrl?: string;     //TODO waarom websiteUri?
   public closed?: boolean;
 
 
-  constructor(id: string, name?: string, address?: string, city?: string, description?: string, startDate?: Date, endDate?: Date, pictureUri?: string, websiteUri?: string, closed?: boolean,) {
+  constructor(id: string, name?: string, address?: string, city?: string, description?: string, startDate?: Date, endDate?: Date, pictureUri?: string, websiteUrl?: string, closed?: boolean,) {
     super();
     this.id = id;
     this.name = name;
@@ -23,7 +23,7 @@ export class Project extends Entity {
     this.startDate = startDate;
     this.endDate = endDate;
     this.pictureUri = pictureUri;
-    this.websiteUri = websiteUri;
+    this.websiteUrl = websiteUrl;
     this.closed = closed;
   }
 }

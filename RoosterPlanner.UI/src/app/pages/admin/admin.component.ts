@@ -72,18 +72,20 @@ export class AdminComponent implements OnInit {
   addProject() {
     const dialogRef = this.dialog.open(CreateProjectComponent, {
       width: '500px',
+      data: {createProject: true}
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      setTimeout(x => {
-        this.listOfProjects = []
-        this.getProjects().then()
-        if (result !== "false") {
-          this.toastr.success(result + " is toegevoegd als nieuw project")
-        }
-      }, 500);
+      if (result !== 'false') {
+        setTimeout(x => {
+          this.listOfProjects = []
+          this.getProjects().then()
+          if (result != null) {
+            this.toastr.success(result + " is toegevoegd als nieuw project")
+          }
+        }, 500);
+      }
     });
-
   }
 
   async addAdministrator() {
@@ -112,7 +114,5 @@ export class AdminComponent implements OnInit {
         this.toastr.success(result + " is verwijderd als administrator")
       }, 500);
     });
-
-
   }
 }

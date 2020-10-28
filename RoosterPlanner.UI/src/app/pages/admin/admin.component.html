@@ -14,7 +14,7 @@
       </div>
       <mat-card-content>
     <span *ngFor="let item of currentProjectPage" class="mobilecard">
-      <a routerLink="/projects/{{item.id}}"><p>{{item.name}}</p></a>
+      <a [routerLink]="['/project', item.id]"><p>{{item.name}}</p></a>
     </span>
 
       </mat-card-content>

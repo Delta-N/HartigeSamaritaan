@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {Project} from "../../models/project";
 import {FormBuilder, Validators} from "@angular/forms";
 import {ProjectService} from "../../services/project.service";
 import {Validator} from "../../helpers/validators"
 import {ToastrService} from "ngx-toastr";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {DateConverter} from "../../helpers/date-converter";
 
 @Component({
   selector: 'app-create-project',
@@ -14,22 +15,29 @@ import {MatDialogRef} from "@angular/material/dialog";
 export class CreateProjectComponent implements OnInit {
   project: Project = new Project('');
   checkoutForm;
+  title: string;
 
-  constructor(private formBuilder: FormBuilder, private projectService: ProjectService, private toastr: ToastrService, public dialogRef: MatDialogRef<CreateProjectComponent>) {
+
+  constructor(private formBuilder: FormBuilder, private projectService: ProjectService, private toastr: ToastrService, public dialogRef: MatDialogRef<CreateProjectComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+    if (!this.data.createProject) {
+      this.project = this.data.project;
+    }
     this.checkoutForm = this.formBuilder.group({
-      id: '',
-      name: ['', Validators.required],
-      address: ['', Validators.required],
-      city: ['', Validators.required],
-      description: ['', Validators.required],
-      startDate: ['', Validators.compose([Validators.required, Validator.date])],
-      endDate: ['', [Validator.dateOrNull]],
-      pictureUri: '',
-      websiteUrl: ''
+      id: this.project.id!=null?this.project.id:'',
+      name: [this.project.name!=null?this.project.name:'', Validators.required],
+      address: [this.project.address!=null?this.project.address:'', Validators.required],
+      city: [this.project.city!=null?this.project.city:'', Validators.required],
+      description: [this.project.description!=null?this.project.description:'', Validators.required],
+      startDate: [this.project.startDate!=null? DateConverter.toReadableString(this.project.startDate.toString()) :'', Validators.compose([Validators.required, Validator.date])],
+      endDate: [this.project.endDate!=null?DateConverter.toReadableString(this.project.endDate.toString()):'', [Validator.dateOrNull]],
+      pictureUri: this.project.pictureUri!=null?this.project.pictureUri:'',
+      websiteUrl: this.project.websiteUrl!=null?this.project.websiteUrl:''
     })
+
   }
 
   ngOnInit(): void {
+
   }
 
 
@@ -38,7 +46,14 @@ export class CreateProjectComponent implements OnInit {
     if (this.checkoutForm.status === 'INVALID') {
       this.toastr.error("Niet alle velden zijn correct ingevuld");
     } else {
-      this.projectService.postProject(this.project).then();
+      //create new project
+      if (this.data.createProject) {
+        this.projectService.postProject(this.project).then();
+      }
+      //edit project
+      else {
+        this.projectService.patchProject(this.project).then();
+      }
       this.dialogRef.close(value.name);
     }
   }

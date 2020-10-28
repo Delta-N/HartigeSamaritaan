@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,34 +33,28 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
-            ProjectDetailsViewModel projectDetailsVm;
-
             try
             {
-                if (id != Guid.Empty)
-                {
-                    TaskResult<Project> result = await this.projectService.GetProjectDetails(id);
-                    if (result.Succeeded)
-                    {
-                        projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
-                        return Ok(projectDetailsVm);
-                    }
+                if (id == Guid.Empty) return BadRequest("No valid id.");
+                
+                TaskResult<Project> result = await projectService.GetProjectDetails(id);
+                
+                if (!result.Succeeded) return UnprocessableEntity();
+                
+                ProjectDetailsViewModel projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
+                return Ok(projectDetailsVm);
 
-                    return UnprocessableEntity();
-                }
-
-                return BadRequest("No valid id.");
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "ProjectController: Error occured.");
-                this.Response.Headers.Add("message", ex.Message);
+                Response.Headers.Add("message", ex.Message);
             }
 
             return NoContent();
         }
 
-        [HttpGet()]
+        [HttpGet]
         public async Task<ActionResult<List<ProjectViewModel>>> Search(string name,
             string city,
             DateTime? startDateFrom = null,
@@ -75,24 +70,21 @@ namespace RoosterPlanner.Api.Controllers
                 Closed = closed
             };
 
-            List<ProjectViewModel> projectVmList;
-
             try
             {
-                TaskListResult<Project> result = await this.projectService.SearchProjectsAsync(filter);
-                if (result.Succeeded)
-                {
-                    Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
-                    projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
-                        .ToList();
-                    return Ok(projectVmList);
-                }
-                return UnprocessableEntity(result.Message);
+                TaskListResult<Project> result = await projectService.SearchProjectsAsync(filter);
+                if (!result.Succeeded) return UnprocessableEntity(result.Message);
+                
+                Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
+                
+                List<ProjectViewModel> projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
+                    .ToList();
+                return Ok(projectVmList);
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "ProjectController: Error occured.");
-                this.Response.Headers.Add("message", ex.Message);
+                Response.Headers.Add("message", ex.Message);
             }
 
             return NoContent();
@@ -100,13 +92,13 @@ namespace RoosterPlanner.Api.Controllers
 
         //alleen een bestuurslid kan projecten aanmaken of wijzigen
         [Authorize(Policy = "Boardmember")]
-        [HttpPost()]
+        [HttpPost]
         public ActionResult Save(ProjectDetailsViewModel projectDetails)
         {
             if (projectDetails == null)
                 return BadRequest("Er is geen geldig project ontvangen.");
 
-            if (String.IsNullOrEmpty(projectDetails.Name))
+            if (string.IsNullOrEmpty(projectDetails.Name))
                 return BadRequest("De naam van het project mag niet leeg zijn.");
 
             TaskResult<Project> result = new TaskResult<Project>();
@@ -114,14 +106,17 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
+                project.LastEditDate=new DateTime();
+                var oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                project.LastEditBy = oid ?? null;
 
-                if (project != null && project.Id == Guid.Empty)
+                if (project.Id == Guid.Empty)
                 {
-                    result = this.projectService.CreateProject(project);
+                    result = projectService.CreateProject(project);
                 }
-                else if (project != null && project.Id != Guid.Empty)
+                else if (project.Id != Guid.Empty)
                 {
-                    result = this.projectService.UpdateProject(project);
+                    result = projectService.UpdateProject(project);
                 }
 
                 if (result.Succeeded)
@@ -131,11 +126,55 @@ namespace RoosterPlanner.Api.Controllers
             catch (Exception ex)
             {
                 logger.Error(ex, "ProjectController: Error occured.");
-                this.Response.Headers.Add("message", ex.Message);
+                Response.Headers.Add("message", ex.Message);
             }
 
             return NoContent();
         }
+
+        [Authorize(Policy = "Boardmember")]
+        [HttpPatch]
+        public async Task<ActionResult> UpdateProject(ProjectDetailsViewModel projectDetails)
+        {
+            if (projectDetails == null|| projectDetails.Id==null)
+                return BadRequest("Er is geen geldig project ontvangen.");
+
+            if (string.IsNullOrEmpty(projectDetails.Name))
+                return BadRequest("De naam van het project mag niet leeg zijn.");
+
+            TaskResult<Project> result = new TaskResult<Project>();
+            try
+            {
+                Project oldProject = projectService.GetProjectDetails(projectDetails.Id)
+                    .Result.Data;
+                Project updatedProject = ProjectDetailsViewModel.CreateProject(projectDetails);
+                oldProject.Address = updatedProject.Address;
+                oldProject.City = updatedProject.City;
+                oldProject.Closed = updatedProject.Closed;
+                oldProject.Description = updatedProject.Description;
+                oldProject.Name = updatedProject.Name;
+                oldProject.Participations = updatedProject.Participations;
+                oldProject.Shifts = updatedProject.Shifts;
+                oldProject.EndDate = updatedProject.EndDate;
+                oldProject.PictureUri = updatedProject.PictureUri;
+                oldProject.ProjectTasks = updatedProject.ProjectTasks;
+                oldProject.StartDate = updatedProject.StartDate;
+                oldProject.WebsiteUrl = updatedProject.WebsiteUrl;
+                
+
+                result = projectService.UpdateProject(oldProject);
+                if (!result.Succeeded) return UnprocessableEntity();
+                return Ok(result);
+
+            } catch (Exception ex)
+            {
+                logger.Error(ex, "ProjectController: Error occured.");
+                Response.Headers.Add("message", ex.Message);
+            }
+
+            return NoContent();
+        }
+
 
         [HttpPost("{id}/addperson/{personId}")]
         public ActionResult AddPerson(Guid id, Guid personId)
@@ -143,10 +182,9 @@ namespace RoosterPlanner.Api.Controllers
             if (id == Guid.Empty)
                 return BadRequest("id");
 
-            if (this.projectService.AddPersonToProject(id, personId) == 1)
+            if (projectService.AddPersonToProject(id, personId) == 1)
                 return Ok();
-            else
-                return UnprocessableEntity();
+            return UnprocessableEntity();
         }
     }
 }
