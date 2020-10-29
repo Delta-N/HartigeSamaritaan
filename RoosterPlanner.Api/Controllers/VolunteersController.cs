@@ -48,7 +48,7 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPost("setparticipation/{oid}/{projectId}")]
         public async Task<ActionResult> SetParticipation(Guid oid, Guid projectId)
         {
-            await ParticipationService.AddParticipationAsync(oid, projectId);
+           // await ParticipationService.AddParticipationAsync(oid, projectId);
             return Ok();
         }
 

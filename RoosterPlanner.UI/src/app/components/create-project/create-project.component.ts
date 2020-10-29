@@ -28,8 +28,8 @@ export class CreateProjectComponent implements OnInit {
       address: [this.project.address!=null?this.project.address:'', Validators.required],
       city: [this.project.city!=null?this.project.city:'', Validators.required],
       description: [this.project.description!=null?this.project.description:'', Validators.required],
-      startDate: [this.project.startDate!=null? DateConverter.toReadableString(this.project.startDate.toString()) :'', Validators.compose([Validators.required, Validator.date])],
-      endDate: [this.project.endDate!=null?DateConverter.toReadableString(this.project.endDate.toString()):'', [Validator.dateOrNull]],
+      startDate: [this.project.startDate!=null? this.project.startDate:'', Validators.compose([Validators.required, Validator.date])],
+      endDate: [this.project.endDate!=null?this.project.endDate:'', [Validator.dateOrNull]],
       pictureUri: this.project.pictureUri!=null?this.project.pictureUri:'',
       websiteUrl: this.project.websiteUrl!=null?this.project.websiteUrl:''
     })
@@ -52,7 +52,7 @@ export class CreateProjectComponent implements OnInit {
       }
       //edit project
       else {
-        this.projectService.patchProject(this.project).then();
+        this.projectService.updateProject(this.project).then();
       }
       this.dialogRef.close(value.name);
     }

@@ -60,4 +60,12 @@ export class UserService {
 
     }).catch()
   }
+
+  async getCurrentUser(){
+    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
+    if (idToken === null) {
+      return false;
+    }
+    return this.getUser(idToken.oid);
+  }
 }

@@ -1,6 +1,8 @@
-import { Component, OnInit , Input} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {Project} from "../../models/project";
 import {ToastrService} from "ngx-toastr";
+import {UserService} from "../../services/user.service";
+import {ProjectService} from "../../services/project.service";
 
 @Component({
   selector: 'app-project-card',
@@ -8,14 +10,18 @@ import {ToastrService} from "ngx-toastr";
   styleUrls: ['./project-card.component.scss']
 })
 export class ProjectCardComponent implements OnInit {
+  isAdmin: boolean = false;
 
-  constructor(private toastr:ToastrService) { }
+  constructor(private toastr: ToastrService, private userService: UserService, private projectService: ProjectService) {
+  }
 
   @Input() project: Project;
 
   ngOnInit(): void {
+    this.isAdmin = this.userService.userIsAdminFrontEnd();
   }
-  removeProject(id: any) {
+
+  removeParticipation(guid: string) {
     this.toastr.warning("Deze functie moet nog gemaakt worden ")
   }
 }

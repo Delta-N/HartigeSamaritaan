@@ -6,9 +6,11 @@
     <a routerLink="/project/beschikbaarheid/{{project.id}}"><p>Beschikbaarheid</p></a>
     <a routerLink="/project/agenda/{{project.id}}"><p>Agenda</p></a>
     <a routerLink="/project/shifts/{{project.id}}"><p>Mijn Shifts</p></a>
+    <span *ngIf="isAdmin"><a routerLink="/project/plannen/{{project.id}}"><p>Plannen</p></a></span>
+    <span *ngIf="isAdmin"><a routerLink="/project/medewerkers/{{project.id}}"><p>Medewerkers</p></a></span>
 
   </mat-card-content>
   <mat-card-actions class="action-anchor">
-    <button mat-button (click)="removeProject(project.id)">Verwijderen</button>
+    <button mat-button (click)="removeParticipation(project.id)">Uitschrijven</button>
   </mat-card-actions>
 </mat-card>

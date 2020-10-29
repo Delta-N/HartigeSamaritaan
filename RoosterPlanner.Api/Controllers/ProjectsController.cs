@@ -96,10 +96,10 @@ namespace RoosterPlanner.Api.Controllers
         public ActionResult Save(ProjectDetailsViewModel projectDetails)
         {
             if (projectDetails == null)
-                return BadRequest("Er is geen geldig project ontvangen.");
+                return BadRequest("No valid project received");
 
             if (string.IsNullOrEmpty(projectDetails.Name))
-                return BadRequest("De naam van het project mag niet leeg zijn.");
+                return BadRequest("Name of project cannot be empty");
 
             TaskResult<Project> result = new TaskResult<Project>();
 
@@ -136,11 +136,11 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPatch]
         public async Task<ActionResult> UpdateProject(ProjectDetailsViewModel projectDetails)
         {
-            if (projectDetails == null|| projectDetails.Id==null)
-                return BadRequest("Er is geen geldig project ontvangen.");
+            if (projectDetails == null)
+                return BadRequest("No valid project received");
 
             if (string.IsNullOrEmpty(projectDetails.Name))
-                return BadRequest("De naam van het project mag niet leeg zijn.");
+                return BadRequest("Name of project cannot be empty");
 
             TaskResult<Project> result = new TaskResult<Project>();
             try

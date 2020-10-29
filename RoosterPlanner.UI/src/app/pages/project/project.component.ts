@@ -6,6 +6,7 @@ import {DateConverter} from "../../helpers/date-converter";
 import {CreateProjectComponent} from "../../components/create-project/create-project.component";
 import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-project',
@@ -16,30 +17,38 @@ export class ProjectComponent implements OnInit {
   guid: string;
   project: Project;
   loaded: boolean = false;
-  startDate: string;
-  endDate: string;
+  title: string;
+  closeButtonText: string;
+  isAdmin:boolean=false;
 
 
-  constructor(private projectService: ProjectService, private route: ActivatedRoute, private toastr: ToastrService, public dialog: MatDialog) {
+  constructor(private userService: UserService, private projectService: ProjectService, private route: ActivatedRoute, private toastr: ToastrService, public dialog: MatDialog) {
   }
 
   async ngOnInit(): Promise<void> {
+    this.isAdmin= this.userService.userIsAdminFrontEnd();
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    await this.projectService.getProject(this.guid).then(listOfProjects => {
-      if (listOfProjects[0] != null) {
-        this.project = listOfProjects[0];
-        this.project.startDate != null ? this.startDate = DateConverter.toReadableString(this.project.startDate.toString()) : this.startDate = null;
-        this.project.endDate != null ? this.endDate = DateConverter.toReadableString(this.project.endDate.toString()) : this.endDate = null;
-        this.loaded = true;
-        console.log(this.project.websiteUrl)
-      }
-    })
+    this.getProject().then();
+
   }
 
   async getProject() {
-    await this.projectService.getProject(this.guid).then(project=>this.project=project[0])
+    await this.projectService.getProject(this.guid).then(project => {
+      if (project[0] != null) {
+        this.project = project[0];
+        this.title = this.project.name;
+        this.project.closed?this.closeButtonText="Project openen":this.closeButtonText="Project sluiten";
+        if (this.project.closed) {
+          this.title += " DIT PROJECT IS GESLOTEN"
+        }
+      }
+      if (this.project.closed) {
+
+      }
+      this.loaded = true;
+    })
   }
 
 
@@ -70,6 +79,13 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  closeProject() {
+  async closeProject() {
+    this.project.closed = !this.project.closed;
+    await this.projectService.updateProject(this.project).then(response => {
+      this.getProject().then();
+      if(this.project.closed){
+      this.toastr.success("Het project is gesloten");
+      }else{this.toastr.success("Het project is geopend");}
+    }, Error => this.toastr.error("Fout tijdens het sluiten van het project"));
   }
 }
