@@ -1,8 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Project} from "../../models/project";
-import {ToastrService} from "ngx-toastr";
 import {UserService} from "../../services/user.service";
-import {ProjectService} from "../../services/project.service";
+import {ParticipationService} from "../../services/participation.service";
+import {Participation} from "../../models/participation";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-project-card',
@@ -12,16 +12,28 @@ import {ProjectService} from "../../services/project.service";
 export class ProjectCardComponent implements OnInit {
   isAdmin: boolean = false;
 
-  constructor(private toastr: ToastrService, private userService: UserService, private projectService: ProjectService) {
+  constructor(private toastr: ToastrService,
+              private userService: UserService,
+              private participationService: ParticipationService) {
   }
 
-  @Input() project: Project;
+  @Input() participation: Participation;
 
   ngOnInit(): void {
     this.isAdmin = this.userService.userIsAdminFrontEnd();
   }
 
-  removeParticipation(guid: string) {
-    this.toastr.warning("Deze functie moet nog gemaakt worden ")
+  removeParticipation(participation: Participation) {
+    this.participationService.deleteParticipation(participation).then(
+      response => {
+        if (response.body !== null) {
+          window.location.reload();
+        }
+      }
+    );
+  }
+
+  todo() {
+    this.toastr.warning("Deze functie moet nog geschreven worden")
   }
 }

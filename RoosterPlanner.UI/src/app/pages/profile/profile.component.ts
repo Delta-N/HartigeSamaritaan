@@ -6,6 +6,7 @@ import {AuthenticationService} from "../../services/authentication.service";
 import {DateConverter} from "../../helpers/date-converter";
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
+import {ActivatedRoute, ParamMap} from "@angular/router";
 
 
 @Component({
@@ -15,22 +16,37 @@ import {ChangeProfileComponent} from "../../components/change-profile/change-pro
 })
 export class ProfileComponent implements OnInit {
   user: User;
-  age: number;
+  age: any;
   loaded: boolean = false;
+  guid: string;
 
-  constructor(private userService: UserService, private authenticationService: AuthenticationService, private dialog: MatDialog) {
+  constructor(private route: ActivatedRoute,
+              private userService: UserService,
+              private authenticationService: AuthenticationService,
+              private dialog: MatDialog) {
   }
 
   async ngOnInit(): Promise<void> {
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.guid = params.get('id');
+    });
+    if (this.guid == null) {
+      const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
+      this.guid = idToken.oid;
+    }
     this.loadUserProfile().then();
   }
 
   async loadUserProfile() {
-    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
-    await this.userService.getUser(idToken.oid).then(x => {
-      this.user = x;
-      this.age = this.calculateAge(this.user.dateOfBirth);
-      this.loaded = true;
+
+    await this.userService.getUser(this.guid).then(x => {
+      if (x.id != "") {
+        this.user = x;
+        this.age = this.calculateAge(this.user.dateOfBirth);
+        this.loaded = true;
+      } else {
+        this.loaded = false;
+      }
     });
   }
 
@@ -44,13 +60,15 @@ export class ProfileComponent implements OnInit {
       data: this.user
     });
     dialogRef.afterClosed().subscribe(async result => {
-      this.loadUserProfile().then();
+      setTimeout(x => {
+        this.loadUserProfile().then()
+      }, 500)
     })
   }
 
-  calculateAge(dateOfBirth: string): number {
+  calculateAge(dateOfBirth: string): any {
     if (dateOfBirth === null || dateOfBirth === undefined)
-      return 0;
+      return "Onbekend";
 
     const today = new Date();
     const birthDate = DateConverter.toDate(dateOfBirth);
@@ -60,7 +78,6 @@ export class ProfileComponent implements OnInit {
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-
     return age;
   }
 

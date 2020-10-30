@@ -13,33 +13,35 @@ export class ProjectService {
   projects: Project[] = [];
   project: any;
 
-  constructor(private apiService: ApiService, private toastr: ToastrService) {
-  }
-
-  formatDate(project): Project {
-    project.startDate = DateConverter.toReadableString(project.startDate);
-    project.endDate != null ? project.endDate = DateConverter.toReadableString(project.endDate) : project.endDate = null;
-    return project
+  constructor(private apiService: ApiService,
+              private toastr: ToastrService) {
   }
 
   async getProject(guid?: string): Promise<Project[]> {
+    this.projects = []
     if (guid == null) {
       //return all projects
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}`).toPromise().then(response => {
-        this.projects = []
         this.projects = response.body;
         this.projects.forEach(project => {
-          project = this.formatDate(project)
         })
       });
     } else {
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}/${guid}`).toPromise().then(response => {
-        this.projects = []
         this.project = response.body
-        this.project = this.formatDate(this.project)
         this.projects.push(this.project)
       });
     }
+    return this.projects
+  }
+  async getActiveProjects():Promise<Project[]>{
+    this.projects=[]
+    await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?closed=false`).toPromise().then(response=>{
+      this.projects=response.body;
+      this.projects.forEach(project=>{
+      })
+    })
+
     return this.projects
   }
 
@@ -105,7 +107,6 @@ export class ProjectService {
       this.toastr.error("Fout tijdens het laden van participations")
       return null;
     }
-    //HIER WAS JE BEZIG
     return this.apiService.get<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}/`).toPromise()
   }
 }

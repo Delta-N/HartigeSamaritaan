@@ -5,10 +5,8 @@ import {Project} from "../../models/project";
 import {ProjectService} from "../../services/project.service";
 import {Participation} from "../../models/participation";
 import {UserService} from "../../services/user.service";
-import {JwtHelper} from "../../helpers/jwt-helper";
 import {User} from "../../models/user";
 import {ParticipationService} from "../../services/participation.service";
-import {DateConverter} from "../../helpers/date-converter";
 
 @Component({
   selector: 'app-home',
@@ -16,50 +14,61 @@ import {DateConverter} from "../../helpers/date-converter";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  projects: Project[] = [];
+
   loaded: boolean = false;
-  participation:Participation;
-  currentUser:User;
-  selectedProject:Project;
+  participations: Participation[] = [];
+  currentUser: User;
+  selectedProjects: Project[];
 
 
-  constructor(public dialog: MatDialog, private projectService: ProjectService, private userService:UserService, private participationService:ParticipationService) {
+  constructor(public dialog: MatDialog,
+              private projectService: ProjectService,
+              private userService: UserService,
+              private participationService: ParticipationService) {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.projectService.getProject().then(response => {
-      this.projects = response.filter(x=>!x.closed);
-      this.loaded = true;
+    await this.userService.getCurrentUser().then(async user => {
+      if (user !== false) {
+        this.currentUser = user
+        this.getParticipations().then(x => this.loaded = true)
+      }
     });
   }
 
-  async addProject() {
-    await this.projectService.getProject("68a122f7-2467-4a11-a61f-4dcbbfd57f2b").then(response => {
-      this.selectedProject = response[0];
-      this.selectedProject.startDate=DateConverter.toDate(this.selectedProject.startDate);
-      this.selectedProject.endDate=DateConverter.toDate(this.selectedProject.endDate);
-      console.log(this.selectedProject);
-    });
-    await this.userService.getCurrentUser().then(user => {
-      if (user !== false) {
-        this.currentUser = user
-        console.log(this.currentUser);
-        this.participation = new Participation("00000000-0000-0000-0000-000000000000", this.currentUser, this.selectedProject, 12)
-        console.log(JSON.stringify(this.participation));
-      }
+
+  async getParticipations() {
+    await this.participationService.getParticipations(this.currentUser.id).then(response => {
+      this.participations = response;
+      this.participations.sort((a, b) => a.project.name.toLowerCase() > b.project.name.toLowerCase() ? 1 : -1);
     })
+  }
 
-
-    await this.participationService.postParticipation(this.participation).then(response => {
-      console.log(response)
-    }, reject => {
-      console.log(reject)
+  async addParticipation() {
+    await this.projectService.getActiveProjects().then(response => {
+      let projects: Project[] = response;
+      projects.forEach(pro => {
+        this.participations.forEach(par => {
+          if (pro.id == par.project.id) {
+            projects = projects.filter(obj => obj !== pro);
+          }
+        })
+      })
+      let dialogRef = this.dialog.open(AddProjectComponent, {
+        data: projects,
+        panelClass: 'custom-dialog-container'
+      });
+      dialogRef.disableClose = true;
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== 'false') {
+          this.selectedProjects = result;
+          this.selectedProjects.forEach(project => {
+            let participation: Participation = new Participation("00000000-0000-0000-0000-000000000000", this.currentUser, project)
+            this.participationService.postParticipation(participation);
+          })
+          setTimeout(x => this.getParticipations(), 1000)
+        }
+      })
     })
-
-
-    /*let dialogRef = this.dialog.open(AddProjectComponent, {data: this.projects, panelClass: 'custom-dialog-container'});
-
-    dialogRef.afterClosed().subscribe(result => {
-    })*/
   }
 }

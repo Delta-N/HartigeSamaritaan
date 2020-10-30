@@ -7,10 +7,14 @@ using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
+using RoosterPlanner.Common;
 using RoosterPlanner.Common.Config;
+using RoosterPlanner.Data.Common;
+using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
+using Person = RoosterPlanner.Models.Person;
 
 namespace RoosterPlanner.Service
 {
@@ -25,10 +29,29 @@ namespace RoosterPlanner.Service
 
     public class AzureB2CService : IAzureB2CService
     {
+        #region Fields
+
+        private readonly AzureAuthenticationConfig azureB2CConfig;
+        private GraphServiceClient graphServiceClient;
+        private DateTime graphServiceClientTimestamp;
+        private IUnitOfWork unitOfWork;
+        private IPersonRepository personRepository;
+        private readonly ILogger logger;
+
+
+        private const string GraphSelectList =
+            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
+
+        #endregion
+
         //Constructor
-        public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig)
+        public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
+            ILogger logger)
         {
             this.azureB2CConfig = azureB2CConfig.Value;
+            this.unitOfWork = unitOfWork;
+            personRepository = unitOfWork.PersonRepository;
+            this.logger = logger;
         }
 
 
@@ -50,6 +73,7 @@ namespace RoosterPlanner.Service
 
                 user = await graphService.Users[userId.ToString()].Request()
                     .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
+                AddPersonToLocalDb(user);
             }
             catch (ServiceException graphEx)
             {
@@ -124,6 +148,10 @@ namespace RoosterPlanner.Service
                 }
 
                 if (users.Count == 0) throw new NullReferenceException("No users found");
+                foreach (var user in users)
+                {
+                    AddPersonToLocalDb(user);
+                }
 
                 result.StatusCode = HttpStatusCode.OK;
                 result.Succeeded = true;
@@ -172,7 +200,7 @@ namespace RoosterPlanner.Service
                 updatedUser.Message = "Error during patching of user";
                 throw ex;
             }
-
+            AddPersonToLocalDb(updatedUser.Data);
             return updatedUser;
         }
 
@@ -222,6 +250,33 @@ namespace RoosterPlanner.Service
             return graphService;
         }
 
+        private void AddPersonToLocalDb(User user)
+        {
+            if (user.Id == null)
+                throw new ArgumentNullException("id");
+            TaskResult<Person> result = new TaskResult<Person>();
+            try
+            {
+                Person person = personRepository.GetPersonByOidAsync(Guid.Parse(user.Id)).Result;
+                if (person == null)
+                {
+                    person = new Person(Guid.Parse(user.Id)) {firstName = user.GivenName, Oid = Guid.Parse(user.Id)};
+                    personRepository.Add(person);
+                }
+                else if (person.firstName != user.GivenName)
+                {
+                    person.firstName = user.GivenName;
+                    personRepository.Update(person);
+                }
+
+                unitOfWork.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                result.Error = ex;
+            }
+        }
 
         public class GraphUserData
         {
@@ -231,16 +286,5 @@ namespace RoosterPlanner.Service
 
             [JsonProperty("value")] public List<User> Value { get; set; }
         }
-
-        #region Fields
-
-        private readonly AzureAuthenticationConfig azureB2CConfig;
-        private GraphServiceClient graphServiceClient;
-        private DateTime graphServiceClientTimestamp;
-
-        private const string GraphSelectList =
-            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
-
-        #endregion
     }
 }

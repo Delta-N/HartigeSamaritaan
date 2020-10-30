@@ -11,6 +11,7 @@ using RoosterPlanner.Api.Models.Enums;
 using RoosterPlanner.Common;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service;
+using RoosterPlanner.Service.DataModels;
 using Extensions = RoosterPlanner.Api.Models.Constants.Extensions;
 
 namespace RoosterPlanner.Api.Controllers
@@ -22,14 +23,11 @@ namespace RoosterPlanner.Api.Controllers
     {
         private readonly ILogger logger;
         private readonly IPersonService personService;
-        private readonly IProjectService projectService;
 
         //Constructor
-        public PersonsController(IPersonService personService, IProjectService projectService,
-            ILogger logger)
+        public PersonsController(IPersonService personService, ILogger logger)
         {
             this.personService = personService;
-            this.projectService = projectService;
             this.logger = logger;
         }
 
@@ -38,13 +36,22 @@ namespace RoosterPlanner.Api.Controllers
         {
             try
             {
+                TaskResult<User> result = new TaskResult<User>();
                 if (id == Guid.Empty) return BadRequest("No valid id.");
+                var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                var result = await personService.GetUser(id);
+                if (id.ToString() == oid || UserHasRole(oid, UserRole.Boardmember))
+                {
+                    result = await personService.GetUser(id);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
 
                 if (!result.Succeeded) return UnprocessableEntity();
 
-                var personVm = PersonViewModel.CreateVm(result.Data);
+                var personVm = PersonViewModel.CreateVmFromUser(result.Data);
                 return Ok(personVm);
             }
             catch (Exception ex)
@@ -80,7 +87,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded) return UnprocessableEntity();
 
-                personViewModels.AddRange(result.Data.Select(user => PersonViewModel.CreateVm(user)));
+                personViewModels.AddRange(result.Data.Select(user => PersonViewModel.CreateVmFromUser(user)));
 
                 return Ok(personViewModels);
             }
@@ -101,16 +108,11 @@ namespace RoosterPlanner.Api.Controllers
                 if (personViewModel == null) return BadRequest("Invalid User");
 
                 var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
-
                 if (oid == null) return BadRequest("Invalid User");
 
-                var currentUserActionResult = Get(Guid.Parse(oid));
-                var okObjectResult = (OkObjectResult) currentUserActionResult.Result;
-
                 //only the owner of a profile or a boardmember can update user data
-                if (okObjectResult.Value is PersonViewModel currentUser &&
-                    (personViewModel.Id.ToString() == oid ||
-                     currentUser.UserRole == UserRole.Boardmember.ToString()))
+                if (personViewModel.Id.ToString() == oid ||
+                    UserHasRole(oid, UserRole.Boardmember))
                 {
                     var user = PersonViewModel.CreateUser(personViewModel);
                     var result = await personService.UpdatePerson(user, personViewModel.Id);
@@ -132,16 +134,6 @@ namespace RoosterPlanner.Api.Controllers
             return NoContent();
         }
 
-        public static string GetOid(ClaimsIdentity claimsIdentity)
-        {
-            var identity = claimsIdentity;
-            string oid = null;
-            if (identity != null)
-                oid = identity.Claims.FirstOrDefault(c =>
-                        c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
-                    ?.Value;
-            return oid;
-        }
 
         [Authorize(Policy = "Boardmember")]
         [HttpPatch("modifyadmin/{oid}/{modifier}")]
@@ -176,6 +168,30 @@ namespace RoosterPlanner.Api.Controllers
             }
 
             return NoContent();
+        }
+
+        public static string GetOid(ClaimsIdentity claimsIdentity)
+        {
+            var identity = claimsIdentity;
+            string oid = null;
+            if (identity != null)
+                oid = identity.Claims.FirstOrDefault(c =>
+                        c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
+                    ?.Value;
+            return oid;
+        }
+
+        public bool UserHasRole(string oid, UserRole userRole)
+        {
+            var currentUserActionResult = Get(Guid.Parse(oid));
+            var okObjectResult = (OkObjectResult) currentUserActionResult.Result;
+            if (okObjectResult.Value is PersonViewModel currentUser &&
+                currentUser.UserRole == userRole.ToString())
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace RoosterPlanner.Api.Models
         public string PhoneNumber { get; set; }
         public string UserRole { get; set; }
 
-        public static PersonViewModel CreateVm(User user)
+        public static PersonViewModel CreateVmFromUser(User user)
         {
             var personViewModel = new PersonViewModel
             {
@@ -78,6 +78,41 @@ namespace RoosterPlanner.Api.Models
                 }
             };
             return user;
+        }
+
+        public static RoosterPlanner.Models.Person CreatePerson(PersonViewModel vm)
+        {
+            return new RoosterPlanner.Models.Person(vm.Id)
+            {
+                firstName = vm.FirstName,
+                LastName = vm.LastName,
+                Email = vm.Email,
+                StreetAddress = vm.StreetAddress,
+                PostalCode = vm.PostalCode,
+                City = vm.City,
+                Country = vm.Country,
+                DateOfBirth = vm.DateOfBirth,
+                UserRole = vm.UserRole,
+                PhoneNumber = vm.PhoneNumber
+            };
+        }
+
+        public static PersonViewModel CreateVmFromPerson(RoosterPlanner.Models.Person person)
+        {
+            return new PersonViewModel
+            {
+             Id   = person.Id,
+             FirstName = person.firstName,
+             LastName = person.LastName,
+             Email = person.Email,
+             StreetAddress = person.StreetAddress,
+             PostalCode = person.PostalCode,
+             City = person.City,
+             Country = person.Country,
+             DateOfBirth = person.DateOfBirth,
+             UserRole = person.UserRole,
+             PhoneNumber = person.PhoneNumber
+            };
         }
     }
 }

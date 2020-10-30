@@ -16,7 +16,6 @@ const routes: Routes = [
     canActivate: [
       MsalGuard
     ]
-
   },
   {
     path: 'home',
@@ -31,6 +30,13 @@ const routes: Routes = [
     canActivate: [
       MsalGuard,
       AuthorizationGuard
+    ]
+  },
+  {
+    path: 'profile/:id',
+    component: ProfileComponent,
+    canActivate: [
+      MsalGuard
     ]
   },
   {

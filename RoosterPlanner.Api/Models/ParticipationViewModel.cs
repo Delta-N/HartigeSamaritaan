@@ -7,8 +7,8 @@ namespace RoosterPlanner.Api.Models
     public class ParticipationViewModel
     {
         public Guid Id { get; set; }
-        public Person Person { get; set; }
-        public Project Project { get; set; }
+        public PersonViewModel Person { get; set; }
+        public ProjectDetailsViewModel Project { get; set; }
         public int MaxWorkingHoursPerWeek { get; set; }
         public List<Availability> Availabilities { get; set; }
         public List<Collaboration> WantsToWorkWith { get; set; }
@@ -24,8 +24,8 @@ namespace RoosterPlanner.Api.Models
             return new ParticipationViewModel()
             {
                 Id = participation.Id,
-                Person = participation.Person,
-                Project = participation.Project,
+                Person = PersonViewModel.CreateVmFromPerson(participation.Person),
+                Project = ProjectDetailsViewModel.CreateVm(participation.Project),
                 MaxWorkingHoursPerWeek = participation.MaxWorkingHoursPerWeek,
                 Availabilities = participation.Availabilities,
                 WantsToWorkWith = participation.WantsToWorkWith
@@ -36,9 +36,9 @@ namespace RoosterPlanner.Api.Models
         {
             return new Participation(participationViewModel.Id)
             {
-                Person = participationViewModel.Person,
+                Person = PersonViewModel.CreatePerson(participationViewModel.Person),
                 PersonId = participationViewModel.Person.Id,
-                Project = participationViewModel.Project,
+                Project = ProjectDetailsViewModel.CreateProject(participationViewModel.Project),
                 ProjectId = participationViewModel.Project.Id,
                 MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
                 Availabilities = participationViewModel.Availabilities,

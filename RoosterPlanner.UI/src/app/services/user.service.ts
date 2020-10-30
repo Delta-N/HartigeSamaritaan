@@ -4,6 +4,7 @@ import {User} from "../models/user";
 import {ApiService} from "./api.service";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {JwtHelper} from "../helpers/jwt-helper";
+import {ToastrService} from "ngx-toastr";
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,18 @@ export class UserService {
   administrators: User[] = [];
   allUsers: User[] = [];
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private toastr: ToastrService) {
   }
 
   async getUser(guid: string): Promise<User> {
     await this.apiService.get<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/${guid}`).toPromise().then(response => {
       this.user = response.body
-    }).catch();
+    }, Error => {
+      if (Error.status == 401) {
+        this.toastr.error("U bent ongeauthoriseerd");
+        return null;
+      }
+    });
     return this.user
   }
 
@@ -61,7 +67,7 @@ export class UserService {
     }).catch()
   }
 
-  async getCurrentUser(){
+  async getCurrentUser() {
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
     if (idToken === null) {
       return false;

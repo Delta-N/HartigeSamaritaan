@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +20,11 @@ namespace RoosterPlanner.Api.Controllers
     {
         private readonly ILogger logger;
         private readonly IParticipationService participationService;
-        private readonly IProjectService projectService;
-
-        public ParticipationController(ILogger logger, IParticipationService participationService,
-            IProjectService projectService)
+        
+        public ParticipationController(ILogger logger, IParticipationService participationService)
         {
             this.logger = logger;
             this.participationService = participationService;
-            this.projectService = projectService;
         }
 
         [HttpGet]
@@ -35,7 +33,7 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 if (personGuid == Guid.Empty) return BadRequest("No valid id.");
-                TaskListResult<Participation> result = await participationService.GetParticipations(personGuid);
+                TaskListResult<Participation> result = await participationService.GetUserParticipations(personGuid);
 
                 if (!result.Succeeded) return UnprocessableEntity();
 
@@ -55,9 +53,10 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Save(ParticipationViewModel participationViewModel)
+        public ActionResult Save([FromBody] ParticipationViewModel participationViewModel)
         {
-            if (participationViewModel == null || participationViewModel.Person==null|| participationViewModel.Project==null)
+            if (participationViewModel == null || participationViewModel.Person == null ||
+                participationViewModel.Project == null)
             {
                 return BadRequest("Er is geen geldige participation ontvangen");
             }
@@ -66,17 +65,18 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 Participation participation = ParticipationViewModel.CreateParticipation(participationViewModel);
-                if (participation.Id==Guid.Empty)
+                if (participation.Id == Guid.Empty)
                 {
                     //create participation
-                    result = participationService.AddParticipationAsync(participation.PersonId,participation.ProjectId, participation.MaxWorkingHoursPerWeek);
+                    result = participationService.AddParticipationAsync(participation.PersonId,
+                        participation.ProjectId);
                 }
                 else
                 {
-                    //update participation todo 
+                    //update participation 
                 }
 
-                if (result.Result.Succeeded)
+                if (result != null && result.Result.Succeeded)
                     return Ok(ParticipationViewModel.CreateVm(result.Result.Data));
                 return UnprocessableEntity(participationViewModel);
             }
@@ -85,7 +85,53 @@ namespace RoosterPlanner.Api.Controllers
                 logger.Error(ex, "ParticipationController: Error occured.");
                 Response.Headers.Add("message", ex.Message);
             }
+
             return NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> RemoveParticipation(Guid id)
+        {
+            try
+            {
+                TaskResult<Participation> participation = participationService.GetParticipation(id);
+                if (!participation.Succeeded)
+                {
+                    BadRequest("Invalid participation");
+                }
+
+                var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                if (oid == null) return BadRequest("Invalid User");
+
+                if (oid == participation.Data.PersonId.ToString())
+                {
+                    //gebruiker mag participation verwijderen
+                    var result = await participationService.RemoveParticipation(participation.Data);
+                    if (result.Succeeded)
+                        return Ok(result);
+                    return Problem();
+                }
+
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "ParticipationController: Error occured.");
+                Response.Headers.Add("message", ex.Message);
+            }
+
+            return NoContent();
+        }
+
+        private static string GetOid(ClaimsIdentity claimsIdentity)
+        {
+            var identity = claimsIdentity;
+            string oid = null;
+            if (identity != null)
+                oid = identity.Claims.FirstOrDefault(c =>
+                        c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
+                    ?.Value;
+            return oid;
         }
     }
 }

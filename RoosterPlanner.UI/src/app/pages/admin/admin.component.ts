@@ -22,16 +22,18 @@ export class AdminComponent implements OnInit {
   tempListProjects: Project[] = [];
   tempListAdmins: User[] = [];
   loaded: boolean = false;
-
   administrators: User[] = []
 
-  constructor(public dialog: MatDialog, private projectService: ProjectService, private router: Router, private userService: UserService, private toastr: ToastrService) {
+  constructor(public dialog: MatDialog,
+              private projectService: ProjectService,
+              private router: Router,
+              private userService: UserService,
+              private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
     this.getProjects().then()
-    this.getAdministrators().then()
-
+    this.getAdministrators().then(x => this.loaded = true)
   }
 
   async getProjects() {
@@ -45,7 +47,6 @@ export class AdminComponent implements OnInit {
     await this.userService.getAdministrators().then(x => {
       this.administrators = x;
       this.spitAdministrators();
-      this.loaded = true;
     });
   }
 
@@ -79,10 +80,11 @@ export class AdminComponent implements OnInit {
       if (result !== 'false') {
         setTimeout(x => {
           this.listOfProjects = []
-          this.getProjects().then()
-          if (result != null) {
-            this.toastr.success(result + " is toegevoegd als nieuw project")
-          }
+          this.getProjects().then(x => {
+            if (result != null) {
+              this.toastr.success(result + " is toegevoegd als nieuw project")
+            }
+          })
         }, 500);
       }
     });
@@ -114,5 +116,9 @@ export class AdminComponent implements OnInit {
         this.toastr.success(result + " is verwijderd als administrator")
       }, 500);
     });
+  }
+
+  todo() {
+    this.toastr.warning("Deze functie moet nog geschreven worden")
   }
 }

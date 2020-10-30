@@ -23,15 +23,15 @@ export class CreateProjectComponent implements OnInit {
       this.project = this.data.project;
     }
     this.checkoutForm = this.formBuilder.group({
-      id: this.project.id!=null?this.project.id:'',
-      name: [this.project.name!=null?this.project.name:'', Validators.required],
-      address: [this.project.address!=null?this.project.address:'', Validators.required],
-      city: [this.project.city!=null?this.project.city:'', Validators.required],
-      description: [this.project.description!=null?this.project.description:'', Validators.required],
-      startDate: [this.project.startDate!=null? this.project.startDate:'', Validators.compose([Validators.required, Validator.date])],
-      endDate: [this.project.endDate!=null?this.project.endDate:'', [Validator.dateOrNull]],
-      pictureUri: this.project.pictureUri!=null?this.project.pictureUri:'',
-      websiteUrl: this.project.websiteUrl!=null?this.project.websiteUrl:''
+      id: this.project.id != null ? this.project.id : '',
+      name: [this.project.name != null ? this.project.name : '', Validators.required],
+      address: [this.project.address != null ? this.project.address : '', Validators.required],
+      city: [this.project.city != null ? this.project.city : '', Validators.required],
+      description: [this.project.description != null ? this.project.description : '', Validators.required],
+      startDate: [this.project.startDate != null ? this.project.startDate : '', Validators.compose([Validators.required, Validator.date])],
+      endDate: [this.project.endDate != null ? this.project.endDate : '', [Validator.dateOrNull]],
+      pictureUri: this.project.pictureUri != null ? this.project.pictureUri : '',
+      websiteUrl: this.project.websiteUrl != null ? this.project.websiteUrl : ''
     })
 
   }

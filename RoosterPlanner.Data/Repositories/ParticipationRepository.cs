@@ -12,7 +12,7 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IParticipationRepository : IRepository<Participation>
     {
-        Task<List<Participation>> GetActiveParticiationsAsync(Guid personGuid);
+        Task<List<Participation>> GetActiveParticipationsAsync(Guid personGuid);
     }
 
     public class ParticipationRepository : Repository<Participation>, IParticipationRepository
@@ -22,13 +22,14 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
-        public Task<List<Participation>> GetActiveParticiationsAsync(Guid personGuid)
+        public Task<List<Participation>> GetActiveParticipationsAsync(Guid personGuid)
         {
-            return this.EntitySet
-                .Include(x => x.Availabilities)
-                //.Include(x=>x.IsWantedBy)
-                .Include(x => x.WantsToWorkWith)
-                .Where(p => p.PersonId == personGuid && !p.Project.Closed)
+            return this.EntitySet.AsNoTracking().AsQueryable()
+                .Include(p=>p.Project)
+                .Include(p=>p.Person)
+                .Include(p=>p.Availabilities)
+                .Include(p=>p.WantsToWorkWith)
+                .Where(p => p.PersonId == personGuid &&!p.Project.Closed)
                 .ToListAsync();
         }
     }

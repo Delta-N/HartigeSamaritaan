@@ -16,6 +16,7 @@ import {UserService} from "../../services/user.service";
 export class ProjectComponent implements OnInit {
   guid: string;
   project: Project;
+  viewProject:Project;
   loaded: boolean = false;
   title: string;
   closeButtonText: string;
@@ -38,14 +39,12 @@ export class ProjectComponent implements OnInit {
     await this.projectService.getProject(this.guid).then(project => {
       if (project[0] != null) {
         this.project = project[0];
-        this.title = this.project.name;
-        this.project.closed?this.closeButtonText="Project openen":this.closeButtonText="Project sluiten";
-        if (this.project.closed) {
+        this.viewProject=DateConverter.formatProjectDateReadable(this.project)
+        this.title = this.viewProject.name;
+        this.viewProject.closed?this.closeButtonText="Project openen":this.closeButtonText="Project sluiten";
+        if (this.viewProject.closed) {
           this.title += " DIT PROJECT IS GESLOTEN"
         }
-      }
-      if (this.project.closed) {
-
       }
       this.loaded = true;
     })

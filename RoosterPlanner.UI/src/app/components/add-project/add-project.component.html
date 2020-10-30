@@ -1,16 +1,12 @@
 <h2 mat-dialog-title>Voeg een project toe</h2>
 
 <mat-dialog-content>
-
-
-
   <span *ngFor="let item of data">
-  <mat-checkbox class="checkBox" id="{{item.GUID}}" (change)="OnChange($event)">{{item.name}}</mat-checkbox>
+  <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnChange($event)">{{item.name}}</mat-checkbox>
   </span>
-
-
 </mat-dialog-content>
+
 <mat-dialog-actions>
-  <!--hier nog iets schrijven zodat als je op sluiten drukt de gegevens uit de array verzonden worden-->
-  <button mat-button mat-dialog-close="logica hier" id="nextButton">Volgende</button>
+  <button mat-button (click)="addParticipations()">Opslaan</button>
+  <button mat-button mat-dialog-close="false">Annuleren</button>
 </mat-dialog-actions>
