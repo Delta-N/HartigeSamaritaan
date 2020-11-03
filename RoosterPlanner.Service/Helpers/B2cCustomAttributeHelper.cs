@@ -29,5 +29,10 @@
 
             return CompleteAttributeName.Replace($"extension_{_b2cExtensionAppClientId}","");
         }
+
+        public string GetTenant()
+        {
+            return "DeltanHackaton.onmicrosoft.com";
+        }
     }
 }

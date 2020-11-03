@@ -1,9 +1,12 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectService} from "../../services/project.service";
 import {Project} from "../../models/project";
 import {Router} from "@angular/router"
 import {MatDialog} from '@angular/material/dialog';
-import{CreateProjectComponent} from "../../components/create-project/create-project.component";
+import {CreateProjectComponent} from "../../components/create-project/create-project.component";
+import {User} from "../../models/user";
+import {UserService} from "../../services/user.service";
+import {AddAdminComponent} from "../../components/add-admin/add-admin.component";
 
 
 @Component({
@@ -13,33 +16,60 @@ import{CreateProjectComponent} from "../../components/create-project/create-proj
 })
 export class AdminComponent implements OnInit {
   projects: Project[] = [];
-  listOfProjects:Project[][]=[]
-  tempList:Project[]=[];
+  listOfProjects: Project[][] = []
+  listOfAdmins: User[][] = []
+  tempListProjects: Project[] = [];
+  tempListAdmins: User[] = [];
   loaded: boolean = false;
 
-  administrators = [
-    {name: "Corné"},
-    {name: "JW"},
-    {name: "Yannick"},
-    {name: "Joanne"},
-  ]
+  administrators: User[] = []
 
-  constructor(public dialog:MatDialog,private projectService: ProjectService, private router: Router) {
+  constructor(public dialog: MatDialog, private projectService: ProjectService, private router: Router, private userService: UserService) {
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
+    this.getProjects().then()
+    this.getAdministrators().then()
+
+  }
+
+  async getProjects() {
     await this.projectService.getProject().then(x => {
       this.projects = x;
-
-      for(let i=0; i<this.projects.length; i++){
-        this.tempList.push(this.projects[i])
-        if(this.tempList.length===5||i===this.projects.length-1){
-          this.listOfProjects.push(this.tempList);
-          this.tempList=[];
-        }
-      }
-      this.loaded = true;
+      this.splitProjects();
     });
+  }
+
+  async getAdministrators() {
+    await this.userService.getAdministrators().then(x => {
+      this.administrators = x;
+      this.spitAdministrators();
+      this.loaded = true;
+
+    });
+  }
+
+  spitAdministrators() {
+    for (let i = 0; i < this.administrators.length; i++) {
+      this.tempListAdmins.push(this.administrators[i])
+      if (this.tempListAdmins.length === 5 || i === this.administrators.length - 1) {
+        this.tempListAdmins.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
+        this.listOfAdmins.push(this.tempListAdmins);
+        this.tempListAdmins.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
+        this.tempListAdmins = [];
+      }
+    }
+  }
+
+  splitProjects() {
+    for (let i = 0; i < this.projects.length; i++) {
+      this.tempListProjects.push(this.projects[i])
+      if (this.tempListProjects.length === 5 || i === this.projects.length - 1) {
+        this.tempListProjects.sort((a, b) => a.name > b.name ? 1 : -1);
+        this.listOfProjects.push(this.tempListProjects);
+        this.tempListProjects = [];
+      }
+    }
   }
 
   addProject() {
@@ -53,7 +83,27 @@ export class AdminComponent implements OnInit {
   }
 
 
-  addAdministrator() {
-    window.alert("Deze functie moet nog geschreven worden...")
+  async addAdministrator() {
+    const dialogRef = this.dialog.open(AddAdminComponent, {
+      width: '500px',
+      data: {addAdminType: true}
+    });
+    dialogRef.afterClosed().subscribe(async result => {
+      this.listOfAdmins=[];
+      this.getAdministrators().then();
+    })
+  }
+
+  removeAdministrator() {
+    const dialogRef = this.dialog.open(AddAdminComponent, {
+      width: '500px',
+      data: {addAdminType: false}
+    });
+    dialogRef.afterClosed().subscribe(async result => {
+      this.listOfAdmins=[];
+      this.getAdministrators().then();
+    });
+
+
   }
 }

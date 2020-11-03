@@ -14,7 +14,6 @@
       <a mat-button class="toolbarbutton" *ngIf="isAdmin" routerLink="/admin">Admin</a>
       <a mat-button class="toolbarbutton" routerLink="/home">Dashboard</a>
       <a mat-button class="toolbarbutton" routerLink="/profile">Profiel</a>
-      <button mat-button class="toolbarbutton" *ngIf="loggedIn" (click)="testButton()">Test Button</button>
       <button mat-button class="toolbarbutton" *ngIf="!loggedIn" (click)="login()">Login</button>
       <button mat-button class="toolbarbutton" *ngIf="loggedIn" (click)="logout()">Logout</button>
 
