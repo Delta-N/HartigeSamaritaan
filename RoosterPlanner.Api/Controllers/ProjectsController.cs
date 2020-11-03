@@ -19,8 +19,8 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly IProjectService projectService;
         private readonly ILogger logger;
+        private readonly IProjectService projectService;
 
         //Constructor
         public ProjectsController(IProjectService projectService, ILogger logger)
@@ -29,19 +29,19 @@ namespace RoosterPlanner.Api.Controllers
             this.logger = logger;
         }
 
-
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
+            if (id == Guid.Empty) return BadRequest("No valid id.");
+
             try
             {
-                if (id == Guid.Empty) return BadRequest("No valid id.");
+                var result = await projectService.GetProjectDetails(id);
 
-                TaskResult<Project> result = await projectService.GetProjectDetails(id);
+                if (!result.Succeeded)
+                    return UnprocessableEntity();
 
-                if (!result.Succeeded) return UnprocessableEntity();
-
-                ProjectDetailsViewModel projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
+                var projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
                 return Ok(projectDetailsVm);
             }
             catch (Exception ex)
@@ -61,7 +61,7 @@ namespace RoosterPlanner.Api.Controllers
             int offset = 0,
             int pageSize = 20)
         {
-            ProjectFilter filter = new ProjectFilter(offset, pageSize)
+            var filter = new ProjectFilter(offset, pageSize)
             {
                 Name = name,
                 City = city,
@@ -71,12 +71,13 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                TaskListResult<Project> result = await projectService.SearchProjectsAsync(filter);
-                if (!result.Succeeded) return UnprocessableEntity(result.Message);
+                var result = await projectService.SearchProjectsAsync(filter);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(result.Message);
 
                 Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
 
-                List<ProjectViewModel> projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
+                var projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
                     .ToList();
                 return Ok(projectVmList);
             }
@@ -100,23 +101,18 @@ namespace RoosterPlanner.Api.Controllers
             if (string.IsNullOrEmpty(projectDetails.Name))
                 return BadRequest("Name of project cannot be empty");
 
-            TaskResult<Project> result = new TaskResult<Project>();
+            var result = new TaskResult<Project>();
 
             try
             {
-                Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
+                var project = ProjectDetailsViewModel.CreateProject(projectDetails);
                 project.LastEditDate = DateTime.UtcNow;
                 var oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 project.LastEditBy = oid ?? null;
 
                 if (project.Id == Guid.Empty)
-                {
                     result = projectService.CreateProject(project);
-                }
-                else if (project.Id != Guid.Empty)
-                {
-                    result = projectService.UpdateProject(project);
-                }
+                else if (project.Id != Guid.Empty) result = projectService.UpdateProject(project);
 
                 if (result.Succeeded)
                     return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
@@ -135,7 +131,7 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPatch]
         public ActionResult UpdateProject(ProjectDetailsViewModel projectDetails)
         {
-            if (projectDetails == null)
+            if (projectDetails == null || projectDetails.Id == Guid.Empty)
                 return BadRequest("No valid project received");
 
             if (string.IsNullOrEmpty(projectDetails.Name))
@@ -143,9 +139,9 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                Project oldProject = projectService.GetProjectDetails(projectDetails.Id)
+                var oldProject = projectService.GetProjectDetails(projectDetails.Id)
                     .Result.Data;
-                Project updatedProject = ProjectDetailsViewModel.CreateProject(projectDetails);
+                var updatedProject = ProjectDetailsViewModel.CreateProject(projectDetails);
                 oldProject.Address = updatedProject.Address;
                 oldProject.City = updatedProject.City;
                 oldProject.Closed = updatedProject.Closed;
@@ -162,7 +158,7 @@ namespace RoosterPlanner.Api.Controllers
                 oldProject.LastEditDate = DateTime.UtcNow;
                 var oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldProject.LastEditBy = oid ?? null;
-                TaskResult<Project> result = projectService.UpdateProject(oldProject);
+                var result = projectService.UpdateProject(oldProject);
                 if (!result.Succeeded) return UnprocessableEntity();
                 return Ok(result);
             }
@@ -173,18 +169,6 @@ namespace RoosterPlanner.Api.Controllers
             }
 
             return NoContent();
-        }
-
-
-        [HttpPost("{id}/addperson/{personId}")]
-        public ActionResult AddPerson(Guid id, Guid personId)
-        {
-            if (id == Guid.Empty)
-                return BadRequest("id");
-
-            if (projectService.AddPersonToProject(id, personId) == 1)
-                return Ok();
-            return UnprocessableEntity();
         }
     }
 }

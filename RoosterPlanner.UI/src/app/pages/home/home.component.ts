@@ -9,6 +9,7 @@ import {User} from "../../models/user";
 import {ParticipationService} from "../../services/participation.service";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
+import {EntityHelper} from "../../helpers/entity-helper";
 
 @Component({
   selector: 'app-home',
@@ -78,7 +79,7 @@ export class HomeComponent implements OnInit {
           if (result !== 'false') {
             this.selectedProjects = result;
             this.selectedProjects.forEach(project => {
-              let participation: Participation = new Participation("00000000-0000-0000-0000-000000000000", this.currentUser, project)
+              let participation: Participation = new Participation(EntityHelper.returnEmptyGuid(), this.currentUser, project)
               this.participationService.postParticipation(participation);
             })
             setTimeout(x => this.getParticipations(), 1000)
@@ -87,7 +88,7 @@ export class HomeComponent implements OnInit {
       })
     } else {
       this.toastr.warning("Vul eerst je profiel aan.")
-      this.route.navigateByUrl('/profile')
+      this.route.navigateByUrl('/profile').then()
     }
   }
 }

@@ -23,9 +23,9 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
+        private readonly AzureAuthenticationConfig azureB2CConfig;
         private readonly ILogger logger;
         private readonly IPersonService personService;
-        private readonly AzureAuthenticationConfig azureB2CConfig;
 
         //Constructor
         public PersonsController(IPersonService personService, ILogger logger,
@@ -39,20 +39,17 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
+            if (id == Guid.Empty)
+                return BadRequest("No valid id.");
             try
             {
-                TaskResult<User> result = new TaskResult<User>();
-                if (id == Guid.Empty) return BadRequest("No valid id.");
+                var result = new TaskResult<User>();
                 var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
                 if (id.ToString() == oid || UserHasRole(oid, UserRole.Boardmember))
-                {
                     result = await personService.GetUser(id);
-                }
                 else
-                {
                     return Unauthorized();
-                }
 
                 if (!result.Succeeded) return UnprocessableEntity();
 
@@ -108,10 +105,10 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPatch]
         public async Task<ActionResult> UpdateUser([FromBody] PersonViewModel personViewModel)
         {
+            if (personViewModel == null || personViewModel.Id == Guid.Empty)
+                return BadRequest("Invalid User");
             try
             {
-                if (personViewModel == null) return BadRequest("Invalid User");
-
                 var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 if (oid == null) return BadRequest("Invalid User");
 
@@ -141,26 +138,25 @@ namespace RoosterPlanner.Api.Controllers
             return NoContent();
         }
 
-
         [Authorize(Policy = "Boardmember")]
         [HttpPatch("modifyadmin/{oid}/{modifier}")]
         public async Task<ActionResult> ModAdmin(Guid oid, int modifier)
         {
+            if (oid == Guid.Empty)
+                return BadRequest("No valid id.");
             try
             {
-                if (oid == Guid.Empty) return BadRequest("No valid id.");
-
                 //check if user exists
                 var result = await personService.GetUser(oid);
 
-                if (!result.Succeeded) return UnprocessableEntity();
+                if (!result.Succeeded)
+                    return UnprocessableEntity();
 
                 var user = new User
                 {
                     AdditionalData = new Dictionary<string, object>(),
                     Id = oid.ToString()
                 };
-
 
                 user.AdditionalData.Add(Extensions.GetInstance(azureB2CConfig).UserRoleExtension, modifier);
                 result = await personService.UpdatePerson(user);
@@ -170,7 +166,6 @@ namespace RoosterPlanner.Api.Controllers
                         PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
                     return Ok(personVm);
                 }
-
 
                 return UnprocessableEntity();
             }
@@ -200,9 +195,7 @@ namespace RoosterPlanner.Api.Controllers
             var okObjectResult = (OkObjectResult) currentUserActionResult.Result;
             if (okObjectResult.Value is PersonViewModel currentUser &&
                 currentUser.UserRole == userRole.ToString())
-            {
                 return true;
-            }
 
             return false;
         }

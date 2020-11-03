@@ -5,6 +5,7 @@ import {HttpResponse} from "@angular/common/http";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {DateConverter} from "../helpers/date-converter";
 import {ToastrService} from "ngx-toastr";
+import {EntityHelper} from "../helpers/entity-helper";
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +53,7 @@ export class ProjectService {
       return null;
     }
     if (project.id === null || project.id === "") {
-      project.id = "00000000-0000-0000-0000-000000000000"
+      project.id = EntityHelper.returnEmptyGuid()
     }
     if (project.endDate !== null) {
       if (project.endDate === undefined || project.endDate.toString() === "") {

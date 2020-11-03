@@ -28,21 +28,6 @@ namespace RoosterPlanner.Service
 
     public class AzureB2CService : IAzureB2CService
     {
-        #region Fields
-
-        private readonly AzureAuthenticationConfig azureB2CConfig;
-        private GraphServiceClient graphServiceClient;
-        private DateTime graphServiceClientTimestamp;
-        private IUnitOfWork unitOfWork;
-        private IPersonRepository personRepository;
-        private readonly ILogger logger;
-
-
-        private const string GraphSelectList =
-            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
-
-        #endregion
-
         //Constructor
         public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
             ILogger logger)
@@ -52,7 +37,6 @@ namespace RoosterPlanner.Service
             personRepository = unitOfWork.PersonRepository;
             this.logger = logger;
         }
-
 
         public async Task<User> GetUserAsync(Guid userId)
         {
@@ -143,17 +127,13 @@ namespace RoosterPlanner.Service
                 }
 
                 if (users.Count == 0) throw new NullReferenceException("No users found");
-                foreach (var user in users)
-                {
-                    AddPersonToLocalDb(user);
-                }
+                foreach (var user in users) AddPersonToLocalDb(user);
 
                 result.StatusCode = HttpStatusCode.OK;
                 result.Succeeded = true;
                 result.Data = users;
                 return result;
             }
-
 
             catch (ServiceException graphEx)
             {
@@ -173,7 +153,7 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult<User>> UpdateUserAsync(User user)
         {
-            if (user == null)
+            if (user == null || user.Id == null || Guid.Parse(user.Id) == Guid.Empty)
                 throw new ArgumentNullException(nameof(user));
 
             var updatedUser = new TaskResult<User>();
@@ -221,7 +201,6 @@ namespace RoosterPlanner.Service
             return graphServiceClient;
         }
 
-
         /// <summary>
         ///     Builds a GraphServiceClient object with bearer token added as Authorization header.
         /// </summary>
@@ -253,12 +232,12 @@ namespace RoosterPlanner.Service
 
         private void AddPersonToLocalDb(User user)
         {
-            if (user.Id == null)
-                throw new ArgumentNullException("id");
-            TaskResult<Person> result = new TaskResult<Person>();
+            if (user == null || user.Id == null)
+                throw new ArgumentNullException(nameof(user));
+            var result = new TaskResult<Person>();
             try
             {
-                Person person = personRepository.GetPersonByOidAsync(Guid.Parse(user.Id)).Result;
+                var person = personRepository.GetPersonByOidAsync(Guid.Parse(user.Id)).Result;
                 if (person == null)
                 {
                     person = new Person(Guid.Parse(user.Id)) {firstName = user.GivenName, Oid = Guid.Parse(user.Id)};
@@ -289,5 +268,19 @@ namespace RoosterPlanner.Service
 
             [JsonProperty("value")] public List<User> Value { get; set; }
         }
+
+        #region Fields
+
+        private readonly AzureAuthenticationConfig azureB2CConfig;
+        private GraphServiceClient graphServiceClient;
+        private DateTime graphServiceClientTimestamp;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IPersonRepository personRepository;
+        private readonly ILogger logger;
+
+        private const string GraphSelectList =
+            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
+
+        #endregion
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Graph;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
@@ -12,24 +11,15 @@ namespace RoosterPlanner.Service
     public interface IParticipationService
     {
         Task<TaskResult<Participation>> AddParticipationAsync(Participation participation);
-        Task<TaskListResult<Participation>> GetUserParticipations(Guid personGuid);
+        Task<TaskListResult<Participation>> GetUserParticipations(Guid personId);
         TaskResult<Participation> GetParticipation(Guid participationId);
-        Task<TaskResult<Participation>> GetParticipation(Guid personGuid, Guid projectGuid);
+        Task<TaskResult<Participation>> GetParticipation(Guid personId, Guid projectId);
         Task<TaskResult<Participation>> RemoveParticipation(Participation participation);
         Task<TaskResult<Participation>> UpdateParticipation(Participation participation);
     }
 
     public class ParticipationService : IParticipationService
     {
-        #region Fields
-
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IParticipationRepository participationRepository;
-        private readonly IAzureB2CService azureB2CService;
-        private readonly ILogger logger;
-
-        #endregion
-
         //private readonly Data.Context.RoosterPlannerContext dataContext = null;
 
         //Constructor
@@ -42,7 +32,7 @@ namespace RoosterPlanner.Service
         }
 
         /// <summary>
-        /// Returns a list of open projects.
+        ///     Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
         public async Task<TaskResult<Participation>> AddParticipationAsync(Participation participation)
@@ -51,17 +41,11 @@ namespace RoosterPlanner.Service
 
             try
             {
-                User person = await azureB2CService.GetUserAsync(participation.PersonId);
-                if (person == null)
-                {
-                    throw new Exception("Who Are You?");
-                }
+                var person = await azureB2CService.GetUserAsync(participation.PersonId);
+                if (person == null) throw new Exception("Who Are You?");
 
                 var project = await unitOfWork.ProjectRepository.GetAsync(participation.ProjectId);
-                if (project == null)
-                {
-                    throw new Exception("Wait? What project?");
-                }
+                if (project == null) throw new Exception("Wait? What project?");
 
                 participation.Person = null;
                 participation.Project = null;
@@ -79,15 +63,15 @@ namespace RoosterPlanner.Service
         }
 
         /// <summary>
-        /// Returns a list of participations that the user is registerd for
+        ///     Returns a list of participations that the user is registerd for
         /// </summary>
         /// <returns>Returns a list of participations.</returns>
-        public async Task<TaskListResult<Participation>> GetUserParticipations(Guid personGuid)
+        public async Task<TaskListResult<Participation>> GetUserParticipations(Guid personId)
         {
-            TaskListResult<Participation> result = TaskListResult<Participation>.CreateDefault();
+            var result = TaskListResult<Participation>.CreateDefault();
             try
             {
-                result.Data = await participationRepository.GetActiveParticipationsAsync(personGuid);
+                result.Data = await participationRepository.GetActiveParticipationsAsync(personId);
                 result.Succeeded = true;
             }
             catch (Exception e)
@@ -102,7 +86,7 @@ namespace RoosterPlanner.Service
 
         public TaskResult<Participation> GetParticipation(Guid participationId)
         {
-            TaskResult<Participation> result = new TaskResult<Participation>();
+            var result = new TaskResult<Participation>();
             try
             {
                 result.Data = participationRepository.Get(participationId);
@@ -118,12 +102,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
-        public async Task<TaskResult<Participation>> GetParticipation(Guid personGuid, Guid projectGuid)
+        public async Task<TaskResult<Participation>> GetParticipation(Guid personId, Guid projectId)
         {
-            TaskResult<Participation> result = new TaskResult<Participation>();
+            var result = new TaskResult<Participation>();
             try
             {
-                Participation x = await participationRepository.GetSpecificParticipation(personGuid, projectGuid);
+                var x = await participationRepository.GetSpecificParticipation(personId, projectId);
                 if (x != null)
                 {
                     result.Data = x;
@@ -142,7 +126,7 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult<Participation>> RemoveParticipation(Participation participation)
         {
-            TaskResult<Participation> result = new TaskResult<Participation>();
+            var result = new TaskResult<Participation>();
             try
             {
                 result.Data = unitOfWork.ParticipationRepository.Remove(participation);
@@ -175,5 +159,14 @@ namespace RoosterPlanner.Service
 
             return taskResult;
         }
+
+        #region Fields
+
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IParticipationRepository participationRepository;
+        private readonly IAzureB2CService azureB2CService;
+        private readonly ILogger logger;
+
+        #endregion
     }
 }

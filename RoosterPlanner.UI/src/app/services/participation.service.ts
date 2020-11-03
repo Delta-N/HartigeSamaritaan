@@ -5,6 +5,7 @@ import {Participation} from "../models/participation";
 import {HttpResponse} from "@angular/common/http";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {DateConverter} from "../helpers/date-converter";
+import {EntityHelper} from "../helpers/entity-helper";
 
 @Injectable({
   providedIn: 'root'
@@ -17,17 +18,16 @@ export class ParticipationService {
   constructor(private apiService: ApiService, private toastr: ToastrService) {
   }
 
-  async getParticipations(userGuid: string): Promise<Participation[]> {
-    await this.apiService.get<HttpResponse<Participation[]>>(`${HttpRoutes.participationApiUrl}?personGuid=${userGuid}`).toPromise().then(response => {
+  async getParticipations(userId: string): Promise<Participation[]> {
+    await this.apiService.get<HttpResponse<Participation[]>>(`${HttpRoutes.participationApiUrl}/${userId}`).toPromise().then(response => {
       this.participations = response.body;
     }, Error => {
-      //hoe worden errors traditioneel gelogt?
     })
     return this.participations
   }
 
-  async getParticipation(userGuid: string, projectGuid) {
-    await this.apiService.get<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}/GetParticipation/${userGuid}/${projectGuid}`).toPromise().then(response => {
+  async getParticipation(userId: string, projectId) {
+    await this.apiService.get<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}/GetParticipation/${userId}/${projectId}`).toPromise().then(response => {
       this.participation = response.body;
     }, Error => {
     })
@@ -45,7 +45,7 @@ export class ParticipationService {
     }
 
     if (participation.id === null || participation.id === "") {
-      participation.id = "00000000-0000-0000-0000-000000000000";
+      participation.id = EntityHelper.returnEmptyGuid();
     }
     if (participation.maxWorkingHoursPerWeek > 40) {
       participation.maxWorkingHoursPerWeek = 40;
@@ -57,7 +57,7 @@ export class ParticipationService {
     if (participation === null) {
       this.toastr.error("Fout tijdens het uitschrijven bij een projcet")
     }
-    return this.apiService.delete<HttpResponse<Number>>(`${HttpRoutes.participationApiUrl}?id=${participation.id}`).toPromise().then();
+    return this.apiService.delete<HttpResponse<Number>>(`${HttpRoutes.participationApiUrl}/${participation.id}`).toPromise().then();
   }
 
   updateParticipation(participation: Participation) {

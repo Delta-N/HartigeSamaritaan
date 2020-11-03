@@ -12,8 +12,8 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IParticipationRepository : IRepository<Participation>
     {
-        Task<List<Participation>> GetActiveParticipationsAsync(Guid personGuid);
-        Task<Participation> GetSpecificParticipation(Guid personGuid, Guid projectGuid);
+        Task<List<Participation>> GetActiveParticipationsAsync(Guid personId);
+        Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId);
     }
 
     public class ParticipationRepository : Repository<Participation>, IParticipationRepository
@@ -23,25 +23,25 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
-        public Task<List<Participation>> GetActiveParticipationsAsync(Guid personGuid)
+        public Task<List<Participation>> GetActiveParticipationsAsync(Guid personId)
         {
-            return this.EntitySet.AsNoTracking().AsQueryable()
+            return EntitySet.AsNoTracking().AsQueryable()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
                 .Include(p => p.Availabilities)
                 .Include(p => p.WantsToWorkWith)
-                .Where(p => p.PersonId == personGuid && !p.Project.Closed)
+                .Where(p => p.PersonId == personId && !p.Project.Closed)
                 .ToListAsync();
         }
 
-        public Task<Participation> GetSpecificParticipation(Guid personGuid, Guid projectGuid)
+        public Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId)
         {
-            return this.EntitySet.AsNoTracking().AsQueryable()
+            return EntitySet.AsNoTracking().AsQueryable()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
                 .Include(p => p.Availabilities)
                 .Include(p => p.WantsToWorkWith)
-                .Where(p => p.PersonId == personGuid && p.ProjectId == projectGuid)
+                .Where(p => p.PersonId == personId && p.ProjectId == projectId)
                 .FirstOrDefaultAsync();
         }
     }
