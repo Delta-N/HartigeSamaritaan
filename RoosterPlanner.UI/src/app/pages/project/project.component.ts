@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectService} from "../../services/project.service";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Project} from "../../models/project";
@@ -40,7 +40,11 @@ export class ProjectComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    await this.getParticipation().then();
+    if (this.isAdmin) {
+      await this.getProject().then();
+    } else {
+      await this.getParticipation().then();
+    }
   }
 
   async getProject() {
