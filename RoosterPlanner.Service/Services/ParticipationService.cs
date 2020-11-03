@@ -11,10 +11,12 @@ namespace RoosterPlanner.Service
 {
     public interface IParticipationService
     {
-        Task<TaskResult<Participation>> AddParticipationAsync(Guid oid, Guid projectId);
+        Task<TaskResult<Participation>> AddParticipationAsync(Participation participation);
         Task<TaskListResult<Participation>> GetUserParticipations(Guid personGuid);
         TaskResult<Participation> GetParticipation(Guid participationId);
+        Task<TaskResult<Participation>> GetParticipation(Guid personGuid, Guid projectGuid);
         Task<TaskResult<Participation>> RemoveParticipation(Participation participation);
+        Task<TaskResult<Participation>> UpdateParticipation(Participation participation);
     }
 
     public class ParticipationService : IParticipationService
@@ -43,31 +45,26 @@ namespace RoosterPlanner.Service
         /// Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskResult<Participation>> AddParticipationAsync(Guid oid, Guid projectId)
+        public async Task<TaskResult<Participation>> AddParticipationAsync(Participation participation)
         {
             var taskResult = new TaskResult<Participation>();
 
             try
             {
-                User person = await azureB2CService.GetUserAsync(oid);
+                User person = await azureB2CService.GetUserAsync(participation.PersonId);
                 if (person == null)
                 {
-                    //TODO: change exception
                     throw new Exception("Who Are You?");
                 }
 
-                var project = await unitOfWork.ProjectRepository.GetAsync(projectId);
+                var project = await unitOfWork.ProjectRepository.GetAsync(participation.ProjectId);
                 if (project == null)
                 {
-                    //TODO: change exception
                     throw new Exception("Wait? What project?");
                 }
 
-                Participation participation = new Participation()
-                {
-                    ProjectId = projectId,
-                    PersonId = Guid.Parse(person.Id)
-                };
+                participation.Person = null;
+                participation.Project = null;
 
                 taskResult.Data = unitOfWork.ParticipationRepository.Add(participation);
                 taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
@@ -121,6 +118,28 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        public async Task<TaskResult<Participation>> GetParticipation(Guid personGuid, Guid projectGuid)
+        {
+            TaskResult<Participation> result = new TaskResult<Participation>();
+            try
+            {
+                Participation x = await participationRepository.GetSpecificParticipation(personGuid, projectGuid);
+                if (x != null)
+                {
+                    result.Data = x;
+                    result.Succeeded = true;
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, "Error loading participations");
+                result.Error = e;
+                result.Succeeded = false;
+            }
+
+            return result;
+        }
+
         public async Task<TaskResult<Participation>> RemoveParticipation(Participation participation)
         {
             TaskResult<Participation> result = new TaskResult<Participation>();
@@ -137,6 +156,24 @@ namespace RoosterPlanner.Service
             }
 
             return result;
+        }
+
+        public async Task<TaskResult<Participation>> UpdateParticipation(Participation participation)
+        {
+            var taskResult = new TaskResult<Participation>();
+
+            try
+            {
+                taskResult.Data = unitOfWork.ParticipationRepository.Update(participation);
+                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Error adding participation");
+                taskResult.Error = ex;
+            }
+
+            return taskResult;
         }
     }
 }

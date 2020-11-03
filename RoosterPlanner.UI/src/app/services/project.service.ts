@@ -34,11 +34,12 @@ export class ProjectService {
     }
     return this.projects
   }
-  async getActiveProjects():Promise<Project[]>{
-    this.projects=[]
-    await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?closed=false`).toPromise().then(response=>{
-      this.projects=response.body;
-      this.projects.forEach(project=>{
+
+  async getActiveProjects(): Promise<Project[]> {
+    this.projects = []
+    await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?closed=false`).toPromise().then(response => {
+      this.projects = response.body;
+      this.projects.forEach(project => {
       })
     })
 
@@ -92,7 +93,6 @@ export class ProjectService {
 
     if (project.startDate.toString() !== "") {
       try {
-
         project.startDate = DateConverter.toDate(project.startDate);
       } catch (e) {
         this.toastr.error(e)
@@ -102,7 +102,7 @@ export class ProjectService {
     return this.apiService.patch<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise()
   }
 
-  getParticipations(guid:string){
+  getParticipations(guid: string) {
     if (guid === null) {
       this.toastr.error("Fout tijdens het laden van participations")
       return null;

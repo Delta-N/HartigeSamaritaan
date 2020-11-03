@@ -9,7 +9,7 @@ export class Project extends Entity {
   public startDate: Date;
   public endDate?: Date;
   public pictureUri?: string;
-  public websiteUrl?: string;     //TODO waarom websiteUri?
+  public websiteUrl?: string;
   public closed?: boolean;
 
 

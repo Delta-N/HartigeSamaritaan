@@ -39,6 +39,7 @@ import {AddAdminComponent} from './components/add-admin/add-admin.component';
 import {FilterPipe} from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 function MSALConfigFactory(): Configuration {
   return msalConfig;
@@ -62,7 +63,8 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     AddAdminComponent,
     FilterPipe,
     ChangeProfileComponent,
-    ProjectComponent
+    ProjectComponent,
+    ConfirmDialogComponent
 
   ],
   imports: [

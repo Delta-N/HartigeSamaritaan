@@ -1,4 +1,4 @@
-*{
+* {
   text-align: left;
   font: normal normal normal 35px/50px Segoe UI;
   letter-spacing: 0;
@@ -13,7 +13,8 @@
   border-bottom: 1px solid gray;
 
 }
-.row{
+
+.row {
   display: flex;
   align-items: center;
 }
@@ -21,24 +22,29 @@
 #push {
   margin-left: auto;
 }
-a:hover{
+
+a:hover {
   color: #434343;
   text-decoration-line: none;
 }
-a{
-  color:#434343;
+
+a {
+  color: #434343;
 }
-.mat-button{
+
+.mat-button {
   font: normal normal normal 17px/17px Segoe UI;
-  padding-top:5px;
-  padding-bottom:5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 
   background: #F1F1F1 0 0 no-repeat padding-box;
   border: 1px solid #707070;
   border-radius: 5px;
   opacity: 1;
 }
-.row-name{  text-align: left;
+
+.row-name {
+  text-align: left;
   min-width: 250px;
   font: normal normal normal 30px Segoe UI;
   letter-spacing: 0;
@@ -46,10 +52,20 @@ a{
   opacity: 1;
 
 }
-.user-data{
+
+.user-data {
   text-align: left;
   font: normal normal normal 24px/45px Segoe UI;
   letter-spacing: 0;
   color: #000000;
   opacity: 1;
+}
+
+.data-row {
+  display: flex;
+  margin-top: 36px
+}
+
+.edit {
+  background-color: #DDFCE0
 }

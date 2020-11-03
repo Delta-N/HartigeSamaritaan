@@ -108,9 +108,6 @@ namespace RoosterPlanner.Data.Common
             if (entity.Id == Guid.Empty)
                 entity.SetKey(Guid.NewGuid());
 
-            entity.LastEditBy = "System";
-            entity.LastEditDate = DateTime.UtcNow;
-
             entry = this.EntitySet.Add(entity);
 
             return entry.Entity;
@@ -141,8 +138,6 @@ namespace RoosterPlanner.Data.Common
                 }
                 throw valEx;
             }
-            entity.LastEditBy = "System";
-            entity.LastEditDate = DateTime.UtcNow;
 
             EntityEntry<TEntity> entry = this.EntitySet.Attach(entity);
             entry.State = EntityState.Modified;
@@ -192,7 +187,6 @@ namespace RoosterPlanner.Data.Common
                 attachedEntity = this.EntitySet.Local.SingleOrDefault(e => e.Id.Equals(entity.Id));
                 if (attachedEntity != null)
                 {
-                    entity.LastEditDate = DateTime.UtcNow;
                     this.DataContext.Entry<TEntity>(attachedEntity).CurrentValues.SetValues(entity);
                 }
                 else
@@ -208,8 +202,6 @@ namespace RoosterPlanner.Data.Common
 
             if (attachedEntity == null)
             {
-                entity.LastEditBy = "System";
-                entity.LastEditDate = DateTime.UtcNow;
             }
 
             return entity;

@@ -5,40 +5,46 @@
     </div>
   </div>
 
-  <div class="container" style="min-height: 65vh;">
+  <div class="container">
 
-    <div style="display: flex; margin-top:36px">
+    <div class="data-row">
       <div class="row-name">Adres:</div>
       <div class="user-data">{{viewProject.address}}</div>
     </div>
-    <div style="display: flex; margin-top:36px">
+    <div class="data-row">
       <div class="row-name">Stad:</div>
       <div class="user-data">{{viewProject.city}}</div>
     </div>
-    <div style="display: flex; margin-top:36px">
+    <div class="data-row">
       <div class="row-name">Omschrijving:</div>
       <div class="user-data">{{viewProject.description}}</div>
     </div>
-    <div style="display: flex; margin-top:36px">
+    <div class="data-row">
       <div class="row-name">Start datum:</div>
       <div class="user-data">{{viewProject.startDate}}</div>
     </div>
-    <div style="display: flex; margin-top:36px">
+    <div class="data-row">
       <div class="row-name">Eind datum:</div>
       <div class="user-data">{{viewProject.endDate}}</div>
     </div>
-    <div style="display: flex; margin-top:36px">
+    <div class="data-row">
       <div class="row-name">Afbeelding URL:</div>
       <div class="user-data">{{viewProject.pictureUri}}</div>
     </div>
-    <div style="display: flex; margin-top:36px">
+    <div class="data-row">
       <div class="row-name">Website:</div>
       <div class="user-data">{{viewProject.websiteUrl}}</div>
     </div>
+    <div *ngIf="!isAdmin && this.participation!=null" class="data-row">
+      <div class="row-name">Max uur per week:</div>
+      <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
+    </div>
+  </div>
+  <div class="container" *ngIf="!isAdmin&& this.participation!=null">
+    <a (click)="editWorkingHours()" mat-button class="edit">Max werkuren wijzigen</a>
   </div>
   <div class="container" *ngIf="isAdmin">
-
-    <a (click)="editProject()" mat-button style="background-color: #DDFCE0">Project wijzigen</a>
-    <a (click)="closeProject()" mat-button style="background-color: #DDFCE0">{{closeButtonText}}</a>
+    <a (click)="editProject()" mat-button class="edit">Project wijzigen</a>
+    <a (click)="closeProject()" mat-button class="edit">{{closeButtonText}}</a>
   </div>
 </div>

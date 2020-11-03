@@ -17,7 +17,7 @@ namespace RoosterPlanner.Service
         Task<TaskResult<User>> GetUser(Guid id);
         Task<TaskListResult<User>> GetB2CMembers(PersonFilter filter);
 
-        Task<TaskResult<User>> UpdatePerson(User user, Guid dataId);
+        Task<TaskResult<User>> UpdatePerson(User user);
     }
 
     public class PersonService : IPersonService
@@ -95,12 +95,12 @@ namespace RoosterPlanner.Service
         ///     Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskResult<User>> UpdatePerson(User user, Guid guid)
+        public async Task<TaskResult<User>> UpdatePerson(User user)
         {
             var taskResult = new TaskResult<User>();
             try
             {
-                var person = await azureB2CService.UpdateUserAsync(user, guid);
+                var person = await azureB2CService.UpdateUserAsync(user);
                 taskResult.Succeeded = person.Succeeded;
                 if (taskResult.Succeeded)
                 {

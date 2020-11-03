@@ -8,7 +8,7 @@ export class DateConverter {
 
     this.date = new Date();
     const offset = this.date.getTimezoneOffset();
-    return new Date(year, month - 1, day,(offset*-1/60)+1); //+1 to compensate daylight saving //todo prio low
+    return new Date(year, month - 1, day,(offset*-1/60)+1); //+1 to compensate daylight saving
   }
 //alle dates worden alleen naar de gebruiker toe geconverteerd naar een leesbarevorm
   static toReadableString(date:string){

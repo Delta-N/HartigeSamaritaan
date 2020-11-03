@@ -68,10 +68,13 @@ export class UserService {
   }
 
   async getCurrentUser() {
+    return this.getUser(this.getCurrentUserId());
+  }
+  getCurrentUserId(){
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
     if (idToken === null) {
       return false;
     }
-    return this.getUser(idToken.oid);
+    return idToken.oid;
   }
 }

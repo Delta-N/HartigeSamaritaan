@@ -46,7 +46,7 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [HttpPost("setparticipation/{oid}/{projectId}")]
-        public async Task<ActionResult> SetParticipation(Guid oid, Guid projectId)
+        public ActionResult SetParticipation(Guid oid, Guid projectId)
         {
            // await ParticipationService.AddParticipationAsync(oid, projectId);
             return Ok();
@@ -61,7 +61,6 @@ namespace RoosterPlanner.Api.Controllers
             }
 
             var user = await AzureB2CService.GetUserAsync(oid);
-            //TODO: NODIG?
             //await PersonService.UpdatePersonName(oid, user.Data.DisplayName);
 
             return Ok();

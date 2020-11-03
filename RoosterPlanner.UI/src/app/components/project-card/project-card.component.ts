@@ -3,6 +3,8 @@ import {UserService} from "../../services/user.service";
 import {ParticipationService} from "../../services/participation.service";
 import {Participation} from "../../models/participation";
 import {ToastrService} from "ngx-toastr";
+import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/confirm-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-project-card',
@@ -14,7 +16,8 @@ export class ProjectCardComponent implements OnInit {
 
   constructor(private toastr: ToastrService,
               private userService: UserService,
-              private participationService: ParticipationService) {
+              private participationService: ParticipationService,
+              public dialog: MatDialog) {
   }
 
   @Input() participation: Participation;
@@ -24,13 +27,24 @@ export class ProjectCardComponent implements OnInit {
   }
 
   removeParticipation(participation: Participation) {
-    this.participationService.deleteParticipation(participation).then(
-      response => {
-        if (response.body !== null) {
-          window.location.reload();
-        }
+    const message = "Weet je zeker dat je wilt uitschrijven voor dit project?"
+    const dialogData = new ConfirmDialogModel("Bevestig uitschrijving", message, "ConfirmationInput");
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult === true) {
+        this.participationService.deleteParticipation(participation).then(
+          response => {
+            if (response.body !== null) {
+              window.location.reload();
+            }
+          }
+        );
       }
-    );
+    });
   }
 
   todo() {

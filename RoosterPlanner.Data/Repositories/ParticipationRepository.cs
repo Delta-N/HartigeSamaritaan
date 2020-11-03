@@ -13,6 +13,7 @@ namespace RoosterPlanner.Data.Repositories
     public interface IParticipationRepository : IRepository<Participation>
     {
         Task<List<Participation>> GetActiveParticipationsAsync(Guid personGuid);
+        Task<Participation> GetSpecificParticipation(Guid personGuid, Guid projectGuid);
     }
 
     public class ParticipationRepository : Repository<Participation>, IParticipationRepository
@@ -25,12 +26,23 @@ namespace RoosterPlanner.Data.Repositories
         public Task<List<Participation>> GetActiveParticipationsAsync(Guid personGuid)
         {
             return this.EntitySet.AsNoTracking().AsQueryable()
-                .Include(p=>p.Project)
-                .Include(p=>p.Person)
-                .Include(p=>p.Availabilities)
-                .Include(p=>p.WantsToWorkWith)
-                .Where(p => p.PersonId == personGuid &&!p.Project.Closed)
+                .Include(p => p.Project)
+                .Include(p => p.Person)
+                .Include(p => p.Availabilities)
+                .Include(p => p.WantsToWorkWith)
+                .Where(p => p.PersonId == personGuid && !p.Project.Closed)
                 .ToListAsync();
+        }
+
+        public Task<Participation> GetSpecificParticipation(Guid personGuid, Guid projectGuid)
+        {
+            return this.EntitySet.AsNoTracking().AsQueryable()
+                .Include(p => p.Project)
+                .Include(p => p.Person)
+                .Include(p => p.Availabilities)
+                .Include(p => p.WantsToWorkWith)
+                .Where(p => p.PersonId == personGuid && p.ProjectId == projectGuid)
+                .FirstOrDefaultAsync();
         }
     }
 }

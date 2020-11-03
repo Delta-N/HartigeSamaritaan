@@ -13,7 +13,6 @@ using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
-using RoosterPlanner.Service.Helpers;
 using Person = RoosterPlanner.Models.Person;
 
 namespace RoosterPlanner.Service
@@ -24,7 +23,7 @@ namespace RoosterPlanner.Service
 
         Task<TaskResult<IEnumerable<User>>> GetAllUsersAsync(PersonFilter filter);
 
-        Task<TaskResult<User>> UpdateUserAsync(User user, Guid guid);
+        Task<TaskResult<User>> UpdateUserAsync(User user);
     }
 
     public class AzureB2CService : IAzureB2CService
@@ -64,12 +63,10 @@ namespace RoosterPlanner.Service
 
             try
             {
-                var
-                    helper = new B2cCustomAttributeHelper(azureB2CConfig.B2CExtentionApplicationId);
                 var graphService = GetGraphServiceClient();
-                var userRole = helper.GetCompleteAttributeName("UserRole");
-                var dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
-                var phoneNumber = helper.GetCompleteAttributeName("PhoneNumber");
+                var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
+                var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
+                var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
 
                 user = await graphService.Users[userId.ToString()].Request()
                     .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
@@ -97,13 +94,11 @@ namespace RoosterPlanner.Service
                 if (string.IsNullOrEmpty(azureB2CConfig.B2CExtentionApplicationId))
                     throw new ArgumentException("B2CExtensionApplicationId is null");
 
-                var
-                    helper = new B2cCustomAttributeHelper(azureB2CConfig.B2CExtentionApplicationId);
                 var graphService = GetGraphServiceClient();
-                var userRole = helper.GetCompleteAttributeName("UserRole");
-                var dateOfBirth = helper.GetCompleteAttributeName("DateOfBirth");
-                var phoneNumber = helper.GetCompleteAttributeName("PhoneNumber");
-                var tenant = helper.GetTenant();
+                var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
+                var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_dateOfBirth";
+                var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_phoneNumber";
+                var tenant = azureB2CConfig.AzureTenantName;
 
                 var filterString = "";
 
@@ -176,17 +171,22 @@ namespace RoosterPlanner.Service
             }
         }
 
-        public async Task<TaskResult<User>> UpdateUserAsync(User user, Guid guid)
+        public async Task<TaskResult<User>> UpdateUserAsync(User user)
         {
-            if (user == null || guid == Guid.Empty)
+            if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
             var updatedUser = new TaskResult<User>();
             try
             {
                 var graphService = GetGraphServiceClient();
-                updatedUser.Data = await graphService.Users[guid.ToString()].Request().UpdateAsync(user);
-                updatedUser.Succeeded = true;
+                updatedUser.Data = await graphService.Users[user.Id].Request().UpdateAsync(user);
+                if (updatedUser.Data == null)
+                {
+                    //UpdateAsync has a bug so manully get user
+                    updatedUser.Data = GetUserAsync(Guid.Parse(user.Id)).Result;
+                    updatedUser.Succeeded = true;
+                }
             }
             catch (ServiceException graphEx)
             {
@@ -200,6 +200,7 @@ namespace RoosterPlanner.Service
                 updatedUser.Message = "Error during patching of user";
                 throw ex;
             }
+
             AddPersonToLocalDb(updatedUser.Data);
             return updatedUser;
         }
@@ -266,6 +267,8 @@ namespace RoosterPlanner.Service
                 else if (person.firstName != user.GivenName)
                 {
                     person.firstName = user.GivenName;
+                    person.LastEditDate = DateTime.UtcNow;
+                    person.LastEditBy = "SYSTEM";
                     personRepository.Update(person);
                 }
 

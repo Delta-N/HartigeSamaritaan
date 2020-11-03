@@ -19,6 +19,10 @@ h1 {
   justify-content: flex-start;
 }
 
+.container {
+  min-height: 65vh;
+}
+
 .bar {
   display: flex;
   align-items: center;

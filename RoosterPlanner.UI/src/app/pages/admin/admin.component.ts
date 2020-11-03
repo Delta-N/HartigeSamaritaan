@@ -17,12 +17,13 @@ import {ToastrService} from "ngx-toastr";
 })
 export class AdminComponent implements OnInit {
   projects: Project[] = [];
-  listOfProjects: Project[][] = []
-  listOfAdmins: User[][] = []
+  listOfProjects: any = []
+  listOfAdmins: any = []
   tempListProjects: Project[] = [];
   tempListAdmins: User[] = [];
   loaded: boolean = false;
   administrators: User[] = []
+  itemsPerCard:number=5;
 
   constructor(public dialog: MatDialog,
               private projectService: ProjectService,
@@ -53,7 +54,7 @@ export class AdminComponent implements OnInit {
   spitAdministrators() {
     for (let i = 0; i < this.administrators.length; i++) {
       this.tempListAdmins.push(this.administrators[i])
-      if (this.tempListAdmins.length === 5 || i === this.administrators.length - 1) {
+      if (this.tempListAdmins.length === this.itemsPerCard || i === this.administrators.length - 1) {
         this.listOfAdmins.push(this.tempListAdmins);
         this.tempListAdmins = [];
       }
@@ -63,7 +64,7 @@ export class AdminComponent implements OnInit {
   splitProjects() {
     for (let i = 0; i < this.projects.length; i++) {
       this.tempListProjects.push(this.projects[i])
-      if (this.tempListProjects.length === 5 || i === this.projects.length - 1) {
+      if (this.tempListProjects.length === this.itemsPerCard || i === this.projects.length - 1) {
         this.listOfProjects.push(this.tempListProjects);
         this.tempListProjects = [];
       }
@@ -85,7 +86,7 @@ export class AdminComponent implements OnInit {
               this.toastr.success(result + " is toegevoegd als nieuw project")
             }
           })
-        }, 500);
+        }, 1000);
       }
     });
   }
@@ -96,11 +97,13 @@ export class AdminComponent implements OnInit {
       data: {addAdminType: true}
     });
     dialogRef.afterClosed().subscribe(async result => {
-      this.listOfAdmins = [];
-      setTimeout(x => {
-        this.getAdministrators().then()
-        this.toastr.success(result + " is toegevoegd als administrator")
-      }, 500);
+      if (result != null) {
+        this.listOfAdmins = [];
+        setTimeout(x => {
+          this.getAdministrators().then()
+          this.toastr.success(result + " is toegevoegd als administrator")
+        }, 500);
+      }
     })
   }
 
@@ -110,11 +113,13 @@ export class AdminComponent implements OnInit {
       data: {addAdminType: false}
     });
     dialogRef.afterClosed().subscribe(async result => {
-      this.listOfAdmins = [];
-      setTimeout(x => {
-        this.getAdministrators().then()
-        this.toastr.success(result + " is verwijderd als administrator")
-      }, 500);
+      if (result != null) {
+        this.listOfAdmins = [];
+        setTimeout(x => {
+          this.getAdministrators().then()
+          this.toastr.success(result + " is verwijderd als administrator")
+        }, 500);
+      }
     });
   }
 

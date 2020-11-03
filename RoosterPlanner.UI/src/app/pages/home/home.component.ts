@@ -7,6 +7,8 @@ import {Participation} from "../../models/participation";
 import {UserService} from "../../services/user.service";
 import {User} from "../../models/user";
 import {ParticipationService} from "../../services/participation.service";
+import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -24,7 +26,9 @@ export class HomeComponent implements OnInit {
   constructor(public dialog: MatDialog,
               private projectService: ProjectService,
               private userService: UserService,
-              private participationService: ParticipationService) {
+              private participationService: ParticipationService,
+              private toastr: ToastrService,
+              private route: Router) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -44,31 +48,46 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  checkUserProfileValid(): boolean {
+    return this.currentUser.firstName != null &&
+      this.currentUser.lastName != null &&
+      this.currentUser.phoneNumber != null &&
+      this.currentUser.city != null &&
+      this.currentUser.postalCode != null &&
+      this.currentUser.streetAddress != null &&
+      this.currentUser.dateOfBirth != null;
+  }
+
   async addParticipation() {
-    await this.projectService.getActiveProjects().then(response => {
-      let projects: Project[] = response;
-      projects.forEach(pro => {
-        this.participations.forEach(par => {
-          if (pro.id == par.project.id) {
-            projects = projects.filter(obj => obj !== pro);
+    if (this.checkUserProfileValid()) {
+      await this.projectService.getActiveProjects().then(response => {
+        let projects: Project[] = response;
+        projects.forEach(pro => {
+          this.participations.forEach(par => {
+            if (pro.id == par.project.id) {
+              projects = projects.filter(obj => obj !== pro);
+            }
+          })
+        })
+        let dialogRef = this.dialog.open(AddProjectComponent, {
+          data: projects,
+          width: '350px',
+        });
+        dialogRef.disableClose = true;
+        dialogRef.afterClosed().subscribe(result => {
+          if (result !== 'false') {
+            this.selectedProjects = result;
+            this.selectedProjects.forEach(project => {
+              let participation: Participation = new Participation("00000000-0000-0000-0000-000000000000", this.currentUser, project)
+              this.participationService.postParticipation(participation);
+            })
+            setTimeout(x => this.getParticipations(), 1000)
           }
         })
       })
-      let dialogRef = this.dialog.open(AddProjectComponent, {
-        data: projects,
-        panelClass: 'custom-dialog-container'
-      });
-      dialogRef.disableClose = true;
-      dialogRef.afterClosed().subscribe(result => {
-        if (result !== 'false') {
-          this.selectedProjects = result;
-          this.selectedProjects.forEach(project => {
-            let participation: Participation = new Participation("00000000-0000-0000-0000-000000000000", this.currentUser, project)
-            this.participationService.postParticipation(participation);
-          })
-          setTimeout(x => this.getParticipations(), 1000)
-        }
-      })
-    })
+    } else {
+      this.toastr.warning("Vul eerst je profiel aan.")
+      this.route.navigateByUrl('/profile')
+    }
   }
 }

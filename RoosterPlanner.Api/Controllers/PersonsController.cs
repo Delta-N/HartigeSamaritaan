@@ -5,10 +5,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.Enums;
 using RoosterPlanner.Common;
+using RoosterPlanner.Common.Config;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
@@ -23,12 +25,15 @@ namespace RoosterPlanner.Api.Controllers
     {
         private readonly ILogger logger;
         private readonly IPersonService personService;
+        private readonly AzureAuthenticationConfig azureB2CConfig;
 
         //Constructor
-        public PersonsController(IPersonService personService, ILogger logger)
+        public PersonsController(IPersonService personService, ILogger logger,
+            IOptions<AzureAuthenticationConfig> azureB2CConfig)
         {
             this.personService = personService;
             this.logger = logger;
+            this.azureB2CConfig = azureB2CConfig.Value;
         }
 
         [HttpGet("{id}")]
@@ -51,7 +56,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded) return UnprocessableEntity();
 
-                var personVm = PersonViewModel.CreateVmFromUser(result.Data);
+                var personVm = PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
                 return Ok(personVm);
             }
             catch (Exception ex)
@@ -69,7 +74,6 @@ namespace RoosterPlanner.Api.Controllers
         public async Task<ActionResult> Get(string email, string firstName, string lastName, string userRole,
             string city, int offset = 0, int pageSize = 20)
         {
-            //TODO aanpassen zodra dat nodig is
             var filter = new PersonFilter(offset, pageSize)
             {
                 Email = email,
@@ -87,7 +91,8 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded) return UnprocessableEntity();
 
-                personViewModels.AddRange(result.Data.Select(user => PersonViewModel.CreateVmFromUser(user)));
+                personViewModels.AddRange(result.Data.Select(user =>
+                    PersonViewModel.CreateVmFromUser(user, Extensions.GetInstance(azureB2CConfig))));
 
                 return Ok(personViewModels);
             }
@@ -114,9 +119,11 @@ namespace RoosterPlanner.Api.Controllers
                 if (personViewModel.Id.ToString() == oid ||
                     UserHasRole(oid, UserRole.Boardmember))
                 {
-                    var user = PersonViewModel.CreateUser(personViewModel);
-                    var result = await personService.UpdatePerson(user, personViewModel.Id);
-                    if (result.Succeeded) return Ok(result);
+                    var user = PersonViewModel.CreateUser(personViewModel, Extensions.GetInstance(azureB2CConfig));
+                    var result = await personService.UpdatePerson(user);
+                    if (result.Succeeded)
+                        return Ok(PersonViewModel.CreateVmFromUser(result.Data,
+                            Extensions.GetInstance(azureB2CConfig)));
                 }
                 else
                 {
@@ -150,14 +157,20 @@ namespace RoosterPlanner.Api.Controllers
 
                 var user = new User
                 {
-                    AdditionalData = new Dictionary<string, object>()
+                    AdditionalData = new Dictionary<string, object>(),
+                    Id = oid.ToString()
                 };
 
 
-                user.AdditionalData.Add(Extensions.UserRoleExtension, modifier);
-                result = await personService.UpdatePerson(user, Guid.Parse(result.Data.Id));
+                user.AdditionalData.Add(Extensions.GetInstance(azureB2CConfig).UserRoleExtension, modifier);
+                result = await personService.UpdatePerson(user);
                 if (result.Succeeded)
-                    return Ok(result.Data);
+                {
+                    var personVm =
+                        PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
+                    return Ok(personVm);
+                }
+
 
                 return UnprocessableEntity();
             }

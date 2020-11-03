@@ -20,7 +20,7 @@ namespace RoosterPlanner.Api.Models
         public string PhoneNumber { get; set; }
         public string UserRole { get; set; }
 
-        public static PersonViewModel CreateVmFromUser(User user)
+        public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
             var personViewModel = new PersonViewModel
             {
@@ -39,27 +39,27 @@ namespace RoosterPlanner.Api.Models
                         personViewModel.Email = objectIdentity.IssuerAssignedId;
 
             if (user.AdditionalData == null) return personViewModel;
-            if (user.AdditionalData.ContainsKey(Extensions.UserRoleExtension))
+            if (user.AdditionalData.ContainsKey(extension.UserRoleExtension))
             {
                 Enum.TryParse(
-                    user.AdditionalData[Extensions.UserRoleExtension]
+                    user.AdditionalData[extension.UserRoleExtension]
                         .ToString(), out UserRole role);
                 personViewModel.UserRole = role.ToString();
             }
 
-            if (user.AdditionalData.ContainsKey(Extensions.DateOfBirthExtension))
+            if (user.AdditionalData.ContainsKey(extension.DateOfBirthExtension))
                 personViewModel.DateOfBirth = user
-                    .AdditionalData[Extensions.DateOfBirthExtension]
+                    .AdditionalData[extension.DateOfBirthExtension]
                     .ToString();
 
-            if (user.AdditionalData.ContainsKey(Extensions.PhoneNumberExtension))
+            if (user.AdditionalData.ContainsKey(extension.PhoneNumberExtension))
                 personViewModel.PhoneNumber = user
-                    .AdditionalData[Extensions.PhoneNumberExtension]
+                    .AdditionalData[extension.PhoneNumberExtension]
                     .ToString();
             return personViewModel;
         }
 
-        public static User CreateUser(PersonViewModel vm)
+        public static User CreateUser(PersonViewModel vm,Extensions extension)
         {
             var user = new User
             {
@@ -73,8 +73,8 @@ namespace RoosterPlanner.Api.Models
                 Country = vm.Country,
                 AdditionalData = new Dictionary<string, object>
                 {
-                    {Extensions.DateOfBirthExtension, vm.DateOfBirth},
-                    {Extensions.PhoneNumberExtension, vm.PhoneNumber}
+                    {extension.DateOfBirthExtension, vm.DateOfBirth},
+                    {extension.PhoneNumberExtension, vm.PhoneNumber}
                 }
             };
             return user;
