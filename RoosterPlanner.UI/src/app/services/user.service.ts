@@ -68,7 +68,11 @@ export class UserService {
   }
 
   async getCurrentUser() {
-    return this.getUser(this.getCurrentUserId());
+    let id = this.getCurrentUserId();
+    if(this.getCurrentUserId()!=false) {
+      return this.getUser(id);
+    }
+    return false;
   }
   getCurrentUserId(){
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
