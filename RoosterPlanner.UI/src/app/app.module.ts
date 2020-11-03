@@ -4,15 +4,15 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Configuration} from 'msal';
 
 import {
-  MsalModule,
-  MsalInterceptor,
   MSAL_CONFIG,
   MSAL_CONFIG_ANGULAR,
-  MsalService,
-  MsalAngularConfiguration
+  MsalAngularConfiguration,
+  MsalInterceptor,
+  MsalModule,
+  MsalService
 } from '@azure/msal-angular';
 
-import {msalConfig, msalAngularConfig} from './app-config';
+import {msalAngularConfig, msalConfig} from './app-config';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -33,8 +33,9 @@ import {ShiftComponent} from './pages/shift/shift.component';
 import {AuthorizationGuard} from "./guards/authorization.guard";
 import {CreateProjectComponent} from "./components/create-project/create-project.component";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { AddAdminComponent } from './components/add-admin/add-admin.component';
+import {AddAdminComponent} from './components/add-admin/add-admin.component';
 import {FilterPipe} from "./helpers/filter.pipe";
+import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 
 function MSALConfigFactory(): Configuration {
   return msalConfig;
@@ -56,7 +57,8 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     ShiftComponent,
     CreateProjectComponent,
     AddAdminComponent,
-    FilterPipe
+    FilterPipe,
+    ChangeProfileComponent
 
   ],
   imports: [

@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Project} from "../../models/project";
-import {FormBuilder} from "@angular/forms";
-import {Router} from "@angular/router";
+import {FormBuilder, Validators} from "@angular/forms";
 import {ProjectService} from "../../services/project.service";
-import {Validators} from '@angular/forms';
-import {DateValidator} from "../../helpers/date-validator"
+import {Validator} from "../../helpers/validators"
 
 @Component({
   selector: 'app-create-project',
@@ -15,15 +13,15 @@ export class CreateProjectComponent implements OnInit {
   project: Project = new Project('');
   checkoutForm;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private projectService: ProjectService) {
+  constructor(private formBuilder: FormBuilder, private projectService: ProjectService) {
     this.checkoutForm = this.formBuilder.group({
       id: '',
       name: ['', Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
       description: ['', Validators.required],
-      startDate: ['', Validators.compose([Validators.required, DateValidator.date])],
-      endDate: ['', [DateValidator.dateOrNull]],
+      startDate: ['', Validators.compose([Validators.required, Validator.date])],
+      endDate: ['', [Validator.dateOrNull]],
       pictureUri: '',
       websiteUrl: ''
     })

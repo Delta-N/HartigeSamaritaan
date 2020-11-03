@@ -27,19 +27,26 @@ export class AdminComponent implements OnInit {
   constructor(public dialog: MatDialog, private projectService: ProjectService, private router: Router, private userService: UserService) {
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
+    this.getProjects().then()
+    this.getAdministrators().then()
+
+  }
+
+  async getProjects() {
     await this.projectService.getProject().then(x => {
       this.projects = x;
       this.splitProjects();
     });
+  }
 
+  async getAdministrators() {
     await this.userService.getAdministrators().then(x => {
       this.administrators = x;
       this.spitAdministrators();
       this.loaded = true;
 
     });
-
   }
 
   spitAdministrators() {
@@ -76,16 +83,15 @@ export class AdminComponent implements OnInit {
   }
 
 
-  addAdministrator() {
+  async addAdministrator() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '500px',
       data: {addAdminType: true}
     });
-    dialogRef.afterClosed().subscribe(result => {
-      /*this.userService.getAdministrators().then(x => {
-        this.administrators = x;
-      })*/
-    });
+    dialogRef.afterClosed().subscribe(async result => {
+      this.listOfAdmins=[];
+      this.getAdministrators().then();
+    })
   }
 
   removeAdministrator() {
@@ -93,10 +99,11 @@ export class AdminComponent implements OnInit {
       width: '500px',
       data: {addAdminType: false}
     });
-    dialogRef.afterClosed().subscribe(result => {
-     /* this.userService.getAdministrators().then(x => {
-        this.administrators = x;
-      })*/
+    dialogRef.afterClosed().subscribe(async result => {
+      this.listOfAdmins=[];
+      this.getAdministrators().then();
     });
+
+
   }
 }

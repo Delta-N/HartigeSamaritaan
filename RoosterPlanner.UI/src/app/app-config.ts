@@ -63,8 +63,8 @@ export const msalAngularConfig: MsalAngularConfiguration = {
   ],
   unprotectedResources: [], // API calls to these coordinates will NOT activate MSALGuard
   protectedResourceMap: [
-    ['https://localhost:5001/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read', 'offline_access', 'openid']],
-    ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read', 'offline_access', 'openid']]
+    ['https://localhost:5001/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read']],
+    ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read']]
   ],     // API calls to these coordinates will activate MSALGuard
   extraQueryParameters: {}
 }
