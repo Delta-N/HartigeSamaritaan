@@ -1,5 +1,4 @@
-﻿import {CacheLocation, Configuration} from 'msal';
-import { MsalAngularConfiguration } from '@azure/msal-angular';
+﻿/*
 import {environment} from "../environments/environment";
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -38,12 +37,12 @@ export const protectedResourceMap: [string, string[]][] = [
 ];
 //
 
-export const msalConfig: Configuration = {
+/!*export const msalConfig: Configuration = {
   auth: environment.auth,
   cache: {
     cacheLocation: 'sessionStorage' as CacheLocation,
     storeAuthStateInCookie: isIE, // Set this to "true" to save cache in cookies to address trusted zones limitations in IE
-  },}
+  },}*!/
 
 export const loginRequest: {scopes: string[]} = {
   scopes: [
@@ -62,8 +61,7 @@ export const msalAngularConfig: MsalAngularConfiguration = {
     ['https://localhost:5001/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read']],
     ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read']]
   ],     // API calls to these coordinates will activate MSALGuard
-  extraQueryParameters: {}
-}
+  extraQueryParameters: {}}
 
 
 
@@ -73,3 +71,5 @@ export const msalAngularConfig: MsalAngularConfiguration = {
 
 
 
+
+*/

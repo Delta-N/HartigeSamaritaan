@@ -1,15 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {AddProjectComponent} from "./components/add-project/add-project.component";
-import {MsalService, BroadcastService} from '@azure/msal-angular';
-import {AuthenticationService} from './services/authentication.service';
 import {UserService} from "./services/user.service";
 import {User} from "./models/user";
-import {Subscription} from "rxjs";
+import {MSAL_GUARD_CONFIG} from "./msal/constants";
+import {MsalGuardConfiguration} from "./msal/msal.guard.config";
+import {MsalBroadcastService, MsalService} from "./msal";
+import {EventMessage, EventType, InteractionType} from "@azure/msal-browser";
+import {filter, takeUntil} from "rxjs/operators";
+import {Subject} from "rxjs";
 import {environment} from "../environments/environment";
-import {AuthError, AuthResponse, UserAgentApplication} from "msal";
-import {b2cPolicies} from './app-config';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -17,8 +17,10 @@ import {Router} from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private failureSubscription: Subscription;
-  private refreshTokenSubscription: Subscription;
+//TODO soms krijg je een idtoken ipv een authtoken. idtoken word niet geaccepteerd door backend. waar heeft dat mee te maken? ontbrekende scope?
+  //todo msal.idtoken wordt niet weggeschreven zoals in angular browser. handmatige oplossing om weg te schrijven maar waar plaats je dat? Zo dicht mogelijk na het ophalen van JUISTE token
+
+
   public hasUser = false;
 
   title = 'Hartige Samaritaan';
@@ -26,61 +28,57 @@ export class AppComponent implements OnInit, OnDestroy {
   loggedIn = false;
   isAdmin = false;
   user: User = new User('');
+  private readonly _destroying$ = new Subject<void>();
+
 
   constructor(public dialog: MatDialog,
-              private broadcastService: BroadcastService,
-              private authService: MsalService,
-              private authenticationService: AuthenticationService,
               private userService: UserService,
-              private router: Router) {
-
-    this.authService.handleRedirectCallback((authError: AuthError, response: AuthResponse) => {
-      if (authError && authError.errorMessage.indexOf('AADB2C90118') > -1) {
-        // change authority to password reset policy
-        this.passwordRedirect(b2cPolicies.authorities.resetPassword.authority);
-        return;
-      }
-
-      // We need to reject id tokens that were not issued with the default sign-in policy.
-      // To learn more about b2c tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
-      if (response && response.tokenType === 'id_token' && response.idToken.claims['tfp'] === b2cPolicies.authorities.resetPassword.authority) {
-        this.authenticationService.logout();
-        return;
-      }
-      if (response && response.idToken && response.idToken.objectId && response.expiresOn > new Date()) {
-        this.hasUser = true;
-      }
-
-      if (authError && !environment.production) {
-        console.error('Redirect Error: ', authError.errorMessage);
-        return;
-      }
-    });
+              @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
+              private authService: MsalService,
+              private msalBroadcastService: MsalBroadcastService) {
   }
-
 
   ngOnInit() {
     this.isIframe = window !== window.parent && !window.opener;
+    this.checkTokenInCache();
+    this.authService.handleRedirectObservable().subscribe({
+      next: (result) => console.log("redirect obs " + result),
+      error: (error) => console.log("redirect obs err " + error)
+    });
     this.isAuthenticated();
-    this.checkAccount().then();
+    this.checkAccount();
+
+
+    this.msalBroadcastService.msalSubject$
+      .pipe(
+        filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS || msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS),
+        takeUntil(this._destroying$)
+      )
+      .subscribe((result) => {
+        this.checkAccount();
+      });
+
+
   }
 
-  ngOnDestroy(): void {
-    //this.unsubscribeMsalBroadcastEvents();
-  }
-
-  private isAuthenticated(): void {
-    const account = this.authService.getAccount();
-    this.hasUser = !!account;
-  }
-
-
-  private passwordRedirect(policyURL: string): void {
-    if (policyURL && policyURL.length > 0) {
-      const clientApp = window.msal as UserAgentApplication;
-      clientApp.authority = policyURL;
-      clientApp.loginRedirect();
+  checkTokenInCache() {
+    var request = {
+      account: this.authService.getAllAccounts()[0],
+      scopes: environment.scopes
     }
+    if (sessionStorage.getItem("msal.idtoken") == null) {
+      this.authService.acquireTokenSilent(request).toPromise().then(token => {
+        sessionStorage.setItem("msal.idtoken", token.idToken)
+      }, Error => {
+        this.authService.acquireTokenRedirect(request).toPromise().then(token => {
+        })
+      })
+    }
+  }
+
+  async checkAccount() {
+    this.loggedIn = this.authService.getAllAccounts().length > 0;
+    this.isAdmin = this.userService.userIsAdminFrontEnd();
   }
 
   openDialog() {
@@ -89,20 +87,27 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // other methods
 
-  async checkAccount() {
-    this.loggedIn = this.authenticationService.checkAccount();
-    this.isAdmin = this.userService.userIsAdminFrontEnd();
-  }
-
-  async testButton() {
-  }
-
   logout() {
-    this.authenticationService.logout()
+    this.authService.logout();
   }
 
   login() {
-    this.authenticationService.login()
+    if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
+      this.authService.loginPopup({...this.msalGuardConfig.authRequest})
+        .subscribe(() => this.checkAccount());
+    } else {
+      this.authService.loginRedirect({...this.msalGuardConfig.authRequest});
+    }
+  }
+
+  ngOnDestroy(): void {
+    this._destroying$.next(null);
+    this._destroying$.complete();
+  }
+
+  private isAuthenticated(): void {
+    const account = this.authService.getAllAccounts()[0];
+    this.hasUser = !!account;
   }
 }
 

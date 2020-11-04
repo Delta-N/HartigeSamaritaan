@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 import {JwtHelper} from "../../helpers/jwt-helper";
-import {AuthenticationService} from "../../services/authentication.service";
+import {MsalService} from "../../msal";
 import {DateConverter} from "../../helpers/date-converter";
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
-              private authenticationService: AuthenticationService,
+              private authenticationService: MsalService,
               private dialog: MatDialog) {
   }
 
