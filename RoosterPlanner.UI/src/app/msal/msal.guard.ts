@@ -49,18 +49,24 @@ export class MsalGuard implements CanActivate {
           if (!this.authService.getAllAccounts().length) {
             let x = this.loginInteractively(state.url);
             this.checkTokenInCache()
-            console.log(sessionStorage.getItem("msal.idtoken"))
             return x;
           } else {
             this.checkTokenInCache()
-            console.log(sessionStorage.getItem("msal.idtoken"))
             return of(true);
           }
 
         }),
         catchError((err) => {
-          if (err.errorMessage)
-            return of(false);
+          if (err.errorMessage.indexOf('AADB2C90118') > -1) {
+            this.authService.loginRedirect({
+              authority: environment.authorities.resetPassword.authority,
+              scopes: environment.scopes
+            })
+            //todo zorgen dat er automatisch doorverwezen word nadat password gereset is.
+            this.authService.logout()
+            return of(true);
+          }
+          return of(false);
         }))
 
   }

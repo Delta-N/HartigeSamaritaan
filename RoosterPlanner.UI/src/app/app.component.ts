@@ -17,7 +17,6 @@ import {environment} from "../environments/environment";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-//todo reset password link
 // todo remove #state=... from link after redirect
 
   public hasUser = false;
