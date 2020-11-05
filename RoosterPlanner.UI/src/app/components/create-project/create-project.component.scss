@@ -1,7 +1,7 @@
-.mat-button{
+.mat-button {
   font: normal normal normal 17px/17px Segoe UI;
-  padding-top:5px;
-  padding-bottom:5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 
   background: #F1F1F1 0 0 no-repeat padding-box;
   border: 1px solid #707070;
@@ -9,15 +9,31 @@
   opacity: 1;
 }
 
-.mat-form-field{
-  width:75%;
+.mat-form-field {
+  width: 75%;
+}
+
+.align-right {
+  margin-left: auto;
 }
 
 
-a:hover{
+a:hover {
   color: #434343;
   text-decoration-line: none;
 }
-a{
-  color:#434343;
+
+a {
+  color: #434343;
+}
+
+.mat-button {
+  font: normal normal normal 17px/17px Segoe UI;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid gray;
+}
+
+.action-button {
+  background-color: #DDFCE0;
 }

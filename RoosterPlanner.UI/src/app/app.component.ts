@@ -17,15 +17,13 @@ import {Router} from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private failureSubscription: Subscription;
-  private refreshTokenSubscription: Subscription;
   public hasUser = false;
 
   title = 'Hartige Samaritaan';
   isIframe = false;
   loggedIn = false;
   isAdmin = false;
-  user: User = new User('');
+  user: User = new User();
 
   constructor(public dialog: MatDialog,
               private broadcastService: BroadcastService,

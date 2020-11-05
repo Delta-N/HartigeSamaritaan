@@ -19,6 +19,7 @@ export class ParticipationService {
   }
 
   async getParticipations(userId: string): Promise<Participation[]> {
+    this.participations = [];
     await this.apiService.get<HttpResponse<Participation[]>>(`${HttpRoutes.participationApiUrl}/${userId}`).toPromise().then(response => {
       this.participations = response.body;
     }, Error => {
@@ -27,6 +28,7 @@ export class ParticipationService {
   }
 
   async getParticipation(userId: string, projectId) {
+    this.participation = null
     await this.apiService.get<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}/GetParticipation/${userId}/${projectId}`).toPromise().then(response => {
       this.participation = response.body;
     }, Error => {

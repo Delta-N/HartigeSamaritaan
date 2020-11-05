@@ -43,8 +43,8 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid id.");
             try
             {
-                var result = new TaskResult<User>();
-                var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                TaskResult<User> result = new TaskResult<User>();
+                string oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
                 if (id.ToString() == oid || UserHasRole(oid, UserRole.Boardmember))
                     result = await personService.GetUser(id);
@@ -53,7 +53,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded) return UnprocessableEntity();
 
-                var personVm = PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
+                PersonViewModel personVm = PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
                 return Ok(personVm);
             }
             catch (Exception ex)
@@ -71,7 +71,7 @@ namespace RoosterPlanner.Api.Controllers
         public async Task<ActionResult> Get(string email, string firstName, string lastName, string userRole,
             string city, int offset = 0, int pageSize = 20)
         {
-            var filter = new PersonFilter(offset, pageSize)
+            PersonFilter filter = new PersonFilter(offset, pageSize)
             {
                 Email = email,
                 FirstName = firstName,
@@ -80,11 +80,11 @@ namespace RoosterPlanner.Api.Controllers
                 City = city
             };
 
-            var personViewModels = new List<PersonViewModel>();
+            List<PersonViewModel> personViewModels = new List<PersonViewModel>();
 
             try
             {
-                var result = await personService.GetB2CMembers(filter);
+                TaskListResult<User> result = await personService.GetB2CMembers(filter);
 
                 if (!result.Succeeded) return UnprocessableEntity();
 
@@ -109,15 +109,15 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("Invalid User");
             try
             {
-                var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                string oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 if (oid == null) return BadRequest("Invalid User");
 
                 //only the owner of a profile or a boardmember can update user data
                 if (personViewModel.Id.ToString() == oid ||
                     UserHasRole(oid, UserRole.Boardmember))
                 {
-                    var user = PersonViewModel.CreateUser(personViewModel, Extensions.GetInstance(azureB2CConfig));
-                    var result = await personService.UpdatePerson(user);
+                    User user = PersonViewModel.CreateUser(personViewModel, Extensions.GetInstance(azureB2CConfig));
+                    TaskResult<User> result = await personService.UpdatePerson(user);
                     if (result.Succeeded)
                         return Ok(PersonViewModel.CreateVmFromUser(result.Data,
                             Extensions.GetInstance(azureB2CConfig)));
@@ -147,12 +147,12 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 //check if user exists
-                var result = await personService.GetUser(oid);
+                TaskResult<User> result = await personService.GetUser(oid);
 
                 if (!result.Succeeded)
                     return UnprocessableEntity();
 
-                var user = new User
+                User user = new User
                 {
                     AdditionalData = new Dictionary<string, object>(),
                     Id = oid.ToString()
@@ -162,7 +162,7 @@ namespace RoosterPlanner.Api.Controllers
                 result = await personService.UpdatePerson(user);
                 if (result.Succeeded)
                 {
-                    var personVm =
+                    PersonViewModel personVm =
                         PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
                     return Ok(personVm);
                 }
@@ -180,7 +180,7 @@ namespace RoosterPlanner.Api.Controllers
 
         public static string GetOid(ClaimsIdentity claimsIdentity)
         {
-            var identity = claimsIdentity;
+            ClaimsIdentity identity = claimsIdentity;
             string oid = null;
             if (identity != null)
                 oid = identity.Claims.FirstOrDefault(c =>
@@ -191,8 +191,8 @@ namespace RoosterPlanner.Api.Controllers
 
         public bool UserHasRole(string oid, UserRole userRole)
         {
-            var currentUserActionResult = Get(Guid.Parse(oid));
-            var okObjectResult = (OkObjectResult) currentUserActionResult.Result;
+            Task<ActionResult> currentUserActionResult = Get(Guid.Parse(oid));
+            OkObjectResult okObjectResult = (OkObjectResult) currentUserActionResult.Result;
             if (okObjectResult.Value is PersonViewModel currentUser &&
                 currentUser.UserRole == userRole.ToString())
                 return true;

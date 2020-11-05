@@ -15,12 +15,16 @@
 
 </div>
 
-<div mat-dialog-actions *ngIf="type==='ConfirmationInput'">
+<div mat-dialog-actions *ngIf="type==='ConfirmationInput'" >
+  <div class="align-right">
   <button mat-raised-button class="button" (click)="onConfirm()">Ja</button>
   <button mat-button (click)="onDismiss()">Nee</button>
+  </div>
 </div>
 
-<div mat-dialog-actions *ngIf="type==='NumberInput'">
+<div mat-dialog-actions *ngIf="type==='NumberInput'" >
+  <div class="align-right">
   <button mat-raised-button class="button" (click)="sendInput(this.workingHours)">Bevestig</button>
   <button mat-button (click)="onDismiss()">Annuleren</button>
+  </div>
 </div>

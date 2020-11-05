@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Graph;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
@@ -37,14 +38,14 @@ namespace RoosterPlanner.Service
         /// <returns>List of projects that are not closed.</returns>
         public async Task<TaskResult<Participation>> AddParticipationAsync(Participation participation)
         {
-            var taskResult = new TaskResult<Participation>();
+            TaskResult<Participation> taskResult = new TaskResult<Participation>();
 
             try
             {
-                var person = await azureB2CService.GetUserAsync(participation.PersonId);
+                User person = await azureB2CService.GetUserAsync(participation.PersonId);
                 if (person == null) throw new Exception("Who Are You?");
 
-                var project = await unitOfWork.ProjectRepository.GetAsync(participation.ProjectId);
+                Project project = await unitOfWork.ProjectRepository.GetAsync(participation.ProjectId);
                 if (project == null) throw new Exception("Wait? What project?");
 
                 participation.Person = null;
@@ -68,7 +69,7 @@ namespace RoosterPlanner.Service
         /// <returns>Returns a list of participations.</returns>
         public async Task<TaskListResult<Participation>> GetUserParticipations(Guid personId)
         {
-            var result = TaskListResult<Participation>.CreateDefault();
+            TaskListResult<Participation> result = TaskListResult<Participation>.CreateDefault();
             try
             {
                 result.Data = await participationRepository.GetActiveParticipationsAsync(personId);
@@ -86,7 +87,7 @@ namespace RoosterPlanner.Service
 
         public TaskResult<Participation> GetParticipation(Guid participationId)
         {
-            var result = new TaskResult<Participation>();
+            TaskResult<Participation> result = new TaskResult<Participation>();
             try
             {
                 result.Data = participationRepository.Get(participationId);
@@ -104,13 +105,13 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult<Participation>> GetParticipation(Guid personId, Guid projectId)
         {
-            var result = new TaskResult<Participation>();
+            TaskResult<Participation> result = new TaskResult<Participation>();
             try
             {
-                var x = await participationRepository.GetSpecificParticipation(personId, projectId);
-                if (x != null)
+                Participation participation = await participationRepository.GetSpecificParticipation(personId, projectId);
+                if (participation != null)
                 {
-                    result.Data = x;
+                    result.Data = participation;
                     result.Succeeded = true;
                 }
             }
@@ -126,7 +127,7 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult<Participation>> RemoveParticipation(Participation participation)
         {
-            var result = new TaskResult<Participation>();
+            TaskResult<Participation> result = new TaskResult<Participation>();
             try
             {
                 result.Data = unitOfWork.ParticipationRepository.Remove(participation);
@@ -144,7 +145,7 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult<Participation>> UpdateParticipation(Participation participation)
         {
-            var taskResult = new TaskResult<Participation>();
+            TaskResult<Participation> taskResult = new TaskResult<Participation>();
 
             try
             {

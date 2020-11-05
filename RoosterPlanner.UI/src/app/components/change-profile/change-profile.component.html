@@ -69,6 +69,8 @@
 
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button (click)="saveProfile(checkoutForm.value)" mat-button mat-dialog-close="">Opslaan</button>
+  <div class="align-right">
+  <button class="action-button" (click)="saveProfile(checkoutForm.value)" mat-button>Opslaan</button>
   <button mat-button mat-dialog-close="">Annuleren</button>
+  </div>
 </mat-dialog-actions>

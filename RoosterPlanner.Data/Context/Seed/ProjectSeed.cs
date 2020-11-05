@@ -15,7 +15,7 @@ namespace RoosterPlanner.Data.Context.Seed
 
         public override List<Project> Seed()
         {
-            var projects = new List<Project>()
+            List<Project> projects = new List<Project>()
             {
                 new Project(Guid.NewGuid())
                 {

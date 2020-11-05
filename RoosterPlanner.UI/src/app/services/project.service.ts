@@ -24,8 +24,6 @@ export class ProjectService {
       //return all projects
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}`).toPromise().then(response => {
         this.projects = response.body;
-        this.projects.forEach(project => {
-        })
       });
     } else {
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}/${guid}`).toPromise().then(response => {
@@ -40,8 +38,6 @@ export class ProjectService {
     this.projects = []
     await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?closed=false`).toPromise().then(response => {
       this.projects = response.body;
-      this.projects.forEach(project => {
-      })
     })
 
     return this.projects

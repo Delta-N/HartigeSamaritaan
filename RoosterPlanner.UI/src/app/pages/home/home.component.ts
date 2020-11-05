@@ -79,7 +79,10 @@ export class HomeComponent implements OnInit {
           if (result !== 'false') {
             this.selectedProjects = result;
             this.selectedProjects.forEach(project => {
-              let participation: Participation = new Participation(EntityHelper.returnEmptyGuid(), this.currentUser, project)
+              let participation: Participation=new Participation();
+              participation.id=EntityHelper.returnEmptyGuid();
+              participation.person=this.currentUser;
+              participation.project=project
               this.participationService.postParticipation(participation);
             })
             setTimeout(x => this.getParticipations(), 1000)

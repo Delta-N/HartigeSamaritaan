@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -33,12 +34,14 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid id.");
             try
             {
-                var result = await participationService.GetUserParticipations(personId);
+                TaskListResult<Participation> result = await participationService.GetUserParticipations(personId);
 
                 if (!result.Succeeded)
                     return UnprocessableEntity();
+                if (result.Data.Count == 0)
+                    return NotFound();
 
-                var participationViewModels = result.Data
+                List<ParticipationViewModel> participationViewModels = result.Data
                     .Select(ParticipationViewModel.CreateVm)
                     .ToList();
 
@@ -47,24 +50,23 @@ namespace RoosterPlanner.Api.Controllers
             catch (Exception ex)
             {
                 logger.Error(ex, "ParticipationController: Error occured.");
-                Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity(ex.Message);
             }
-
-            return NoContent();
         }
 
-        [HttpGet("GetParticipation/{personGuid}/{projectGuid}")]
+        [HttpGet("GetParticipation/{personid}/{projectid}")]
         public async Task<ActionResult> GetParticipation(Guid personId, Guid projectId)
         {
             if (personId == Guid.Empty || projectId == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                var result = await participationService.GetParticipation(personId, projectId);
+                TaskResult<Participation> result = await participationService.GetParticipation(personId, projectId);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
-                var participationViewModel = ParticipationViewModel.CreateVm(result.Data);
+                    if (result.Data == null)
+                        return NotFound();
+                ParticipationViewModel participationViewModel = ParticipationViewModel.CreateVm(result.Data);
 
                 return Ok(participationViewModel);
             }
@@ -87,7 +89,7 @@ namespace RoosterPlanner.Api.Controllers
             Task<TaskResult<Participation>> result = null;
             try
             {
-                var participation = ParticipationViewModel.CreateParticipation(participationViewModel);
+                Participation participation = ParticipationViewModel.CreateParticipation(participationViewModel);
                 participation.LastEditBy = GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 participation.LastEditDate = DateTime.UtcNow;
 
@@ -121,11 +123,11 @@ namespace RoosterPlanner.Api.Controllers
             Task<TaskResult<Participation>> result = null;
             try
             {
-                var oldParticipation =
+                Participation oldParticipation =
                     participationService
                         .GetParticipation(participationViewModel.Person.Id, participationViewModel.Project.Id).Result
                         .Data;
-                var updatedParticipation = ParticipationViewModel.CreateParticipation(participationViewModel);
+                Participation updatedParticipation = ParticipationViewModel.CreateParticipation(participationViewModel);
 
                 if (oldParticipation.ProjectId != updatedParticipation.ProjectId)
                 {
@@ -173,17 +175,17 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid id.");
             try
             {
-                var participation = participationService.GetParticipation(id);
+                TaskResult<Participation> participation = participationService.GetParticipation(id);
                 if (!participation.Succeeded) BadRequest("Invalid participation");
 
-                var oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                string oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 if (oid == null)
                     return BadRequest("Invalid User");
 
                 if (oid == participation.Data.PersonId.ToString())
                 {
                     //gebruiker mag participation verwijderen
-                    var result = await participationService.RemoveParticipation(participation.Data);
+                    TaskResult<Participation> result = await participationService.RemoveParticipation(participation.Data);
                     if (result.Succeeded)
                         return Ok(result);
                     return Problem();
@@ -202,7 +204,7 @@ namespace RoosterPlanner.Api.Controllers
 
         private static string GetOid(ClaimsIdentity claimsIdentity)
         {
-            var identity = claimsIdentity;
+            ClaimsIdentity identity = claimsIdentity;
             string oid = null;
             if (identity != null)
                 oid = identity.Claims.FirstOrDefault(c =>

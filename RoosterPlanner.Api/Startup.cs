@@ -28,6 +28,8 @@ namespace RoosterPlanner.Api
         public void ConfigureServices(IServiceCollection services)
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
+            // Enable Application Insights telemetry collection.
+            services.AddApplicationInsightsTelemetry();
 
             services.AddAuthentication(options =>
                 {
@@ -72,8 +74,7 @@ namespace RoosterPlanner.Api
                     policy.RequireClaim("extension_UserRole", "1","2"));
             });
 
-            // Enable Application Insights telemetry collection.
-            services.AddApplicationInsightsTelemetry();
+
             
             services.AddControllers().AddJsonOptions(options =>
             {

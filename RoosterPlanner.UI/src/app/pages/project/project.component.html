@@ -35,12 +35,12 @@
       <div class="row-name">Website:</div>
       <div class="user-data">{{viewProject.websiteUrl}}</div>
     </div>
-    <div *ngIf="!isAdmin && this.participation!=null" class="data-row">
+    <div *ngIf="this.participation!=null" class="data-row">
       <div class="row-name">Max uur per week:</div>
       <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
     </div>
   </div>
-  <div class="container" *ngIf="!isAdmin&& this.participation!=null">
+  <div class="container" *ngIf="this.participation!=null">
     <a (click)="editWorkingHours()" mat-button class="edit">Max werkuren wijzigen</a>
   </div>
   <div class="container" *ngIf="isAdmin">

@@ -36,13 +36,11 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                var result = await projectService.GetProjectDetails(id);
+                TaskResult<Project> result = await projectService.GetProjectDetails(id);
 
                 if (!result.Succeeded)
                     return UnprocessableEntity();
-
-                var projectDetailsVm = ProjectDetailsViewModel.CreateVm(result.Data);
-                return Ok(projectDetailsVm);
+                return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
@@ -61,7 +59,7 @@ namespace RoosterPlanner.Api.Controllers
             int offset = 0,
             int pageSize = 20)
         {
-            var filter = new ProjectFilter(offset, pageSize)
+            ProjectFilter filter = new ProjectFilter(offset, pageSize)
             {
                 Name = name,
                 City = city,
@@ -71,13 +69,13 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                var result = await projectService.SearchProjectsAsync(filter);
+                TaskListResult<Project> result = await projectService.SearchProjectsAsync(filter);
                 if (!result.Succeeded)
                     return UnprocessableEntity(result.Message);
 
                 Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
 
-                var projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
+                List<ProjectViewModel> projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
                     .ToList();
                 return Ok(projectVmList);
             }
@@ -101,13 +99,13 @@ namespace RoosterPlanner.Api.Controllers
             if (string.IsNullOrEmpty(projectDetails.Name))
                 return BadRequest("Name of project cannot be empty");
 
-            var result = new TaskResult<Project>();
+            TaskResult<Project> result = new TaskResult<Project>();
 
             try
             {
-                var project = ProjectDetailsViewModel.CreateProject(projectDetails);
+                Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
                 project.LastEditDate = DateTime.UtcNow;
-                var oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                string oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 project.LastEditBy = oid ?? null;
 
                 if (project.Id == Guid.Empty)
@@ -139,9 +137,9 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                var oldProject = projectService.GetProjectDetails(projectDetails.Id)
+                Project oldProject = projectService.GetProjectDetails(projectDetails.Id)
                     .Result.Data;
-                var updatedProject = ProjectDetailsViewModel.CreateProject(projectDetails);
+                Project updatedProject = ProjectDetailsViewModel.CreateProject(projectDetails);
                 oldProject.Address = updatedProject.Address;
                 oldProject.City = updatedProject.City;
                 oldProject.Closed = updatedProject.Closed;
@@ -156,11 +154,11 @@ namespace RoosterPlanner.Api.Controllers
                 oldProject.WebsiteUrl = updatedProject.WebsiteUrl;
 
                 oldProject.LastEditDate = DateTime.UtcNow;
-                var oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                string oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldProject.LastEditBy = oid ?? null;
-                var result = projectService.UpdateProject(oldProject);
+                TaskResult<Project> result = projectService.UpdateProject(oldProject);
                 if (!result.Succeeded) return UnprocessableEntity();
-                return Ok(result);
+                return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
