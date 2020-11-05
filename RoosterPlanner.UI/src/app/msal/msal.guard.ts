@@ -7,6 +7,8 @@ import {MsalGuardConfiguration} from './msal.guard.config';
 import {MSAL_GUARD_CONFIG} from './constants';
 import {catchError, concatMap, map} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
+import {environment} from "../../environments/environment";
+
 
 @Injectable()
 export class MsalGuard implements CanActivate {
@@ -45,30 +47,60 @@ export class MsalGuard implements CanActivate {
       .pipe(
         concatMap(() => {
           if (!this.authService.getAllAccounts().length) {
-            return this.loginInteractively(state.url);
+            let x = this.loginInteractively(state.url);
+            this.checkTokenInCache()
+            console.log(sessionStorage.getItem("msal.idtoken"))
+            return x;
+          } else {
+            this.checkTokenInCache()
+            console.log(sessionStorage.getItem("msal.idtoken"))
+            return of(true);
           }
-          return of(true);
+
         }),
-        catchError(() => console.log)
-      );
+        catchError((err) => {
+          if (err.errorMessage)
+            return of(false);
+        }))
+
+  }
+
+  checkTokenInCache() {
+    const request = {
+      account: this.authService.getAllAccounts()[0],
+      scopes: environment.scopes
+    };
+    if (sessionStorage.getItem("msal.idtoken") == null) {
+      this.authService.acquireTokenSilent(request).toPromise().then(token => {
+        sessionStorage.setItem("msal.idtoken", token.idToken)
+      }, Error => {
+        this.authService.acquireTokenRedirect(request).toPromise().then(token => {
+        })
+      })
+    }
   }
 
   private loginInteractively(url: string): Observable<boolean> {
+    const redirectStartPage = this.getDestinationUrl(url);
     if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
-      return this.authService.loginPopup({...this.msalGuardConfig.authRequest})
+      return this.authService.loginPopup({
+        scopes: environment.scopes,
+        ...this.msalGuardConfig.authRequest,
+      })
         .pipe(
           map(() => true),
           catchError(() => of(false))
         );
     }
 
-    const redirectStartPage = this.getDestinationUrl(url);
+
     this.authService.loginRedirect({
       redirectStartPage,
-      scopes: [],
+      scopes: environment.scopes,
       ...this.msalGuardConfig.authRequest,
     });
     return of(false);
   }
+
 
 }

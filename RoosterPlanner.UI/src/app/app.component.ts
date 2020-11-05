@@ -17,9 +17,8 @@ import {environment} from "../environments/environment";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-//TODO soms krijg je een idtoken ipv een authtoken. idtoken word niet geaccepteerd door backend. waar heeft dat mee te maken? ontbrekende scope?
-  //todo msal.idtoken wordt niet weggeschreven zoals in angular browser. handmatige oplossing om weg te schrijven maar waar plaats je dat? Zo dicht mogelijk na het ophalen van JUISTE token
-
+//todo reset password link
+// todo remove #state=... from link after redirect
 
   public hasUser = false;
 
@@ -40,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isIframe = window !== window.parent && !window.opener;
-    this.checkTokenInCache();
+    //this.checkTokenInCache();
     this.authService.handleRedirectObservable().subscribe({
       next: (result) => console.log("redirect obs " + result),
       error: (error) => console.log("redirect obs err " + error)
@@ -55,6 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
         takeUntil(this._destroying$)
       )
       .subscribe((result) => {
+        console.log(result)
         this.checkAccount();
       });
 
@@ -62,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   checkTokenInCache() {
-    var request = {
+    let request = {
       account: this.authService.getAllAccounts()[0],
       scopes: environment.scopes
     }
@@ -84,8 +84,6 @@ export class AppComponent implements OnInit, OnDestroy {
   openDialog() {
     this.dialog.open(AddProjectComponent);
   }
-
-  // other methods
 
   logout() {
     this.authService.logout();

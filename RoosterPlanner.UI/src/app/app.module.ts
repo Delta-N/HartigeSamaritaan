@@ -36,7 +36,7 @@ import {MSAL_GUARD_CONFIG, MSAL_INTERCEPTOR_CONFIG} from "./msal/constants";
 import {MsalGuardConfiguration} from "./msal/msal.guard.config";
 import {environment} from "../environments/environment";
 
-
+export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
@@ -45,7 +45,16 @@ function MSALInstanceFactory(): IPublicClientApplication {
       navigateToLoginRequestUrl: environment.auth.navigateToLoginRequestUrl,
       knownAuthorities: environment.auth.knownAuthorities,
       redirectUri: environment.auth.redirectUri
+    },
+    cache: {
+      cacheLocation: 'sessionStorage',
+      storeAuthStateInCookie: isIE
+    },
+    system: {
+      tokenRenewalOffsetSeconds: 0,
+      loadFrameTimeout: 9000,
     }
+
   });
 }
 

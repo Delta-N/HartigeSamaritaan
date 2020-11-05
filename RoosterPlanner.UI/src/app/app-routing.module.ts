@@ -65,11 +65,7 @@ const routes: Routes = [
     path: 'code',
     component: HomeComponent
   },
-  {
-    // todo
-    path: 'state',
-    component: HomeComponent
-  },
+
   {
     path: '**',
     component: NotFoundComponent
