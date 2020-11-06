@@ -43,4 +43,5 @@ export class ChangeProfileComponent implements OnInit {
       });
     }
   }
+  close(){this.dialogRef.close(null)}
 }

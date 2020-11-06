@@ -10,6 +10,7 @@ import {ParticipationService} from "../../services/participation.service";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
 import {EntityHelper} from "../../helpers/entity-helper";
+import {DateConverter} from "../../helpers/date-converter";
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,7 @@ export class HomeComponent implements OnInit {
     await this.userService.getCurrentUser().then(async user => {
       if (user !== false) {
         this.currentUser = user
-        this.getParticipations().then(x => this.loaded = true)
+        this.getParticipations().then(() => this.loaded = true)
       }
     });
   }
@@ -60,9 +61,21 @@ export class HomeComponent implements OnInit {
   }
 
   async addParticipation() {
+    let projects: Project[] = [];
     if (this.checkUserProfileValid()) {
       await this.projectService.getActiveProjects().then(response => {
-        let projects: Project[] = response;
+        response.forEach(project => {
+          if(project.endDate==null){
+            projects.push(project)
+          }
+          else if (project.endDate != null) {
+            let dateNow:Date=new Date()
+            dateNow.setHours(0,0,0)
+           if(DateConverter.toDate(DateConverter.toReadableString(project.endDate.toString()))>=dateNow){
+             projects.push(project)
+           }
+          }
+        })
         projects.forEach(pro => {
           this.participations.forEach(par => {
             if (pro.id == par.project.id) {
@@ -79,13 +92,13 @@ export class HomeComponent implements OnInit {
           if (result !== 'false') {
             this.selectedProjects = result;
             this.selectedProjects.forEach(project => {
-              let participation: Participation=new Participation();
-              participation.id=EntityHelper.returnEmptyGuid();
-              participation.person=this.currentUser;
-              participation.project=project
+              let participation: Participation = new Participation();
+              participation.id = EntityHelper.returnEmptyGuid();
+              participation.person = this.currentUser;
+              participation.project = project
               this.participationService.postParticipation(participation);
             })
-            setTimeout(x => this.getParticipations(), 1000)
+            setTimeout(() => this.getParticipations(), 1000)
           }
         })
       })

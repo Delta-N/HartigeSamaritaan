@@ -59,8 +59,9 @@ export class ProfileComponent implements OnInit {
       width: '500px',
       data: this.user
     });
-    dialogRef.afterClosed().subscribe(async result => {
-      if (Response != null) {
+    dialogRef.disableClose=true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
         this.user = result;
         this.age = this.calculateAge(this.user.dateOfBirth)
       }

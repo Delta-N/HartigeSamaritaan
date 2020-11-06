@@ -23,7 +23,7 @@ export class AddAdminComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    if (this.data.administrators != null) {
+    if (this.data.administrators != null && !this.data.addAdminType) {
       this.users = this.data.administrators;
       this.loaded = true;
     } else {

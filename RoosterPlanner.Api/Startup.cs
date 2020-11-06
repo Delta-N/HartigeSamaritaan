@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using AutoMapper;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +30,8 @@ namespace RoosterPlanner.Api
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
             // Enable Application Insights telemetry collection.
-            services.AddApplicationInsightsTelemetry();
+            var options = new ApplicationInsightsServiceOptions { ConnectionString = Configuration["ApplicationInsight:ConnectionString"] };
+            services.AddApplicationInsightsTelemetry(options);
 
             services.AddAuthentication(options =>
                 {

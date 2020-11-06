@@ -87,18 +87,30 @@ export class AdminComponent implements OnInit {
           this.listOfProjects = []
           this.getProjects().then(() => {
             if (result != null) {
-              this.toastr.success(result + " is toegevoegd als nieuw project")
+              this.toastr.success(result.name + " is toegevoegd als nieuw project")
             }
           })
         }, 1000);
       }
     });
   }
+  modAdmin(modifier: string) {
+    let toastrString: string;
+    let dataModifier: boolean;
+    if (modifier === 'add') {
+      toastrString = 'toegevoegd';
+      dataModifier = true;
+    } else if (modifier === 'remove') {
+      toastrString = 'verwijderd';
+      dataModifier = false;
+    }
 
-  async addAdministrator() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '500px',
-      data: {addAdminType: true}
+      data: {
+        addAdminType: dataModifier,
+        administrators: this.administrators
+      }
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(async result => {
@@ -106,26 +118,7 @@ export class AdminComponent implements OnInit {
         this.listOfAdmins = [];
         setTimeout(() => {
           this.getAdministrators().then()
-          this.toastr.success(result + " is toegevoegd als administrator")
-        }, 500);
-      }
-    })
-  }
-
-  removeAdministrator() {
-    const dialogRef = this.dialog.open(AddAdminComponent, {
-      width: '500px',
-      data: {
-        addAdminType: false,
-        administrators: this.administrators
-      }
-    });
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result != null) {
-        this.listOfAdmins = [];
-        setTimeout(() => {
-          this.getAdministrators().then()
-          this.toastr.success(result + " is verwijderd als administrator")
+          this.toastr.success(result + " is " + toastrString + " als administrator")
         }, 500);
       }
     });
