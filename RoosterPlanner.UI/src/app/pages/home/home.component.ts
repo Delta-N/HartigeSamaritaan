@@ -65,17 +65,17 @@ export class HomeComponent implements OnInit {
     if (this.checkUserProfileValid()) {
       await this.projectService.getActiveProjects().then(response => {
         response.forEach(project => {
-          if(project.endDate==null){
+          if (project.endDate == null) {
             projects.push(project)
-          }
-          else if (project.endDate != null) {
-            let dateNow:Date=new Date()
-            dateNow.setHours(0,0,0)
-           if(DateConverter.toDate(DateConverter.toReadableString(project.endDate.toString()))>=dateNow){
-             projects.push(project)
-           }
+          } else if (project.endDate != null) {
+            let dateNow: Date = new Date()
+
+            if (DateConverter.toDate(DateConverter.toReadableString(project.endDate.toString())) >= dateNow) {
+              projects.push(project)
+            }
           }
         })
+
         projects.forEach(pro => {
           this.participations.forEach(par => {
             if (pro.id == par.project.id) {
@@ -83,6 +83,7 @@ export class HomeComponent implements OnInit {
             }
           })
         })
+
         let dialogRef = this.dialog.open(AddProjectComponent, {
           data: projects,
           width: '350px',
