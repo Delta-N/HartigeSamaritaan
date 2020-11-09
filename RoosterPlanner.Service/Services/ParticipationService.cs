@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
-using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
+using RoosterPlanner.Service.Helpers;
 
 namespace RoosterPlanner.Service
 {
@@ -44,10 +44,10 @@ namespace RoosterPlanner.Service
             try
             {
                 User person = await azureB2CService.GetUserAsync(participation.PersonId);
-                if (person == null) throw new Exception("Who Are You?");
+                if (person == null) throw new RecordNotFoundException("Person: " +participation.PersonId);
 
                 Project project = await unitOfWork.ProjectRepository.GetAsync(participation.ProjectId);
-                if (project == null) throw new Exception("Wait? What project?");
+                if (project == null) throw new RecordNotFoundException("Project: " + participation.ProjectId);
 
                 participation.Person = null;
                 participation.Project = null;

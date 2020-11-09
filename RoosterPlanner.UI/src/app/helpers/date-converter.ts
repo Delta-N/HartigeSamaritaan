@@ -1,22 +1,21 @@
 ﻿import {Project} from "../models/project";
+import * as moment from "moment"
 
 export class DateConverter {
   static date: Date
 
   static toDate(str) {
-    const [day, month, year] = str.split("-")
+    const offset = moment().utcOffset()
 
-    this.date = new Date();
-    const offset = this.date.getTimezoneOffset();
-    return new Date(year, month - 1, day,(offset*-1/60)+1); //+1 to compensate daylight saving
+    if(moment().isDST())
+      return moment(str,"DD-MM-YYYY").add(offset,'minutes').toDate();
+    return  moment(str,"DD-MM-YYYY").add(offset,'minutes').add(1,'hour').toDate();
+
   }
 //alle dates worden alleen naar de gebruiker toe geconverteerd naar een leesbarevorm
   static toReadableString(date:string){
-    const day = date.substring(8,10);
-    const month = date.substring(5,7);
-    const year = date.substring(0,4);
+    return moment(date,"YYYY-MM-DDTHH:mm").format("DD-MM-YYYY")
 
-    return String(day+"-"+month+"-"+year);
   }
   static formatProjectDateReadable(project): Project {
     project.startDate = DateConverter.toReadableString(project.startDate);
@@ -29,11 +28,6 @@ export class DateConverter {
     return project
   }
   static todayString():String{
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    let yyyy = today.getFullYear();
-
-    return dd + '-' + mm + '-' + yyyy;
+    return moment().format("DD-MM-YYYY")
   }
 }
