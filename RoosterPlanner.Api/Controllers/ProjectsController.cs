@@ -41,15 +41,17 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded)
                     return UnprocessableEntity();
+                if (result.Data == null)
+                    return Ok();
+                
                 return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
                 logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         [HttpGet]
@@ -77,6 +79,8 @@ namespace RoosterPlanner.Api.Controllers
                     return UnprocessableEntity(result.Message);
 
                 Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
+                if (result.Data == null)
+                    return Ok();
 
                 List<ProjectViewModel> projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
                     .ToList();
@@ -86,9 +90,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         //alleen een bestuurslid kan projecten aanmaken of wijzigen
@@ -123,9 +126,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         [Authorize(Policy = "Boardmember")]
@@ -167,9 +169,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
     }
 }

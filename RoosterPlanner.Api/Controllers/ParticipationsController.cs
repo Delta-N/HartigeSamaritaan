@@ -75,9 +75,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         [HttpPost]
@@ -106,9 +105,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         [HttpPatch]
@@ -164,9 +162,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -198,9 +195,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         private static string GetOid(ClaimsIdentity claimsIdentity)

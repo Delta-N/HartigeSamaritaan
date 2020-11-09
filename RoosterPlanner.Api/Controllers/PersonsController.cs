@@ -53,17 +53,19 @@ namespace RoosterPlanner.Api.Controllers
                     return Unauthorized();
 
                 if (!result.Succeeded) return UnprocessableEntity();
+                if (result.Data == null)
+                    return Ok();
 
-                PersonViewModel personVm = PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
+                PersonViewModel personVm =
+                    PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
                 return Ok(personVm);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         //Mogen project admins (medewerkercommissie) ook alle gebruikers opvragen?)
@@ -88,6 +90,8 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<User> result = await personService.GetB2CMembers(filter);
 
                 if (!result.Succeeded) return UnprocessableEntity();
+                if (result.Data == null)
+                    return Ok();
 
                 personViewModels.AddRange(result.Data.Select(user =>
                     PersonViewModel.CreateVmFromUser(user, Extensions.GetInstance(azureB2CConfig))));
@@ -96,11 +100,10 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         [HttpPatch]
@@ -132,11 +135,10 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         [Authorize(Policy = "Boardmember")]
@@ -172,11 +174,10 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
             }
-
-            return NoContent();
         }
 
         public static string GetOid(ClaimsIdentity claimsIdentity)

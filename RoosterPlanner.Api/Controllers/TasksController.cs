@@ -29,29 +29,5 @@ namespace RoosterPlanner.Api.Controllers
             this.logger = logger;
         }
 
-        [HttpGet("active")]
-        public async Task<ActionResult<IEnumerable<TaskViewModel>>> GetActiveTasks()
-        {
-            TaskListResult<Task> taskListResult = await this.taskService.GetActiveTasksAsync();
-            if (taskListResult.Succeeded)
-            {
-                return Ok(taskListResult.Data.Select(t => mapper.Map<TaskViewModel>(t)).ToList());
-            }
-            return UnprocessableEntity();
-        }
-
-        [HttpDelete()]
-        public async Task<ActionResult> DeleteTask(Guid id)
-        {
-            if (id != Guid.Empty)
-            {
-                TaskResult result = await this.taskService.SetTaskDeleteAsync(id);
-                if (result.Succeeded)
-                    return Ok();
-                else
-                    return UnprocessableEntity(result.Message);
-            }
-            return BadRequest("No valid id.");
-        }
     }
 }
