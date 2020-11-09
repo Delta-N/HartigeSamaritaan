@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
@@ -32,7 +33,7 @@ namespace RoosterPlanner.Data.Repositories
     public class ProjectRepository : Repository<Project>, IProjectRepository
     {
         //Constructor
-        public ProjectRepository(RoosterPlannerContext dataContext, ILogger logger) : base(dataContext, logger)
+        public ProjectRepository(RoosterPlannerContext dataContext) : base(dataContext)
         {
         }
 

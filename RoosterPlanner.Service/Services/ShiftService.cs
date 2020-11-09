@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Models;
@@ -20,7 +21,7 @@ namespace RoosterPlanner.Service
         #endregion
 
         //Constructor
-        public ShiftService(IUnitOfWork unitOfWork, ILogger logger)
+        public ShiftService(IUnitOfWork unitOfWork, ILogger<ShiftService> logger)
         {
             this.unitOfWork = unitOfWork;
             this.logger = logger;
@@ -36,7 +37,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve shifts.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;

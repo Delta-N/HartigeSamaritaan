@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Common;
 using RoosterPlanner.Models;
@@ -23,7 +24,7 @@ namespace RoosterPlanner.Api.Controllers
         private readonly IProjectService projectService;
 
         //Constructor
-        public ProjectsController(IProjectService projectService, ILogger logger)
+        public ProjectsController(IProjectService projectService, ILogger<ProjectsController> logger)
         {
             this.projectService = projectService;
             this.logger = logger;
@@ -44,7 +45,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ProjectController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -83,7 +84,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ProjectController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -120,7 +121,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ProjectController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -164,7 +165,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ProjectController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 

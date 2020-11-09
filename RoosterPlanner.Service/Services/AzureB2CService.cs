@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
@@ -13,6 +14,7 @@ using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Person = RoosterPlanner.Models.Person;
 
 namespace RoosterPlanner.Service
@@ -30,7 +32,7 @@ namespace RoosterPlanner.Service
     {
         //Constructor
         public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
-            ILogger logger)
+            ILogger<AzureB2CService> logger)
         {
             this.azureB2CConfig = azureB2CConfig.Value;
             this.unitOfWork = unitOfWork;
@@ -255,7 +257,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 result.Error = ex;
             }
         }

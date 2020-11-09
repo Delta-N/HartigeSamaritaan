@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Common;
 using RoosterPlanner.Models;
@@ -21,7 +22,7 @@ namespace RoosterPlanner.Api.Controllers
         private readonly ILogger logger;
         private readonly IParticipationService participationService;
 
-        public ParticipationsController(ILogger logger, IParticipationService participationService)
+        public ParticipationsController(ILogger<ParticipationsController> logger, IParticipationService participationService)
         {
             this.logger = logger;
             this.participationService = participationService;
@@ -39,8 +40,8 @@ namespace RoosterPlanner.Api.Controllers
                 if (!result.Succeeded)
                     return UnprocessableEntity();
                 if (result.Data.Count == 0)
-                    return NotFound();
-
+                    return Ok(new List<ParticipationViewModel>());
+                
                 List<ParticipationViewModel> participationViewModels = result.Data
                     .Select(ParticipationViewModel.CreateVm)
                     .ToList();
@@ -49,7 +50,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ParticipationController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 return UnprocessableEntity(ex.Message);
             }
         }
@@ -65,14 +66,14 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded)
                     if (result.Data == null)
-                        return NotFound();
+                        return Ok();
                 ParticipationViewModel participationViewModel = ParticipationViewModel.CreateVm(result.Data);
 
                 return Ok(participationViewModel);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ParticipationController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -103,7 +104,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ParticipationController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -161,7 +162,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ParticipationController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -195,7 +196,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ParticipationController: Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
@@ -35,7 +36,7 @@ namespace RoosterPlanner.Service
         #endregion
 
         //Constructor
-        public ProjectService(IUnitOfWork unitOfWork, ILogger logger)
+        public ProjectService(IUnitOfWork unitOfWork, ILogger<ProjectService> logger)
         {
             this.unitOfWork = unitOfWork;
             this.projectRepository = unitOfWork.ProjectRepository;
@@ -57,7 +58,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -82,7 +83,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -102,7 +103,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -122,7 +123,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -144,7 +145,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -167,7 +168,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;

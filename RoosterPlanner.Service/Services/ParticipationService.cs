@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
@@ -24,7 +25,7 @@ namespace RoosterPlanner.Service
         //private readonly Data.Context.RoosterPlannerContext dataContext = null;
 
         //Constructor
-        public ParticipationService(IUnitOfWork unitOfWork, ILogger logger, IAzureB2CService azureB2CService)
+        public ParticipationService(IUnitOfWork unitOfWork, ILogger<ParticipationService> logger, IAzureB2CService azureB2CService)
         {
             this.unitOfWork = unitOfWork;
             participationRepository = unitOfWork.ParticipationRepository;
@@ -56,7 +57,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error adding participation");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
 
@@ -75,10 +76,10 @@ namespace RoosterPlanner.Service
                 result.Data = await participationRepository.GetActiveParticipationsAsync(personId);
                 result.Succeeded = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logger.Error(e, "Error loading participations");
-                result.Error = e;
+                logger.Log(LogLevel.Error,ex.ToString());
+                result.Error = ex;
                 result.Succeeded = false;
             }
 
@@ -93,10 +94,10 @@ namespace RoosterPlanner.Service
                 result.Data = participationRepository.Get(participationId);
                 result.Succeeded = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logger.Error(e, "Error loading participations");
-                result.Error = e;
+                logger.Log(LogLevel.Error,ex.ToString());
+                result.Error = ex;
                 result.Succeeded = false;
             }
 
@@ -115,10 +116,10 @@ namespace RoosterPlanner.Service
                     result.Succeeded = true;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logger.Error(e, "Error loading participations");
-                result.Error = e;
+                logger.Log(LogLevel.Error,ex.ToString());
+                result.Error = ex;
                 result.Succeeded = false;
             }
 
@@ -133,10 +134,10 @@ namespace RoosterPlanner.Service
                 result.Data = unitOfWork.ParticipationRepository.Remove(participation);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logger.Error(e, "Error loading participations");
-                result.Error = e;
+                logger.Log(LogLevel.Error,ex.ToString());
+                result.Error = ex;
                 result.Succeeded = false;
             }
 
@@ -154,7 +155,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error adding participation");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
 

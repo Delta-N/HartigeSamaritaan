@@ -98,10 +98,7 @@ namespace RoosterPlanner.Api
             //dit moet nog omgebouwd worden
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
-            services.AddSingleton<ILogger, Logger>(l =>
-            {
-                return Logger.Create(Configuration["ApplicationInsight:InstrumentationKey"]);
-            });
+            services.AddLogging();
 
             ServiceContainer.Register(services, Configuration);
         }

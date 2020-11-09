@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Common;
 using RoosterPlanner.Service;
@@ -21,7 +22,7 @@ namespace RoosterPlanner.Api.Controllers
         private readonly ILogger logger;
 
         //Constructor
-        public TasksController(IMapper mapper, ITaskService taskService, ILogger logger)
+        public TasksController(IMapper mapper, ITaskService taskService, ILogger<TasksController> logger)
         {
             this.mapper = mapper;
             this.taskService = taskService;

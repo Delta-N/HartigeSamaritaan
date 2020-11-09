@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Service.DataModels;
@@ -23,7 +24,7 @@ namespace RoosterPlanner.Service
         #endregion
 
         //Constructor
-        public TaskService(IUnitOfWork unitOfWork, ILogger logger)
+        public TaskService(IUnitOfWork unitOfWork, ILogger<TaskService> logger)
         {
             this.unitOfWork = unitOfWork;
             this.logger = logger;
@@ -40,7 +41,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve taken.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;

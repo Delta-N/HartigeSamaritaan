@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
@@ -23,7 +24,7 @@ namespace RoosterPlanner.Service
     public class PersonService : IPersonService
     {
         //Constructor
-        public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger logger)
+        public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger<PersonService> logger)
         {
             this.unitOfWork = unitOfWork;
             personRepository = unitOfWork.PersonRepository;
@@ -49,10 +50,10 @@ namespace RoosterPlanner.Service
                     taskResult.Message = ResponseMessage.UserNotFound;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logger.Error(e, $"Fout bij het ophalen van gebruiker met id {id}");
-                taskResult.Error = e;
+                logger.Log(LogLevel.Error,ex.ToString());
+                taskResult.Error = ex;
                 taskResult.Succeeded = false;
             }
 
@@ -81,10 +82,10 @@ namespace RoosterPlanner.Service
                     result.Message = b2CUsersResult.Message;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logger.Error(e, "Fout bij het ophalen van alle gebruikers");
-                result.Error = e;
+                logger.Log(LogLevel.Error,ex.ToString());
+                result.Error = ex;
                 result.Succeeded = false;
             }
 
@@ -113,10 +114,10 @@ namespace RoosterPlanner.Service
                     taskResult.Message = person.Message;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logger.Error(e, "Fout tijdens het update van User");
-                taskResult.Error = e;
+                logger.Log(LogLevel.Error,ex.ToString());
+                taskResult.Error = ex;
                 taskResult.Succeeded = false;
             }
 

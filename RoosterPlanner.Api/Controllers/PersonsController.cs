@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
@@ -28,7 +29,7 @@ namespace RoosterPlanner.Api.Controllers
         private readonly IPersonService personService;
 
         //Constructor
-        public PersonsController(IPersonService personService, ILogger logger,
+        public PersonsController(IPersonService personService, ILogger<PersonsController> logger,
             IOptions<AzureAuthenticationConfig> azureB2CConfig)
         {
             this.personService = personService;
@@ -58,7 +59,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "PersonController - Get(Guid id): Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -95,7 +96,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "PersonController - Get(): Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -131,7 +132,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "PersonController - UpdateUser(User user): Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 
@@ -171,7 +172,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "PersonController - Patch(): Error occured.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 Response.Headers.Add("message", ex.Message);
             }
 

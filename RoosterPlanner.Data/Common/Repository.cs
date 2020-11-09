@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Models;
 
@@ -26,7 +27,7 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         /// <param name="dataContext">The data context.</param>
         /// <param name="logger">Interface where log messages can be written to.</param>
-        public Repository(DbContext dataContext, ILogger logger)
+        public Repository(DbContext dataContext)
         {
             this.DataContext = dataContext ?? throw new ArgumentNullException("dataContext");
 
@@ -96,7 +97,7 @@ namespace RoosterPlanner.Data.Common
             catch (ValidationException valEx)
             {
                 //Log
-                logger.LogException(valEx, new Dictionary<string, string> { { "Message", valEx.Message }, { "FieldValue", valEx.Value.ToString() } });
+                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
@@ -131,7 +132,7 @@ namespace RoosterPlanner.Data.Common
             catch (ValidationException valEx)
             {
                 //Log
-                logger.LogException(valEx, new Dictionary<string, string> { { "Message", valEx.Message }, { "FieldValue", valEx.Value.ToString() } });
+                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
@@ -164,7 +165,7 @@ namespace RoosterPlanner.Data.Common
             catch (ValidationException valEx)
             {
                 //Log
-                logger.LogException(valEx, new Dictionary<string, string> { { "Message", valEx.Message }, { "FieldValue", valEx.Value.ToString() } });
+                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
