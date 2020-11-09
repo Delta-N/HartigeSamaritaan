@@ -19,7 +19,9 @@ export class AddAdminComponent implements OnInit {
   title: string;
 
 
-  constructor(private userService: UserService, @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<AddAdminComponent>) {
+  constructor(private userService: UserService,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public dialogRef: MatDialogRef<AddAdminComponent>) {
   }
 
   async ngOnInit(): Promise<void> {

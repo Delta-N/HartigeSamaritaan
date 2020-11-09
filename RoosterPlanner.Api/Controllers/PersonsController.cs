@@ -93,8 +93,15 @@ namespace RoosterPlanner.Api.Controllers
                 if (result.Data == null)
                     return Ok();
 
-                personViewModels.AddRange(result.Data.Select(user =>
-                    PersonViewModel.CreateVmFromUser(user, Extensions.GetInstance(azureB2CConfig))));
+                for (int i = 0; i < result.Data.Count(); i++)
+                {
+                    personViewModels.Add(PersonViewModel.CreateVmFromUser(result.Data[i],
+                        Extensions.GetInstance(azureB2CConfig)));
+                    if (personViewModels.Count == pageSize)
+                    {
+                        break;
+                    }
+                }
 
                 return Ok(personViewModels);
             }

@@ -53,6 +53,14 @@ export class UserService {
     return this.allUsers;
   }
 
+  async getRangeOfUsers(offset:number, pageSize:number):Promise<User[]>{
+    let rangeOfUsers:User[]=[]
+    await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}?offset=${offset}&pageSize=${pageSize}`).toPromise().then(response => {
+      rangeOfUsers=response.body
+    })
+    return rangeOfUsers
+  }
+
   userIsAdminFrontEnd(): boolean {
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
     if (idToken === null) {
