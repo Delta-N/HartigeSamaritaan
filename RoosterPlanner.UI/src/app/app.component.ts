@@ -9,7 +9,6 @@ import {MsalBroadcastService, MsalService} from "./msal";
 import {EventMessage, EventType, InteractionType} from "@azure/msal-browser";
 import {filter, takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
-import {environment} from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -38,11 +37,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isIframe = window !== window.parent && !window.opener;
-    //this.checkTokenInCache();
-    this.authService.handleRedirectObservable().subscribe({
-      next: (result) => console.log("redirect obs " + result),
-      error: (error) => console.log("redirect obs err " + error)
-    });
     this.isAuthenticated();
     this.checkAccount();
 
@@ -53,26 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
         takeUntil(this._destroying$)
       )
       .subscribe((result) => {
-        console.log(result)
         this.checkAccount();
       });
 
 
-  }
-
-  checkTokenInCache() {
-    let request = {
-      account: this.authService.getAllAccounts()[0],
-      scopes: environment.scopes
-    }
-    if (sessionStorage.getItem("msal.idtoken") == null) {
-      this.authService.acquireTokenSilent(request).toPromise().then(token => {
-        sessionStorage.setItem("msal.idtoken", token.idToken)
-      }, Error => {
-        this.authService.acquireTokenRedirect(request).toPromise().then(token => {
-        })
-      })
-    }
   }
 
   async checkAccount() {
