@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
@@ -18,7 +19,7 @@ namespace RoosterPlanner.Data.Repositories
     public class ShiftRepository : Repository<Shift>, IShiftRepository
     {
         //Constructor
-        public ShiftRepository(RoosterPlannerContext dataContext, ILogger logger) : base(dataContext, logger)
+        public ShiftRepository(RoosterPlannerContext dataContext) : base(dataContext)
         {
         }
 

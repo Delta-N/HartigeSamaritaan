@@ -1,14 +1,34 @@
-﻿namespace RoosterPlanner.Api.Models.Constants
+﻿using RoosterPlanner.Common.Config;
+
+namespace RoosterPlanner.Api.Models.Constants
 {
-    //Keuze gemaakt om de constanten hier op te nemen. @Dennis waar zou jij dat doen.
-    //Het leek mij overigens geen goed idee op de appsettings te laten injecteren in PersonViewmodel
+
     public class Extensions
     {
-        public static string UserRoleExtension =>
-            "extension_4e6dae7dd1c74eac85fefc6da42e7b61_UserRole";
+        private static Extensions _extensions;
+        private readonly AzureAuthenticationConfig azureB2CConfig;
 
-        public static string DateOfBirthExtension => "extension_4e6dae7dd1c74eac85fefc6da42e7b61_DateOfBirth";
+        private Extensions(AzureAuthenticationConfig azureB2CConfig)
+        {
+            this.azureB2CConfig = azureB2CConfig;
+        }
 
-        public static string PhoneNumberExtension => "extension_4e6dae7dd1c74eac85fefc6da42e7b61_PhoneNumber";
+        public static Extensions GetInstance(AzureAuthenticationConfig azureB2CConfig)
+        {
+            if (_extensions == null)
+            {
+                _extensions=new Extensions(azureB2CConfig);
+            }
+            return _extensions;
+        }
+
+        public string UserRoleExtension =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
+
+        public string DateOfBirthExtension =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
+
+        public string PhoneNumberExtension =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
     }
 }

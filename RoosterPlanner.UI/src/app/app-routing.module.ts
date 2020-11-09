@@ -1,12 +1,13 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from "./pages/home/home.component";
 import {NotFoundComponent} from "./pages/not-found/not-found.component";
 import {AdminComponent} from "./pages/admin/admin.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {ShiftComponent} from "./pages/shift/shift.component";
-import {MsalGuard} from "@azure/msal-angular";
 import {AuthorizationGuard} from "./guards/authorization.guard";
+import {ProjectComponent} from "./pages/project/project.component";
+import {MsalGuard} from "./msal";
 
 const routes: Routes = [
   {
@@ -15,7 +16,6 @@ const routes: Routes = [
     canActivate: [
       MsalGuard
     ]
-
   },
   {
     path: 'home',
@@ -33,6 +33,13 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'profile/:id',
+    component: ProfileComponent,
+    canActivate: [
+      MsalGuard
+    ]
+  },
+  {
     path: 'profile',
     component: ProfileComponent,
     canActivate: [
@@ -47,15 +54,31 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'project/:id',
+    component: ProjectComponent,
+    canActivate: [
+      MsalGuard
+    ]
+  },
+  {
+    // Needed for hash routing
+    path: 'code',
+    component: HomeComponent
+  },
+
+  {
     path: '**',
     component: NotFoundComponent
   }
-
-
 ];
+const isIframe = window !== window.parent && !window.opener;
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    useHash: false,
+    // Don't perform initial navigation in iframes
+    initialNavigation: !isIframe ? 'enabled' : 'disabled'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

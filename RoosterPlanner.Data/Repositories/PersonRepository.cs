@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
@@ -17,7 +18,7 @@ namespace RoosterPlanner.Data.Repositories
     public class PersonRepository : Repository<Person>, IPersonRepository
     {
         //Constructor
-        public PersonRepository(RoosterPlannerContext dataContext, ILogger logger) : base(dataContext, logger)
+        public PersonRepository(RoosterPlannerContext dataContext) : base(dataContext)
         {
         }
 

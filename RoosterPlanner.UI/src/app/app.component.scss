@@ -57,6 +57,7 @@ img {
   color: #FFFFFF;
   opacity: 1;
 }
+
 .sidenav-button {
   text-align: right;
   letter-spacing: 0;
@@ -75,6 +76,10 @@ img {
   padding: 30px;
   border-bottom: 1px solid gray;
 
+}
+
+#toolbar {
+  min-width: 100px
 }
 
 #push {

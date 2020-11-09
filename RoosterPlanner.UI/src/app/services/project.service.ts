@@ -4,17 +4,22 @@ import {Project} from "../models/project";
 import {HttpResponse} from "@angular/common/http";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {DateConverter} from "../helpers/date-converter";
+import {ToastrService} from "ngx-toastr";
+import {EntityHelper} from "../helpers/entity-helper";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
   projects: Project[] = [];
+  project: any;
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService,
+              private toastr: ToastrService) {
   }
 
-  async getProject(guid?: string) {
+  async getProject(guid?: string): Promise<Project[]> {
+    this.projects = []
     if (guid == null) {
       //return all projects
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}`).toPromise().then(response => {
@@ -22,38 +27,84 @@ export class ProjectService {
       });
     } else {
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}/${guid}`).toPromise().then(response => {
-        this.projects = response.body;
+        this.project = response.body
+        this.projects.push(this.project)
       });
     }
     return this.projects
   }
 
+  async getActiveProjects(): Promise<Project[]> {
+    let currentDate = new Date().toISOString();
+    this.projects = []
+    await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?closed=false&endDate=${currentDate}`).toPromise().then(response => {
+      this.projects = response.body;
+    })
+
+    return this.projects
+  }
+
   postProject(project: Project) {
     if (project === null) {
-      window.alert("Leeg project in project service");
-      return;
+      this.toastr.error("Leeg project in project service")
+      return null;
     }
     if (project.id === null || project.id === "") {
-      project.id = "00000000-0000-0000-0000-000000000000"
+      project.id = EntityHelper.returnEmptyGuid()
     }
     if (project.endDate !== null) {
-      if (project.endDate.toString() === "") {
+      if (project.endDate === undefined || project.endDate.toString() === "") {
         project.endDate = null;
       } else {
         project.endDate = DateConverter.toDate(project.endDate);
       }
     }
 
-
     if (project.startDate.toString() !== "") {
       try {
 
         project.startDate = DateConverter.toDate(project.startDate);
       } catch (e) {
-        console.error(e)
+        this.toastr.error(e)
         project.startDate = null;
       }
     }
     return this.apiService.post<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise();
+  }
+
+  updateProject(project: Project) {
+    if (project === null) {
+      this.toastr.error("Leeg project in project service")
+      return;
+    }
+    if (project.id === null || project.id === "") {
+      this.toastr.error("ProjectId is leeg")
+      return;
+    }
+    if (project.endDate !== null) {
+      if (project.endDate === undefined || project.endDate.toString() === "") {
+        project.endDate = null;
+      } else {
+        project.endDate = DateConverter.toDate(project.endDate);
+      }
+    }
+
+    if (project.startDate.toString() !== "") {
+      try {
+        project.startDate = DateConverter.toDate(project.startDate);
+      } catch (e) {
+        this.toastr.error(e)
+        project.startDate = null;
+      }
+    }
+    return this.apiService.patch<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise()
+  }
+
+  getParticipations(guid: string) {
+    if (guid === null) {
+      this.toastr.error("Fout tijdens het laden van participations")
+      return null;
+    }
+    return this.apiService.get<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}/`).toPromise()
   }
 }

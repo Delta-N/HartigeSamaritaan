@@ -12,14 +12,22 @@ namespace RoosterPlanner.Models
 
         [Column(Order = 1)]
         [Required, MaxLength(256)]
-        public string Name { get; set; }
+        public string firstName { get; set; }
         
-        [Column(Order = 2 )]
-        public PersonType Type { get; set; }
+        [Column(Order = 2)] public PersonType Type { get; set; }
 
         public List<Participation> Participations { get; set; }
         public List<Certificate> Certificates { get; set; }
-        
+
+        [NotMapped] public string LastName { get; set; }
+        [NotMapped] public string Email { get; set; }
+        [NotMapped] public string StreetAddress { get; set; }
+        [NotMapped] public string PostalCode { get; set; }
+        [NotMapped] public string City { get; set; }
+        [NotMapped] public string Country { get; set; }
+        [NotMapped] public string DateOfBirth { get; set; }
+        [NotMapped] public string PhoneNumber { get; set; }
+        [NotMapped] public string UserRole { get; set; }
 
         //Constructor
         public Person() : base(Guid.Empty)

@@ -20,9 +20,9 @@ namespace RoosterPlanner.Api.Models
         public string PhoneNumber { get; set; }
         public string UserRole { get; set; }
 
-        public static PersonViewModel CreateVm(User user)
+        public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
-            var personViewModel = new PersonViewModel
+            PersonViewModel personViewModel = new PersonViewModel
             {
                 Id = new Guid(user.Id),
                 FirstName = user.GivenName,
@@ -34,50 +34,101 @@ namespace RoosterPlanner.Api.Models
                 Country = user.Country
             };
             if (user.Identities != null && personViewModel.Email == null)
-                foreach (var objectIdentity in user.Identities)
+                foreach (ObjectIdentity objectIdentity in user.Identities)
                     if (objectIdentity.SignInType == "emailAddress")
                         personViewModel.Email = objectIdentity.IssuerAssignedId;
 
             if (user.AdditionalData == null) return personViewModel;
-            if (user.AdditionalData.ContainsKey(Extensions.UserRoleExtension))
+            if (user.AdditionalData.ContainsKey(extension.UserRoleExtension))
             {
                 Enum.TryParse(
-                    user.AdditionalData[Extensions.UserRoleExtension]
+                    user.AdditionalData[extension.UserRoleExtension]
                         .ToString(), out UserRole role);
                 personViewModel.UserRole = role.ToString();
             }
 
-            if (user.AdditionalData.ContainsKey(Extensions.DateOfBirthExtension))
+            if (user.AdditionalData.ContainsKey(extension.DateOfBirthExtension))
                 personViewModel.DateOfBirth = user
-                    .AdditionalData[Extensions.DateOfBirthExtension]
+                    .AdditionalData[extension.DateOfBirthExtension]
                     .ToString();
 
-            if (user.AdditionalData.ContainsKey(Extensions.PhoneNumberExtension))
+            if (user.AdditionalData.ContainsKey(extension.PhoneNumberExtension))
                 personViewModel.PhoneNumber = user
-                    .AdditionalData[Extensions.PhoneNumberExtension]
+                    .AdditionalData[extension.PhoneNumberExtension]
                     .ToString();
             return personViewModel;
         }
 
-        public static User CreateUser(PersonViewModel vm)
+        public static User CreateUser(PersonViewModel vm, Extensions extension)
         {
-            var user = new User
+            if (vm != null && extension != null)
             {
-                Id = vm.Id.ToString(),
-                GivenName = vm.FirstName,
-                Surname = vm.LastName,
-                Mail = vm.Email,
-                StreetAddress = vm.StreetAddress,
-                PostalCode = vm.PostalCode,
-                City = vm.City,
-                Country = vm.Country,
-                AdditionalData = new Dictionary<string, object>
+
+
+                User user = new User
                 {
-                    {Extensions.DateOfBirthExtension, vm.DateOfBirth},
-                    {Extensions.PhoneNumberExtension, vm.PhoneNumber}
-                }
-            };
-            return user;
+                    Id = vm.Id.ToString(),
+                    GivenName = vm.FirstName,
+                    Surname = vm.LastName,
+                    Mail = vm.Email,
+                    StreetAddress = vm.StreetAddress,
+                    PostalCode = vm.PostalCode,
+                    City = vm.City,
+                    Country = vm.Country,
+                    AdditionalData = new Dictionary<string, object>
+                    {
+                        {extension.DateOfBirthExtension, vm.DateOfBirth},
+                        {extension.PhoneNumberExtension, vm.PhoneNumber}
+                    }
+                };
+                return user;
+            }
+
+            return null;
+        }
+
+        public static RoosterPlanner.Models.Person CreatePerson(PersonViewModel vm)
+        {
+            if (vm != null)
+            {
+                return new RoosterPlanner.Models.Person(vm.Id)
+                {
+                    firstName = vm.FirstName,
+                    LastName = vm.LastName,
+                    Email = vm.Email,
+                    StreetAddress = vm.StreetAddress,
+                    PostalCode = vm.PostalCode,
+                    City = vm.City,
+                    Country = vm.Country,
+                    DateOfBirth = vm.DateOfBirth,
+                    UserRole = vm.UserRole,
+                    PhoneNumber = vm.PhoneNumber
+                };
+            }
+
+            return null;
+        }
+
+        public static PersonViewModel CreateVmFromPerson(RoosterPlanner.Models.Person person)
+        {
+            if (person != null)
+            {
+                return new PersonViewModel
+                {
+                    Id = person.Id,
+                    FirstName = person.firstName,
+                    LastName = person.LastName,
+                    Email = person.Email,
+                    StreetAddress = person.StreetAddress,
+                    PostalCode = person.PostalCode,
+                    City = person.City,
+                    Country = person.Country,
+                    DateOfBirth = person.DateOfBirth,
+                    UserRole = person.UserRole,
+                    PhoneNumber = person.PhoneNumber
+                };
+            }
+            return null;
         }
     }
 }

@@ -1,10 +1,11 @@
-.action-anchor{
+.action-anchor {
   position: absolute;
   bottom: 15px;
 }
+
 .cardholder {
   display: flex;
-  overflow-x:auto;
+  overflow-x: auto;
   align-items: flex-start;
   padding-top: 30px;
   flex-wrap: wrap;
@@ -19,7 +20,7 @@
   border-bottom: 1px solid gray;
 }
 
-.mat-button{
+.mat-button {
   text-align: left;
   font: normal normal 400 18px/27px Segoe UI;
   letter-spacing: 0;
@@ -28,17 +29,18 @@
   padding: 10px;
 }
 
-.mat-card-title{
+.mat-card-title {
   border-bottom: 1px solid gray;
   text-align: left;
   font: normal normal bold 21px/31px Segoe UI;
   letter-spacing: 0;
   color: #434343;
   opacity: 1;
-  margin-left:10px;
+  margin-left: 10px;
   padding-left: 10px;
 }
-.mat-card{
+
+.mat-card {
   border-radius: 20px;
   margin-right: 30px;
   background: #E8E8E8 0 0 no-repeat padding-box;
@@ -50,10 +52,11 @@
   letter-spacing: 0;
   color: #434343;
   min-width: 325px;
-  min-height:375px ;
-  max-height:375px ;
+  min-height: 375px;
+  max-height: 375px;
 }
-.mat-card-content{
+
+.mat-card-content {
   font: normal normal 400 18px/27px Segoe UI;
   color: #434343;
 
@@ -61,22 +64,27 @@
   justify-content: space-between;
   padding: 20px;
 }
-.mat-card-content.h6{
+
+.mat-card-content.h6 {
   margin-top: 25px;
 }
 
-.mat-card-actions{
+.mat-card-actions {
   border: none;
   color: red;
 }
-a:hover{
+
+a:hover {
   color: #434343;
   text-decoration-line: none;
+  cursor: pointer;
 }
-a{
-  color:#434343;
+
+a {
+  color: #434343;
 }
-h1{
+
+h1 {
   text-align: left;
   font: normal normal normal 35px/50px Segoe UI;
   letter-spacing: 0;
@@ -84,31 +92,31 @@ h1{
   opacity: 1;
 }
 
-.mat-card{
-margin-top: 30px;
+.mat-card {
+  margin-top: 30px;
   margin-bottom: 30px;
 }
 
-@media only screen and (max-width:1200px) {
-  .cardholder{
-    display:flex;
+@media only screen and (max-width: 1200px) {
+  .cardholder {
+    display: flex;
     justify-content: center;
   }
-  .mat-card{
-    margin:15px;
+  .mat-card {
+    margin: 15px;
   }
 }
 
 
-@media only screen and (max-width:450px) {
-  .cardholder{
-    display:flex;
+@media only screen and (max-width: 450px) {
+  .cardholder {
+    display: flex;
     flex-direction: column;
   }
-  .card{
+  .card {
     margin-bottom: 30px;
   }
-  .bar{
-    display:block;
+  .bar {
+    display: block;
   }
 }

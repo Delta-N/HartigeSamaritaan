@@ -1,22 +1,25 @@
-<div *ngIf="loaded">
+<div *ngIf="loaded" class="container">
   <h2 mat-dialog-title>Administrator {{title}}</h2>
 
   <div class="search">
-    <input class="form-control" type="text" name="search" [(ngModel)]="searchText" (ngModelChange)="resetPage()" autocomplete="off"
-           placeholder="Zoek gebruiker">
-    <br>
+    <p>
+      <input class="form-control" type="text" name="search" [(ngModel)]="searchText" (ngModelChange)="resetPage()" autocomplete="off" placeholder="Zoek gebruiker">
+    </p>
   </div>
 
-  <mat-dialog-content>
+  <mat-dialog-content id="content">
 <span *ngFor="let user of users| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
-  <a mat-dialog-close="" (click)="modAdmin(user.id)">{{user.firstName}} {{user.lastName}}</a>
-  <br>
+  <p><a (click)="modAdmin(user.id)" mat-dialog-close="{{user.firstName}}">{{user.firstName}} {{user.lastName}} </a></p>
 </span>
-    <br>
   </mat-dialog-content>
 
-  <mat-dialog-actions>
-    <button mat-raised-button (click)="prevPage()"><</button>
-    <button mat-raised-button (click)="nextPage()">></button>
+  <mat-dialog-actions id="actions-bar">
+    <div class="align-buttons">
+      <button mat-raised-button (click)="prevPage()"><</button>
+      <button mat-raised-button (click)="nextPage()">></button>
+    </div>
+    <div class="align-right">
+      <button mat-button (click)="close()">Annuleren</button>
+    </div>
   </mat-dialog-actions>
 </div>

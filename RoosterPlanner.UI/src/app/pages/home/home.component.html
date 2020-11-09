@@ -1,22 +1,22 @@
 <div class="container">
   <div class="bar">
     <h1>Dashboard</h1>
-    <h5 id="push" (click)="addProject()">Aanmelden bij project</h5>
+    <button mat-button id="push" (click)="addParticipation()">Aanmelden bij project</button>
   </div>
 
-  <span *ngIf="projects.length > 0">
+  <span *ngIf="participations.length > 0">
        <div class="cardholder">
-       <span *ngFor="let item of projects" class="mobilecard">
-        <app-project-card [project]="item"></app-project-card>
+       <span *ngFor="let item of participations" class="mobilecard">
+        <app-project-card [participation]="item"></app-project-card>
        </span>
         </div>
 </span>
 
-  <div *ngIf="projects.length === 0&& loaded===true">
-    <div class="container" style="min-height: 65vh;">
+  <div *ngIf="participations.length === 0&& loaded===true">
+    <div class="container">
       <div>
         <div class="row"><p id="flavortext">Nog niet aangemeld bij een project</p></div>
-        <div class="row"><a mat-button id="big-button" (click)="addProject()">Aanmelden</a></div>
+        <div class="row"><a mat-button id="big-button" (click)="addParticipation()">Aanmelden</a></div>
       </div>
     </div>
   </div>

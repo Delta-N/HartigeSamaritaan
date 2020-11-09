@@ -9,21 +9,6 @@ export class Project extends Entity {
   public startDate: Date;
   public endDate?: Date;
   public pictureUri?: string;
-  public websiteUri?: string;     //TODO waarom websiteUri?
+  public websiteUrl?: string;
   public closed?: boolean;
-
-
-  constructor(id: string, name?: string, address?: string, city?: string, description?: string, startDate?: Date, endDate?: Date, pictureUri?: string, websiteUri?: string, closed?: boolean,) {
-    super();
-    this.id = id;
-    this.name = name;
-    this.address = address;
-    this.city = city;
-    this.description = description;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.pictureUri = pictureUri;
-    this.websiteUri = websiteUri;
-    this.closed = closed;
-  }
 }

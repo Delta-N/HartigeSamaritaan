@@ -1,18 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {Configuration} from 'msal';
 
-import {
-  MSAL_CONFIG,
-  MSAL_CONFIG_ANGULAR,
-  MsalAngularConfiguration,
-  MsalInterceptor,
-  MsalModule,
-  MsalService
-} from '@azure/msal-angular';
-
-import {msalAngularConfig, msalConfig} from './app-config';
+import {CommonModule} from "@angular/common";
+import {ToastrModule} from "ngx-toastr";
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -36,13 +27,49 @@ import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AddAdminComponent} from './components/add-admin/add-admin.component';
 import {FilterPipe} from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
+import {ProjectComponent} from './pages/project/project.component';
+import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
+import {InteractionType, IPublicClientApplication, PublicClientApplication} from "@azure/msal-browser";
+import {MsalInterceptorConfig} from "./msal/msal.interceptor.config";
+import {MSAL_INSTANCE, MsalBroadcastService, MsalGuard, MsalInterceptor, MsalService} from "./msal";
+import {MSAL_GUARD_CONFIG, MSAL_INTERCEPTOR_CONFIG} from "./msal/constants";
+import {MsalGuardConfiguration} from "./msal/msal.guard.config";
+import {environment} from "../environments/environment";
 
-function MSALConfigFactory(): Configuration {
-  return msalConfig;
+export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication({
+    auth: {
+      clientId: environment.auth.clientId,
+      authority: environment.auth.authority,
+      navigateToLoginRequestUrl: environment.auth.navigateToLoginRequestUrl,
+      knownAuthorities: environment.auth.knownAuthorities,
+      redirectUri: environment.auth.redirectUri
+    },
+    cache: {
+      cacheLocation: 'sessionStorage',
+      storeAuthStateInCookie: isIE
+    },
+    system: {
+      tokenRenewalOffsetSeconds: 0,
+      loadFrameTimeout: 9000,
+    }
+
+  });
 }
 
-function MSALAngularConfigFactory(): MsalAngularConfiguration {
-  return msalAngularConfig;
+function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
+  const protectedResourceMap = new Map<string, Array<string>>();
+  environment.protectedResourceMap.forEach(input => {
+    let string1 = input[0] as string
+    let string2 = input[1] as string[]
+    protectedResourceMap.set(string1, string2)
+
+  })
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap,
+  };
 }
 
 @NgModule({
@@ -58,10 +85,13 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     CreateProjectComponent,
     AddAdminComponent,
     FilterPipe,
-    ChangeProfileComponent
+    ChangeProfileComponent,
+    ProjectComponent,
+    ConfirmDialogComponent
 
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -72,9 +102,9 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     MatDialogModule,
     MatCheckboxModule,
     HttpClientModule,
-    MsalModule,
     ReactiveFormsModule,
     FormsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     {
@@ -83,15 +113,22 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
       multi: true
     },
     {
-      provide: MSAL_CONFIG,
-      useFactory: MSALConfigFactory
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory
     },
     {
-      provide: MSAL_CONFIG_ANGULAR,
-      useFactory: MSALAngularConfigFactory
+      provide: MSAL_GUARD_CONFIG,
+      useValue: {
+        interactionType: InteractionType.Redirect
+      } as MsalGuardConfiguration
     },
-
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useFactory: MSALInterceptorConfigFactory
+    },
     MsalService,
+    MsalGuard,
+    MsalBroadcastService,
     AuthorizationGuard,
     FormBuilder
   ],

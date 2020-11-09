@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Models;
@@ -21,7 +22,7 @@ namespace RoosterPlanner.Service
         #endregion
 
         //Constructor
-        public MatchService(IUnitOfWork unitOfWork, ILogger logger)
+        public MatchService(IUnitOfWork unitOfWork, ILogger<MatchService> logger)
         {
             this.unitOfWork = unitOfWork;
             this.logger = logger;
@@ -54,7 +55,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het updaten van match.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
