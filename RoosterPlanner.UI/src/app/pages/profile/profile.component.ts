@@ -59,10 +59,12 @@ export class ProfileComponent implements OnInit {
       width: '500px',
       data: this.user
     });
-    dialogRef.afterClosed().subscribe(async result => {
-      setTimeout(x => {
-        this.loadUserProfile().then()
-      }, 500)
+    dialogRef.disableClose=true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.user = result;
+        this.age = this.calculateAge(this.user.dateOfBirth)
+      }
     })
   }
 

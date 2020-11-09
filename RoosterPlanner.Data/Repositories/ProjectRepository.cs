@@ -69,6 +69,10 @@ namespace RoosterPlanner.Data.Repositories
             if (filter.StartDate.HasValue)
                 q = q.Where(x => x.StartDate >= filter.StartDate.Value);
 
+            //EndDate
+            if (filter.EndDate.HasValue)
+                q = q.Where(x => x.EndDate >= filter.EndDate.Value || x.EndDate == null);
+
             //Closed
             if (filter.Closed.HasValue)
                 q = q.Where(x => x.Closed == filter.Closed.Value);

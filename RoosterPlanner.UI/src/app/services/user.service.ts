@@ -10,7 +10,7 @@ import {ToastrService} from "ngx-toastr";
   providedIn: 'root'
 })
 export class UserService {
-  user: User = new User('');
+  user: User;
   administrators: User[] = [];
   allUsers: User[] = [];
 
@@ -61,20 +61,23 @@ export class UserService {
     return ((idToken.extension_UserRole === 1) || (idToken.extension_UserRole === 2))
   }
 
-  async updateUser(updateUser: User) {
+  async updateUser(updateUser: User): Promise<User> {
+    let user: User = new User();
     await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/`, updateUser).toPromise().then(response => {
-
-    }).catch()
+      user = response.body
+    })
+    return user
   }
 
   async getCurrentUser() {
     let id = this.getCurrentUserId();
-    if(this.getCurrentUserId()!=false) {
+    if (this.getCurrentUserId() != false) {
       return this.getUser(id);
     }
     return false;
   }
-  getCurrentUserId(){
+
+  getCurrentUserId() {
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
     if (idToken === null) {
       return false;

@@ -1,9 +1,10 @@
-﻿import { Pipe, PipeTransform } from '@angular/core';
+﻿import {Pipe, PipeTransform} from '@angular/core';
+import {User} from "../models/user";
 
-@Pipe({ name: 'userFilter' })
+@Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
 
-  transform(items: any[], searchText: string): any[] {
+  transform(items: User[], searchText: string): any[] {
     if (!items) {
       return [];
     }
@@ -12,8 +13,8 @@ export class FilterPipe implements PipeTransform {
     }
     searchText = searchText.toLowerCase()
 
-    return items.filter(function(item){
-      return JSON.stringify(item).toLowerCase().includes(searchText);
+    return items.filter(function (item) {
+      return JSON.stringify(item.firstName + " " + item.lastName).toLowerCase().includes(searchText);
     });
   }
 }

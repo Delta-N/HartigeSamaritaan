@@ -30,7 +30,9 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(p => p.Person)
                 .Include(p => p.Availabilities)
                 .Include(p => p.WantsToWorkWith)
-                .Where(p => p.PersonId == personId && !p.Project.Closed)
+                .Where(p => p.PersonId == personId && !p.Project.Closed && (
+                    p.Project.EndDate >= DateTime.Now ||
+                    p.Project.EndDate == null))
                 .ToListAsync();
         }
 

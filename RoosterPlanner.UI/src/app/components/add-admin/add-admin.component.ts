@@ -1,5 +1,5 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 
@@ -16,34 +16,32 @@ export class AddAdminComponent implements OnInit {
   displayUsers: User[] = []
   loaded: boolean;
   searchText: string = '';
-  title:string;
+  title: string;
 
 
-
-  constructor(private userService: UserService, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(private userService: UserService, @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<AddAdminComponent>) {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.userService.getAllUsers().then(users => {
-      users.forEach(user => {
-        if (this.data.addAdminType) {
-          if (user.userRole !== "Boardmember") {
-            this.users.push(user);
-          }
-
-        }
-        if (!this.data.addAdminType) {
-          if (user.userRole === "Boardmember") {
-            this.users.push(user);
-          }
-        }
-      })
-
+    if (this.data.administrators != null && !this.data.addAdminType) {
+      this.users = this.data.administrators;
       this.loaded = true;
-    })
+    } else {
+      await this.userService.getAllUsers().then(users => {
+        users.forEach(user => {
+          if (this.data.addAdminType) {
+            if (user.userRole !== "Boardmember") {
+              this.users.push(user);
+            }
+          }
+        })
+        this.loaded = true;
+      })
+    }
+
     this.users.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
     this.fillDisplayUsers();
-    this.data.addAdminType?this.title = 'toevoegen':this.title='verwijderen';
+    this.data.addAdminType ? this.title = 'toevoegen' : this.title = 'verwijderen';
   }
 
   fillDisplayUsers() {
@@ -63,7 +61,6 @@ export class AddAdminComponent implements OnInit {
       this.currentPage++;
       this.fillDisplayUsers();
     }
-
   }
 
   prevPage() {
@@ -83,6 +80,9 @@ export class AddAdminComponent implements OnInit {
 
   resetPage() {
     this.currentPage = 1;
+  }
+  close(){
+    this.dialogRef.close()
   }
 
 }

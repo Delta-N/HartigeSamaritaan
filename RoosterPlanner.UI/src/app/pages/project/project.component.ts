@@ -40,11 +40,7 @@ export class ProjectComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    if (this.isAdmin) {
-      await this.getProject().then();
-    } else {
       await this.getParticipation().then();
-    }
   }
 
   async getProject() {
@@ -93,13 +89,13 @@ export class ProjectComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== 'false') {
         if (result === 'closed') {
-          setTimeout(x => {
+          setTimeout(() => {
             this.toastr.success("Dit project is gesloten")
             this.getProject().then();
           }, 500);
         } else {
-          setTimeout(x => {
-            this.toastr.success(result + " is gewijzigd")
+          setTimeout(() => {
+            this.toastr.success(result.name + " is gewijzigd")
             this.getProject().then();
           }, 500);
         }
@@ -110,14 +106,14 @@ export class ProjectComponent implements OnInit {
 
   async closeProject() {
     this.project.closed = !this.project.closed;
-    await this.projectService.updateProject(this.project).then(response => {
+    await this.projectService.updateProject(this.project).then(() => {
       this.getProject().then();
       if (this.project.closed) {
         this.toastr.success("Het project is gesloten");
       } else {
         this.toastr.success("Het project is geopend");
       }
-    }, Error => this.toastr.error("Fout tijdens het sluiten van het project"));
+    }, () => this.toastr.error("Fout tijdens het sluiten van het project"));
   }
 
   editWorkingHours() {
@@ -131,7 +127,7 @@ export class ProjectComponent implements OnInit {
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult != null && dialogResult !== this.participation.maxWorkingHoursPerWeek) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
-        this.participationService.updateParticipation(this.participation).then(x => {
+        this.participationService.updateParticipation(this.participation).then(() => {
           this.getParticipation().then()
         })
       }

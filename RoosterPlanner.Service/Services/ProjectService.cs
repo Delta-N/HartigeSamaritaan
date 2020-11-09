@@ -93,7 +93,7 @@ namespace RoosterPlanner.Service
             if (id == Guid.Empty)
                 return null;
 
-            var taskResult = new TaskResult<Project>();
+            TaskResult<Project> taskResult = new TaskResult<Project>();
 
             try
             {
@@ -113,7 +113,7 @@ namespace RoosterPlanner.Service
             if (project == null)
                 throw new ArgumentNullException("project");
 
-            var taskResult = new TaskResult<Project>();
+            TaskResult<Project> taskResult = new TaskResult<Project>();
 
             try
             {
@@ -135,7 +135,7 @@ namespace RoosterPlanner.Service
                 throw new ArgumentNullException("project");
             }
 
-            var taskResult = new TaskResult<Project>();
+            TaskResult<Project> taskResult = new TaskResult<Project>();
 
             try
             {

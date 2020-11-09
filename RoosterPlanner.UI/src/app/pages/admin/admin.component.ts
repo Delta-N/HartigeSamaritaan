@@ -23,7 +23,7 @@ export class AdminComponent implements OnInit {
   tempListAdmins: User[] = [];
   loaded: boolean = false;
   administrators: User[] = []
-  itemsPerCard:number=5;
+  itemsPerCard: number = 5;
 
   constructor(public dialog: MatDialog,
               private projectService: ProjectService,
@@ -34,7 +34,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProjects().then()
-    this.getAdministrators().then(x => this.loaded = true)
+    this.getAdministrators().then(() => this.loaded = true)
   }
 
   async getProjects() {
@@ -52,10 +52,10 @@ export class AdminComponent implements OnInit {
   }
 
   spitAdministrators() {
+    this.administrators.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
     for (let i = 0; i < this.administrators.length; i++) {
       this.tempListAdmins.push(this.administrators[i])
       if (this.tempListAdmins.length === this.itemsPerCard || i === this.administrators.length - 1) {
-        this.tempListAdmins.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
         this.listOfAdmins.push(this.tempListAdmins);
         this.tempListAdmins = [];
       }
@@ -63,10 +63,10 @@ export class AdminComponent implements OnInit {
   }
 
   splitProjects() {
+    this.projects.sort((a, b) => a.startDate < b.startDate ? 1 : -1);
     for (let i = 0; i < this.projects.length; i++) {
       this.tempListProjects.push(this.projects[i])
       if (this.tempListProjects.length === this.itemsPerCard || i === this.projects.length - 1) {
-        this.tempListProjects.sort((a, b) => a.name > b.name ? 1 : -1);
         this.listOfProjects.push(this.tempListProjects);
         this.tempListProjects = [];
       }
@@ -76,50 +76,49 @@ export class AdminComponent implements OnInit {
   addProject() {
     const dialogRef = this.dialog.open(CreateProjectComponent, {
       width: '500px',
-      data: {createProject: true}
+      data: {
+        createProject: true,
+      }
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result !== 'false') {
-        setTimeout(x => {
+        setTimeout(() => {
           this.listOfProjects = []
-          this.getProjects().then(x => {
+          this.getProjects().then(() => {
             if (result != null) {
-              this.toastr.success(result + " is toegevoegd als nieuw project")
+              this.toastr.success(result.name + " is toegevoegd als nieuw project")
             }
           })
         }, 1000);
       }
     });
   }
+  modAdmin(modifier: string) {
+    let toastrString: string;
+    let dataModifier: boolean;
+    if (modifier === 'add') {
+      toastrString = 'toegevoegd';
+      dataModifier = true;
+    } else if (modifier === 'remove') {
+      toastrString = 'verwijderd';
+      dataModifier = false;
+    }
 
-  async addAdministrator() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '500px',
-      data: {addAdminType: true}
-    });
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result != null) {
-        this.listOfAdmins = [];
-        setTimeout(x => {
-          this.getAdministrators().then()
-          this.toastr.success(result + " is toegevoegd als administrator")
-        }, 500);
+      data: {
+        addAdminType: dataModifier,
+        administrators: this.administrators
       }
-    })
-  }
-
-  removeAdministrator() {
-    const dialogRef = this.dialog.open(AddAdminComponent, {
-      width: '500px',
-      data: {addAdminType: false}
     });
+    dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(async result => {
       if (result != null) {
         this.listOfAdmins = [];
-        setTimeout(x => {
+        setTimeout(() => {
           this.getAdministrators().then()
-          this.toastr.success(result + " is verwijderd als administrator")
+          this.toastr.success(result + " is " + toastrString + " als administrator")
         }, 500);
       }
     });

@@ -22,7 +22,7 @@ namespace RoosterPlanner.Api.Models
 
         public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
-            var personViewModel = new PersonViewModel
+            PersonViewModel personViewModel = new PersonViewModel
             {
                 Id = new Guid(user.Id),
                 FirstName = user.GivenName,
@@ -34,7 +34,7 @@ namespace RoosterPlanner.Api.Models
                 Country = user.Country
             };
             if (user.Identities != null && personViewModel.Email == null)
-                foreach (var objectIdentity in user.Identities)
+                foreach (ObjectIdentity objectIdentity in user.Identities)
                     if (objectIdentity.SignInType == "emailAddress")
                         personViewModel.Email = objectIdentity.IssuerAssignedId;
 
@@ -61,7 +61,7 @@ namespace RoosterPlanner.Api.Models
 
         public static User CreateUser(PersonViewModel vm,Extensions extension)
         {
-            var user = new User
+            User user = new User
             {
                 Id = vm.Id.ToString(),
                 GivenName = vm.FirstName,
