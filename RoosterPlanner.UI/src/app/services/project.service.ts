@@ -35,8 +35,9 @@ export class ProjectService {
   }
 
   async getActiveProjects(): Promise<Project[]> {
+    let currentDate = new Date().toISOString();
     this.projects = []
-    await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?closed=false`).toPromise().then(response => {
+    await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?closed=false&endDate=${currentDate}`).toPromise().then(response => {
       this.projects = response.body;
     })
 

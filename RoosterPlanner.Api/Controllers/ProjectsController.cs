@@ -55,6 +55,7 @@ namespace RoosterPlanner.Api.Controllers
         public async Task<ActionResult<List<ProjectViewModel>>> Search(string name,
             string city,
             DateTime? startDateFrom = null,
+            DateTime? endDate = null,
             bool? closed = null,
             int offset = 0,
             int pageSize = 20)
@@ -64,6 +65,7 @@ namespace RoosterPlanner.Api.Controllers
                 Name = name,
                 City = city,
                 StartDate = startDateFrom,
+                EndDate = endDate,
                 Closed = closed
             };
 

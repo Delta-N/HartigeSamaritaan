@@ -19,6 +19,11 @@ namespace RoosterPlanner.Models.FilterModels
         /// Gets or sets the StartDate.
         /// </summary>
         public DateTime? StartDate { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the StartDate.
+        /// </summary>
+        public DateTime? EndDate { get; set; }
 
         /// <summary>
         /// Gets or sets the locatie.

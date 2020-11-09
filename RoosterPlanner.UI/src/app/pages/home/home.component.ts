@@ -64,45 +64,36 @@ export class HomeComponent implements OnInit {
     let projects: Project[] = [];
     if (this.checkUserProfileValid()) {
       await this.projectService.getActiveProjects().then(response => {
-        response.forEach(project => {
-          if (project.endDate == null) {
-            projects.push(project)
-          } else if (project.endDate != null) {
-            let dateNow: Date = new Date()
+          projects = response;
 
-            if (DateConverter.toDate(DateConverter.toReadableString(project.endDate.toString())) >= dateNow) {
-              projects.push(project)
-            }
-          }
-        })
+          projects.forEach(pro => {
+            this.participations.forEach(par => {
+              if (pro.id == par.project.id) {
+                projects = projects.filter(obj => obj !== pro);
+              }
+            })
+          })
 
-        projects.forEach(pro => {
-          this.participations.forEach(par => {
-            if (pro.id == par.project.id) {
-              projects = projects.filter(obj => obj !== pro);
+          let dialogRef = this.dialog.open(AddProjectComponent, {
+            data: projects,
+            width: '350px',
+          });
+          dialogRef.disableClose = true;
+          dialogRef.afterClosed().subscribe(result => {
+            if (result !== 'false') {
+              this.selectedProjects = result;
+              this.selectedProjects.forEach(project => {
+                let participation: Participation = new Participation();
+                participation.id = EntityHelper.returnEmptyGuid();
+                participation.person = this.currentUser;
+                participation.project = project
+                this.participationService.postParticipation(participation);
+              })
+              setTimeout(() => this.getParticipations(), 1000)
             }
           })
-        })
-
-        let dialogRef = this.dialog.open(AddProjectComponent, {
-          data: projects,
-          width: '350px',
-        });
-        dialogRef.disableClose = true;
-        dialogRef.afterClosed().subscribe(result => {
-          if (result !== 'false') {
-            this.selectedProjects = result;
-            this.selectedProjects.forEach(project => {
-              let participation: Participation = new Participation();
-              participation.id = EntityHelper.returnEmptyGuid();
-              participation.person = this.currentUser;
-              participation.project = project
-              this.participationService.postParticipation(participation);
-            })
-            setTimeout(() => this.getParticipations(), 1000)
-          }
-        })
-      })
+        }
+      )
     } else {
       this.toastr.warning("Vul eerst je profiel aan.")
       this.route.navigateByUrl('/profile').then()
