@@ -10,11 +10,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.Enums;
-using RoosterPlanner.Common;
 using RoosterPlanner.Common.Config;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
+using RoosterPlanner.Service.Helpers;
 using Extensions = RoosterPlanner.Api.Models.Constants.Extensions;
 
 namespace RoosterPlanner.Api.Controllers
@@ -44,8 +44,8 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid id.");
             try
             {
-                TaskResult<User> result = new TaskResult<User>();
-                string oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                TaskResult<User> result;
+                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
                 if (id.ToString() == oid || UserHasRole(oid, UserRole.Boardmember))
                     result = await personService.GetUser(id);
@@ -120,7 +120,7 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("Invalid User");
             try
             {
-                string oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 if (oid == null) return BadRequest("Invalid User");
 
                 //only the owner of a profile or a boardmember can update user data
@@ -186,19 +186,7 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity();
             }
         }
-
-        public static string GetOid(ClaimsIdentity claimsIdentity)
-        {
-            ClaimsIdentity identity = claimsIdentity;
-            string oid = null;
-            if (identity != null)
-                oid = identity.Claims.FirstOrDefault(c =>
-                        c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
-                    ?.Value;
-            return oid;
-        }
-
-        public bool UserHasRole(string oid, UserRole userRole)
+        private bool UserHasRole(string oid, UserRole userRole)
         {
             Task<ActionResult> currentUserActionResult = Get(Guid.Parse(oid));
             OkObjectResult okObjectResult = (OkObjectResult) currentUserActionResult.Result;

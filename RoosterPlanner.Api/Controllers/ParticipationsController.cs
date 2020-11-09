@@ -10,6 +10,7 @@ using RoosterPlanner.Api.Models;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
+using RoosterPlanner.Service.Helpers;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -90,7 +91,7 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 Participation participation = ParticipationViewModel.CreateParticipation(participationViewModel);
-                participation.LastEditBy = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                participation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 participation.LastEditDate = DateTime.UtcNow;
 
                 if (participation.Id == Guid.Empty)
@@ -149,7 +150,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 oldParticipation.Person = null;
                 oldParticipation.Project = null;
-                oldParticipation.LastEditBy = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                oldParticipation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldParticipation.LastEditDate = DateTime.UtcNow;
 
                 result = participationService.UpdateParticipation(oldParticipation);
@@ -181,7 +182,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<Participation> participation = participationService.GetParticipation(id);
                 if (!participation.Succeeded) BadRequest("Invalid participation");
 
-                string oid = GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 if (oid == null)
                     return BadRequest("Invalid User");
 
@@ -203,17 +204,6 @@ namespace RoosterPlanner.Api.Controllers
                 Response.Headers.Add("message", ex.Message);
                 return UnprocessableEntity();
             }
-        }
-
-        private static string GetOid(ClaimsIdentity claimsIdentity)
-        {
-            ClaimsIdentity identity = claimsIdentity;
-            string oid = null;
-            if (identity != null)
-                oid = identity.Claims.FirstOrDefault(c =>
-                        c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
-                    ?.Value;
-            return oid;
         }
     }
 }

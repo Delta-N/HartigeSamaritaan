@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
-using RoosterPlanner.Common;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
+using RoosterPlanner.Service.Helpers;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -111,8 +111,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
                 project.LastEditDate = DateTime.UtcNow;
-                string oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-                project.LastEditBy = oid ?? null;
+                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                project.LastEditBy = oid;
 
                 if (project.Id == Guid.Empty)
                     result = projectService.CreateProject(project);
@@ -159,8 +159,8 @@ namespace RoosterPlanner.Api.Controllers
                 oldProject.WebsiteUrl = updatedProject.WebsiteUrl;
 
                 oldProject.LastEditDate = DateTime.UtcNow;
-                string oid = PersonsController.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-                oldProject.LastEditBy = oid ?? null;
+                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                oldProject.LastEditBy = oid;
                 TaskResult<Project> result = projectService.UpdateProject(oldProject);
                 if (!result.Succeeded) return UnprocessableEntity();
                 return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
