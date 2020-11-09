@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Context;
 using RoosterPlanner.Data.Repositories;
+using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Common
 {
@@ -14,8 +15,6 @@ namespace RoosterPlanner.Data.Common
         IParticipationRepository ParticipationRepository { get; }
 
         IPersonRepository PersonRepository { get; }
-
-        IProjectPersonRepository ProjectPersonRepository { get; }
 
         ITaskRepository TaskRepository { get; }
 
@@ -48,11 +47,10 @@ namespace RoosterPlanner.Data.Common
         /// Gets the data context.
         /// </summary>
         protected RoosterPlannerContext DataContext { get; private set; }
-        protected ILogger Logger { get; private set; }
+        protected ILogger<UnitOfWork> Logger { get; private set; }
 
         private IProjectRepository projectRepository;
         private IParticipationRepository participationRepository;
-        private IProjectPersonRepository projectPersonRepository;
         private IPersonRepository personRepository;
         private ITaskRepository taskRepository;
         private ICategoryRepository categoryRepository;
@@ -67,7 +65,7 @@ namespace RoosterPlanner.Data.Common
             get
             {
                 if (projectRepository == null)
-                    this.projectRepository = new ProjectRepository(this.DataContext, this.Logger);
+                    this.projectRepository = new ProjectRepository(this.DataContext);
                 return this.projectRepository;
             }
         }
@@ -78,7 +76,7 @@ namespace RoosterPlanner.Data.Common
             get
             {
                 if (shiftRepository == null)
-                    this.shiftRepository = new ShiftRepository(this.DataContext, null);
+                    this.shiftRepository = new ShiftRepository(this.DataContext);
                 return this.shiftRepository;
             }
         }
@@ -88,19 +86,8 @@ namespace RoosterPlanner.Data.Common
             get
             {
                 if (matchRepository == null)
-                    this.matchRepository = new MatchRepository(this.DataContext, null);
+                    this.matchRepository = new MatchRepository(this.DataContext);
                 return this.matchRepository;
-            }
-        }
-
-
-        public IProjectPersonRepository ProjectPersonRepository
-        {
-            get
-            {
-                if (projectPersonRepository == null)
-                    projectPersonRepository = new ProjectPersonRepository(this.DataContext, this.Logger);
-                return projectPersonRepository;
             }
         }
 
@@ -109,7 +96,7 @@ namespace RoosterPlanner.Data.Common
             get
             {
                 if (taskRepository == null)
-                    this.taskRepository = new TaskRepository(this.DataContext, this.Logger);
+                    this.taskRepository = new TaskRepository(this.DataContext);
                 return this.taskRepository;
             }
         }
@@ -119,7 +106,7 @@ namespace RoosterPlanner.Data.Common
             get
             {
                 if (categoryRepository == null)
-                    this.categoryRepository = new CategoryRepository(this.DataContext, this.Logger);
+                    this.categoryRepository = new CategoryRepository(this.DataContext);
                 return this.categoryRepository;
             }
         }
@@ -129,7 +116,7 @@ namespace RoosterPlanner.Data.Common
             get
             {
                 if (participationRepository == null)
-                    this.participationRepository = new ParticipationRepository(this.DataContext, this.Logger);
+                    this.participationRepository = new ParticipationRepository(this.DataContext);
                 return this.participationRepository;
             }
         }
@@ -139,7 +126,7 @@ namespace RoosterPlanner.Data.Common
             get
             {
                 if (personRepository == null)
-                    this.personRepository = new PersonRepository(this.DataContext, this.Logger);
+                    this.personRepository = new PersonRepository(this.DataContext);
                 return this.personRepository;
             }
         }
@@ -149,7 +136,7 @@ namespace RoosterPlanner.Data.Common
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
-        public UnitOfWork(RoosterPlannerContext dataContext, ILogger logger)
+        public UnitOfWork(RoosterPlannerContext dataContext, ILogger<UnitOfWork> logger)
         {
             this.DataContext = dataContext;
             this.Logger = logger;

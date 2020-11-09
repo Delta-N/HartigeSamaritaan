@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
@@ -18,7 +19,7 @@ namespace RoosterPlanner.Data.Repositories
     public class ShiftRepository : Repository<Shift>, IShiftRepository
     {
         //Constructor
-        public ShiftRepository(RoosterPlannerContext dataContext, ILogger logger) : base(dataContext, logger)
+        public ShiftRepository(RoosterPlannerContext dataContext) : base(dataContext)
         {
         }
 
@@ -26,7 +27,7 @@ namespace RoosterPlanner.Data.Repositories
         {
             return EntitySet.Where(i => i.Date > DateTime.Now
             && i.Task.DeletedDateTime == null
-            && i.Task.TaskProjects.Any(x => x.ProjectId == projectId))
+            && i.Task.ProjectTasks.Any(x => x.ProjectId == projectId))
             .OrderBy(i => i.Date).ThenBy(i => i.StartTime)
                 .Include(t => t.Task)
                 .Include("Task.Category").ToListAsync();

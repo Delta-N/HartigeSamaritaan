@@ -12,10 +12,10 @@ namespace RoosterPlanner.Models
         [Column(Order = 2)]
         public TimeSpan EndTime { get; set; }
 
-        [Column(Order = 3, TypeName ="date")]
+        [Column(Order = 3, TypeName = "date")]
         public DateTime Date { get; set; }
 
-        public List<Match> Matches { get; set; }
+        public List<Availability> Availabilities { get; set; }
 
         [Column(Order = 4)]
         public Guid TaskId { get; set; }
@@ -23,9 +23,22 @@ namespace RoosterPlanner.Models
         [ForeignKey("TaskId")]
         public Task Task { get; set; }
 
+        [Column(Order = 5)]
+        public Guid ProjectId { get; set; }
+
+        [ForeignKey("ProjectId")]
+        public Project Project { get; set; }
+
+
         //Constructor
         public Shift() : base()
         {
+            Availabilities = new List<Availability>();
+        }
+
+        public Shift(Guid id) : base(id)
+        {
+            Availabilities = new List<Availability>();
         }
     }
 }

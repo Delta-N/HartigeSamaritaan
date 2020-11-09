@@ -1,0 +1,89 @@
+.mat-toolbar {
+  height: 7vh;
+  background-color: #E74B3B;
+}
+
+div {
+  overflow: inherit;
+}
+
+
+a {
+  text-decoration: none;
+  font-size: 110%;
+  white-space: normal;
+}
+
+button {
+  font-size: 110%;
+  min-width: min-content;
+}
+
+.example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.example-container {
+  position: absolute;
+  top: 7vh;
+  bottom: 1px;
+  left: 0;
+  right: 0;
+}
+
+.example-sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  background: rgba(255, 0, 0, 0.5);
+}
+
+
+img {
+  width: 50%;
+  max-width: 300px;
+  height: auto;
+}
+
+.toolbarbutton {
+  text-align: right;
+  font: normal normal normal 18px/28px Segoe UI;
+  letter-spacing: 0;
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+.sidenav-button {
+  text-align: right;
+  letter-spacing: 0;
+  color: black;
+  opacity: 1;
+}
+
+.logo {
+  display: flex;
+  min-width: 150px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  border-bottom: 1px solid gray;
+
+}
+
+#toolbar {
+  min-width: 100px
+}
+
+#push {
+  font: normal normal normal 20px/28px Segoe UI;
+  margin-left: auto;
+}
+

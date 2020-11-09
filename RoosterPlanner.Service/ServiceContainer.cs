@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
-using RoosterPlanner.Data.Repositories;
 
 namespace RoosterPlanner.Service
 {

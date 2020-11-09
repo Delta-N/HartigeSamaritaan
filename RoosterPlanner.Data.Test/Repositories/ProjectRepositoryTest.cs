@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RoosterPlanner.Common;
@@ -45,7 +46,7 @@ namespace RoosterPlanner.Data.Repositories
             int rowsAffected = 0;
             using (RoosterPlannerContext context = GetRoosterPlannerContext(connectionStringsConfig))
             {
-                ProjectRepository projectRepo = new ProjectRepository(context, loggerMock.Object);
+                ProjectRepository projectRepo = new ProjectRepository(context);
                 addedProject = projectRepo.AddOrUpdate(project);
 
                 rowsAffected = context.SaveChanges();
@@ -54,9 +55,9 @@ namespace RoosterPlanner.Data.Repositories
 
             //Assert
             Assert.IsNotNull(addedProject);
-            Assert.AreNotEqual<Guid>(Guid.Empty, addedProject.Id);
+            Assert.AreNotEqual(Guid.Empty, addedProject.Id);
             Assert.IsTrue(addedProject.LastEditDate > DateTime.UtcNow.Date);
-            Assert.AreEqual<int>(1, rowsAffected);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
@@ -84,13 +85,13 @@ namespace RoosterPlanner.Data.Repositories
 
             using (RoosterPlannerContext context = GetRoosterPlannerContext(connectionStringsConfig))
             {
-                ProjectRepository projectRepo = new ProjectRepository(context, loggerMock.Object);
+                ProjectRepository projectRepo = new ProjectRepository(context);
                 loadedProject = projectRepo.Get(projectId);
             }
 
             //Assert
             Assert.IsNotNull(loadedProject);
-            Assert.AreEqual<Guid>(projectId, loadedProject.Id);
+            Assert.AreEqual(projectId, loadedProject.Id);
             Assert.IsNotNull(loadedProject.Name);
             Assert.IsTrue(loadedProject.StartDate > new DateTime(2019, 1, 1));
         }
@@ -109,13 +110,13 @@ namespace RoosterPlanner.Data.Repositories
 
             MockRepository mockRepo = new MockRepository(MockBehavior.Default);
             Mock<ILogger> loggerMock = mockRepo.Create<ILogger>();
-            loggerMock.Setup(s => s.LogException(It.IsNotNull<ValidationException>(), It.IsNotNull<Dictionary<string, string>>()));
+            //loggerMock.Setup(s => s.Log(It.IsNotNull<LogLevel>(), It.IsNotNull<Dictionary<string, string>>()));
 
             //Act
             Project savedProject = null;
             using (RoosterPlannerContext context = GetRoosterPlannerContext(connectionStringsConfig))
             {
-                ProjectRepository projectRepo = new ProjectRepository(context, loggerMock.Object);
+                ProjectRepository projectRepo = new ProjectRepository(context);
                 savedProject = projectRepo.AddOrUpdate(project);
             }
 

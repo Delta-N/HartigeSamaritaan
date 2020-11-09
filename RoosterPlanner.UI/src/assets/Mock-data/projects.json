@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Delft"
+    },
+    {
+        "id": 2,
+        "name": "Rotterdam"
+    },
+    {
+        "id": 3,
+        "name": "Amsterdam"
+    },
+    {
+        "id": 4,
+        "name": "Delft2"
+    },
+    {
+        "id": 5,
+        "name": "Utrecht"
+    },
+    {
+        "id": 6,
+        "name": "Maastricht"
+    }
+]

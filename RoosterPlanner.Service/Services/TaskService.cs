@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Service.DataModels;
+using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Service
 {
     public interface ITaskService
     {
-        Task<TaskListResult<Models.Task>> GetActiveTasksAsync();
+        Task<TaskListResult<Task>> GetActiveTasksAsync();
 
         Task<TaskResult> SetTaskDeleteAsync(Guid id);
     }
@@ -17,20 +19,20 @@ namespace RoosterPlanner.Service
     public class TaskService : ITaskService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor
-        public TaskService(IUnitOfWork unitOfWork, ILogger logger)
+        public TaskService(IUnitOfWork unitOfWork, ILogger<TaskService> logger)
         {
             this.unitOfWork = unitOfWork;
             this.logger = logger;
         }
 
-        public async Task<TaskListResult<Models.Task>> GetActiveTasksAsync()
+        public async Task<TaskListResult<Task>> GetActiveTasksAsync()
         {
-            var taskResult = TaskListResult<Models.Task>.CreateDefault();
+            var taskResult = TaskListResult<Task>.CreateDefault();
 
             try
             {
@@ -39,7 +41,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve taken.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;

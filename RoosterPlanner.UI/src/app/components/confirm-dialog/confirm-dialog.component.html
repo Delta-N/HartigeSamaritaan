@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>
+  {{title}}
+</h1>
+
+<div mat-dialog-content>
+  <p>{{message}}</p>
+  <span *ngIf="type==='NumberInput'">
+  <mat-form-field>
+        <mat-label for="workingHours">
+          Aantal uur
+        </mat-label>
+        <input  [(ngModel)]="workingHours" id="workingHours" matInput type="number" min="0" max="40">
+      </mat-form-field>
+  </span>
+
+</div>
+
+<div mat-dialog-actions *ngIf="type==='ConfirmationInput'" >
+  <div class="align-right">
+  <button mat-raised-button class="button" (click)="onConfirm()">Ja</button>
+  <button mat-button (click)="onDismiss()">Nee</button>
+  </div>
+</div>
+
+<div mat-dialog-actions *ngIf="type==='NumberInput'" >
+  <div class="align-right">
+  <button mat-raised-button class="button" (click)="sendInput(this.workingHours)">Bevestig</button>
+  <button mat-button (click)="onDismiss()">Annuleren</button>
+  </div>
+</div>

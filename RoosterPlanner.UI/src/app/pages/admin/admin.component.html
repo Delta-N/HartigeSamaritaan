@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="bar">
+    <h1>Administrator portaal</h1>
+  </div>
+</div>
+
+<div class="container">
+  <div class="cardholder" *ngIf="loaded===true">
+
+    <span *ngIf="listOfProjects.length===0">
+      <mat-card class="card">
+        <div>
+          <mat-card-title>Projecten</mat-card-title>
+        </div>
+        <mat-card-content>
+          <mat-card-actions>
+          <button mat-button (click)="addProject()">+ nieuw project toevoegen</button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </span>
+
+    <span *ngFor="let currentProjectPage of listOfProjects">
+      <mat-card class="card">
+        <div>
+          <mat-card-title>Projecten</mat-card-title>
+        </div>
+        <mat-card-content>
+          <span *ngFor="let item of currentProjectPage" class="mobilecard">
+            <a [routerLink]="['/project', item.id]"><p>{{item.name}}</p></a>
+          </span>
+        </mat-card-content>
+        <mat-card-actions class="action-anchor">
+          <button mat-button (click)="addProject()">+ nieuw project toevoegen</button>
+        </mat-card-actions>
+      </mat-card>
+    </span>
+
+    <span *ngFor="let currentAdminPage of listOfAdmins">
+      <mat-card class="card">
+        <div>
+          <mat-card-title>Administrators</mat-card-title>
+        </div>
+        <mat-card-content>
+          <span *ngFor="let item of currentAdminPage">
+            <a [routerLink]="['/profile', item.id]"><p>{{item.firstName}} {{item.lastName}}</p></a>
+          </span>
+        </mat-card-content>
+        <mat-card-actions class="action-anchor">
+          <button mat-button (click)="modAdmin('add')">+ nieuwe toevoegen</button>
+          <button mat-button (click)="modAdmin('remove')">verwijderen</button>
+        </mat-card-actions>
+      </mat-card>
+    </span>
+
+    <mat-card class="card">
+      <div>
+        <mat-card-title>Gegevens</mat-card-title>
+      </div>
+      <mat-card-content>
+        <a (click)="todo()"><p>Lijst medewerkers</p></a>
+        <a (click)="todo()"><p>Statistieken exporteren</p></a>
+        <mat-card-actions class="action-anchor"></mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

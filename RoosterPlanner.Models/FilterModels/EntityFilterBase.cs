@@ -40,7 +40,7 @@ namespace RoosterPlanner.Models.FilterModels
                 for (int i = 0; i < sort.Length; i++)
                 {
                     SortType sortType = new SortType(sort[i]);
-                    if (sort.Length >= (i + 2))
+                    if (sort.Length >= i + 2)
                     {
                         i++;
                         sortType.Direction = sort[i];
@@ -60,7 +60,7 @@ namespace RoosterPlanner.Models.FilterModels
         //Constructor - Overload
         public EntityFilterBase(string[] sort)
         {
-            this.Sort = sort;
+            Sort = sort;
         }
         #endregion
 
@@ -120,15 +120,15 @@ namespace RoosterPlanner.Models.FilterModels
 
         public SortType(string fieldName, string direction)
         {
-            if (String.IsNullOrWhiteSpace(fieldName))
+            if (string.IsNullOrWhiteSpace(fieldName))
                 throw new ArgumentNullException("fieldName");
 
-            if (String.IsNullOrEmpty(direction))
+            if (string.IsNullOrEmpty(direction))
                 throw new ArgumentNullException("direction");
 
-            if (Char.IsLower(fieldName[0]))
+            if (char.IsLower(fieldName[0]))
             {
-                var firstChar = Char.ToUpperInvariant(fieldName[0]);
+                var firstChar = char.ToUpperInvariant(fieldName[0]);
 
                 if (fieldName.Length == 1)
                     fieldName = firstChar.ToString();
@@ -136,8 +136,8 @@ namespace RoosterPlanner.Models.FilterModels
                     fieldName = string.Format("{0}{1}", firstChar, fieldName.Substring(1));
             }
 
-            this.FieldName = fieldName;
-            this.Direction = direction.ToUpper();
+            FieldName = fieldName;
+            Direction = direction.ToUpper();
         }
     }
 }

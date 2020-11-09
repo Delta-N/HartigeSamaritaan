@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+.custom-dialog-container .mat-dialog-container{
+  border-radius: 10px;
+  min-width: 30vw;
+  min-height: 40vh;
+
+}

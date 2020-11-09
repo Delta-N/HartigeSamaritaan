@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
+using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
 {
     public interface IShiftService
     {
-        Task<TaskListResult<Models.Shift>> GetActiveShiftsForProjectAsync(Guid projectId);
+        Task<TaskListResult<Shift>> GetActiveShiftsForProjectAsync(Guid projectId);
     }
 
     public class ShiftService : IShiftService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor
-        public ShiftService(IUnitOfWork unitOfWork, ILogger logger)
+        public ShiftService(IUnitOfWork unitOfWork, ILogger<ShiftService> logger)
         {
             this.unitOfWork = unitOfWork;
             this.logger = logger;
         }
 
-        public async Task<TaskListResult<Models.Shift>> GetActiveShiftsForProjectAsync(Guid projectId)
+        public async Task<TaskListResult<Shift>> GetActiveShiftsForProjectAsync(Guid projectId)
         {
-            TaskListResult<Models.Shift> taskResult = TaskListResult<Models.Shift>.CreateDefault();
+            TaskListResult<Shift> taskResult = TaskListResult<Shift>.CreateDefault();
 
             try
             {
@@ -35,7 +37,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve shifts.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;

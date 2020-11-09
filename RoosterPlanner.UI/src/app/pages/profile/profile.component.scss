@@ -1,0 +1,70 @@
+* {
+  text-align: left;
+  font: normal normal normal 35px/50px Segoe UI;
+  letter-spacing: 0;
+  color: #434343;
+  opacity: 1;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  padding: 15px 10px 10px;
+  border-bottom: 1px solid gray;
+
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+#push {
+  margin-left: auto;
+}
+
+a:hover {
+  color: #434343;
+  text-decoration-line: none;
+}
+
+a {
+  color: #434343;
+}
+
+.mat-button {
+  font: normal normal normal 17px/17px Segoe UI;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  border: 1px solid gray;
+  border-radius: 5px;
+  opacity: 1;
+}
+
+.row-name {
+  text-align: left;
+  min-width: 250px;
+  font: normal normal normal 30px Segoe UI;
+  letter-spacing: 0;
+  color: #707070;
+  opacity: 1;
+
+}
+
+.user-data {
+  text-align: left;
+  font: normal normal normal 24px/45px Segoe UI;
+  letter-spacing: 0;
+  color: #000000;
+  opacity: 1;
+}
+
+.data-row {
+  display: flex;
+  margin-top: 36px
+}
+
+#editProfile {
+  background-color: #DDFCE0
+}

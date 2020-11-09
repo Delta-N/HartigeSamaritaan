@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
@@ -32,7 +33,7 @@ namespace RoosterPlanner.Data.Repositories
     public class ProjectRepository : Repository<Project>, IProjectRepository
     {
         //Constructor
-        public ProjectRepository(RoosterPlannerContext dataContext, ILogger logger) : base(dataContext, logger)
+        public ProjectRepository(RoosterPlannerContext dataContext) : base(dataContext)
         {
         }
 
@@ -68,6 +69,10 @@ namespace RoosterPlanner.Data.Repositories
             //StartDate
             if (filter.StartDate.HasValue)
                 q = q.Where(x => x.StartDate >= filter.StartDate.Value);
+
+            //EndDate
+            if (filter.EndDate.HasValue)
+                q = q.Where(x => x.EndDate >= filter.EndDate.Value || x.EndDate == null);
 
             //Closed
             if (filter.Closed.HasValue)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
@@ -29,18 +30,16 @@ namespace RoosterPlanner.Service
     public class ProjectService : IProjectService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly IProjectRepository projectRepository = null;
-        private readonly IProjectPersonRepository projectPersonRepository = null;
-        private readonly ILogger logger = null;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IProjectRepository projectRepository;
+        private readonly ILogger logger;
         #endregion
 
         //Constructor
-        public ProjectService(IUnitOfWork unitOfWork, ILogger logger)
+        public ProjectService(IUnitOfWork unitOfWork, ILogger<ProjectService> logger)
         {
             this.unitOfWork = unitOfWork;
             this.projectRepository = unitOfWork.ProjectRepository;
-            this.projectPersonRepository = unitOfWork.ProjectPersonRepository;
             this.logger = logger;
         }
 
@@ -59,7 +58,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -84,7 +83,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -95,7 +94,7 @@ namespace RoosterPlanner.Service
             if (id == Guid.Empty)
                 return null;
 
-            var taskResult = new TaskResult<Project>();
+            TaskResult<Project> taskResult = new TaskResult<Project>();
 
             try
             {
@@ -104,7 +103,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -115,7 +114,7 @@ namespace RoosterPlanner.Service
             if (project == null)
                 throw new ArgumentNullException("project");
 
-            var taskResult = new TaskResult<Project>();
+            TaskResult<Project> taskResult = new TaskResult<Project>();
 
             try
             {
@@ -124,7 +123,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -137,7 +136,7 @@ namespace RoosterPlanner.Service
                 throw new ArgumentNullException("project");
             }
 
-            var taskResult = new TaskResult<Project>();
+            TaskResult<Project> taskResult = new TaskResult<Project>();
 
             try
             {
@@ -146,7 +145,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -169,7 +168,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
             }
             return taskResult;
@@ -177,13 +176,6 @@ namespace RoosterPlanner.Service
 
         public int AddPersonToProject(Guid projectId, Guid personId)
         {
-            if (projectId == Guid.Empty)
-                throw new ArgumentException("projectId");
-            if (personId == Guid.Empty)
-                throw new ArgumentException("personId");
-
-            ProjectPerson projectPerson = new ProjectPerson { ProjectId = projectId, PersonId = personId };
-            projectPerson = projectPersonRepository.Add(projectPerson);
 
             return unitOfWork.SaveChanges();
         }

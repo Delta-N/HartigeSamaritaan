@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
@@ -12,13 +13,39 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IParticipationRepository : IRepository<Participation>
     {
+        Task<List<Participation>> GetActiveParticipationsAsync(Guid personId);
+        Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId);
     }
 
     public class ParticipationRepository : Repository<Participation>, IParticipationRepository
     {
         //Constructor
-        public ParticipationRepository(RoosterPlannerContext dataContext, ILogger logger) : base(dataContext, logger)
+        public ParticipationRepository(RoosterPlannerContext dataContext) : base(dataContext)
         {
+        }
+
+        public Task<List<Participation>> GetActiveParticipationsAsync(Guid personId)
+        {
+            return EntitySet.AsNoTracking().AsQueryable()
+                .Include(p => p.Project)
+                .Include(p => p.Person)
+                .Include(p => p.Availabilities)
+                .Include(p => p.WantsToWorkWith)
+                .Where(p => p.PersonId == personId && !p.Project.Closed && (
+                    p.Project.EndDate >= DateTime.Now ||
+                    p.Project.EndDate == null))
+                .ToListAsync();
+        }
+
+        public Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId)
+        {
+            return EntitySet.AsNoTracking().AsQueryable()
+                .Include(p => p.Project)
+                .Include(p => p.Person)
+                .Include(p => p.Availabilities)
+                .Include(p => p.WantsToWorkWith)
+                .Where(p => p.PersonId == personId && p.ProjectId == projectId)
+                .FirstOrDefaultAsync();
         }
     }
 }

@@ -1,82 +1,136 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Graph;
 using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
-using RoosterPlanner.Service.DataModels.B2C;
+using RoosterPlanner.Service.Helpers;
 
 namespace RoosterPlanner.Service
 {
     public interface IPersonService
     {
-        Task<TaskListResult<Person>> GetB2cMembers();
+        Task<TaskResult<User>> GetUser(Guid id);
+        Task<TaskListResult<User>> GetB2CMembers(PersonFilter filter);
 
-        Task<TaskResult<Project>> UpdatePersonName(Guid oid, string name);
+        Task<TaskResult<User>> UpdatePerson(User user);
     }
 
     public class PersonService : IPersonService
     {
-        #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly IPersonRepository personRepository = null;
-        private readonly IAzureB2CService azureB2CService = null;
-        private readonly ILogger logger = null;
-        #endregion
-
         //Constructor
-        public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger logger)
+        public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger<PersonService> logger)
         {
             this.unitOfWork = unitOfWork;
-            this.personRepository = unitOfWork.PersonRepository;
+            personRepository = unitOfWork.PersonRepository;
             this.azureB2CService = azureB2CService;
             this.logger = logger;
         }
 
-        public async Task<TaskListResult<Person>> GetB2cMembers()
+        public async Task<TaskResult<User>> GetUser(Guid id)
         {
-            TaskListResult<Person> result = TaskListResult<Person>.CreateDefault();
-
-            TaskResult<List<AppUser>> b2cUsersResult = await this.azureB2CService.GetAllUsersAsync();
-            if (b2cUsersResult.Succeeded)
+            var taskResult = new TaskResult<User>();
+            try
             {
-                result.Data = b2cUsersResult.Data.Select(x => new Person { Oid = x.Id, Name = x.DisplayName }).ToList();
-                result.Succeeded = true;
+                var person = await azureB2CService.GetUserAsync(id);
+                taskResult.Succeeded = person != null;
+                if (taskResult.Succeeded)
+                {
+                    taskResult.StatusCode = HttpStatusCode.OK;
+                    taskResult.Data = person;
+                }
+                else
+                {
+                    taskResult.StatusCode = HttpStatusCode.NotFound;
+                    taskResult.Message = ResponseMessage.UserNotFound;
+                }
             }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error,ex.ToString());
+                taskResult.Error = ex;
+                taskResult.Succeeded = false;
+            }
+
+            return taskResult;
+        }
+
+        public async Task<TaskListResult<User>> GetB2CMembers(PersonFilter filter)
+        {
+            if (filter == null)
+                throw new ArgumentNullException("filter");
+
+            var result = TaskListResult<User>.CreateDefault();
+            try
+            {
+                var b2CUsersResult = await azureB2CService.GetAllUsersAsync(filter);
+                if (b2CUsersResult.Succeeded)
+                {
+                    result.Data = new List<User>();
+                    foreach (var user in b2CUsersResult.Data) result.Data.Add(user);
+
+                    result.Succeeded = true;
+                }
+                else
+                {
+                    result.StatusCode = b2CUsersResult.StatusCode;
+                    result.Message = b2CUsersResult.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error,ex.ToString());
+                result.Error = ex;
+                result.Succeeded = false;
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Returns a list of open projects.
+        ///     Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskResult<Project>> UpdatePersonName(Guid oid, string name)
+        public async Task<TaskResult<User>> UpdatePerson(User user)
         {
-            var taskResult = new TaskResult<Project>();
-
+            var taskResult = new TaskResult<User>();
             try
             {
-                var person = await unitOfWork.PersonRepository.GetPersonByOidAsync(oid);
-                if (person == null)
+                var person = await azureB2CService.UpdateUserAsync(user);
+                taskResult.Succeeded = person.Succeeded;
+                if (taskResult.Succeeded)
                 {
-                    //TODO: change exception
-                    throw new Exception("Who Are You?");
+                    taskResult.StatusCode = HttpStatusCode.OK;
+                    taskResult.Data = person.Data;
                 }
-
-                person.Name = name;
-
-                taskResult.Succeeded = (await unitOfWork.SaveChangesAsync() == 1);
-                await unitOfWork.SaveChangesAsync();
+                else
+                {
+                    taskResult.Succeeded = false;
+                    taskResult.Message = person.Message;
+                }
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het updaten van een persoon.");
+                logger.Log(LogLevel.Error,ex.ToString());
                 taskResult.Error = ex;
+                taskResult.Succeeded = false;
             }
+
             return taskResult;
         }
+
+        #region Fields
+
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IPersonRepository personRepository;
+        private readonly IAzureB2CService azureB2CService;
+        private readonly ILogger logger;
+
+        #endregion
     }
 }

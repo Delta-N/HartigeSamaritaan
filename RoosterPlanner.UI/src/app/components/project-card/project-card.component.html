@@ -1,0 +1,16 @@
+<mat-card>
+  <div>
+    <mat-card-title><a [routerLink]="['/project', participation.project.id]">{{participation.project.name}}</a></mat-card-title>
+  </div>
+  <mat-card-content>
+    <a (click)="todo()"><p>Beschikbaarheid</p></a>
+    <a (click)="todo()"><p>Agenda</p></a>
+    <a (click)="todo()"><p>Mijn Shifts</p></a>
+    <span *ngIf="isAdmin"><a (click)="todo()"><p>Plannen</p></a></span>
+    <span *ngIf="isAdmin"><a (click)="todo()"><p>Medewerkers</p></a></span>
+
+  </mat-card-content>
+  <mat-card-actions class="action-anchor">
+    <button mat-button (click)="removeParticipation(participation)">Uitschrijven</button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Voeg een project toe</h2>
+
+<mat-dialog-content>
+  <span *ngFor="let item of data">
+  <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnChange($event)">{{item.name}}</mat-checkbox>
+  </span>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="align-right">
+  <button class="action-button" mat-button (click)="addParticipations()">Opslaan</button>
+  <button mat-button mat-dialog-close="false">Annuleren</button>
+  </div>
+</mat-dialog-actions>

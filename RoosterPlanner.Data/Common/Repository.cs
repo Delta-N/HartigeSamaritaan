@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Common;
 using RoosterPlanner.Models;
 
@@ -26,15 +27,13 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         /// <param name="dataContext">The data context.</param>
         /// <param name="logger">Interface where log messages can be written to.</param>
-        public Repository(DbContext dataContext, ILogger logger)
+        public Repository(DbContext dataContext)
         {
             this.DataContext = dataContext ?? throw new ArgumentNullException("dataContext");
 
             this.EntitySet = DataContext.Set<TEntity>();
             if (EntitySet == null)
                 throw new InvalidOperationException($"No entity set found in the context for the type {typeof(TEntity).Name}");
-
-            this.logger = logger;
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace RoosterPlanner.Data.Common
             catch (ValidationException valEx)
             {
                 //Log
-                logger.LogException(valEx, new Dictionary<string, string> { { "Message", valEx.Message }, { "FieldValue", valEx.Value.ToString() } });
+                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
@@ -107,9 +106,6 @@ namespace RoosterPlanner.Data.Common
             EntityEntry<TEntity> entry = this.DataContext.Entry(entity);
             if (entity.Id == Guid.Empty)
                 entity.SetKey(Guid.NewGuid());
-
-            entity.LastEditBy = "System";
-            entity.LastEditDate = DateTime.UtcNow;
 
             entry = this.EntitySet.Add(entity);
 
@@ -134,16 +130,13 @@ namespace RoosterPlanner.Data.Common
             catch (ValidationException valEx)
             {
                 //Log
-                logger.LogException(valEx, new Dictionary<string, string> { { "Message", valEx.Message }, { "FieldValue", valEx.Value.ToString() } });
+                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
                 }
                 throw valEx;
             }
-
-            entity.LastEditBy = "System";
-            entity.LastEditDate = DateTime.UtcNow;
 
             EntityEntry<TEntity> entry = this.EntitySet.Attach(entity);
             entry.State = EntityState.Modified;
@@ -170,7 +163,7 @@ namespace RoosterPlanner.Data.Common
             catch (ValidationException valEx)
             {
                 //Log
-                logger.LogException(valEx, new Dictionary<string, string> { { "Message", valEx.Message }, { "FieldValue", valEx.Value.ToString() } });
+                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
@@ -193,7 +186,6 @@ namespace RoosterPlanner.Data.Common
                 attachedEntity = this.EntitySet.Local.SingleOrDefault(e => e.Id.Equals(entity.Id));
                 if (attachedEntity != null)
                 {
-                    entity.LastEditDate = DateTime.UtcNow;
                     this.DataContext.Entry<TEntity>(attachedEntity).CurrentValues.SetValues(entity);
                 }
                 else
@@ -209,8 +201,6 @@ namespace RoosterPlanner.Data.Common
 
             if (attachedEntity == null)
             {
-                entity.LastEditBy = "System";
-                entity.LastEditDate = DateTime.UtcNow;
             }
 
             return entity;
@@ -250,7 +240,7 @@ namespace RoosterPlanner.Data.Common
         public int Delete(Guid id)
         {
             if (id != Guid.Empty)
-                return this.DataContext.Database.ExecuteSqlCommand($"DELETE FROM [{nameof(TEntity)}] WHERE[AuthorId] = @p0;", id);
+                return this.DataContext.Database.ExecuteSqlRaw($"DELETE FROM [{nameof(TEntity)}] WHERE[AuthorId] = @p0;", id);
             return 0;
         }
 

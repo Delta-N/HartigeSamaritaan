@@ -1,0 +1,44 @@
+<div>
+  <mat-toolbar color="primary">
+    <div fxShow="true" fxHide.gt-sm="true" id="toolbar">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <a mat-button routerLink="/">
+      <img src="../assets/Logo.png" alt="Hartige Samaritaan" class="logo"/>
+    </a>
+    <span class="example-spacer"></span>
+    <div fxShow="true" fxHide.lt-md="true">
+      <a mat-button class="toolbarbutton" *ngIf="isAdmin" routerLink="/admin">Admin</a>
+      <a mat-button class="toolbarbutton" routerLink="/home">Dashboard</a>
+      <a mat-button class="toolbarbutton" routerLink="/profile">Profiel</a>
+      <button mat-button class="toolbarbutton" *ngIf="!loggedIn" (click)="login()">Login</button>
+      <button mat-button class="toolbarbutton" *ngIf="loggedIn" (click)="logout()">Logout</button>
+
+    </div>
+  </mat-toolbar>
+
+
+  <div>
+    <mat-sidenav-container class="example-container">
+      <mat-sidenav #sidenav mode="side" opened="false" fxShow="true" fxHide.gt-sm="true">
+        <div fxLayout="column">
+          <a mat-button class="sidenav-button" routerLink="/home">Dashboard</a>
+          <a mat-button class="sidenav-button" routerLink="/profile">Profiel</a>
+          <a mat-button class="sidenav-button" *ngIf="isAdmin" routerLink="/admin">Admin</a>
+        </div>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+
+    </mat-sidenav-container>
+  </div>
+
+
+</div>
+
+

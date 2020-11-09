@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="checkoutForm" (ngSubmit)="saveProject(checkoutForm.value)">
+    <div>
+      <mat-form-field>
+        <mat-label for="name">
+          Naam
+        </mat-label>
+        <input matInput id="name" type="text" formControlName="name" placeholder="Project naam">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label for="address">
+          Adres
+        </mat-label>
+        <input matInput id="address" type="text" formControlName="address" placeholder="Address">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label for="city">
+          Stad
+        </mat-label>
+        <input matInput id="city" type="text" formControlName="city" placeholder="Stad">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label for="description">
+          Omschrijving
+        </mat-label>
+        <input matInput id="description" type="text" formControlName="description" placeholder="Omschrijving">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label for="startDate">
+          Start datum
+        </mat-label>
+        <input matInput id="startDate" type="text" formControlName="startDate" placeholder="dd-mm-yyyy">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label for="endDate">
+          Eind datum
+        </mat-label>
+        <input matInput id="endDate" type="text" formControlName="endDate" placeholder="dd-mm-yyyy">
+      </mat-form-field>
+      <div></div>
+      <mat-form-field>
+        <mat-label for="pictureUri">
+          Afbeelding URL
+        </mat-label>
+        <input matInput id="pictureUri" type="text" formControlName="pictureUri" placeholder="Hyperlink van een plaatje">
+      </mat-form-field>
+      <div></div>
+      <mat-form-field>
+        <mat-label for="websiteUrl">
+          Website URL
+        </mat-label>
+        <input matInput id="websiteUrl" type="text" formControlName="websiteUrl" placeholder="Hyperlink van de website">
+      </mat-form-field>
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="align-right">
+    <button class="action-button" mat-button (click)="saveProject(checkoutForm.value)">Opslaan</button>
+    <button mat-button mat-dialog-close="false">Annuleren</button>
+  </div>
+</mat-dialog-actions>
+
+
