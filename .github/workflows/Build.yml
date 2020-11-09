@@ -3,11 +3,11 @@ name: Build the project
 on:
   push:
     branches: 
-      - refactor-ui
+      - develop
       - master
   pull_request:
     branches:
-      - refactor-ui
+      - develop
       - master
 
 env:
