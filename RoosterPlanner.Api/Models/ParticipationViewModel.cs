@@ -21,29 +21,39 @@ namespace RoosterPlanner.Api.Models
 
         public static ParticipationViewModel CreateVm(Participation participation)
         {
-            return new ParticipationViewModel()
+            if (participation != null)
             {
-                Id = participation.Id,
-                Person = PersonViewModel.CreateVmFromPerson(participation.Person),
-                Project = ProjectDetailsViewModel.CreateVm(participation.Project),
-                MaxWorkingHoursPerWeek = participation.MaxWorkingHoursPerWeek,
-                Availabilities = participation.Availabilities,
-                WantsToWorkWith = participation.WantsToWorkWith
-            };
+                return new ParticipationViewModel()
+                {
+                    Id = participation.Id,
+                    Person = PersonViewModel.CreateVmFromPerson(participation.Person),
+                    Project = ProjectDetailsViewModel.CreateVm(participation.Project),
+                    MaxWorkingHoursPerWeek = participation.MaxWorkingHoursPerWeek,
+                    Availabilities = participation.Availabilities,
+                    WantsToWorkWith = participation.WantsToWorkWith
+                };
+            }
+
+            return null;
         }
 
         public static Participation CreateParticipation(ParticipationViewModel participationViewModel)
         {
-            return new Participation(participationViewModel.Id)
+            if (participationViewModel != null)
             {
-                Person = PersonViewModel.CreatePerson(participationViewModel.Person),
-                PersonId = participationViewModel.Person.Id,
-                Project = ProjectDetailsViewModel.CreateProject(participationViewModel.Project),
-                ProjectId = participationViewModel.Project.Id,
-                MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
-                Availabilities = participationViewModel.Availabilities,
-                WantsToWorkWith = participationViewModel.WantsToWorkWith,
-            };
+                return new Participation(participationViewModel.Id)
+                {
+                    Person = PersonViewModel.CreatePerson(participationViewModel.Person),
+                    PersonId = participationViewModel.Person.Id,
+                    Project = ProjectDetailsViewModel.CreateProject(participationViewModel.Project),
+                    ProjectId = participationViewModel.Project.Id,
+                    MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
+                    Availabilities = participationViewModel.Availabilities,
+                    WantsToWorkWith = participationViewModel.WantsToWorkWith,
+                };
+            }
+
+            return null;
         }
     }
 }

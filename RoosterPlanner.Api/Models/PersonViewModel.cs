@@ -59,60 +59,76 @@ namespace RoosterPlanner.Api.Models
             return personViewModel;
         }
 
-        public static User CreateUser(PersonViewModel vm,Extensions extension)
+        public static User CreateUser(PersonViewModel vm, Extensions extension)
         {
-            User user = new User
+            if (vm != null && extension != null)
             {
-                Id = vm.Id.ToString(),
-                GivenName = vm.FirstName,
-                Surname = vm.LastName,
-                Mail = vm.Email,
-                StreetAddress = vm.StreetAddress,
-                PostalCode = vm.PostalCode,
-                City = vm.City,
-                Country = vm.Country,
-                AdditionalData = new Dictionary<string, object>
+
+
+                User user = new User
                 {
-                    {extension.DateOfBirthExtension, vm.DateOfBirth},
-                    {extension.PhoneNumberExtension, vm.PhoneNumber}
-                }
-            };
-            return user;
+                    Id = vm.Id.ToString(),
+                    GivenName = vm.FirstName,
+                    Surname = vm.LastName,
+                    Mail = vm.Email,
+                    StreetAddress = vm.StreetAddress,
+                    PostalCode = vm.PostalCode,
+                    City = vm.City,
+                    Country = vm.Country,
+                    AdditionalData = new Dictionary<string, object>
+                    {
+                        {extension.DateOfBirthExtension, vm.DateOfBirth},
+                        {extension.PhoneNumberExtension, vm.PhoneNumber}
+                    }
+                };
+                return user;
+            }
+
+            return null;
         }
 
         public static RoosterPlanner.Models.Person CreatePerson(PersonViewModel vm)
         {
-            return new RoosterPlanner.Models.Person(vm.Id)
+            if (vm != null)
             {
-                firstName = vm.FirstName,
-                LastName = vm.LastName,
-                Email = vm.Email,
-                StreetAddress = vm.StreetAddress,
-                PostalCode = vm.PostalCode,
-                City = vm.City,
-                Country = vm.Country,
-                DateOfBirth = vm.DateOfBirth,
-                UserRole = vm.UserRole,
-                PhoneNumber = vm.PhoneNumber
-            };
+                return new RoosterPlanner.Models.Person(vm.Id)
+                {
+                    firstName = vm.FirstName,
+                    LastName = vm.LastName,
+                    Email = vm.Email,
+                    StreetAddress = vm.StreetAddress,
+                    PostalCode = vm.PostalCode,
+                    City = vm.City,
+                    Country = vm.Country,
+                    DateOfBirth = vm.DateOfBirth,
+                    UserRole = vm.UserRole,
+                    PhoneNumber = vm.PhoneNumber
+                };
+            }
+
+            return null;
         }
 
         public static PersonViewModel CreateVmFromPerson(RoosterPlanner.Models.Person person)
         {
-            return new PersonViewModel
+            if (person != null)
             {
-             Id   = person.Id,
-             FirstName = person.firstName,
-             LastName = person.LastName,
-             Email = person.Email,
-             StreetAddress = person.StreetAddress,
-             PostalCode = person.PostalCode,
-             City = person.City,
-             Country = person.Country,
-             DateOfBirth = person.DateOfBirth,
-             UserRole = person.UserRole,
-             PhoneNumber = person.PhoneNumber
-            };
+                return new PersonViewModel
+                {
+                    Id = person.Id,
+                    FirstName = person.firstName,
+                    LastName = person.LastName,
+                    Email = person.Email,
+                    StreetAddress = person.StreetAddress,
+                    PostalCode = person.PostalCode,
+                    City = person.City,
+                    Country = person.Country,
+                    DateOfBirth = person.DateOfBirth,
+                    UserRole = person.UserRole,
+                    PhoneNumber = person.PhoneNumber
+                };
+            }
+            return null;
         }
     }
 }

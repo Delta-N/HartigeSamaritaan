@@ -46,15 +46,8 @@ export class ProjectComponent implements OnInit {
   async getProject() {
     await this.projectService.getProject(this.guid).then(project => {
       if (project[0] != null) {
-        this.project = project[0];
-        this.viewProject = DateConverter.formatProjectDateReadable(this.project)
-        this.title = this.viewProject.name;
-        this.viewProject.closed ? this.closeButtonText = "Project openen" : this.closeButtonText = "Project sluiten";
-        if (this.viewProject.closed) {
-          this.title += " DIT PROJECT IS GESLOTEN"
-        }
+        this.displayProject(project[0]);
       }
-      this.loaded = true;
     })
   }
 
@@ -62,18 +55,22 @@ export class ProjectComponent implements OnInit {
     await this.participationService.getParticipation(this.userService.getCurrentUserId(), this.guid).then(par => {
       if (par != null) {
         this.participation = par;
-        this.project = this.participation.project
-        this.viewProject = DateConverter.formatProjectDateReadable(this.project)
-        this.title = this.viewProject.name;
-        this.viewProject.closed ? this.closeButtonText = "Project openen" : this.closeButtonText = "Project sluiten";
-        if (this.viewProject.closed) {
-          this.title += " DIT PROJECT IS GESLOTEN"
-        }
-        this.loaded = true;
+        this.displayProject(this.participation.project)
       } else {
         this.getProject().then();
       }
     })
+  }
+
+  displayProject(project:Project){
+    this.project = project
+    this.viewProject = DateConverter.formatProjectDateReadable(this.project)
+    this.title = this.viewProject.name;
+    this.viewProject.closed ? this.closeButtonText = "Project openen" : this.closeButtonText = "Project sluiten";
+    if (this.viewProject.closed) {
+      this.title += " DIT PROJECT IS GESLOTEN"
+    }
+    this.loaded = true;
   }
 
 
@@ -88,26 +85,19 @@ export class ProjectComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result !== 'false') {
-        if (result === 'closed') {
-          setTimeout(() => {
-            this.toastr.success("Dit project is gesloten")
-            this.getProject().then();
-          }, 500);
-        } else {
           setTimeout(() => {
             this.toastr.success(result.name + " is gewijzigd")
-            this.getProject().then();
+            this.getProject();
           }, 500);
-        }
-
       }
     });
   }
 
   async closeProject() {
     this.project.closed = !this.project.closed;
-    await this.projectService.updateProject(this.project).then(() => {
-      this.getProject().then();
+    this.loaded=false;
+    await this.projectService.updateProject(this.project).then(response => {
+      this.displayProject(response.body)
       if (this.project.closed) {
         this.toastr.success("Het project is gesloten");
       } else {
@@ -125,10 +115,11 @@ export class ProjectComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
+      this.loaded=false;
       if (dialogResult != null && dialogResult !== this.participation.maxWorkingHoursPerWeek) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
-        this.participationService.updateParticipation(this.participation).then(() => {
-          this.getParticipation().then()
+        this.participationService.updateParticipation(this.participation).then(response => {
+          this.displayProject(response.body.project)
         })
       }
     });

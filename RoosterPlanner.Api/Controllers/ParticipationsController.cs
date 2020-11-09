@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
-using RoosterPlanner.Common;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
@@ -22,7 +21,8 @@ namespace RoosterPlanner.Api.Controllers
         private readonly ILogger logger;
         private readonly IParticipationService participationService;
 
-        public ParticipationsController(ILogger<ParticipationsController> logger, IParticipationService participationService)
+        public ParticipationsController(ILogger<ParticipationsController> logger,
+            IParticipationService participationService)
         {
             this.logger = logger;
             this.participationService = participationService;
@@ -41,7 +41,7 @@ namespace RoosterPlanner.Api.Controllers
                     return UnprocessableEntity();
                 if (result.Data.Count == 0)
                     return Ok(new List<ParticipationViewModel>());
-                
+
                 List<ParticipationViewModel> participationViewModels = result.Data
                     .Select(ParticipationViewModel.CreateVm)
                     .ToList();
@@ -50,7 +50,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 return UnprocessableEntity(ex.Message);
             }
         }
@@ -73,7 +73,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
                 return UnprocessableEntity();
             }
@@ -103,7 +103,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
                 return UnprocessableEntity();
             }
@@ -155,12 +155,17 @@ namespace RoosterPlanner.Api.Controllers
                 result = participationService.UpdateParticipation(oldParticipation);
 
                 if (result != null && result.Result.Succeeded)
+                {
+                    result.Result.Data.Person = updatedParticipation.Person;
+                    result.Result.Data.Project = updatedParticipation.Project;
                     return Ok(ParticipationViewModel.CreateVm(result.Result.Data));
+                }
+
                 return UnprocessableEntity(participationViewModel);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
                 return UnprocessableEntity();
             }
@@ -183,7 +188,8 @@ namespace RoosterPlanner.Api.Controllers
                 if (oid == participation.Data.PersonId.ToString())
                 {
                     //gebruiker mag participation verwijderen
-                    TaskResult<Participation> result = await participationService.RemoveParticipation(participation.Data);
+                    TaskResult<Participation> result =
+                        await participationService.RemoveParticipation(participation.Data);
                     if (result.Succeeded)
                         return Ok(result);
                     return Problem();
@@ -193,7 +199,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
                 return UnprocessableEntity();
             }
