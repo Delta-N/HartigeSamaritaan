@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import {map, catchError} from 'rxjs/operators';
-import {AuthenticationParameters} from 'msal';
-import {MsalService} from '@azure/msal-angular';
-import { msalConfig, loginRequest, msalAngularConfig } from '../app-config';
+import {catchError, map} from 'rxjs/operators';
+
 import {JwtHelper} from '../helpers/jwt-helper';
+import {MsalService} from "../msal";
+import {environment} from "../../environments/environment";
+import {SilentRequest} from "@azure/msal-browser";
 
 export interface Options {
   headers?: {
@@ -183,11 +184,11 @@ export class ApiService {
   */
   private async refreshToken(): Promise<any> {
     const authParameters = {
-      account: this.msalService.getAccount(),
-      authority: msalConfig.auth.authority,
-      redirectUri: msalConfig.auth.redirectUri,
-      scopes: loginRequest.scopes
-    } as AuthenticationParameters;
+      account: this.msalService.getAllAccounts()[0],
+      authority: environment.auth.authority,
+      redirectUri: environment.auth.redirectUri,
+      scopes: environment.scopes
+    } as SilentRequest;
     await this.msalService.acquireTokenSilent(authParameters);
   }
 }

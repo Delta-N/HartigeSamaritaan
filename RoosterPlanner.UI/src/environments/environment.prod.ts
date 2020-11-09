@@ -1,12 +1,20 @@
 export const environment = {
   production: true,
   auth: {
-    clientId: "a6ca557c-9d83-4867-a02d-99c5fbd159a5",
+    clientId: "71002406-7b5a-4f76-bcd7-101bcc156941",
     authority: "https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/b2c_1_susi",
     redirectUri: "https://roosterplanner-web-dev.azurewebsites.net",
     postLogoutRedirectUri: "https://roosterplanner-web-dev.azurewebsites.net",
     navigateToLoginRequestUrl: true,
     validateAuthority: false,
+    knownAuthorities: ["https://DeltanHackaton.b2clogin.com"],
   },
+  protectedResourceMap: [
+    ['https://localhost:5001/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read']],
+    ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read']]
+  ],
+  scopes: [
+    'https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read'
+  ],
   backendUrl: "https://roosterplanner-api-dev.azurewebsites.net/"
 };
