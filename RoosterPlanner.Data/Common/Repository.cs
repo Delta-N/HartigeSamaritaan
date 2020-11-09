@@ -34,8 +34,6 @@ namespace RoosterPlanner.Data.Common
             this.EntitySet = DataContext.Set<TEntity>();
             if (EntitySet == null)
                 throw new InvalidOperationException($"No entity set found in the context for the type {typeof(TEntity).Name}");
-
-            this.logger = logger;
         }
 
         /// <summary>
