@@ -8,6 +8,7 @@ import {ShiftComponent} from "./pages/shift/shift.component";
 import {AuthorizationGuard} from "./guards/authorization.guard";
 import {ProjectComponent} from "./pages/project/project.component";
 import {MsalGuard} from "./msal";
+import {TaskComponent} from "./pages/task/task.component";
 
 const routes: Routes = [
   {
@@ -56,6 +57,13 @@ const routes: Routes = [
   {
     path: 'project/:id',
     component: ProjectComponent,
+    canActivate: [
+      MsalGuard
+    ]
+  },
+  {
+    path: 'task/:id',
+    component: TaskComponent,
     canActivate: [
       MsalGuard
     ]
