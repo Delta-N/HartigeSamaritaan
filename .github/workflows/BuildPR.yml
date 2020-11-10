@@ -2,7 +2,6 @@
 
 on:
   pull_request:
-    - '*'
 
 env:
   BUILD_CONFIGURATION: Release
