@@ -18,19 +18,20 @@ export class ProjectService {
               private toastr: ToastrService) {
   }
 
-  async getProject(guid?: string): Promise<Project[]> {
-    this.projects = []
-    if (guid == null) {
-      //return all projects
-      await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}`).toPromise().then(response => {
-        this.projects = response.body;
-      });
-    } else {
+  async getProject(guid?: string): Promise<Project> {
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}/${guid}`).toPromise().then(response => {
         this.project = response.body
         this.projects.push(this.project)
       });
-    }
+    return this.project
+  }
+
+  async getAllProjects(offset:number,pageSize:number): Promise<Project[]>{
+    this.projects = []
+      //return all projects
+      await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?offset=${offset}&pageSize=${pageSize}`).toPromise().then(response => {
+        this.projects = response.body;
+      });
     return this.projects
   }
 

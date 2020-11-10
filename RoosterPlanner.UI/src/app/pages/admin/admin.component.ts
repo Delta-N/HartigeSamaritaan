@@ -24,6 +24,9 @@ export class AdminComponent implements OnInit {
   loaded: boolean = false;
   administrators: User[] = []
   itemsPerCard: number = 5;
+  adminCardStyle = 'card';
+  projectsElementHeight: number;
+  offset: number = 0;
 
   constructor(public dialog: MatDialog,
               private projectService: ProjectService,
@@ -38,7 +41,7 @@ export class AdminComponent implements OnInit {
   }
 
   async getProjects() {
-    await this.projectService.getProject().then(x => {
+    await this.projectService.getAllProjects(this.offset, this.itemsPerCard).then(x => {
       this.projects = x;
       this.splitProjects();
     });
@@ -63,12 +66,14 @@ export class AdminComponent implements OnInit {
   }
 
   splitProjects() {
+    this.listOfProjects = [];
+    this.tempListProjects = [];
     this.projects.sort((a, b) => a.startDate < b.startDate ? 1 : -1);
     for (let i = 0; i < this.projects.length; i++) {
       this.tempListProjects.push(this.projects[i])
       if (this.tempListProjects.length === this.itemsPerCard || i === this.projects.length - 1) {
         this.listOfProjects.push(this.tempListProjects);
-        this.tempListProjects = [];
+        break;
       }
     }
   }
@@ -126,5 +131,20 @@ export class AdminComponent implements OnInit {
 
   todo() {
     this.toastr.warning("Deze functie moet nog geschreven worden")
+  }
+
+  expand() {
+    if (this.adminCardStyle == 'expanded-card') {
+      this.adminCardStyle = 'card';
+      this.itemsPerCard = 5;
+      this.splitProjects()
+    } else {
+      this.adminCardStyle = 'expanded-card';
+      this.itemsPerCard = 10000; //aanpassen na 10k projecten ;)
+      this.getProjects().then(() => {
+        this.splitProjects()
+        this.projectsElementHeight = (this.projects.length * 48);
+      })
+    }
   }
 }
