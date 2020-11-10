@@ -7,7 +7,7 @@
 <div class="container">
   <div class="cardholder" *ngIf="loaded===true">
 
-    <span *ngIf="listOfProjects.length===0">
+    <span *ngIf="projects.length===0">
       <mat-card class="card">
         <div>
           <mat-card-title>Projecten</mat-card-title>
@@ -20,13 +20,13 @@
       </mat-card>
     </span>
 
-    <span *ngFor="let currentProjectPage of listOfProjects">
-      <mat-card [ngClass]="[adminCardStyle]">
+
+      <mat-card [ngClass]="[projectCardStyle]" id="projectCard">
         <div >
-          <mat-card-title>Projecten <button class="card-title-icon" mat-icon-button (click)="expand()"><mat-icon>zoom_out_map</mat-icon></button></mat-card-title>
+          <mat-card-title>Projecten <button class="card-title-icon" mat-icon-button (click)="expandProjectCard()"><mat-icon>zoom_out_map</mat-icon></button></mat-card-title>
         </div>
         <mat-card-content [style.height.px]="projectsElementHeight">
-          <span *ngFor="let item of currentProjectPage" class="mobilecard">
+          <span *ngFor="let item of projects" class="mobilecard">
             <a [routerLink]="['/project', item.id]"><p>{{item.name}}</p></a>
           </span>
         </mat-card-content>
@@ -34,15 +34,15 @@
           <button mat-button (click)="addProject()">+ nieuw project toevoegen</button>
         </mat-card-actions>
       </mat-card>
-    </span>
 
-    <span *ngFor="let currentAdminPage of listOfAdmins">
-      <mat-card class="card">
+
+
+      <mat-card [ngClass]="[adminCardStyle]" id="adminCard">
         <div>
-          <mat-card-title>Administrators</mat-card-title>
+          <mat-card-title>Administrators<button class="card-title-icon" mat-icon-button (click)="expandAdminCard()"><mat-icon>zoom_out_map</mat-icon></button></mat-card-title>
         </div>
         <mat-card-content>
-          <span *ngFor="let item of currentAdminPage">
+          <span *ngFor="let item of administrators">
             <a [routerLink]="['/profile', item.id]"><p>{{item.firstName}} {{item.lastName}}</p></a>
           </span>
         </mat-card-content>
@@ -51,9 +51,8 @@
           <button mat-button (click)="modAdmin('remove')">verwijderen</button>
         </mat-card-actions>
       </mat-card>
-    </span>
 
-    <mat-card class="card">
+    <mat-card class="card" id="dataCard">
       <div>
         <mat-card-title>Gegevens</mat-card-title>
       </div>
