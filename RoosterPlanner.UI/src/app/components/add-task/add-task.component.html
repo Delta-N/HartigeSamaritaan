@@ -31,7 +31,7 @@
 
     <div id="instruction">
       <mat-label>Instructie:</mat-label>
-      <span *ngIf="task.instruction!=null"><a [href]=task.instruction>PDF</a></span>
+      <span *ngIf="task.documentUri!=null"><a [href]=task.documentUri>PDF</a></span>
       <button class="action-button" id="uploadButton" mat-button (click)="uploadInstructions()">uploaden</button>
     </div>
 

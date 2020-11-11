@@ -5,6 +5,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {ToastrService} from "ngx-toastr";
 import {UserService} from "../../services/user.service";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
+import {TaskService} from "../../services/task.service";
+import {Task} from "../../models/task";
 
 @Component({
   selector: 'app-task',
@@ -13,7 +15,7 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confi
 })
 export class TaskComponent implements OnInit {
   guid: string;
-  task: any; //aanpassen zodra task model eris
+  task: Task;
   isAdmin: boolean = false;
 
 
@@ -21,7 +23,8 @@ export class TaskComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private toastr: ToastrService,
-    private userService: UserService) {
+    private userService: UserService,
+    private taskService:TaskService) {
   }
 
   ngOnInit(): void {
@@ -29,17 +32,7 @@ export class TaskComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    //placeholder
-    let task: any = {};
-    task.id = "12"
-    task.name = "Sous chef"
-    task.category = "Koken"
-    task.instruction = null
-    task.instruction = "http://test.com"
-    task.description = "Het is belangrijk dat deze persoon niet alleen verstand heeft van koken maar ook leiding geven. Deze persoon werkt direct onder de chef en is eigenlijk..."
-
-    this.task = task;
-    //placeholder^
+   this.taskService.getTask(this.guid).then(response=>this.task=response)
   }
 
   edit() {
@@ -55,8 +48,8 @@ export class TaskComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== 'false') {
         this.toastr.success(result.name + " is gewijzigd")
-        //this.task=result();
-        console.log(result)
+        this.task=result();
+
       }
     });
   }
@@ -70,10 +63,10 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult === true) {
-        /*    await this.taskService.deleteTask(this.guid).then(response=>{
-           handle response
-          })*/
-        console.log("taak is verwijderd")
+            this.taskService.deleteTask(this.guid).then(response=>{
+              console.log(response)
+              //logica schrijven
+          })
       }
     })
   }

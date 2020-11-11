@@ -5,6 +5,7 @@ import {ToastrService} from "ngx-toastr";
 import {EntityHelper} from "../../helpers/entity-helper";
 import {Task} from "../../models/task";
 import {Category} from "../../models/category";
+import {TaskService} from "../../services/task.service";
 
 @Component({
   selector: 'app-add-task',
@@ -21,7 +22,11 @@ export class AddTaskComponent implements OnInit {
   categories: any = [];
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private toastr: ToastrService, public dialogRef: MatDialogRef<AddTaskComponent>) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+              private formBuilder: FormBuilder,
+              private toastr: ToastrService,
+              public dialogRef: MatDialogRef<AddTaskComponent>,
+              private taskService:TaskService) {
     data.task != null ? this.task = data.task : this.task=new Task();
 
     this.modifier = data.modifier;
@@ -55,15 +60,13 @@ export class AddTaskComponent implements OnInit {
       this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
       if (this.modifier === 'toevoegen') {
-        /* this.taskService.postTask(this.updatedTask).then(response => {
+         this.taskService.postTask(this.updatedTask).then(response => {
         this.dialogRef.close(response)
-        });*/
-        this.dialogRef.close(this.updatedTask) // deze regel weghalen
+        });
       } else if (this.modifier === 'wijzigen') {
-        /* this.taskService.updateTask(this.updatedTask).then(response => {
+         this.taskService.updateTask(this.updatedTask).then(response => {
         this.dialogRef.close(response)
-        });*/
-        this.dialogRef.close(this.updatedTask) // deze regel weghalen
+        });
 
       }
     }

@@ -10,7 +10,7 @@ import {AddAdminComponent} from "../../components/add-admin/add-admin.component"
 import {ToastrService} from "ngx-toastr";
 import {AddTaskComponent} from "../../components/add-task/add-task.component";
 import {Task} from "../../models/task";
-import {Category} from "../../models/category";
+import {TaskService} from "../../services/task.service";
 
 
 @Component({
@@ -38,49 +38,14 @@ export class AdminComponent implements OnInit {
               private projectService: ProjectService,
               private router: Router,
               private userService: UserService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private taskService:TaskService) {
   }
 
   ngOnInit(): void {
     this.getProjects(0, this.itemsPerCard).then()
-    this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
-    //this.getTasks
-
-    let task:Task=new Task();
-    let category:Category=new Category();
-    category.code='KOK'
-    category.name='Koken'
-    task.id="12"
-    task.name="Sous chef"
-    task.category=category
-    task.instruction=null
-    task.instruction="http://test.com"
-    task.description= "Het is belangrijk dat deze persoon niet alleen verstand heeft van koken maar ook leiding geven. Deze persoon werkt direct onder de chef en is eigenlijk..."
-    this.tasks.push(task)
-
-    let task2:Task=new Task();
-    let category2:Category=new Category();
-    task2.id="13"
-    task2.name="Serveren"
-    category2.code='BED'
-    category2.name='Bediening'
-    task2.category=category2
-    task2.description= "een leuke beschrijving"
-    this.tasks.push(task2)
-
-
-    let task3:Task=new Task();
-    let category3:Category=new Category()
-    task3.id="14"
-    task3.name="Klussen"
-    category3.code='OVR'
-    category3.name='Overige'
-    task3.category=category3
-    task3.description= "een leuke beschrijving"
-    this.tasks.push(task3)
-    this.tasks.push(task3)
-    this.tasks.push(task3)
-    this.tasks.push(task3)
+    this.getAdministrators(0, this.itemsPerCard).then()
+    this.getTasks(0,this.itemsPerCard).then(() => this.loaded = true)
   }
 
   async getProjects(offset: number, pageSize: number) {
@@ -98,10 +63,10 @@ export class AdminComponent implements OnInit {
   }
 
   async getTasks(offset: number, pageSize: number) {
-/*    await this.taskService.getTasks(offset,pageSize).then(tasks=>{
+    await this.taskService.getAllTasks(offset,pageSize).then(tasks=>{
       this.tasks=tasks;
       this.tasks.sort((a, b) => a.name > b.name ? 1 : -1);
-    })*/
+    })
   }
 
 

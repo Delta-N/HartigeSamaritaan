@@ -121,7 +121,7 @@ namespace RoosterPlanner.Api.Controllers
 
         [Authorize(Policy = "Boardmember")]
         [HttpPatch]
-        public ActionResult UpdateProject(TaskViewModel taskViewModel)
+        public ActionResult UpdateTask(TaskViewModel taskViewModel)
         {
             if (taskViewModel == null || taskViewModel.Id == Guid.Empty)
                 return BadRequest("No valid project received");
