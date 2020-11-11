@@ -42,7 +42,7 @@ namespace RoosterPlanner.Service
             TaskResult<Task> taskResult = new TaskResult<Task>();
             try
             {
-                taskResult.Data = null; //await this.unitOfWork.TaskRepository.GetTask(id);
+                taskResult.Data = await this.unitOfWork.TaskRepository.GetTask(id);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)
@@ -61,7 +61,8 @@ namespace RoosterPlanner.Service
             TaskListResult<Task> taskResult = TaskListResult<Task>.CreateDefault();
             try
             {
-                taskResult.Data = null; //await this.taskRepository.SearchTasksAsync(filter);
+                taskResult.Data = await this.taskRepository.SearchTasksAsync(filter);
+                taskResult.Succeeded = true;
             }
             catch (Exception ex)
             {
