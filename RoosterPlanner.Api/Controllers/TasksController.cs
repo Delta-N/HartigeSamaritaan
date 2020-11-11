@@ -36,7 +36,7 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid id.");
             try
             {
-                TaskResult<Task> result = null; //await taskService.GetActiveTasksAsync(); // dit nog aanpassen
+                TaskResult<Task> result =  await taskService.GetTask(id); 
                 if (!result.Succeeded)
                     return UnprocessableEntity();
                 if (result.Data == null)
@@ -60,7 +60,7 @@ namespace RoosterPlanner.Api.Controllers
             };
             try
             {
-                TaskListResult<Task> result = null; //await taskService.SearchTasksAsync(filter);
+                TaskListResult<Task> result = await taskService.SearchTasksAsync(filter);
                 if (!result.Succeeded)
                     return UnprocessableEntity(result.Message);
                 Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
@@ -101,10 +101,10 @@ namespace RoosterPlanner.Api.Controllers
                 task.LastEditBy = oid;
 
                 if (task.Id == Guid.Empty)
-                    result = null; //taskService.CreateTask(task);
+                    result = taskService.CreateTask(task);
                 else
                 {
-                    result = null;//taskService.UpdateTask(task);
+                    result = taskService.UpdateTask(task);
                 }
 
                 if (result.Succeeded)
@@ -131,7 +131,7 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("Category of a Task cannot be empty");
             try
             {
-                Task oldTask = null;//taskService.Get(taskViewModel.Id).result.data;
+                Task oldTask = taskService.GetTask(taskViewModel.Id).Result.Data;
                 Task updatedTask = TaskViewModel.CreateTask(taskViewModel);
                 if(updatedTask==null)
                     return BadRequest("Unable to convert TaskViewModel to Task");
@@ -149,7 +149,7 @@ namespace RoosterPlanner.Api.Controllers
                 oldTask.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldTask.LastEditBy = oid;
-                TaskResult<Task> result = null; //taskService.UpdateTask(oldTask);
+                TaskResult<Task> result = taskService.UpdateTask(oldTask);
                 if (!result.Succeeded)
                     return UnprocessableEntity();
                 return Ok(TaskViewModel.CreateVm(result.Data));
