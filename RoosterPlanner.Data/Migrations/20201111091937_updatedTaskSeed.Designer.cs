@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoosterPlanner.Data.Context;
 
 namespace RoosterPlanner.Data.Migrations
 {
     [DbContext(typeof(RoosterPlannerContext))]
-    partial class RoosterPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20201111091937_updatedTaskSeed")]
+    partial class updatedTaskSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,24 +263,6 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Participations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("66e971cf-16f2-4521-befb-aaca981f642f"),
-                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxWorkingHoursPerWeek = 12,
-                            PersonId = new Guid("25e5b0e6-82ef-45fe-bbde-ef76021ec531"),
-                            ProjectId = new Guid("e86bb765-27ab-404f-b140-211505d869fe")
-                        },
-                        new
-                        {
-                            Id = new Guid("541310c7-ffec-43f5-81a7-7b2c07f9ce81"),
-                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxWorkingHoursPerWeek = 40,
-                            PersonId = new Guid("7f66fc12-b1c0-481f-851b-3cc1f65fd20e"),
-                            ProjectId = new Guid("55c92c6a-067b-442a-b33d-b8ce35cf1d8a")
-                        });
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Person", b =>
@@ -393,7 +377,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e86bb765-27ab-404f-b140-211505d869fe"),
+                            Id = new Guid("852874e2-7b37-44a4-8592-ac064c313aef"),
                             Address = "Stationsplein 2",
                             City = "Voorburg",
                             Closed = false,
@@ -405,7 +389,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("55c92c6a-067b-442a-b33d-b8ce35cf1d8a"),
+                            Id = new Guid("ce3cba97-8fee-4cad-8665-dad2aac17276"),
                             Address = "Laan van Waalhaven 450",
                             City = "Den Haag",
                             Closed = false,
@@ -569,45 +553,41 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("50756bdb-8bfb-4646-8119-35fbb4cfc8f9"),
+                            Id = new Guid("80405368-5098-478e-8d4b-b2f60f4bb3a3"),
                             CategoryId = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
                             Color = "Blue",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chef",
                             DocumentUri = "http://test.com/chef",
-                            LastEditBy = "SYSTEM",
                             LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Chef"
                         },
                         new
                         {
-                            Id = new Guid("17e71d4f-5da4-4146-91bf-069edaf452c2"),
+                            Id = new Guid("10ea4a9f-14a3-4b17-9ef6-b1c19db0a6e9"),
                             CategoryId = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
                             Color = "Red",
                             Description = "Een leuke beschrijving van de werkzaamheden van een runner",
                             DocumentUri = "http://test.com/runner",
-                            LastEditBy = "SYSTEM",
                             LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Runner"
                         },
                         new
                         {
-                            Id = new Guid("adb41bf9-b0fe-4d2d-8ee5-4040f07a4a6c"),
+                            Id = new Guid("02d45be0-e502-400c-a05c-8dab1f24900f"),
                             CategoryId = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
                             Color = "Yellow",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chauffeur",
                             DocumentUri = "http://test.com/chauffeur",
-                            LastEditBy = "SYSTEM",
                             LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Chauffeur"
                         },
                         new
                         {
-                            Id = new Guid("3a1185f2-9de9-4401-9963-b859427806b5"),
+                            Id = new Guid("1cfe83a7-919b-4967-ba49-ea39ace02584"),
                             CategoryId = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
                             Color = "Green",
                             Description = "Een leuke beschrijving van de werkzaamheden van een klusser",
                             DocumentUri = "http://test.com/Klusser",
-                            LastEditBy = "SYSTEM",
                             LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Klusser"
                         });

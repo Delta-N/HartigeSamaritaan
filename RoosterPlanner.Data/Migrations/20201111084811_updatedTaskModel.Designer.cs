@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoosterPlanner.Data.Context;
 
 namespace RoosterPlanner.Data.Migrations
 {
     [DbContext(typeof(RoosterPlannerContext))]
-    partial class RoosterPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20201111084811_updatedTaskModel")]
+    partial class updatedTaskModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +96,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
+                            Id = new Guid("c1fb76ad-bf24-404b-8764-fcd3eeef6091"),
                             Code = "KEUKEN",
                             LastEditBy = "System",
                             LastEditDate = new DateTime(2019, 1, 22, 8, 1, 1, 0, DateTimeKind.Unspecified),
@@ -102,7 +104,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
+                            Id = new Guid("888cd4c0-73a3-40ed-8120-b880105b6dee"),
                             Code = "BEDIENING",
                             LastEditBy = "System",
                             LastEditDate = new DateTime(2019, 1, 18, 16, 55, 29, 0, DateTimeKind.Unspecified),
@@ -110,19 +112,11 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
+                            Id = new Guid("4427e3c7-82bc-4209-9968-67dbf16f3577"),
                             Code = "LOGISTIEK",
                             LastEditBy = "System",
                             LastEditDate = new DateTime(2019, 1, 15, 2, 22, 55, 0, DateTimeKind.Unspecified),
                             Name = "Logistiek"
-                        },
-                        new
-                        {
-                            Id = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
-                            Code = "OVERIGE",
-                            LastEditBy = "System",
-                            LastEditDate = new DateTime(2019, 1, 15, 2, 22, 55, 0, DateTimeKind.Unspecified),
-                            Name = "Overige"
                         });
                 });
 
@@ -261,24 +255,6 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Participations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("66e971cf-16f2-4521-befb-aaca981f642f"),
-                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxWorkingHoursPerWeek = 12,
-                            PersonId = new Guid("25e5b0e6-82ef-45fe-bbde-ef76021ec531"),
-                            ProjectId = new Guid("e86bb765-27ab-404f-b140-211505d869fe")
-                        },
-                        new
-                        {
-                            Id = new Guid("541310c7-ffec-43f5-81a7-7b2c07f9ce81"),
-                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxWorkingHoursPerWeek = 40,
-                            PersonId = new Guid("7f66fc12-b1c0-481f-851b-3cc1f65fd20e"),
-                            ProjectId = new Guid("55c92c6a-067b-442a-b33d-b8ce35cf1d8a")
-                        });
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Person", b =>
@@ -393,7 +369,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e86bb765-27ab-404f-b140-211505d869fe"),
+                            Id = new Guid("ac3a8e71-1134-44d6-807a-d19084f96d80"),
                             Address = "Stationsplein 2",
                             City = "Voorburg",
                             Closed = false,
@@ -405,7 +381,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("55c92c6a-067b-442a-b33d-b8ce35cf1d8a"),
+                            Id = new Guid("834b6663-3ae7-4ebb-bcd1-1f4a54bfe4ca"),
                             Address = "Laan van Waalhaven 450",
                             City = "Den Haag",
                             Closed = false,
@@ -565,52 +541,6 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Tasks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("50756bdb-8bfb-4646-8119-35fbb4cfc8f9"),
-                            CategoryId = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
-                            Color = "Blue",
-                            Description = "Een leuke beschrijving van de werkzaamheden van een chef",
-                            DocumentUri = "http://test.com/chef",
-                            LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Chef"
-                        },
-                        new
-                        {
-                            Id = new Guid("17e71d4f-5da4-4146-91bf-069edaf452c2"),
-                            CategoryId = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
-                            Color = "Red",
-                            Description = "Een leuke beschrijving van de werkzaamheden van een runner",
-                            DocumentUri = "http://test.com/runner",
-                            LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Runner"
-                        },
-                        new
-                        {
-                            Id = new Guid("adb41bf9-b0fe-4d2d-8ee5-4040f07a4a6c"),
-                            CategoryId = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
-                            Color = "Yellow",
-                            Description = "Een leuke beschrijving van de werkzaamheden van een chauffeur",
-                            DocumentUri = "http://test.com/chauffeur",
-                            LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Chauffeur"
-                        },
-                        new
-                        {
-                            Id = new Guid("3a1185f2-9de9-4401-9963-b859427806b5"),
-                            CategoryId = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
-                            Color = "Green",
-                            Description = "Een leuke beschrijving van de werkzaamheden van een klusser",
-                            DocumentUri = "http://test.com/Klusser",
-                            LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Klusser"
-                        });
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Availability", b =>
