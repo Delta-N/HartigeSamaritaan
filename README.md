@@ -1,6 +1,7 @@
 # HartigeSamaritaan
 Roosterplanner systeem
 
-# CI
+# CI / CD
 
-[![Build status](https://dev.azure.com/delta-n/Delta-N%20Hackathon/_apis/build/status/Delta-N%20Hackathon-CI)](https://dev.azure.com/delta-n/Delta-N%20Hackathon/_build/latest?definitionId=182)
+![Build](https://github.com/Delta-N/HartigeSamaritaan/workflows/Build/badge.svg)
+![Deploy](https://github.com/Delta-N/HartigeSamaritaan/workflows/Deploy/badge.svg)
