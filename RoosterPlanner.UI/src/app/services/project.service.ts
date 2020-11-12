@@ -18,7 +18,7 @@ export class ProjectService {
               private toastr: ToastrService) {
   }
 
-  async getProject(guid?: string): Promise<Project> {
+  async getProject(guid: string): Promise<Project> {
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}/${guid}`).toPromise().then(response => {
         this.project = response.body
         this.projects.push(this.project)
@@ -28,7 +28,6 @@ export class ProjectService {
 
   async getAllProjects(offset:number,pageSize:number): Promise<Project[]>{
     this.projects = []
-      //return all projects
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}?offset=${offset}&pageSize=${pageSize}`).toPromise().then(response => {
         this.projects = response.body;
       });
@@ -99,13 +98,5 @@ export class ProjectService {
       }
     }
     return this.apiService.patch<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise()
-  }
-
-  getParticipations(guid: string) {
-    if (guid === null) {
-      this.toastr.error("Fout tijdens het laden van participations")
-      return null;
-    }
-    return this.apiService.get<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}/`).toPromise()
   }
 }

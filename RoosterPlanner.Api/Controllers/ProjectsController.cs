@@ -33,7 +33,8 @@ namespace RoosterPlanner.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
-            if (id == Guid.Empty) return BadRequest("No valid id.");
+            if (id == Guid.Empty) 
+                return BadRequest("No valid id.");
 
             try
             {
@@ -82,8 +83,7 @@ namespace RoosterPlanner.Api.Controllers
                 if (result.Data == null)
                     return Ok();
 
-                List<ProjectViewModel> projectVmList = result.Data.Select(ProjectViewModel.CreateVm)
-                    .ToList();
+                List<ProjectViewModel> projectVmList = result.Data.Select(ProjectViewModel.CreateVm).ToList();
                 return Ok(projectVmList);
             }
             catch (Exception ex)
@@ -105,18 +105,22 @@ namespace RoosterPlanner.Api.Controllers
             if (string.IsNullOrEmpty(projectDetails.Name))
                 return BadRequest("Name of project cannot be empty");
 
-            TaskResult<Project> result = new TaskResult<Project>();
+            TaskResult<Project> result;
 
             try
             {
                 Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
+                if (project == null)
+                    return BadRequest("Unable to convert ProjectDetailsViewmodel to Project");
+                
                 project.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 project.LastEditBy = oid;
 
                 if (project.Id == Guid.Empty)
-                    result = projectService.CreateProject(project);
-                else if (project.Id != Guid.Empty) result = projectService.UpdateProject(project);
+                    result = projectService.CreateProject(project).Result;
+                else 
+                    return BadRequest("Cannot update existing Project with post method");
 
                 if (result.Succeeded)
                     return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
@@ -161,8 +165,10 @@ namespace RoosterPlanner.Api.Controllers
                 oldProject.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldProject.LastEditBy = oid;
-                TaskResult<Project> result = projectService.UpdateProject(oldProject);
-                if (!result.Succeeded) return UnprocessableEntity();
+                
+                TaskResult<Project> result = projectService.UpdateProject(oldProject).Result;
+                if (!result.Succeeded) 
+                    return UnprocessableEntity();
                 return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
