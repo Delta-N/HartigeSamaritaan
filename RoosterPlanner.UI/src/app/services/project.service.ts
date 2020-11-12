@@ -97,6 +97,6 @@ export class ProjectService {
         project.startDate = null;
       }
     }
-    return this.apiService.patch<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise()
+    return this.apiService.put<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise()
   }
 }

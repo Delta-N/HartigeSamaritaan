@@ -52,7 +52,7 @@ export class TaskService {
       this.toastr.error("TaskID is leeg")
       return null;
     }
-    return this.apiService.patch<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}`, updatedTask).toPromise()
+    return this.apiService.put<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}`, updatedTask).toPromise()
   }
 
   deleteTask(guid: string) {

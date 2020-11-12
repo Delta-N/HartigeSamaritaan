@@ -121,7 +121,7 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [Authorize(Policy = "Boardmember")]
-        [HttpPatch]
+        [HttpPut]
         public ActionResult UpdateTask(TaskViewModel taskViewModel)
         {
             if (taskViewModel == null || taskViewModel.Id == Guid.Empty)
@@ -280,7 +280,7 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [Authorize(Policy = "Boardmember")]
-        [HttpPatch("UpdateCategory")]
+        [HttpPut("UpdateCategory")]
         public ActionResult UpdateCategory(CategoryViewModel categoryViewModel)
         {
             if (categoryViewModel == null || categoryViewModel.Id == Guid.Empty || categoryViewModel.Name == null)

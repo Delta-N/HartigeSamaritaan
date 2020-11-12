@@ -90,6 +90,6 @@ export class ParticipationService {
         participation.project.startDate = null;
       }
     }
-    return this.apiService.patch<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation).toPromise()
+    return this.apiService.put<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation).toPromise()
   }
 }

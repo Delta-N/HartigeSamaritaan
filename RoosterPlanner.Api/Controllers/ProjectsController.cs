@@ -135,7 +135,7 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [Authorize(Policy = "Boardmember")]
-        [HttpPatch]
+        [HttpPut]
         public ActionResult UpdateProject(ProjectDetailsViewModel projectDetails)
         {
             if (projectDetails == null || projectDetails.Id == Guid.Empty)
