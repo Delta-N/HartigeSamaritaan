@@ -148,9 +148,9 @@ namespace RoosterPlanner.Api.Controllers
                 oldTask.ProjectTasks = updatedTask.ProjectTasks;
                 oldTask.DeletedDateTime = updatedTask.DeletedDateTime;
 
-                if (oldTask.CategoryId != updatedTask.CategoryId)
+                if (updatedTask.CategoryId != null && oldTask.CategoryId != updatedTask.CategoryId)
                 {
-                    oldTask.Category = taskService.GetCategory(updatedTask.CategoryId).Result.Data;
+                    oldTask.Category = taskService.GetCategory(updatedTask.CategoryId??Guid.Empty).Result.Data;
                     oldTask.CategoryId = oldTask.Category.Id;
                 }
 
