@@ -45,8 +45,8 @@ export class ProjectComponent implements OnInit {
 
   async getProject() {
     await this.projectService.getProject(this.guid).then(project => {
-      if (project[0] != null) {
-        this.displayProject(project[0]);
+      if (project != null) {
+        this.displayProject(project);
       }
     })
   }

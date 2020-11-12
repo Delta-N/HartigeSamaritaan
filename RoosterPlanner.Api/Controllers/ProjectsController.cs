@@ -156,11 +156,13 @@ namespace RoosterPlanner.Api.Controllers
                 oldProject.Name = updatedProject.Name;
                 oldProject.Participations = updatedProject.Participations;
                 oldProject.Shifts = updatedProject.Shifts;
-                oldProject.EndDate = updatedProject.EndDate;
+                oldProject.ParticipationEndDate = updatedProject.ParticipationEndDate;
                 oldProject.PictureUri = updatedProject.PictureUri;
                 oldProject.ProjectTasks = updatedProject.ProjectTasks;
-                oldProject.StartDate = updatedProject.StartDate;
+                oldProject.ParticipationStartDate = updatedProject.ParticipationStartDate;
                 oldProject.WebsiteUrl = updatedProject.WebsiteUrl;
+                oldProject.ProjectStartDate = updatedProject.ProjectStartDate;
+                oldProject.ProjectEndDate = updatedProject.ProjectEndDate;
 
                 oldProject.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);

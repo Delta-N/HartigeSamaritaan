@@ -75,19 +75,19 @@ export class ParticipationService {
       this.toastr.error("PersonId is leeg")
       return;
     }
-    if (participation.project.endDate !== null) {
-      if (participation.project.endDate === undefined || participation.project.endDate.toString() === "") {
-        participation.project.endDate = null;
+    if (participation.project.participationEndDate !== null) {
+      if (participation.project.participationEndDate === undefined || participation.project.participationEndDate.toString() === "") {
+        participation.project.participationEndDate = null;
       } else {
-        participation.project.endDate = DateConverter.toDate(participation.project.endDate);
+        participation.project.participationEndDate = DateConverter.toDate(participation.project.participationEndDate);
       }
     }
-    if (participation.project.startDate.toString() !== "") {
+    if (participation.project.participationStartDate.toString() !== "") {
       try {
-        participation.project.startDate = DateConverter.toDate(participation.project.startDate);
+        participation.project.participationStartDate = DateConverter.toDate(participation.project.participationStartDate);
       } catch (e) {
         this.toastr.error(e)
-        participation.project.startDate = null;
+        participation.project.participationStartDate = null;
       }
     }
     return this.apiService.put<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation).toPromise()

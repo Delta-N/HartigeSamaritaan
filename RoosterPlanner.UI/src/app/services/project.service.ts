@@ -21,7 +21,6 @@ export class ProjectService {
   async getProject(guid: string): Promise<Project> {
       await this.apiService.get<HttpResponse<Project[]>>(`${HttpRoutes.projectApiUrl}/${guid}`).toPromise().then(response => {
         this.project = response.body
-        this.projects.push(this.project)
       });
     return this.project
   }
@@ -52,23 +51,39 @@ export class ProjectService {
     if (project.id === null || project.id === "") {
       project.id = EntityHelper.returnEmptyGuid()
     }
-    if (project.endDate !== null) {
-      if (project.endDate === undefined || project.endDate.toString() === "") {
-        project.endDate = null;
+    if (project.participationEndDate !== null) {
+      if (project.participationEndDate === undefined || project.participationEndDate.toString() === "") {
+        project.participationEndDate = null;
       } else {
-        project.endDate = DateConverter.toDate(project.endDate);
+        project.participationEndDate = DateConverter.toDate(project.participationEndDate);
       }
     }
 
-    if (project.startDate.toString() !== "") {
+    if (project.participationStartDate.toString() !== "") {
       try {
-
-        project.startDate = DateConverter.toDate(project.startDate);
+        project.participationStartDate = DateConverter.toDate(project.participationStartDate);
       } catch (e) {
         this.toastr.error(e)
-        project.startDate = null;
+        project.participationStartDate = null;
       }
     }
+
+    if (project.projectEndDate !== null) {
+      if (project.projectEndDate === undefined || project.projectEndDate.toString() === "") {
+        project.projectEndDate = null;
+      } else {
+        project.projectEndDate = DateConverter.toDate(project.projectEndDate);
+      }
+    }
+
+    if (project.projectStartDate !== null) {
+      if (project.projectStartDate === undefined || project.projectStartDate.toString() === "") {
+        project.projectStartDate = null;
+      } else {
+        project.projectStartDate = DateConverter.toDate(project.projectStartDate);
+      }
+    }
+
     return this.apiService.post<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise();
   }
 
@@ -81,22 +96,38 @@ export class ProjectService {
       this.toastr.error("ProjectId is leeg")
       return;
     }
-    if (project.endDate !== null) {
-      if (project.endDate === undefined || project.endDate.toString() === "") {
-        project.endDate = null;
+    if (project.participationEndDate !== null) {
+      if (project.participationEndDate === undefined || project.participationEndDate.toString() === "") {
+        project.participationEndDate = null;
       } else {
-        project.endDate = DateConverter.toDate(project.endDate);
+        project.participationEndDate = DateConverter.toDate(project.participationEndDate);
       }
     }
 
-    if (project.startDate.toString() !== "") {
+    if (project.participationStartDate.toString() !== "") {
       try {
-        project.startDate = DateConverter.toDate(project.startDate);
+        project.participationStartDate = DateConverter.toDate(project.participationStartDate);
       } catch (e) {
         this.toastr.error(e)
-        project.startDate = null;
+        project.participationStartDate = null;
       }
     }
-    return this.apiService.put<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise()
+
+    if (project.projectEndDate !== null) {
+      if (project.projectEndDate === undefined || project.projectEndDate.toString() === "") {
+        project.projectEndDate = null;
+      } else {
+        project.projectEndDate = DateConverter.toDate(project.projectEndDate);
+      }
+    }
+
+    if (project.projectStartDate !== null) {
+      if (project.projectStartDate === undefined || project.projectStartDate.toString() === "") {
+        project.projectStartDate = null;
+      } else {
+        project.projectStartDate = DateConverter.toDate(project.projectStartDate);
+      }
+    }
+        return this.apiService.put<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project).toPromise()
   }
 }
