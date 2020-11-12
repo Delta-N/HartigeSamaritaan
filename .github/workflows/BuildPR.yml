@@ -57,8 +57,3 @@ jobs:
         run: |
           dotnet build --configuration ${{ env.BUILD_CONFIGURATION  }}
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
-
-      - name: publish API
-        run: |
-          dotnet publish --configuration ${{ env.BUILD_CONFIGURATION  }} --no-build --no-restore --output ../staging/api
-        working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
