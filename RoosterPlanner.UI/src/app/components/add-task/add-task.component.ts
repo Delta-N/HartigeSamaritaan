@@ -6,6 +6,7 @@ import {EntityHelper} from "../../helpers/entity-helper";
 import {Task} from "../../models/task";
 import {Category} from "../../models/category";
 import {TaskService} from "../../services/task.service";
+import {CategoryService} from "../../services/category.service";
 
 @Component({
   selector: 'app-add-task',
@@ -13,45 +14,45 @@ import {TaskService} from "../../services/task.service";
   styleUrls: ['./add-task.component.scss']
 })
 export class AddTaskComponent implements OnInit {
-  categoryControl = new FormControl('', Validators.required);
+  categoryControl: FormControl;
+  colorControl: FormControl;
   task: Task;
   updatedTask: Task;
 
   checkoutForm;
   modifier: string = 'toevoegen';
-  categories: any = [];
+  categories: Category[] = [];
+  colors: string[] = ["Red", "Blue", "Yellow", "Green", "Orange", "Pink"];
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private formBuilder: FormBuilder,
               private toastr: ToastrService,
               public dialogRef: MatDialogRef<AddTaskComponent>,
-              private taskService:TaskService) {
-    data.task != null ? this.task = data.task : this.task=new Task();
+              private taskService: TaskService,
+              private categoryService: CategoryService) {
+    data.task != null ? this.task = data.task : this.task = new Task();
 
     this.modifier = data.modifier;
-    let category1:Category=new Category()
-    let category2:Category=new Category()
-    let category3:Category=new Category()
-    category1.code='KOK'
-    category1.name='Koken'
-    category2.code='BED'
-    category2.name='Bediening'
-    category3.code='OVR'
-    category3.name='Overige'
-    this.categories.push(category1)
-    this.categories.push(category2)
-    this.categories.push(category3)
+    this.categoryControl = new FormControl('', Validators.required);
+    this.colorControl = new FormControl(this.task.color != null ? this.task.color : '', Validators.required)
 
     this.checkoutForm = this.formBuilder.group({
       id: [this.task.id != null ? this.task.id : EntityHelper.returnEmptyGuid()],
       name: [this.task.name != null ? this.task.name : '', Validators.required],
       category: this.categoryControl,
+      color: this.colorControl,
       description: [this.task.description != null ? this.task.description : '']
     })
   }
 
   ngOnInit(): void {
+    this.categoryService.getAllCategory().then(response => {
+      this.categories = response
+      if (this.task.category != null) {
+        this.categoryControl.setValue(this.categories.find(c => c.name == this.task.category.name))
+      }
+    })
   }
 
   saveTask(value: Task) {
@@ -60,12 +61,12 @@ export class AddTaskComponent implements OnInit {
       this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
       if (this.modifier === 'toevoegen') {
-         this.taskService.postTask(this.updatedTask).then(response => {
-        this.dialogRef.close(response)
+        this.taskService.postTask(this.updatedTask).then(response => {
+          this.dialogRef.close(response)
         });
       } else if (this.modifier === 'wijzigen') {
-         this.taskService.updateTask(this.updatedTask).then(response => {
-        this.dialogRef.close(response)
+        this.taskService.updateTask(this.updatedTask).then(response => {
+          this.dialogRef.close(response)
         });
 
       }
