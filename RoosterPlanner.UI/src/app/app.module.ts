@@ -35,6 +35,8 @@ import {MSAL_INSTANCE, MsalBroadcastService, MsalGuard, MsalInterceptor, MsalSer
 import {MSAL_GUARD_CONFIG, MSAL_INTERCEPTOR_CONFIG} from "./msal/constants";
 import {MsalGuardConfiguration} from "./msal/msal.guard.config";
 import {environment} from "../environments/environment";
+import { TaskComponent } from './pages/task/task.component';
+import { AddTaskComponent } from './components/add-task/add-task.component';
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 function MSALInstanceFactory(): IPublicClientApplication {
@@ -87,7 +89,9 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     FilterPipe,
     ChangeProfileComponent,
     ProjectComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    TaskComponent,
+    AddTaskComponent
 
   ],
   imports: [

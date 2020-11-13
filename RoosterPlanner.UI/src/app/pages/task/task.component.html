@@ -1,0 +1,32 @@
+<div class="container">
+
+      <div class="bar">
+        <h1>Taak</h1>
+      </div>
+
+
+  <div class="data-row">
+    <div class="row-name">Naam:</div>
+    <div class="user-data">Sous chef</div>
+  </div>
+
+  <div class="data-row">
+    <div class="row-name">Categorie:</div>
+    <div class="user-data">Koken</div>
+  </div>
+
+  <div class="data-row" *ngIf="task.instruction!=null" >
+    <div class="row-name">Instructiedocument:</div>
+    <div class="user-data"><a [href]="task.instruction">Klik hier om te lezen</a></div>
+  </div>
+
+  <div class="data-row">
+    <div class="row-name">Omschrijving:</div>
+    <div class="user-data">Het is belangrijk dat deze persoon niet alleen verstand heeft van koken maar ook leiding geven. Deze persoon werkt direct onder de chef en is eigenlijk...</div>
+  </div>
+
+  <div class="row">
+  <a *ngIf="isAdmin" (click)="edit()" mat-button id="editTask">Taak wijzigen</a>
+  <a *ngIf="isAdmin" (click)="delete()" mat-button id="deleteTask">Taak verwijderen</a>
+  </div>
+</div>
