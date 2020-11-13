@@ -37,12 +37,12 @@ export class UserService {
   }
 
   async makeAdmin(GUID: string) {
-    await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/1`).toPromise().then(response => {
+    await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/1`).toPromise().then(response => {
     }).catch();
   }
 
   async removeAdmin(GUID: string) {
-    await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/4`).toPromise().then(response => {
+    await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/4`).toPromise().then(response => {
     }).catch();
   }
 
@@ -71,7 +71,7 @@ export class UserService {
 
   async updateUser(updateUser: User): Promise<User> {
     let user: User = new User();
-    await this.apiService.patch<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/`, updateUser).toPromise().then(response => {
+    await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/`, updateUser).toPromise().then(response => {
       user = response.body
     })
     return user

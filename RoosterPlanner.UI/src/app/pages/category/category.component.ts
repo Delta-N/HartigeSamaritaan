@@ -1,21 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {AddTaskComponent} from "../../components/add-task/add-task.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ToastrService} from "ngx-toastr";
 import {UserService} from "../../services/user.service";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
-import {TaskService} from "../../services/task.service";
-import {Task} from "../../models/task";
+import {CategoryService} from "../../services/category.service";
+import {Category} from "../../models/category";
+import {AddCategoryComponent} from "../../components/add-category/add-category.component";
 
 @Component({
-  selector: 'app-task',
-  templateUrl: './task.component.html',
-  styleUrls: ['./task.component.scss']
+  selector: 'app-category',
+  templateUrl: './category.component.html',
+  styleUrls: ['./category.component.scss']
 })
-export class TaskComponent implements OnInit {
+export class CategoryComponent implements OnInit {
+
   guid: string;
-  task: Task;
+  category: Category;
   isAdmin: boolean = false;
   loaded: boolean = false;
 
@@ -25,8 +26,8 @@ export class TaskComponent implements OnInit {
     public dialog: MatDialog,
     private toastr: ToastrService,
     private userService: UserService,
-    private taskService: TaskService,
-    private router:Router) {
+    private categoryService: CategoryService,
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -34,33 +35,31 @@ export class TaskComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    this.taskService.getTask(this.guid).then(response => {
-      this.task = response;
+    this.categoryService.getCategory(this.guid).then(response => {
+      this.category = response;
       this.loaded = true;
     })
   }
 
   edit() {
-    const dialogRef = this.dialog.open(AddTaskComponent, {
+    const dialogRef = this.dialog.open(AddCategoryComponent, {
       width: '500px',
-      height: '600px',
       data: {
         modifier: 'wijzigen',
-        task: this.task,
+        category: this.category,
       }
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result.status == 200) {
         this.toastr.success(result.body.name + " is gewijzigd")
-        this.task = result.body;
-
+        this.category = result.body;
       }
     });
   }
 
   delete() {
-    const message = "Weet je zeker dat je deze taak wilt verwijderen?"
+    const message = "Weet je zeker dat je deze category wilt verwijderen? Hiermee verwijder je ook alle taken die hieraan hangen" //set null instellen
     const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput");
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
@@ -68,9 +67,9 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult === true) {
-        this.taskService.deleteTask(this.guid).then(response => {
-          if(response.status==200){
-            this.router.navigateByUrl("/admin")
+        this.categoryService.deleteCategory(this.guid).then(response => {
+          if (response.status == 200) {
+            this.router.navigateByUrl("/tasks")
           }
         })
       }

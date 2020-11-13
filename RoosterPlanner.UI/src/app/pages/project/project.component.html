@@ -19,13 +19,23 @@
       <div class="row-name">Omschrijving:</div>
       <div class="user-data">{{viewProject.description}}</div>
     </div>
+    <span *ngIf="isAdmin">
     <div class="data-row">
-      <div class="row-name">Start datum:</div>
-      <div class="user-data">{{viewProject.startDate}}</div>
+      <div class="row-name">Project Start datum:</div>
+      <div class="user-data">{{viewProject.projectStartDate}}</div>
     </div>
     <div class="data-row">
-      <div class="row-name">Eind datum:</div>
-      <div class="user-data">{{viewProject.endDate}}</div>
+      <div class="row-name">Project Eind datum:</div>
+      <div class="user-data">{{viewProject.projectEndDate}}</div>
+    </div>
+      </span>
+    <div class="data-row">
+      <div class="row-name">Participatie Start datum:</div>
+      <div class="user-data">{{viewProject.participationStartDate}}</div>
+    </div>
+    <div class="data-row">
+      <div class="row-name">Participatie Eind datum:</div>
+      <div class="user-data">{{viewProject.participationEndDate}}</div>
     </div>
     <div class="data-row">
       <div class="row-name">Afbeelding URL:</div>
