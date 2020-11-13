@@ -8,9 +8,6 @@ import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 import {AddAdminComponent} from "../../components/add-admin/add-admin.component";
 import {ToastrService} from "ngx-toastr";
-import {AddTaskComponent} from "../../components/add-task/add-task.component";
-import {Task} from "../../models/task";
-import {TaskService} from "../../services/task.service";
 
 
 @Component({
@@ -30,28 +27,25 @@ export class AdminComponent implements OnInit {
   adminElementHeight: number;
 
   reasonableMaxInteger: number = 10000; //aanpassen na 10k projecten/admins ;)
-  tasks:Task[]=[];
-  taskCardStyle = 'card';
-  private tasksElementHeight: number;
+
 
   constructor(public dialog: MatDialog,
               private projectService: ProjectService,
               private router: Router,
               private userService: UserService,
               private toastr: ToastrService,
-              private taskService:TaskService) {
+  ) {
   }
 
   ngOnInit(): void {
     this.getProjects(0, this.itemsPerCard).then()
-    this.getAdministrators(0, this.itemsPerCard).then()
-    this.getTasks(0,this.itemsPerCard).then(() => this.loaded = true)
+    this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
   }
 
   async getProjects(offset: number, pageSize: number) {
     await this.projectService.getAllProjects(offset, pageSize).then(x => {
       this.projects = x;
-      this.projects.sort((a, b) => a.startDate < b.startDate ? 1 : -1);
+      this.projects.sort((a, b) => a.participationStartDate < b.participationStartDate ? 1 : -1);
     });
   }
 
@@ -61,14 +55,6 @@ export class AdminComponent implements OnInit {
       this.administrators.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
     });
   }
-
-  async getTasks(offset: number, pageSize: number) {
-    await this.taskService.getAllTasks(offset,pageSize).then(tasks=>{
-      this.tasks=tasks;
-      this.tasks.sort((a, b) => a.name > b.name ? 1 : -1);
-    })
-  }
-
 
   addProject() {
     const dialogRef = this.dialog.open(CreateProjectComponent, {
@@ -129,14 +115,12 @@ export class AdminComponent implements OnInit {
     if (this.projectCardStyle == 'expanded-card') {
       document.getElementById("adminCard").hidden = false;
       document.getElementById("dataCard").hidden = false;
-      document.getElementById("taskCard").hidden = false;
       this.projectCardStyle = 'card';
       this.itemsPerCard = 5;
-      this.projects=this.projects.slice(0,this.itemsPerCard);
+      this.projects = this.projects.slice(0, this.itemsPerCard);
     } else {
       document.getElementById("adminCard").hidden = true;
       document.getElementById("dataCard").hidden = true;
-      document.getElementById("taskCard").hidden = true;
       this.projectCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger
       this.getProjects(0, this.itemsPerCard).then(() => {
@@ -150,59 +134,16 @@ export class AdminComponent implements OnInit {
     if (this.adminCardStyle == 'expanded-card') {
       document.getElementById("projectCard").hidden = false;
       document.getElementById("dataCard").hidden = false;
-      document.getElementById("taskCard").hidden = false;
       this.adminCardStyle = 'card';
       this.itemsPerCard = 5;
-      this.administrators=this.administrators.slice(0,this.itemsPerCard);
+      this.administrators = this.administrators.slice(0, this.itemsPerCard);
     } else {
       document.getElementById("projectCard").hidden = true;
       document.getElementById("dataCard").hidden = true;
-      document.getElementById("taskCard").hidden = true;
       this.adminCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
       this.getAdministrators(0, this.itemsPerCard).then(() => {
         this.adminElementHeight = (this.administrators.length * 48);
-      })
-
-    }
-  }
-
-  modTask(modifier: string) {
-    if(modifier==='add'){
-      const dialogRef = this.dialog.open(AddTaskComponent, {
-        width: '500px',
-        height: '500px',
-        data: {
-          modifier:'toevoegen',
-        }
-      });
-      dialogRef.disableClose = true;
-      dialogRef.afterClosed().subscribe(result => {
-        if (result !== 'false') {
-          this.toastr.success(result.name + " is toegevoegd")
-          //this.task=result();
-          console.log(result)
-        }
-      });
-    }
-  }
-
-  expandTaskCard() {
-    if (this.taskCardStyle == 'expanded-card') {
-      document.getElementById("projectCard").hidden = false;
-      document.getElementById("dataCard").hidden = false;
-      document.getElementById("adminCard").hidden = false;
-      this.taskCardStyle = 'card';
-      this.itemsPerCard = 5;
-      this.tasks=this.tasks.slice(0,this.itemsPerCard);
-    } else {
-      document.getElementById("projectCard").hidden = true;
-      document.getElementById("dataCard").hidden = true;
-      document.getElementById("adminCard").hidden = true;
-      this.taskCardStyle = 'expanded-card';
-      this.itemsPerCard = this.reasonableMaxInteger;
-      this.getTasks(0, this.itemsPerCard).then(() => {
-        this.tasksElementHeight = (this.tasks.length * 48);
       })
 
     }

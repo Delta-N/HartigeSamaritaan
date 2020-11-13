@@ -17,7 +17,7 @@ namespace RoosterPlanner.Data.Repositories
         {
             Project project = new Project(id) {
                 Name = name ?? $"Project_{DateTime.Now.ToString("yyyyddMM-HHmm")}",
-                StartDate = DateTime.Today.AddDays(-7),
+                ParticipationStartDate = DateTime.Today.AddDays(-7),
                 LastEditBy = "System",
                 LastEditDate = DateTime.UtcNow.Date
             };
@@ -33,7 +33,7 @@ namespace RoosterPlanner.Data.Repositories
             //Arrange
             Project project = new Project {
                 Name = $"Project_{DateTime.Now.ToString("yyyyddMM-HHmm")}",
-                StartDate = DateTime.Today.AddDays(-7),
+                ParticipationStartDate = DateTime.Today.AddDays(-7),
                 LastEditBy = "System",
                 LastEditDate = DateTime.UtcNow.Date
             };
@@ -67,7 +67,7 @@ namespace RoosterPlanner.Data.Repositories
             Guid projectId = Guid.NewGuid();
             Project project = new Project(projectId) {
                 Name = $"Project_{DateTime.Now.ToString("yyyyddMM-HHmm")}",
-                StartDate = DateTime.Today.AddDays(-7),
+                ParticipationStartDate = DateTime.Today.AddDays(-7),
                 LastEditBy = "System",
                 LastEditDate = DateTime.UtcNow.Date
             };
@@ -93,7 +93,7 @@ namespace RoosterPlanner.Data.Repositories
             Assert.IsNotNull(loadedProject);
             Assert.AreEqual(projectId, loadedProject.Id);
             Assert.IsNotNull(loadedProject.Name);
-            Assert.IsTrue(loadedProject.StartDate > new DateTime(2019, 1, 1));
+            Assert.IsTrue(loadedProject.ParticipationStartDate > new DateTime(2019, 1, 1));
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace RoosterPlanner.Data.Repositories
             //Arrange
             Project project = new Project {
                 Name = $"Project_{DateTime.Now.ToString("yyyyddMM-HHmm")}".PadRight(66, 'X'),
-                StartDate = DateTime.Today.AddDays(-7),
+                ParticipationStartDate = DateTime.Today.AddDays(-7),
                 LastEditBy = "System",
                 LastEditDate = DateTime.UtcNow.Date
             };

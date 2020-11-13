@@ -8,7 +8,7 @@ namespace RoosterPlanner.Models
     public class Availability : Entity
     {
         [Column(Order = 1)]
-        public Guid ParticipationId { get; set; }
+        public Guid? ParticipationId { get; set; }
 
         [ForeignKey("ParticipationId")]
         public Participation Participation { get; set; }

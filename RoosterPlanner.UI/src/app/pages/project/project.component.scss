@@ -46,7 +46,7 @@ a {
 .row-name {
   text-align: left;
   min-width: 250px;
-  font: normal normal normal 30px Segoe UI;
+  font: normal normal normal 20px Segoe UI;
   letter-spacing: 0;
   color: #707070;
   opacity: 1;
@@ -55,7 +55,7 @@ a {
 
 .user-data {
   text-align: left;
-  font: normal normal normal 24px/45px Segoe UI;
+  font: normal normal normal 20px/45px Segoe UI;
   letter-spacing: 0;
   color: #000000;
   opacity: 1;
@@ -63,9 +63,25 @@ a {
 
 .data-row {
   display: flex;
-  margin-top: 36px
+  margin-top: 9px;
+  margin-bottom: 9px;
 }
 
 .edit {
   background-color: #DDFCE0
+}
+
+@media only screen and (max-width: 550px) {
+
+  .row-name {
+    font: normal normal normal 15px Segoe UI;
+    min-width: 175px;
+  }
+  .user-data {
+    font: normal normal normal 15px/45px Segoe UI;
+  }
+  .data-row{
+    align-items: center;
+  }
+
 }

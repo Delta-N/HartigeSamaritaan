@@ -24,6 +24,17 @@
 
     <div>
       <mat-form-field>
+        <mat-label for="color"> Shiftkleur</mat-label>
+        <mat-select [formControl]="colorControl" required>
+          <mat-option *ngFor="let color of colors" [value]="color">
+            {{color}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
         <mat-label for="description"> Omschrijving</mat-label>
         <textarea matInput formControlName="description" id="description" placeholder="Omschrijving..."></textarea>
       </mat-form-field>

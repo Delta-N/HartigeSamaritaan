@@ -110,7 +110,7 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPut]
         public ActionResult Update([FromBody] ParticipationViewModel participationViewModel)
         {
             if (participationViewModel == null ||

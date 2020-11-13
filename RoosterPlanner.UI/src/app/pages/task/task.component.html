@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container" *ngIf="loaded">
 
-      <div class="bar">
-        <h1>Taak</h1>
-      </div>
+  <div class="bar">
+    <h1>Taak</h1>
+  </div>
 
 
   <div class="data-row">
@@ -12,10 +12,15 @@
 
   <div class="data-row">
     <div class="row-name">Categorie:</div>
-    <div class="user-data">{{task.category.name}}</div>
+    <div class="user-data">{{task.category!=null?task.category.name:null}}</div>
   </div>
 
-  <div class="data-row" *ngIf="task.documentUri!=null" >
+  <div class="data-row">
+    <div class="row-name">Shiftkleur:</div>
+    <div class="user-data">{{task.color}}</div>
+  </div>
+
+  <div class="data-row" *ngIf="task.documentUri!=null">
     <div class="row-name">Instructiedocument:</div>
     <div class="user-data"><a [href]="task.documentUri">Klik hier om te lezen</a></div>
   </div>
@@ -26,7 +31,7 @@
   </div>
 
   <div class="row">
-  <a *ngIf="isAdmin" (click)="edit()" mat-button id="editTask">Taak wijzigen</a>
-  <a *ngIf="isAdmin" (click)="delete()" mat-button id="deleteTask">Taak verwijderen</a>
+    <a *ngIf="isAdmin" (click)="edit()" mat-button id="editTask">Taak wijzigen</a>
+    <a *ngIf="isAdmin" (click)="delete()" mat-button id="deleteTask">Taak verwijderen</a>
   </div>
 </div>
