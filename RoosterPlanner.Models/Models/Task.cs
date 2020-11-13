@@ -13,7 +13,7 @@ namespace RoosterPlanner.Models
 
         [Column(Order = 2)] public DateTime? DeletedDateTime { get; set; } //NODIG?
 
-        [Column(Order = 3)] public Guid CategoryId { get; set; }
+        [Column(Order = 3)] public Guid? CategoryId { get; set; }
 
         [Column(Order = 4)] [MaxLength(12)] public string Color { get; set; }
 

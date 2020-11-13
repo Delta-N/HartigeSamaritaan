@@ -18,7 +18,7 @@ namespace RoosterPlanner.Models
         public List<Availability> Availabilities { get; set; }
 
         [Column(Order = 4)]
-        public Guid TaskId { get; set; }
+        public Guid? TaskId { get; set; }
 
         [ForeignKey("TaskId")]
         public Task Task { get; set; }

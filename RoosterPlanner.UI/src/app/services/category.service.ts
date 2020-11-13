@@ -53,7 +53,7 @@ export class CategoryService {
       this.toastr.error("CategoryID is leeg")
       return null;
     }
-    return this.apiService.patch<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/UpdateCategory`, category).toPromise()
+    return this.apiService.put<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/UpdateCategory`, category).toPromise()
   }
 
   deleteCategory(guid: string) {

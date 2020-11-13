@@ -45,7 +45,7 @@ export class AdminComponent implements OnInit {
   async getProjects(offset: number, pageSize: number) {
     await this.projectService.getAllProjects(offset, pageSize).then(x => {
       this.projects = x;
-      this.projects.sort((a, b) => a.startDate < b.startDate ? 1 : -1);
+      this.projects.sort((a, b) => a.participationStartDate < b.participationStartDate ? 1 : -1);
     });
   }
 
@@ -115,14 +115,12 @@ export class AdminComponent implements OnInit {
     if (this.projectCardStyle == 'expanded-card') {
       document.getElementById("adminCard").hidden = false;
       document.getElementById("dataCard").hidden = false;
-      document.getElementById("taskCard").hidden = false;
       this.projectCardStyle = 'card';
       this.itemsPerCard = 5;
       this.projects = this.projects.slice(0, this.itemsPerCard);
     } else {
       document.getElementById("adminCard").hidden = true;
       document.getElementById("dataCard").hidden = true;
-      document.getElementById("taskCard").hidden = true;
       this.projectCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger
       this.getProjects(0, this.itemsPerCard).then(() => {
@@ -136,14 +134,12 @@ export class AdminComponent implements OnInit {
     if (this.adminCardStyle == 'expanded-card') {
       document.getElementById("projectCard").hidden = false;
       document.getElementById("dataCard").hidden = false;
-      document.getElementById("taskCard").hidden = false;
       this.adminCardStyle = 'card';
       this.itemsPerCard = 5;
       this.administrators = this.administrators.slice(0, this.itemsPerCard);
     } else {
       document.getElementById("projectCard").hidden = true;
       document.getElementById("dataCard").hidden = true;
-      document.getElementById("taskCard").hidden = true;
       this.adminCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
       this.getAdministrators(0, this.itemsPerCard).then(() => {

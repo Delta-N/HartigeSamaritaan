@@ -121,7 +121,7 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [Authorize(Policy = "Boardmember")]
-        [HttpPatch]
+        [HttpPut]
         public ActionResult UpdateTask(TaskViewModel taskViewModel)
         {
             if (taskViewModel == null || taskViewModel.Id == Guid.Empty)
@@ -148,9 +148,9 @@ namespace RoosterPlanner.Api.Controllers
                 oldTask.ProjectTasks = updatedTask.ProjectTasks;
                 oldTask.DeletedDateTime = updatedTask.DeletedDateTime;
 
-                if (oldTask.CategoryId != updatedTask.CategoryId)
+                if (updatedTask.CategoryId != null && oldTask.CategoryId != updatedTask.CategoryId)
                 {
-                    oldTask.Category = taskService.GetCategory(updatedTask.CategoryId).Result.Data;
+                    oldTask.Category = taskService.GetCategory(updatedTask.CategoryId??Guid.Empty).Result.Data;
                     oldTask.CategoryId = oldTask.Category.Id;
                 }
 
@@ -280,7 +280,7 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [Authorize(Policy = "Boardmember")]
-        [HttpPatch("UpdateCategory")]
+        [HttpPut("UpdateCategory")]
         public ActionResult UpdateCategory(CategoryViewModel categoryViewModel)
         {
             if (categoryViewModel == null || categoryViewModel.Id == Guid.Empty || categoryViewModel.Name == null)

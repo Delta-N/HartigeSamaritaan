@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,15 +17,20 @@ namespace RoosterPlanner.Models
 
         [Column(Order = 3)]
         public string UrlPdf { get; set; }
+        
+        public List<Task> Tasks { get; set; }
+
 
         //Constructor
         public Category() : this(Guid.Empty)
         {
+            Tasks=new List<Task>();
         }
 
         //Constructor
         public Category(Guid id) : base(id)
         {
+            Tasks=new List<Task>();
         }
     }
 }

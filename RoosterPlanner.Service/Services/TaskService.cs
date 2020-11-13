@@ -159,7 +159,7 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult<Category>> GetCategory(Guid categoryId)
         {
-            if (categoryId == null)
+            if (categoryId == Guid.Empty)
                 throw new ArgumentNullException("categoryId");
 
             TaskResult<Category> taskResult = new TaskResult<Category>();

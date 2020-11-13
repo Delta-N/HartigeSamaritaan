@@ -18,7 +18,7 @@ namespace RoosterPlanner.Models
         public Guid PersonId { get; set; }
 
         [Column(Order = 4)]
-        public Guid CertificateTypeId { get; set; }
+        public Guid? CertificateTypeId { get; set; }
 
         [ForeignKey("PersonId")]
         public Person Person { get; set; }
