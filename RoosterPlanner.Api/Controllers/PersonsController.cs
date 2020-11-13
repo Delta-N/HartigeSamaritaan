@@ -113,7 +113,7 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPut]
         public async Task<ActionResult> UpdateUser([FromBody] PersonViewModel personViewModel)
         {
             if (personViewModel == null || personViewModel.Id == Guid.Empty)
@@ -149,7 +149,7 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [Authorize(Policy = "Boardmember")]
-        [HttpPatch("modifyadmin/{oid}/{modifier}")]
+        [HttpPut("modifyadmin/{oid}/{modifier}")]
         public async Task<ActionResult> ModAdmin(Guid oid, int modifier)
         {
             if (oid == Guid.Empty)

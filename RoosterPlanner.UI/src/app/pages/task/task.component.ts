@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {AddTaskComponent} from "../../components/add-task/add-task.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ToastrService} from "ngx-toastr";
 import {UserService} from "../../services/user.service";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
+import {TaskService} from "../../services/task.service";
+import {Task} from "../../models/task";
 
 @Component({
   selector: 'app-task',
@@ -13,15 +15,18 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confi
 })
 export class TaskComponent implements OnInit {
   guid: string;
-  task: any; //aanpassen zodra task model eris
+  task: Task;
   isAdmin: boolean = false;
+  loaded: boolean = false;
 
 
   constructor(
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private toastr: ToastrService,
-    private userService: UserService) {
+    private userService: UserService,
+    private taskService: TaskService,
+    private router:Router) {
   }
 
   ngOnInit(): void {
@@ -29,23 +34,16 @@ export class TaskComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    //placeholder
-    let task: any = {};
-    task.id = "12"
-    task.name = "Sous chef"
-    task.category = "Koken"
-    task.instruction = null
-    task.instruction = "http://test.com"
-    task.description = "Het is belangrijk dat deze persoon niet alleen verstand heeft van koken maar ook leiding geven. Deze persoon werkt direct onder de chef en is eigenlijk..."
-
-    this.task = task;
-    //placeholder^
+    this.taskService.getTask(this.guid).then(response => {
+      this.task = response;
+      this.loaded = true;
+    })
   }
 
   edit() {
     const dialogRef = this.dialog.open(AddTaskComponent, {
       width: '500px',
-      height: '500px',
+      height: '600px',
       data: {
         modifier: 'wijzigen',
         task: this.task,
@@ -53,10 +51,10 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      if (result !== 'false') {
-        this.toastr.success(result.name + " is gewijzigd")
-        //this.task=result();
-        console.log(result)
+      if (result.status == 200) {
+        this.toastr.success(result.body.name + " is gewijzigd")
+        this.task = result.body;
+
       }
     });
   }
@@ -70,10 +68,11 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult === true) {
-        /*    await this.taskService.deleteTask(this.guid).then(response=>{
-           handle response
-          })*/
-        console.log("taak is verwijderd")
+        this.taskService.deleteTask(this.guid).then(response => {
+          if(response.status==200){
+            this.router.navigateByUrl("/admin")
+          }
+        })
       }
     })
   }

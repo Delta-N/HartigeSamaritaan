@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
@@ -12,19 +11,13 @@ namespace RoosterPlanner.Service
 {
     public interface IProjectService
     {
-        Task<TaskListResult<Project>> GetActiveProjectsAsync();
-
         Task<TaskListResult<Project>> SearchProjectsAsync(ProjectFilter filter);
 
         Task<TaskResult<Project>> GetProjectDetails(Guid id);
 
-        TaskResult<Project> CreateProject(Project project);
+        Task<TaskResult<Project>> CreateProject(Project project);
 
-        TaskResult<Project> UpdateProject(Project project);
-
-        TaskResult<Project> CloseProject(Project project);
-
-        int AddPersonToProject(Guid projectId, Guid personId);
+        Task<TaskResult<Project>> UpdateProject(Project project);
     }
 
     public class ProjectService : IProjectService
@@ -42,28 +35,7 @@ namespace RoosterPlanner.Service
             this.projectRepository = unitOfWork.ProjectRepository;
             this.logger = logger;
         }
-
-        /// <summary>
-        /// Returns a list of open projects.
-        /// </summary>
-        /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskListResult<Project>> GetActiveProjectsAsync()
-        {
-            TaskListResult<Project> taskResult = TaskListResult<Project>.CreateDefault();
-
-            try
-            {
-                taskResult.Data = await this.projectRepository.GetActiveProjectsAsync();
-                taskResult.Succeeded = true;
-            }
-            catch (Exception ex)
-            {
-                logger.Log(LogLevel.Error,ex.ToString());
-                taskResult.Error = ex;
-            }
-            return taskResult;
-        }
-
+        
         /// <summary>
         /// Search for projects 
         /// </summary>
@@ -109,7 +81,7 @@ namespace RoosterPlanner.Service
             return taskResult;
         }
 
-        public TaskResult<Project> CreateProject(Project project)
+        public async Task<TaskResult<Project>> CreateProject(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -119,7 +91,7 @@ namespace RoosterPlanner.Service
             try
             {
                 taskResult.Data = this.projectRepository.Add(project);
-                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+                taskResult.Succeeded = await this.unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
@@ -129,19 +101,17 @@ namespace RoosterPlanner.Service
             return taskResult;
         }
 
-        public TaskResult<Project> UpdateProject(Project project)
+        public async Task<TaskResult<Project>> UpdateProject(Project project)
         {
-            if (project == null)
-            {
+            if (project == null || project.Id==Guid.Empty)
                 throw new ArgumentNullException("project");
-            }
 
             TaskResult<Project> taskResult = new TaskResult<Project>();
 
             try
             {
                 taskResult.Data = projectRepository.Update(project);
-                taskResult.Succeeded = unitOfWork.SaveChanges() == 1;
+                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
@@ -149,35 +119,6 @@ namespace RoosterPlanner.Service
                 taskResult.Error = ex;
             }
             return taskResult;
-        }
-
-        /// <summary>
-        /// Closes the project.
-        /// </summary>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        public TaskResult<Project> CloseProject(Project project)
-        {
-            TaskResult<Project> taskResult = new TaskResult<Project>();
-
-            try
-            {
-                project.Closed = true;
-                taskResult.Data = projectRepository.AddOrUpdate(project);
-                taskResult.Succeeded = unitOfWork.SaveChanges() == 1;
-            }
-            catch (Exception ex)
-            {
-                logger.Log(LogLevel.Error,ex.ToString());
-                taskResult.Error = ex;
-            }
-            return taskResult;
-        }
-
-        public int AddPersonToProject(Guid projectId, Guid personId)
-        {
-
-            return unitOfWork.SaveChanges();
         }
     }
 }

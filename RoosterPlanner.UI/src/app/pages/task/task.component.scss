@@ -22,25 +22,28 @@ h1 {
   border-bottom: 1px solid gray;
 
 }
-.data-row {
-  display: flex;
-  margin-top: 36px
-}
 .row-name {
   text-align: left;
-  min-width: 275px;
-  font: normal normal normal 30px Segoe UI;
+  min-width: 250px;
+  font: normal normal normal 20px Segoe UI;
   letter-spacing: 0;
   color: #707070;
   opacity: 1;
 
 }
+
 .user-data {
   text-align: left;
-  font: normal normal normal 24px/45px Segoe UI;
+  font: normal normal normal 20px/45px Segoe UI;
   letter-spacing: 0;
   color: #000000;
   opacity: 1;
+}
+
+.data-row {
+  display: flex;
+  margin-top: 9px;
+  margin-bottom: 9px;
 }
 
 .mat-button {
@@ -58,4 +61,17 @@ h1 {
 }
 #deleteTask{
   background-color: white;
+}
+@media only screen and (max-width: 550px) {
+
+  .row-name {
+    font: normal normal normal 15px Segoe UI;
+    min-width: 175px;
+  }
+  .user-data {
+    font: normal normal normal 15px/45px Segoe UI;
+  }
+  .data-row {
+    align-items: center;
+  }
 }

@@ -9,6 +9,8 @@ import {AuthorizationGuard} from "./guards/authorization.guard";
 import {ProjectComponent} from "./pages/project/project.component";
 import {MsalGuard} from "./msal";
 import {TaskComponent} from "./pages/task/task.component";
+import {AllTasksComponent} from "./pages/all-tasks/all-tasks.component";
+import {CategoryComponent} from "./pages/category/category.component";
 
 const routes: Routes = [
   {
@@ -64,6 +66,21 @@ const routes: Routes = [
   {
     path: 'task/:id',
     component: TaskComponent,
+    canActivate: [
+      MsalGuard
+    ]
+  },
+  {
+    path: 'tasks',
+    component: AllTasksComponent,
+    canActivate: [
+      MsalGuard,
+      AuthorizationGuard
+    ]
+  },
+  {
+    path: 'category/:id',
+    component: CategoryComponent,
     canActivate: [
       MsalGuard
     ]
