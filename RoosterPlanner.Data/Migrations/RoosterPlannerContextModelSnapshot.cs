@@ -31,7 +31,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ParticipationId")
+                    b.Property<Guid?>("ParticipationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Preference")
@@ -131,7 +131,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CertificateTypeId")
+                    b.Property<Guid?>("CertificateTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateExpired")
@@ -201,7 +201,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IsWantedById")
+                    b.Property<Guid?>("IsWantedById")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastEditBy")
@@ -216,7 +216,7 @@ namespace RoosterPlanner.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("WantsToWorkWithId")
+                    b.Property<Guid?>("WantsToWorkWithId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -357,9 +357,6 @@ namespace RoosterPlanner.Data.Migrations
                         .HasColumnType("nvarchar(512)")
                         .HasMaxLength(512);
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("LastEditBy")
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
@@ -372,16 +369,25 @@ namespace RoosterPlanner.Data.Migrations
                         .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
+                    b.Property<DateTime?>("ParticipationEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ParticipationStartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PictureUri")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ProjectEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ProjectStartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("WebsiteUrl")
                         .HasColumnType("nvarchar(max)");
@@ -398,10 +404,12 @@ namespace RoosterPlanner.Data.Migrations
                             City = "Voorburg",
                             Closed = false,
                             Description = "Leuk project in Voorburg",
-                            EndDate = new DateTime(2020, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Voorburg 2020",
-                            StartDate = new DateTime(2020, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            ParticipationEndDate = new DateTime(2020, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ParticipationStartDate = new DateTime(2020, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ProjectEndDate = new DateTime(2020, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ProjectStartDate = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -410,21 +418,17 @@ namespace RoosterPlanner.Data.Migrations
                             City = "Den Haag",
                             Closed = false,
                             Description = "Leuk project in Den Haag",
-                            EndDate = new DateTime(2018, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastEditDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Den Haag 2018",
-                            StartDate = new DateTime(2018, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            ParticipationEndDate = new DateTime(2020, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ParticipationStartDate = new DateTime(2020, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ProjectEndDate = new DateTime(2020, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ProjectStartDate = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.ProjectTask", b =>
                 {
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
@@ -435,12 +439,20 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.HasKey("ProjectId", "TaskId");
+                    b.Property<Guid?>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("TaskId");
 
@@ -452,7 +464,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CertificateTypeId")
+                    b.Property<Guid?>("CertificateTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastEditBy")
@@ -467,7 +479,7 @@ namespace RoosterPlanner.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("TaskId")
+                    b.Property<Guid?>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -508,7 +520,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
-                    b.Property<Guid>("TaskId")
+                    b.Property<Guid?>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -525,7 +537,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Color")
@@ -569,7 +581,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("50756bdb-8bfb-4646-8119-35fbb4cfc8f9"),
+                            Id = new Guid("ce45a6a5-a41a-4fa5-887f-d67b13fbad94"),
                             CategoryId = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
                             Color = "Blue",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chef",
@@ -580,7 +592,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("17e71d4f-5da4-4146-91bf-069edaf452c2"),
+                            Id = new Guid("202b5144-8232-4531-a080-60cca12919d1"),
                             CategoryId = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
                             Color = "Red",
                             Description = "Een leuke beschrijving van de werkzaamheden van een runner",
@@ -591,7 +603,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("adb41bf9-b0fe-4d2d-8ee5-4040f07a4a6c"),
+                            Id = new Guid("0ca10a56-cf22-4afe-a56b-a56a4c496631"),
                             CategoryId = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
                             Color = "Yellow",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chauffeur",
@@ -602,7 +614,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3a1185f2-9de9-4401-9963-b859427806b5"),
+                            Id = new Guid("b4394291-861d-4ed8-b13e-9b4d5f105dc5"),
                             CategoryId = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
                             Color = "Green",
                             Description = "Een leuke beschrijving van de werkzaamheden van een klusser",
@@ -618,8 +630,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.Participation", "Participation")
                         .WithMany("Availabilities")
                         .HasForeignKey("ParticipationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("RoosterPlanner.Models.Shift", "Shift")
                         .WithMany("Availabilities")
@@ -633,8 +644,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.CertificateType", "CertificateType")
                         .WithMany("Certificates")
                         .HasForeignKey("CertificateTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("RoosterPlanner.Models.Person", "Person")
                         .WithMany("Certificates")
@@ -648,14 +658,12 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.Participation", "IsWantedBy")
                         .WithMany("IsWantedBy")
                         .HasForeignKey("IsWantedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("RoosterPlanner.Models.Participation", "WantsToWorkWith")
                         .WithMany("WantsToWorkWith")
                         .HasForeignKey("WantsToWorkWithId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
@@ -684,8 +692,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("ProjectTasks")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Requirement", b =>
@@ -693,14 +700,12 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.CertificateType", "CertificateType")
                         .WithMany("Requirements")
                         .HasForeignKey("CertificateTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("Requirements")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
@@ -714,17 +719,15 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("Shifts")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
                 {
                     b.HasOne("RoosterPlanner.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Tasks")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

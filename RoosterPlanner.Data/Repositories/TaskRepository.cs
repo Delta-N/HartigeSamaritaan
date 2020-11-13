@@ -25,23 +25,23 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<List<Task>> SearchTasksAsync(TaskFilter filter)
         {
-            if(filter==null)
+            if (filter == null)
                 throw new ArgumentNullException("filter");
 
-            IQueryable<Task> queryable = EntitySet.AsNoTracking().AsQueryable().Include(t=>t.Category);
-            
+            IQueryable<Task> queryable = EntitySet.AsNoTracking().AsQueryable().Include(t => t.Category);
+
             //Name
             if (!String.IsNullOrEmpty(filter.Name))
-                queryable = queryable.Where(t => t.Name.IndexOf(filter.Name) >= 0);
+                queryable = queryable.Where(t =>  t.Name.IndexOf(filter.Name) >= 0);
+
+            queryable = filter.SetFilter<Task>(queryable);
 
             filter.TotalItemCount = queryable.Count();
-            Task<List<Task>> tasks = null;
-            if (filter.Offset > 0 && filter.PageSize != 0)
+            Task<List<Task>> tasks;
+            if (filter.Offset >= 0 && filter.PageSize != 0)
                 tasks = queryable.Skip(filter.Offset).Take(filter.PageSize).ToListAsync();
             else
-            {
                 tasks = queryable.ToListAsync();
-            }
 
             return tasks;
         }

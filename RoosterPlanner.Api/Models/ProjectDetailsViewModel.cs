@@ -11,8 +11,10 @@ namespace RoosterPlanner.Api.Models
         public string Address { get; set; }
         public string City { get; set; }
         public string Description { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime ParticipationStartDate { get; set; }
+        public DateTime? ParticipationEndDate { get; set; }
+        public DateTime ProjectStartDate { get; set; }
+        public DateTime ProjectEndDate { get; set; }
         public string PictureUri { get; set; }
         public string WebsiteUrl { get; set; }
         public bool Closed { get; set; }
@@ -34,8 +36,10 @@ namespace RoosterPlanner.Api.Models
                 Description = project.Description,
                 PictureUri = project.PictureUri,
                 WebsiteUrl = project.WebsiteUrl,
-                StartDate = project.StartDate,
-                EndDate = project.EndDate,
+                ParticipationStartDate = project.ParticipationStartDate,
+                ParticipationEndDate = project.ParticipationEndDate,
+                ProjectStartDate = project.ProjectStartDate,
+                ProjectEndDate = project.ProjectEndDate,
                 Closed = project.Closed
             };
         }
@@ -50,8 +54,10 @@ namespace RoosterPlanner.Api.Models
                 Description = projectDetailsViewModel.Description,
                 PictureUri = projectDetailsViewModel.PictureUri,
                 WebsiteUrl = projectDetailsViewModel.WebsiteUrl,
-                StartDate = projectDetailsViewModel.StartDate,
-                EndDate = projectDetailsViewModel.EndDate,
+                ParticipationStartDate = projectDetailsViewModel.ParticipationStartDate,
+                ParticipationEndDate = projectDetailsViewModel.ParticipationEndDate,
+                ProjectStartDate = projectDetailsViewModel.ProjectStartDate,
+                ProjectEndDate = projectDetailsViewModel.ProjectEndDate,
                 Closed = projectDetailsViewModel.Closed
             };
         }

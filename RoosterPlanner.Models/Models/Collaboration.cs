@@ -7,12 +7,12 @@ namespace RoosterPlanner.Models
     {
 
         [Column(Order = 1)]
-        public Guid WantsToWorkWithId { get; set; }
+        public Guid? WantsToWorkWithId { get; set; }
         [ForeignKey("WantsToWorkWithId")]
         public Participation WantsToWorkWith { get; set; }
 
         [Column(Order = 2)]
-        public Guid IsWantedById { get; set; }
+        public Guid? IsWantedById { get; set; }
         [ForeignKey("IsWantedById")]
         public Participation IsWantedBy { get; set; }
         

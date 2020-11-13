@@ -43,7 +43,7 @@ namespace RoosterPlanner.Data.Repositories
         /// <returns>List of projects that are not closed.</returns>
         public Task<List<Project>> GetActiveProjectsAsync()
         {
-            return this.EntitySet.Where(p => !p.Closed).OrderBy(p => p.StartDate).ToListAsync();
+            return this.EntitySet.Where(p => !p.Closed).OrderBy(p => p.ParticipationStartDate).ToListAsync();
         }
 
         /// <summary>
@@ -68,11 +68,11 @@ namespace RoosterPlanner.Data.Repositories
 
             //StartDate
             if (filter.StartDate.HasValue)
-                q = q.Where(x => x.StartDate >= filter.StartDate.Value);
+                q = q.Where(x => x.ParticipationStartDate >= filter.StartDate.Value);
 
             //EndDate
             if (filter.EndDate.HasValue)
-                q = q.Where(x => x.EndDate >= filter.EndDate.Value || x.EndDate == null);
+                q = q.Where(x => x.ParticipationEndDate >= filter.EndDate.Value || x.ParticipationEndDate == null);
 
             //Closed
             if (filter.Closed.HasValue)

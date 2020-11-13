@@ -18,15 +18,13 @@ export class DateConverter {
 
   }
   static formatProjectDateReadable(project): Project {
-    project.startDate = DateConverter.toReadableString(project.startDate);
-    project.endDate != null ? project.endDate = DateConverter.toReadableString(project.endDate) : project.endDate = null;
+    project.participationStartDate = DateConverter.toReadableString(project.participationStartDate);
+    project.participationEndDate != null ? project.participationEndDate = DateConverter.toReadableString(project.participationEndDate) : project.participationEndDate = null;
+    project.projectEndDate = DateConverter.toReadableString(project.projectEndDate);
+    project.projectStartDate = DateConverter.toReadableString(project.projectStartDate);
     return project
   }
-  static formatProjectDateSendable(project):Project{
-    project.startDate = DateConverter.toDate(project.startDate);
-    project.endDate != null ? project.endDate = DateConverter.toDate(project.endDate) : project.endDate = null;
-    return project
-  }
+
   static todayString():String{
     return moment().format("DD-MM-YYYY")
   }
