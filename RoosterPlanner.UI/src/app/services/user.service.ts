@@ -29,8 +29,8 @@ export class UserService {
     return this.user
   }
 
-  async getAdministrators(): Promise<User[]> {
-    await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}?Userrole=1`).toPromise().then(response => {
+  async getAdministrators(offset: number, pageSize: number): Promise<User[]> {
+    await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}?Userrole=1&offset=${offset}&pageSize=${pageSize}`).toPromise().then(response => {
       this.administrators = response.body
     }).catch();
     return this.administrators;

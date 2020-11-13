@@ -17,16 +17,16 @@ import {ToastrService} from "ngx-toastr";
 })
 export class AdminComponent implements OnInit {
   projects: Project[] = [];
-  listOfProjects: any = []
-  listOfAdmins: any = []
-  tempListProjects: Project[] = [];
-  tempListAdmins: User[] = [];
   loaded: boolean = false;
   administrators: User[] = []
   itemsPerCard: number = 5;
-  adminCardStyle = 'card';
+
+  projectCardStyle = 'card';
   projectsElementHeight: number;
-  offset: number = 0;
+  adminCardStyle = 'card';
+  adminElementHeight: number;
+
+  reasonableMaxInteger: number = 10000; //aanpassen na 10k projecten/admins ;)
 
   constructor(public dialog: MatDialog,
               private projectService: ProjectService,
@@ -36,47 +36,25 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getProjects().then()
-    this.getAdministrators().then(() => this.loaded = true)
+    this.getProjects(0, this.itemsPerCard).then()
+    this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
   }
 
-  async getProjects() {
-    await this.projectService.getAllProjects(this.offset, this.itemsPerCard).then(x => {
+  async getProjects(offset: number, pageSize: number) {
+    await this.projectService.getAllProjects(offset, pageSize).then(x => {
       this.projects = x;
-      this.splitProjects();
+      this.projects.sort((a, b) => a.startDate < b.startDate ? 1 : -1);
     });
   }
 
-  async getAdministrators() {
-    await this.userService.getAdministrators().then(x => {
+  async getAdministrators(offset: number, pageSize: number) {
+    await this.userService.getAdministrators(offset, pageSize).then(x => {
       this.administrators = x;
-      this.spitAdministrators();
+      this.administrators.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
     });
   }
 
-  spitAdministrators() {
-    this.administrators.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
-    for (let i = 0; i < this.administrators.length; i++) {
-      this.tempListAdmins.push(this.administrators[i])
-      if (this.tempListAdmins.length === this.itemsPerCard || i === this.administrators.length - 1) {
-        this.listOfAdmins.push(this.tempListAdmins);
-        this.tempListAdmins = [];
-      }
-    }
-  }
 
-  splitProjects() {
-    this.listOfProjects = [];
-    this.tempListProjects = [];
-    this.projects.sort((a, b) => a.startDate < b.startDate ? 1 : -1);
-    for (let i = 0; i < this.projects.length; i++) {
-      this.tempListProjects.push(this.projects[i])
-      if (this.tempListProjects.length === this.itemsPerCard || i === this.projects.length - 1) {
-        this.listOfProjects.push(this.tempListProjects);
-        break;
-      }
-    }
-  }
 
   addProject() {
     const dialogRef = this.dialog.open(CreateProjectComponent, {
@@ -89,8 +67,7 @@ export class AdminComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== 'false') {
         setTimeout(() => {
-          this.listOfProjects = []
-          this.getProjects().then(() => {
+          this.getProjects(0, this.itemsPerCard).then(() => {
             if (result != null) {
               this.toastr.success(result.name + " is toegevoegd als nieuw project")
             }
@@ -99,13 +76,15 @@ export class AdminComponent implements OnInit {
       }
     });
   }
-  modAdmin(modifier: string) {
+
+  async modAdmin(modifier: string) {
     let toastrString: string;
     let dataModifier: boolean;
     if (modifier === 'add') {
       toastrString = 'toegevoegd';
       dataModifier = true;
     } else if (modifier === 'remove') {
+      await this.getAdministrators(0, this.reasonableMaxInteger)
       toastrString = 'verwijderd';
       dataModifier = false;
     }
@@ -120,9 +99,8 @@ export class AdminComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(async result => {
       if (result != null) {
-        this.listOfAdmins = [];
         setTimeout(() => {
-          this.getAdministrators().then()
+          this.getAdministrators(0, this.itemsPerCard).then()
           this.toastr.success(result + " is " + toastrString + " als administrator")
         }, 500);
       }
@@ -133,18 +111,41 @@ export class AdminComponent implements OnInit {
     this.toastr.warning("Deze functie moet nog geschreven worden")
   }
 
-  expand() {
+  expandProjectCard() {
+    if (this.projectCardStyle == 'expanded-card') {
+      document.getElementById("adminCard").hidden = false;
+      document.getElementById("dataCard").hidden = false;
+      this.projectCardStyle = 'card';
+      this.itemsPerCard = 5;
+      this.projects=this.projects.slice(0,this.itemsPerCard);
+    } else {
+      document.getElementById("adminCard").hidden = true;
+      document.getElementById("dataCard").hidden = true;
+      this.projectCardStyle = 'expanded-card';
+      this.itemsPerCard = this.reasonableMaxInteger
+      this.getProjects(0, this.itemsPerCard).then(() => {
+        this.projectsElementHeight = (this.projects.length * 48);
+
+      })
+    }
+  }
+
+  expandAdminCard() {
     if (this.adminCardStyle == 'expanded-card') {
+      document.getElementById("projectCard").hidden = false;
+      document.getElementById("dataCard").hidden = false;
       this.adminCardStyle = 'card';
       this.itemsPerCard = 5;
-      this.splitProjects()
+      this.administrators=this.administrators.slice(0,this.itemsPerCard);
     } else {
+      document.getElementById("projectCard").hidden = true;
+      document.getElementById("dataCard").hidden = true;
       this.adminCardStyle = 'expanded-card';
-      this.itemsPerCard = 10000; //aanpassen na 10k projecten ;)
-      this.getProjects().then(() => {
-        this.splitProjects()
-        this.projectsElementHeight = (this.projects.length * 48);
+      this.itemsPerCard = this.reasonableMaxInteger;
+      this.getAdministrators(0, this.itemsPerCard).then(() => {
+        this.adminElementHeight = (this.administrators.length * 48);
       })
+
     }
   }
 }
