@@ -90,6 +90,23 @@ export class ParticipationService {
         participation.project.participationStartDate = null;
       }
     }
+
+    if (participation.project.projectEndDate !== null) {
+      if (participation.project.projectEndDate === undefined || participation.project.projectEndDate.toString() === "") {
+        participation.project.projectEndDate = null;
+      } else {
+        participation.project.projectEndDate = DateConverter.toDate(participation.project.projectEndDate);
+      }
+    }
+
+    if (participation.project.projectStartDate !== null) {
+      if (participation.project.projectStartDate === undefined || participation.project.projectStartDate.toString() === "") {
+        participation.project.projectStartDate = null;
+      } else {
+        participation.project.projectStartDate = DateConverter.toDate(participation.project.projectStartDate);
+      }
+    }
+
     return this.apiService.put<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation).toPromise()
   }
 }
