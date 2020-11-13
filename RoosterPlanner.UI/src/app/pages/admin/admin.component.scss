@@ -11,6 +11,10 @@
   flex-wrap: wrap;
   justify-content: flex-start;
 }
+.card-title-icon{
+  display: flex;
+  margin-left:auto;
+}
 
 .bar {
   display: flex;
@@ -38,6 +42,7 @@
   opacity: 1;
   margin-left: 10px;
   padding-left: 10px;
+  display:flex;
 }
 
 .mat-card {
@@ -54,6 +59,10 @@
   min-width: 325px;
   min-height: 375px;
   max-height: 375px;
+}
+.expanded-card{
+  min-width: 60vw;
+  max-height: none;
 }
 
 .mat-card-content {

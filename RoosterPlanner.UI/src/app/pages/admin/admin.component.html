@@ -21,11 +21,11 @@
     </span>
 
     <span *ngFor="let currentProjectPage of listOfProjects">
-      <mat-card class="card">
-        <div>
-          <mat-card-title>Projecten</mat-card-title>
+      <mat-card [ngClass]="[adminCardStyle]">
+        <div >
+          <mat-card-title>Projecten <button class="card-title-icon" mat-icon-button (click)="expand()"><mat-icon>zoom_out_map</mat-icon></button></mat-card-title>
         </div>
-        <mat-card-content>
+        <mat-card-content [style.height.px]="projectsElementHeight">
           <span *ngFor="let item of currentProjectPage" class="mobilecard">
             <a [routerLink]="['/project', item.id]"><p>{{item.name}}</p></a>
           </span>
