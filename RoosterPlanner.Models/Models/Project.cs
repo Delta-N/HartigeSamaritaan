@@ -24,18 +24,24 @@ namespace RoosterPlanner.Models
         public string Description { get; set; }
 
         [Column(Order = 5)]
-        public DateTime StartDate { get; set; }
+        public DateTime ParticipationStartDate { get; set; }
 
         [Column(Order = 6)]
-        public DateTime? EndDate { get; set; }
-
+        public DateTime? ParticipationEndDate { get; set; }
+        
         [Column(Order = 7)]
-        public string PictureUri { get; set; }
+        public DateTime ProjectStartDate { get; set; }
 
         [Column(Order = 8)]
-        public string WebsiteUrl { get; set; }
+        public DateTime ProjectEndDate { get; set; }
 
         [Column(Order = 9)]
+        public string PictureUri { get; set; }
+
+        [Column(Order = 10)]
+        public string WebsiteUrl { get; set; }
+
+        [Column(Order = 11)]
         public bool Closed { get; set; }
 
         public List<ProjectTask> ProjectTasks { get; set; }

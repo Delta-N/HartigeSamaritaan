@@ -3,12 +3,14 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class ProjectViewModel 
+    public class ProjectViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime ParticipationStartDate { get; set; }
+        public DateTime? ParticipationEndDate { get; set; }
+        public DateTime ProjectStartDate { get; set; }
+        public DateTime ProjectEndDate { get; set; }
         public bool Closed { get; set; }
 
         public static ProjectViewModel CreateVm(Project project)
@@ -17,8 +19,10 @@ namespace RoosterPlanner.Api.Models
             {
                 Id = project.Id,
                 Name = project.Name,
-                StartDate = project.StartDate,
-                EndDate = project.EndDate,
+                ParticipationStartDate = project.ParticipationStartDate,
+                ParticipationEndDate = project.ParticipationEndDate,
+                ProjectStartDate = project.ProjectStartDate,
+                ProjectEndDate = project.ProjectEndDate,
                 Closed = project.Closed
             };
         }

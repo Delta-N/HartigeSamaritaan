@@ -5,8 +5,8 @@ namespace RoosterPlanner.Models
 {
     public class Requirement : Entity
     {
-        public Guid CertificateTypeId { get; set; }
-        public Guid TaskId { get; set; }
+        public Guid? CertificateTypeId { get; set; }
+        public Guid? TaskId { get; set; }
 
         [ForeignKey("CertificateTypeId")] 
         public CertificateType CertificateType { get; set; }

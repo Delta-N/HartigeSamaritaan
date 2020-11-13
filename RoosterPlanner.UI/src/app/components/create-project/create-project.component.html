@@ -36,20 +36,37 @@
     </div>
     <div>
       <mat-form-field>
-        <mat-label for="startDate">
-          Start datum
+        <mat-label for="projectStartDate">
+          Project Start datum
         </mat-label>
-        <input matInput id="startDate" type="text" formControlName="startDate" placeholder="dd-mm-yyyy">
+        <input matInput id="projectStartDate" type="text" formControlName="projectStartDate" placeholder="dd-mm-yyyy">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label for="projectEndDate">
+          Project Eind datum
+        </mat-label>
+        <input matInput id="projectEndDate" type="text" formControlName="projectEndDate" placeholder="dd-mm-yyyy">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
-        <mat-label for="endDate">
-          Eind datum
+        <mat-label for="participationStartDate">
+          Participatie Start datum
         </mat-label>
-        <input matInput id="endDate" type="text" formControlName="endDate" placeholder="dd-mm-yyyy">
+        <input matInput id="participationStartDate" type="text" formControlName="participationStartDate" placeholder="dd-mm-yyyy">
       </mat-form-field>
-      <div></div>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label for="participationEndDate">
+          Participatie Eind datum
+        </mat-label>
+        <input matInput id="participationEndDate" type="text" formControlName="participationEndDate" placeholder="dd-mm-yyyy">
+      </mat-form-field>
+    </div>
       <mat-form-field>
         <mat-label for="pictureUri">
           Afbeelding URL
@@ -63,7 +80,6 @@
         </mat-label>
         <input matInput id="websiteUrl" type="text" formControlName="websiteUrl" placeholder="Hyperlink van de website">
       </mat-form-field>
-    </div>
   </form>
 
 </mat-dialog-content>

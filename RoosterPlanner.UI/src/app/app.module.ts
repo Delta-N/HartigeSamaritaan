@@ -37,6 +37,9 @@ import {MsalGuardConfiguration} from "./msal/msal.guard.config";
 import {environment} from "../environments/environment";
 import { TaskComponent } from './pages/task/task.component';
 import { AddTaskComponent } from './components/add-task/add-task.component';
+import { AllTasksComponent } from './pages/all-tasks/all-tasks.component';
+import { CategoryComponent } from './pages/category/category.component';
+import { AddCategoryComponent } from './components/add-category/add-category.component';
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 function MSALInstanceFactory(): IPublicClientApplication {
@@ -91,7 +94,10 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ProjectComponent,
     ConfirmDialogComponent,
     TaskComponent,
-    AddTaskComponent
+    AddTaskComponent,
+    AllTasksComponent,
+    CategoryComponent,
+    AddCategoryComponent
 
   ],
   imports: [

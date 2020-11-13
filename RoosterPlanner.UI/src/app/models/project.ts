@@ -6,8 +6,10 @@ export class Project extends Entity {
   public address: string;
   public city: string;
   public description: string;
-  public startDate: Date;
-  public endDate?: Date;
+  public participationStartDate: Date;
+  public participationEndDate?: Date;
+  public projectStartDate: Date;
+  public projectEndDate: Date;
   public pictureUri?: string;
   public websiteUrl?: string;
   public closed?: boolean;
