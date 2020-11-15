@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Logging;
-using RoosterPlanner.Common;
 using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Common
@@ -19,14 +16,12 @@ namespace RoosterPlanner.Data.Common
         protected virtual DbSet<TEntity> EntitySet { get; private set; }
 
         #region Fields
-        private readonly ILogger logger = null;
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Repository&lt;TEntity&gt;"/> class.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
-        /// <param name="logger">Interface where log messages can be written to.</param>
         public Repository(DbContext dataContext)
         {
             this.DataContext = dataContext ?? throw new ArgumentNullException("dataContext");
@@ -94,8 +89,6 @@ namespace RoosterPlanner.Data.Common
             }
             catch (ValidationException valEx)
             {
-                //Log
-                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
@@ -129,8 +122,6 @@ namespace RoosterPlanner.Data.Common
             }
             catch (ValidationException valEx)
             {
-                //Log
-                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
@@ -162,8 +153,6 @@ namespace RoosterPlanner.Data.Common
             }
             catch (ValidationException valEx)
             {
-                //Log
-                logger.Log(LogLevel.Error,valEx.ToString());
                 if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);

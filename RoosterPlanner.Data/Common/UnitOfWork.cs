@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using RoosterPlanner.Common;
 using RoosterPlanner.Data.Context;
 using RoosterPlanner.Data.Repositories;
-using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Common
 {
@@ -47,7 +44,6 @@ namespace RoosterPlanner.Data.Common
         /// Gets the data context.
         /// </summary>
         protected RoosterPlannerContext DataContext { get; private set; }
-        protected ILogger<UnitOfWork> Logger { get; private set; }
 
         private IProjectRepository projectRepository;
         private IParticipationRepository participationRepository;
@@ -136,10 +132,9 @@ namespace RoosterPlanner.Data.Common
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
-        public UnitOfWork(RoosterPlannerContext dataContext, ILogger<UnitOfWork> logger)
+        public UnitOfWork(RoosterPlannerContext dataContext)
         {
             this.DataContext = dataContext;
-            this.Logger = logger;
         }
         #endregion
 

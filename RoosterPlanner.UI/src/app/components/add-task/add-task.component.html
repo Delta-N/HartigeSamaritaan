@@ -40,10 +40,14 @@
       </mat-form-field>
     </div>
 
-    <div id="instruction">
-      <mat-label>Instructie:</mat-label>
-      <span *ngIf="task.documentUri!=null"><a [href]=task.documentUri>PDF</a></span>
-      <button class="action-button" id="uploadButton" mat-button (click)="uploadInstructions()">uploaden</button>
+    <div *ngIf="task.documentUri!=null">
+      <mat-label><a [href]=task.documentUri>Huidige instructie :</a></mat-label>
+    </div>
+
+    <div>
+      <label for="file" class="custom-file-upload">{{this.task.documentUri == null ? "Instructies toevoegen" : "Instructies vervangen"}}</label>
+      <span *ngIf="this.files!=null">{{this.files[0].name}}</span>
+      <input #fileInput type="file" id="file" (change)="uploadInstructions(fileInput.files)"/>
     </div>
 
   </form>

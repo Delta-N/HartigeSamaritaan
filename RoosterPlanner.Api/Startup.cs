@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using AutoMapper;
+using Azure.Storage.Blobs;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RoosterPlanner.Api.AutoMapperProfiles;
-using RoosterPlanner.Common;
 using RoosterPlanner.Common.Config;
 using RoosterPlanner.Service;
 
@@ -94,6 +94,8 @@ namespace RoosterPlanner.Api
             services.AddTransient<ITaskService, TaskService>();
             services.AddTransient<IShiftService, ShiftService>();
             services.AddTransient<IMatchService, MatchService>();
+            services.AddScoped(x => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorage")));
+            services.AddTransient<IBlobService,BlobService>();
 
             //dit moet nog omgebouwd worden
             services.AddAutoMapper(typeof(AutoMapperProfile));
