@@ -22,6 +22,11 @@ namespace RoosterPlanner.Service
         TaskResult<Category> CreateCategory(Category category);
         TaskResult<Category> UpdateCategory(Category category);
         Task<TaskResult<Category>> RemoveCategory(Category category);
+        Task<TaskResult<ProjectTask>> RemoveProjectTask(ProjectTask resultData);
+        Task<TaskResult<ProjectTask>> GetProjectTask(Guid id);
+        Task<TaskResult<ProjectTask>> GetProjectTask(Guid projectId, Guid taskId);
+        Task<TaskResult<ProjectTask>> AddTaskToProject(ProjectTask projectTask);
+        Task<TaskListResult<ProjectTask>> GetAllProjectTasks(Guid projectId);
     }
 
     public class TaskService : ITaskService
@@ -32,6 +37,7 @@ namespace RoosterPlanner.Service
         private readonly ILogger logger;
         private readonly ITaskRepository taskRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IProjectTaskRepository projectTaskRepository;
 
         #endregion
 
@@ -42,6 +48,7 @@ namespace RoosterPlanner.Service
             this.logger = logger;
             this.taskRepository = unitOfWork.TaskRepository;
             this.categoryRepository = unitOfWork.CategoryRepository;
+            this.projectTaskRepository = unitOfWork.ProjectTaskRepository;
         }
 
         public async Task<TaskResult<Task>> GetTask(Guid id)
@@ -232,6 +239,103 @@ namespace RoosterPlanner.Service
             }
 
             return result;
+        }
+
+        public async Task<TaskResult<ProjectTask>> RemoveProjectTask(ProjectTask projectTask)
+        {
+            if (projectTask == null)
+                throw new ArgumentNullException("projectTask");
+            TaskResult<ProjectTask> result = new TaskResult<ProjectTask>();
+            try
+            {
+                result.Data = projectTaskRepository.Remove(projectTask);
+                result.Succeeded = await unitOfWork.SaveChangesAsync()==1;
+            }catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error,ex.ToString());
+                result.Error = ex;
+                result.Succeeded = false;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskResult<ProjectTask>> GetProjectTask(Guid id)
+        {
+            if (id == Guid.Empty)
+                throw new ArgumentNullException("id");
+
+            TaskResult<ProjectTask> taskResult = new TaskResult<ProjectTask>();
+            try
+            {
+                taskResult.Data = await this.projectTaskRepository.GetAsync(id);
+                taskResult.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, ex.ToString());
+                taskResult.Error = ex;
+            }
+
+            return taskResult;
+        }
+
+        public async Task<TaskResult<ProjectTask>> GetProjectTask(Guid projectId, Guid taskId)
+        {
+            if (projectId == null)
+                throw new ArgumentNullException("projectId");
+            if (taskId == null)
+                throw new ArgumentNullException("taskId");
+            
+            TaskResult<ProjectTask> taskResult = new TaskResult<ProjectTask>();
+            try
+            {
+                taskResult.Data = await this.projectTaskRepository.GetProjectTask(projectId, taskId);
+                taskResult.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, ex.ToString());
+                taskResult.Error = ex;
+            }
+
+            return taskResult;
+        }
+
+        public async Task<TaskResult<ProjectTask>> AddTaskToProject(ProjectTask projectTask)
+        {
+            if (projectTask == null)
+                throw new ArgumentNullException("projectTask");
+            TaskResult<ProjectTask> result = new TaskResult<ProjectTask>();
+            try
+            {
+                result.Data = projectTaskRepository.Add(projectTask);
+                result.Succeeded = await unitOfWork.SaveChangesAsync()==1;
+            }catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error,ex.ToString());
+                result.Error = ex;
+                result.Succeeded = false;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskListResult<ProjectTask>> GetAllProjectTasks(Guid projectId)
+        {
+            TaskListResult<ProjectTask> taskResult = TaskListResult<ProjectTask>.CreateDefault();
+            try
+            {
+                taskResult.Data = await this.projectTaskRepository.GetAll(projectId);
+                taskResult.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, ex.ToString());
+                taskResult.Error = ex;
+            }
+
+            return taskResult;
         }
     }
 }

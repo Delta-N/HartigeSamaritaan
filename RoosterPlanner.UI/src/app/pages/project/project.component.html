@@ -1,25 +1,29 @@
-<div *ngIf="loaded">
+<span *ngIf="loaded">
   <div class="container">
-    <div class="bar">
-      <h1>{{title}}</h1>
+    <div class="row" id="bar">
+      <div class="bar">
+        <h1>{{title}}</h1>
+      </div>
     </div>
-  </div>
 
-  <div class="container">
 
-    <div class="data-row">
-      <div class="row-name">Adres:</div>
-      <div class="user-data">{{viewProject.address}}</div>
-    </div>
-    <div class="data-row">
-      <div class="row-name">Stad:</div>
-      <div class="user-data">{{viewProject.city}}</div>
-    </div>
-    <div class="data-row">
-      <div class="row-name">Omschrijving:</div>
-      <div class="user-data">{{viewProject.description}}</div>
-    </div>
-    <span *ngIf="isAdmin">
+    <div class="row">
+      <div class="row">
+        <div class="col-md-6" id="left">
+
+          <div class="data-row">
+            <div class="row-name">Adres:</div>
+            <div class="user-data">{{viewProject.address}}</div>
+          </div>
+          <div class="data-row">
+            <div class="row-name">Stad:</div>
+            <div class="user-data">{{viewProject.city}}</div>
+          </div>
+          <div class="data-row">
+            <div class="row-name">Omschrijving:</div>
+            <div class="user-data">{{viewProject.description}}</div>
+          </div>
+          <span *ngIf="isAdmin">
     <div class="data-row">
       <div class="row-name">Project Start datum:</div>
       <div class="user-data">{{viewProject.projectStartDate}}</div>
@@ -29,32 +33,58 @@
       <div class="user-data">{{viewProject.projectEndDate}}</div>
     </div>
       </span>
-    <div class="data-row">
-      <div class="row-name">Participatie Start datum:</div>
-      <div class="user-data">{{viewProject.participationStartDate}}</div>
+          <div class="data-row">
+            <div class="row-name">Participatie Start datum:</div>
+            <div class="user-data">{{viewProject.participationStartDate}}</div>
+          </div>
+          <div class="data-row">
+            <div class="row-name">Participatie Eind datum:</div>
+            <div class="user-data">{{viewProject.participationEndDate}}</div>
+          </div>
+          <div class="data-row">
+            <div class="row-name">Website:</div>
+            <div class="user-data">{{viewProject.websiteUrl}}</div>
+          </div>
+          <div *ngIf="this.participation!=null" class="data-row">
+            <div class="row-name">Max uur per week:</div>
+            <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
+          </div>
+
+        </div>
+        <div class="col-md-6">
+        <span *ngIf="project.pictureUri!=null" id="pictureFrame">
+        <img src="{{project.pictureUri}}" alt="Project picture"/></span>
+
+          <mat-card [ngClass]="[taskCardStyle]" id="taskCard">
+            <div>
+              <mat-card-title>Project taken
+                <button class="card-title-icon" mat-icon-button (click)="expandTaskCard()">
+                  <mat-icon>zoom_out_map</mat-icon>
+                </button>
+              </mat-card-title>
+            </div>
+            <mat-card-content>
+        <span *ngFor="let item of projectTasks">
+            <a [routerLink]="['/task', item.id]"><p>{{item.name}}</p></a>
+          </span>
+              <mat-card-actions class="action-anchor"></mat-card-actions>
+            </mat-card-content>
+            <mat-card-actions class="action-anchor" *ngIf="isAdmin">
+              <button mat-button class="card-button" (click)="modTask('add')">Nieuwe toevoegen</button>
+              <button mat-button class="card-button" (click)="modTask('remove')">Verwijderen</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
     </div>
-    <div class="data-row">
-      <div class="row-name">Participatie Eind datum:</div>
-      <div class="user-data">{{viewProject.participationEndDate}}</div>
+
+
+    <div class="row" *ngIf="this.participation!=null">
+      <a (click)="editWorkingHours()" mat-button class="edit">Max werkuren wijzigen</a>
     </div>
-    <div class="data-row">
-      <div class="row-name">Afbeelding URL:</div>
-      <div class="user-data">{{viewProject.pictureUri}}</div>
-    </div>
-    <div class="data-row">
-      <div class="row-name">Website:</div>
-      <div class="user-data">{{viewProject.websiteUrl}}</div>
-    </div>
-    <div *ngIf="this.participation!=null" class="data-row">
-      <div class="row-name">Max uur per week:</div>
-      <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
+    <div class="row" *ngIf="isAdmin">
+      <a (click)="editProject()" mat-button class="edit">Project wijzigen</a>
+      <a (click)="closeProject()" mat-button class="edit">{{closeButtonText}}</a>
     </div>
   </div>
-  <div class="container" *ngIf="this.participation!=null">
-    <a (click)="editWorkingHours()" mat-button class="edit">Max werkuren wijzigen</a>
-  </div>
-  <div class="container" *ngIf="isAdmin">
-    <a (click)="editProject()" mat-button class="edit">Project wijzigen</a>
-    <a (click)="closeProject()" mat-button class="edit">{{closeButtonText}}</a>
-  </div>
-</div>
+</span>

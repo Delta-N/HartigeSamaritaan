@@ -21,6 +21,8 @@ namespace RoosterPlanner.Data.Common
 
         IMatchRepository MatchRepository { get; }
 
+        IProjectTaskRepository ProjectTaskRepository { get; }
+
         /// <summary>
         /// Saves the changes.
         /// </summary>
@@ -54,6 +56,7 @@ namespace RoosterPlanner.Data.Common
         private IMatchRepository matchRepository;
 
         private IShiftRepository shiftRepository;
+        private IProjectTaskRepository projectTaskRepository;
         #endregion
 
         public IProjectRepository ProjectRepository
@@ -124,6 +127,16 @@ namespace RoosterPlanner.Data.Common
                 if (personRepository == null)
                     this.personRepository = new PersonRepository(this.DataContext);
                 return this.personRepository;
+            }
+        }
+
+        public IProjectTaskRepository ProjectTaskRepository
+        {
+            get
+            {
+                if(projectTaskRepository==null)
+                    this.projectTaskRepository=new ProjectTaskRepository(this.DataContext);
+                return this.projectTaskRepository;
             }
         }
 

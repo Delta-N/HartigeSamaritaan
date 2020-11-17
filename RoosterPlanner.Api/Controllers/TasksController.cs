@@ -21,12 +21,14 @@ namespace RoosterPlanner.Api.Controllers
     public class TasksController : ControllerBase
     {
         private readonly ITaskService taskService;
+        private readonly IProjectService projectService;
         private readonly ILogger logger;
 
         //Constructor
-        public TasksController(ITaskService taskService, ILogger<TasksController> logger)
+        public TasksController(ITaskService taskService, IProjectService projectService, ILogger<TasksController> logger)
         {
             this.taskService = taskService;
+            this.projectService = projectService;
             this.logger = logger;
         }
 
@@ -150,7 +152,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (updatedTask.CategoryId != null && oldTask.CategoryId != updatedTask.CategoryId)
                 {
-                    oldTask.Category = taskService.GetCategory(updatedTask.CategoryId??Guid.Empty).Result.Data;
+                    oldTask.Category = taskService.GetCategory(updatedTask.CategoryId ?? Guid.Empty).Result.Data;
                     oldTask.CategoryId = oldTask.Category.Id;
                 }
 
@@ -328,6 +330,125 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<Category> result = await taskService.RemoveCategory(category.Result.Data);
                 if (result.Succeeded)
                     return Ok(result);
+                return Problem();
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, ex.ToString());
+                Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
+            }
+        }
+
+        [HttpGet("GetProjectTask/{id}")]
+        public async Task<ActionResult> GetProjectTask(Guid id)
+        {
+            if (id == Guid.Empty)
+                return BadRequest("No valid id.");
+            try
+            {
+                TaskResult<ProjectTask> result = await taskService.GetProjectTask(id);
+
+                if (!result.Succeeded)
+                    if (result.Data == null)
+                        return Ok();
+                ProjectTaskViewModel projectTaskViewModel = ProjectTaskViewModel.CreateVm(result.Data);
+                return Ok(projectTaskViewModel);
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, ex.ToString());
+                Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
+            }
+        }
+
+        [HttpGet("GetAllProjectTasks/{projectId}")]
+        public async Task<ActionResult> GetAllProjectTasks(Guid projectId)
+        {
+            if(projectId==Guid.Empty)
+                return BadRequest("No valid id.");
+
+            try
+            {
+                TaskListResult<ProjectTask> result = await taskService.GetAllProjectTasks(projectId);
+
+                if (!result.Succeeded)
+                    if (result.Data == null)
+                        return Ok();
+
+                List<TaskViewModel> taskViewModels = new List<TaskViewModel>(); 
+                foreach (ProjectTask projectTask in result.Data)
+                {
+                    taskViewModels.Add(TaskViewModel.CreateVm(projectTask.Task));
+                }
+
+                return Ok(taskViewModels);
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, ex.ToString());
+                Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
+            }
+        }
+
+        [Authorize(Policy = "Boardmember&Committeemember")]
+        [HttpPost("AddTaskToProject")]
+        public ActionResult AddTaskToProject(ProjectTaskViewModel projectTaskViewModel)
+        {
+            if (projectTaskViewModel == null)
+                return BadRequest("No valid ProjectTask received");
+            if (projectTaskViewModel.ProjectId == Guid.Empty || projectTaskViewModel.TaskId == Guid.Empty)
+                return BadRequest("Project and/or Task Ids cannot be empty");
+            TaskResult<ProjectTask> result;
+
+            try
+            {
+                ProjectTask projectTask = ProjectTaskViewModel.CreateProjectTask(projectTaskViewModel);
+                if (projectTask == null)
+                    return BadRequest("Unable to convert ProjectTaskViewModel to ProjectTask");
+                projectTask.Task = taskService.GetTask((Guid) projectTask.TaskId).Result.Data;
+                projectTask.Project = projectService.GetProjectDetails(projectTask.ProjectId).Result.Data;
+                if(projectTask.Task==null || projectTask.Project==null)
+                    return BadRequest("Unable to add project and or task to projecttask");
+
+
+                projectTask.LastEditDate = DateTime.UtcNow;
+                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                projectTask.LastEditBy = oid;
+
+                if (projectTask.Id == Guid.Empty)
+                    result = taskService.AddTaskToProject(projectTask).Result;
+                else
+                    return BadRequest("Cannot update existing ProjectTask with post method");
+
+                if (result.Succeeded)
+                    return Ok(TaskViewModel.CreateVm(result.Data.Task));
+                return UnprocessableEntity();
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, ex.ToString());
+                Response.Headers.Add("message", ex.Message);
+                return UnprocessableEntity();
+            }
+        }
+
+        [Authorize(Policy = "Boardmember&Committeemember")]
+        [HttpDelete("RemoveTaskFromProject/{projectId}/{taskId}")]
+        public async Task<ActionResult> RemoveTaskFromProject(Guid projectId, Guid taskId)
+        {
+            if (projectId == Guid.Empty || taskId == Guid.Empty)
+                return BadRequest("No valid id received");
+            try
+            {
+                Task<TaskResult<ProjectTask>> projectTask = taskService.GetProjectTask(projectId,taskId);
+                if (projectTask == null)
+                    return NotFound("ProjectTask not found");
+                TaskResult<ProjectTask> result = await taskService.RemoveProjectTask(projectTask.Result.Data);
+                if (result.Succeeded)
+                    return Ok(result.Data.TaskId);
                 return Problem();
             }
             catch (Exception ex)

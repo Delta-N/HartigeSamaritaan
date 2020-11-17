@@ -25,7 +25,7 @@ import {AuthorizationGuard} from "./guards/authorization.guard";
 import {CreateProjectComponent} from "./components/create-project/create-project.component";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AddAdminComponent} from './components/add-admin/add-admin.component';
-import {FilterPipe} from "./helpers/filter.pipe";
+import {FilterPipe, TaskFilterPipe} from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
@@ -40,6 +40,7 @@ import { AddTaskComponent } from './components/add-task/add-task.component';
 import { AllTasksComponent } from './pages/all-tasks/all-tasks.component';
 import { CategoryComponent } from './pages/category/category.component';
 import { AddCategoryComponent } from './components/add-category/add-category.component';
+import { AddProjectTaskComponent } from './components/add-project-task/add-project-task.component';
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 function MSALInstanceFactory(): IPublicClientApplication {
@@ -97,7 +98,9 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     AddTaskComponent,
     AllTasksComponent,
     CategoryComponent,
-    AddCategoryComponent
+    AddCategoryComponent,
+    AddProjectTaskComponent,
+    TaskFilterPipe,
 
   ],
   imports: [

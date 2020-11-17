@@ -5,6 +5,7 @@ import {Task} from "../models/task";
 import {EntityHelper} from "../helpers/entity-helper";
 import {HttpResponse} from "@angular/common/http";
 import {HttpRoutes} from "../helpers/HttpRoutes";
+import {Projecttask} from "../models/projecttask";
 
 @Injectable({
   providedIn: 'root'
@@ -62,4 +63,33 @@ export class TaskService {
     }
     return this.apiService.delete<HttpResponse<Number>>(`${HttpRoutes.taskApiUrl}/${guid}`).toPromise()
   }
+
+  async getAllProjectTasks(guid: string): Promise<Task[]> {
+    if (guid == null) {
+      this.toastr.error("ProjectTaskId is leeg")
+      return null;
+    }
+    let projecttasks: Task[] = [];
+    await this.apiService.get<HttpResponse<Task[]>>(`${HttpRoutes.taskApiUrl}/GetAllProjectTasks/${guid}`).toPromise().then(response =>
+      projecttasks = response.body
+    );
+    return projecttasks
+  }
+
+  addTaskToProject(projectTask: Projecttask) {
+    if (projectTask === null) {
+      this.toastr.error("ProjectTask is leeg")
+      return null;
+    }
+    return this.apiService.post<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/AddTaskToProject`,projectTask).toPromise()
+  }
+  removeTaskFromProject(projectId:string,taskId:string){
+    if(projectId==null||taskId==null){
+      this.toastr.error("Ongeldige projectId en/of taskId")
+      return null;
+    }
+    return this.apiService.delete<HttpResponse<string>>(`${HttpRoutes.taskApiUrl}/RemoveTaskFromProject/${projectId}/${taskId}`).toPromise()
+  }
+
+
 }
