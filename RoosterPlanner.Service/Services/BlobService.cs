@@ -3,30 +3,32 @@ using System.IO;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Options;
+using RoosterPlanner.Common.Config;
 
 namespace RoosterPlanner.Service
 {
     public interface IBlobService
     {
-        Task<Uri> UploadFileBlobAsync(string blobContainerName, Stream content, string contentType, string fileName);
+        Task<Uri> UploadFileBlobAsync(string blobContainerName, string blobName, Stream content, string contentType);
         Task<bool> DeleteFileBlobAsync(string blobContainerName, string blobName);
     }
-    
 
-    public class BlobService :IBlobService
+    public class BlobService : IBlobService
     {
         private readonly BlobServiceClient _blobServiceClient;
 
-        public BlobService(BlobServiceClient blobServiceClient)
+        public BlobService(IOptions<AzureBlobConfig> azureBlobConfig)
         {
-            _blobServiceClient = blobServiceClient;
+            _blobServiceClient = new BlobServiceClient(azureBlobConfig.Value.AzureBlobConnectionstring);
         }
 
-        public async Task<Uri> UploadFileBlobAsync(string blobContainerName, Stream content, string contentType, string fileName)
+        public async Task<Uri> UploadFileBlobAsync(string blobContainerName, string blobName, Stream content,
+            string contentType)
         {
             BlobContainerClient containerClient = GetContainerClient(blobContainerName);
-            BlobClient blobClient = containerClient.GetBlobClient(fileName);
-            await blobClient.UploadAsync(content, new BlobHttpHeaders { ContentType = contentType });
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+            await blobClient.UploadAsync(content, new BlobHttpHeaders {ContentType = contentType});
             return blobClient.Uri;
         }
 

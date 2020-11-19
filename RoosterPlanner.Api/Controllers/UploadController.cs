@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RoosterPlanner.Api.Models;
 using RoosterPlanner.Service;
 
 namespace RoosterPlanner.Api.Controllers
@@ -24,37 +26,40 @@ namespace RoosterPlanner.Api.Controllers
 
         [Authorize(Policy = "Boardmember")]
         [HttpPost, RequestSizeLimit(100_000_00)]
-        public async Task<ActionResult> UploadInstruction()
+        public async Task<ActionResult> UploadInstruction(string containerName = "instructiondocuments")
         {
             try
             {
-                if (Request.Form.Files.Count == 0)
+                if (Request.Form.Files.FirstOrDefault()==null)
                     return BadRequest("No file received");
                 IFormFile file = Request.Form.Files[0];
                 string extension = Path.GetExtension(file.FileName);
 
                 Uri result = await blobService.UploadFileBlobAsync(
-                    "instructiondocuments",
+                    containerName,
+                    Guid.NewGuid() + extension,
                     file.OpenReadStream(),
-                    file.ContentType,
-                    Guid.NewGuid()+extension);
+                    file.ContentType
+                    );
 
-                string toReturn = result.AbsoluteUri;
-
-                return Ok(new {path = toReturn});
+                return Ok(new UploadResultViewModel()
+                {
+                    Path = result.AbsoluteUri,
+                    Succeeded = true
+                });
             }
             catch (Exception ex)
             {
                 logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                return UnprocessableEntity(new UploadResultViewModel(){Succeeded = false});
             }
         }
 
         [HttpDelete()]
         public async Task<ActionResult> Delete(string url)
         {
-            if (url == null)
+            if (string.IsNullOrEmpty(url))
                 return BadRequest("No valid Url received");
 
             try
@@ -63,43 +68,20 @@ namespace RoosterPlanner.Api.Controllers
                 string blobfilename = Path.GetFileName(uri.LocalPath);
                 string blobContainerName = uri.AbsolutePath.Substring(1, uri.AbsolutePath.IndexOf('/', 1) - 1);
                 bool result = await blobService.DeleteFileBlobAsync(blobContainerName, blobfilename);
-                return Ok(result);
+                return Ok(new UploadResultViewModel(){Succeeded = result});
             }
             catch (Exception ex)
             {
                 logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                return UnprocessableEntity(new UploadResultViewModel(){Succeeded = false});
             }
         }
 
         [HttpPost("UploadProfilePicture"), RequestSizeLimit(500_000_0)]
         public async Task<ActionResult> UploadProfilePicture()
         {
-            try
-            {
-                if (Request.Form.Files.Count == 0)
-                    return BadRequest("No file received");
-                IFormFile file = Request.Form.Files[0];
-                string extension = Path.GetExtension(file.FileName);
-
-
-                Uri result = await blobService.UploadFileBlobAsync(
-                    "profilepictures",
-                    file.OpenReadStream(),
-                    file.ContentType,
-                    Guid.NewGuid()+extension);
-
-                string toReturn = result.AbsoluteUri;
-
-                return Ok(new {path = toReturn});
-            }
-            catch (Exception ex)
-            {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
-            }
+            return await UploadInstruction("profilepicture");
         }
     }
 }

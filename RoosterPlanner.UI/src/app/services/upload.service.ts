@@ -2,6 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ApiService} from "./api.service";
 import {HttpRoutes} from "../helpers/HttpRoutes";
+import {Uploadresult} from "../models/uploadresult";
 
 @Injectable({providedIn: 'root'})
 export class UploadService {
@@ -10,10 +11,21 @@ export class UploadService {
               private apiService: ApiService) {
   }
 
-  uploadInstruction(formData: FormData):Promise<any> {
-    return this.apiService.postMultiPartFormData(`${HttpRoutes.uploadApiUrl}`, formData).toPromise();
+  async uploadInstruction(formData: FormData): Promise<Uploadresult> {
+    let uploadResult: Uploadresult = new Uploadresult();
+    await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}`, formData)
+      .toPromise().then(res => {
+        uploadResult = res;
+      });
+    return uploadResult
   }
-  deleteIfExists(url:string){
-    return this.apiService.delete(`${HttpRoutes.uploadApiUrl}?Url=${url}`).toPromise();
+
+  async deleteIfExists(url: string): Promise<Uploadresult> {
+    let uploadResult: Uploadresult = new Uploadresult();
+
+    await this.apiService.delete<Uploadresult>(`${HttpRoutes.uploadApiUrl}?Url=${url}`).toPromise().then(res => {
+      uploadResult = res;
+    });
+    return uploadResult;
   }
 }
