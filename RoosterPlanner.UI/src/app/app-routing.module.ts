@@ -50,7 +50,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'shift',
+    path: 'shift/:id',
     component: ShiftComponent,
     canActivate: [
       MsalGuard

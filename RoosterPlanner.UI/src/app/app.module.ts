@@ -41,6 +41,8 @@ import { AllTasksComponent } from './pages/all-tasks/all-tasks.component';
 import { CategoryComponent } from './pages/category/category.component';
 import { AddCategoryComponent } from './components/add-category/add-category.component';
 import { AddProjectTaskComponent } from './components/add-project-task/add-project-task.component';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {NgxMultipleDatesModule} from "ngx-multiple-dates";
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 function MSALInstanceFactory(): IPublicClientApplication {
@@ -118,6 +120,8 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ReactiveFormsModule,
     FormsModule,
     ToastrModule.forRoot(),
+    NgxMaterialTimepickerModule,
+    NgxMultipleDatesModule,
   ],
   providers: [
     {

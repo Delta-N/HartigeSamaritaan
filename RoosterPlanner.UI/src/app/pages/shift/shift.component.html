@@ -1,1 +1,71 @@
-<p>shift works!</p>
+<span *ngIf="loaded">
+   <div class="container">
+      <div class="row" id="bar">
+         <div class="bar">
+            <h1>{{title}}</h1>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-md-12">
+            <div class="data-row">
+               <div class="row-name">Taak:</div>
+               <div class="user-data">
+                  <div>
+                     <mat-form-field>
+                        <mat-label for="Tasks"> Taak:</mat-label>
+                        <mat-select [formControl]="taskControl" required>
+                           <mat-option *ngFor="let task of tasks" [value]="task">
+                           {{task.name}}
+                           </mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                  </div>
+               </div>
+            </div>
+            <div class="data-row">
+               <div class="row-name">Vanaf:</div>
+               <div class="user-data">
+                  <mat-form-field>
+                     <mat-label> Starttijd:</mat-label>
+                     <input matInput [ngxTimepicker]="Starttime" [format]="24" readonly>
+                     <ngx-material-timepicker [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"   #Starttime></ngx-material-timepicker>
+                     <ng-template #cancelBtn>
+                        <button mat-button>Annuleren</button>
+                     </ng-template>
+                     <ng-template #confirmBtn>
+                        <button mat-button class="action-button">Opslaan</button>
+                     </ng-template>
+                  </mat-form-field>
+               </div>
+            </div>
+            <div class="data-row">
+               <div class="row-name">Tot:</div>
+               <div class="user-data">
+                  <mat-form-field>
+                     <mat-label> Eindtijd:</mat-label>
+                     <input matInput [ngxTimepicker]="EndTime" [format]="24" readonly>
+                     <ngx-material-timepicker [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn" #EndTime></ngx-material-timepicker>
+                  </mat-form-field>
+               </div>
+            </div>
+            <div class="data-row">
+               <div class="row-name">Aantal vrijwilligers:</div>
+               <div class="user-data">
+                  <mat-form-field>
+                     <mat-label for="requiredParticipants">
+                        Aantal vrijwilligers
+                     </mat-label>
+                     <input  [(ngModel)]="requiredParticipants" id="requiredParticipants" matInput type="number" min="0">
+                  </mat-form-field>
+               </div>
+            </div>
+            <div class="data-row">
+               <div class="row-name">Dagen:</div>
+               <div class="user-data">
+
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</span>
