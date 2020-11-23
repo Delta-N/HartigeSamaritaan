@@ -20,10 +20,40 @@ export class ShiftService {
       this.toastr.error("ProjectId mag niet leeg zijn")
       return null;
     }
-    return await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}`).toPromise().then()
+    let shifts: Shift[] = [];
+    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/project/${projectId}`).toPromise().then(
+      res => {
+        if (res.status === 200) {
+          shifts = res.body
+        } else {
+          this.toastr.error("Fout tijdens het ophalen van shiften bij project " + projectId)
+          return null;
+        }
+      }
+    )
+    return shifts;
   }
 
-  async postShifts(shifts: Shift[]):Promise<Shift[]> {
+  async getShift(shiftId: string): Promise<Shift> {
+    if (!shiftId) {
+      this.toastr.error("ShiftId mag niet leeg zijn")
+      return null;
+    }
+    let shift: Shift = null;
+    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/shift/${shiftId}`).toPromise().then(
+      res => {
+        if (res.status === 200) {
+          shift = res.body
+        } else {
+          this.toastr.error("Fout tijdens het ophalen van shift " + shiftId)
+          return null;
+        }
+      }
+    )
+    return shift;
+  }
+
+  async postShifts(shifts: Shift[]): Promise<Shift[]> {
     if (!shifts || !shifts.length) {
       this.toastr.error("Geen shiften om te posten")
       return null;
@@ -66,12 +96,22 @@ export class ShiftService {
     return updatedShift;
   }
 
-  deleteShift(shiftId: string) {
+  async deleteShift(shiftId: string):Promise<boolean> {
     if (!shiftId) {
       this.toastr.error("ShiftId mag niet leeg zijn")
       return null;
     }
-    return this.apiService.delete<HttpResponse<number>>(`${HttpRoutes.shiftApiUrl}/${shiftId}`).toPromise();
+    await this.apiService.delete<HttpResponse<number>>(`${HttpRoutes.shiftApiUrl}/${shiftId}`).toPromise().then(res=>
+    {
+      if(res.status===200){
+        return true;
+      }
+      else{
+        this.toastr.error("Fout tijdens het verwijderen van shift "+shiftId)
+        return null;
+      }
+    });
+    return false;
   }
 
 }

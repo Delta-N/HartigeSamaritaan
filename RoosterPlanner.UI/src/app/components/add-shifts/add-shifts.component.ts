@@ -182,6 +182,10 @@ export class AddShiftsComponent implements OnInit {
         this.toastr.error("Starttijd moet voor eindtijd komen")
         return;
       }
+      if (value.par <= 0) {
+        this.toastr.error("Een shift heeft minimaal 1 vrijwilliger nodig")
+        return;
+      }
 
       let shifts: Shift[] = []
       this.shiftDates.forEach(shiftdate => {
