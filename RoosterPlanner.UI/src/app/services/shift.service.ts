@@ -23,7 +23,7 @@ export class ShiftService {
     return await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}`).toPromise().then()
   }
 
-  postShifts(shifts: Shift[]) {
+  async postShifts(shifts: Shift[]):Promise<Shift[]> {
     if (!shifts || !shifts.length) {
       this.toastr.error("Geen shiften om te posten")
       return null;
@@ -37,7 +37,16 @@ export class ShiftService {
         return null;
       }
     })
-    return this.apiService.post<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}`, shifts).toPromise();
+    let postedShifts: Shift[] = null;
+    await this.apiService.post<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}`, shifts).toPromise().then(res => {
+      if (res.status === 200) {
+        postedShifts = res.body
+      } else {
+        this.toastr.error("Fout tijdens het aanmaken van shiften")
+        return null;
+      }
+      return postedShifts;
+    });
   }
 
   async updateShift(shift: Shift): Promise<Shift> {
