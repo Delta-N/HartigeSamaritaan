@@ -1,0 +1,56 @@
+#bar {
+  display: flex;
+  align-items: center;
+  padding: 15px 10px 10px;
+  border-bottom: 1px solid gray;
+
+}
+
+h1 {
+  text-align: left;
+  font: normal normal normal 35px/50px Segoe UI;
+  letter-spacing: 0;
+  color: #434343;
+  opacity: 1;
+}
+
+.mat-button {
+  font: normal normal normal 17px/17px Segoe UI;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid gray;
+}
+
+.action-button {
+  background-color: #DDFCE0;
+}
+
+a:hover {
+  color: #434343;
+  text-decoration-line: none;
+  cursor: pointer;
+}
+
+a {
+  color: #434343;
+}
+
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  width: 25%;
+}
+
+
+
+
+
+

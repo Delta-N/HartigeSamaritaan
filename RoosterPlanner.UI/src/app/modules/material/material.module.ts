@@ -18,6 +18,8 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatChip, MatChipsModule} from "@angular/material/chips";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   declarations: [],
@@ -47,7 +49,10 @@ import {MatChip, MatChipsModule} from "@angular/material/chips";
     MatIconModule,
     MatInputModule,
     MatToolbarModule,
-    MatChipsModule
+    MatChipsModule,
+    MatPaginatorModule,
+    MatSortModule
+
 
 
   ],
@@ -74,8 +79,9 @@ import {MatChip, MatChipsModule} from "@angular/material/chips";
     MatIconModule,
     MatInputModule,
     MatToolbarModule,
-    MatChip
-
+    MatChip,
+    MatPaginatorModule,
+    MatSortModule
   ]
 })
 export class MaterialModule {}

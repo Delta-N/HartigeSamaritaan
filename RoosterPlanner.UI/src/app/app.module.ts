@@ -51,6 +51,8 @@ import {
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatChipsModule} from "@angular/material/chips";
 import {NgxMultipleDatesModule} from "ngx-multiple-dates";
+import { ShiftOverviewComponent } from './pages/shift-overview/shift-overview.component';
+import { AddShiftsComponent } from './components/add-shifts/add-shifts.component';
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -113,6 +115,8 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     AddProjectTaskComponent,
     TaskFilterPipe,
     DatePipe,
+    ShiftOverviewComponent,
+    AddShiftsComponent,
 
   ],
   imports: [
