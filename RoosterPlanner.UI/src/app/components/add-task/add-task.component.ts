@@ -64,23 +64,20 @@ export class AddTaskComponent implements OnInit {
       this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
 
-      if (this.files != null) {
+      if (this.files && this.files[0]) {
         const formData = new FormData();
-        if (this.files.length > 0) {
+        formData.append(this.files[0].name, this.files[0]);
 
-          if (this.files[0])
-            formData.append(this.files[0].name, this.files[0]);
-
-
-          if (this.task.documentUri != null)
-            this.uploadService.deleteIfExists(this.task.documentUri).then();
+        if (this.task.documentUri != null)
+          await this.uploadService.deleteIfExists(this.task.documentUri).then(); //do nothing with result
 
 
-          await this.uploadService.uploadInstruction(formData).then(url => {
-            this.updatedTask.documentUri = url.path;
-          });
-        }
+        await this.uploadService.uploadInstruction(formData).then(url => {
+          if (url && url.path && url.path.trim().length > 0)
+            this.updatedTask.documentUri = url.path.trim();
+        });
       }
+
       if (this.modifier === 'toevoegen') {
         this.taskService.postTask(this.updatedTask).then(response => {
           this.dialogRef.close(response)

@@ -24,19 +24,16 @@ namespace RoosterPlanner.Api
             Configuration = configuration;
         }
 
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
             // Enable Application Insights telemetry collection.
-            var options = new ApplicationInsightsServiceOptions { ConnectionString = Configuration["ApplicationInsight:ConnectionString"] };
+            var options = new ApplicationInsightsServiceOptions
+                {ConnectionString = Configuration["ApplicationInsight:ConnectionString"]};
             services.AddApplicationInsightsTelemetry(options);
 
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.Authority =
@@ -50,7 +47,6 @@ namespace RoosterPlanner.Api
                     {
                         //OnAuthenticationFailed = AuthenticationFailedAsync
                     };
-                    
                 });
 
             services.AddCors(options =>
@@ -68,16 +64,14 @@ namespace RoosterPlanner.Api
             {
                 options.AddPolicy("Boardmember", policy =>
                     policy.RequireClaim("extension_UserRole", "1"));
-                
+
                 options.AddPolicy("Committeemember", policy =>
                     policy.RequireClaim("extension_UserRole", "2"));
-                
+
                 options.AddPolicy("Boardmember&Committeemember", policy =>
-                    policy.RequireClaim("extension_UserRole", "1","2"));
+                    policy.RequireClaim("extension_UserRole", "1", "2"));
             });
 
-
-            
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.IgnoreNullValues = true;
@@ -86,6 +80,8 @@ namespace RoosterPlanner.Api
 
             services.Configure<AzureAuthenticationConfig>(
                 Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
+            services.Configure<AzureBlobConfig>(
+                Configuration.GetSection(AzureBlobConfig.ConfigSectionName));
 
             services.AddTransient<IAzureB2CService, AzureB2CService>();
             services.AddTransient<IProjectService, ProjectService>();
@@ -94,8 +90,7 @@ namespace RoosterPlanner.Api
             services.AddTransient<ITaskService, TaskService>();
             services.AddTransient<IShiftService, ShiftService>();
             services.AddTransient<IMatchService, MatchService>();
-            services.AddScoped(x => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorage")));
-            services.AddTransient<IBlobService,BlobService>();
+            services.AddTransient<IBlobService, BlobService>();
 
             //dit moet nog omgebouwd worden
             services.AddAutoMapper(typeof(AutoMapperProfile));
