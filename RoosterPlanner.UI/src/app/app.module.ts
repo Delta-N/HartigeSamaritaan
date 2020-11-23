@@ -25,7 +25,7 @@ import {AuthorizationGuard} from "./guards/authorization.guard";
 import {CreateProjectComponent} from "./components/create-project/create-project.component";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AddAdminComponent} from './components/add-admin/add-admin.component';
-import {FilterPipe, TaskFilterPipe} from "./helpers/filter.pipe";
+import {DatePipe, FilterPipe, TaskFilterPipe} from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
@@ -35,16 +35,25 @@ import {MSAL_INSTANCE, MsalBroadcastService, MsalGuard, MsalInterceptor, MsalSer
 import {MSAL_GUARD_CONFIG, MSAL_INTERCEPTOR_CONFIG} from "./msal/constants";
 import {MsalGuardConfiguration} from "./msal/msal.guard.config";
 import {environment} from "../environments/environment";
-import { TaskComponent } from './pages/task/task.component';
-import { AddTaskComponent } from './components/add-task/add-task.component';
-import { AllTasksComponent } from './pages/all-tasks/all-tasks.component';
-import { CategoryComponent } from './pages/category/category.component';
-import { AddCategoryComponent } from './components/add-category/add-category.component';
-import { AddProjectTaskComponent } from './components/add-project-task/add-project-task.component';
+import {TaskComponent} from './pages/task/task.component';
+import {AddTaskComponent} from './components/add-task/add-task.component';
+import {AllTasksComponent} from './pages/all-tasks/all-tasks.component';
+import {CategoryComponent} from './pages/category/category.component';
+import {AddCategoryComponent} from './components/add-category/add-category.component';
+import {AddProjectTaskComponent} from './components/add-project-task/add-project-task.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+
+import {
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MatChipsModule} from "@angular/material/chips";
 import {NgxMultipleDatesModule} from "ngx-multiple-dates";
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+
 function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
@@ -103,6 +112,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     AddCategoryComponent,
     AddProjectTaskComponent,
     TaskFilterPipe,
+    DatePipe,
 
   ],
   imports: [
@@ -121,7 +131,9 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     FormsModule,
     ToastrModule.forRoot(),
     NgxMaterialTimepickerModule,
+    MatChipsModule,
     NgxMultipleDatesModule,
+
   ],
   providers: [
     {
@@ -143,6 +155,13 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory
     },
+    {provide: MAT_DATE_LOCALE, useValue: 'nl-NL'},
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
     MsalService,
     MsalGuard,
     MsalBroadcastService,

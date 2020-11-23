@@ -1,6 +1,7 @@
 ﻿import {Pipe, PipeTransform} from '@angular/core';
 import {User} from "../models/user";
 import {Task} from "../models/task";
+import {DateConverter} from "./date-converter";
 
 @Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
@@ -25,7 +26,7 @@ export class TaskFilterPipe implements PipeTransform {
 
   transform(items: Task[], searchText: string): any[] {
     if (!items) {
-      return [];
+      return []
     }
     if (!searchText) {
       return items;
@@ -35,5 +36,12 @@ export class TaskFilterPipe implements PipeTransform {
     return items.filter(function (item) {
       return JSON.stringify(item.name).toLowerCase().includes(searchText);
     });
+  }
+}
+
+@Pipe({name: 'datePipe'})
+export class DatePipe implements PipeTransform {
+  transform(value: Date): string {
+    return DateConverter.dateToString(value);
   }
 }
