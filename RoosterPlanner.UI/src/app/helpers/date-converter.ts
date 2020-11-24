@@ -10,7 +10,13 @@ export class DateConverter {
     if (moment().isDST())
       return moment(str, "DD-MM-YYYY").add(offset, 'minutes').toDate();
     return moment(str, "DD-MM-YYYY").add(offset, 'minutes').add(1, 'hour').toDate();
+  }
 
+  static addOffset(date: Date) {
+    const offset = moment().utcOffset()
+    if (moment().isDST())
+      return moment(date).add(offset, 'minutes').toDate();
+    return moment(date).add(offset, 'minutes').add(1, 'hour').toDate();
   }
 
 //alle dates worden alleen naar de gebruiker toe geconverteerd naar een leesbarevorm
@@ -50,9 +56,9 @@ export class DateConverter {
         'november',
         'december'
       ]
-      const monthName=months[date.getMonth()]
+      const monthName = months[date.getMonth()]
 
-      return date.getDate()+" "+monthName+" "+date.getFullYear();
+      return date.getDate() + " " + monthName + " " + date.getFullYear();
     }
     return null;
   }

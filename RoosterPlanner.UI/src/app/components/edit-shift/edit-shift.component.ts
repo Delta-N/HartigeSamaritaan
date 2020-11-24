@@ -51,7 +51,7 @@ export class EditShiftComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskService.getAllProjectTasks(this.projectGuid).then(res => {
-      this.tasks = res;
+      this.tasks = res.filter(t => t != null);
       if (this.shift.task) {
         this.taskControl.setValue(this.tasks.find(t => t.name == this.shift.task.name))
       }
