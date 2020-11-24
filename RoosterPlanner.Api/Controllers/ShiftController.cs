@@ -35,16 +35,16 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [HttpGet("project/{id}")]
-        public async Task<ActionResult> GetShifts(Guid projectId)
+        public async Task<ActionResult> GetShifts(Guid id)
         {
-            if (projectId == Guid.Empty)
+            if (id == Guid.Empty)
                 return BadRequest("No valid id");
             try
             {
-                TaskListResult<Shift> result = await shiftService.GetShifts(projectId);
+                TaskListResult<Shift> result = await shiftService.GetShifts(id);
                 if (!result.Succeeded)
                     return UnprocessableEntity();
-                if (result.Data == null)
+                if (result.Data == null || result.Data.Count()==0)
                     return Ok();
                 List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
                 return Ok(shiftVmList);
@@ -58,14 +58,14 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [HttpGet("shift/{id}")]
-        public async Task<ActionResult> GetShift(Guid shiftId)
+        public async Task<ActionResult> GetShift(Guid id)
         {
-            if (shiftId == Guid.Empty)
+            if (id == Guid.Empty)
                 return BadRequest();
             try
             {
-                TaskResult<Shift> result = await shiftService.GetShift(shiftId);
-                if (result.Succeeded)
+                TaskResult<Shift> result = await shiftService.GetShift(id);
+                if (!result.Succeeded)
                     return UnprocessableEntity();
                 if (result.Data == null)
                     return Ok();
@@ -111,7 +111,6 @@ namespace RoosterPlanner.Api.Controllers
 
                     if (project == null || task == null)
                         shifts.Remove(shift);
-                    
                     shift.Project = project;
                     shift.Task = task;
                     shift.LastEditDate = DateTime.UtcNow;
@@ -172,7 +171,8 @@ namespace RoosterPlanner.Api.Controllers
                 oldShift.StartTime = updatedShift.StartTime;
                 oldShift.EndTime = updatedShift.EndTime;
                 oldShift.ParticipantsRequired = updatedShift.ParticipantsRequired;
-                oldShift.Task = updatedShift.Task;
+                oldShift.Task = task;
+                oldShift.Project = project;
                 //cannot update Project, Id or Date by design
                 oldShift.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);

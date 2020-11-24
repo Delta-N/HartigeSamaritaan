@@ -45,15 +45,20 @@ namespace RoosterPlanner.Api.Models
         {
             if (taskViewModel != null)
             {
-                return new Task(taskViewModel.Id)
+                Task task = new Task(taskViewModel.Id)
                 {
                     Name = taskViewModel.Name,
-                    Category = CategoryViewModel.CreateCategory(taskViewModel.Category),
-                    CategoryId = taskViewModel.Category.Id,
                     Color = taskViewModel.Color,
                     DocumentUri = taskViewModel.DocumentUri,
                     Description = taskViewModel.Description
                 };
+                if (taskViewModel.Category != null)
+                {
+                    task.CategoryId = taskViewModel.Category.Id;
+                    task.Category = CategoryViewModel.CreateCategory(taskViewModel.Category);
+                }
+
+                return task;
             }
 
             return null;

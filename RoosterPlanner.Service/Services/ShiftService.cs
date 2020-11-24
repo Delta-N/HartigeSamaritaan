@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
-using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Service
 {
@@ -64,7 +63,7 @@ namespace RoosterPlanner.Service
             TaskResult<Shift> taskResult = new TaskResult<Shift>();
             try
             {
-                taskResult.Data = await this.unitOfWork.ShiftRepository.GetAsync(shiftId);
+                taskResult.Data = await this.unitOfWork.ShiftRepository.GetShift(shiftId);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)
@@ -104,7 +103,7 @@ namespace RoosterPlanner.Service
             try
             {
                 taskResult.Data = await this.shiftRepository.AddAll(shifts);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync()==1;
+                taskResult.Succeeded = await unitOfWork.SaveChangesAsync()==shifts.Count();
             }
             catch (Exception ex)
             {

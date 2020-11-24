@@ -13,6 +13,7 @@ namespace RoosterPlanner.Data.Repositories
     {
         Task<List<Shift>> GetAll(Guid projectId);
         Task<List<Shift>> AddAll(List<Shift> shifts);
+        Task<Shift> GetShift(Guid shiftId);
     }
 
     public class ShiftRepository : Repository<Shift>, IShiftRepository
@@ -39,8 +40,24 @@ namespace RoosterPlanner.Data.Repositories
         {
             if (shifts == null || shifts.Count == 0)
                 return null;
-            await this.EntitySet.AddRangeAsync(shifts);
+            foreach (Shift shift in shifts)
+            {
+                if (shift.Id == Guid.Empty)
+                    shift.SetKey(Guid.NewGuid());
+                await this.EntitySet.AddAsync(shift);
+            }
+
             return shifts;
+        }
+
+        public Task<Shift> GetShift(Guid shiftId)
+        {
+            return this.EntitySet
+                .AsNoTracking()
+                .AsQueryable()
+                .Include(s => s.Task)
+                .Include(s => s.Project)
+                .Where(s=>s.Id==shiftId).FirstOrDefaultAsync();
         }
     }
 }
