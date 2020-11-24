@@ -17,7 +17,7 @@ namespace RoosterPlanner.Models
 
         [Column(Order = 4)] [MaxLength(12)] public string Color { get; set; }
 
-        [Column(Order = 5)] [MaxLength(128)] public string DocumentUri { get; set; }
+        [Column(Order = 5)] [MaxLength(256)] public string DocumentUri { get; set; }
 
         [Column(Order = 6)] [MaxLength(256)] public string Description { get; set; }
 

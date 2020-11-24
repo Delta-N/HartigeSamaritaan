@@ -7,6 +7,7 @@ import {Task} from "../../models/task";
 import {Category} from "../../models/category";
 import {TaskService} from "../../services/task.service";
 import {CategoryService} from "../../services/category.service";
+import {UploadService} from "../../services/upload.service";
 
 @Component({
   selector: 'app-add-task',
@@ -23,6 +24,7 @@ export class AddTaskComponent implements OnInit {
   modifier: string = 'toevoegen';
   categories: Category[] = [];
   colors: string[] = ["Red", "Blue", "Yellow", "Green", "Orange", "Pink"];
+  files: FileList;
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -30,7 +32,8 @@ export class AddTaskComponent implements OnInit {
               private toastr: ToastrService,
               public dialogRef: MatDialogRef<AddTaskComponent>,
               private taskService: TaskService,
-              private categoryService: CategoryService) {
+              private categoryService: CategoryService,
+              private uploadService: UploadService) {
     data.task != null ? this.task = data.task : this.task = new Task();
 
     this.modifier = data.modifier;
@@ -55,11 +58,26 @@ export class AddTaskComponent implements OnInit {
     })
   }
 
-  saveTask(value: Task) {
+  async saveTask(value: Task) {
     this.updatedTask = value;
     if (this.checkoutForm.status === 'INVALID') {
       this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
+
+      if (this.files && this.files[0]) {
+        const formData = new FormData();
+        formData.append(this.files[0].name, this.files[0]);
+
+        if (this.task.documentUri != null)
+          await this.uploadService.deleteIfExists(this.task.documentUri).then(); //do nothing with result
+
+
+        await this.uploadService.uploadInstruction(formData).then(url => {
+          if (url && url.path && url.path.trim().length > 0)
+            this.updatedTask.documentUri = url.path.trim();
+        });
+      }
+
       if (this.modifier === 'toevoegen') {
         this.taskService.postTask(this.updatedTask).then(response => {
           this.dialogRef.close(response)
@@ -77,7 +95,7 @@ export class AddTaskComponent implements OnInit {
     this.dialogRef.close('false')
   }
 
-  uploadInstructions() {
-
+  uploadInstructions(files: FileList) {
+    this.files = files;
   }
 }

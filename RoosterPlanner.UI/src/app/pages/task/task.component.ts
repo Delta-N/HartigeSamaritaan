@@ -7,6 +7,7 @@ import {UserService} from "../../services/user.service";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
 import {TaskService} from "../../services/task.service";
 import {Task} from "../../models/task";
+import {UploadService} from "../../services/upload.service";
 
 @Component({
   selector: 'app-task',
@@ -26,7 +27,8 @@ export class TaskComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private taskService: TaskService,
-    private router:Router) {
+    private router: Router,
+    private uploadService: UploadService) {
   }
 
   ngOnInit(): void {
@@ -51,7 +53,7 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      if (result.status == 200) {
+      if (result.status === 200) {
         this.toastr.success(result.body.name + " is gewijzigd")
         this.task = result.body;
 
@@ -68,8 +70,11 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult === true) {
+        if (this.task.documentUri != null) {
+          this.uploadService.deleteIfExists(this.task.documentUri).then()
+        }
         this.taskService.deleteTask(this.guid).then(response => {
-          if(response.status==200){
+          if (response.status === 200) {
             this.router.navigateByUrl("/admin")
           }
         })
