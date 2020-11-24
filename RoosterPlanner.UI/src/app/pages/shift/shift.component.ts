@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Shift} from "../../models/shift";
-import {Project} from "../../models/project";
-import {Task} from "../../models/task";
 import {ShiftService} from "../../services/shift.service";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
@@ -28,31 +26,16 @@ export class ShiftComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    //PLACEHOLDER
-    let testShift: Shift = new Shift();
-    testShift.date = new Date("11/23/2020");
-    testShift.endTime = "15:00";
-    testShift.id = "00000000-0000-0000-0000-000000000010";
-    testShift.participantsRequired = 1;
-    testShift.project = new Project();
-    testShift.startTime = "13:00";
-    testShift.task = new Task();
-    testShift.task.color = "Blue";
-    testShift.task.name = "Chef";
-    this.shift = testShift;
-    this.loaded = true;
-    //END OF PLACEHOLDER
-
   }
 
 
-  ngOnInit(): void {
-    /*  this.shiftService.getShift(this.guid).then(shift => {
-        if (shift) {
-          this.shift = shift
-          this.loaded = true;
-        }
-      })*/
+  async ngOnInit(): Promise<void> {
+    await this.shiftService.getShift(this.guid).then(shift => {
+      if (shift) {
+        this.shift = shift
+        this.loaded = true;
+      }
+    })
   }
 
   delete() {
@@ -79,12 +62,12 @@ export class ShiftComponent implements OnInit {
       height: '600px',
       data: {
         shift: this.shift,
-        projectGuid: this.guid
+        projectGuid: this.shift.project.id
       }
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(res => {
-      if (res && res!=='false') {
+      if (res && res !== 'false') {
         this.toastr.success("Shift is gewijzigd")
         this.shift = res;
       }

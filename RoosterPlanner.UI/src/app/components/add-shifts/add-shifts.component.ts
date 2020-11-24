@@ -73,7 +73,7 @@ export class AddShiftsComponent implements OnInit {
     });
 
     this.taskService.getAllProjectTasks(this.guid).then(tasks => {
-      this.tasks = tasks;
+      this.tasks = tasks.filter(t=>t!=null);
     });
 
     this.projectService.getProject(this.guid).then(project => {
@@ -174,7 +174,7 @@ export class AddShiftsComponent implements OnInit {
     return end.valueOf() - start.valueOf() >= 0
   }
 
-  save(value: any) {
+  async save(value: any) {
     if (this.checkoutForm.status === 'INVALID' || !this.shiftDates.length) {
       this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
@@ -198,15 +198,15 @@ export class AddShiftsComponent implements OnInit {
         currentShift.endTime = value.end;
 
         if (shiftdate instanceof moment) {
-          currentShift.date = new Date(shiftdate.valueOf());
+          currentShift.date = DateConverter.addOffset(new Date(shiftdate.valueOf()));
         } else {
-          currentShift.date = shiftdate;
+          currentShift.date = DateConverter.addOffset(shiftdate);
         }
         shifts.push(currentShift);
       })
       if (shifts && shifts.length) {
-        this.shiftService.postShifts(shifts).then(shifts => {
-          if (shifts && shifts.length) {
+        await this.shiftService.postShifts(shifts).then(res => {
+          if (res && res.length) {
             this._location.back();
           }
         });

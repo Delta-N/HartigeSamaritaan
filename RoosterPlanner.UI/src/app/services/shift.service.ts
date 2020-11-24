@@ -21,10 +21,10 @@ export class ShiftService {
       return null;
     }
     let shifts: Shift[] = [];
-    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/project/${projectId}`).toPromise().then(
-      res => {
+    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/project/${projectId}`).toPromise().then(res => {
         if (res.status === 200) {
           shifts = res.body
+          shifts.forEach(s => s.date = new Date(s.date))
         } else {
           this.toastr.error("Fout tijdens het ophalen van shiften bij project " + projectId)
           return null;
@@ -44,12 +44,12 @@ export class ShiftService {
       res => {
         if (res.status === 200) {
           shift = res.body
+          shift.date = new Date(shift.date);
         } else {
           this.toastr.error("Fout tijdens het ophalen van shift " + shiftId)
           return null;
         }
-      }
-    )
+      })
     return shift;
   }
 
@@ -75,8 +75,8 @@ export class ShiftService {
         this.toastr.error("Fout tijdens het aanmaken van shiften")
         return null;
       }
-      return postedShifts;
     });
+    return postedShifts;
   }
 
   async updateShift(shift: Shift): Promise<Shift> {
@@ -88,6 +88,7 @@ export class ShiftService {
     await this.apiService.put<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}`, shift).toPromise().then(res => {
       if (res.status === 200) {
         updatedShift = res.body;
+        updatedShift.date=new Date(updatedShift.date)
       } else {
         this.toastr.error("Fout tijdens het updaten van shift: " + shift.id)
         return null;
@@ -96,22 +97,19 @@ export class ShiftService {
     return updatedShift;
   }
 
-  async deleteShift(shiftId: string):Promise<boolean> {
+  async deleteShift(shiftId: string): Promise<boolean> {
     if (!shiftId) {
       this.toastr.error("ShiftId mag niet leeg zijn")
       return null;
     }
-    await this.apiService.delete<HttpResponse<number>>(`${HttpRoutes.shiftApiUrl}/${shiftId}`).toPromise().then(res=>
-    {
-      if(res.status===200){
+    return await this.apiService.delete<HttpResponse<number>>(`${HttpRoutes.shiftApiUrl}?shiftId=${shiftId}`).toPromise().then(res => {
+      if (res.status === 200) {
         return true;
-      }
-      else{
-        this.toastr.error("Fout tijdens het verwijderen van shift "+shiftId)
-        return null;
+      } else {
+        this.toastr.error("Fout tijdens het verwijderen van shift " + shiftId)
+        return false;
       }
     });
-    return false;
   }
 
 }
