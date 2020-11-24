@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RoosterPlanner.Data.Migrations
 {
-    public partial class Freshstart : Migration
+    public partial class AnotherFreshStart : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -94,7 +94,7 @@ namespace RoosterPlanner.Data.Migrations
                     DeletedDateTime = table.Column<DateTime>(nullable: true),
                     CategoryId = table.Column<Guid>(nullable: true),
                     Color = table.Column<string>(maxLength: 12, nullable: true),
-                    DocumentUri = table.Column<string>(maxLength: 128, nullable: true),
+                    DocumentUri = table.Column<string>(maxLength: 256, nullable: true),
                     Description = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
@@ -235,7 +235,8 @@ namespace RoosterPlanner.Data.Migrations
                     EndTime = table.Column<TimeSpan>(nullable: false),
                     Date = table.Column<DateTime>(type: "date", nullable: false),
                     TaskId = table.Column<Guid>(nullable: true),
-                    ProjectId = table.Column<Guid>(nullable: false)
+                    ProjectId = table.Column<Guid>(nullable: false),
+                    ParticipantsRequired = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -355,10 +356,10 @@ namespace RoosterPlanner.Data.Migrations
                 columns: new[] { "Id", "CategoryId", "Color", "DeletedDateTime", "Description", "DocumentUri", "LastEditBy", "LastEditDate", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("ce45a6a5-a41a-4fa5-887f-d67b13fbad94"), new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"), "Blue", null, "Een leuke beschrijving van de werkzaamheden van een chef", "http://test.com/chef", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chef" },
-                    { new Guid("202b5144-8232-4531-a080-60cca12919d1"), new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"), "Red", null, "Een leuke beschrijving van de werkzaamheden van een runner", "http://test.com/runner", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Runner" },
-                    { new Guid("0ca10a56-cf22-4afe-a56b-a56a4c496631"), new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"), "Yellow", null, "Een leuke beschrijving van de werkzaamheden van een chauffeur", "http://test.com/chauffeur", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chauffeur" },
-                    { new Guid("b4394291-861d-4ed8-b13e-9b4d5f105dc5"), new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"), "Green", null, "Een leuke beschrijving van de werkzaamheden van een klusser", "http://test.com/Klusser", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Klusser" }
+                    { new Guid("003313bb-e1f1-4814-b1ae-f962e88b914d"), new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"), "Blue", null, "Een leuke beschrijving van de werkzaamheden van een chef", "http://test.com/chef", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chef" },
+                    { new Guid("4972b334-c537-4829-985a-cfa67ec0ae4b"), new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"), "Red", null, "Een leuke beschrijving van de werkzaamheden van een runner", "http://test.com/runner", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Runner" },
+                    { new Guid("f72411ac-f666-4ed5-a959-d377a0c07b21"), new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"), "Yellow", null, "Een leuke beschrijving van de werkzaamheden van een chauffeur", "http://test.com/chauffeur", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chauffeur" },
+                    { new Guid("128b66d5-20ea-45ad-8697-0257b565d9b7"), new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"), "Green", null, "Een leuke beschrijving van de werkzaamheden van een klusser", "http://test.com/Klusser", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Klusser" }
                 });
 
             migrationBuilder.CreateIndex(

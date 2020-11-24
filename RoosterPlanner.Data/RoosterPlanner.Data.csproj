@@ -18,4 +18,8 @@
     <Folder Include="Migrations" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\RoosterPlannerContextModelSnapshot.cs" />
+  </ItemGroup>
+
 </Project>

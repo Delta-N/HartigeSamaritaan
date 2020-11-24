@@ -28,6 +28,8 @@ namespace RoosterPlanner.Models
 
         [ForeignKey("ProjectId")]
         public Project Project { get; set; }
+        [Column(Order = 6)]
+        public int ParticipantsRequired { get; set; }
 
 
         //Constructor
