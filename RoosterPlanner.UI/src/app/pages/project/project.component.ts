@@ -138,11 +138,17 @@ export class ProjectComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       this.loaded = false;
-      if (dialogResult != null && dialogResult !== this.participation.maxWorkingHoursPerWeek) {
+      if (dialogResult != null &&
+        dialogResult !== this.participation.maxWorkingHoursPerWeek &&
+        dialogResult > 0 &&
+        dialogResult <= 40) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
         this.participationService.updateParticipation(this.participation).then(response => {
-          this.displayProject(response.body.project)
-        })
+          this.displayProject(response.body.project);
+        });
+      } else {
+        this.toastr.error("fout tijdens het updaten van maximaal aantal werkuren")
+        this.loaded=true;
       }
     });
   }
