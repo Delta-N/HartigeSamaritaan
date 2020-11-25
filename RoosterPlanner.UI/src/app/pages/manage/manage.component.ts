@@ -14,13 +14,15 @@ export class ManageComponent implements OnInit {
   projects: Project[] = [];
 
   constructor(private userService: UserService,
-              private toastr:ToastrService) {
+              private toastr: ToastrService) {
   }
 
   async ngOnInit(): Promise<void> {
     let userId: string = this.userService.getCurrentUserId();
     await this.userService.getProjectsManagedBy(userId).then(res => {
-      res.forEach(m => this.projects.push(m.project))
+      if (res != null) {
+        res.forEach(m => this.projects.push(m.project))
+      }
       this.loaded = true;
     })
   }

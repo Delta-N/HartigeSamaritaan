@@ -31,14 +31,14 @@ export class AddManagerComponent implements OnInit {
     //get all current project managers
     await this.userService.getAllProjectManagers(this.projectId).then(res => {
       if (res) {
-        this.managers = res.filter(m => m.person.userRole !== "Boardmember");
+        this.managers = res;
       }
 
     })
     //get all users
     await this.userService.getAllUsers().then(users => {
       users.forEach(user => {
-        if (user.userRole !== "Boardmember" && !this.managers.find(m => m.personId == user.id)) { //and this.projectManagers does not contain (user.id)
+        if (!this.managers.find(m => m.personId == user.id)) {
           this.users.push(user);
         }
       })

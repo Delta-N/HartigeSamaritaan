@@ -240,7 +240,7 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity();
             }
         }
-        
+
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpGet("projectsmanagedby/{userId}")]
         public async Task<ActionResult> GetProjectsManagedBy(Guid userId)
@@ -250,7 +250,7 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 TaskListResult<Manager> result = await personService.GetProjectsManagedBy(userId);
-                
+
                 if (!result.Succeeded)
                     return UnprocessableEntity();
                 if (result.Data == null || result.Data.Count == 0)
@@ -265,7 +265,6 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity();
             }
         }
-        
 
         [Authorize(Policy = "Boardmember")]
         [HttpPost("makemanager/{projectId}/{userId}")]
@@ -301,7 +300,8 @@ namespace RoosterPlanner.Api.Controllers
                 };
 
                 TaskResult<Manager> result = await personService.MakeManager(manager);
-                await ModAdmin(userId, 2); //make user a manager in B2C
+                if (!UserHasRole(person.Oid.ToString(), UserRole.Boardmember))
+                    await ModAdmin(userId, 2); //make user a manager in B2C
 
                 if (!result.Succeeded)
                     return UnprocessableEntity();
@@ -331,10 +331,13 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<Manager> result = await personService.RemoveManager(manager);
                 TaskResult<List<Manager>> userManagesOtherProjects =
                     await personService.UserManagesOtherProjects(manager.PersonId);
-
-                if (userManagesOtherProjects != null && userManagesOtherProjects.Data != null &&
+                
+                if (userManagesOtherProjects != null &&
+                    userManagesOtherProjects.Data != null &&
                     userManagesOtherProjects.Data.Count == 0)
-                    await ModAdmin(userId, 4); //remove user as a manager in B2C
+                    if (!UserHasRole(manager.PersonId.ToString(), UserRole.Boardmember))
+                        await ModAdmin(userId, 4); //remove user as a manager in B2C}
+                    
 
                 if (!result.Succeeded)
                     return UnprocessableEntity();
