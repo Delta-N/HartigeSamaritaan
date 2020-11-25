@@ -6,6 +6,7 @@ import {Validator} from "../../helpers/validators"
 import {ToastrService} from "ngx-toastr";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DateConverter} from "../../helpers/date-converter";
+import {UploadService} from "../../services/upload.service";
 
 @Component({
   selector: 'app-create-project',
@@ -16,13 +17,15 @@ export class CreateProjectComponent implements OnInit {
   project: Project = new Project();
   checkoutForm;
   title: string;
+  files: FileList;
 
 
   constructor(private formBuilder: FormBuilder,
               private projectService: ProjectService,
               private toastr: ToastrService,
               public dialogRef: MatDialogRef<CreateProjectComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private uploadService:UploadService) {
 
     let today = DateConverter.todayString()
     if (!this.data.createProject) {
@@ -38,7 +41,7 @@ export class CreateProjectComponent implements OnInit {
       participationEndDate: [this.project.participationEndDate != null ? this.project.participationEndDate : '', [Validator.dateOrNull]],
       projectStartDate: [this.project.projectStartDate != null ? this.project.projectStartDate : today, Validator.date],
       projectEndDate: [this.project.projectEndDate != null ? this.project.projectEndDate : '', Validator.date],
-      pictureUri: this.project.pictureUri != null ? this.project.pictureUri : '',
+      pictureUri: this.project.pictureUri != null ? this.project.pictureUri : null,
       websiteUrl: this.project.websiteUrl != null ? this.project.websiteUrl : ''
     })
 
@@ -48,7 +51,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
 
-  saveProject(value: Project) {
+  async saveProject(value: Project) {
     this.project = value
     if (this.checkoutForm.status === 'INVALID') {
       this.toastr.error("Niet alle velden zijn correct ingevuld");
@@ -58,13 +61,13 @@ export class CreateProjectComponent implements OnInit {
       let parSdate = DateConverter.toDate(this.project.participationStartDate)
       //alleen participation end date is optioneel
       let parEdate = null;
-      this.project.participationEndDate!=null?parEdate=DateConverter.toDate(this.project.participationEndDate):null;
+      this.project.participationEndDate != null ? parEdate = DateConverter.toDate(this.project.participationEndDate) : null;
 
-      if(prEdate<prSdate){
+      if (prEdate < prSdate) {
         this.toastr.error("Project einddatum mag niet voor project startdatum liggen")
         return;
       }
-      if(parSdate<prSdate || parSdate>prEdate){
+      if (parSdate < prSdate || parSdate > prEdate) {
         this.toastr.error("Participatie startdatum moet tussen projectstart en project einddatum liggen")
         return;
       }
@@ -72,23 +75,40 @@ export class CreateProjectComponent implements OnInit {
         this.toastr.error("Participatie eindatum mag niet voor de participatie startdatum liggen")
         return;
       }
-      if (parEdate != null && parEdate > (prEdate || parEdate<prSdate)) {
+      if (parEdate != null && parEdate > (prEdate || parEdate < prSdate)) {
         this.toastr.error("Participatie einddatum moet tussen projectstart en project einddatum liggen")
         return;
       }
 
+      if (this.files && this.files[0]) {
+        const formData = new FormData();
+        formData.append(this.files[0].name, this.files[0]);
+
+        if (this.project.pictureUri != null)
+          await this.uploadService.deleteIfExists(this.project.pictureUri).then();
+
+        await this.uploadService.uploadProjectPicture(formData).then(url => {
+          if (url && url.path && url.path.trim().length > 0)
+            this.project.pictureUri = url.path.trim();
+        });
+      }
+
       //create new project
       if (this.data.createProject) {
-        this.projectService.postProject(this.project).then(response=>this.project=response.body);
+        this.projectService.postProject(this.project).then(response => this.project = response.body);
       }
       //edit project
       else {
-        this.projectService.updateProject(this.project).then(response=>{
-          this.project=response.body
+        this.projectService.updateProject(this.project).then(response => {
+          this.project = response.body
         });
 
       }
       this.dialogRef.close(this.project);
     }
+  }
+
+  uploadPicture(files: FileList) {
+    this.files = files;
   }
 }

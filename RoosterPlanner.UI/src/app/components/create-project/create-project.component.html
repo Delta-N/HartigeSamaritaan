@@ -67,19 +67,26 @@
         <input matInput id="participationEndDate" type="text" formControlName="participationEndDate" placeholder="dd-mm-yyyy">
       </mat-form-field>
     </div>
-      <mat-form-field>
-        <mat-label for="pictureUri">
-          Afbeelding URL
-        </mat-label>
-        <input matInput id="pictureUri" type="text" formControlName="pictureUri" placeholder="Hyperlink van een plaatje">
-      </mat-form-field>
-      <div></div>
-      <mat-form-field>
-        <mat-label for="websiteUrl">
-          Website URL
-        </mat-label>
-        <input matInput id="websiteUrl" type="text" formControlName="websiteUrl" placeholder="Hyperlink van de website">
-      </mat-form-field>
+
+    <mat-form-field>
+      <mat-label for="websiteUrl">
+        Website URL
+      </mat-label>
+      <input matInput id="websiteUrl" type="text" formControlName="websiteUrl" placeholder="Hyperlink van de website">
+    </mat-form-field>
+
+    <div *ngIf="project.pictureUri!=null">
+      <mat-label><a [href]=project.pictureUri>Huidige afbeelding :</a></mat-label>
+    </div>
+
+    <div>
+      <label for="file"
+             class="custom-file-upload">{{this.project.pictureUri == null ? "Afbeelding toevoegen" : "Afbeelding vervangen"}}</label>
+      <span *ngIf="this.files!=null">{{this.files[0].name}}</span>
+      <input #fileInput type="file" id="file" (change)="uploadPicture(fileInput.files)"/>
+    </div>
+
+
   </form>
 
 </mat-dialog-content>

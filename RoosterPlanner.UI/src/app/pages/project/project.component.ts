@@ -50,16 +50,7 @@ export class ProjectComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    await this.getParticipation().then(() => {
-        if (this.project != null) {
-          this.project.pictureUri = "../assets/Logo.png"
-        }
-        if (this.participation != null) {
-          this.participation.project.pictureUri = "../assets/Logo.png";
-        }
-      }
-    );
-
+    await this.getParticipation().then();
     await this.getProjectTasks().then();
 
   }
@@ -200,7 +191,7 @@ export class ProjectComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.toastr.success("De rol van "+ result+" is succesvol gewijzigd.")
+        this.toastr.success("De rol van " + result + " is succesvol gewijzigd.")
       }
     });
   }

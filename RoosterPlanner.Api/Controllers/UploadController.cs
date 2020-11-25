@@ -83,5 +83,12 @@ namespace RoosterPlanner.Api.Controllers
         {
             return await UploadInstruction("profilepicture");
         }
+
+        [Authorize(Policy = "Boardmember")]
+        [HttpPost("UploadProjectPicture"), RequestSizeLimit(500_000_0)]
+        public async Task<ActionResult> UploadProjectPicture()
+        {
+            return await UploadInstruction("projectpicture");
+        }
     }
 }

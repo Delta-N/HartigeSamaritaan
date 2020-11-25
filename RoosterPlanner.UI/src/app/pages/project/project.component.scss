@@ -1,5 +1,6 @@
 img {
-  width: 70%;
+  padding-top: 10px;
+  max-width:200px;
   height: auto;
 }
 
@@ -37,6 +38,7 @@ a {
 }
 
 .mat-button {
+  margin:5px;
   font: normal normal normal 17px/17px Segoe UI;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -159,7 +161,7 @@ border: none;
   margin-bottom: 30px;
 }
 #left{
-  min-height: 550px;
+  min-height: 400px;
   min-width: 450px;
 }
 
