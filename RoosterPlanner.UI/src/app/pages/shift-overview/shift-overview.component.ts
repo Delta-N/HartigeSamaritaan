@@ -51,8 +51,10 @@ export class ShiftOverviewComponent implements OnInit {
     })
     let shifts: Shift[] = [];
     await this.shiftService.getAllShifts(this.guid).then(res => {
-      shifts = res;
-      this.dataSource = new MatTableDataSource<Shift>(shifts)
+      if (res != null) {
+        shifts = res;
+        this.dataSource = new MatTableDataSource<Shift>(shifts)
+      }
       this.loaded = true;
     })
 
