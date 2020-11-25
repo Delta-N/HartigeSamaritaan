@@ -24,7 +24,9 @@ export class ShiftService {
     await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/project/${projectId}`).toPromise().then(res => {
         if (res.status === 200) {
           shifts = res.body
-          shifts.forEach(s => s.date = new Date(s.date))
+          if (shifts != null) {
+            shifts.forEach(s => s.date = new Date(s.date))
+          }
         } else {
           this.toastr.error("Fout tijdens het ophalen van shiften bij project " + projectId)
           return null;
@@ -88,7 +90,7 @@ export class ShiftService {
     await this.apiService.put<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}`, shift).toPromise().then(res => {
       if (res.status === 200) {
         updatedShift = res.body;
-        updatedShift.date=new Date(updatedShift.date)
+        updatedShift.date = new Date(updatedShift.date)
       } else {
         this.toastr.error("Fout tijdens het updaten van shift: " + shift.id)
         return null;
