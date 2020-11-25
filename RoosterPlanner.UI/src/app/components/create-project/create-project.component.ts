@@ -53,6 +53,30 @@ export class CreateProjectComponent implements OnInit {
     if (this.checkoutForm.status === 'INVALID') {
       this.toastr.error("Niet alle velden zijn correct ingevuld");
     } else {
+      let prSdate = DateConverter.toDate(this.project.projectStartDate)
+      let prEdate = DateConverter.toDate(this.project.projectEndDate)
+      let parSdate = DateConverter.toDate(this.project.participationStartDate)
+      //alleen participation end date is optioneel
+      let parEdate = null;
+      this.project.participationEndDate!=null?parEdate=DateConverter.toDate(this.project.participationEndDate):null;
+
+      if(prEdate<prSdate){
+        this.toastr.error("Project einddatum mag niet voor project startdatum liggen")
+        return;
+      }
+      if(parSdate<prSdate || parSdate>prEdate){
+        this.toastr.error("Participatie startdatum moet tussen projectstart en project einddatum liggen")
+        return;
+      }
+      if (parEdate != null && parEdate < parSdate) {
+        this.toastr.error("Participatie eindatum mag niet voor de participatie startdatum liggen")
+        return;
+      }
+      if (parEdate != null && parEdate > (prEdate || parEdate<prSdate)) {
+        this.toastr.error("Participatie einddatum moet tussen projectstart en project einddatum liggen")
+        return;
+      }
+
       //create new project
       if (this.data.createProject) {
         this.projectService.postProject(this.project).then(response=>this.project=response.body);
