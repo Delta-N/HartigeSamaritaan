@@ -7,6 +7,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {Location} from "@angular/common";
 import {EditShiftComponent} from "../../components/edit-shift/edit-shift.component";
 import {ToastrService} from "ngx-toastr";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-shift',
@@ -17,12 +18,14 @@ export class ShiftComponent implements OnInit {
   guid: string;
   loaded: boolean = false;
   shift: Shift;
+  authorized: boolean;
 
   constructor(private route: ActivatedRoute,
               private shiftService: ShiftService,
               public dialog: MatDialog,
               private _location: Location,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private userService: UserService) {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
@@ -30,6 +33,7 @@ export class ShiftComponent implements OnInit {
 
 
   async ngOnInit(): Promise<void> {
+    this.authorized = this.userService.userIsProjectAdminFrontEnd();
     await this.shiftService.getShift(this.guid).then(shift => {
       if (shift) {
         this.shift = shift

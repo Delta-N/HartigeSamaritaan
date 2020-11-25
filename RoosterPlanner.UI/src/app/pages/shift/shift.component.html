@@ -22,7 +22,7 @@
     <div class="row-name">#Benodigde vrijwilligers:</div>
     <div class="user-data">{{shift.participantsRequired}}</div>
   </div>
-  <div class="row">
+  <div *ngIf="authorized" class="row">
     <a (click)="edit()" mat-button id="editShift">Shift wijzigen</a>
     <a (click)="delete()" mat-button id="deleteShift">Shift verwijderen</a>
   </div>
