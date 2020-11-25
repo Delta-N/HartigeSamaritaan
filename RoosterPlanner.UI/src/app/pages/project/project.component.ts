@@ -189,7 +189,7 @@ export class ProjectComponent implements OnInit {
 
   modManager() {
     const dialogRef = this.dialog.open(AddManagerComponent, {
-      width: '750px',
+      width: '500px',
       data: {
         projectId: this.project.id
       }

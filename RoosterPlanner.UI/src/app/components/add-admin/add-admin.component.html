@@ -2,9 +2,12 @@
   <h2 mat-dialog-title>Administrator {{title}}</h2>
 
   <div class="search">
-    <p>
-      <input class="form-control" type="text" name="search" [(ngModel)]="searchText" (ngModelChange)="resetPage()" autocomplete="off" placeholder="Zoek gebruiker">
-    </p>
+    <mat-form-field>
+      <input matInput class="form-control" type="text" name="search" [(ngModel)]="searchText"
+             (ngModelChange)="resetPage()"
+             autocomplete="off" placeholder="Zoek gebruiker" id="searchbar">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
   </div>
 
   <mat-dialog-content id="content">
@@ -14,7 +17,7 @@
   </mat-dialog-content>
 
   <mat-dialog-actions id="actions-bar">
-    <div class="align-buttons">
+    <div>
       <button mat-raised-button (click)="prevPage()"><</button>
       <button mat-raised-button (click)="nextPage()">></button>
     </div>
