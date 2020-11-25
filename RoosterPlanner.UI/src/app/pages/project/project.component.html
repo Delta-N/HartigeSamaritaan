@@ -45,6 +45,11 @@
                <div class="row-name">Max uur per week:</div>
                <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
             </div>
+           <div class="row" *ngIf="isAdmin">
+         <a (click)="editProject()" mat-button class="edit">Project wijzigen</a>
+         <a (click)="closeProject()" mat-button class="edit">{{closeButtonText}}</a>
+         <a (click)="modManager()" mat-button>Beheerders</a>
+      </div>
          </div>
          <div class="col-md-6">
             <mat-card [ngClass]="[taskCardStyle]" id="taskCard">
@@ -76,10 +81,6 @@
       <div class="row" *ngIf="this.participation!=null">
          <a (click)="editWorkingHours()" mat-button class="edit">Max werkuren wijzigen</a>
       </div>
-      <div class="row" *ngIf="isAdmin">
-         <a (click)="editProject()" mat-button class="edit">Project wijzigen</a>
-         <a (click)="closeProject()" mat-button class="edit">{{closeButtonText}}</a>
-         <a (click)="modManager()" mat-button>Beheerders</a>
-      </div>
+
    </div>
 </span>

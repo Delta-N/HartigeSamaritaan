@@ -30,9 +30,10 @@ namespace RoosterPlanner.Api.Controllers
         {
             try
             {
-                if (Request.Form.Files.FirstOrDefault()==null)
+                IFormFile file = Request.Form.Files.FirstOrDefault();
+                if (file == null)
                     return BadRequest("No file received");
-                IFormFile file = Request.Form.Files[0];
+
                 string extension = Path.GetExtension(file.FileName);
 
                 Uri result = await blobService.UploadFileBlobAsync(
@@ -40,7 +41,7 @@ namespace RoosterPlanner.Api.Controllers
                     Guid.NewGuid() + extension,
                     file.OpenReadStream(),
                     file.ContentType
-                    );
+                );
 
                 return Ok(new UploadResultViewModel()
                 {
@@ -52,7 +53,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(new UploadResultViewModel(){Succeeded = false});
+                return UnprocessableEntity(new UploadResultViewModel() {Succeeded = false});
             }
         }
 
@@ -64,17 +65,22 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                Uri uri = new Uri(url);
-                string blobfilename = Path.GetFileName(uri.LocalPath);
-                string blobContainerName = uri.AbsolutePath.Substring(1, uri.AbsolutePath.IndexOf('/', 1) - 1);
-                bool result = await blobService.DeleteFileBlobAsync(blobContainerName, blobfilename);
-                return Ok(new UploadResultViewModel(){Succeeded = result});
+                if (Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute))
+                {
+                    Uri uri = new Uri(url);
+                    string blobfilename = Path.GetFileName(uri.LocalPath);
+                    string blobContainerName = uri.AbsolutePath.Substring(1, uri.AbsolutePath.IndexOf('/', 1) - 1);
+                    bool result = await blobService.DeleteFileBlobAsync(blobContainerName, blobfilename);
+                    return Ok(new UploadResultViewModel() {Succeeded = result});
+                }
+
+                return Ok();
             }
             catch (Exception ex)
             {
                 logger.Log(LogLevel.Error, ex.ToString());
                 Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(new UploadResultViewModel(){Succeeded = false});
+                return UnprocessableEntity(new UploadResultViewModel() {Succeeded = false});
             }
         }
 
