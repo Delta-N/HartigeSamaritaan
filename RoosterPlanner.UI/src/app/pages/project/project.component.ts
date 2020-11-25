@@ -13,6 +13,7 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confi
 import {TaskService} from "../../services/task.service";
 import {AddProjectTaskComponent} from "../../components/add-project-task/add-project-task.component";
 import {Task} from 'src/app/models/task';
+import {AddManagerComponent} from "../../components/add-manager/add-manager.component";
 
 @Component({
   selector: 'app-project',
@@ -74,7 +75,7 @@ export class ProjectComponent implements OnInit {
 
   async getProjectTasks() {
     this.taskService.getAllProjectTasks(this.guid).then(tasks => {
-      this.projectTasks = tasks.filter(t=>t!=null);
+      this.projectTasks = tasks.filter(t => t != null);
       this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
       this.projectTasks.sort((a, b) => a.name > b.name ? 1 : -1);
 
@@ -183,9 +184,24 @@ export class ProjectComponent implements OnInit {
       }
     });
     dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(()=>{
+    dialogRef.afterClosed().subscribe(() => {
       this.getProjectTasks().then();
 
     })
+  }
+
+  modManager() {
+    const dialogRef = this.dialog.open(AddManagerComponent, {
+      width: '750px',
+      data: {
+        projectId: this.project.id
+      }
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.toastr.success("De rol van "+ result+" is succesvol gewijzigd.")
+      }
+    });
   }
 }

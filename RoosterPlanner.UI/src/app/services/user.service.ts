@@ -5,6 +5,7 @@ import {ApiService} from "./api.service";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {JwtHelper} from "../helpers/jwt-helper";
 import {ToastrService} from "ngx-toastr";
+import {Manager} from "../models/manager";
 
 @Injectable({
   providedIn: 'root'
@@ -47,21 +48,78 @@ export class UserService {
   }
 
   async getAllUsers(): Promise<User[]> {
-    await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}`).toPromise().then(response => {
+    let resonableLargeNumber = 10000;
+    await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}?pageSize=${resonableLargeNumber}`).toPromise().then(response => {
       this.allUsers = response.body
     }).catch();
     return this.allUsers;
   }
 
-  async getRangeOfUsers(offset:number, pageSize:number):Promise<User[]>{
-    let rangeOfUsers:User[]=[]
+  async getAllProjectManagers(projectId: string) {
+    if (!projectId) {
+      return null;
+    }
+    let managers: Manager[] = [];
+    await this.apiService.get<HttpResponse<Manager[]>>(`${HttpRoutes.personApiUrl}/managers/${projectId}`).toPromise().then(response => {
+      if (response.status === 200) {
+        managers = response.body
+      }
+    })
+    return managers
+  }
+
+  async getProjectsManagedBy(userId: string) {
+    if (!userId) {
+      return null;
+    }
+    let managers: Manager[] = [];
+    await this.apiService.get<HttpResponse<Manager[]>>(`${HttpRoutes.personApiUrl}/projectsmanagedby/${userId}`).toPromise().then(response => {
+      if (response.status === 200) {
+        managers = response.body
+      }
+    })
+    return managers
+  }
+
+  async makeManager(projectId: string, userId: String):Promise<boolean> {
+    if (!projectId || !userId) {
+      return false;
+    }
+    return await this.apiService.post<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}/makemanager/${projectId}/${userId}`).toPromise().then(response => {
+      if (response.status === 200) {
+        return true;
+      }
+    })
+  }
+
+  async removeManager(projectId: string, userId: String):Promise<boolean> {
+    if (!projectId || !userId) {
+      return false;
+    }
+    return await this.apiService.delete<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}/removemanager/${projectId}/${userId}`).toPromise().then(response => {
+      if (response.status === 200) {
+        return true;
+      }
+    })
+  }
+
+  async getRangeOfUsers(offset: number, pageSize: number): Promise<User[]> {
+    let rangeOfUsers: User[] = []
     await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}?offset=${offset}&pageSize=${pageSize}`).toPromise().then(response => {
-      rangeOfUsers=response.body
+      rangeOfUsers = response.body
     })
     return rangeOfUsers
   }
 
   userIsAdminFrontEnd(): boolean {
+    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
+    if (idToken === null) {
+      return false;
+    }
+    return ((idToken.extension_UserRole === 1))
+  }
+
+  userIsProjectAdminFrontEnd(): boolean {
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
     if (idToken === null) {
       return false;

@@ -1,0 +1,45 @@
+<div *ngIf="loaded" class="container">
+  <h2 mat-dialog-title>Beheerder</h2>
+  <div class="search">
+
+      <mat-form-field>
+      <input matInput class="form-control" type="text" name="search" [(ngModel)]="searchText" (ngModelChange)="resetPage()"
+             autocomplete="off" placeholder="Zoek gebruiker" id="searchbar">
+      <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+
+  </div>
+  <mat-tab-group animationDuration="500ms" (selectedTabChange)="changeTab($event)">
+    <mat-tab label="Toevoegen" id="add">
+      <div class="container">
+        <div class="names">
+         <span
+           *ngFor="let user of users| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
+            <p><a (click)="modManager(user.id, false)">{{user.firstName}} {{user.lastName}} </a></p>
+         </span>
+        </div>
+        <div class="row">
+          <button mat-raised-button (click)="prevPage()"><</button>
+          <button mat-raised-button (click)="nextPage()">></button>
+          <button mat-button (click)="close()" class="closebutton">Annuleren</button>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Verwijderen">
+      <div class="container">
+        <div class="names">
+      <span
+        *ngFor="let manager of managers| managerFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
+            <p><a
+              (click)="modManager(manager.person.id, true)">{{manager.person.firstName}} {{manager.person.lastName}}</a></p>
+      </span>
+        </div>
+        <div class="row">
+          <button mat-raised-button (click)="prevPage()"><</button>
+          <button mat-raised-button (click)="nextPage()">></button>
+          <button mat-button (click)="close()" class="closebutton">Annuleren</button>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

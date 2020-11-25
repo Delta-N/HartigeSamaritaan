@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RoosterPlanner.Data.Migrations
 {
-    public partial class AnotherFreshStart : Migration
+    public partial class CreativeName : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -139,6 +139,34 @@ namespace RoosterPlanner.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Managers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    LastEditBy = table.Column<string>(maxLength: 128, nullable: true),
+                    LastEditDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    PersonId = table.Column<Guid>(nullable: false),
+                    ProjectId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Managers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Managers_Persons_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "Persons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Managers_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Participations",
                 columns: table => new
                 {
@@ -176,7 +204,7 @@ namespace RoosterPlanner.Data.Migrations
                     LastEditDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                     ProjectId = table.Column<Guid>(nullable: false),
-                    TaskId = table.Column<Guid>(nullable: true)
+                    TaskId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,7 +220,7 @@ namespace RoosterPlanner.Data.Migrations
                         column: x => x.TaskId,
                         principalTable: "Tasks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -356,10 +384,10 @@ namespace RoosterPlanner.Data.Migrations
                 columns: new[] { "Id", "CategoryId", "Color", "DeletedDateTime", "Description", "DocumentUri", "LastEditBy", "LastEditDate", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("003313bb-e1f1-4814-b1ae-f962e88b914d"), new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"), "Blue", null, "Een leuke beschrijving van de werkzaamheden van een chef", "http://test.com/chef", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chef" },
-                    { new Guid("4972b334-c537-4829-985a-cfa67ec0ae4b"), new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"), "Red", null, "Een leuke beschrijving van de werkzaamheden van een runner", "http://test.com/runner", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Runner" },
-                    { new Guid("f72411ac-f666-4ed5-a959-d377a0c07b21"), new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"), "Yellow", null, "Een leuke beschrijving van de werkzaamheden van een chauffeur", "http://test.com/chauffeur", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chauffeur" },
-                    { new Guid("128b66d5-20ea-45ad-8697-0257b565d9b7"), new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"), "Green", null, "Een leuke beschrijving van de werkzaamheden van een klusser", "http://test.com/Klusser", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Klusser" }
+                    { new Guid("244a61c4-3b96-4e12-b94b-3043aad08932"), new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"), "Blue", null, "Een leuke beschrijving van de werkzaamheden van een chef", "http://test.com/chef", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chef" },
+                    { new Guid("6072a38a-6dd3-47f0-b308-194ed501bd38"), new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"), "Red", null, "Een leuke beschrijving van de werkzaamheden van een runner", "http://test.com/runner", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Runner" },
+                    { new Guid("c5342957-5c44-4394-8499-216095e90d62"), new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"), "Yellow", null, "Een leuke beschrijving van de werkzaamheden van een chauffeur", "http://test.com/chauffeur", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chauffeur" },
+                    { new Guid("d0465595-ced3-4ff3-8360-d0546bd38184"), new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"), "Green", null, "Een leuke beschrijving van de werkzaamheden van een klusser", "http://test.com/Klusser", "SYSTEM", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Klusser" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -391,6 +419,16 @@ namespace RoosterPlanner.Data.Migrations
                 name: "IX_Collaborations_WantsToWorkWithId",
                 table: "Collaborations",
                 column: "WantsToWorkWithId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Managers_PersonId",
+                table: "Managers",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Managers_ProjectId",
+                table: "Managers",
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Participations_PersonId",
@@ -454,6 +492,9 @@ namespace RoosterPlanner.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Collaborations");
+
+            migrationBuilder.DropTable(
+                name: "Managers");
 
             migrationBuilder.DropTable(
                 name: "ProjectTasks");

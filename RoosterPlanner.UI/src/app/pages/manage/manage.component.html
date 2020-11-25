@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="bar">
+    <h1>Beheer</h1>
+  </div>
+      <div class="cardholder" *ngIf="projects.length > 0">
+         <span *ngFor="let item of projects" class="mobilecard">
+            <mat-card>
+               <div>
+                  <mat-card-title><a [routerLink]="['/project', item.id]">{{item.name}}</a></mat-card-title>
+               </div>
+               <mat-card-content>
+                  <a (click)="todo()"><p>Plannen</p></a>
+                  <a [routerLink]="['/shifts', item.id]"><p>Shiften</p></a>
+                  <a (click)="todo()"><p>Medewerkers</p></a>
+               </mat-card-content>
+               <mat-card-actions class="action-anchor">
+               </mat-card-actions>
+            </mat-card>
+         </span>
+      </div>
+
+  <div *ngIf="projects.length === 0 && loaded">
+    <div class="container">
+      <div>
+        <div class="row">
+          <p id="flavortext">Je beheert nog geen project</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

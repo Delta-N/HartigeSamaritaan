@@ -2,6 +2,7 @@
 import {User} from "../models/user";
 import {Task} from "../models/task";
 import {DateConverter} from "./date-converter";
+import {Manager} from "../models/manager";
 
 @Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
@@ -17,6 +18,24 @@ export class FilterPipe implements PipeTransform {
 
     return items.filter(function (item) {
       return JSON.stringify(item.firstName + " " + item.lastName).toLowerCase().includes(searchText);
+    });
+  }
+}
+
+@Pipe({name: 'managerFilter'})
+export class ManagerFilterPipe implements PipeTransform {
+
+  transform(items: Manager[], searchText: string): any[] {
+    if (!items) {
+      return [];
+    }
+    if (!searchText) {
+      return items;
+    }
+    searchText = searchText.toLowerCase()
+
+    return items.filter(function (item) {
+      return JSON.stringify(item.person.firstName + " " + item.person.lastName).toLowerCase().includes(searchText);
     });
   }
 }
