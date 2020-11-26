@@ -45,7 +45,7 @@ jobs:
       - name: build front-end
         run: |
           npm install
-          npm install --global @angular/cli > /dev/null
+          npm install --global @angular/cli
           ng build --prod --outputPath=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
 
