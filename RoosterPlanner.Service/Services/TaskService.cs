@@ -282,9 +282,9 @@ namespace RoosterPlanner.Service
 
         public async Task<TaskResult<ProjectTask>> GetProjectTask(Guid projectId, Guid taskId)
         {
-            if (projectId == null)
+            if (projectId == Guid.Empty)
                 throw new ArgumentNullException("projectId");
-            if (taskId == null)
+            if (taskId == Guid.Empty)
                 throw new ArgumentNullException("taskId");
             
             TaskResult<ProjectTask> taskResult = new TaskResult<ProjectTask>();
