@@ -9,7 +9,7 @@ import {UserService} from "../../services/user.service";
 import {AddAdminComponent} from "../../components/add-admin/add-admin.component";
 import {ToastrService} from "ngx-toastr";
 
-
+//
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
