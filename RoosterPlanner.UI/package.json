@@ -31,6 +31,8 @@
     "bootstrap": "^4.5.3",
     "minimatch": "^3.0.4",
     "moment": "^2.29.1",
+    "ngx-material-timepicker": "^5.5.3",
+    "ngx-multiple-dates": "^1.0.0",
     "ngx-toastr": "^13.1.0",
     "path": "^0.12.7",
     "rxjs": "~6.6.3",
