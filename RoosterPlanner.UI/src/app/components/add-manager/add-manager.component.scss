@@ -20,6 +20,16 @@
   min-height: 225px;
 }
 
+a:hover {
+  color: #434343;
+  text-decoration-line: none;
+  cursor: pointer;
+}
+
+a {
+  color: #434343;
+}
+
 ::ng-deep .mat-tab-body-wrapper {
   margin-top: 10px;
 }
