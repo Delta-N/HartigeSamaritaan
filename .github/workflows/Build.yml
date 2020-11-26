@@ -6,9 +6,9 @@ on:
       - develop
       - master
       - Refactor
-      pull_request:
-        branches:
-          - Refactor
+  pull_request:
+    branches:
+      - Refactor
 
 env:
   BUILD_CONFIGURATION: Release
