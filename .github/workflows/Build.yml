@@ -1,14 +1,18 @@
-name: Build
+name: Build the project
 
 on:
   push:
-    branches: 
+    branches:
       - develop
       - master
+      - Refactor
+      pull_request:
+        branches:
+          - Refactor
 
 env:
   BUILD_CONFIGURATION: Release
-  DOTNET_VERSION: 3.1.x
+  DOTNET_VERSION: 5.0
   NODE_VERSION: 12.18.3
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
