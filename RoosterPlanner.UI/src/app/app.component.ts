@@ -9,7 +9,7 @@ import {MsalBroadcastService, MsalService} from "./msal";
 import {EventMessage, EventType, InteractionType} from "@azure/msal-browser";
 import {filter, takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
-
+//
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
