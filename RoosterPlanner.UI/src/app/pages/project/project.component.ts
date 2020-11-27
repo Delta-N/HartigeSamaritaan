@@ -182,7 +182,9 @@ export class ProjectComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(() => {
-      this.getProjectTasks().then();
+      setTimeout(() => {
+        this.getProjectTasks();
+      }, 500);
 
     })
   }
@@ -197,7 +199,7 @@ export class ProjectComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.toastr.success("De rol van " + result + " is succesvol gewijzigd.")
+        this.toastr.success("De rol van " + result + " is gewijzigd.")
       }
     });
   }
