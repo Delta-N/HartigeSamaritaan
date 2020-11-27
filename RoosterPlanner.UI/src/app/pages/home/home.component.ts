@@ -52,6 +52,7 @@ export class HomeComponent implements OnInit {
   async addParticipation() {
     let projects: Project[] = [];
     let userCheckedProfile: boolean = false;
+    this.toastr.warning("Controleer je profiel en vul deze eventueel aan.")
 
     const dialogRef = this.dialog.open(ChangeProfileComponent, {
       width: '500px',
