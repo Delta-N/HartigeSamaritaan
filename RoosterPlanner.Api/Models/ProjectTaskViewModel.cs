@@ -19,7 +19,7 @@ namespace RoosterPlanner.Api.Models
                     Id = projectTask.Id,
                     ProjectId = projectTask.ProjectId,
                 };
-                if (projectTask.TaskId != null)
+                if (projectTask.TaskId != Guid.Empty)
                 {
                     vm.TaskId = (Guid) projectTask.TaskId;
                 }

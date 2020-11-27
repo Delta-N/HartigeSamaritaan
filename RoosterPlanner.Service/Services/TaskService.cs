@@ -14,13 +14,13 @@ namespace RoosterPlanner.Service
     {
         Task<TaskResult<Task>> GetTask(Guid id);
         Task<TaskListResult<Task>> SearchTasksAsync(TaskFilter filter);
-        TaskResult<Task> CreateTask(Task task);
+        Task<TaskResult<Task>> CreateTask(Task task);
         Task<TaskResult<Task>> UpdateTask(Task task);
         Task<TaskResult<Task>> RemoveTask(Task task);
         Task<TaskListResult<Category>> GetAllCategories();
         Task<TaskResult<Category>> GetCategory(Guid categoryId);
-        TaskResult<Category> CreateCategory(Category category);
-        TaskResult<Category> UpdateCategory(Category category);
+        Task<TaskResult<Category>> CreateCategory(Category category);
+        Task<TaskResult<Category>> UpdateCategory(Category category);
         Task<TaskResult<Category>> RemoveCategory(Category category);
         Task<TaskResult<ProjectTask>> RemoveProjectTask(ProjectTask resultData);
         Task<TaskResult<ProjectTask>> GetProjectTask(Guid id);
@@ -73,7 +73,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskListResult<Task>> SearchTasksAsync(TaskFilter filter)
         {
             if (filter == null)
-                throw new ArgumentNullException("filter");
+                throw new ArgumentNullException(nameof(filter));
             TaskListResult<Task> taskResult = TaskListResult<Task>.CreateDefault();
             try
             {
@@ -89,16 +89,16 @@ namespace RoosterPlanner.Service
             return taskResult;
         }
 
-        public TaskResult<Task> CreateTask(Task task)
+        public async Task<TaskResult<Task>> CreateTask(Task task)
         {
             if (task == null)
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
 
             TaskResult<Task> taskResult = new TaskResult<Task>();
             try
             {
                 taskResult.Data = this.taskRepository.Add(task);
-                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+                taskResult.Succeeded = await this.unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
@@ -112,7 +112,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<Task>> UpdateTask(Task task)
         {
             if (task == null)
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
 
             TaskResult<Task> taskResult = new TaskResult<Task>();
             try
@@ -167,7 +167,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<Category>> GetCategory(Guid categoryId)
         {
             if (categoryId == Guid.Empty)
-                throw new ArgumentNullException("categoryId");
+                throw new ArgumentNullException(nameof(categoryId));
 
             TaskResult<Category> taskResult = new TaskResult<Category>();
             try
@@ -184,16 +184,16 @@ namespace RoosterPlanner.Service
             return taskResult;
         }
 
-        public TaskResult<Category> CreateCategory(Category category)
+        public async Task<TaskResult<Category>> CreateCategory(Category category)
         {
             if (category == null)
-                throw new ArgumentNullException("category");
+                throw new ArgumentNullException(nameof(category));
             TaskResult<Category> taskResult = new TaskResult<Category>();
 
             try
             {
                 taskResult.Data = this.categoryRepository.Add(category);
-                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+                taskResult.Succeeded = await this.unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
@@ -204,16 +204,16 @@ namespace RoosterPlanner.Service
             return taskResult;
         }
 
-        public TaskResult<Category> UpdateCategory(Category category)
+        public async Task<TaskResult<Category>> UpdateCategory(Category category)
         {
             if (category == null)
-                throw new ArgumentNullException("category");
+                throw new ArgumentNullException(nameof(category));
             TaskResult<Category> taskResult = new TaskResult<Category>();
 
             try
             {
                 taskResult.Data = this.categoryRepository.Update(category);
-                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
+                taskResult.Succeeded = await this.unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
@@ -231,9 +231,10 @@ namespace RoosterPlanner.Service
             {
                 result.Data = unitOfWork.CategoryRepository.Remove(category);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 result.Error = ex;
                 result.Succeeded = false;
             }
@@ -244,15 +245,16 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<ProjectTask>> RemoveProjectTask(ProjectTask projectTask)
         {
             if (projectTask == null)
-                throw new ArgumentNullException("projectTask");
+                throw new ArgumentNullException(nameof(projectTask));
             TaskResult<ProjectTask> result = new TaskResult<ProjectTask>();
             try
             {
                 result.Data = projectTaskRepository.Remove(projectTask);
-                result.Succeeded = await unitOfWork.SaveChangesAsync()==1;
-            }catch (Exception ex)
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+            }
+            catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 result.Error = ex;
                 result.Succeeded = false;
             }
@@ -263,7 +265,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<ProjectTask>> GetProjectTask(Guid id)
         {
             if (id == Guid.Empty)
-                throw new ArgumentNullException("id");
+                throw new ArgumentNullException(nameof(id));
 
             TaskResult<ProjectTask> taskResult = new TaskResult<ProjectTask>();
             try
@@ -283,10 +285,10 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<ProjectTask>> GetProjectTask(Guid projectId, Guid taskId)
         {
             if (projectId == null)
-                throw new ArgumentNullException("projectId");
+                throw new ArgumentNullException(nameof(projectId));
             if (taskId == null)
-                throw new ArgumentNullException("taskId");
-            
+                throw new ArgumentNullException(nameof(taskId));
+
             TaskResult<ProjectTask> taskResult = new TaskResult<ProjectTask>();
             try
             {
@@ -305,15 +307,16 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<ProjectTask>> AddTaskToProject(ProjectTask projectTask)
         {
             if (projectTask == null)
-                throw new ArgumentNullException("projectTask");
+                throw new ArgumentNullException(nameof(projectTask));
             TaskResult<ProjectTask> result = new TaskResult<ProjectTask>();
             try
             {
                 result.Data = projectTaskRepository.Add(projectTask);
-                result.Succeeded = await unitOfWork.SaveChangesAsync()==1;
-            }catch (Exception ex)
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+            }
+            catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 result.Error = ex;
                 result.Succeeded = false;
             }
@@ -326,7 +329,7 @@ namespace RoosterPlanner.Service
             TaskListResult<ProjectTask> taskResult = TaskListResult<ProjectTask>.CreateDefault();
             try
             {
-                taskResult.Data = await this.projectTaskRepository.GetAll(projectId);
+                taskResult.Data = await this.projectTaskRepository.GetAllFromProject(projectId);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)

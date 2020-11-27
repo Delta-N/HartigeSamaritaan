@@ -17,21 +17,35 @@ export class TaskService {
   }
 
   async getTask(guid: string): Promise<Task> {
-    let task: Task;
-    await this.apiService.get<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/${guid}`).toPromise().then(response =>
-      task = response.body);
+    if (!guid) {
+      this.toastr.error("taskId mag niet leeg zijn")
+      return null
+    }
+    let task: Task = null;
+    await this.apiService.get<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/${guid}`).toPromise().then(response => {
+      if (response.status === 200) {
+        task = response.body
+      } else {
+        this.toastr.error("Fout tijdens het ophalen van de taak")
+      }
+    });
     return task
   }
 
   async getAllTasks(offset: number, pageSize: number): Promise<Task[]> {
     let tasks: Task[] = [];
-    await this.apiService.get<HttpResponse<Task[]>>(`${HttpRoutes.taskApiUrl}?offset=${offset}&pageSize=${pageSize}`).toPromise().then(response =>
-      tasks = response.body
+    await this.apiService.get<HttpResponse<Task[]>>(`${HttpRoutes.taskApiUrl}?offset=${offset}&pageSize=${pageSize}`).toPromise().then(response => {
+        if (response.status === 200) {
+          tasks = response.body
+        } else {
+          this.toastr.error("Fout tijdens het ophalen van de taken.")
+        }
+      }
     );
     return tasks
   }
 
-  postTask(task: Task) {
+  async postTask(task: Task) {
     if (task === null || task.name === null || task.category === null || task.category.id === null) {
       this.toastr.error("Ongeldige taak")
       return null;
@@ -40,11 +54,18 @@ export class TaskService {
     if (task.id === null || task.id === "") {
       task.id = EntityHelper.returnEmptyGuid()
     }
-    return this.apiService.post<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}`, task).toPromise()
-
+    let resTask: Task = null;
+    await this.apiService.post<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}`, task).toPromise().then(response => {
+      if (response.status === 200) {
+        resTask = response.body
+      } else {
+        this.toastr.error("Fout tijdens het posten van een taak")
+      }
+    })
+    return resTask;
   }
 
-  updateTask(updatedTask: Task) {
+  async updateTask(updatedTask: Task) {
     if (updatedTask === null || updatedTask.name === null || updatedTask.category === null || updatedTask.category.id === null) {
       this.toastr.error("Ongeldige taak")
       return null;
@@ -53,15 +74,31 @@ export class TaskService {
       this.toastr.error("TaskID is leeg")
       return null;
     }
-    return this.apiService.put<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}`, updatedTask).toPromise()
+    let resTask: Task = null
+    await this.apiService.put<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}`, updatedTask).toPromise().then(response => {
+      if (response.status === 200) {
+        resTask = response.body
+      } else {
+        this.toastr.error("Fout tijdens het updaten van de taak")
+      }
+    })
+    return resTask;
   }
 
-  deleteTask(guid: string) {
+  async deleteTask(guid: string) {
     if (guid === null || guid == "") {
       this.toastr.error("TaskId is leeg")
       return null;
     }
-    return this.apiService.delete<HttpResponse<Number>>(`${HttpRoutes.taskApiUrl}/${guid}`).toPromise()
+    let result: boolean = false;
+    await this.apiService.delete<HttpResponse<Number>>(`${HttpRoutes.taskApiUrl}/${guid}`).toPromise().then(response => {
+      if (response.status === 200) {
+        result = true;
+      } else {
+        this.toastr.error("Fout tijdens het verwijderen van de taak")
+      }
+    })
+    return result;
   }
 
   async getAllProjectTasks(guid: string): Promise<Task[]> {
@@ -70,26 +107,46 @@ export class TaskService {
       return null;
     }
     let projecttasks: Task[] = [];
-    await this.apiService.get<HttpResponse<Task[]>>(`${HttpRoutes.taskApiUrl}/GetAllProjectTasks/${guid}`).toPromise().then(response =>
-      projecttasks = response.body
-    );
-    return projecttasks
+    await this.apiService.get<HttpResponse<Task[]>>(`${HttpRoutes.taskApiUrl}/GetAllProjectTasks/${guid}`).toPromise().then(response => {
+        if (response.status === 200) {
+          projecttasks = response.body
+        } else {
+          this.toastr.error("Fout tijdens het ophalen van project taken");
+        }
+      }
+    )
+    return projecttasks;
   }
 
-  addTaskToProject(projectTask: Projecttask) {
+  async addTaskToProject(projectTask: Projecttask) {
     if (projectTask === null) {
       this.toastr.error("ProjectTask is leeg")
       return null;
     }
-    return this.apiService.post<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/AddTaskToProject`,projectTask).toPromise()
+    let task: Task = null;
+    await this.apiService.post<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/AddTaskToProject`, projectTask).toPromise().then(response => {
+      if (response.status === 200) {
+        task = response.body
+      } else {
+        this.toastr.error("Fout tijdens het toevoegen van de taak aan het project")
+      }
+    })
+    return task;
   }
-  removeTaskFromProject(projectId:string,taskId:string){
-    if(projectId==null||taskId==null){
+
+  async removeTaskFromProject(projectId: string, taskId: string) {
+    if (projectId == null || taskId == null) {
       this.toastr.error("Ongeldige projectId en/of taskId")
       return null;
     }
-    return this.apiService.delete<HttpResponse<string>>(`${HttpRoutes.taskApiUrl}/RemoveTaskFromProject/${projectId}/${taskId}`).toPromise()
+    let id: string = null;
+    await this.apiService.delete<HttpResponse<string>>(`${HttpRoutes.taskApiUrl}/RemoveTaskFromProject/${projectId}/${taskId}`).toPromise().then(response => {
+      if (response.status === 200) {
+        id = response.body
+      } else {
+        this.toastr.error("Fout tijdens het verwijderen van de taak uit het project")
+      }
+    })
+    return id;
   }
-
-
 }

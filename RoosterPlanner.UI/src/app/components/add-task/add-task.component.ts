@@ -79,11 +79,11 @@ export class AddTaskComponent implements OnInit {
       }
 
       if (this.modifier === 'toevoegen') {
-        this.taskService.postTask(this.updatedTask).then(response => {
+       await this.taskService.postTask(this.updatedTask).then(response => {
           this.dialogRef.close(response)
         });
       } else if (this.modifier === 'wijzigen') {
-        this.taskService.updateTask(this.updatedTask).then(response => {
+        await this.taskService.updateTask(this.updatedTask).then(response => {
           this.dialogRef.close(response)
         });
 
