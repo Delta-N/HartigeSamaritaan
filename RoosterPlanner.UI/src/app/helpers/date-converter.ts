@@ -39,7 +39,6 @@ export class DateConverter {
 
   static dateToString(date: Date) {
     if (date != null) {
-      moment.locale('nl')
       return moment(date).format('LL')
     }
   }
