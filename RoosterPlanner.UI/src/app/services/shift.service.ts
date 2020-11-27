@@ -21,18 +21,20 @@ export class ShiftService {
       return null;
     }
     let shifts: Shift[] = [];
-    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/project/${projectId}`).toPromise().then(res => {
-        if (res.status === 200) {
-          shifts = res.body
-          if (shifts != null) {
-            shifts.forEach(s => s.date = new Date(s.date))
+    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/project/${projectId}`)
+      .toPromise()
+      .then(res => {
+          if (res.status === 200) {
+            shifts = res.body
+            if (shifts != null) {
+              shifts.forEach(s => s.date = new Date(s.date))
+            }
+          } else {
+            this.toastr.error("Fout tijdens het ophalen van shiften bij project " + projectId)
+            return null;
           }
-        } else {
-          this.toastr.error("Fout tijdens het ophalen van shiften bij project " + projectId)
-          return null;
         }
-      }
-    )
+      )
     return shifts;
   }
 
@@ -42,8 +44,9 @@ export class ShiftService {
       return null;
     }
     let shift: Shift = null;
-    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/shift/${shiftId}`).toPromise().then(
-      res => {
+    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/shift/${shiftId}`)
+      .toPromise()
+      .then(res => {
         if (res.status === 200) {
           shift = res.body
           shift.date = new Date(shift.date);
@@ -70,14 +73,16 @@ export class ShiftService {
       }
     })
     let postedShifts: Shift[] = null;
-    await this.apiService.post<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}`, shifts).toPromise().then(res => {
-      if (res.status === 200) {
-        postedShifts = res.body
-      } else {
-        this.toastr.error("Fout tijdens het aanmaken van shiften")
-        return null;
-      }
-    });
+    await this.apiService.post<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}`, shifts)
+      .toPromise()
+      .then(res => {
+        if (res.status === 200) {
+          postedShifts = res.body
+        } else {
+          this.toastr.error("Fout tijdens het aanmaken van shiften")
+          return null;
+        }
+      });
     return postedShifts;
   }
 
@@ -87,15 +92,17 @@ export class ShiftService {
       return null;
     }
     let updatedShift: Shift = null;
-    await this.apiService.put<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}`, shift).toPromise().then(res => {
-      if (res.status === 200) {
-        updatedShift = res.body;
-        updatedShift.date = new Date(updatedShift.date)
-      } else {
-        this.toastr.error("Fout tijdens het updaten van shift: " + shift.id)
-        return null;
-      }
-    })
+    await this.apiService.put<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}`, shift)
+      .toPromise()
+      .then(res => {
+        if (res.status === 200) {
+          updatedShift = res.body;
+          updatedShift.date = new Date(updatedShift.date)
+        } else {
+          this.toastr.error("Fout tijdens het updaten van shift: " + shift.id)
+          return null;
+        }
+      })
     return updatedShift;
   }
 
@@ -104,14 +111,16 @@ export class ShiftService {
       this.toastr.error("ShiftId mag niet leeg zijn")
       return null;
     }
-    return await this.apiService.delete<HttpResponse<number>>(`${HttpRoutes.shiftApiUrl}?shiftId=${shiftId}`).toPromise().then(res => {
-      if (res.status === 200) {
-        return true;
-      } else {
-        this.toastr.error("Fout tijdens het verwijderen van shift " + shiftId)
-        return false;
-      }
-    });
+    return await this.apiService.delete<HttpResponse<number>>(`${HttpRoutes.shiftApiUrl}?shiftId=${shiftId}`)
+      .toPromise()
+      .then(res => {
+        if (res.status === 200) {
+          return true;
+        } else {
+          this.toastr.error("Fout tijdens het verwijderen van shift " + shiftId)
+          return false;
+        }
+      });
   }
 
 }

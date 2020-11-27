@@ -7,6 +7,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from "@angular/material/table";
 import {ShiftService} from "../../services/shift.service";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 @Component({
   selector: 'app-shift-overview',
@@ -20,7 +21,7 @@ export class ShiftOverviewComponent implements OnInit {
 
   project: Project;
 
-  displayedColumns: string[] = ['Taak', 'Datum', 'Vanaf', 'Tot', '#Benodigde vrijwilligers'];
+  displayedColumns: string[]=[];
   dataSource: MatTableDataSource<Shift> = new MatTableDataSource<Shift>();
   paginator: MatPaginator;
   sort: MatSort;
@@ -39,6 +40,7 @@ export class ShiftOverviewComponent implements OnInit {
               private projectService: ProjectService,
               private router: Router,
               private shiftService: ShiftService) {
+    this.displayedColumns=TextInjectorService.shiftTableColumnNames;
   }
 
   async ngOnInit(): Promise<void> {
