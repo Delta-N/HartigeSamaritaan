@@ -32,7 +32,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C16EA3C5-5642-42F5-B0BA-35965E0A0431}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-	EndProjectSectioncd
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterPlanner.UI", "RoosterPlanner.UI\RoosterPlanner.UI.csproj", "{003BAE01-79D4-4D14-B733-DF0C78A65F63}"
 EndProject

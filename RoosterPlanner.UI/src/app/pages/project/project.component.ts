@@ -10,6 +10,9 @@ import {UserService} from "../../services/user.service";
 import {Participation} from "../../models/participation";
 import {ParticipationService} from "../../services/participation.service";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
+import {TaskService} from "../../services/task.service";
+import {AddProjectTaskComponent} from "../../components/add-project-task/add-project-task.component";
+import {Task} from 'src/app/models/task';
 
 @Component({
   selector: 'app-project',
@@ -25,6 +28,11 @@ export class ProjectComponent implements OnInit {
   closeButtonText: string;
   isAdmin: boolean = false;
   participation: Participation;
+  projectTasks: Task[];
+  taskCardStyle = 'card';
+  itemsPerCard = 5;
+  reasonableMaxInteger = 10000;
+  tasksElementHeight: number;
 
 
   constructor(private userService: UserService,
@@ -32,7 +40,8 @@ export class ProjectComponent implements OnInit {
               private participationService: ParticipationService,
               private route: ActivatedRoute,
               private toastr: ToastrService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              public taskService: TaskService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -40,29 +49,50 @@ export class ProjectComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-      await this.getParticipation().then();
+    await this.getParticipation().then(() => {
+        if (this.project != null) {
+          this.project.pictureUri = "../assets/Logo.png"
+        }
+        if (this.participation != null) {
+          this.participation.project.pictureUri = "../assets/Logo.png";
+        }
+      }
+    );
+
+    await this.getProjectTasks().then();
+
   }
 
   async getProject() {
     await this.projectService.getProject(this.guid).then(project => {
       if (project != null) {
+        this.project = project;
         this.displayProject(project);
       }
     })
   }
 
+  async getProjectTasks() {
+    this.taskService.getAllProjectTasks(this.guid).then(tasks => {
+      this.projectTasks = tasks;
+      this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
+      this.projectTasks.sort((a, b) => a.name > b.name ? 1 : -1);
+
+    })
+  }
+
   async getParticipation() {
-    await this.participationService.getParticipation(this.userService.getCurrentUserId(), this.guid).then(par => {
+    await this.participationService.getParticipation(this.userService.getCurrentUserId(), this.guid).then(async par => {
       if (par != null) {
         this.participation = par;
         this.displayProject(this.participation.project)
       } else {
-        this.getProject().then();
+        await this.getProject().then();
       }
     })
   }
 
-  displayProject(project:Project){
+  displayProject(project: Project) {
     this.project = project
     this.viewProject = DateConverter.formatProjectDateReadable(this.project)
     this.title = this.viewProject.name;
@@ -85,17 +115,17 @@ export class ProjectComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result !== 'false') {
-          setTimeout(() => {
-            this.toastr.success(result.name + " is gewijzigd")
-            this.getProject();
-          }, 500);
+        setTimeout(() => {
+          this.toastr.success(result.name + " is gewijzigd")
+          this.getProject();
+        }, 500);
       }
     });
   }
 
   async closeProject() {
     this.project.closed = !this.project.closed;
-    this.loaded=false;
+    this.loaded = false;
     await this.projectService.updateProject(this.project).then(response => {
       this.displayProject(response.body)
       if (this.project.closed) {
@@ -115,7 +145,7 @@ export class ProjectComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
-      this.loaded=false;
+      this.loaded = false;
       if (dialogResult != null && dialogResult !== this.participation.maxWorkingHoursPerWeek) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
         this.participationService.updateParticipation(this.participation).then(response => {
@@ -123,5 +153,39 @@ export class ProjectComponent implements OnInit {
         })
       }
     });
+  }
+
+  expandTaskCard() {
+    if (this.taskCardStyle == 'expanded-card') {
+      document.getElementById("left").hidden = false;
+      document.getElementById("pictureFrame").hidden = false;
+      this.taskCardStyle = 'card';
+      this.itemsPerCard = 5;
+      this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
+    } else {
+      document.getElementById("left").hidden = true;
+      document.getElementById("pictureFrame").hidden = true;
+      this.taskCardStyle = 'expanded-card';
+      this.itemsPerCard = this.reasonableMaxInteger;
+      this.getProjectTasks().then(() => {
+        this.tasksElementHeight = (this.projectTasks.length * 48);
+      })
+    }
+  }
+
+  modTask(modifier: string) {
+    const dialogRef = this.dialog.open(AddProjectTaskComponent, {
+      width: '500px',
+      data: {
+        modifier: modifier,
+        project: this.project,
+        currentProjectTasks: this.projectTasks
+      }
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(()=>{
+      this.getProjectTasks();
+
+    })
   }
 }
