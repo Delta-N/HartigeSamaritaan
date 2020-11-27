@@ -74,7 +74,7 @@ export class ProjectComponent implements OnInit {
 
   async getProjectTasks() {
     this.taskService.getAllProjectTasks(this.guid).then(tasks => {
-      this.projectTasks = tasks;
+      this.projectTasks = tasks.filter(t => t != null);
       this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
       this.projectTasks.sort((a, b) => a.name > b.name ? 1 : -1);
 
@@ -183,7 +183,7 @@ export class ProjectComponent implements OnInit {
       }
     });
     dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(()=>{
+    dialogRef.afterClosed().subscribe(() => {
       this.getProjectTasks();
 
     })

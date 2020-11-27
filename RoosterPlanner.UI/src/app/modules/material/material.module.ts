@@ -9,13 +9,17 @@ import { MatInputModule } from '@angular/material/input';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatOptionModule } from '@angular/material/core';
+import {MatNativeDateModule, MatOptionModule, MatRippleModule} from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatChip, MatChipsModule} from "@angular/material/chips";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   declarations: [],
@@ -36,7 +40,21 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatListModule,
     MatTableModule,
     MatCardModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatNativeDateModule,
+    MatRippleModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatIconModule,
+    MatInputModule,
+    MatToolbarModule,
+    MatChipsModule,
+    MatPaginatorModule,
+    MatSortModule
+
+
+
   ],
   exports: [
     MatToolbarModule,
@@ -52,7 +70,18 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatSelectModule,
     MatMenuModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatNativeDateModule,
+    MatRippleModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatIconModule,
+    MatInputModule,
+    MatToolbarModule,
+    MatChip,
+    MatPaginatorModule,
+    MatSortModule
   ]
 })
 export class MaterialModule {}

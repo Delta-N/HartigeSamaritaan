@@ -7,16 +7,24 @@ export class DateConverter {
   static toDate(str) {
     const offset = moment().utcOffset()
 
-    if(moment().isDST())
-      return moment(str,"DD-MM-YYYY").add(offset,'minutes').toDate();
-    return  moment(str,"DD-MM-YYYY").add(offset,'minutes').add(1,'hour').toDate();
-
+    if (moment().isDST())
+      return moment(str, "DD-MM-YYYY").add(offset, 'minutes').toDate();
+    return moment(str, "DD-MM-YYYY").add(offset, 'minutes').add(1, 'hour').toDate();
   }
+
+  static addOffset(date: Date) {
+    const offset = moment().utcOffset()
+    if (moment().isDST())
+      return moment(date).add(offset, 'minutes').toDate();
+    return moment(date).add(offset, 'minutes').add(1, 'hour').toDate();
+  }
+
 //alle dates worden alleen naar de gebruiker toe geconverteerd naar een leesbarevorm
-  static toReadableString(date:string){
-    return moment(date,"YYYY-MM-DDTHH:mm").format("DD-MM-YYYY")
+  static toReadableString(date: string) {
+    return moment(date, "YYYY-MM-DDTHH:mm").format("DD-MM-YYYY")
 
   }
+
   static formatProjectDateReadable(project): Project {
     project.participationStartDate = DateConverter.toReadableString(project.participationStartDate);
     project.participationEndDate != null ? project.participationEndDate = DateConverter.toReadableString(project.participationEndDate) : project.participationEndDate = null;
@@ -25,7 +33,17 @@ export class DateConverter {
     return project
   }
 
-  static todayString():String{
+  static todayString(): String {
     return moment().format("DD-MM-YYYY")
+  }
+
+  static dateToString(date: Date) {
+    if (date != null) {
+      return moment(date).format('LL')
+    }
+  }
+
+  static dateToMoment(date: Date) {
+    return moment(date)
   }
 }

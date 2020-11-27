@@ -7,6 +7,7 @@
     <a (click)="todo()"><p>Agenda</p></a>
     <a (click)="todo()"><p>Mijn Shifts</p></a>
     <span *ngIf="isAdmin"><a (click)="todo()"><p>Plannen</p></a></span>
+    <span *ngIf="isAdmin"><a [routerLink]="['/shifts', participation.project.id]"><p>Shiften</p></a></span>
     <span *ngIf="isAdmin"><a (click)="todo()"><p>Medewerkers</p></a></span>
 
   </mat-card-content>

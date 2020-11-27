@@ -11,6 +11,8 @@ import {MsalGuard} from "./msal";
 import {TaskComponent} from "./pages/task/task.component";
 import {AllTasksComponent} from "./pages/all-tasks/all-tasks.component";
 import {CategoryComponent} from "./pages/category/category.component";
+import {AddShiftsComponent} from "./components/add-shifts/add-shifts.component";
+import {ShiftOverviewComponent} from "./pages/shift-overview/shift-overview.component";
 
 const routes: Routes = [
   {
@@ -50,8 +52,22 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'shift',
+    path: 'shifts/:id',
+    component: ShiftOverviewComponent,
+    canActivate: [
+      MsalGuard
+    ]
+  },
+  {
+    path: 'shift/:id',
     component: ShiftComponent,
+    canActivate: [
+      MsalGuard
+    ]
+  },
+  {
+    path: 'addshifts/:id',
+    component: AddShiftsComponent,
     canActivate: [
       MsalGuard
     ]
