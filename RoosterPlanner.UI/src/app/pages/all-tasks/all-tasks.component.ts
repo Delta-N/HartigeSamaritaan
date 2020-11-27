@@ -65,10 +65,10 @@ export class AllTasksComponent implements OnInit {
         }
       });
       dialogRef.disableClose = true;
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe(async result => {
         if (result !== 'false') {
-          this.getTasks(0, this.itemsPerCard).then()
-          this.toastr.success(result.body.name + " is toegevoegd")
+          await this.getTasks(0, this.itemsPerCard).then()
+          this.toastr.success(result.name + " is toegevoegd")
         }
       });
     }

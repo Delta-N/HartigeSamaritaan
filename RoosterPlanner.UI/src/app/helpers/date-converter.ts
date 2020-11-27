@@ -38,29 +38,9 @@ export class DateConverter {
   }
 
   static dateToString(date: Date) {
-    if (date instanceof moment) {
-      return moment(date).format("LL")
+    if (date != null) {
+      return moment(date).format('LL')
     }
-    if (date instanceof Date) {
-      const months = [
-        'januari',
-        'februari',
-        'maart',
-        'april',
-        'mei',
-        'juni',
-        'juli',
-        'augustus',
-        'september',
-        'oktober',
-        'november',
-        'december'
-      ]
-      const monthName = months[date.getMonth()]
-
-      return date.getDate() + " " + monthName + " " + date.getFullYear();
-    }
-    return null;
   }
 
   static dateToMoment(date: Date) {
