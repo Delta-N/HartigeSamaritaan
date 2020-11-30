@@ -23,7 +23,7 @@
 <mat-dialog-actions id="actions">
 
   <div class="align-right">
-    <button class="action-button" (click)="saveCategory(checkoutForm.value)" mat-button>Opslaan</button>
-    <button mat-button (click)="close()">Annuleren</button>
+    <button class="action-button override-button" (click)="saveCategory(checkoutForm.value)" mat-button>Opslaan</button>
+    <button mat-button class="override-button" (click)="close()">Annuleren</button>
   </div>
 </mat-dialog-actions>

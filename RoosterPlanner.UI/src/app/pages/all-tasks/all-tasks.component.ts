@@ -51,6 +51,7 @@ export class AllTasksComponent implements OnInit {
     await this.categoryService.getAllCategory().then(categories => {
       this.categories = categories;
       this.categories.sort((a, b) => a.name > b.name ? 1 : -1)
+      this.categories=this.categories.splice(offset,pageSize)
     })
   }
 

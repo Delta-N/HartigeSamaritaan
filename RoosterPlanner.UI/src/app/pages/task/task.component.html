@@ -31,7 +31,7 @@
   </div>
 
   <div class="row">
-    <a *ngIf="isAdmin" (click)="edit()" mat-button id="editTask">Taak wijzigen</a>
-    <a *ngIf="isAdmin" (click)="delete()" mat-button id="deleteTask">Taak verwijderen</a>
+    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editTask">Taak wijzigen</a>
+    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="deleteTask">Taak verwijderen</a>
   </div>
 </div>

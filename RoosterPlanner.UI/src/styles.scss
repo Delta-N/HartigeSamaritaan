@@ -10,5 +10,212 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-radius: 10px;
   min-width: 30vw;
   min-height: 40vh;
+}
 
+a:hover {
+  color: #434343;
+  text-decoration-line: none;
+}
+
+a {
+  color: #434343;
+}
+
+input[type="file"] {
+  display: none;
+}
+h1 {
+  text-align: left;
+  font: normal normal normal 35px/50px Segoe UI;
+  letter-spacing: 0;
+  color: #434343;
+  opacity: 1;
+}
+
+h2 {
+  text-align: left;
+  font: normal normal normal 25px/50px Segoe UI;
+  letter-spacing: 0;
+  color: #434343;
+  opacity: 1;
+}
+
+.action-anchor {
+  position: absolute !important;
+  bottom: 15px;
+}
+
+.action-button {
+  background-color: #DDFCE0;
+}
+.align-right {
+  margin-left: auto;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  padding: 15px 10px 10px;
+  border-bottom: 1px solid gray;
+}
+
+.cardholder {
+  display: flex;
+  overflow-x: auto;
+  align-items: flex-start;
+  padding-top: 30px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.card-title-icon {
+  display: flex;
+  margin-left: auto !important;
+  justify-content: center;
+}
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.data-row {
+  display: flex;
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+
+
+.expanded-card {
+  min-width: 100% !important;
+  max-height: none !important;
+}
+
+.mat-button {
+  text-align: left;
+  font: normal normal 400 18px/27px Segoe UI;
+  letter-spacing: 0;
+  color: #434343;
+  opacity: 1;
+  padding: 10px !important;
+}
+
+.override-button{
+  font: normal normal normal 17px/17px Segoe UI !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  border: 1px solid gray !important;
+}
+
+.mat-card {
+  margin-right: 30px;
+  border-radius: 20px !important;
+  background: #E8E8E8 0 0 no-repeat padding-box;
+  box-shadow: 3px 3px 6px #0000001A !important;
+  border: 1px solid #D1D1D1;
+  opacity: 1;
+  text-align: left;
+  font: normal normal bold 21px/31px Segoe UI;
+  letter-spacing: 0;
+  color: #434343;
+  min-width: 325px;
+  min-height: 375px;
+  max-height: 375px;
+}
+
+.mat-card-actions {
+  border: none;
+}
+
+.mat-card-content {
+  font: normal normal 400 18px/27px Segoe UI;
+  color: #434343;
+  min-height: 240px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.mat-card-content.h6 {
+  margin-top: 25px;
+}
+
+
+.mat-card-title {
+  border-bottom: 1px solid gray;
+  text-align: left;
+  font: normal normal bold 21px/31px Segoe UI;
+  letter-spacing: 0;
+  color: #434343;
+  opacity: 1;
+  margin-left: 10px;
+  padding-left: 10px;
+  display: flex !important;
+}
+
+.mobilecard {
+  margin-bottom: 30px !important;
+}
+
+.row-name {
+  text-align: left;
+  min-width: 250px;
+  font: normal normal normal 20px Segoe UI !important;
+  letter-spacing: 0;
+  color: #707070 !important;
+  opacity: 1;
+
+}
+
+.user-data {
+  text-align: left;
+  font: normal normal normal 20px/45px Segoe UI !important;
+  letter-spacing: 0;
+  color: #000000 !important;
+  opacity: 1;
+}
+
+
+
+@media only screen and (max-width: 1200px) {
+  .cardholder {
+    display: flex;
+    justify-content: center !important;
+  }
+  .mat-card {
+    margin: 15px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+
+  .row-name {
+    font: normal normal normal 15px Segoe UI !important;
+    min-width: 175px;
+  }
+  .user-data {
+    font: normal normal normal 15px/45px Segoe UI !important;
+  }
+  .data-row {
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .cardholder {
+    display: flex;
+    flex-direction: column;
+  }
+  .card {
+    margin-bottom: 30px;
+  }
+  .bar {
+    display: block;
+  }
+}
+
+#searchbar {
+  max-height: 25px;
 }

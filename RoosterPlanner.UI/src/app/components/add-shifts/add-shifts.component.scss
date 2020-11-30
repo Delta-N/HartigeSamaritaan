@@ -1,50 +1,6 @@
-#bar {
-  display: flex;
-  align-items: center;
-  padding: 15px 10px 10px;
-  border-bottom: 1px solid gray;
-
-}
-
-h1 {
-  text-align: left;
-  font: normal normal normal 35px/50px Segoe UI;
-  letter-spacing: 0;
-  color: #434343;
-  opacity: 1;
-}
-
-h2 {
-  text-align: left;
-  font: normal normal normal 25px/50px Segoe UI;
-  letter-spacing: 0;
-  color: #434343;
-  opacity: 1;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-}
-
-.row-name {
-  text-align: left;
-  min-width: 250px;
-  font: normal normal normal 20px Segoe UI;
-  letter-spacing: 0;
-  color: #707070;
-  opacity: 1;
-
-}
-
 .user-data {
-  border: none;
-}
+  font: normal normal normal 15px/45px Segoe UI !important;
 
-.data-row {
-  display: flex;
-  margin-top: 9px;
-  margin-bottom: 9px;
 }
 
 ::ng-deep ngx-material-timepicker-content {
@@ -71,17 +27,6 @@ h2 {
   }
 }
 
-.mat-button {
-  font: normal normal normal 17px/17px Segoe UI;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border: 1px solid gray;
-}
-
-.action-button {
-  background-color: #DDFCE0;
-}
-
 .right {
   display: flex;
   margin-bottom: auto;
@@ -98,10 +43,6 @@ h2 {
 
 .date-button {
   margin: 5px;
-}
-.save{
-  background-color: #DDFCE0
-
 }
 
 #open-label {

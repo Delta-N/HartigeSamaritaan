@@ -19,10 +19,10 @@
         <ngx-material-timepicker style="z-index: 999;" [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"
                                  #Starttime (closed)="adjustZindex(1)"></ngx-material-timepicker>
         <ng-template #cancelBtn>
-          <button mat-button>Annuleren</button>
+          <button mat-button class="override-button">Annuleren</button>
         </ng-template>
         <ng-template #confirmBtn>
-          <button mat-button class="action-button">Opslaan</button>
+          <button mat-button class="action-button override-button">Opslaan</button>
         </ng-template>
       </mat-form-field>
     </div>
@@ -55,7 +55,7 @@
 </mat-dialog-content>
 <mat-dialog-actions id="actions">
   <div class="align-right">
-    <button class="action-button" (click)="save(checkoutForm.value)" mat-button>Opslaan</button>
-    <button mat-button (click)="close()">Annuleren</button>
+    <button mat-button class="action-button override-button" (click)="save(checkoutForm.value)">Opslaan</button>
+    <button mat-button class="override-button"(click)="close()">Annuleren</button>
   </div>
 </mat-dialog-actions>

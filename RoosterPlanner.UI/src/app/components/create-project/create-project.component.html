@@ -75,15 +75,13 @@
       <input matInput id="websiteUrl" type="text" formControlName="websiteUrl" placeholder="Hyperlink van de website">
     </mat-form-field>
 
-    <div *ngIf="project.pictureUri!=null">
-      <mat-label><a [href]=project.pictureUri>Huidige afbeelding :</a></mat-label>
-    </div>
-
     <div>
       <label for="file"
              class="custom-file-upload">{{this.project.pictureUri == null ? "Afbeelding toevoegen" : "Afbeelding vervangen"}}</label>
       <span *ngIf="this.files!=null">{{this.files[0].name}}</span>
       <input #fileInput type="file" id="file" (change)="uploadPicture(fileInput.files)"/>
+      <img *ngIf="project.pictureUri!=null" id="pictureFrame" src="{{project.pictureUri}}"
+           alt="Project picture"/>
     </div>
 
 
@@ -92,8 +90,8 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="align-right">
-    <button class="action-button" mat-button (click)="saveProject(checkoutForm.value)">Opslaan</button>
-    <button mat-button mat-dialog-close="false">Annuleren</button>
+    <button class="action-button override-button" mat-button  (click)="saveProject(checkoutForm.value)">Opslaan</button>
+    <button mat-button class="override-button" mat-dialog-close="false">Annuleren</button>
   </div>
 </mat-dialog-actions>
 

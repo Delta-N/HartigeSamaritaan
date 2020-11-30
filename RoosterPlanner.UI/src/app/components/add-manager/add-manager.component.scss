@@ -1,33 +1,13 @@
-.mat-button {
-  font: normal normal normal 17px/17px Segoe UI;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border: 1px solid gray;
+.mat-form-field {
+  width: 100%;
 }
 
 .closebutton {
   margin-left: auto;
 }
 
-.mat-form-field {
-  width: 100%;
-}
-
-#searchbar {
-  max-height: 25px;
-}
 .names {
   min-height: 225px;
-}
-
-a:hover {
-  color: #434343;
-  text-decoration-line: none;
-  cursor: pointer;
-}
-
-a {
-  color: #434343;
 }
 
 ::ng-deep .mat-tab-body-wrapper {
@@ -40,6 +20,4 @@ a {
   .mat-tab-body-content {
     overflow: hidden;
   }
-
-
 }

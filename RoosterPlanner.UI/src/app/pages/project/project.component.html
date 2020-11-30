@@ -1,7 +1,7 @@
 <span *ngIf="loaded">
    <div class="container">
-      <div class="row" id="bar">
-         <div class="bar">
+      <div class="row bar">
+         <div>
             <h1>{{title}}</h1>
          </div>
       </div>
@@ -46,12 +46,12 @@
                <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
             </div>
            <div class="row" *ngIf="this.participation!=null">
-         <a (click)="editWorkingHours()" mat-button class="edit">Max werkuren wijzigen</a>
+         <a (click)="editWorkingHours()" mat-button class="edit override-button">Max werkuren wijzigen</a>
       </div>
            <div class="row" *ngIf="isAdmin">
-         <a (click)="editProject()" mat-button class="edit">Project wijzigen</a>
-         <a (click)="closeProject()" mat-button>{{closeButtonText}}</a>
-         <a (click)="modManager()" mat-button>Beheerders</a>
+         <a (click)="editProject()" mat-button class="edit override-button">Project wijzigen</a>
+         <a (click)="closeProject()" mat-button class="override-button">{{closeButtonText}}</a>
+         <a (click)="modManager()" mat-button class="override-button">Beheerders</a>
       </div>
          </div>
          <div class="col-md-6">
@@ -74,8 +74,8 @@
                   <mat-card-actions class="action-anchor"></mat-card-actions>
                </mat-card-content>
                <mat-card-actions class="action-anchor" *ngIf="isAdmin">
-                  <button mat-button class="card-button" (click)="modTask('add')">Nieuwe toevoegen</button>
-                  <button mat-button class="card-button" (click)="modTask('remove')">Verwijderen</button>
+                  <button mat-button (click)="modTask('add')">Nieuwe toevoegen</button>
+                  <button mat-button (click)="modTask('remove')">Verwijderen</button>
                </mat-card-actions>
             </mat-card>
             <img *ngIf="project.pictureUri!=null" id="pictureFrame" src="{{project.pictureUri}}"
