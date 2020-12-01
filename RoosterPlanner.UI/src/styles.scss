@@ -1,12 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 
-.custom-dialog-container .mat-dialog-container{
+.custom-dialog-container .mat-dialog-container {
   border-radius: 10px;
   min-width: 30vw;
   min-height: 40vh;
@@ -24,6 +30,7 @@ a {
 input[type="file"] {
   display: none;
 }
+
 h1 {
   text-align: left;
   font: normal normal normal 35px/50px Segoe UI;
@@ -48,6 +55,7 @@ h2 {
 .action-button {
   background-color: #DDFCE0;
 }
+
 .align-right {
   margin-left: auto;
 }
@@ -55,7 +63,6 @@ h2 {
 .bar {
   display: flex;
   align-items: center;
-  padding: 15px 10px 10px;
   border-bottom: 1px solid gray;
 }
 
@@ -102,7 +109,7 @@ h2 {
   padding: 10px !important;
 }
 
-.override-button{
+.override-button {
   font: normal normal normal 17px/17px Segoe UI !important;
   padding-top: 5px !important;
   padding-bottom: 5px !important;
@@ -176,7 +183,6 @@ h2 {
   color: #000000 !important;
   opacity: 1;
 }
-
 
 
 @media only screen and (max-width: 1200px) {

@@ -59,7 +59,7 @@
                <div>
                   <mat-card-title>
                      Project taken
-                     <button class="card-title-icon" mat-icon-button (click)="expandTaskCard()">
+                     <button [disabled]="projectTasksExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandTaskCard()">
                         <mat-icon>zoom_out_map</mat-icon>
                      </button>
                   </mat-card-title>
@@ -73,7 +73,7 @@
                  <span *ngIf="!projectTasks || projectTasks.length==0">N.N.T.B.</span>
                   <mat-card-actions class="action-anchor"></mat-card-actions>
                </mat-card-content>
-               <mat-card-actions class="action-anchor" *ngIf="isAdmin">
+               <mat-card-actions class="action-anchor" *ngIf="isAdmin || isManager">
                   <button mat-button (click)="modTask('add')">Nieuwe toevoegen</button>
                   <button mat-button (click)="modTask('remove')">Verwijderen</button>
                </mat-card-actions>

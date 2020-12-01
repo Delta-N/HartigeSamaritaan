@@ -16,7 +16,7 @@ import {UploadService} from "../../services/upload.service";
 export class CreateProjectComponent implements OnInit {
   project: Project = new Project();
   checkoutForm;
-  title: string;
+  title: string="Project toevoegen";
   files: FileList;
 
 
@@ -31,6 +31,7 @@ export class CreateProjectComponent implements OnInit {
     if (!this.data.createProject) {
       this.project = this.data.project;
     }
+    this.title=this.data.title;
     this.checkoutForm = this.formBuilder.group({
       id: this.project.id != null ? this.project.id : '',
       name: [this.project.name != null ? this.project.name : '', Validators.required],

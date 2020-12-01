@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isIframe = false;
   loggedIn = false;
   isAdmin = false;
-  isProjectAdmin: boolean;
+  isManager: boolean;
 
   user: User = new User();
   private readonly _destroying$ = new Subject<void>();
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
   async checkAccount() {
     this.loggedIn = this.authService.getAllAccounts().length > 0;
     this.isAdmin = this.userService.userIsAdminFrontEnd();
-    this.isProjectAdmin = this.userService.userIsProjectAdminFrontEnd();
+    this.isManager = this.userService.userIsProjectAdminFrontEnd();
   }
 
   openDialog() {

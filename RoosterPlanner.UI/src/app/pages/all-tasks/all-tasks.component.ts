@@ -26,6 +26,8 @@ export class AllTasksComponent implements OnInit {
   categoryCardStyle = 'card';
   categoryElementHeight: number;
   categories: Category[];
+  tasksExpandbtnDisabled: boolean = true;
+  categoryExpandbtnDisabled: boolean = true;
 
 
   constructor(public dialog: MatDialog,
@@ -44,14 +46,21 @@ export class AllTasksComponent implements OnInit {
     await this.taskService.getAllTasks(offset, pageSize).then(tasks => {
       this.tasks = tasks;
       this.tasks.sort((a, b) => a.name > b.name ? 1 : -1);
+      if (this.tasks.length >= 5) {
+        this.tasksExpandbtnDisabled = false;
+      }
     })
+
   }
 
   async getCategories(offset: number, pageSize: number) {
     await this.categoryService.getAllCategory().then(categories => {
       this.categories = categories;
       this.categories.sort((a, b) => a.name > b.name ? 1 : -1)
-      this.categories=this.categories.splice(offset,pageSize)
+      if (this.categories.length >= 5) {
+        this.categoryExpandbtnDisabled = false;
+      }
+      this.categories = this.categories.splice(offset, pageSize)
     })
   }
 
