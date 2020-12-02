@@ -21,7 +21,8 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<List<Category>> GetAll()
         {
-            IQueryable<Category> queryable = EntitySet.AsNoTracking().AsQueryable();
+            IQueryable<Category> queryable = EntitySet
+                .AsNoTracking();
             Task<List<Category>> categories = queryable.ToListAsync();
             return categories;
         }

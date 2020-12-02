@@ -15,7 +15,7 @@ namespace RoosterPlanner.Api.Models
 
         public static ProjectViewModel CreateVm(Project project)
         {
-            return new ProjectViewModel
+            return new()
             {
                 Id = project.Id,
                 Name = project.Name,

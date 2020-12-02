@@ -53,7 +53,8 @@ namespace RoosterPlanner.Data.Repositories
             if (filter == null)
                 throw new ArgumentNullException(nameof(filter));
 
-            var q = EntitySet.AsNoTracking().AsQueryable();
+            var q = EntitySet
+                .AsNoTracking();
 
             //Name
             if (!string.IsNullOrEmpty(filter.Name))

@@ -26,7 +26,9 @@ namespace RoosterPlanner.Data.Repositories
             if (filter == null)
                 throw new ArgumentNullException(nameof(filter));
 
-            IQueryable<Task> queryable = EntitySet.AsNoTracking().AsQueryable().Include(t => t.Category);
+            IQueryable<Task> queryable = EntitySet
+                .AsNoTracking()
+                .Include(t => t.Category);
 
             //Name
             if (!string.IsNullOrEmpty(filter.Name))

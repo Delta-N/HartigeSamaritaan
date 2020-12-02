@@ -29,7 +29,6 @@ namespace RoosterPlanner.Data.Repositories
 
             return EntitySet
                 .AsNoTracking()
-                .AsQueryable()
                 .Include(m => m.Person)
                 .Include(m => m.Project)
                 .Where(m => m.PersonId == userId && m.ProjectId == projectId)
@@ -41,7 +40,6 @@ namespace RoosterPlanner.Data.Repositories
             if (userId == Guid.Empty)
                 return null;
             return EntitySet
-                .AsQueryable()
                 .AsNoTracking()
                 .Where(m => m.PersonId == userId)
                 .ToListAsync();
@@ -53,7 +51,6 @@ namespace RoosterPlanner.Data.Repositories
                 return null;
 
             return EntitySet
-                .AsQueryable()
                 .AsNoTracking()
                 .Include(m => m.Person)
                 .Include(m => m.Project)
@@ -67,7 +64,6 @@ namespace RoosterPlanner.Data.Repositories
                 return null;
 
             return EntitySet
-                .AsQueryable()
                 .AsNoTracking()
                 .Include(m => m.Person)
                 .Include(m => m.Project)

@@ -18,9 +18,7 @@ namespace RoosterPlanner.Data.Common
         IShiftRepository ShiftRepository { get; }
 
         ICategoryRepository CategoryRepository { get; }
-
-        IMatchRepository MatchRepository { get; }
-
+        
         IProjectTaskRepository ProjectTaskRepository { get; }
         IManagerRepository ManagerRepository { get; }
 
@@ -53,9 +51,6 @@ namespace RoosterPlanner.Data.Common
         private IPersonRepository personRepository;
         private ITaskRepository taskRepository;
         private ICategoryRepository categoryRepository;
-
-        private IMatchRepository matchRepository;
-
         private IShiftRepository shiftRepository;
         private IProjectTaskRepository projectTaskRepository;
         private IManagerRepository managerRepository;
@@ -65,9 +60,7 @@ namespace RoosterPlanner.Data.Common
         public IProjectRepository ProjectRepository => projectRepository ??= new ProjectRepository(DataContext);
 
         public IShiftRepository ShiftRepository => shiftRepository ??= new ShiftRepository(DataContext);
-
-        public IMatchRepository MatchRepository => matchRepository ??= new MatchRepository(DataContext);
-
+        
         public ITaskRepository TaskRepository => taskRepository ??= new TaskRepository(DataContext);
 
         public ICategoryRepository CategoryRepository => categoryRepository ??= new CategoryRepository(DataContext);

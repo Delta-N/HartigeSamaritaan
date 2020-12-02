@@ -23,7 +23,8 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<List<Participation>> GetActiveParticipationsAsync(Guid personId)
         {
-            return EntitySet.AsNoTracking().AsQueryable()
+            return EntitySet
+                .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
                 .Include(p => p.Availabilities)
@@ -36,7 +37,8 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId)
         {
-            return EntitySet.AsNoTracking().AsQueryable()
+            return EntitySet
+                .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
                 .Include(p => p.Availabilities)

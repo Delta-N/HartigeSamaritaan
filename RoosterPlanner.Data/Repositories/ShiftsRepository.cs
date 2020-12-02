@@ -29,7 +29,6 @@ namespace RoosterPlanner.Data.Repositories
                 return Task.FromResult<List<Shift>>(null);
             return EntitySet
                 .AsNoTracking()
-                .AsQueryable()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
                 .Where(s => s.ProjectId == projectId)
@@ -57,7 +56,6 @@ namespace RoosterPlanner.Data.Repositories
 
             return EntitySet
                 .AsNoTracking()
-                .AsQueryable()
                 .Include(s => s.Task)
                 .Include(s => s.Project)
                 .Where(s=>s.Id==shiftId).FirstOrDefaultAsync();
