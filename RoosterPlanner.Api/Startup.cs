@@ -37,13 +37,10 @@ namespace RoosterPlanner.Api
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidateLifetime = true,
+                        ValidateLifetime = true
                     };
                     jwtOptions.Audience = Configuration["AzureAD:Audience"];
-                    jwtOptions.Events = new JwtBearerEvents
-                    {
-                        //OnAuthenticationFailed = AuthenticationFailedAsync
-                    };
+                    jwtOptions.Events = new JwtBearerEvents();
                 });
 
             services.AddCors(options =>

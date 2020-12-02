@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using RoosterPlanner.Common;
+﻿using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Context;
 using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Repositories
@@ -13,7 +11,7 @@ namespace RoosterPlanner.Data.Repositories
     public class MatchRepository : Repository<Availability>, IMatchRepository
     {
         //Constructor
-        public MatchRepository(RoosterPlannerContext dataContext) : base(dataContext)
+        public MatchRepository(DbContext dataContext) : base(dataContext)
         {
         }
     }

@@ -27,7 +27,7 @@ namespace RoosterPlanner.Data.Repositories
             if (projectId == Guid.Empty || userId == Guid.Empty)
                 return null;
 
-            return this.EntitySet
+            return EntitySet
                 .AsNoTracking()
                 .AsQueryable()
                 .Include(m => m.Person)
@@ -40,7 +40,7 @@ namespace RoosterPlanner.Data.Repositories
         {
             if (userId == Guid.Empty)
                 return null;
-            return this.EntitySet
+            return EntitySet
                 .AsQueryable()
                 .AsNoTracking()
                 .Where(m => m.PersonId == userId)
@@ -52,7 +52,7 @@ namespace RoosterPlanner.Data.Repositories
             if (projectId == Guid.Empty)
                 return null;
 
-            return this.EntitySet
+            return EntitySet
                 .AsQueryable()
                 .AsNoTracking()
                 .Include(m => m.Person)
@@ -66,7 +66,7 @@ namespace RoosterPlanner.Data.Repositories
             if (userId == Guid.Empty)
                 return null;
 
-            return this.EntitySet
+            return EntitySet
                 .AsQueryable()
                 .AsNoTracking()
                 .Include(m => m.Person)

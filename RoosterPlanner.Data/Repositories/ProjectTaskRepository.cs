@@ -22,7 +22,7 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<List<ProjectTask>> GetAllFromProject(Guid projectId)
         {
-            return this.EntitySet
+            return EntitySet
                 .AsNoTracking()
                 .Include(pt => pt.Project)
                 .Include(pt => pt.Task)
@@ -31,7 +31,7 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<ProjectTask> GetProjectTask(Guid projectId, Guid taskId)
         {
-            return  this.EntitySet
+            return  EntitySet
                 .AsNoTracking()
                 .Where(pt => pt.ProjectId == projectId && pt.TaskId == taskId)
                 .FirstOrDefaultAsync();

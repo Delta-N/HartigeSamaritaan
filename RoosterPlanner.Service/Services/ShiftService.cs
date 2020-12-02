@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Data.Common;
@@ -25,7 +24,7 @@ namespace RoosterPlanner.Service
 
         private readonly IUnitOfWork unitOfWork;
         private readonly IShiftRepository shiftRepository;
-        private readonly ILogger logger;
+        private readonly ILogger<ShiftService> logger;
 
         #endregion
 
@@ -40,7 +39,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<Shift>> RemoveShift(Shift shift)
         {
             if (shift == null)
-                throw new ArgumentNullException("shift");
+                throw new ArgumentNullException(nameof(shift));
             TaskResult<Shift> taskResult = new TaskResult<Shift>();
             try
             {
@@ -63,7 +62,7 @@ namespace RoosterPlanner.Service
             TaskResult<Shift> taskResult = new TaskResult<Shift>();
             try
             {
-                taskResult.Data = await this.unitOfWork.ShiftRepository.GetShift(shiftId);
+                taskResult.Data = await unitOfWork.ShiftRepository.GetShift(shiftId);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)
@@ -78,7 +77,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<Shift>> UpdateShift(Shift shift)
         {
             if(shift==null)
-                throw new ArgumentNullException("shift");
+                throw new ArgumentNullException(nameof(shift));
             
             TaskResult<Shift> taskResult = new TaskResult<Shift>();
             try
@@ -98,12 +97,12 @@ namespace RoosterPlanner.Service
         public async Task<TaskListResult<Shift>> CreateShifts(List<Shift> shifts)
         {
             if(shifts==null || shifts.Count==0)
-                throw new ArgumentNullException("shifts");
+                throw new ArgumentNullException(nameof(shifts));
             TaskListResult<Shift> taskResult = TaskListResult<Shift>.CreateDefault();
             try
             {
-                taskResult.Data = await this.shiftRepository.AddAll(shifts);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync()==shifts.Count();
+                taskResult.Data = await shiftRepository.AddAll(shifts);
+                taskResult.Succeeded = await unitOfWork.SaveChangesAsync()==shifts.Count;
             }
             catch (Exception ex)
             {
@@ -117,11 +116,11 @@ namespace RoosterPlanner.Service
         public async Task<TaskListResult<Shift>> GetShifts(Guid projectId)
         {
             if(projectId==Guid.Empty)
-                throw new ArgumentNullException("projectId");
+                throw new ArgumentNullException(nameof(projectId));
             TaskListResult<Shift> taskResult = TaskListResult<Shift>.CreateDefault();
             try
             {
-                taskResult.Data = await this.shiftRepository.GetByProjectAsync(projectId);
+                taskResult.Data = await shiftRepository.GetByProjectAsync(projectId);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)

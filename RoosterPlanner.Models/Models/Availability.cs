@@ -1,7 +1,6 @@
-﻿using RoosterPlanner.Models.Types;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using RoosterPlanner.Models.Types;
 
 namespace RoosterPlanner.Models
 {

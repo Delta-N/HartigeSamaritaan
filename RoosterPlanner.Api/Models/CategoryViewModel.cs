@@ -14,7 +14,7 @@ namespace RoosterPlanner.Api.Models
         {
             if (category != null)
             {
-                return new CategoryViewModel()
+                return new CategoryViewModel
                 {
                     Id = category.Id,
                     Code = category.Code,

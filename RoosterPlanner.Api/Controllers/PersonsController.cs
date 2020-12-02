@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
+using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Api.Models.Enums;
 using RoosterPlanner.Common.Config;
 using RoosterPlanner.Models;
@@ -16,7 +17,6 @@ using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Extensions = RoosterPlanner.Api.Models.Constants.Extensions;
 using Person = RoosterPlanner.Models.Person;
 
 namespace RoosterPlanner.Api.Controllers
@@ -27,7 +27,7 @@ namespace RoosterPlanner.Api.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly AzureAuthenticationConfig azureB2CConfig;
-        private readonly ILogger logger;
+        private readonly ILogger<PersonsController> logger;
         private readonly IPersonService personService;
         private readonly IProjectService projectService;
 
@@ -97,9 +97,9 @@ namespace RoosterPlanner.Api.Controllers
                 if (result.Data == null)
                     return Ok();
 
-                for (int i = 0; i < result.Data.Count(); i++)
+                foreach (User user in result.Data)
                 {
-                    personViewModels.Add(PersonViewModel.CreateVmFromUser(result.Data[i],
+                    personViewModels.Add(PersonViewModel.CreateVmFromUser(user,
                         Extensions.GetInstance(azureB2CConfig)));
                     if (personViewModels.Count == pageSize)
                     {
@@ -177,21 +177,19 @@ namespace RoosterPlanner.Api.Controllers
                     //check if user is also a manager
                     TaskResult<List<Manager>> userManagesOtherProjects =
                         await personService.UserManagesOtherProjects(oid);
-                    if (userManagesOtherProjects != null && userManagesOtherProjects.Data != null &&
-                        userManagesOtherProjects.Data.Count > 0)
+                    if (userManagesOtherProjects?.Data != null && userManagesOtherProjects.Data.Count > 0)
                         modifier = 2;
                 }
 
                 user.AdditionalData.Add(Extensions.GetInstance(azureB2CConfig).UserRoleExtension, modifier);
                 result = await personService.UpdatePerson(user);
-                if (result.Succeeded)
-                {
-                    PersonViewModel personVm =
-                        PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
-                    return Ok(personVm);
-                }
+                if (!result.Succeeded) 
+                    return UnprocessableEntity();
+                
+                PersonViewModel personVm =
+                    PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
+                return Ok(personVm);
 
-                return UnprocessableEntity();
             }
             catch (Exception ex)
             {
@@ -214,16 +212,15 @@ namespace RoosterPlanner.Api.Controllers
                 foreach (Manager manager in result.Data)
                 {
                     User temp = personService.GetUser(manager.PersonId).Result.Data;
-                    if (temp != null)
-                    {
-                        PersonViewModel vm =
-                            PersonViewModel.CreateVmFromUser(temp, Extensions.GetInstance(azureB2CConfig));
-                        if (vm != null)
-                        {
-                            Person person = PersonViewModel.CreatePerson(vm);
-                            manager.Person = person;
-                        }
-                    }
+                    if (temp == null) 
+                        continue;
+                    PersonViewModel vm =
+                        PersonViewModel.CreateVmFromUser(temp, Extensions.GetInstance(azureB2CConfig));
+                    if (vm == null) 
+                        continue;
+                        
+                    Person person = PersonViewModel.CreatePerson(vm);
+                    manager.Person = person;
                 }
 
                 if (!result.Succeeded)
@@ -289,14 +286,14 @@ namespace RoosterPlanner.Api.Controllers
                     return BadRequest("User already manages this project");
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-                manager = new Manager()
+                manager = new Manager
                 {
                     ProjectId = project.Id,
                     Project = project,
                     PersonId = person.Id,
                     Person = person,
                     LastEditDate = DateTime.UtcNow,
-                    LastEditBy = oid,
+                    LastEditBy = oid
                 };
 
                 TaskResult<Manager> result = await personService.MakeManager(manager);
@@ -332,8 +329,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<List<Manager>> userManagesOtherProjects =
                     await personService.UserManagesOtherProjects(manager.PersonId);
                 
-                if (userManagesOtherProjects != null &&
-                    userManagesOtherProjects.Data != null &&
+                if (userManagesOtherProjects?.Data != null && 
                     userManagesOtherProjects.Data.Count == 0)
                     if (!UserHasRole(manager.PersonId.ToString(), UserRole.Boardmember))
                         await ModAdmin(userId, 4); //remove user as a manager in B2C}
@@ -355,11 +351,9 @@ namespace RoosterPlanner.Api.Controllers
         {
             Task<ActionResult> currentUserActionResult = Get(Guid.Parse(oid));
             OkObjectResult okObjectResult = (OkObjectResult) currentUserActionResult.Result;
-            if (okObjectResult.Value is PersonViewModel currentUser &&
-                currentUser.UserRole == userRole.ToString())
-                return true;
 
-            return false;
+            return okObjectResult.Value is PersonViewModel currentUser &&
+                   currentUser.UserRole == userRole.ToString();
         }
     }
 }

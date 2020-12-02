@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Context;
 using RoosterPlanner.Models;
-using Task = RoosterPlanner.Models.Task;
+using Task = System.Threading.Tasks.Task;
 
 namespace RoosterPlanner.Data.Repositories
 {
@@ -20,15 +19,15 @@ namespace RoosterPlanner.Data.Repositories
     public class ShiftRepository : Repository<Shift>, IShiftRepository
     {
         //Constructor
-        public ShiftRepository(RoosterPlannerContext dataContext) : base(dataContext)
+        public ShiftRepository(DbContext dataContext) : base(dataContext)
         {
         }
 
         public Task<List<Shift>> GetByProjectAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
-                return System.Threading.Tasks.Task.FromResult<List<Shift>>(null);
-            return this.EntitySet
+                return Task.FromResult<List<Shift>>(null);
+            return EntitySet
                 .AsNoTracking()
                 .AsQueryable()
                 .Include(s => s.Project)
@@ -40,12 +39,12 @@ namespace RoosterPlanner.Data.Repositories
         public async Task<List<Shift>> AddAll(List<Shift> shifts)
         {
             if (shifts == null || shifts.Count == 0)
-                return await System.Threading.Tasks.Task.FromResult<List<Shift>>(null);
+                return await Task.FromResult<List<Shift>>(null);
             foreach (Shift shift in shifts)
             {
                 if (shift.Id == Guid.Empty)
                     shift.SetKey(Guid.NewGuid());
-                await this.EntitySet.AddAsync(shift);
+                await EntitySet.AddAsync(shift);
             }
 
             return shifts;
@@ -54,9 +53,9 @@ namespace RoosterPlanner.Data.Repositories
         public Task<Shift> GetShift(Guid shiftId)
         {
             if (shiftId == Guid.Empty)
-                return System.Threading.Tasks.Task.FromResult<Shift>(null);
+                return Task.FromResult<Shift>(null);
 
-            return this.EntitySet
+            return EntitySet
                 .AsNoTracking()
                 .AsQueryable()
                 .Include(s => s.Task)

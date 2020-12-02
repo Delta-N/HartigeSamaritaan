@@ -16,7 +16,7 @@ namespace RoosterPlanner.Api.Models
             if (manager == null)
                 return null;
 
-            ManagerViewModel vm = new ManagerViewModel()
+            ManagerViewModel vm = new ManagerViewModel
             {
                 Id = manager.Id,
                 ProjectId = manager.ProjectId,

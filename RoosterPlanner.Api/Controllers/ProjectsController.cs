@@ -20,7 +20,7 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly ILogger logger;
+        private readonly ILogger<ProjectsController> logger;
         private readonly IProjectService projectService;
 
         //Constructor
@@ -105,8 +105,6 @@ namespace RoosterPlanner.Api.Controllers
             if (string.IsNullOrEmpty(projectDetails.Name))
                 return BadRequest("Name of project cannot be empty");
 
-            TaskResult<Project> result;
-
             try
             {
                 Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
@@ -117,6 +115,7 @@ namespace RoosterPlanner.Api.Controllers
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 project.LastEditBy = oid;
 
+                TaskResult<Project> result;
                 if (project.Id == Guid.Empty)
                     result = projectService.CreateProject(project).Result;
                 else 

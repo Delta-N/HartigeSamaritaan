@@ -22,10 +22,18 @@ namespace RoosterPlanner.Service
 
     public class ParticipationService : IParticipationService
     {
-        //private readonly Data.Context.RoosterPlannerContext dataContext = null;
+        #region Fields
+
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IParticipationRepository participationRepository;
+        private readonly IAzureB2CService azureB2CService;
+        private readonly ILogger<ParticipationService> logger;
+
+        #endregion
 
         //Constructor
-        public ParticipationService(IUnitOfWork unitOfWork, ILogger<ParticipationService> logger, IAzureB2CService azureB2CService)
+        public ParticipationService(IUnitOfWork unitOfWork, ILogger<ParticipationService> logger,
+            IAzureB2CService azureB2CService)
         {
             this.unitOfWork = unitOfWork;
             participationRepository = unitOfWork.ParticipationRepository;
@@ -44,7 +52,7 @@ namespace RoosterPlanner.Service
             try
             {
                 User person = await azureB2CService.GetUserAsync(participation.PersonId);
-                if (person == null) throw new RecordNotFoundException("Person: " +participation.PersonId);
+                if (person == null) throw new RecordNotFoundException("Person: " + participation.PersonId);
 
                 Project project = await unitOfWork.ProjectRepository.GetAsync(participation.ProjectId);
                 if (project == null) throw new RecordNotFoundException("Project: " + participation.ProjectId);
@@ -57,7 +65,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 taskResult.Error = ex;
             }
 
@@ -78,7 +86,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 result.Error = ex;
                 result.Succeeded = false;
             }
@@ -96,7 +104,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 result.Error = ex;
                 result.Succeeded = false;
             }
@@ -109,7 +117,8 @@ namespace RoosterPlanner.Service
             TaskResult<Participation> result = new TaskResult<Participation>();
             try
             {
-                Participation participation = await participationRepository.GetSpecificParticipation(personId, projectId);
+                Participation participation =
+                    await participationRepository.GetSpecificParticipation(personId, projectId);
                 if (participation != null)
                 {
                     result.Data = participation;
@@ -118,7 +127,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 result.Error = ex;
                 result.Succeeded = false;
             }
@@ -136,7 +145,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 result.Error = ex;
                 result.Succeeded = false;
             }
@@ -155,20 +164,11 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 taskResult.Error = ex;
             }
 
             return taskResult;
         }
-
-        #region Fields
-
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IParticipationRepository participationRepository;
-        private readonly IAzureB2CService azureB2CService;
-        private readonly ILogger logger;
-
-        #endregion
     }
 }

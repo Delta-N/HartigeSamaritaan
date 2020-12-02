@@ -21,7 +21,7 @@ namespace RoosterPlanner.Models
         {
         }
 
-        public Collaboration(Guid Id) : base(Id)
+        public Collaboration(Guid id) : base(id)
         {
         }
     }

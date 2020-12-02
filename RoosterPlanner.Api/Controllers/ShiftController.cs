@@ -11,7 +11,6 @@ using RoosterPlanner.Models;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Shift = RoosterPlanner.Models.Shift;
 using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Api.Controllers
@@ -20,7 +19,7 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ShiftController : ControllerBase
     {
-        private readonly ILogger logger;
+        private readonly ILogger<ShiftController> logger;
         private readonly IShiftService shiftService;
         private readonly IProjectService projectService;
         private readonly ITaskService taskService;
@@ -44,7 +43,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<Shift> result = await shiftService.GetShifts(id);
                 if (!result.Succeeded)
                     return UnprocessableEntity();
-                if (result.Data == null || result.Data.Count()==0)
+                if (result.Data == null || result.Data.Count == 0)
                     return Ok();
                 List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
                 return Ok(shiftVmList);
@@ -91,44 +90,46 @@ namespace RoosterPlanner.Api.Controllers
                 List<Shift> shifts = shiftViewModels.Select(ShiftViewModel.CreateShift).ToList();
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                //get project and get task from db
-                Project project = projectService.GetProjectDetails(shifts[0].ProjectId).Result.Data;
-                Task task = null;
-                if (shifts[0].TaskId != null)
-                    task = taskService.GetTask((Guid) shifts[0].TaskId).Result.Data;
-
-                foreach (Shift shift in shifts)
+                if (shifts[0] != null)
                 {
-                    if (shift.Id != Guid.Empty || shift.TaskId == null || shift.ProjectId == Guid.Empty)
-                        shifts.Remove(shift);
-                    
-                    // check if projectId and taskId differs from above? getproject/task => add project and task to shift
-                    if(project.Id!=shift.ProjectId)
-                        project=projectService.GetProjectDetails(shift.ProjectId).Result.Data;
-                    
-                    if(task !=null && shift.TaskId!=null &&  task.Id!=shift.TaskId)
-                        task = taskService.GetTask((Guid) shift.TaskId).Result.Data;
+                    //get project and get task from db
+                    Project project = projectService.GetProjectDetails(shifts[0].ProjectId).Result.Data;
+                    Task task = null;
+                    if (shifts[0].TaskId != null)
+                        task = (await taskService.GetTask((Guid) shifts[0].TaskId)).Data;
 
-                    if (project == null || task == null)
-                        shifts.Remove(shift);
-                    shift.Project = project;
-                    shift.Task = task;
-                    shift.LastEditDate = DateTime.UtcNow;
-                    shift.LastEditBy = oid;
+                    foreach (Shift shift in shifts)
+                    {
+                        if (shift.Id != Guid.Empty || shift.TaskId == null || shift.ProjectId == Guid.Empty)
+                            shifts.Remove(shift);
+
+                        // check if projectId and taskId differs from above? getproject/task => add project and task to shift
+                        if (project.Id != shift.ProjectId)
+                            project = projectService.GetProjectDetails(shift.ProjectId).Result.Data;
+
+                        if (task != null && shift.TaskId != null && task.Id != shift.TaskId)
+                            task = taskService.GetTask((Guid) shift.TaskId).Result.Data;
+
+                        if (project == null || task == null)
+                            shifts.Remove(shift);
+                        shift.Project = project;
+                        shift.Task = task;
+                        shift.LastEditDate = DateTime.UtcNow;
+                        shift.LastEditBy = oid;
+                    }
                 }
 
-                if (shifts.Count() != shiftViewModels.Count())
+                if (shifts.Count != shiftViewModels.Count)
                     return UnprocessableEntity("Could not covert al viewmodels to shifts");
 
                 TaskListResult<Shift> result = await shiftService.CreateShifts(shifts);
 
-                if (result.Succeeded)
-                {
-                    List<ShiftViewModel> createdVm = result.Data.Select(ShiftViewModel.CreateVm).ToList();
-                    return Ok(createdVm);
-                }
+                if (!result.Succeeded) 
+                    return UnprocessableEntity();
+                
+                List<ShiftViewModel> createdVm = result.Data.Select(ShiftViewModel.CreateVm).ToList();
+                return Ok(createdVm);
 
-                return UnprocessableEntity();
             }
             catch (Exception ex)
             {
@@ -205,9 +206,8 @@ namespace RoosterPlanner.Api.Controllers
                     return NotFound("Shift not found");
 
                 TaskResult<Shift> result = await shiftService.RemoveShift(shift.Result.Data);
-                if (!result.Succeeded)
-                    return Problem();
-                return Ok(result);
+                
+                return !result.Succeeded ? Problem() : Ok(result);
             }
             catch (Exception ex)
             {

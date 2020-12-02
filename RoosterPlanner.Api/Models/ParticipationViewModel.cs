@@ -23,7 +23,7 @@ namespace RoosterPlanner.Api.Models
         {
             if (participation != null)
             {
-                return new ParticipationViewModel()
+                return new ParticipationViewModel
                 {
                     Id = participation.Id,
                     Person = PersonViewModel.CreateVmFromPerson(participation.Person),
@@ -49,7 +49,7 @@ namespace RoosterPlanner.Api.Models
                     ProjectId = participationViewModel.Project.Id,
                     MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
                     Availabilities = participationViewModel.Availabilities,
-                    WantsToWorkWith = participationViewModel.WantsToWorkWith,
+                    WantsToWorkWith = participationViewModel.WantsToWorkWith
                 };
             }
 

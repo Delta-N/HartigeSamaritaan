@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
-using RoosterPlanner.Common;
 using RoosterPlanner.Common.Config;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
@@ -30,6 +29,20 @@ namespace RoosterPlanner.Service
 
     public class AzureB2CService : IAzureB2CService
     {
+        #region Fields
+
+        private readonly AzureAuthenticationConfig azureB2CConfig;
+        private GraphServiceClient graphServiceClient;
+        private DateTime graphServiceClientTimestamp;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IPersonRepository personRepository;
+        private readonly ILogger<AzureB2CService> logger;
+
+        private const string GraphSelectList =
+            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
+
+        #endregion
+
         //Constructor
         public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
             ILogger<AzureB2CService> logger)
@@ -45,27 +58,14 @@ namespace RoosterPlanner.Service
             if (userId == Guid.Empty)
                 throw new ArgumentNullException(nameof(userId));
 
-            User user;
+            var graphService = GetGraphServiceClient();
+            var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
+            var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
+            var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
 
-            try
-            {
-                var graphService = GetGraphServiceClient();
-                var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
-                var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
-                var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
-
-                user = await graphService.Users[userId.ToString()].Request()
-                    .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
-                AddPersonToLocalDb(user);
-            }
-            catch (ServiceException graphEx)
-            {
-                throw graphEx;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var user = await graphService.Users[userId.ToString()].Request()
+                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
+            AddPersonToLocalDb(user);
 
             return user;
         }
@@ -143,20 +143,20 @@ namespace RoosterPlanner.Service
                 result.Succeeded = false;
                 result.StatusCode = graphEx.StatusCode;
                 result.Message = graphEx.Message;
-                throw graphEx;
+                throw;
             }
             catch (Exception ex)
             {
                 result.Succeeded = false;
                 result.StatusCode = HttpStatusCode.InternalServerError;
                 result.Message = ex.Message;
-                throw ex;
+                throw;
             }
         }
 
         public async Task<TaskResult<User>> UpdateUserAsync(User user)
         {
-            if (user == null || user.Id == null || Guid.Parse(user.Id) == Guid.Empty)
+            if (user?.Id == null || Guid.Parse(user.Id) == Guid.Empty)
                 throw new ArgumentNullException(nameof(user));
 
             var updatedUser = new TaskResult<User>();
@@ -171,17 +171,17 @@ namespace RoosterPlanner.Service
                     updatedUser.Succeeded = true;
                 }
             }
-            catch (ServiceException graphEx)
+            catch (ServiceException)
             {
                 updatedUser.Succeeded = false;
                 updatedUser.Message = "Error during patching of user";
-                throw graphEx;
+                throw;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 updatedUser.Succeeded = false;
                 updatedUser.Message = "Error during patching of user";
-                throw ex;
+                throw;
             }
 
             AddPersonToLocalDb(updatedUser.Data);
@@ -235,7 +235,7 @@ namespace RoosterPlanner.Service
 
         private void AddPersonToLocalDb(User user)
         {
-            if (user == null || user.Id == null)
+            if (user?.Id == null)
                 throw new ArgumentNullException(nameof(user));
             var result = new TaskResult<Person>();
             try
@@ -243,12 +243,12 @@ namespace RoosterPlanner.Service
                 var person = personRepository.GetPersonByOidAsync(Guid.Parse(user.Id)).Result;
                 if (person == null)
                 {
-                    person = new Person(Guid.Parse(user.Id)) {firstName = user.GivenName, Oid = Guid.Parse(user.Id)};
+                    person = new Person(Guid.Parse(user.Id)) {FirstName = user.GivenName, Oid = Guid.Parse(user.Id)};
                     personRepository.Add(person);
                 }
-                else if (person.firstName != user.GivenName)
+                else if (person.FirstName != user.GivenName)
                 {
-                    person.firstName = user.GivenName;
+                    person.FirstName = user.GivenName;
                     person.LastEditDate = DateTime.UtcNow;
                     person.LastEditBy = "SYSTEM";
                     personRepository.Update(person);
@@ -258,7 +258,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.Log(LogLevel.Error, ex.ToString());
                 result.Error = ex;
             }
         }
@@ -271,19 +271,5 @@ namespace RoosterPlanner.Service
 
             [JsonProperty("value")] public List<User> Value { get; set; }
         }
-
-        #region Fields
-
-        private readonly AzureAuthenticationConfig azureB2CConfig;
-        private GraphServiceClient graphServiceClient;
-        private DateTime graphServiceClientTimestamp;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IPersonRepository personRepository;
-        private readonly ILogger logger;
-
-        private const string GraphSelectList =
-            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
-
-        #endregion
     }
 }

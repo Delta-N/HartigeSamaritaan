@@ -12,22 +12,21 @@ namespace RoosterPlanner.Api.Models
 
         public static ProjectTaskViewModel CreateVm(ProjectTask projectTask)
         {
-            if (projectTask != null)
+            if (projectTask == null) 
+                return null;
+            
+            ProjectTaskViewModel vm = new ProjectTaskViewModel
             {
-                ProjectTaskViewModel vm = new ProjectTaskViewModel()
-                {
-                    Id = projectTask.Id,
-                    ProjectId = projectTask.ProjectId,
-                };
-                if (projectTask.TaskId != Guid.Empty)
-                {
-                    vm.TaskId = (Guid) projectTask.TaskId;
-                }
-
-                return vm;
+                Id = projectTask.Id,
+                ProjectId = projectTask.ProjectId
+            };
+            if (projectTask.TaskId != Guid.Empty)
+            {
+                vm.TaskId = projectTask.TaskId;
             }
 
-            return null;
+            return vm;
+
         }
 
         public static ProjectTask CreateProjectTask(ProjectTaskViewModel projectTaskViewModel)

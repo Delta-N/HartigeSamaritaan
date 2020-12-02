@@ -8,9 +8,7 @@ namespace RoosterPlanner.Api.Models
         public Guid Id { get; set; }
 
         public string Name { get; set; }
-
-        public DateTime? DeletedDateTime { get; set; } //Nodig?
-
+        
         public CategoryViewModel Category { get; set; }
 
         public string Color { get; set; }
@@ -26,7 +24,7 @@ namespace RoosterPlanner.Api.Models
         {
             if (task != null)
             {
-                return new TaskViewModel()
+                return new TaskViewModel
                 {
                     Id = task.Id,
                     Name = task.Name,
@@ -43,25 +41,24 @@ namespace RoosterPlanner.Api.Models
 
         public static Task CreateTask(TaskViewModel taskViewModel)
         {
-            if (taskViewModel != null)
+            if (taskViewModel == null) 
+                return null;
+            
+            Task task = new Task(taskViewModel.Id)
             {
-                Task task = new Task(taskViewModel.Id)
-                {
-                    Name = taskViewModel.Name,
-                    Color = taskViewModel.Color,
-                    DocumentUri = taskViewModel.DocumentUri,
-                    Description = taskViewModel.Description
-                };
-                if (taskViewModel.Category != null)
-                {
-                    task.CategoryId = taskViewModel.Category.Id;
-                    task.Category = CategoryViewModel.CreateCategory(taskViewModel.Category);
-                }
-
+                Name = taskViewModel.Name,
+                Color = taskViewModel.Color,
+                DocumentUri = taskViewModel.DocumentUri,
+                Description = taskViewModel.Description
+            };
+            if (taskViewModel.Category == null)
                 return task;
-            }
 
-            return null;
+            task.CategoryId = taskViewModel.Category.Id;
+            task.Category = CategoryViewModel.CreateCategory(taskViewModel.Category);
+
+            return task;
+
         }
     }
 }

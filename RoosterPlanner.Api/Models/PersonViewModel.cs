@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Api.Models.Enums;
+using Person = RoosterPlanner.Models.Person;
 
 namespace RoosterPlanner.Api.Models
 {
@@ -61,39 +62,36 @@ namespace RoosterPlanner.Api.Models
 
         public static User CreateUser(PersonViewModel vm, Extensions extension)
         {
-            if (vm != null && extension != null)
+            if (vm == null || extension == null) 
+                return null;
+            
+            User user = new User
             {
-
-
-                User user = new User
+                Id = vm.Id.ToString(),
+                GivenName = vm.FirstName,
+                Surname = vm.LastName,
+                Mail = vm.Email,
+                StreetAddress = vm.StreetAddress,
+                PostalCode = vm.PostalCode,
+                City = vm.City,
+                Country = vm.Country,
+                AdditionalData = new Dictionary<string, object>
                 {
-                    Id = vm.Id.ToString(),
-                    GivenName = vm.FirstName,
-                    Surname = vm.LastName,
-                    Mail = vm.Email,
-                    StreetAddress = vm.StreetAddress,
-                    PostalCode = vm.PostalCode,
-                    City = vm.City,
-                    Country = vm.Country,
-                    AdditionalData = new Dictionary<string, object>
-                    {
-                        {extension.DateOfBirthExtension, vm.DateOfBirth},
-                        {extension.PhoneNumberExtension, vm.PhoneNumber}
-                    }
-                };
-                return user;
-            }
+                    {extension.DateOfBirthExtension, vm.DateOfBirth},
+                    {extension.PhoneNumberExtension, vm.PhoneNumber}
+                }
+            };
+            return user;
 
-            return null;
         }
 
-        public static RoosterPlanner.Models.Person CreatePerson(PersonViewModel vm)
+        public static Person CreatePerson(PersonViewModel vm)
         {
             if (vm != null)
             {
-                return new RoosterPlanner.Models.Person(vm.Id)
+                return new Person(vm.Id)
                 {
-                    firstName = vm.FirstName,
+                    FirstName = vm.FirstName,
                     LastName = vm.LastName,
                     Email = vm.Email,
                     StreetAddress = vm.StreetAddress,
@@ -109,14 +107,14 @@ namespace RoosterPlanner.Api.Models
             return null;
         }
 
-        public static PersonViewModel CreateVmFromPerson(RoosterPlanner.Models.Person person)
+        public static PersonViewModel CreateVmFromPerson(Person person)
         {
             if (person != null)
             {
                 return new PersonViewModel
                 {
                     Id = person.Id,
-                    FirstName = person.firstName,
+                    FirstName = person.FirstName,
                     LastName = person.LastName,
                     Email = person.Email,
                     StreetAddress = person.StreetAddress,

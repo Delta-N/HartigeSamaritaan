@@ -1,43 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Context;
+using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
-using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Data.Repositories
 {
     public interface ITaskRepository : IRepository<Task>
     {
-        Task<List<Task>> SearchTasksAsync(TaskFilter filter);
-        Task<Task> GetTask(Guid id);
+        System.Threading.Tasks.Task<List<Task>> SearchTasksAsync(TaskFilter filter);
+        System.Threading.Tasks.Task<Task> GetTask(Guid id);
     }
 
     public class TaskRepository : Repository<Task>, ITaskRepository
     {
         //Constructor
-        public TaskRepository(RoosterPlannerContext dataContext) : base(dataContext)
+        public TaskRepository(DbContext dataContext) : base(dataContext)
         {
         }
 
-        public Task<List<Task>> SearchTasksAsync(TaskFilter filter)
+        public System.Threading.Tasks.Task<List<Task>> SearchTasksAsync(TaskFilter filter)
         {
             if (filter == null)
-                throw new ArgumentNullException("filter");
+                throw new ArgumentNullException(nameof(filter));
 
             IQueryable<Task> queryable = EntitySet.AsNoTracking().AsQueryable().Include(t => t.Category);
 
             //Name
-            if (!String.IsNullOrEmpty(filter.Name))
-                queryable = queryable.Where(t =>  t.Name.IndexOf(filter.Name) >= 0);
+            if (!string.IsNullOrEmpty(filter.Name))
+                queryable = queryable.Where(t =>  t.Name.Contains(filter.Name));
 
-            queryable = filter.SetFilter<Task>(queryable);
+            queryable = filter.SetFilter(queryable);
 
             filter.TotalItemCount = queryable.Count();
-            Task<List<Task>> tasks;
+            System.Threading.Tasks.Task<List<Task>> tasks;
             if (filter.Offset >= 0 && filter.PageSize != 0)
                 tasks = queryable.Skip(filter.Offset).Take(filter.PageSize).ToListAsync();
             else
@@ -46,7 +44,7 @@ namespace RoosterPlanner.Data.Repositories
             return tasks;
         }
 
-        public Task<Task> GetTask(Guid id)
+        public System.Threading.Tasks.Task<Task> GetTask(Guid id)
         {
             return EntitySet
                 .Include(t => t.Category)

@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace RoosterPlanner.Service.Helpers
 {
-    public class IdentityHelper
+    public static class IdentityHelper
     {
         public static string GetOid(ClaimsIdentity claimsIdentity)
         {

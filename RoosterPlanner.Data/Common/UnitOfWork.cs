@@ -62,95 +62,23 @@ namespace RoosterPlanner.Data.Common
 
         #endregion
 
-        public IProjectRepository ProjectRepository
-        {
-            get
-            {
-                if (projectRepository == null)
-                    this.projectRepository = new ProjectRepository(this.DataContext);
-                return this.projectRepository;
-            }
-        }
+        public IProjectRepository ProjectRepository => projectRepository ??= new ProjectRepository(DataContext);
 
-        public IShiftRepository ShiftRepository
-        {
-            get
-            {
-                if (shiftRepository == null)
-                    this.shiftRepository = new ShiftRepository(this.DataContext);
-                return this.shiftRepository;
-            }
-        }
+        public IShiftRepository ShiftRepository => shiftRepository ??= new ShiftRepository(DataContext);
 
-        public IMatchRepository MatchRepository
-        {
-            get
-            {
-                if (matchRepository == null)
-                    this.matchRepository = new MatchRepository(this.DataContext);
-                return this.matchRepository;
-            }
-        }
+        public IMatchRepository MatchRepository => matchRepository ??= new MatchRepository(DataContext);
 
-        public ITaskRepository TaskRepository
-        {
-            get
-            {
-                if (taskRepository == null)
-                    this.taskRepository = new TaskRepository(this.DataContext);
-                return this.taskRepository;
-            }
-        }
+        public ITaskRepository TaskRepository => taskRepository ??= new TaskRepository(DataContext);
 
-        public ICategoryRepository CategoryRepository
-        {
-            get
-            {
-                if (categoryRepository == null)
-                    this.categoryRepository = new CategoryRepository(this.DataContext);
-                return this.categoryRepository;
-            }
-        }
+        public ICategoryRepository CategoryRepository => categoryRepository ??= new CategoryRepository(DataContext);
 
-        public IParticipationRepository ParticipationRepository
-        {
-            get
-            {
-                if (participationRepository == null)
-                    this.participationRepository = new ParticipationRepository(this.DataContext);
-                return this.participationRepository;
-            }
-        }
+        public IParticipationRepository ParticipationRepository => participationRepository ??= new ParticipationRepository(DataContext);
 
-        public IPersonRepository PersonRepository
-        {
-            get
-            {
-                if (personRepository == null)
-                    this.personRepository = new PersonRepository(this.DataContext);
-                return this.personRepository;
-            }
-        }
+        public IPersonRepository PersonRepository => personRepository ??= new PersonRepository(DataContext);
 
-        public IProjectTaskRepository ProjectTaskRepository
-        {
-            get
-            {
-                if (projectTaskRepository == null)
-                    this.projectTaskRepository = new ProjectTaskRepository(this.DataContext);
-                return this.projectTaskRepository;
-            }
-        }
+        public IProjectTaskRepository ProjectTaskRepository => projectTaskRepository ??= new ProjectTaskRepository(DataContext);
 
-        public IManagerRepository ManagerRepository
-        {
-            get
-            {
-                if (managerRepository == null)
-                    this.managerRepository = new ManagerRepository(this.DataContext);
-                return this.managerRepository;
-            }
-        }
+        public IManagerRepository ManagerRepository => managerRepository ??= new ManagerRepository(DataContext);
 
         #region Constructor
 
@@ -160,7 +88,7 @@ namespace RoosterPlanner.Data.Common
         /// <param name="dataContext">The data context.</param>
         public UnitOfWork(RoosterPlannerContext dataContext)
         {
-            this.DataContext = dataContext;
+            DataContext = dataContext;
         }
 
         #endregion
@@ -188,7 +116,7 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         public void Dispose()
         {
-            this.DataContext.Dispose();
+            DataContext.Dispose();
         }
 
         #endregion

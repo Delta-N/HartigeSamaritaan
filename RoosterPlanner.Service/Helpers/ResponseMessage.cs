@@ -1,10 +1,8 @@
 ﻿namespace RoosterPlanner.Service.Helpers
 {
-    public class ResponseMessage
+    public static class ResponseMessage
     {
-        public static string UserNotFound = $"Gebruiker {NotFound}";
-        private static readonly string NotFound = "niet gevonden.";
-
-
+        public static readonly string UserNotFound = $"Gebruiker {NotFound}";
+        private const string NotFound = "niet gevonden.";
     }
 }

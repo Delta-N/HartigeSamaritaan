@@ -38,7 +38,7 @@ namespace RoosterPlanner.Service
         private readonly IPersonRepository personRepository;
         private readonly IManagerRepository managerRepository;
         private readonly IAzureB2CService azureB2CService;
-        private readonly ILogger logger;
+        private readonly ILogger<PersonService> logger;
 
         #endregion
 
@@ -83,11 +83,11 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<Person>> GetPerson(Guid id)
         {
             if (id == Guid.Empty)
-                throw new ArgumentNullException("id");
+                throw new ArgumentNullException(nameof(id));
             TaskResult<Person> taskResult = new TaskResult<Person>();
             try
             {
-                taskResult.Data = await this.personRepository.GetAsync(id);
+                taskResult.Data = await personRepository.GetAsync(id);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)
@@ -102,7 +102,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskListResult<User>> GetB2CMembers(PersonFilter filter)
         {
             if (filter == null)
-                throw new ArgumentNullException("filter");
+                throw new ArgumentNullException(nameof(filter));
 
             var result = TaskListResult<User>.CreateDefault();
             try
@@ -165,11 +165,11 @@ namespace RoosterPlanner.Service
         public async Task<TaskListResult<Manager>> GetManagers(Guid projectId)
         {
             if (projectId == Guid.Empty)
-                throw new ArgumentNullException("projectId");
+                throw new ArgumentNullException(nameof(projectId));
             TaskListResult<Manager> taskResult = TaskListResult<Manager>.CreateDefault();
             try
             {
-                taskResult.Data = await this.managerRepository.GetAll(projectId);
+                taskResult.Data = await managerRepository.GetAll(projectId);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)
@@ -184,11 +184,11 @@ namespace RoosterPlanner.Service
         public async Task<TaskListResult<Manager>> GetProjectsManagedBy(Guid userId)
         {
             if (userId == Guid.Empty)
-                throw new ArgumentNullException("userId");
+                throw new ArgumentNullException(nameof(userId));
             TaskListResult<Manager> taskResult = TaskListResult<Manager>.CreateDefault();
             try
             {
-                taskResult.Data = await this.managerRepository.GetProjectsManagedBy(userId);
+                taskResult.Data = await managerRepository.GetProjectsManagedBy(userId);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)
@@ -203,15 +203,15 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<Manager>> GetManager(Guid projectId, Guid userId)
         {
             if (projectId == Guid.Empty)
-                throw new ArgumentNullException("projectId");
+                throw new ArgumentNullException(nameof(projectId));
 
             if (userId == Guid.Empty)
-                throw new ArgumentNullException("userId");
+                throw new ArgumentNullException(nameof(userId));
 
             TaskResult<Manager> taskResult = new TaskResult<Manager>();
             try
             {
-                taskResult.Data = await this.managerRepository.GetManager(projectId, userId);
+                taskResult.Data = await managerRepository.GetManager(projectId, userId);
                 if (taskResult.Data != null)
                     taskResult.Succeeded = true;
             }
@@ -227,7 +227,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<Manager>> RemoveManager(Manager manager)
         {
             if (manager == null)
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
 
             TaskResult<Manager> taskResult = new TaskResult<Manager>();
             try
@@ -247,7 +247,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<Manager>> MakeManager(Manager manager)
         {
             if (manager == null)
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
 
             TaskResult<Manager> taskResult = new TaskResult<Manager>();
             try
@@ -267,7 +267,7 @@ namespace RoosterPlanner.Service
         public async Task<TaskResult<List<Manager>>> UserManagesOtherProjects(Guid userId)
         {
             if (userId == Guid.Empty)
-                throw new ArgumentNullException("userId");
+                throw new ArgumentNullException(nameof(userId));
             TaskResult<List<Manager>> taskResult = new TaskResult<List<Manager>>();
             try
             {

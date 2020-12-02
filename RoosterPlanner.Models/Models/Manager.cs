@@ -20,7 +20,7 @@ namespace RoosterPlanner.Models
        
 
         //Constructor
-        public Manager() : base()
+        public Manager()
         {
         }
 

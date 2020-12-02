@@ -19,7 +19,7 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ParticipationsController : ControllerBase
     {
-        private readonly ILogger logger;
+        private readonly ILogger<ParticipationsController> logger;
         private readonly IParticipationService participationService;
 
         public ParticipationsController(ILogger<ParticipationsController> logger,
@@ -83,8 +83,7 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPost]
         public ActionResult Save([FromBody] ParticipationViewModel participationViewModel)
         {
-            if (participationViewModel == null || participationViewModel.Person == null ||
-                participationViewModel.Project == null)
+            if (participationViewModel?.Person == null || participationViewModel.Project == null)
                 return BadRequest("No valid participation received");
 
             Task<TaskResult<Participation>> result = null;
@@ -113,10 +112,9 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPut]
         public ActionResult Update([FromBody] ParticipationViewModel participationViewModel)
         {
-            if (participationViewModel == null ||
-                participationViewModel.Person == null ||
-                participationViewModel.Person.Id == Guid.Empty ||
-                participationViewModel.Project == null ||
+            if (participationViewModel?.Person == null || 
+                participationViewModel.Person.Id == Guid.Empty || 
+                participationViewModel.Project == null || 
                 participationViewModel.Project.Id == Guid.Empty)
                 return BadRequest("No valid participation received");
 
@@ -155,14 +153,13 @@ namespace RoosterPlanner.Api.Controllers
 
                 result = participationService.UpdateParticipation(oldParticipation);
 
-                if (result != null && result.Result.Succeeded)
-                {
-                    result.Result.Data.Person = updatedParticipation.Person;
-                    result.Result.Data.Project = updatedParticipation.Project;
-                    return Ok(ParticipationViewModel.CreateVm(result.Result.Data));
-                }
+                if (result == null || !result.Result.Succeeded) 
+                    return UnprocessableEntity(participationViewModel);
+                
+                result.Result.Data.Person = updatedParticipation.Person;
+                result.Result.Data.Project = updatedParticipation.Project;
+                return Ok(ParticipationViewModel.CreateVm(result.Result.Data));
 
-                return UnprocessableEntity(participationViewModel);
             }
             catch (Exception ex)
             {
@@ -186,17 +183,14 @@ namespace RoosterPlanner.Api.Controllers
                 if (oid == null)
                     return BadRequest("Invalid User");
 
-                if (oid == participation.Data.PersonId.ToString())
-                {
-                    //gebruiker mag participation verwijderen
-                    TaskResult<Participation> result =
-                        await participationService.RemoveParticipation(participation.Data);
-                    if (result.Succeeded)
-                        return Ok(result);
-                    return Problem();
-                }
-
-                return Unauthorized();
+                if (oid != participation.Data.PersonId.ToString()) 
+                    return Unauthorized();
+                
+                //gebruiker mag participation verwijderen
+                TaskResult<Participation> result =
+                    await participationService.RemoveParticipation(participation.Data);
+                
+                return result.Succeeded ? Ok(result) : Problem();
             }
             catch (Exception ex)
             {

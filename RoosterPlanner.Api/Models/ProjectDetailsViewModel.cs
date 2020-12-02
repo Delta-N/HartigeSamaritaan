@@ -23,11 +23,11 @@ namespace RoosterPlanner.Api.Models
         //Constructor
         public ProjectDetailsViewModel()
         {
-            this.Tasks = new List<Task>();
+            Tasks = new List<Task>();
         }
         public static ProjectDetailsViewModel CreateVm(Project project)
         {
-            return new ProjectDetailsViewModel
+            return new()
             {
                 Id = project.Id,
                 Name = project.Name,
@@ -46,7 +46,7 @@ namespace RoosterPlanner.Api.Models
 
         public static Project CreateProject(ProjectDetailsViewModel projectDetailsViewModel)
         {
-            return new Project(projectDetailsViewModel.Id)
+            return new(projectDetailsViewModel.Id)
             {
                 Name = projectDetailsViewModel.Name,
                 Address = projectDetailsViewModel.Address,

@@ -22,7 +22,7 @@ namespace RoosterPlanner.Api.Controllers
     {
         private readonly ITaskService taskService;
         private readonly IProjectService projectService;
-        private readonly ILogger logger;
+        private readonly ILogger<TasksController> logger;
 
         //Constructor
         public TasksController(ITaskService taskService, IProjectService projectService,
@@ -60,7 +60,7 @@ namespace RoosterPlanner.Api.Controllers
         {
             TaskFilter filter = new TaskFilter(offset, pageSize)
             {
-                Name = name,
+                Name = name
             };
             try
             {
@@ -93,7 +93,6 @@ namespace RoosterPlanner.Api.Controllers
             if (taskViewModel.Category == null)
                 return BadRequest("Category of a Task cannot be empty");
 
-            TaskResult<Task> result;
             try
             {
                 Task task = TaskViewModel.CreateTask(taskViewModel);
@@ -106,6 +105,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 task.Category = null;
 
+                TaskResult<Task> result;
                 if (task.Id == Guid.Empty)
                     result = await taskService.CreateTask(task);
                 else
@@ -186,9 +186,7 @@ namespace RoosterPlanner.Api.Controllers
                 if (task == null)
                     return NotFound("Task not found");
                 TaskResult<Task> result = await taskService.RemoveTask(task);
-                if (result.Succeeded)
-                    return Ok(result);
-                return Problem();
+                return result.Succeeded ? Ok(result) : Problem();
             }
             catch (Exception ex)
             {
@@ -253,7 +251,6 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid task received");
             if (string.IsNullOrEmpty(categoryViewModel.Name))
                 return BadRequest("Name of a Category cannot be empty");
-            TaskResult<Category> result;
 
             try
             {
@@ -265,6 +262,7 @@ namespace RoosterPlanner.Api.Controllers
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 category.LastEditBy = oid;
 
+                TaskResult<Category> result;
                 if (category.Id == Guid.Empty)
                     result = await taskService.CreateCategory(category);
                 else
@@ -329,9 +327,7 @@ namespace RoosterPlanner.Api.Controllers
                 if (category == null)
                     return NotFound("Category not found");
                 TaskResult<Category> result = await taskService.RemoveCategory(category);
-                if (result.Succeeded)
-                    return Ok(result);
-                return Problem();
+                return result.Succeeded ? Ok(result) : Problem();
             }
             catch (Exception ex)
             {
@@ -378,11 +374,7 @@ namespace RoosterPlanner.Api.Controllers
                     if (result.Data == null)
                         return Ok();
 
-                List<TaskViewModel> taskViewModels = new List<TaskViewModel>();
-                foreach (ProjectTask projectTask in result.Data)
-                {
-                    taskViewModels.Add(TaskViewModel.CreateVm(projectTask.Task));
-                }
+                List<TaskViewModel> taskViewModels = result.Data.Select(projectTask => TaskViewModel.CreateVm(projectTask.Task)).ToList();
 
                 return Ok(taskViewModels);
             }
@@ -402,14 +394,13 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid ProjectTask received");
             if (projectTaskViewModel.ProjectId == Guid.Empty || projectTaskViewModel.TaskId == Guid.Empty)
                 return BadRequest("Project and/or Task Ids cannot be empty");
-            TaskResult<ProjectTask> result;
 
             try
             {
                 ProjectTask projectTask = ProjectTaskViewModel.CreateProjectTask(projectTaskViewModel);
                 if (projectTask == null)
                     return BadRequest("Unable to convert ProjectTaskViewModel to ProjectTask");
-                projectTask.Task = (await taskService.GetTask((Guid) projectTask.TaskId)).Data;
+                projectTask.Task = (await taskService.GetTask(projectTask.TaskId)).Data;
                 projectTask.Project = (await projectService.GetProjectDetails(projectTask.ProjectId)).Data;
                 if (projectTask.Task == null || projectTask.Project == null)
                     return BadRequest("Unable to add project and or task to projecttask");
@@ -418,8 +409,9 @@ namespace RoosterPlanner.Api.Controllers
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 projectTask.LastEditBy = oid;
 
+                TaskResult<ProjectTask> result;
                 if (projectTask.Id == Guid.Empty)
-                    result = (await taskService.AddTaskToProject(projectTask));
+                    result = await taskService.AddTaskToProject(projectTask);
                 else
                     return BadRequest("Cannot update existing ProjectTask with post method");
 
@@ -447,9 +439,8 @@ namespace RoosterPlanner.Api.Controllers
                 if (projectTask == null)
                     return NotFound("ProjectTask not found");
                 TaskResult<ProjectTask> result = await taskService.RemoveProjectTask(projectTask);
-                if (result.Succeeded)
-                    return Ok(result.Data.TaskId);
-                return Problem();
+                
+                return result.Succeeded ? Ok(result.Data.TaskId) : Problem();
             }
             catch (Exception ex)
             {
