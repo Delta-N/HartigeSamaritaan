@@ -16,7 +16,7 @@
 
 
   <div class="row">
-    <a *ngIf="isAdmin" (click)="edit()" mat-button id="editCategory">Category wijzigen</a>
-    <a *ngIf="isAdmin" (click)="delete()" mat-button id="deleteCategory">Category verwijderen</a>
+    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editCategory">Category wijzigen</a>
+    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="deleteCategory">Category verwijderen</a>
   </div>
 </div>

@@ -13,7 +13,6 @@ export class AddAdminComponent implements OnInit {
   checkoutForm;
   pageSize: number = 5;
   currentPage: number = 1;
-  displayUsers: User[] = []
   loaded: boolean;
   searchText: string = '';
   title: string;
@@ -42,33 +41,20 @@ export class AddAdminComponent implements OnInit {
     }
 
     this.users.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
-    this.fillDisplayUsers();
+
     this.data.addAdminType ? this.title = 'toevoegen' : this.title = 'verwijderen';
-  }
-
-  fillDisplayUsers() {
-    this.displayUsers = [];
-    for (let i = this.pageSize * (this.currentPage - 1); i < this.pageSize * this.currentPage; i++) {
-      this.displayUsers.push(this.users[i])
-    }
-    this.displayUsers = this.displayUsers.filter(f => {
-      return f != null;
-    })
-
   }
 
   nextPage() {
 
     if (this.currentPage != Math.ceil(this.users.length / this.pageSize)) {
       this.currentPage++;
-      this.fillDisplayUsers();
     }
   }
 
   prevPage() {
     if (this.currentPage != 1) {
       this.currentPage--;
-      this.fillDisplayUsers();
     }
   }
 
@@ -83,7 +69,8 @@ export class AddAdminComponent implements OnInit {
   resetPage() {
     this.currentPage = 1;
   }
-  close(){
+
+  close() {
     this.dialogRef.close()
   }
 

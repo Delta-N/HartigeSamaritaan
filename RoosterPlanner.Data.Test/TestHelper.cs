@@ -21,7 +21,7 @@ namespace RoosterPlanner.Data
             ConnectionStringsConfig configuration = new ConnectionStringsConfig();
 
             var iConfig = GetIConfigurationRoot(outputPath);
-            iConfig.GetSection("ConnectionStrings").Bind(configuration);
+            /*iConfig.GetSection("ConnectionStrings").Bind(configuration);*/
 
             return configuration;
         }

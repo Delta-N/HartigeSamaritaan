@@ -2,20 +2,21 @@ name: Build the project
 
 on:
   push:
-    branches: 
+    branches:
       - develop
       - master
+      - Refactor
 
 env:
   BUILD_CONFIGURATION: Release
-  DOTNET_VERSION: 3.1.x
-  NODE_VERSION: 12.18.3
+  DOTNET_VERSION: 5.0.x
+  NODE_VERSION: 14.15.1
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
 
 jobs:
   build-front-end: 
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
 
     steps:
       - uses: actions/checkout@v2
@@ -41,7 +42,7 @@ jobs:
       - name: build front-end
         run: |
           npm install
-          npm install --global @angular/cli > /dev/null
+          npm install --global @angular/cli
           ng build --prod --outputPath=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
 

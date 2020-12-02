@@ -8,9 +8,8 @@ import {UserService} from "../../services/user.service";
 import {User} from "../../models/user";
 import {ParticipationService} from "../../services/participation.service";
 import {ToastrService} from "ngx-toastr";
-import {Router} from "@angular/router";
 import {EntityHelper} from "../../helpers/entity-helper";
-import {DateConverter} from "../../helpers/date-converter";
+import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
 
 @Component({
   selector: 'app-home',
@@ -30,7 +29,7 @@ export class HomeComponent implements OnInit {
               private userService: UserService,
               private participationService: ParticipationService,
               private toastr: ToastrService,
-              private route: Router) {
+              ) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -50,53 +49,56 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  checkUserProfileValid(): boolean {
-    return this.currentUser.firstName != null &&
-      this.currentUser.lastName != null &&
-      this.currentUser.phoneNumber != null &&
-      this.currentUser.city != null &&
-      this.currentUser.postalCode != null &&
-      this.currentUser.streetAddress != null &&
-      this.currentUser.dateOfBirth != null;
-  }
-
   async addParticipation() {
     let projects: Project[] = [];
-    if (this.checkUserProfileValid()) {
-      await this.projectService.getActiveProjects().then(response => {
-          projects = response;
+    let userCheckedProfile: boolean = false;
+    this.toastr.warning("Controleer je profiel en vul deze eventueel aan.")
 
-          projects.forEach(pro => {
-            this.participations.forEach(par => {
-              if (pro.id == par.project.id) {
-                projects = projects.filter(obj => obj !== pro);
+    const dialogRef = this.dialog.open(ChangeProfileComponent, {
+      width: '500px',
+      data: this.currentUser
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        userCheckedProfile = true;
+      }
+
+      if (userCheckedProfile) {
+        this.projectService.getActiveProjects().then(response => {
+            projects = response;
+
+            projects.forEach(pro => {
+              this.participations.forEach(par => {
+                if (pro.id == par.project.id) {
+                  projects = projects.filter(obj => obj !== pro);
+                }
+              })
+            })
+
+            let dialogRef = this.dialog.open(AddProjectComponent, {
+              data: projects,
+              width: '350px',
+            });
+            dialogRef.disableClose = true;
+            dialogRef.afterClosed().subscribe(result => {
+              if (result !== 'false') {
+                this.selectedProjects = result;
+                this.selectedProjects.forEach(project => {
+                  let participation: Participation = new Participation();
+                  participation.id = EntityHelper.returnEmptyGuid();
+                  participation.person = this.currentUser;
+                  participation.project = project
+                  this.participationService.postParticipation(participation);
+                })
+                setTimeout(() => this.getParticipations(), 1000)
               }
             })
-          })
-
-          let dialogRef = this.dialog.open(AddProjectComponent, {
-            data: projects,
-            width: '350px',
-          });
-          dialogRef.disableClose = true;
-          dialogRef.afterClosed().subscribe(result => {
-            if (result !== 'false') {
-              this.selectedProjects = result;
-              this.selectedProjects.forEach(project => {
-                let participation: Participation = new Participation();
-                participation.id = EntityHelper.returnEmptyGuid();
-                participation.person = this.currentUser;
-                participation.project = project
-                this.participationService.postParticipation(participation);
-              })
-              setTimeout(() => this.getParticipations(), 1000)
-            }
-          })
-        }
-      )
-    } else {
-      this.toastr.warning("Vul eerst je profiel aan.")
-      this.route.navigateByUrl('/profile').then()
-    }
+          }
+        )
+      } else {
+        this.toastr.warning("Controleer eerst je profiel")
+      }
+    })
   }
 }

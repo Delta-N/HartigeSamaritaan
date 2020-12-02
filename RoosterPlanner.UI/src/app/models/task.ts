@@ -9,5 +9,5 @@ export class Task extends Entity {
   public color: string;
   public documentUri: string;
   public requirements: Requirement[];
-  public description:string;
+  public description: string;
 }

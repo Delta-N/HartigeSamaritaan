@@ -1,7 +1,6 @@
 import {Entity} from "./entity.model";
 
 export class User extends Entity {
-  public id: string;
   public firstName: string;
   public lastName: string;
   public email: string;

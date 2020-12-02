@@ -1,42 +1,49 @@
 <div class="container">
-  <div class="bar">
+  <div class="row bar">
     <h1>Taken</h1>
   </div>
-</div>
 
-<div class="container">
-  <div class="cardholder" *ngIf="loaded===true">
-
-
-    <mat-card [ngClass]="[taskCardStyle]" id="taskCard">
-      <div>
-        <mat-card-title>Taken <button class="card-title-icon" mat-icon-button (click)="expandTaskCard()"><mat-icon>zoom_out_map</mat-icon></button></mat-card-title>
-      </div>
-      <mat-card-content>
+  <div class="row cardholder" *ngIf="loaded===true">
+      <mat-card [ngClass]="[taskCardStyle]" id="taskCard">
+        <div>
+          <mat-card-title>Taken
+            <button [disabled]="tasksExpandbtnDisabled" class="card-title-icon" mat-icon-button
+                    (click)="expandTaskCard()">
+              <mat-icon>zoom_out_map</mat-icon>
+            </button>
+          </mat-card-title>
+        </div>
+        <mat-card-content>
         <span *ngFor="let item of tasks">
             <a [routerLink]="['/task', item.id]"><p>{{item.name}}</p></a>
           </span>
-        <mat-card-actions class="action-anchor"></mat-card-actions>
-      </mat-card-content>
-      <mat-card-actions class="action-anchor">
-        <button mat-button (click)="modTask('add')">+ nieuwe toevoegen</button>
-      </mat-card-actions>
-    </mat-card>
+          <mat-card-actions class="action-anchor"></mat-card-actions>
+        </mat-card-content>
+        <mat-card-actions class="action-anchor">
+          <button mat-button (click)="modTask('add')">+ nieuwe toevoegen</button>
+        </mat-card-actions>
+      </mat-card>
 
-    <mat-card [ngClass]="[categoryCardStyle]" id="categoryCard">
-      <div>
-        <mat-card-title>Categorieën <button class="card-title-icon" mat-icon-button (click)="expandCategoryCard()"><mat-icon>zoom_out_map</mat-icon></button></mat-card-title>
-      </div>
-      <mat-card-content>
+      <mat-card [ngClass]="[categoryCardStyle]" id="categoryCard">
+        <div>
+          <mat-card-title>Categorieën
+            <button [disabled]="categoryExpandbtnDisabled" class="card-title-icon" mat-icon-button
+                    (click)="expandCategoryCard()">
+              <mat-icon>zoom_out_map</mat-icon>
+            </button>
+          </mat-card-title>
+        </div>
+        <mat-card-content>
         <span *ngFor="let item of categories">
             <a [routerLink]="['/category', item.id]"><p>{{item.name}}</p></a>
           </span>
-        <mat-card-actions class="action-anchor"></mat-card-actions>
-      </mat-card-content>
-      <mat-card-actions class="action-anchor">
-        <button mat-button (click)="modCategory('add')">+ nieuwe toevoegen</button>
-      </mat-card-actions>
-    </mat-card>
+          <mat-card-actions class="action-anchor"></mat-card-actions>
+        </mat-card-content>
+        <mat-card-actions class="action-anchor">
+          <button mat-button (click)="modCategory('add')">+ nieuwe toevoegen</button>
+        </mat-card-actions>
+      </mat-card>
 
+    </div>
   </div>
-</div>
+

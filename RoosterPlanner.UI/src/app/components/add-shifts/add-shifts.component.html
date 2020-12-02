@@ -1,7 +1,7 @@
 <span *ngIf="loaded">
    <div class="container">
-      <div class="row" id="bar">
-         <div class="bar">
+      <div class="row bar" >
+         <div>
             <h1>{{title}}</h1>
          </div>
       </div>
@@ -93,7 +93,7 @@
                </div>
             </div>
             <div class="row">
-               <a (click)="save(checkoutForm.value)" mat-button class="save">Opslaan</a>
+               <a (click)="save(checkoutForm.value)" mat-button class="action-button">Opslaan</a>
             </div>
          </div>
          <div class="col-md-6 right">

@@ -9,7 +9,7 @@ import {UserService} from "../../services/user.service";
 import {AddAdminComponent} from "../../components/add-admin/add-admin.component";
 import {ToastrService} from "ngx-toastr";
 
-
+//
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -27,7 +27,8 @@ export class AdminComponent implements OnInit {
   adminElementHeight: number;
 
   reasonableMaxInteger: number = 10000; //aanpassen na 10k projecten/admins ;)
-
+  projectExpandbtnDisabled: boolean = true;
+  adminExpandbtnDisabled: boolean = true;
 
   constructor(public dialog: MatDialog,
               private projectService: ProjectService,
@@ -45,6 +46,9 @@ export class AdminComponent implements OnInit {
   async getProjects(offset: number, pageSize: number) {
     await this.projectService.getAllProjects(offset, pageSize).then(x => {
       this.projects = x;
+      if (this.projects.length >= 5) {
+        this.projectExpandbtnDisabled = false;
+      }
       this.projects.sort((a, b) => a.participationStartDate < b.participationStartDate ? 1 : -1);
     });
   }
@@ -52,6 +56,9 @@ export class AdminComponent implements OnInit {
   async getAdministrators(offset: number, pageSize: number) {
     await this.userService.getAdministrators(offset, pageSize).then(x => {
       this.administrators = x;
+      if (this.administrators.length >= 5) {
+        this.adminExpandbtnDisabled = false;
+      }
       this.administrators.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
     });
   }
@@ -61,6 +68,8 @@ export class AdminComponent implements OnInit {
       width: '500px',
       data: {
         createProject: true,
+        title:"Project toevoegen",
+
       }
     });
     dialogRef.disableClose = true;
@@ -98,12 +107,16 @@ export class AdminComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(async result => {
+      this.loaded=false;
+      this.getAdministrators(0, this.itemsPerCard).then()
       if (result != null) {
         setTimeout(() => {
-          this.getAdministrators(0, this.itemsPerCard).then()
+          this.getAdministrators(0, this.itemsPerCard).then(()=>this.loaded=true)
           this.toastr.success(result + " is " + toastrString + " als administrator")
         }, 500);
       }
+      this.getAdministrators(0, this.itemsPerCard).then(()=>this.loaded=true)
+
     });
   }
 

@@ -1,7 +1,6 @@
 import {Entity} from "./entity.model";
 
 export class Project extends Entity {
-  public id: string;
   public name: string;
   public address: string;
   public city: string;

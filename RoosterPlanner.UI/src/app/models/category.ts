@@ -1,8 +1,8 @@
 ﻿import {Entity} from "./entity.model";
 
-export class Category extends Entity{
+export class Category extends Entity {
 
-  public code:string;
-  public name:string;
+  public code: string;
+  public name: string;
 
 }

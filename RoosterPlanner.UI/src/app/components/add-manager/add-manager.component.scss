@@ -1,16 +1,9 @@
-.mat-button {
-  font: normal normal normal 17px/17px Segoe UI;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border: 1px solid gray;
+.mat-form-field {
+  width: 100%;
 }
 
 .closebutton {
   margin-left: auto;
-}
-
-.mat-form-field {
-  width: 100%;
 }
 
 .names {
@@ -27,6 +20,4 @@
   .mat-tab-body-content {
     overflow: hidden;
   }
-
-
 }

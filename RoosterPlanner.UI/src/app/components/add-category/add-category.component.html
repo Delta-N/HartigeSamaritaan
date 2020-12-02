@@ -8,7 +8,7 @@
 
       <mat-form-field>
         <mat-label for="code"> Code</mat-label>
-        <input formControlName="code" id="code" matInput placeholder="Category code" type="text">
+        <input formControlName="code" id="code" matInput placeholder="Maximaal 10 tekens" type="text">
       </mat-form-field>
     </div>
     <div>
@@ -23,7 +23,7 @@
 <mat-dialog-actions id="actions">
 
   <div class="align-right">
-    <button class="action-button" (click)="saveCategory(checkoutForm.value)" mat-button>Opslaan</button>
-    <button mat-button (click)="close()">Annuleren</button>
+    <button class="action-button override-button" (click)="saveCategory(checkoutForm.value)" mat-button>Opslaan</button>
+    <button mat-button class="override-button" (click)="close()">Annuleren</button>
   </div>
 </mat-dialog-actions>

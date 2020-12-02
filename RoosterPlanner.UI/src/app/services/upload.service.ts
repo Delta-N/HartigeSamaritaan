@@ -20,6 +20,24 @@ export class UploadService {
     return uploadResult
   }
 
+  async uploadProjectPicture(formData: FormData): Promise<Uploadresult> {
+    let uploadResult: Uploadresult = new Uploadresult();
+    await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadProjectPicture`, formData)
+      .toPromise().then(res => {
+        uploadResult = res;
+      });
+    return uploadResult
+  }
+
+  async uploadProfilePicture(formData: FormData): Promise<Uploadresult> {
+    let uploadResult: Uploadresult = new Uploadresult();
+    await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadProfilePicture`, formData)
+      .toPromise().then(res => {
+        uploadResult = res;
+      });
+    return uploadResult
+  }
+
   async deleteIfExists(url: string): Promise<Uploadresult> {
     let uploadResult: Uploadresult = new Uploadresult();
 

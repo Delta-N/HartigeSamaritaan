@@ -42,6 +42,7 @@ export class AddManagerComponent implements OnInit {
           this.users.push(user);
         }
       })
+
       this.users.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
       this.managers.sort((a, b) => a.person.firstName > b.person.firstName ? 1 : -1);
       this.loaded = true;

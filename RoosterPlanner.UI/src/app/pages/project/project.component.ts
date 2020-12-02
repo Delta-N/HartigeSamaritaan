@@ -34,6 +34,8 @@ export class ProjectComponent implements OnInit {
   itemsPerCard = 5;
   reasonableMaxInteger = 10000;
   tasksElementHeight: number;
+  projectTasksExpandbtnDisabled:boolean=true;
+  isManager: boolean=false;
 
 
   constructor(private userService: UserService,
@@ -47,19 +49,11 @@ export class ProjectComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.isAdmin = this.userService.userIsAdminFrontEnd();
+    this.isManager = this.userService.userIsProjectAdminFrontEnd();
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    await this.getParticipation().then(() => {
-        if (this.project != null) {
-          this.project.pictureUri = "../assets/Logo.png"
-        }
-        if (this.participation != null) {
-          this.participation.project.pictureUri = "../assets/Logo.png";
-        }
-      }
-    );
-
+    await this.getParticipation().then();
     await this.getProjectTasks().then();
 
   }
@@ -77,6 +71,9 @@ export class ProjectComponent implements OnInit {
     this.taskService.getAllProjectTasks(this.guid).then(tasks => {
       this.projectTasks = tasks.filter(t => t != null);
       this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
+      if (this.projectTasks.length >= 5) {
+        this.projectTasksExpandbtnDisabled = false;
+      }
       this.projectTasks.sort((a, b) => a.name > b.name ? 1 : -1);
 
     })
@@ -97,7 +94,7 @@ export class ProjectComponent implements OnInit {
     this.project = project
     this.viewProject = DateConverter.formatProjectDateReadable(this.project)
     this.title = this.viewProject.name;
-    this.viewProject.closed ? this.closeButtonText = "Project openen" : this.closeButtonText = "Project sluiten";
+    this.viewProject.closed ? this.closeButtonText = "Project openen" : this.closeButtonText = "Project afsluiten";
     if (this.viewProject.closed) {
       this.title += " DIT PROJECT IS GESLOTEN"
     }
@@ -110,7 +107,8 @@ export class ProjectComponent implements OnInit {
       width: '500px',
       data: {
         createProject: false,
-        project: this.project
+        project: this.project,
+        title:"Project wijzigen",
       }
     });
     dialogRef.disableClose = true;
@@ -125,16 +123,31 @@ export class ProjectComponent implements OnInit {
   }
 
   async closeProject() {
-    this.project.closed = !this.project.closed;
-    this.loaded = false;
-    await this.projectService.updateProject(this.project).then(response => {
-      this.displayProject(response.body)
-      if (this.project.closed) {
-        this.toastr.success("Het project is gesloten");
-      } else {
-        this.toastr.success("Het project is geopend");
+    let messageVariable: string;
+    this.project.closed ? messageVariable = "openen" : messageVariable = "sluiten";
+    const message = "Weet je zeker dat je dit project wilt " + messageVariable + " ?"
+    const dialogData = new ConfirmDialogModel("Bevestig wijziging", message, "ConfirmationInput");
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(async dialogResult => {
+      if (dialogResult === true) {
+        this.project.closed = !this.project.closed;
+        this.loaded = false;
+        await this.projectService.updateProject(this.project).then(response => {
+          this.displayProject(response.body)
+          if (this.project.closed) {
+            this.toastr.success("Het project is gesloten");
+          } else {
+            this.toastr.success("Het project is geopend");
+          }
+        }, () => this.toastr.error("Fout tijdens het sluiten van het project"));
       }
-    }, () => this.toastr.error("Fout tijdens het sluiten van het project"));
+    });
+
+
   }
 
   editWorkingHours() {
@@ -147,11 +160,17 @@ export class ProjectComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       this.loaded = false;
-      if (dialogResult != null && dialogResult !== this.participation.maxWorkingHoursPerWeek) {
+      if (dialogResult != null &&
+        dialogResult !== this.participation.maxWorkingHoursPerWeek &&
+        dialogResult > 0 &&
+        dialogResult <= 40) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
         this.participationService.updateParticipation(this.participation).then(response => {
-          this.displayProject(response.body.project)
-        })
+          this.displayProject(response.body.project);
+        });
+      } else {
+        this.toastr.error("fout tijdens het updaten van maximaal aantal werkuren")
+        this.loaded = true;
       }
     });
   }
@@ -185,13 +204,15 @@ export class ProjectComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(() => {
-      this.getProjectTasks();
+      setTimeout(() => {
+        this.getProjectTasks();
+      }, 500);
     })
   }
 
   modManager() {
     const dialogRef = this.dialog.open(AddManagerComponent, {
-      width: '750px',
+      width: '500px',
       data: {
         projectId: this.project.id
       }
@@ -199,7 +220,7 @@ export class ProjectComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.toastr.success("De rol van "+ result+" is succesvol gewijzigd.")
+        this.toastr.success("De rol van " + result + " is gewijzigd.")
       }
     });
   }

@@ -42,6 +42,10 @@ export class AddCategoryComponent implements OnInit {
     if (this.checkoutForm.status === 'INVALID') {
       this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
+      if(this.updatedCategory.code.length>10){
+        this.toastr.error("Code mag maximaal 10 tekens lang zijn")
+        return;
+      }
       if (this.modifier === 'toevoegen') {
         this.categoryService.postCategory(this.updatedCategory).then(response => {
           this.dialogRef.close(response)

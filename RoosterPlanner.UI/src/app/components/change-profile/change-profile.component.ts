@@ -5,6 +5,7 @@ import {User} from "../../models/user";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {UserService} from "../../services/user.service";
 import {ToastrService} from "ngx-toastr";
+import {DateConverter} from "../../helpers/date-converter";
 
 @Component({
   selector: 'app-change-profile',
@@ -38,10 +39,22 @@ export class ChangeProfileComponent implements OnInit {
     if (this.checkoutForm.status === 'INVALID') {
       this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
-      this.userService.updateUser(this.updateUser).then(response => {
-        this.dialogRef.close(response)
-      });
+      let bd: Date = DateConverter.toDate(this.updateUser.dateOfBirth);
+      let today: Date = new Date();
+
+      if ((bd > today)) {
+        this.toastr.error("Geboortedatum mag niet in de toekomst liggen")
+      } else if (bd.getFullYear() - today.getFullYear() < -100) {
+        this.toastr.error("Kom op zo oud ben je echt niet!")
+      } else {
+        this.userService.updateUser(this.updateUser).then(response => {
+          this.dialogRef.close(response)
+        });
+      }
     }
   }
-  close(){this.dialogRef.close(null)}
+
+  close() {
+    this.dialogRef.close(null)
+  }
 }
