@@ -228,6 +228,38 @@ namespace RoosterPlanner.Data.Migrations
                     b.ToTable("Collaborations");
                 });
 
+            modelBuilder.Entity("RoosterPlanner.Models.Manager", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastEditBy")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Managers");
+                });
+
             modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -447,7 +479,7 @@ namespace RoosterPlanner.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid?>("TaskId")
+                    b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -584,7 +616,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("003313bb-e1f1-4814-b1ae-f962e88b914d"),
+                            Id = new Guid("244a61c4-3b96-4e12-b94b-3043aad08932"),
                             CategoryId = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
                             Color = "Blue",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chef",
@@ -595,7 +627,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4972b334-c537-4829-985a-cfa67ec0ae4b"),
+                            Id = new Guid("6072a38a-6dd3-47f0-b308-194ed501bd38"),
                             CategoryId = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
                             Color = "Red",
                             Description = "Een leuke beschrijving van de werkzaamheden van een runner",
@@ -606,7 +638,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f72411ac-f666-4ed5-a959-d377a0c07b21"),
+                            Id = new Guid("c5342957-5c44-4394-8499-216095e90d62"),
                             CategoryId = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
                             Color = "Yellow",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chauffeur",
@@ -617,7 +649,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("128b66d5-20ea-45ad-8697-0257b565d9b7"),
+                            Id = new Guid("d0465595-ced3-4ff3-8360-d0546bd38184"),
                             CategoryId = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
                             Color = "Green",
                             Description = "Een leuke beschrijving van de werkzaamheden van een klusser",
@@ -669,6 +701,21 @@ namespace RoosterPlanner.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("RoosterPlanner.Models.Manager", b =>
+                {
+                    b.HasOne("RoosterPlanner.Models.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RoosterPlanner.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("RoosterPlanner.Models.Participation", b =>
                 {
                     b.HasOne("RoosterPlanner.Models.Person", "Person")
@@ -695,7 +742,8 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasOne("RoosterPlanner.Models.Task", "Task")
                         .WithMany("ProjectTasks")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Requirement", b =>

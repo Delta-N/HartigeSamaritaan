@@ -20,6 +20,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatChip, MatChipsModule} from "@angular/material/chips";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
+import {MatTabsModule} from "@angular/material/tabs";
 
 @NgModule({
   declarations: [],
@@ -51,8 +52,8 @@ import {MatSortModule} from "@angular/material/sort";
     MatToolbarModule,
     MatChipsModule,
     MatPaginatorModule,
-    MatSortModule
-
+    MatSortModule,
+    MatTabsModule,
 
 
   ],
@@ -81,7 +82,8 @@ import {MatSortModule} from "@angular/material/sort";
     MatToolbarModule,
     MatChip,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatTabsModule,
   ]
 })
 export class MaterialModule {}

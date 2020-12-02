@@ -3,26 +3,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RoosterPlanner.Models
 {
-    public class ProjectTask : Entity
+    public class Manager : Entity
     {
-        [Column(Order = 0)]
+        [Column(Order = 1)]
+        public Guid PersonId { get; set; }
+
+        [ForeignKey("PersonId")]
+        public Person Person { get; set; }
+
+        [Column(Order = 2)]
         public Guid ProjectId { get; set; }
 
         [ForeignKey("ProjectId")]
         public Project Project { get; set; }
 
-        [Column(Order = 1)]
-        public Guid TaskId { get; set; }
-
-        [ForeignKey("TaskId")]
-        public Task Task { get; set; }
+       
 
         //Constructor
-        public ProjectTask() : base()
+        public Manager() : base()
         {
         }
 
-        public ProjectTask(Guid id) : base(id)
+        public Manager(Guid id) : base(id)
         {
         }
     }

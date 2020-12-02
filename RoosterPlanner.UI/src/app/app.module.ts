@@ -25,7 +25,7 @@ import {AuthorizationGuard} from "./guards/authorization.guard";
 import {CreateProjectComponent} from "./components/create-project/create-project.component";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AddAdminComponent} from './components/add-admin/add-admin.component';
-import {DatePipe, FilterPipe, TaskFilterPipe} from "./helpers/filter.pipe";
+import {DatePipe, FilterPipe, ManagerFilterPipe, TaskFilterPipe} from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
@@ -54,6 +54,9 @@ import {NgxMultipleDatesModule} from "ngx-multiple-dates";
 import {ShiftOverviewComponent} from './pages/shift-overview/shift-overview.component';
 import {AddShiftsComponent} from './components/add-shifts/add-shifts.component';
 import {EditShiftComponent} from './components/edit-shift/edit-shift.component';
+import { ManageComponent } from './pages/manage/manage.component';
+import {ManageGuard} from "./guards/manage.guard";
+import { AddManagerComponent } from './components/add-manager/add-manager.component';
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -119,6 +122,9 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ShiftOverviewComponent,
     AddShiftsComponent,
     EditShiftComponent,
+    ManageComponent,
+    AddManagerComponent,
+    ManagerFilterPipe,
 
   ],
   imports: [
@@ -172,7 +178,8 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     MsalGuard,
     MsalBroadcastService,
     AuthorizationGuard,
-    FormBuilder
+    FormBuilder,
+    ManageGuard,
   ],
   bootstrap: [AppComponent],
   entryComponents: [AddProjectComponent]

@@ -12,6 +12,7 @@
     <span class="example-spacer"></span>
     <div fxShow="true" fxHide.lt-md="true">
       <a mat-button class="toolbarbutton" *ngIf="isAdmin" routerLink="/admin">Admin</a>
+      <a mat-button class="toolbarbutton" *ngIf="isProjectAdmin" routerLink="/manage">Beheer</a>
       <a mat-button class="toolbarbutton" routerLink="/home">Dashboard</a>
       <a mat-button class="toolbarbutton" routerLink="/profile">Profiel</a>
       <button mat-button class="toolbarbutton" *ngIf="!loggedIn" (click)="login()">Login</button>
@@ -28,6 +29,7 @@
           <a mat-button class="sidenav-button" routerLink="/home">Dashboard</a>
           <a mat-button class="sidenav-button" routerLink="/profile">Profiel</a>
           <a mat-button class="sidenav-button" *ngIf="isAdmin" routerLink="/admin">Admin</a>
+          <a mat-button class="sidenav-button" *ngIf="isProjectAdmin" routerLink="/manage">Beheer</a>
         </div>
       </mat-sidenav>
 

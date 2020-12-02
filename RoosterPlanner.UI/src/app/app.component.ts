@@ -18,7 +18,6 @@ import * as moment from "moment"
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-// todo remove #state=... from link after redirect
 
   public hasUser = false;
 
@@ -26,6 +25,8 @@ export class AppComponent implements OnInit, OnDestroy {
   isIframe = false;
   loggedIn = false;
   isAdmin = false;
+  isProjectAdmin: boolean;
+
   user: User = new User();
   private readonly _destroying$ = new Subject<void>();
 
@@ -59,6 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
   async checkAccount() {
     this.loggedIn = this.authService.getAllAccounts().length > 0;
     this.isAdmin = this.userService.userIsAdminFrontEnd();
+    this.isProjectAdmin = this.userService.userIsProjectAdminFrontEnd();
   }
 
   openDialog() {

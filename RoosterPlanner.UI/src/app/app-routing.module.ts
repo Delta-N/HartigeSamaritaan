@@ -13,6 +13,8 @@ import {AllTasksComponent} from "./pages/all-tasks/all-tasks.component";
 import {CategoryComponent} from "./pages/category/category.component";
 import {AddShiftsComponent} from "./components/add-shifts/add-shifts.component";
 import {ShiftOverviewComponent} from "./pages/shift-overview/shift-overview.component";
+import {ManageComponent} from "./pages/manage/manage.component";
+import {ManageGuard} from "./guards/manage.guard";
 
 const routes: Routes = [
   {
@@ -55,7 +57,8 @@ const routes: Routes = [
     path: 'shifts/:id',
     component: ShiftOverviewComponent,
     canActivate: [
-      MsalGuard
+      MsalGuard,
+      ManageGuard
     ]
   },
   {
@@ -69,7 +72,8 @@ const routes: Routes = [
     path: 'addshifts/:id',
     component: AddShiftsComponent,
     canActivate: [
-      MsalGuard
+      MsalGuard,
+      ManageGuard
     ]
   },
   {
@@ -99,6 +103,13 @@ const routes: Routes = [
     component: CategoryComponent,
     canActivate: [
       MsalGuard
+    ]
+  },
+  {
+    path: 'manage',
+    component: ManageComponent,
+    canActivate: [
+      ManageGuard
     ]
   },
   {

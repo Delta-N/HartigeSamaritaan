@@ -18,6 +18,7 @@ namespace RoosterPlanner.Data.Context
         public DbSet<Availability> Availabilities { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Collaboration> Collaborations { get; set; }
+        public DbSet<Manager> Managers { get; set; }
 
         //Constructor
         public RoosterPlannerContext(DbContextOptions<RoosterPlannerContext> options) : base(options)
@@ -38,7 +39,7 @@ namespace RoosterPlanner.Data.Context
                 .HasOne(pt => pt.Task)
                 .WithMany(t => t.ProjectTasks)
                 .HasForeignKey(pt => pt.TaskId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Project>(pro =>
             {

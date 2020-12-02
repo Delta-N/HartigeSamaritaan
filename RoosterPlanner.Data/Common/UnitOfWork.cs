@@ -22,6 +22,7 @@ namespace RoosterPlanner.Data.Common
         IMatchRepository MatchRepository { get; }
 
         IProjectTaskRepository ProjectTaskRepository { get; }
+        IManagerRepository ManagerRepository { get; }
 
         /// <summary>
         /// Saves the changes.
@@ -57,6 +58,8 @@ namespace RoosterPlanner.Data.Common
 
         private IShiftRepository shiftRepository;
         private IProjectTaskRepository projectTaskRepository;
+        private IManagerRepository managerRepository;
+
         #endregion
 
         public IProjectRepository ProjectRepository
@@ -68,7 +71,6 @@ namespace RoosterPlanner.Data.Common
                 return this.projectRepository;
             }
         }
-
 
         public IShiftRepository ShiftRepository
         {
@@ -134,13 +136,24 @@ namespace RoosterPlanner.Data.Common
         {
             get
             {
-                if(projectTaskRepository==null)
-                    this.projectTaskRepository=new ProjectTaskRepository(this.DataContext);
+                if (projectTaskRepository == null)
+                    this.projectTaskRepository = new ProjectTaskRepository(this.DataContext);
                 return this.projectTaskRepository;
             }
         }
 
+        public IManagerRepository ManagerRepository
+        {
+            get
+            {
+                if (managerRepository == null)
+                    this.managerRepository = new ManagerRepository(this.DataContext);
+                return this.managerRepository;
+            }
+        }
+
         #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
         /// </summary>
@@ -149,9 +162,11 @@ namespace RoosterPlanner.Data.Common
         {
             this.DataContext = dataContext;
         }
+
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Saves the changes.
         /// </summary>
@@ -175,6 +190,7 @@ namespace RoosterPlanner.Data.Common
         {
             this.DataContext.Dispose();
         }
+
         #endregion
     }
 }
