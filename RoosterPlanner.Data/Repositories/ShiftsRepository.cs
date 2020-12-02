@@ -27,7 +27,7 @@ namespace RoosterPlanner.Data.Repositories
         public Task<List<Shift>> GetByProjectAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
-                return System.Threading.Tasks.Task.FromResult(new List<Shift>());
+                return System.Threading.Tasks.Task.FromResult<List<Shift>>(null);
             return this.EntitySet
                 .AsNoTracking()
                 .AsQueryable()
@@ -40,7 +40,7 @@ namespace RoosterPlanner.Data.Repositories
         public async Task<List<Shift>> AddAll(List<Shift> shifts)
         {
             if (shifts == null || shifts.Count == 0)
-                return null;
+                return await System.Threading.Tasks.Task.FromResult<List<Shift>>(null);
             foreach (Shift shift in shifts)
             {
                 if (shift.Id == Guid.Empty)
@@ -53,8 +53,8 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<Shift> GetShift(Guid shiftId)
         {
-            if(shiftId==Guid.Empty)
-                return System.Threading.Tasks.Task.FromResult<>(null);
+            if (shiftId == Guid.Empty)
+                return System.Threading.Tasks.Task.FromResult<Shift>(null);
 
             return this.EntitySet
                 .AsNoTracking()
