@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -25,11 +23,11 @@ namespace RoosterPlanner.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+           
             IdentityModelEventSource.ShowPII = true; // temp for more logging
             // Enable Application Insights telemetry collection.
-            var options = new ApplicationInsightsServiceOptions
-                {ConnectionString = Configuration["ApplicationInsight:ConnectionString"]};
-            services.AddApplicationInsightsTelemetry(options);
+            
+            services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(jwtOptions =>
@@ -39,6 +37,7 @@ namespace RoosterPlanner.Api
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
+                        ValidateLifetime = true,
                     };
                     jwtOptions.Audience = Configuration["AzureAD:Audience"];
                     jwtOptions.Events = new JwtBearerEvents
@@ -61,7 +60,7 @@ namespace RoosterPlanner.Api
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Boardmember", policy =>
-                    policy.RequireClaim("extension_UserRole", "1"));
+                    policy.RequireClaim("extension_UserRole", "1")); //userRole.boardmember
 
                 options.AddPolicy("Committeemember", policy =>
                     policy.RequireClaim("extension_UserRole", "2"));
@@ -89,8 +88,6 @@ namespace RoosterPlanner.Api
             services.AddTransient<IShiftService, ShiftService>();
             services.AddTransient<IMatchService, MatchService>();
             services.AddTransient<IBlobService, BlobService>();
-
-
 
             services.AddLogging();
 

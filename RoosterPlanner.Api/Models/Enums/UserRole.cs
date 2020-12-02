@@ -2,11 +2,9 @@
 {
     public enum UserRole
     {
-        Boardmember=1,
-        Committeemember,
-        Volunteer,
-        None
+        Boardmember = 1,
+        Committeemember = 2,
+        Volunteer = 3,
+        None = 4
     }
-    
-
 }
