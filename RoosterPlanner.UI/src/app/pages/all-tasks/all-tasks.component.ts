@@ -8,6 +8,8 @@ import {AddTaskComponent} from "../../components/add-task/add-task.component";
 import {Category} from "../../models/category";
 import {CategoryService} from "../../services/category.service";
 import {AddCategoryComponent} from "../../components/add-category/add-category.component";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 @Component({
   selector: 'app-all-tasks',
@@ -34,7 +36,17 @@ export class AllTasksComponent implements OnInit {
               private router: Router,
               private toastr: ToastrService,
               private taskService: TaskService,
-              private categoryService: CategoryService) {
+              private categoryService: CategoryService,
+              private breadcrumbService: BreadcrumbService) {
+    let breadcrumb: Breadcrumb = new Breadcrumb();
+    breadcrumb.label = 'test';
+    breadcrumb.url = "/tasks";
+    let breadcrumb2: Breadcrumb = new Breadcrumb();
+    breadcrumb2.label = 'test';
+    breadcrumb2.url = "/tasks";
+    let array: Breadcrumb[]=[];
+    array.push(breadcrumb, breadcrumb2);
+    this.breadcrumbService.replace(array);
   }
 
   ngOnInit(): void {
