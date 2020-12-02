@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
 using RoosterPlanner.Models;
+using Task = RoosterPlanner.Models.Task;
 
 namespace RoosterPlanner.Data.Repositories
 {
     public interface IShiftRepository : IRepository<Shift>
     {
-        Task<List<Shift>> GetAll(Guid projectId);
+        Task<List<Shift>> GetByProjectAsync(Guid projectId);
         Task<List<Shift>> AddAll(List<Shift> shifts);
         Task<Shift> GetShift(Guid shiftId);
     }
@@ -23,10 +24,10 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
-        public Task<List<Shift>> GetAll(Guid projectId)
+        public Task<List<Shift>> GetByProjectAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
-                return null;
+                return System.Threading.Tasks.Task.FromResult(new List<Shift>());
             return this.EntitySet
                 .AsNoTracking()
                 .AsQueryable()
@@ -52,6 +53,9 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<Shift> GetShift(Guid shiftId)
         {
+            if(shiftId==Guid.Empty)
+                return System.Threading.Tasks.Task.FromResult<>(null);
+
             return this.EntitySet
                 .AsNoTracking()
                 .AsQueryable()
