@@ -121,7 +121,7 @@ namespace RoosterPlanner.Service
             TaskListResult<Shift> taskResult = TaskListResult<Shift>.CreateDefault();
             try
             {
-                taskResult.Data = await this.shiftRepository.GetAll(projectId);
+                taskResult.Data = await this.shiftRepository.GetByProjectAsync(projectId);
                 taskResult.Succeeded = true;
             }
             catch (Exception ex)

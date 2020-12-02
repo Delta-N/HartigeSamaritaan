@@ -9,7 +9,8 @@ import {MsalBroadcastService, MsalService} from "./msal";
 import {EventMessage, EventType, InteractionType} from "@azure/msal-browser";
 import {filter, takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
-//
+import * as moment from "moment"
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    moment.locale('nl')
     this.isIframe = window !== window.parent && !window.opener;
     this.isAuthenticated();
     this.checkAccount();

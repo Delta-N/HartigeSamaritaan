@@ -14,6 +14,7 @@ import {DateConverter} from "../../helpers/date-converter";
 import {Shift} from "../../models/shift";
 import {EntityHelper} from "../../helpers/entity-helper";
 import * as moment from "moment";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 @Component({
   selector: 'app-add-shifts',
@@ -35,7 +36,7 @@ export class AddShiftsComponent implements OnInit {
   endTimeControl: FormControl;
   participantsRequiredControl: FormControl;
   daySelectionControl: FormControl;
-  selectionOptions: string[] = ['Elke dag', 'Elke maandag', 'Elke dinsdag', 'Elke woensdag', 'Elke donderdag', 'Elke vrijdag', 'Elke zaterdag', 'Elke zondag', 'Verwijder selectie'];
+  selectionOptions: string[];
 
   shiftDates: Date[] = [];
   min: Date;
@@ -51,7 +52,9 @@ export class AddShiftsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private shiftService: ShiftService,
-    private _location: Location) {
+    private _location: Location,) {
+
+    this.selectionOptions = TextInjectorService.calenderSelectionOptions;
 
     this.taskControl = new FormControl('', Validators.required);
     this.startTimeControl = new FormControl('', Validators.required);
@@ -73,7 +76,7 @@ export class AddShiftsComponent implements OnInit {
     });
 
     this.taskService.getAllProjectTasks(this.guid).then(tasks => {
-      this.tasks = tasks.filter(t=>t!=null);
+      this.tasks = tasks.filter(t => t != null);
     });
 
     this.projectService.getProject(this.guid).then(project => {
@@ -101,38 +104,38 @@ export class AddShiftsComponent implements OnInit {
 
     //filter alldates depending on action
     switch (this.daySelectionControl.value) {
-      case 'Elke dag': {
+      case this.selectionOptions[0]: {
         break;
       }
-      case 'Elke maandag': {
+      case this.selectionOptions[1]: {
         allDates = allDates.filter(d => d.getDay() === 1)
         break;
       }
-      case 'Elke dinsdag': {
+      case this.selectionOptions[2]: {
         allDates = allDates.filter(d => d.getDay() === 2)
         break;
       }
-      case 'Elke woensdag': {
+      case this.selectionOptions[3]: {
         allDates = allDates.filter(d => d.getDay() === 3)
         break;
       }
-      case 'Elke donderdag': {
+      case this.selectionOptions[4]: {
         allDates = allDates.filter(d => d.getDay() === 4)
         break;
       }
-      case 'Elke vrijdag': {
+      case this.selectionOptions[5]: {
         allDates = allDates.filter(d => d.getDay() === 5)
         break;
       }
-      case 'Elke zaterdag': {
+      case this.selectionOptions[6]: {
         allDates = allDates.filter(d => d.getDay() === 6)
         break;
       }
-      case 'Elke zondag': {
+      case this.selectionOptions[7]: {
         allDates = allDates.filter(d => d.getDay() === 0)
         break;
       }
-      case 'Verwijder selectie': {
+      case this.selectionOptions[8]: {
         allDates = [];
         currentDates = [];
         break;
