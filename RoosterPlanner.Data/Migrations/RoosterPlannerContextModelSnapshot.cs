@@ -509,6 +509,9 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ParticipantsRequired")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
@@ -581,7 +584,7 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("58b28157-e4a0-48a2-8813-35c57187b56a"),
+                            Id = new Guid("003313bb-e1f1-4814-b1ae-f962e88b914d"),
                             CategoryId = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
                             Color = "Blue",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chef",
@@ -592,7 +595,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7e62a962-68a8-4d3c-ac50-9a3320173c48"),
+                            Id = new Guid("4972b334-c537-4829-985a-cfa67ec0ae4b"),
                             CategoryId = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
                             Color = "Red",
                             Description = "Een leuke beschrijving van de werkzaamheden van een runner",
@@ -603,7 +606,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b1c6e7ed-78cf-435b-9f1f-576bb0ca7934"),
+                            Id = new Guid("f72411ac-f666-4ed5-a959-d377a0c07b21"),
                             CategoryId = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
                             Color = "Yellow",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chauffeur",
@@ -614,7 +617,7 @@ namespace RoosterPlanner.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2354a5ab-56a7-4e0e-91e0-a5fb34145624"),
+                            Id = new Guid("128b66d5-20ea-45ad-8697-0257b565d9b7"),
                             CategoryId = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
                             Color = "Green",
                             Description = "Een leuke beschrijving van de werkzaamheden van een klusser",
