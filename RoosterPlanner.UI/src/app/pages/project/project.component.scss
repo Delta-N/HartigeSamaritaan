@@ -25,6 +25,12 @@ img {
   margin-bottom: auto;
 }
 
+.row {
+  display: flex;
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+
 @media only screen and (max-width: 550px) {
   img {
     max-width: 400px;
@@ -32,5 +38,4 @@ img {
   .mat-card {
     display: none;
   }
-
 }

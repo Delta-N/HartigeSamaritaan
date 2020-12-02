@@ -2,6 +2,12 @@
   font: normal normal normal 15px/45px Segoe UI !important;
 }
 
+.row {
+  display: flex;
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+
 ::ng-deep ngx-material-timepicker-content {
   --dial-background-color: #e03e2d !important;
   --button-color: gray;
