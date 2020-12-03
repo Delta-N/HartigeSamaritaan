@@ -90,8 +90,8 @@ export class AddProjectTaskComponent implements OnInit {
       projectTask.taskId = task.id
       projectTask.id = EntityHelper.returnEmptyGuid();
       await this.taskService.addTaskToProject(projectTask).then(res => {
-          if (res.status === 200) {
-            this.currentProjectTasks.push(res.body)
+          if (res) {
+            this.currentProjectTasks.push(res)
             this.toastr.success("Taak toegevoegd")
             this.dialogRef.close();
           }
@@ -99,9 +99,9 @@ export class AddProjectTaskComponent implements OnInit {
       )
     }
     if (this.data.modifier === 'remove') {
-      await this.taskService.removeTaskFromProject(this.project.id,id).then(res=>{
-        if (res.status === 200) {
-          this.currentProjectTasks = this.currentProjectTasks.filter(cpt=>cpt.id!==res.body)
+      await this.taskService.removeTaskFromProject(this.project.id, id).then(res => {
+        if (res) {
+          this.currentProjectTasks = this.currentProjectTasks.filter(cpt => cpt.id !== res)
           this.toastr.success("Taak verwijderd")
           this.dialogRef.close(this.currentProjectTasks);
         }

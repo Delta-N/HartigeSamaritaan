@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +27,8 @@ namespace RoosterPlanner.Api
 
             // Enable Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddApplicationInsightsTelemetry(options);
+            services.AddApplicationInsightsTelemetry(options);
 
             services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(jwtOptions =>
@@ -56,8 +57,7 @@ namespace RoosterPlanner.Api
                 });
             });
 
-            services.AddAuthorization(options =>
-            {
+            services.AddAuthorization(options => { 
                 options.AddPolicy("Boardmember", policy =>
                     policy.RequireClaim("extension_UserRole", "1")); //UserRole.Boardmember
 

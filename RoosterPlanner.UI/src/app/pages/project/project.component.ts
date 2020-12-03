@@ -207,7 +207,6 @@ export class ProjectComponent implements OnInit {
       setTimeout(() => {
         this.getProjectTasks();
       }, 500);
-
     })
   }
 

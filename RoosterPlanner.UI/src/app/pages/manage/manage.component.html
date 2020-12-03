@@ -1,8 +1,7 @@
-<div class="container">
-  <div class="bar">
+  <div class="row bar">
     <h1>Beheer</h1>
   </div>
-      <div class="cardholder" *ngIf="projects.length > 0">
+      <div class="row cardholder" *ngIf="projects.length > 0">
          <span *ngFor="let item of projects" class="mobilecard">
             <mat-card>
                <div>
@@ -20,12 +19,10 @@
       </div>
 
   <div *ngIf="projects.length === 0 && loaded">
-    <div class="container">
       <div>
         <div class="row">
           <p id="flavortext">Je beheert nog geen project</p>
         </div>
       </div>
     </div>
-  </div>
-</div>
+

@@ -39,13 +39,10 @@ jobs:
         run: |
           npm install
           npm install --global @angular/cli > /dev/null
-          ng build --prod --outputPath=../staging/web
+          ng build --prod
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: "Web Artifact"
-          path: ./staging/web
+      
 
   build-back-end:
     runs-on: ubuntu-latest
@@ -62,13 +59,3 @@ jobs:
         run: |
           dotnet build --configuration ${{ env.BUILD_CONFIGURATION  }}
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
-
-      - name: publish API
-        run: |
-          dotnet publish --configuration ${{ env.BUILD_CONFIGURATION  }} --no-build --no-restore --output ../staging/api
-        working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: "Api Artifact"
-          path: ./staging/api  

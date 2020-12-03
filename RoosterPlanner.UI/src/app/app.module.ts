@@ -57,6 +57,7 @@ import {EditShiftComponent} from './components/edit-shift/edit-shift.component';
 import { ManageComponent } from './pages/manage/manage.component';
 import {ManageGuard} from "./guards/manage.guard";
 import { AddManagerComponent } from './components/add-manager/add-manager.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -125,6 +126,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ManageComponent,
     AddManagerComponent,
     ManagerFilterPipe,
+    BreadcrumbComponent,
 
   ],
   imports: [

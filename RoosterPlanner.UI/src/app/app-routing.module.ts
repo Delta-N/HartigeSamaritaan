@@ -37,7 +37,10 @@ const routes: Routes = [
     canActivate: [
       MsalGuard,
       AuthorizationGuard
-    ]
+    ],
+    data: {
+      breadcrumb: 'Admin'
+    }
   },
   {
     path: 'profile/:id',
@@ -115,7 +118,10 @@ const routes: Routes = [
   {
     // Needed for hash routing
     path: 'code',
-    component: HomeComponent
+    redirectTo: 'home',
+    canActivate: [
+      MsalGuard
+    ]
   },
 
   {
