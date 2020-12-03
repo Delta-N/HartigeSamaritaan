@@ -75,8 +75,9 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.LogError(ex, "ProjectService: Error occured getting project by Id", id);
                 taskResult.Error = ex;
+                taskResult.Message = "Fout opgetreden bij het ophalen van het project.";
             }
             return taskResult;
         }

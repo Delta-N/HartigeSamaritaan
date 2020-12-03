@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -26,10 +25,9 @@ namespace RoosterPlanner.Api
         public void ConfigureServices(IServiceCollection services)
         {
             IdentityModelEventSource.ShowPII = true; // temp for more logging
+
             // Enable Application Insights telemetry collection.
-            var options = new ApplicationInsightsServiceOptions
-                {ConnectionString = Configuration["ApplicationInsight:ConnectionString"]};
-            services.AddApplicationInsightsTelemetry(options);
+            services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(jwtOptions =>
@@ -39,6 +37,7 @@ namespace RoosterPlanner.Api
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
+                        ValidateLifetime = true
                     };
                     jwtOptions.Audience = Configuration["AzureAD:Audience"];
                     jwtOptions.Events = new JwtBearerEvents
@@ -51,8 +50,7 @@ namespace RoosterPlanner.Api
             {
                 options.AddPolicy("AllowOrigins", builder =>
                 {
-                    builder
-                        .WithOrigins(Configuration.GetSection("AllowedHosts").Value)
+                    builder.WithOrigins(Configuration.GetSection("AllowedHosts").Value)
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
@@ -61,7 +59,7 @@ namespace RoosterPlanner.Api
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Boardmember", policy =>
-                    policy.RequireClaim("extension_UserRole", "1"));
+                    policy.RequireClaim("extension_UserRole", "1")); //UserRole.Boardmember
 
                 options.AddPolicy("Committeemember", policy =>
                     policy.RequireClaim("extension_UserRole", "2"));
@@ -89,8 +87,6 @@ namespace RoosterPlanner.Api
             services.AddTransient<IShiftService, ShiftService>();
             services.AddTransient<IMatchService, MatchService>();
             services.AddTransient<IBlobService, BlobService>();
-
-
 
             services.AddLogging();
 

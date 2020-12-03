@@ -7,6 +7,4 @@
         Volunteer,
         None
     }
-    
-
 }

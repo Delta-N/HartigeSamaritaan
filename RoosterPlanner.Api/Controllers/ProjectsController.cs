@@ -31,7 +31,7 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult<ProjectDetailsViewModel>> Get(Guid id)
         {
             if (id == Guid.Empty) 
                 return BadRequest("No valid id.");
@@ -49,7 +49,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.LogError(ex, ex.Message, id);
                 Response.Headers.Add("message", ex.Message);
                 return UnprocessableEntity();
             }
@@ -88,7 +88,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
+                logger.LogError(ex, ex.Message, filter);
                 Response.Headers.Add("message", ex.Message);
                 return UnprocessableEntity();
             }
@@ -97,7 +97,7 @@ namespace RoosterPlanner.Api.Controllers
         //alleen een bestuurslid kan projecten aanmaken of wijzigen
         [Authorize(Policy = "Boardmember")]
         [HttpPost]
-        public ActionResult Save(ProjectDetailsViewModel projectDetails)
+        public async Task<ActionResult> Save(ProjectDetailsViewModel projectDetails)
         {
             if (projectDetails == null)
                 return BadRequest("No valid project received");
@@ -118,7 +118,7 @@ namespace RoosterPlanner.Api.Controllers
                 project.LastEditBy = oid;
 
                 if (project.Id == Guid.Empty)
-                    result = projectService.CreateProject(project).Result;
+                    result = await projectService.CreateProject(project);
                 else 
                     return BadRequest("Cannot update existing Project with post method");
 
