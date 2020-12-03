@@ -12,8 +12,8 @@ namespace RoosterPlanner.Data.Repositories
     public interface IShiftRepository : IRepository<Shift>
     {
         Task<List<Shift>> GetByProjectAsync(Guid projectId);
-        Task<List<Shift>> AddAll(List<Shift> shifts);
-        Task<Shift> GetShift(Guid shiftId);
+        Task<List<Shift>> AddShiftsAsync(List<Shift> shifts);
+        Task<Shift> GetShiftAsync(Guid shiftId);
     }
 
     public class ShiftRepository : Repository<Shift>, IShiftRepository
@@ -35,21 +35,22 @@ namespace RoosterPlanner.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Shift>> AddAll(List<Shift> shifts)
+        public Task<List<Shift>> AddShiftsAsync(List<Shift> shifts)
         {
             if (shifts == null || shifts.Count == 0)
-                return await Task.FromResult<List<Shift>>(null);
+                return Task.FromResult<List<Shift>>(null);
             foreach (Shift shift in shifts)
             {
                 if (shift.Id == Guid.Empty)
                     shift.SetKey(Guid.NewGuid());
-                await EntitySet.AddAsync(shift);
+                shift.LastEditDate = DateTime.UtcNow;
+                EntitySet.AddAsync(shift);
             }
 
-            return shifts;
+            return Task.FromResult(shifts);
         }
 
-        public Task<Shift> GetShift(Guid shiftId)
+        public Task<Shift> GetShiftAsync(Guid shiftId)
         {
             if (shiftId == Guid.Empty)
                 return Task.FromResult<Shift>(null);
@@ -58,7 +59,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Task)
                 .Include(s => s.Project)
-                .Where(s=>s.Id==shiftId).FirstOrDefaultAsync();
+                .Where(s => s.Id == shiftId).FirstOrDefaultAsync();
         }
     }
 }

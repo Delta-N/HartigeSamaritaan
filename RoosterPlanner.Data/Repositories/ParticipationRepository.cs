@@ -11,7 +11,7 @@ namespace RoosterPlanner.Data.Repositories
     public interface IParticipationRepository : IRepository<Participation>
     {
         Task<List<Participation>> GetActiveParticipationsAsync(Guid personId);
-        Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId);
+        Task<Participation> GetSpecificParticipationAsync(Guid personId, Guid projectId);
     }
 
     public class ParticipationRepository : Repository<Participation>, IParticipationRepository
@@ -35,7 +35,7 @@ namespace RoosterPlanner.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId)
+        public Task<Participation> GetSpecificParticipationAsync(Guid personId, Guid projectId)
         {
             return EntitySet
                 .AsNoTracking()

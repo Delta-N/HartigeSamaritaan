@@ -26,37 +26,36 @@ namespace RoosterPlanner.Api.Controllers
         //Constructor
         public ProjectsController(IProjectService projectService, ILogger<ProjectsController> logger)
         {
-            this.projectService = projectService;
-            this.logger = logger;
+            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult<ProjectDetailsViewModel>> GetProjectAsync(Guid id)
         {
-            if (id == Guid.Empty) 
+            if (id == Guid.Empty)
                 return BadRequest("No valid id.");
 
             try
             {
-                TaskResult<Project> result = await projectService.GetProjectDetails(id);
+                TaskResult<Project> result = await projectService.GetProjectDetailsAsync(id);
 
                 if (!result.Succeeded)
                     return UnprocessableEntity();
                 if (result.Data == null)
-                    return Ok();
-                
+                    return NotFound();
+
                 return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
-                Response.Headers.Add("message", ex.Message);
+                logger.Log(LogLevel.Error, ex.ToString());
                 return UnprocessableEntity();
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProjectViewModel>>> Search(string name,
+        public async Task<ActionResult<List<ProjectViewModel>>> SearchAsync(string name,
             string city,
             DateTime? startDateFrom = null,
             DateTime? endDate = null,
@@ -81,15 +80,14 @@ namespace RoosterPlanner.Api.Controllers
 
                 Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
                 if (result.Data == null)
-                    return Ok();
+                    return Ok(new List<ProjectViewModel>());
 
                 List<ProjectViewModel> projectVmList = result.Data.Select(ProjectViewModel.CreateVm).ToList();
                 return Ok(projectVmList);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
-                Response.Headers.Add("message", ex.Message);
+                logger.Log(LogLevel.Error, ex.ToString());
                 return UnprocessableEntity();
             }
         }
@@ -97,7 +95,7 @@ namespace RoosterPlanner.Api.Controllers
         //alleen een bestuurslid kan projecten aanmaken of wijzigen
         [Authorize(Policy = "Boardmember")]
         [HttpPost]
-        public ActionResult Save(ProjectDetailsViewModel projectDetails)
+        public async Task<ActionResult<ProjectDetailsViewModel>> SaveProjectAsync(ProjectDetailsViewModel projectDetails)
         {
             if (projectDetails == null)
                 return BadRequest("No valid project received");
@@ -110,15 +108,14 @@ namespace RoosterPlanner.Api.Controllers
                 Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
                 if (project == null)
                     return BadRequest("Unable to convert ProjectDetailsViewmodel to Project");
-                
-                project.LastEditDate = DateTime.UtcNow;
+
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 project.LastEditBy = oid;
 
                 TaskResult<Project> result;
                 if (project.Id == Guid.Empty)
-                    result = projectService.CreateProject(project).Result;
-                else 
+                    result = await projectService.CreateProjectAsync(project);
+                else
                     return BadRequest("Cannot update existing Project with post method");
 
                 if (result.Succeeded)
@@ -127,15 +124,14 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
-                Response.Headers.Add("message", ex.Message);
+                logger.Log(LogLevel.Error, ex.ToString());
                 return UnprocessableEntity();
             }
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpPut]
-        public ActionResult UpdateProject(ProjectDetailsViewModel projectDetails)
+        public async Task<ActionResult<ProjectDetailsViewModel>> UpdateProjectAsync(ProjectDetailsViewModel projectDetails)
         {
             if (projectDetails == null || projectDetails.Id == Guid.Empty)
                 return BadRequest("No valid project received");
@@ -145,8 +141,7 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                Project oldProject = projectService.GetProjectDetails(projectDetails.Id)
-                    .Result.Data;
+                Project oldProject = (await projectService.GetProjectDetailsAsync(projectDetails.Id)).Data;
                 Project updatedProject = ProjectDetailsViewModel.CreateProject(projectDetails);
                 oldProject.Address = updatedProject.Address;
                 oldProject.City = updatedProject.City;
@@ -157,25 +152,22 @@ namespace RoosterPlanner.Api.Controllers
                 oldProject.Shifts = updatedProject.Shifts;
                 oldProject.ParticipationEndDate = updatedProject.ParticipationEndDate;
                 oldProject.PictureUri = updatedProject.PictureUri;
-                oldProject.ProjectTasks = updatedProject.ProjectTasks;
                 oldProject.ParticipationStartDate = updatedProject.ParticipationStartDate;
                 oldProject.WebsiteUrl = updatedProject.WebsiteUrl;
                 oldProject.ProjectStartDate = updatedProject.ProjectStartDate;
                 oldProject.ProjectEndDate = updatedProject.ProjectEndDate;
 
-                oldProject.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldProject.LastEditBy = oid;
-                
-                TaskResult<Project> result = projectService.UpdateProject(oldProject).Result;
-                if (!result.Succeeded) 
+
+                TaskResult<Project> result = await projectService.UpdateProjectAsync(oldProject);
+                if (!result.Succeeded)
                     return UnprocessableEntity();
                 return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
-                Response.Headers.Add("message", ex.Message);
+                logger.Log(LogLevel.Error, ex.ToString());
                 return UnprocessableEntity();
             }
         }

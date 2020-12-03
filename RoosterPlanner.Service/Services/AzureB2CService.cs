@@ -47,10 +47,10 @@ namespace RoosterPlanner.Service
         public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
             ILogger<AzureB2CService> logger)
         {
-            this.azureB2CConfig = azureB2CConfig.Value;
-            this.unitOfWork = unitOfWork;
-            personRepository = unitOfWork.PersonRepository;
-            this.logger = logger;
+            this.azureB2CConfig = azureB2CConfig.Value ?? throw new ArgumentNullException(nameof(azureB2CConfig));
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            personRepository = unitOfWork.PersonRepository ?? throw new ArgumentNullException(nameof(unitOfWork.PersonRepository));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<User> GetUserAsync(Guid userId)
@@ -65,7 +65,7 @@ namespace RoosterPlanner.Service
 
             var user = await graphService.Users[userId.ToString()].Request()
                 .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
-            AddPersonToLocalDb(user);
+            await AddPersonToLocalDbAsync(user);
 
             return user;
         }
@@ -128,8 +128,9 @@ namespace RoosterPlanner.Service
                         break;
                 }
 
-                if (users.Count == 0) throw new NullReferenceException("No users found");
-                //dit is heel tijdrovend keuze maken om personen alleen in te voegen en updaten bij het individueel ophalen/updaten van gebruikers
+                if (users.Count == 0) 
+                    throw new NullReferenceException("No users found");
+                //dit is heel tijdrovend. keuze maken om personen alleen in te voegen en updaten bij het individueel ophalen/updaten van gebruikers
                 //foreach (var user in users) AddPersonToLocalDb(user);
 
                 result.StatusCode = HttpStatusCode.OK;
@@ -140,14 +141,12 @@ namespace RoosterPlanner.Service
 
             catch (ServiceException graphEx)
             {
-                result.Succeeded = false;
                 result.StatusCode = graphEx.StatusCode;
                 result.Message = graphEx.Message;
                 throw;
             }
             catch (Exception ex)
             {
-                result.Succeeded = false;
                 result.StatusCode = HttpStatusCode.InternalServerError;
                 result.Message = ex.Message;
                 throw;
@@ -184,7 +183,7 @@ namespace RoosterPlanner.Service
                 throw;
             }
 
-            AddPersonToLocalDb(updatedUser.Data);
+            await AddPersonToLocalDbAsync(updatedUser.Data);
             return updatedUser;
         }
 
@@ -233,14 +232,14 @@ namespace RoosterPlanner.Service
             return graphService;
         }
 
-        private void AddPersonToLocalDb(User user)
+        private async Task AddPersonToLocalDbAsync(User user)
         {
             if (user?.Id == null)
                 throw new ArgumentNullException(nameof(user));
             var result = new TaskResult<Person>();
             try
             {
-                var person = personRepository.GetPersonByOidAsync(Guid.Parse(user.Id)).Result;
+                var person = await personRepository.GetPersonByOidAsync(Guid.Parse(user.Id));
                 if (person == null)
                 {
                     person = new Person(Guid.Parse(user.Id)) {FirstName = user.GivenName, Oid = Guid.Parse(user.Id)};
@@ -254,11 +253,12 @@ namespace RoosterPlanner.Service
                     personRepository.Update(person);
                 }
 
-                unitOfWork.SaveChanges();
+                await unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
+                result.Message = GetType().Name + " - Error adding person to LocalDB " + user.Id;
+                logger.LogError(result.Message,ex);
                 result.Error = ex;
             }
         }

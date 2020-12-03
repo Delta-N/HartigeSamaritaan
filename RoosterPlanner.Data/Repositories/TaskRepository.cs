@@ -11,7 +11,7 @@ namespace RoosterPlanner.Data.Repositories
     public interface ITaskRepository : IRepository<Task>
     {
         System.Threading.Tasks.Task<List<Task>> SearchTasksAsync(TaskFilter filter);
-        System.Threading.Tasks.Task<Task> GetTask(Guid id);
+        System.Threading.Tasks.Task<Task> GetTaskAsync(Guid id);
     }
 
     public class TaskRepository : Repository<Task>, ITaskRepository
@@ -46,7 +46,7 @@ namespace RoosterPlanner.Data.Repositories
             return tasks;
         }
 
-        public System.Threading.Tasks.Task<Task> GetTask(Guid id)
+        public System.Threading.Tasks.Task<Task> GetTaskAsync(Guid id)
         {
             return EntitySet
                 .Include(t => t.Category)

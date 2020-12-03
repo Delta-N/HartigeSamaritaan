@@ -13,29 +13,31 @@ namespace RoosterPlanner.Service
     {
         Task<TaskListResult<Project>> SearchProjectsAsync(ProjectFilter filter);
 
-        Task<TaskResult<Project>> GetProjectDetails(Guid id);
+        Task<TaskResult<Project>> GetProjectDetailsAsync(Guid id);
 
-        Task<TaskResult<Project>> CreateProject(Project project);
+        Task<TaskResult<Project>> CreateProjectAsync(Project project);
 
-        Task<TaskResult<Project>> UpdateProject(Project project);
+        Task<TaskResult<Project>> UpdateProjectAsync(Project project);
     }
 
     public class ProjectService : IProjectService
     {
         #region Fields
+
         private readonly IUnitOfWork unitOfWork;
         private readonly IProjectRepository projectRepository;
         private readonly ILogger<ProjectService> logger;
+
         #endregion
 
         //Constructor
         public ProjectService(IUnitOfWork unitOfWork, ILogger<ProjectService> logger)
         {
-            this.unitOfWork = unitOfWork;
-            projectRepository = unitOfWork.ProjectRepository;
-            this.logger = logger;
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            projectRepository = unitOfWork.ProjectRepository ?? throw new ArgumentNullException(nameof(projectRepository));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-        
+
         /// <summary>
         /// Search for projects 
         /// </summary>
@@ -46,79 +48,87 @@ namespace RoosterPlanner.Service
             if (filter == null)
                 throw new ArgumentNullException(nameof(filter));
 
-            TaskListResult<Project> taskResult = TaskListResult<Project>.CreateDefault();
+            TaskListResult<Project> result = TaskListResult<Project>.CreateDefault();
 
             try
             {
-                taskResult.Data = await projectRepository.SearchProjectsAsync(filter);
-                taskResult.Succeeded = true;
+                result.Data = await projectRepository.SearchProjectsAsync(filter);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error finding projects with filter: " + filter;
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
             }
-            return taskResult;
+
+            return result;
         }
 
-        public async Task<TaskResult<Project>> GetProjectDetails(Guid id)
+        public async Task<TaskResult<Project>> GetProjectDetailsAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return null;
 
-            TaskResult<Project> taskResult = new TaskResult<Project>();
+            TaskResult<Project> result = new TaskResult<Project>();
 
             try
             {
-                taskResult.Data = await projectRepository.GetProjectDetails(id);
-                taskResult.Succeeded = true;
+                result.Data = await projectRepository.GetProjectDetailsAsync(id);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error getting project details " + id;
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
             }
-            return taskResult;
+
+            return result;
         }
 
-        public async Task<TaskResult<Project>> CreateProject(Project project)
+        public async Task<TaskResult<Project>> CreateProjectAsync(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException(nameof(project));
 
-            TaskResult<Project> taskResult = new TaskResult<Project>();
+            TaskResult<Project> result = new TaskResult<Project>();
 
             try
             {
-                taskResult.Data = projectRepository.Add(project);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Data = projectRepository.Add(project);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error creating project " + project.Id;
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
             }
-            return taskResult;
+
+            return result;
         }
 
-        public async Task<TaskResult<Project>> UpdateProject(Project project)
+        public async Task<TaskResult<Project>> UpdateProjectAsync(Project project)
         {
-            if (project == null || project.Id==Guid.Empty)
+            if (project == null || project.Id == Guid.Empty)
                 throw new ArgumentNullException(nameof(project));
 
-            TaskResult<Project> taskResult = new TaskResult<Project>();
+            TaskResult<Project> result = new TaskResult<Project>();
 
             try
             {
-                taskResult.Data = projectRepository.Update(project);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Data = projectRepository.Update(project);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error,ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error updating project " + project.Id;
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
             }
-            return taskResult;
+
+            return result;
         }
     }
 }

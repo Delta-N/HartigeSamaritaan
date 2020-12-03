@@ -28,7 +28,7 @@ namespace RoosterPlanner.Models
         /// Gets or sets the LastEditDate.
         /// </summary>
         [Display(Name = "Laatst gewijzigd op")]
-        [Column(TypeName = "datetime2", Order = 98)]
+        [Column(TypeName = "datetime", Order = 98)]
         public DateTime LastEditDate { get; set; }
 
         /// <summary>

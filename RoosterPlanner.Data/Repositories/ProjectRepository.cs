@@ -24,7 +24,7 @@ namespace RoosterPlanner.Data.Repositories
         /// <returns></returns>
         Task<List<Project>> SearchProjectsAsync(ProjectFilter filter);
 
-        Task<Project> GetProjectDetails(Guid id);
+        Task<Project> GetProjectDetailsAsync(Guid id);
     }
 
     public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -89,7 +89,7 @@ namespace RoosterPlanner.Data.Repositories
             return projects;
         }
 
-        public Task<Project> GetProjectDetails(Guid id)
+        public Task<Project> GetProjectDetailsAsync(Guid id)
         {
             return EntitySet.Include(x => x.ProjectTasks)
                 .Where(p => p.Id == id).FirstOrDefaultAsync();

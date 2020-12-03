@@ -11,11 +11,11 @@ namespace RoosterPlanner.Service
 {
     public interface IShiftService
     {
-        Task<TaskResult<Shift>> RemoveShift(Shift shift);
-        Task<TaskResult<Shift>> GetShift(Guid shiftId);
-        Task<TaskResult<Shift>> UpdateShift(Shift shift);
-        Task<TaskListResult<Shift>> CreateShifts(List<Shift> shifts);
-        Task<TaskListResult<Shift>> GetShifts(Guid projectId);
+        Task<TaskResult<Shift>> RemoveShiftAsync(Shift shift);
+        Task<TaskResult<Shift>> GetShiftAsync(Guid shiftId);
+        Task<TaskResult<Shift>> UpdateShiftAsync(Shift shift);
+        Task<TaskListResult<Shift>> CreateShiftsAsync(List<Shift> shifts);
+        Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId);
     }
 
     public class ShiftService : IShiftService
@@ -31,105 +31,112 @@ namespace RoosterPlanner.Service
         //Constructor
         public ShiftService(IUnitOfWork unitOfWork, ILogger<ShiftService> logger)
         {
-            this.unitOfWork = unitOfWork;
-            shiftRepository = unitOfWork.ShiftRepository;
-            this.logger = logger;
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            shiftRepository = unitOfWork.ShiftRepository ?? throw new ArgumentNullException(nameof(shiftRepository));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<TaskResult<Shift>> RemoveShift(Shift shift)
+        public async Task<TaskResult<Shift>> RemoveShiftAsync(Shift shift)
         {
             if (shift == null)
                 throw new ArgumentNullException(nameof(shift));
-            TaskResult<Shift> taskResult = new TaskResult<Shift>();
+            TaskResult<Shift> result = new TaskResult<Shift>();
             try
             {
-                taskResult.Data = shiftRepository.Remove(shift);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Data = shiftRepository.Remove(shift);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error removing shift " + shift.Id;
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskResult<Shift>> GetShift(Guid shiftId)
+        public async Task<TaskResult<Shift>> GetShiftAsync(Guid shiftId)
         {
             if (shiftId == Guid.Empty)
-                return null;
-            TaskResult<Shift> taskResult = new TaskResult<Shift>();
-            try
-            {
-                taskResult.Data = await unitOfWork.ShiftRepository.GetShift(shiftId);
-                taskResult.Succeeded = true;
-            }
-            catch (Exception ex)
-            {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
-            }
-
-            return taskResult;
-        }
-
-        public async Task<TaskResult<Shift>> UpdateShift(Shift shift)
-        {
-            if(shift==null)
-                throw new ArgumentNullException(nameof(shift));
+                throw new ArgumentNullException(nameof(shiftId));
             
-            TaskResult<Shift> taskResult = new TaskResult<Shift>();
+            TaskResult<Shift> result = new TaskResult<Shift>();
             try
             {
-                taskResult.Data = unitOfWork.ShiftRepository.Update(shift);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Data = await shiftRepository.GetShiftAsync(shiftId);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error getting shift " + shiftId;
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskListResult<Shift>> CreateShifts(List<Shift> shifts)
+        public async Task<TaskResult<Shift>> UpdateShiftAsync(Shift shift)
         {
-            if(shifts==null || shifts.Count==0)
+            if (shift == null)
+                throw new ArgumentNullException(nameof(shift));
+
+            TaskResult<Shift> result = new TaskResult<Shift>();
+            try
+            {
+                result.Data = shiftRepository.Update(shift);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error updating shift " + shift.Id;
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskListResult<Shift>> CreateShiftsAsync(List<Shift> shifts)
+        {
+            if (shifts == null || shifts.Count == 0)
                 throw new ArgumentNullException(nameof(shifts));
-            TaskListResult<Shift> taskResult = TaskListResult<Shift>.CreateDefault();
+            TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
             try
             {
-                taskResult.Data = await shiftRepository.AddAll(shifts);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync()==shifts.Count;
+                result.Data = await shiftRepository.AddShiftsAsync(shifts);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == shifts.Count;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error creating shifts ";
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskListResult<Shift>> GetShifts(Guid projectId)
+        public async Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId)
         {
-            if(projectId==Guid.Empty)
+            if (projectId == Guid.Empty)
                 throw new ArgumentNullException(nameof(projectId));
-            TaskListResult<Shift> taskResult = TaskListResult<Shift>.CreateDefault();
+            
+            TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
             try
             {
-                taskResult.Data = await shiftRepository.GetByProjectAsync(projectId);
-                taskResult.Succeeded = true;
+                result.Data = await shiftRepository.GetByProjectAsync(projectId);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error getting shifts with projectid " + projectId;
+                logger.LogError(result.Message, ex);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
     }
 }

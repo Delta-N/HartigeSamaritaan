@@ -9,7 +9,7 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<List<Category>> GetAll();
+        Task<List<Category>> GetAllCategoriesAsync();
     }
 
     public class CategoryRepository : Repository<Category>, ICategoryRepository
@@ -19,7 +19,7 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
-        public Task<List<Category>> GetAll()
+        public Task<List<Category>> GetAllCategoriesAsync()
         {
             IQueryable<Category> queryable = EntitySet
                 .AsNoTracking();

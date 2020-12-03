@@ -10,8 +10,8 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IProjectTaskRepository : IRepository<ProjectTask>
     {
-        Task<List<ProjectTask>> GetAllFromProject(Guid projectId);
-        Task<ProjectTask> GetProjectTask(Guid projectId, Guid taskId);
+        Task<List<ProjectTask>> GetAllFromProjectAsync(Guid projectId);
+        Task<ProjectTask> GetProjectTaskAsync(Guid projectId, Guid taskId);
     }
 
     public class ProjectTaskRepository : Repository<ProjectTask>, IProjectTaskRepository
@@ -20,7 +20,7 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
-        public Task<List<ProjectTask>> GetAllFromProject(Guid projectId)
+        public Task<List<ProjectTask>> GetAllFromProjectAsync(Guid projectId)
         {
             return EntitySet
                 .AsNoTracking()
@@ -29,7 +29,7 @@ namespace RoosterPlanner.Data.Repositories
                 .Where(pt => pt.ProjectId == projectId).ToListAsync();
         }
 
-        public Task<ProjectTask> GetProjectTask(Guid projectId, Guid taskId)
+        public Task<ProjectTask> GetProjectTaskAsync(Guid projectId, Guid taskId)
         {
             return  EntitySet
                 .AsNoTracking()
