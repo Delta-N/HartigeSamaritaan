@@ -27,8 +27,6 @@ namespace RoosterPlanner.Api
 
             // Enable Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry(Configuration);
-            services.AddApplicationInsightsTelemetry(options);
-            services.AddApplicationInsightsTelemetry(options);
 
             services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(jwtOptions =>
