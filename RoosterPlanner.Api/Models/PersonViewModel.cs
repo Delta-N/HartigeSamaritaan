@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models.Constants;
-using RoosterPlanner.Api.Models.Enums;
+using RoosterPlanner.Models.Models.Enums;
 using Person = RoosterPlanner.Models.Person;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class PersonViewModel
+    public class PersonViewModel : EntityViewModel
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -32,7 +31,7 @@ namespace RoosterPlanner.Api.Models
                 StreetAddress = user.StreetAddress,
                 PostalCode = user.PostalCode,
                 City = user.City,
-                Country = user.Country
+                Country = user.Country,
             };
             if (user.Identities != null && personViewModel.Email == null)
                 foreach (ObjectIdentity objectIdentity in user.Identities)
@@ -79,7 +78,8 @@ namespace RoosterPlanner.Api.Models
                 {
                     {extension.DateOfBirthExtension, vm.DateOfBirth},
                     {extension.PhoneNumberExtension, vm.PhoneNumber}
-                }
+                },
+                
             };
             return user;
 
@@ -100,7 +100,10 @@ namespace RoosterPlanner.Api.Models
                     Country = vm.Country,
                     DateOfBirth = vm.DateOfBirth,
                     UserRole = vm.UserRole,
-                    PhoneNumber = vm.PhoneNumber
+                    PhoneNumber = vm.PhoneNumber,
+                    LastEditDate = vm.LastEditDate,
+                    LastEditBy = vm.LastEditBy,
+                    RowVersion = vm.RowVersion
                 };
             }
 
@@ -123,7 +126,10 @@ namespace RoosterPlanner.Api.Models
                     Country = person.Country,
                     DateOfBirth = person.DateOfBirth,
                     UserRole = person.UserRole,
-                    PhoneNumber = person.PhoneNumber
+                    PhoneNumber = person.PhoneNumber,
+                    LastEditDate = person.LastEditDate,
+                    LastEditBy = person.LastEditBy,
+                    RowVersion = person.RowVersion
                 };
             }
             return null;

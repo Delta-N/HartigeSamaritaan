@@ -8,6 +8,8 @@ import {Location} from "@angular/common";
 import {EditShiftComponent} from "../../components/edit-shift/edit-shift.component";
 import {ToastrService} from "ngx-toastr";
 import {UserService} from "../../services/user.service";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 @Component({
   selector: 'app-shift',
@@ -25,7 +27,18 @@ export class ShiftComponent implements OnInit {
               public dialog: MatDialog,
               private _location: Location,
               private toastr: ToastrService,
-              private userService: UserService) {
+              private userService: UserService,
+              private breadcrumbService: BreadcrumbService) {
+    let previous: Breadcrumb = new Breadcrumb();
+    previous.label = "Shift overzicht";
+    previous.url = this.breadcrumbService.previousUrl;
+
+    let current: Breadcrumb = new Breadcrumb();
+    current.label = "Shift";
+
+    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
+    this.breadcrumbService.replace(breadcrumbs);
+
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });

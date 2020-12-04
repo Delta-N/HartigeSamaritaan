@@ -50,11 +50,9 @@ export class CategoryComponent implements OnInit {
       }
     });
     dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.status == 200) {
-        this.toastr.success(result.body.name + " is gewijzigd")
-        this.category = result.body;
-      }
+    dialogRef.afterClosed().subscribe(async result => {
+      this.category = result;
+      this.toastr.success(result.name + " is gewijzigd")
     });
   }
 
@@ -65,10 +63,10 @@ export class CategoryComponent implements OnInit {
       maxWidth: "400px",
       data: dialogData
     });
-    dialogRef.afterClosed().subscribe(dialogResult => {
+    dialogRef.afterClosed().subscribe(async dialogResult => {
       if (dialogResult === true) {
-        this.categoryService.deleteCategory(this.guid).then(response => {
-          if (response.status == 200) {
+        await this.categoryService.deleteCategory(this.guid).then(async response => {
+          if (response) {
             this.router.navigateByUrl("/tasks")
           }
         })

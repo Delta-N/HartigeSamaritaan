@@ -14,6 +14,8 @@ import {TaskService} from "../../services/task.service";
 import {AddProjectTaskComponent} from "../../components/add-project-task/add-project-task.component";
 import {Task} from 'src/app/models/task';
 import {AddManagerComponent} from "../../components/add-manager/add-manager.component";
+import {Breadcrumb} from "../../models/breadcrumb";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
 
 @Component({
   selector: 'app-project',
@@ -34,8 +36,8 @@ export class ProjectComponent implements OnInit {
   itemsPerCard = 5;
   reasonableMaxInteger = 10000;
   tasksElementHeight: number;
-  projectTasksExpandbtnDisabled:boolean=true;
-  isManager: boolean=false;
+  projectTasksExpandbtnDisabled: boolean = true;
+  isManager: boolean = false;
 
 
   constructor(private userService: UserService,
@@ -44,7 +46,10 @@ export class ProjectComponent implements OnInit {
               private route: ActivatedRoute,
               private toastr: ToastrService,
               public dialog: MatDialog,
-              public taskService: TaskService) {
+              private taskService: TaskService,
+              private breadcrumbService: BreadcrumbService) {
+    this.breadcrumbService.backcrumb();
+
   }
 
   async ngOnInit(): Promise<void> {
@@ -108,7 +113,7 @@ export class ProjectComponent implements OnInit {
       data: {
         createProject: false,
         project: this.project,
-        title:"Project wijzigen",
+        title: "Project wijzigen",
       }
     });
     dialogRef.disableClose = true;
@@ -137,7 +142,7 @@ export class ProjectComponent implements OnInit {
         this.project.closed = !this.project.closed;
         this.loaded = false;
         await this.projectService.updateProject(this.project).then(response => {
-          this.displayProject(response.body)
+          this.displayProject(response)
           if (this.project.closed) {
             this.toastr.success("Het project is gesloten");
           } else {
@@ -158,15 +163,16 @@ export class ProjectComponent implements OnInit {
       data: dialogData
     });
 
-    dialogRef.afterClosed().subscribe(dialogResult => {
+    dialogRef.afterClosed().subscribe(async dialogResult => {
       this.loaded = false;
       if (dialogResult != null &&
         dialogResult !== this.participation.maxWorkingHoursPerWeek &&
         dialogResult > 0 &&
         dialogResult <= 40) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
-        this.participationService.updateParticipation(this.participation).then(response => {
-          this.displayProject(response.body.project);
+        await this.participationService.updateParticipation(this.participation).then(async response => {
+          if (response)
+            this.displayProject(response.project);
         });
       } else {
         this.toastr.error("fout tijdens het updaten van maximaal aantal werkuren")

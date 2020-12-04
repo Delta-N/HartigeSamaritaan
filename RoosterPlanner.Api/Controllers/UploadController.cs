@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Service;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -52,7 +53,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
+                logger.LogError(ex, GetType().Name + "Error in " + nameof(UploadInstructionAsync));
                 return UnprocessableEntity(new UploadResultViewModel {Succeeded = false});
             }
         }
@@ -66,7 +67,7 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 if (!Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute))
-                    return UnprocessableEntity("UrI not correctly formatted");
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = "UrI not correctly formatted"});
 
                 Uri uri = new Uri(url);
                 string blobfilename = Path.GetFileName(uri.LocalPath);
@@ -76,7 +77,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
+                logger.LogError(ex, GetType().Name + "Error in " + nameof(DeleteAsync));
                 return UnprocessableEntity(new UploadResultViewModel {Succeeded = false});
             }
         }

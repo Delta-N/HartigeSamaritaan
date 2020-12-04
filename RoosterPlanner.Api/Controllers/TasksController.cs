@@ -13,6 +13,7 @@ using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Task = RoosterPlanner.Models.Task;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -42,20 +43,23 @@ namespace RoosterPlanner.Api.Controllers
             {
                 TaskResult<Task> result = await taskService.GetTaskAsync(id);
                 if (!result.Succeeded)
-                    return UnprocessableEntity("Cannot get task");
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null)
                     return NotFound();
                 return Ok(TaskViewModel.CreateVm(result.Data));
+
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TaskViewModel>>> SearchAsync(string name, int offset = 0, int pageSize = 20)
+        public async Task<ActionResult<List<TaskViewModel>>> SearchTasksAsync(string name, int offset = 0,
+            int pageSize = 20)
         {
             TaskFilter filter = new TaskFilter(offset, pageSize)
             {
@@ -65,17 +69,18 @@ namespace RoosterPlanner.Api.Controllers
             {
                 TaskListResult<Task> result = await taskService.SearchTasksAsync(filter);
                 if (!result.Succeeded)
-                    return UnprocessableEntity(result.Message);
-                Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+
                 if (result.Data == null)
                     return Ok(new List<TaskViewModel>());
                 List<TaskViewModel> taskVmList = result.Data.Select(TaskViewModel.CreateVm).ToList();
-                return Ok(taskVmList);
+                return Ok(new SearchResultViewModel<TaskViewModel>(filter.TotalItemCount, taskVmList));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(SearchTasksAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -108,14 +113,15 @@ namespace RoosterPlanner.Api.Controllers
                 else
                     return BadRequest("Cannot update existing Task with post method");
 
-                if (result.Succeeded)
-                    return Ok(TaskViewModel.CreateVm(result.Data));
-                return UnprocessableEntity(taskViewModel);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                return Ok(TaskViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(SaveTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -158,13 +164,14 @@ namespace RoosterPlanner.Api.Controllers
 
                 TaskResult<Task> result = await taskService.UpdateTaskAsync(oldTask);
                 if (!result.Succeeded)
-                    return UnprocessableEntity("Cannot update task");
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(TaskViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(UpdateTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -180,12 +187,16 @@ namespace RoosterPlanner.Api.Controllers
                 if (task == null)
                     return NotFound("Task not found");
                 TaskResult<Task> result = await taskService.RemoveTaskAsync(task);
-                return result.Succeeded ? Ok(TaskViewModel.CreateVm(result.Data)) : Problem();
+                return !result.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = result.Message})
+                    : Ok(TaskViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(RemoveTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -207,8 +218,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetAllCategoriesAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -229,8 +241,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetCategoryAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -258,14 +271,15 @@ namespace RoosterPlanner.Api.Controllers
                 else
                     return BadRequest("Cannot update existing category with post method");
 
-                if (result.Succeeded)
-                    return Ok(CategoryViewModel.CreateVm(result.Data));
-                return UnprocessableEntity("Cannot save category");
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                return Ok(CategoryViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(SaveCategoryAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -292,13 +306,14 @@ namespace RoosterPlanner.Api.Controllers
 
                 TaskResult<Category> result = await taskService.UpdateCategoryAsync(oldCategory);
                 if (!result.Succeeded)
-                    return UnprocessableEntity("Cannot update category");
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(CategoryViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(UpdateCategoryAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -314,12 +329,16 @@ namespace RoosterPlanner.Api.Controllers
                 if (category == null)
                     return NotFound("Category not found");
                 TaskResult<Category> result = await taskService.RemoveCategoryAsync(category);
-                return result.Succeeded ? Ok(CategoryViewModel.CreateVm(result.Data)) : Problem();
+                return !result.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = result.Message})
+                    : Ok(CategoryViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(RemoveCategoryAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -340,8 +359,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetProjectTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -366,8 +386,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetAllProjectTasksAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -399,14 +420,15 @@ namespace RoosterPlanner.Api.Controllers
                 else
                     return BadRequest("Cannot update existing ProjectTask with post method");
 
-                if (result.Succeeded)
-                    return Ok(TaskViewModel.CreateVm(result.Data.Task));
-                return UnprocessableEntity("Cannot add task to project");
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                return Ok(TaskViewModel.CreateVm(result.Data.Task));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(AddTaskToProjectAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -423,12 +445,16 @@ namespace RoosterPlanner.Api.Controllers
                     return NotFound("ProjectTask not found");
                 TaskResult<ProjectTask> result = await taskService.RemoveProjectTaskAsync(projectTask);
 
-                return result.Succeeded ? Ok(TaskViewModel.CreateVm(result.Data.Task)) : Problem();
+                return !result.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = result.Message})
+                    : Ok(TaskViewModel.CreateVm(result.Data.Task));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(RemoveTaskFromProjectAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
     }

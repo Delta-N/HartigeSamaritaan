@@ -1,6 +1,4 @@
-﻿
-
-namespace RoosterPlanner.Api.Models.Enums
+﻿namespace RoosterPlanner.Models.Models.Enums
 {
     public enum ShiftStatus
     {

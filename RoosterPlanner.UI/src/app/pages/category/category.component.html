@@ -1,15 +1,15 @@
-<div class="container" *ngIf="loaded">
+<span  *ngIf="loaded">
 
-  <div class="bar">
+  <div class="row bar">
     <h1>Category</h1>
   </div>
 
-  <div class="data-row">
+  <div class="row">
     <div class="row-name">Code:</div>
     <div class="user-data">{{category.code}}</div>
   </div>
 
-  <div class="data-row">
+  <div class="row">
     <div class="row-name">Naam:</div>
     <div class="user-data">{{category.name}}</div>
   </div>
@@ -19,4 +19,4 @@
     <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editCategory">Category wijzigen</a>
     <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="deleteCategory">Category verwijderen</a>
   </div>
-</div>
+</span>

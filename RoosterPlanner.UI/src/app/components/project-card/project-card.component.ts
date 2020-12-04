@@ -34,11 +34,10 @@ export class ProjectCardComponent implements OnInit {
       data: dialogData
     });
 
-    dialogRef.afterClosed().subscribe(dialogResult => {
+    dialogRef.afterClosed().subscribe(async dialogResult => {
       if (dialogResult === true) {
-        this.participationService.deleteParticipation(participation).then(
-          response => {
-            if (response.body !== null) {
+        await this.participationService.deleteParticipation(participation).then(async response => {
+            if (response !== null) {
               window.location.reload();
             }
           }

@@ -49,7 +49,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error removing shift " + shift.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex,result.Message, shift);
                 result.Error = ex;
             }
 
@@ -70,7 +70,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting shift " + shiftId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -91,7 +91,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error updating shift " + shift.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, shift);
                 result.Error = ex;
             }
 
@@ -111,7 +111,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error creating shifts ";
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, shifts);
                 result.Error = ex;
             }
 
@@ -132,7 +132,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting shifts with projectid " + projectId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 

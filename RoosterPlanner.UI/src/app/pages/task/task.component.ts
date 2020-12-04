@@ -8,6 +8,8 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confi
 import {TaskService} from "../../services/task.service";
 import {Task} from "../../models/task";
 import {UploadService} from "../../services/upload.service";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 @Component({
   selector: 'app-task',
@@ -28,7 +30,15 @@ export class TaskComponent implements OnInit {
     private userService: UserService,
     private taskService: TaskService,
     private router: Router,
-    private uploadService: UploadService) {
+    private uploadService: UploadService,
+    private breadcrumbService: BreadcrumbService) {
+
+    let breadcrumb: Breadcrumb = new Breadcrumb();
+    breadcrumb.label = 'Taak';
+    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
+      this.breadcrumbService.admincrumb, this.breadcrumbService.takencrumb, breadcrumb];
+
+    this.breadcrumbService.replace(array);
   }
 
   ngOnInit(): void {

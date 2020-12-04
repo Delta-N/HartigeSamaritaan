@@ -15,6 +15,7 @@ import {UploadService} from "../../services/upload.service";
 })
 export class CreateProjectComponent implements OnInit {
   project: Project = new Project();
+  updatedProject: Project;
   checkoutForm;
   title: string="Project toevoegen";
   files: FileList;
@@ -53,16 +54,16 @@ export class CreateProjectComponent implements OnInit {
 
 
   async saveProject(value: Project) {
-    this.project = value
+    this.updatedProject = value
     if (this.checkoutForm.status === 'INVALID') {
       this.toastr.error("Niet alle velden zijn correct ingevuld");
     } else {
-      let prSdate = DateConverter.toDate(this.project.projectStartDate)
-      let prEdate = DateConverter.toDate(this.project.projectEndDate)
-      let parSdate = DateConverter.toDate(this.project.participationStartDate)
+      let prSdate = DateConverter.toDate(this.updatedProject.projectStartDate)
+      let prEdate = DateConverter.toDate(this.updatedProject.projectEndDate)
+      let parSdate = DateConverter.toDate(this.updatedProject.participationStartDate)
       //alleen participation end date is optioneel
       let parEdate = null;
-      this.project.participationEndDate != null ? parEdate = DateConverter.toDate(this.project.participationEndDate) : null;
+      this.updatedProject.participationEndDate != null ? parEdate = DateConverter.toDate(this.updatedProject.participationEndDate) : null;
 
       if (prEdate < prSdate) {
         this.toastr.error("Project einddatum mag niet voor project startdatum liggen")
@@ -85,27 +86,30 @@ export class CreateProjectComponent implements OnInit {
         const formData = new FormData();
         formData.append(this.files[0].name, this.files[0]);
 
-        if (this.project.pictureUri != null)
-          await this.uploadService.deleteIfExists(this.project.pictureUri).then();
+        if (this.updatedProject.pictureUri != null)
+          await this.uploadService.deleteIfExists(this.updatedProject.pictureUri).then();
 
         await this.uploadService.uploadProjectPicture(formData).then(url => {
           if (url && url.path && url.path.trim().length > 0)
-            this.project.pictureUri = url.path.trim();
+            this.updatedProject.pictureUri = url.path.trim();
         });
       }
 
       //create new project
       if (this.data.createProject) {
-        this.projectService.postProject(this.project).then(response => this.project = response.body);
+        await this.projectService.postProject(this.updatedProject).then(async response => this.updatedProject = response);
       }
       //edit project
       else {
-        this.projectService.updateProject(this.project).then(response => {
-          this.project = response.body
+        this.updatedProject.lastEditBy = this.project.lastEditBy;
+        this.updatedProject.lastEditDate = this.project.lastEditDate;
+        this.updatedProject.rowVersion = this.project.rowVersion;
+        await this.projectService.updateProject(this.updatedProject).then(async response => {
+          this.project = response
         });
 
       }
-      this.dialogRef.close(this.project);
+      this.dialogRef.close(this.updatedProject);
     }
   }
 

@@ -38,14 +38,9 @@ export class AllTasksComponent implements OnInit {
               private taskService: TaskService,
               private categoryService: CategoryService,
               private breadcrumbService: BreadcrumbService) {
-    let breadcrumb: Breadcrumb = new Breadcrumb();
-    breadcrumb.label = 'test';
-    breadcrumb.url = "/tasks";
-    let breadcrumb2: Breadcrumb = new Breadcrumb();
-    breadcrumb2.label = 'test';
-    breadcrumb2.url = "/tasks";
-    let array: Breadcrumb[]=[];
-    array.push(breadcrumb, breadcrumb2);
+    let tempcrumb:Breadcrumb= this.breadcrumbService.takencrumb;
+    tempcrumb.url=null;
+    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.admincrumb,tempcrumb ];
     this.breadcrumbService.replace(array);
   }
 

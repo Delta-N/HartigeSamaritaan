@@ -37,21 +37,24 @@ export class AddCategoryComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  saveCategory(value: Category) {
+  async saveCategory(value: Category) {
     this.updatedCategory = value;
     if (this.checkoutForm.status === 'INVALID') {
       this.toastr.error("Niet alle velden zijn correct ingevuld")
     } else {
-      if(this.updatedCategory.code.length>10){
+      if (this.updatedCategory.code.length > 10) {
         this.toastr.error("Code mag maximaal 10 tekens lang zijn")
         return;
       }
       if (this.modifier === 'toevoegen') {
-        this.categoryService.postCategory(this.updatedCategory).then(response => {
+        await this.categoryService.postCategory(this.updatedCategory).then(async response => {
           this.dialogRef.close(response)
         });
       } else if (this.modifier === 'wijzigen') {
-        this.categoryService.updateCategory(this.updatedCategory).then(response => {
+        this.updatedCategory.lastEditBy = this.category.lastEditBy;
+        this.updatedCategory.lastEditDate = this.category.lastEditDate;
+        this.updatedCategory.rowVersion = this.category.rowVersion;
+        await this.categoryService.updateCategory(this.updatedCategory).then(async response => {
           this.dialogRef.close(response)
         });
 

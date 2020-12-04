@@ -66,7 +66,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting task " + id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -86,7 +86,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting task with filter: " + filter;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, filter);
                 result.Error = ex;
             }
 
@@ -107,7 +107,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error creating task " + task.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, task);
                 result.Error = ex;
             }
 
@@ -128,7 +128,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error updating task " + task.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, task);
                 result.Error = ex;
             }
 
@@ -149,7 +149,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error removing task " + task.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, task);
                 result.Error = ex;
             }
 
@@ -167,7 +167,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting all categories ";
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -188,7 +188,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting category " + categoryId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -210,7 +210,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error creating category " + category.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, category);
                 result.Error = ex;
             }
 
@@ -232,7 +232,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error updating category " + category.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, category);
                 result.Error = ex;
             }
 
@@ -253,7 +253,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error removing category " + category.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, category);
                 result.Error = ex;
             }
 
@@ -274,7 +274,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error removing projecttask " + projectTask.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, projectTask);
                 result.Error = ex;
             }
 
@@ -295,7 +295,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting projecttask " + id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -317,7 +317,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting projecttask " + projectId + " " + taskId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -337,7 +337,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error adding task to project " + projectTask.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, projectTask);
                 result.Error = ex;
             }
 
@@ -358,7 +358,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting tasks from project " + projectId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 

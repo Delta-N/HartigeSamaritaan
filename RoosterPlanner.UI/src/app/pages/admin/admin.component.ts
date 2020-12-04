@@ -44,7 +44,7 @@ export class AdminComponent implements OnInit {
   }
 
   async getProjects(offset: number, pageSize: number) {
-    await this.projectService.getAllProjects(offset, pageSize).then(x => {
+    await this.projectService.getAllProjects(offset, pageSize).then(async x => {
       this.projects = x;
       if (this.projects.length >= 5) {
         this.projectExpandbtnDisabled = false;
@@ -68,7 +68,7 @@ export class AdminComponent implements OnInit {
       width: '500px',
       data: {
         createProject: true,
-        title:"Project toevoegen",
+        title: "Project toevoegen",
 
       }
     });
@@ -107,15 +107,15 @@ export class AdminComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(async result => {
-      this.loaded=false;
-      this.getAdministrators(0, this.itemsPerCard).then()
-      if (result != null) {
+      if (result) {
+        this.loaded = false;
+        this.getAdministrators(0, this.itemsPerCard).then()
         setTimeout(() => {
-          this.getAdministrators(0, this.itemsPerCard).then(()=>this.loaded=true)
+          this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
           this.toastr.success(result + " is " + toastrString + " als administrator")
         }, 500);
       }
-      this.getAdministrators(0, this.itemsPerCard).then(()=>this.loaded=true)
+      this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
 
     });
   }

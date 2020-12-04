@@ -58,7 +58,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error finding projects with filter: " + filter;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, filter);
                 result.Error = ex;
             }
 
@@ -80,7 +80,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting project details " + id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -102,7 +102,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error creating project " + project.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, project);
                 result.Error = ex;
             }
 
@@ -124,7 +124,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error updating project " + project.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, project);
                 result.Error = ex;
             }
 

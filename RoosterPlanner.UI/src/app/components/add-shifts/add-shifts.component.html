@@ -32,10 +32,10 @@
                      <ngx-material-timepicker [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"
                                               #Starttime></ngx-material-timepicker>
                      <ng-template #cancelBtn>
-                        <button mat-button>Annuleren</button>
+                        <button mat-button class="override-button">Annuleren</button>
                      </ng-template>
                      <ng-template #confirmBtn>
-                        <button mat-button class="action-button">Opslaan</button>
+                        <button mat-button class="action-button override-button">Opslaan</button>
                      </ng-template>
                   </mat-form-field>
                </div>

@@ -75,7 +75,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error adding Participation to LocalDB " + participation.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, participation);
                 result.Error = ex;
             }
 
@@ -100,7 +100,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error finding participations " + personId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -121,7 +121,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error finding participation " + participationId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -149,7 +149,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error finding participation " + personId + " " + projectId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -170,7 +170,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error removing participation " + participation.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, participation);
                 result.Error = ex;
             }
 
@@ -191,7 +191,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error updating participation " + participation.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, participation);
                 result.Error = ex;
             }
 

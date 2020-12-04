@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from "./api.service";
-import {ToastrService} from "ngx-toastr";
 import {Category} from "../models/category";
 import {HttpResponse} from "@angular/common/http";
 import {Task} from "../models/task";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {EntityHelper} from "../helpers/entity-helper";
+import {ErrorService} from "./error.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,54 +13,97 @@ import {EntityHelper} from "../helpers/entity-helper";
 export class CategoryService {
 
   constructor(private apiService: ApiService,
-              private toastr: ToastrService) {
+              private errorService: ErrorService) {
   }
 
   async getCategory(guid: string): Promise<Category> {
+    if (!guid) {
+      this.errorService.error("categoryID mag niet leeg zijn")
+      return null;
+    }
     let category: Category = null;
-    await this.apiService.get<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/GetCategory/${guid}`).toPromise().then(response => {
-      category = response.body;
-    })
+    await this.apiService.get<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/GetCategory/${guid}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          category = res.body;
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
     return category;
   }
 
   async getAllCategory(): Promise<Category[]> {
     let categories: Category[] = [];
-    await this.apiService.get<HttpResponse<Category[]>>(`${HttpRoutes.taskApiUrl}/GetAllCategories`).toPromise().then(response =>
-      categories = response.body
-    );
+    await this.apiService.get<HttpResponse<Category[]>>(`${HttpRoutes.taskApiUrl}/GetAllCategories`)
+      .toPromise()
+      .then(res => {
+          if (res.ok)
+            categories = res.body
+        }, Error => {
+          this.errorService.httpError(Error)
+        }
+      );
     return categories
   }
 
-  postCategory(category: Category) {
-    if (category === null || category.name === null) {
-      this.toastr.error("Ongeldige category")
+  async postCategory(category: Category): Promise<Category> {
+    if (!category || !category.name) {
+      this.errorService.error("Ongeldige category")
       return null;
     }
 
-    if (category.id === null || category.id === "") {
+    if (!category.id) {
       category.id = EntityHelper.returnEmptyGuid()
     }
-    return this.apiService.post<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/SaveCategory`, category).toPromise()
+    let resCategory: Category = null;
+    await this.apiService.post<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/SaveCategory`, category)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          resCategory = res.body
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return resCategory
   }
 
-  updateCategory(category: Category) {
-    if (category === null || category.name === null) {
-      this.toastr.error("Ongeldige category")
+  async updateCategory(category: Category): Promise<Category> {
+    if (!category || !category.name) {
+      this.errorService.error("Ongeldige category")
       return null;
     }
-    if (category.id === null || category.id === "") {
-      this.toastr.error("CategoryID is leeg")
+    let updatedCategory: Category = null;
+    if (!category.id) {
+      this.errorService.error("CategoryID is leeg")
       return null;
     }
-    return this.apiService.put<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/UpdateCategory`, category).toPromise()
+    await this.apiService.put<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/UpdateCategory`, category)
+      .toPromise()
+      .then(res => {
+          if (res.ok)
+            updatedCategory = res.body;
+        }, Error => {
+          this.errorService.httpError(Error)
+        }
+      )
+    return updatedCategory
   }
 
-  deleteCategory(guid: string) {
-    if (guid === null || guid == "") {
-      this.toastr.error("CategoryID is leeg")
+  async deleteCategory(guid: string): Promise<boolean> {
+    if (!guid) {
+      this.errorService.error("CategoryID is leeg")
       return null;
     }
-    return this.apiService.delete<HttpResponse<Number>>(`${HttpRoutes.taskApiUrl}/DeleteCategory/${guid}`).toPromise()
+    let deleted: boolean = false;
+    await this.apiService.delete<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/DeleteCategory/${guid}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          deleted = true;
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return deleted;
   }
 }

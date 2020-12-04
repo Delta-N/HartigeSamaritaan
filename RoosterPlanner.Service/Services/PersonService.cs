@@ -45,7 +45,8 @@ namespace RoosterPlanner.Service
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             personRepository = unitOfWork.PersonRepository ?? throw new ArgumentNullException(nameof(personRepository));
-            managerRepository = unitOfWork.ManagerRepository ?? throw new ArgumentNullException(nameof(managerRepository));
+            managerRepository = unitOfWork.ManagerRepository ??
+                                throw new ArgumentNullException(nameof(managerRepository));
             this.azureB2CService = azureB2CService ?? throw new ArgumentNullException(nameof(azureB2CService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -54,27 +55,27 @@ namespace RoosterPlanner.Service
         {
             if (id == Guid.Empty)
                 throw new ArgumentNullException(nameof(id));
-            
+
             TaskResult<User> result = new TaskResult<User>();
             try
             {
                 User person = await azureB2CService.GetUserAsync(id);
                 result.Succeeded = person != null;
-                if (result.Succeeded)
-                {
-                    result.StatusCode = HttpStatusCode.OK;
-                    result.Data = person;
-                }
-                else
+                if (!result.Succeeded)
                 {
                     result.StatusCode = HttpStatusCode.NotFound;
                     result.Message = ResponseMessage.UserNotFound;
+                }
+                else
+                {
+                    result.StatusCode = HttpStatusCode.OK;
+                    result.Data = person;
                 }
             }
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting user " + id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -85,7 +86,7 @@ namespace RoosterPlanner.Service
         {
             if (id == Guid.Empty)
                 throw new ArgumentNullException(nameof(id));
-            
+
             TaskResult<Person> result = new TaskResult<Person>();
             try
             {
@@ -95,7 +96,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting person " + id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -114,7 +115,7 @@ namespace RoosterPlanner.Service
                 if (b2CUsersResult.Succeeded)
                 {
                     result.Data = new List<User>();
-                    foreach (var user in b2CUsersResult.Data) 
+                    foreach (var user in b2CUsersResult.Data)
                         result.Data.Add(user);
 
                     result.Succeeded = true;
@@ -128,7 +129,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting users " + filter;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, filter);
                 result.Error = ex;
             }
 
@@ -146,21 +147,21 @@ namespace RoosterPlanner.Service
             {
                 TaskResult<User> person = await azureB2CService.UpdateUserAsync(user);
                 result.Succeeded = person.Succeeded;
-                if (result.Succeeded)
-                {
-                    result.StatusCode = HttpStatusCode.OK;
-                    result.Data = person.Data;
-                }
-                else
+                if (!result.Succeeded)
                 {
                     result.Succeeded = false;
                     result.Message = person.Message;
+                }
+                else
+                {
+                    result.StatusCode = HttpStatusCode.OK;
+                    result.Data = person.Data;
                 }
             }
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error updating user " + user.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, user);
                 result.Error = ex;
             }
 
@@ -171,7 +172,7 @@ namespace RoosterPlanner.Service
         {
             if (projectId == Guid.Empty)
                 throw new ArgumentNullException(nameof(projectId));
-            
+
             TaskListResult<Manager> result = TaskListResult<Manager>.CreateDefault();
             try
             {
@@ -181,7 +182,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting managers " + projectId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -192,7 +193,7 @@ namespace RoosterPlanner.Service
         {
             if (userId == Guid.Empty)
                 throw new ArgumentNullException(nameof(userId));
-            
+
             TaskListResult<Manager> result = TaskListResult<Manager>.CreateDefault();
             try
             {
@@ -202,7 +203,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting projects managed by " + userId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -227,7 +228,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting manager " + userId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 
@@ -248,7 +249,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error removing manager " + manager.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, manager);
                 result.Error = ex;
             }
 
@@ -269,7 +270,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error creating manager " + manager.Id;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message, manager);
                 result.Error = ex;
             }
 
@@ -280,7 +281,7 @@ namespace RoosterPlanner.Service
         {
             if (userId == Guid.Empty)
                 throw new ArgumentNullException(nameof(userId));
-            
+
             TaskResult<List<Manager>> result = new TaskResult<List<Manager>>();
             try
             {
@@ -290,7 +291,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting projects user manages " + userId;
-                logger.LogError(result.Message, ex);
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 

@@ -29,12 +29,12 @@ export class HomeComponent implements OnInit {
               private userService: UserService,
               private participationService: ParticipationService,
               private toastr: ToastrService,
-              ) {
+  ) {
   }
 
   async ngOnInit(): Promise<void> {
     await this.userService.getCurrentUser().then(async user => {
-      if (user !== false) {
+      if (user) {
         this.currentUser = user
         this.getParticipations().then(() => this.loaded = true)
       }
@@ -59,15 +59,15 @@ export class HomeComponent implements OnInit {
       data: this.currentUser
     });
     dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(result => {
+
+    dialogRef.afterClosed().subscribe(async result => {
       if (result != null) {
         userCheckedProfile = true;
       }
 
       if (userCheckedProfile) {
-        this.projectService.getActiveProjects().then(response => {
+        await this.projectService.getActiveProjects().then(async response => {
             projects = response;
-
             projects.forEach(pro => {
               this.participations.forEach(par => {
                 if (pro.id == par.project.id) {
@@ -81,17 +81,21 @@ export class HomeComponent implements OnInit {
               width: '350px',
             });
             dialogRef.disableClose = true;
-            dialogRef.afterClosed().subscribe(result => {
+            dialogRef.afterClosed().subscribe(async result => {
+
               if (result !== 'false') {
                 this.selectedProjects = result;
-                this.selectedProjects.forEach(project => {
+                for (const project of this.selectedProjects) {
                   let participation: Participation = new Participation();
                   participation.id = EntityHelper.returnEmptyGuid();
                   participation.person = this.currentUser;
                   participation.project = project
-                  this.participationService.postParticipation(participation);
-                })
-                setTimeout(() => this.getParticipations(), 1000)
+                  await this.participationService.postParticipation(participation).then(res => {
+                    if (res) {
+                      this.participations.push(res)
+                    }
+                  });
+                }
               }
             })
           }

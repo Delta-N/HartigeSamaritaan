@@ -101,7 +101,7 @@ export class AddProjectTaskComponent implements OnInit {
     if (this.data.modifier === 'remove') {
       await this.taskService.removeTaskFromProject(this.project.id, id).then(res => {
         if (res) {
-          this.currentProjectTasks = this.currentProjectTasks.filter(cpt => cpt.id !== res)
+          this.currentProjectTasks = this.currentProjectTasks.filter(cpt => cpt.id !== id)
           this.toastr.success("Taak verwijderd")
           this.dialogRef.close(this.currentProjectTasks);
         }

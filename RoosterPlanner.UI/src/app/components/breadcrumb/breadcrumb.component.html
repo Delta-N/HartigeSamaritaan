@@ -1,10 +1,8 @@
-<div class="placeholder">
-  <ol>
-    <li *ngFor="let breadcrumb of breadcrumbs"
-        class="breadcrumb-item">
-      <a [routerLink]="[breadcrumb.url]">
+<ol class="bread">
+  <li *ngFor="let breadcrumb of breadcrumbs">
+      <a *ngIf="breadcrumb.url" [routerLink]="[breadcrumb.url]">
         {{ breadcrumb.label }}
       </a>
-    </li>
-  </ol>
-</div>
+    <span *ngIf="!breadcrumb.url"><b>{{ breadcrumb.label }}</b></span>
+  </li>
+</ol>

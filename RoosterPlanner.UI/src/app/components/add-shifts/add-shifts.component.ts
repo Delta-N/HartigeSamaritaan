@@ -15,6 +15,8 @@ import {Shift} from "../../models/shift";
 import {EntityHelper} from "../../helpers/entity-helper";
 import * as moment from "moment";
 import {TextInjectorService} from "../../services/text-injector.service";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 @Component({
   selector: 'app-add-shifts',
@@ -52,7 +54,18 @@ export class AddShiftsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private shiftService: ShiftService,
-    private _location: Location,) {
+    private _location: Location,
+    private breadcrumbService: BreadcrumbService) {
+
+    let previous: Breadcrumb = new Breadcrumb();
+    previous.label = "Shift overzicht";
+    previous.url = this.breadcrumbService.previousUrl;
+
+    let current: Breadcrumb = new Breadcrumb();
+    current.label = "Shift toevoegen";
+
+    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
+    this.breadcrumbService.replace(breadcrumbs);
 
     this.selectionOptions = TextInjectorService.calenderSelectionOptions;
 
@@ -70,7 +83,7 @@ export class AddShiftsComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
@@ -79,7 +92,7 @@ export class AddShiftsComponent implements OnInit {
       this.tasks = tasks.filter(t => t != null);
     });
 
-    this.projectService.getProject(this.guid).then(project => {
+    await this.projectService.getProject(this.guid).then(async project => {
       this.project = project;
       this.min = this.project.participationStartDate;
       this.max = this.project.participationEndDate;

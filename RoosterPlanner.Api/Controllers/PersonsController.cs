@@ -10,14 +10,15 @@ using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.Constants;
-using RoosterPlanner.Api.Models.Enums;
 using RoosterPlanner.Common.Config;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models.Enums;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Person = RoosterPlanner.Models.Person;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -51,12 +52,13 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<User> result;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                if (id.ToString() == oid || UserHasRole(oid, UserRole.Boardmember))
+                if (id.ToString() == oid || await UserHasRole(oid, UserRole.Boardmember))
                     result = await personService.GetUserAsync(id);
                 else
                     return Unauthorized();
 
-                if (!result.Succeeded) return UnprocessableEntity();
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null)
                     return NotFound();
 
@@ -66,8 +68,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetPersonAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -93,7 +96,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 TaskListResult<User> result = await personService.GetB2CMembersAsync(filter);
 
-                if (!result.Succeeded) return UnprocessableEntity();
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null)
                     return Ok(new List<PersonViewModel>());
 
@@ -107,12 +111,13 @@ namespace RoosterPlanner.Api.Controllers
                     }
                 }
 
-                return Ok(personViewModels);
+                return Ok(new SearchResultViewModel<PersonViewModel>(filter.TotalItemCount, personViewModels));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetPersonAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -127,26 +132,22 @@ namespace RoosterPlanner.Api.Controllers
                 if (oid == null) return BadRequest("Invalid User");
 
                 //only the owner of a profile or a boardmember can update user data
-                if (personViewModel.Id.ToString() == oid ||
-                    UserHasRole(oid, UserRole.Boardmember))
-                {
-                    User user = PersonViewModel.CreateUser(personViewModel, Extensions.GetInstance(azureB2CConfig));
-                    TaskResult<User> result = await personService.UpdatePersonAsync(user);
-                    if (result.Succeeded)
-                        return Ok(PersonViewModel.CreateVmFromUser(result.Data,
-                            Extensions.GetInstance(azureB2CConfig)));
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                if (personViewModel.Id.ToString() != oid && !await UserHasRole(oid, UserRole.Boardmember))
+                    return BadRequest("Invalid User");
 
-                return BadRequest("Invalid User");
+                User user = PersonViewModel.CreateUser(personViewModel, Extensions.GetInstance(azureB2CConfig));
+                TaskResult<User> result = await personService.UpdatePersonAsync(user);
+
+                if (!result.Succeeded)
+                    return Unauthorized();
+                return Ok(PersonViewModel.CreateVmFromUser(result.Data,
+                    Extensions.GetInstance(azureB2CConfig)));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(UpdateUserAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -162,7 +163,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<User> result = await personService.GetUserAsync(oid);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
 
                 User user = new User
                 {
@@ -182,7 +183,7 @@ namespace RoosterPlanner.Api.Controllers
                 user.AdditionalData.Add(Extensions.GetInstance(azureB2CConfig).UserRoleExtension, modifier);
                 result = await personService.UpdatePersonAsync(user);
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
 
                 PersonViewModel personVm =
                     PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
@@ -190,8 +191,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(ModAdminAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -220,7 +222,7 @@ namespace RoosterPlanner.Api.Controllers
                 }
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
                     return Ok(new List<ManagerViewModel>());
                 List<ManagerViewModel> managerVmList = result.Data.Select(ManagerViewModel.CreateVm).ToList();
@@ -228,8 +230,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetProjectManagersAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -244,7 +247,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<Manager> result = await personService.GetProjectsManagedByAsync(userId);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
                     return NotFound();
                 List<ManagerViewModel> managerVmList = result.Data.Select(ManagerViewModel.CreateVm).ToList();
@@ -252,8 +255,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetProjectsManagedByAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -290,17 +294,18 @@ namespace RoosterPlanner.Api.Controllers
                 };
 
                 TaskResult<Manager> result = await personService.MakeManagerAsync(manager);
-                if (!UserHasRole(person.Oid.ToString(), UserRole.Boardmember))
+                if (!await UserHasRole(person.Oid.ToString(), UserRole.Boardmember))
                     await ModAdminAsync(userId, 2); //make user a manager in B2C
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(PersonViewModel.CreateVmFromUser(user, Extensions.GetInstance(azureB2CConfig)));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(MakeManagerAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -323,24 +328,27 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (userManagesOtherProjects?.Data != null &&
                     userManagesOtherProjects.Data.Count == 0)
-                    if (!UserHasRole(manager.PersonId.ToString(), UserRole.Boardmember))
+                    if (!await UserHasRole(manager.PersonId.ToString(), UserRole.Boardmember))
                         await ModAdminAsync(userId, 4); //remove user as a manager in B2C}
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(PersonViewModel.CreateVmFromPerson(manager.Person));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(RemoveManagerAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
-        private bool UserHasRole(string oid, UserRole userRole)
+        private async Task<bool> UserHasRole(string oid, UserRole userRole)
         {
-            Task<ActionResult<PersonViewModel>> currentUserActionResult = GetPersonAsync(Guid.Parse(oid));
-            return currentUserActionResult.Result?.Value?.UserRole == userRole.ToString();
+            PersonViewModel personVm = PersonViewModel.CreateVmFromUser(
+                (await personService.GetUserAsync(Guid.Parse(oid))).Data,
+                Extensions.GetInstance(azureB2CConfig));
+            return personVm.UserRole == userRole.ToString();
         }
     }
 }

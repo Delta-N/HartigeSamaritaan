@@ -76,13 +76,18 @@ export class AddTaskComponent implements OnInit {
           if (url && url.path && url.path.trim().length > 0)
             this.updatedTask.documentUri = url.path.trim();
         });
-      }
+      } else
+        this.updatedTask.documentUri = this.task.documentUri;
+
 
       if (this.modifier === 'toevoegen') {
-       await this.taskService.postTask(this.updatedTask).then(response => {
+        await this.taskService.postTask(this.updatedTask).then(response => {
           this.dialogRef.close(response)
         });
       } else if (this.modifier === 'wijzigen') {
+        this.updatedTask.lastEditBy = this.task.lastEditBy;
+        this.updatedTask.lastEditDate = this.task.lastEditDate;
+        this.updatedTask.rowVersion = this.task.rowVersion;
         await this.taskService.updateTask(this.updatedTask).then(response => {
           this.dialogRef.close(response)
         });

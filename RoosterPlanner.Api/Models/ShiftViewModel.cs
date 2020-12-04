@@ -4,9 +4,8 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class ShiftViewModel
+    public class ShiftViewModel : EntityViewModel
     {
-        public Guid Id { get; set; }
         public ProjectDetailsViewModel Project { get; set; }
         public TaskViewModel Task { get; set; }
         public DateTime Date { get; set; }
@@ -25,7 +24,10 @@ namespace RoosterPlanner.Api.Models
                 Date = shift.Date,
                 StartTime = shift.StartTime.ToString("hh\\:mm"),
                 EndTime = shift.EndTime.ToString("hh\\:mm"),
-                ParticipantsRequired = shift.ParticipantsRequired
+                ParticipantsRequired = shift.ParticipantsRequired,
+                LastEditDate = shift.LastEditDate,
+                LastEditBy = shift.LastEditBy,
+                RowVersion = shift.RowVersion
             };
 
             if (shift.Project != null)
@@ -53,7 +55,10 @@ namespace RoosterPlanner.Api.Models
                 Project = ProjectDetailsViewModel.CreateProject(shiftViewModel.Project),
                 ParticipantsRequired = shiftViewModel.ParticipantsRequired,
                 TaskId = shiftViewModel.Task.Id,
-                ProjectId = shiftViewModel.Project.Id
+                ProjectId = shiftViewModel.Project.Id,
+                LastEditDate = shiftViewModel.LastEditDate,
+                LastEditBy = shiftViewModel.LastEditBy,
+                RowVersion = shiftViewModel.RowVersion
             };
 
         }

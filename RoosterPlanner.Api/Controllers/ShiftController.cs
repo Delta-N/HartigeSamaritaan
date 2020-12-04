@@ -12,6 +12,7 @@ using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Task = RoosterPlanner.Models.Task;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -42,7 +43,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id);
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
                     return Ok(new List<ShiftViewModel>());
                 List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
@@ -50,8 +51,9 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -64,15 +66,16 @@ namespace RoosterPlanner.Api.Controllers
             {
                 TaskResult<Shift> result = await shiftService.GetShiftAsync(id);
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null)
                     return NotFound();
                 return Ok(ShiftViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -117,20 +120,21 @@ namespace RoosterPlanner.Api.Controllers
                 }
 
                 if (shifts.Count != shiftViewModels.Count)
-                    return UnprocessableEntity("Could not covert al viewmodels to shifts");
+                    return UnprocessableEntity(new ErrorViewModel{Type = Type.Error, Message = "Could not covert al viewmodels to shifts"});
 
                 TaskListResult<Shift> result = await shiftService.CreateShiftsAsync(shifts);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
 
                 List<ShiftViewModel> createdVm = result.Data.Select(ShiftViewModel.CreateVm).ToList();
                 return Ok(createdVm);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(SaveShiftsAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -176,13 +180,14 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<Shift> result = await shiftService.UpdateShiftAsync(oldShift);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(ShiftViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(UpdateShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
@@ -200,12 +205,14 @@ namespace RoosterPlanner.Api.Controllers
 
                 TaskResult<Shift> result = await shiftService.RemoveShiftAsync(shift.Data);
 
-                return !result.Succeeded ? Problem() : Ok(result);
+                return !result.Succeeded ? UnprocessableEntity(new ErrorViewModel
+                    {Type = Type.Error, Message = result.Message}) : Ok(result);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(RemoveShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
     }

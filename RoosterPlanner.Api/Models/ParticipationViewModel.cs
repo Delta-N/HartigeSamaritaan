@@ -4,9 +4,8 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class ParticipationViewModel
+    public class ParticipationViewModel : EntityViewModel
     {
-        public Guid Id { get; set; }
         public PersonViewModel Person { get; set; }
         public ProjectDetailsViewModel Project { get; set; }
         public int MaxWorkingHoursPerWeek { get; set; }
@@ -30,7 +29,10 @@ namespace RoosterPlanner.Api.Models
                     Project = ProjectDetailsViewModel.CreateVm(participation.Project),
                     MaxWorkingHoursPerWeek = participation.MaxWorkingHoursPerWeek,
                     Availabilities = participation.Availabilities,
-                    WantsToWorkWith = participation.WantsToWorkWith
+                    WantsToWorkWith = participation.WantsToWorkWith,
+                    LastEditDate = participation.LastEditDate,
+                    LastEditBy = participation.LastEditBy,
+                    RowVersion = participation.RowVersion
                 };
             }
 
@@ -49,7 +51,10 @@ namespace RoosterPlanner.Api.Models
                     ProjectId = participationViewModel.Project.Id,
                     MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
                     Availabilities = participationViewModel.Availabilities,
-                    WantsToWorkWith = participationViewModel.WantsToWorkWith
+                    WantsToWorkWith = participationViewModel.WantsToWorkWith,
+                    LastEditDate = participationViewModel.LastEditDate,
+                    LastEditBy = participationViewModel.LastEditBy,
+                    RowVersion = participationViewModel.RowVersion
                 };
             }
 

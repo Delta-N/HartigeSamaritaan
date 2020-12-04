@@ -12,6 +12,7 @@ using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -41,7 +42,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskResult<Project> result = await projectService.GetProjectDetailsAsync(id);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null)
                     return NotFound();
 
@@ -49,13 +50,14 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetProjectAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProjectViewModel>>> SearchAsync(string name,
+        public async Task<ActionResult<List<ProjectViewModel>>> SearchProjectsAsync(string name,
             string city,
             DateTime? startDateFrom = null,
             DateTime? endDate = null,
@@ -76,26 +78,28 @@ namespace RoosterPlanner.Api.Controllers
             {
                 TaskListResult<Project> result = await projectService.SearchProjectsAsync(filter);
                 if (!result.Succeeded)
-                    return UnprocessableEntity(result.Message);
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
 
-                Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
                 if (result.Data == null)
                     return Ok(new List<ProjectViewModel>());
 
                 List<ProjectViewModel> projectVmList = result.Data.Select(ProjectViewModel.CreateVm).ToList();
-                return Ok(projectVmList);
+
+                return Ok(new SearchResultViewModel<ProjectViewModel>(filter.TotalItemCount, projectVmList));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(SearchProjectsAsync);
+                logger.LogError(ex,message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         //alleen een bestuurslid kan projecten aanmaken of wijzigen
         [Authorize(Policy = "Boardmember")]
         [HttpPost]
-        public async Task<ActionResult<ProjectDetailsViewModel>> SaveProjectAsync(ProjectDetailsViewModel projectDetails)
+        public async Task<ActionResult<ProjectDetailsViewModel>> SaveProjectAsync(
+            ProjectDetailsViewModel projectDetails)
         {
             if (projectDetails == null)
                 return BadRequest("No valid project received");
@@ -118,20 +122,23 @@ namespace RoosterPlanner.Api.Controllers
                 else
                     return BadRequest("Cannot update existing Project with post method");
 
-                if (result.Succeeded)
-                    return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
-                return UnprocessableEntity(projectDetails);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
+                
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(SaveProjectAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpPut]
-        public async Task<ActionResult<ProjectDetailsViewModel>> UpdateProjectAsync(ProjectDetailsViewModel projectDetails)
+        public async Task<ActionResult<ProjectDetailsViewModel>> UpdateProjectAsync(
+            ProjectDetailsViewModel projectDetails)
         {
             if (projectDetails == null || projectDetails.Id == Guid.Empty)
                 return BadRequest("No valid project received");
@@ -162,13 +169,14 @@ namespace RoosterPlanner.Api.Controllers
 
                 TaskResult<Project> result = await projectService.UpdateProjectAsync(oldProject);
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(UpdateProjectAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
     }

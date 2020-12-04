@@ -49,7 +49,8 @@ namespace RoosterPlanner.Service
         {
             this.azureB2CConfig = azureB2CConfig.Value ?? throw new ArgumentNullException(nameof(azureB2CConfig));
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            personRepository = unitOfWork.PersonRepository ?? throw new ArgumentNullException(nameof(unitOfWork.PersonRepository));
+            personRepository = unitOfWork.PersonRepository ??
+                               throw new ArgumentNullException(nameof(unitOfWork.PersonRepository));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -128,7 +129,9 @@ namespace RoosterPlanner.Service
                         break;
                 }
 
-                if (users.Count == 0) 
+                filter.TotalItemCount = users.Count;
+
+                if (users.Count == 0)
                     throw new NullReferenceException("No users found");
                 //dit is heel tijdrovend. keuze maken om personen alleen in te voegen en updaten bij het individueel ophalen/updaten van gebruikers
                 //foreach (var user in users) AddPersonToLocalDb(user);
@@ -258,7 +261,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error adding person to LocalDB " + user.Id;
-                logger.LogError(result.Message,ex);
+                logger.LogError(ex,result.Message, user);
                 result.Error = ex;
             }
         }

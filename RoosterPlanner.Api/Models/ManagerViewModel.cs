@@ -3,9 +3,8 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class ManagerViewModel
+    public class ManagerViewModel : EntityViewModel
     {
-        public Guid Id { get; set; }
         public Guid ProjectId { get; set; }
         public ProjectDetailsViewModel Project { get; set; }
         public Guid PersonId { get; set; }
@@ -20,7 +19,10 @@ namespace RoosterPlanner.Api.Models
             {
                 Id = manager.Id,
                 ProjectId = manager.ProjectId,
-                PersonId = manager.PersonId
+                PersonId = manager.PersonId,
+                LastEditDate = manager.LastEditDate,
+                LastEditBy = manager.LastEditBy,
+                RowVersion = manager.RowVersion
             };
             if (manager.Person != null)
                 vm.Person = PersonViewModel.CreateVmFromPerson(manager.Person);
@@ -33,12 +35,16 @@ namespace RoosterPlanner.Api.Models
         {
             if (managerViewModel == null)
                 return null;
-
             Manager manager = new Manager(managerViewModel.Id)
             {
                 ProjectId = managerViewModel.ProjectId,
-                PersonId = managerViewModel.PersonId
+                PersonId = managerViewModel.PersonId,
+                LastEditDate = managerViewModel.LastEditDate,
+                LastEditBy = managerViewModel.LastEditBy,
+                RowVersion = managerViewModel.RowVersion
+                
             };
+
             if (managerViewModel.Project != null)
                 manager.Project = ProjectDetailsViewModel.CreateProject(managerViewModel.Project);
             if (managerViewModel.Person != null)

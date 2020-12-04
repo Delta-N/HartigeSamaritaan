@@ -1,112 +1,133 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from "./api.service";
-import {ToastrService} from "ngx-toastr";
 import {Participation} from "../models/participation";
 import {HttpResponse} from "@angular/common/http";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {DateConverter} from "../helpers/date-converter";
 import {EntityHelper} from "../helpers/entity-helper";
+import {ErrorService} from "./error.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParticipationService {
-  participations: Participation[] = []
-  participation: Participation;
 
-
-  constructor(private apiService: ApiService, private toastr: ToastrService) {
+  constructor(private apiService: ApiService,
+              private errorService: ErrorService) {
   }
 
   async getParticipations(userId: string): Promise<Participation[]> {
-    this.participations = [];
-    await this.apiService.get<HttpResponse<Participation[]>>(`${HttpRoutes.participationApiUrl}/${userId}`).toPromise().then(response => {
-      this.participations = response.body;
-    }, Error => {
-    })
-    return this.participations
-  }
-
-  async getParticipation(userId: string, projectId) {
-    this.participation = null
-    await this.apiService.get<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}/GetParticipation/${userId}/${projectId}`).toPromise().then(response => {
-      this.participation = response.body;
-    }, Error => {
-    })
-    return this.participation
-  }
-
-  postParticipation(participation: Participation) {
-    if (participation === null) {
-      this.toastr.error("Lege participation in participationservice")
+    if (!userId) {
+      this.errorService.error("UserId mag niet leeg zijn")
       return null;
     }
-    if (participation.project === null || participation.person === null) {
-      this.toastr.error("Ongeldige participation in participationservice")
+    let participations: Participation[] = [];
+    await this.apiService.get<HttpResponse<Participation[]>>(`${HttpRoutes.participationApiUrl}/${userId}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          participations = res.body;
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return participations;
+  }
+
+  async getParticipation(userId: string, projectId: string): Promise<Participation> {
+    if (!userId || !projectId) {
+      this.errorService.error("UserId en/of ProjectId mag niet leeg zijn");
+      return null;
+    }
+    let participation: Participation = null;
+    await this.apiService.get<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}/GetParticipation/${userId}/${projectId}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          participation = res.body;
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return participation;
+  }
+
+  async postParticipation(participation: Participation): Promise<Participation> {
+    if (!participation) {
+      this.errorService.error("Lege participation in participationservice")
+      return null;
+    }
+    if (!participation.project || !participation.person) {
+      this.errorService.error("Ongeldige participation in participationservice")
       return null;
     }
 
-    if (participation.id === null || participation.id === "") {
+    if (!participation.id) {
       participation.id = EntityHelper.returnEmptyGuid();
     }
     if (participation.maxWorkingHoursPerWeek > 40) {
       participation.maxWorkingHoursPerWeek = 40;
     }
-    return this.apiService.post<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation).toPromise()
+    let postedParticipation: Participation = null;
+    await this.apiService.post<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          postedParticipation = res.body
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return postedParticipation;
   }
 
-  deleteParticipation(participation: Participation) {
-    if (participation === null) {
-      this.toastr.error("Fout tijdens het uitschrijven bij een projcet")
+  async updateParticipation(participation: Participation): Promise<Participation> {
+    if (!participation) {
+      this.errorService.error("Lege participation in participation service")
+      return null;
     }
-    return this.apiService.delete<HttpResponse<Number>>(`${HttpRoutes.participationApiUrl}/${participation.id}`).toPromise().then();
-  }
-
-  updateParticipation(participation: Participation) {
-    if (participation === null) {
-      this.toastr.error("Lege participation in participation service")
-      return;
+    if (!participation.project.id) {
+      this.errorService.error("ProjectId is leeg")
+      return null;
     }
-    if (participation.project.id === null || participation.project.id === "") {
-      this.toastr.error("ProjectId is leeg")
-      return;
+    if (!participation.person.id) {
+      this.errorService.error("PersonId is leeg")
+      return null;
     }
-    if (participation.person.id === null || participation.person.id === "") {
-      this.toastr.error("PersonId is leeg")
-      return;
-    }
-    if (participation.project.participationEndDate !== null) {
-      if (participation.project.participationEndDate === undefined || participation.project.participationEndDate.toString() === "") {
-        participation.project.participationEndDate = null;
-      } else {
+    try {
+      if (participation.project.participationEndDate) {
         participation.project.participationEndDate = DateConverter.toDate(participation.project.participationEndDate);
       }
+      participation.project.participationStartDate = DateConverter.toDate(participation.project.participationStartDate);
+      participation.project.projectEndDate = DateConverter.toDate(participation.project.projectEndDate);
+      participation.project.projectStartDate = DateConverter.toDate(participation.project.projectStartDate);
+    } catch (e) {
+      this.errorService.error(e)
     }
-    if (participation.project.participationStartDate.toString() !== "") {
-      try {
-        participation.project.participationStartDate = DateConverter.toDate(participation.project.participationStartDate);
-      } catch (e) {
-        this.toastr.error(e)
-        participation.project.participationStartDate = null;
-      }
-    }
+    let updatedParticipation = null;
+    await this.apiService.put<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation)
+      .toPromise()
+      .then(res => {
+        if (res.ok) {
+          updatedParticipation = res.body;
+        }
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return updatedParticipation;
+  }
 
-    if (participation.project.projectEndDate !== null) {
-      if (participation.project.projectEndDate === undefined || participation.project.projectEndDate.toString() === "") {
-        participation.project.projectEndDate = null;
-      } else {
-        participation.project.projectEndDate = DateConverter.toDate(participation.project.projectEndDate);
-      }
+  async deleteParticipation(participation: Participation): Promise<boolean> {
+    if (participation === null) {
+      this.errorService.error("Fout tijdens het uitschrijven bij een project")
+      return null;
     }
-
-    if (participation.project.projectStartDate !== null) {
-      if (participation.project.projectStartDate === undefined || participation.project.projectStartDate.toString() === "") {
-        participation.project.projectStartDate = null;
-      } else {
-        participation.project.projectStartDate = DateConverter.toDate(participation.project.projectStartDate);
-      }
-    }
-
-    return this.apiService.put<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation).toPromise()
+    let deleted: boolean = false;
+    await this.apiService.delete<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}/${participation.id}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          deleted = true;
+      }, Error => {
+        this.errorService.httpError(Error)
+      });
+    return deleted;
   }
 }

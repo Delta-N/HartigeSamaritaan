@@ -3,9 +3,8 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class ProjectViewModel
+    public class ProjectViewModel : EntityViewModel
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime ParticipationStartDate { get; set; }
         public DateTime? ParticipationEndDate { get; set; }
@@ -23,7 +22,10 @@ namespace RoosterPlanner.Api.Models
                 ParticipationEndDate = project.ParticipationEndDate,
                 ProjectStartDate = project.ProjectStartDate,
                 ProjectEndDate = project.ProjectEndDate,
-                Closed = project.Closed
+                Closed = project.Closed,
+                LastEditDate = project.LastEditDate,
+                LastEditBy = project.LastEditBy,
+                RowVersion = project.RowVersion
             };
         }
     }
