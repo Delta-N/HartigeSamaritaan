@@ -23,10 +23,9 @@ namespace RoosterPlanner.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
             IdentityModelEventSource.ShowPII = true; // temp for more logging
+
             // Enable Application Insights telemetry collection.
-            
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
@@ -47,17 +46,15 @@ namespace RoosterPlanner.Api
             {
                 options.AddPolicy("AllowOrigins", builder =>
                 {
-                    builder
-                        .WithOrigins(Configuration.GetSection("AllowedHosts").Value)
+                    builder.WithOrigins(Configuration.GetSection("AllowedHosts").Value)
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
             });
 
-            services.AddAuthorization(options =>
-            {
+            services.AddAuthorization(options => { 
                 options.AddPolicy("Boardmember", policy =>
-                    policy.RequireClaim("extension_UserRole", "1")); //userRole.boardmember
+                    policy.RequireClaim("extension_UserRole", "1")); //UserRole.Boardmember
 
                 options.AddPolicy("Committeemember", policy =>
                     policy.RequireClaim("extension_UserRole", "2"));
