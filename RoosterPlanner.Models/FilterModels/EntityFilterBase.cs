@@ -9,7 +9,7 @@ namespace RoosterPlanner.Models.FilterModels
     {
         public static IQueryable<TEntity> ApplyFilter<TEntity>(this IQueryable<TEntity> query, EntityFilterBase filter)
         {
-            if (filter == null) throw new ArgumentNullException("filter");
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
 
             return filter.SetFilter(query);
         }
@@ -121,10 +121,10 @@ namespace RoosterPlanner.Models.FilterModels
         public SortType(string fieldName, string direction)
         {
             if (string.IsNullOrWhiteSpace(fieldName))
-                throw new ArgumentNullException("fieldName");
+                throw new ArgumentNullException(nameof(fieldName));
 
             if (string.IsNullOrEmpty(direction))
-                throw new ArgumentNullException("direction");
+                throw new ArgumentNullException(nameof(direction));
 
             if (char.IsLower(fieldName[0]))
             {

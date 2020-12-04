@@ -9,7 +9,7 @@ namespace RoosterPlanner.Data
     public abstract class DatabaseContext
     {
         #region Fields
-        protected static ConnectionStringsConfig connectionStringsConfig = null;
+        protected static ConnectionStringsConfig connectionStringsConfig;
         #endregion
 
         public static void Init(TestContext context)
@@ -26,7 +26,7 @@ namespace RoosterPlanner.Data
         {
             DbContextOptionsBuilder<RoosterPlannerContext> dbContextOptions = new DbContextOptionsBuilder<RoosterPlannerContext>()
                 .UseSqlServer(connectionStringsConfig.RoosterPlannerDatabase)
-                .EnableDetailedErrors(true);
+                .EnableDetailedErrors();
             return new RoosterPlannerContext(dbContextOptions.Options);
         }
     }

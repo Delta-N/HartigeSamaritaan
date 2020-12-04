@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Service;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -16,17 +17,18 @@ namespace RoosterPlanner.Api.Controllers
     public class UploadController : ControllerBase
     {
         private readonly IBlobService blobService;
-        private readonly ILogger logger;
+        private readonly ILogger<UploadController> logger;
 
         public UploadController(IBlobService blobService, ILogger<UploadController> logger)
         {
-            this.blobService = blobService;
-            this.logger = logger;
+            this.blobService = blobService ?? throw new ArgumentNullException(nameof(blobService));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpPost, RequestSizeLimit(100_000_00)]
-        public async Task<ActionResult> UploadInstruction(string containerName = "instructiondocuments")
+        public async Task<ActionResult<UploadResultViewModel>> UploadInstructionAsync(
+            string containerName = "instructiondocuments")
         {
             try
             {
@@ -43,7 +45,7 @@ namespace RoosterPlanner.Api.Controllers
                     file.ContentType
                 );
 
-                return Ok(new UploadResultViewModel()
+                return Ok(new UploadResultViewModel
                 {
                     Path = result.AbsoluteUri,
                     Succeeded = true
@@ -51,50 +53,46 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(new UploadResultViewModel() {Succeeded = false});
+                logger.LogError(ex, GetType().Name + "Error in " + nameof(UploadInstructionAsync));
+                return UnprocessableEntity(new UploadResultViewModel {Succeeded = false});
             }
         }
 
-        [HttpDelete()]
-        public async Task<ActionResult> Delete(string url)
+        [HttpDelete]
+        public async Task<ActionResult<UploadResultViewModel>> DeleteAsync(string url)
         {
             if (string.IsNullOrEmpty(url))
                 return BadRequest("No valid Url received");
 
             try
             {
-                if (Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute))
-                {
-                    Uri uri = new Uri(url);
-                    string blobfilename = Path.GetFileName(uri.LocalPath);
-                    string blobContainerName = uri.AbsolutePath.Substring(1, uri.AbsolutePath.IndexOf('/', 1) - 1);
-                    bool result = await blobService.DeleteFileBlobAsync(blobContainerName, blobfilename);
-                    return Ok(new UploadResultViewModel() {Succeeded = result});
-                }
+                if (!Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute))
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = "UrI not correctly formatted"});
 
-                return Ok();
+                Uri uri = new Uri(url);
+                string blobfilename = Path.GetFileName(uri.LocalPath);
+                string blobContainerName = uri.AbsolutePath.Substring(1, uri.AbsolutePath.IndexOf('/', 1) - 1);
+                bool result = await blobService.DeleteFileBlobAsync(blobContainerName, blobfilename);
+                return Ok(new UploadResultViewModel {Succeeded = result});
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(new UploadResultViewModel() {Succeeded = false});
+                logger.LogError(ex, GetType().Name + "Error in " + nameof(DeleteAsync));
+                return UnprocessableEntity(new UploadResultViewModel {Succeeded = false});
             }
         }
 
         [HttpPost("UploadProfilePicture"), RequestSizeLimit(500_000_0)]
-        public async Task<ActionResult> UploadProfilePicture()
+        public async Task<ActionResult<UploadResultViewModel>> UploadProfilePictureAsync()
         {
-            return await UploadInstruction("profilepicture");
+            return await UploadInstructionAsync("profilepicture");
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpPost("UploadProjectPicture"), RequestSizeLimit(500_000_0)]
-        public async Task<ActionResult> UploadProjectPicture()
+        public async Task<ActionResult<UploadResultViewModel>> UploadProjectPictureAsync()
         {
-            return await UploadInstruction("projectpicture");
+            return await UploadInstructionAsync("projectpicture");
         }
     }
 }

@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {CommonModule} from "@angular/common";
@@ -54,9 +54,11 @@ import {NgxMultipleDatesModule} from "ngx-multiple-dates";
 import {ShiftOverviewComponent} from './pages/shift-overview/shift-overview.component';
 import {AddShiftsComponent} from './components/add-shifts/add-shifts.component';
 import {EditShiftComponent} from './components/edit-shift/edit-shift.component';
-import { ManageComponent } from './pages/manage/manage.component';
+import {ManageComponent} from './pages/manage/manage.component';
 import {ManageGuard} from "./guards/manage.guard";
-import { AddManagerComponent } from './components/add-manager/add-manager.component';
+import {AddManagerComponent} from './components/add-manager/add-manager.component';
+import {BreadcrumbComponent} from './components/breadcrumb/breadcrumb.component';
+import {ErrorHandlerService} from "./services/logging.service";
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -125,6 +127,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ManageComponent,
     AddManagerComponent,
     ManagerFilterPipe,
+    BreadcrumbComponent,
 
   ],
   imports: [
@@ -180,6 +183,8 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     AuthorizationGuard,
     FormBuilder,
     ManageGuard,
+
+    {provide: ErrorHandler, useClass: ErrorHandlerService}
   ],
   bootstrap: [AppComponent],
   entryComponents: [AddProjectComponent]

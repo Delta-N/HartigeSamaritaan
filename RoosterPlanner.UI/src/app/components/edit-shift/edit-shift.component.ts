@@ -80,7 +80,6 @@ export class EditShiftComponent implements OnInit {
       this.shift.startTime = value.start;
       this.shift.endTime = value.end;
       this.shift.task = value.task;
-
       this.shiftService.updateShift(this.shift).then(res => {
         if (res) {
           this.dialogRef.close(res)

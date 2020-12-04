@@ -10,6 +10,7 @@ import {EventMessage, EventType, InteractionType} from "@azure/msal-browser";
 import {filter, takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
 import * as moment from "moment"
+import {LoggingService} from "./services/logging.service";
 
 @Component({
   selector: 'app-root',
@@ -34,7 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
               private userService: UserService,
               @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
               private authService: MsalService,
-              private msalBroadcastService: MsalBroadcastService) {
+              private msalBroadcastService: MsalBroadcastService,
+              private loggingService: LoggingService) {
   }
 
   ngOnInit() {

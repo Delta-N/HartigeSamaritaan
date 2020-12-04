@@ -11,6 +11,7 @@ using RoosterPlanner.Models;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -19,27 +20,28 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ParticipationsController : ControllerBase
     {
-        private readonly ILogger logger;
+        private readonly ILogger<ParticipationsController> logger;
         private readonly IParticipationService participationService;
 
         public ParticipationsController(ILogger<ParticipationsController> logger,
             IParticipationService participationService)
         {
-            this.logger = logger;
-            this.participationService = participationService;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.participationService =
+                participationService ?? throw new ArgumentNullException(nameof(participationService));
         }
 
         [HttpGet("{personId}")]
-        public async Task<ActionResult> GetUserParticipation(Guid personId)
+        public async Task<ActionResult<List<ParticipationViewModel>>> GetUserParticipationAsync(Guid personId)
         {
             if (personId == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                TaskListResult<Participation> result = await participationService.GetUserParticipations(personId);
+                TaskListResult<Participation> result = await participationService.GetUserParticipationsAsync(personId);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data.Count == 0)
                     return Ok(new List<ParticipationViewModel>());
 
@@ -51,95 +53,96 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetParticipationAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet("GetParticipation/{personid}/{projectid}")]
-        public async Task<ActionResult> GetParticipation(Guid personId, Guid projectId)
+        public async Task<ActionResult<ParticipationViewModel>> GetParticipationAsync(Guid personId, Guid projectId)
         {
             if (personId == Guid.Empty || projectId == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                TaskResult<Participation> result = await participationService.GetParticipation(personId, projectId);
+                TaskResult<Participation>
+                    result = await participationService.GetParticipationAsync(personId, projectId);
 
                 if (!result.Succeeded)
                     if (result.Data == null)
-                        return Ok();
+                        return NoContent();
                 ParticipationViewModel participationViewModel = ParticipationViewModel.CreateVm(result.Data);
 
                 return Ok(participationViewModel);
+
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetParticipationAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpPost]
-        public ActionResult Save([FromBody] ParticipationViewModel participationViewModel)
+        public async Task<ActionResult<ParticipationViewModel>> SaveParticipationAsync(
+            [FromBody] ParticipationViewModel participationViewModel)
         {
-            if (participationViewModel == null || participationViewModel.Person == null ||
-                participationViewModel.Project == null)
+            if (participationViewModel?.Person == null || participationViewModel.Project == null)
                 return BadRequest("No valid participation received");
 
-            Task<TaskResult<Participation>> result = null;
+            TaskResult<Participation> result = null;
             try
             {
                 Participation participation = ParticipationViewModel.CreateParticipation(participationViewModel);
                 participation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-                participation.LastEditDate = DateTime.UtcNow;
 
                 if (participation.Id == Guid.Empty)
                     //create participation
-                    result = participationService.AddParticipationAsync(participation);
+                    result = await participationService.AddParticipationAsync(participation);
 
-                if (result != null && result.Result.Succeeded)
-                    return Ok(ParticipationViewModel.CreateVm(result.Result.Data));
-                return UnprocessableEntity(participationViewModel);
+                if (result == null || !result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result?.Message});
+                return Ok(ParticipationViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(SaveParticipationAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpPut]
-        public ActionResult Update([FromBody] ParticipationViewModel participationViewModel)
+        public async Task<ActionResult<ParticipationViewModel>> UpdateParticipationAsync(
+            [FromBody] ParticipationViewModel participationViewModel)
         {
-            if (participationViewModel == null ||
-                participationViewModel.Person == null ||
+            if (participationViewModel?.Person == null ||
                 participationViewModel.Person.Id == Guid.Empty ||
                 participationViewModel.Project == null ||
                 participationViewModel.Project.Id == Guid.Empty)
                 return BadRequest("No valid participation received");
 
-            Task<TaskResult<Participation>> result = null;
+            TaskResult<Participation> result = new TaskResult<Participation>();
             try
             {
                 Participation oldParticipation =
                     participationService
-                        .GetParticipation(participationViewModel.Person.Id, participationViewModel.Project.Id).Result
+                        .GetParticipationAsync(participationViewModel.Person.Id, participationViewModel.Project.Id)
+                        .Result
                         .Data;
                 Participation updatedParticipation = ParticipationViewModel.CreateParticipation(participationViewModel);
 
                 if (oldParticipation.ProjectId != updatedParticipation.ProjectId)
                 {
-                    result.Result.Succeeded = false;
-                    result.Result.Message = "A participation cannot change project";
+                    result.Message = "A participation cannot change project";
                     return BadRequest(result);
                 }
 
                 if (oldParticipation.PersonId != updatedParticipation.PersonId)
                 {
-                    result.Result.Succeeded = false;
-                    result.Result.Message = "A participation cannot change user";
+                    result.Message = "A participation cannot change user";
                     return BadRequest(result);
                 }
 
@@ -151,58 +154,52 @@ namespace RoosterPlanner.Api.Controllers
                 oldParticipation.Person = null;
                 oldParticipation.Project = null;
                 oldParticipation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-                oldParticipation.LastEditDate = DateTime.UtcNow;
 
-                result = participationService.UpdateParticipation(oldParticipation);
+                result = await participationService.UpdateParticipationAsync(oldParticipation);
 
-                if (result != null && result.Result.Succeeded)
-                {
-                    result.Result.Data.Person = updatedParticipation.Person;
-                    result.Result.Data.Project = updatedParticipation.Project;
-                    return Ok(ParticipationViewModel.CreateVm(result.Result.Data));
-                }
+                if (result == null || !result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result?.Message});
 
-                return UnprocessableEntity(participationViewModel);
+                result.Data.Person = updatedParticipation.Person;
+                result.Data.Project = updatedParticipation.Project;
+                return Ok(ParticipationViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(UpdateParticipationAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveParticipation(Guid id)
+        public async Task<ActionResult<ParticipationViewModel>> RemoveParticipationAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                TaskResult<Participation> participation = participationService.GetParticipation(id);
+                TaskResult<Participation> participation = await participationService.GetParticipationAsync(id);
                 if (!participation.Succeeded) BadRequest("Invalid participation");
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 if (oid == null)
                     return BadRequest("Invalid User");
 
-                if (oid == participation.Data.PersonId.ToString())
-                {
-                    //gebruiker mag participation verwijderen
-                    TaskResult<Participation> result =
-                        await participationService.RemoveParticipation(participation.Data);
-                    if (result.Succeeded)
-                        return Ok(result);
-                    return Problem();
-                }
+                if (oid != participation.Data.PersonId.ToString())
+                    return Unauthorized();
 
-                return Unauthorized();
+                //gebruiker mag participation verwijderen
+                TaskResult<Participation> result =
+                    await participationService.RemoveParticipationAsync(participation.Data);
+
+                return !result.Succeeded ? UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message}) : Ok(result);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(RemoveParticipationAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
     }

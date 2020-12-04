@@ -3,13 +3,9 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class TaskViewModel
+    public class TaskViewModel : EntityViewModel
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
-
-        public DateTime? DeletedDateTime { get; set; } //Nodig?
 
         public CategoryViewModel Category { get; set; }
 
@@ -20,13 +16,11 @@ namespace RoosterPlanner.Api.Models
 
         public string Description { get; set; }
 
-        public byte[] RowVersion { get; set; }
-
         public static TaskViewModel CreateVm(Task task)
         {
             if (task != null)
             {
-                return new TaskViewModel()
+                return new TaskViewModel
                 {
                     Id = task.Id,
                     Name = task.Name,
@@ -34,7 +28,10 @@ namespace RoosterPlanner.Api.Models
                     Color = task.Color,
                     DocumentUri = task.DocumentUri,
                     //Requirements = RequirementViewModel.CreateVmFromList(task.Requirements),
-                    Description = task.Description
+                    Description = task.Description,
+                    LastEditDate = task.LastEditDate,
+                    LastEditBy = task.LastEditBy,
+                    RowVersion = task.RowVersion
                 };
             }
 
@@ -43,25 +40,26 @@ namespace RoosterPlanner.Api.Models
 
         public static Task CreateTask(TaskViewModel taskViewModel)
         {
-            if (taskViewModel != null)
+            if (taskViewModel == null)
+                return null;
+
+            Task task = new Task(taskViewModel.Id)
             {
-                Task task = new Task(taskViewModel.Id)
-                {
-                    Name = taskViewModel.Name,
-                    Color = taskViewModel.Color,
-                    DocumentUri = taskViewModel.DocumentUri,
-                    Description = taskViewModel.Description
-                };
-                if (taskViewModel.Category != null)
-                {
-                    task.CategoryId = taskViewModel.Category.Id;
-                    task.Category = CategoryViewModel.CreateCategory(taskViewModel.Category);
-                }
-
+                Name = taskViewModel.Name,
+                Color = taskViewModel.Color,
+                DocumentUri = taskViewModel.DocumentUri,
+                Description = taskViewModel.Description,
+                LastEditDate = taskViewModel.LastEditDate,
+                LastEditBy = taskViewModel.LastEditBy,
+                RowVersion = taskViewModel.RowVersion
+            };
+            if (taskViewModel.Category == null)
                 return task;
-            }
 
-            return null;
+            task.CategoryId = taskViewModel.Category.Id;
+            task.Category = CategoryViewModel.CreateCategory(taskViewModel.Category);
+
+            return task;
         }
     }
 }

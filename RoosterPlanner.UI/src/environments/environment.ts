@@ -33,7 +33,12 @@ export const environment = {
       authority: "https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/b2c_1_edit"
     }
   },
-  backendUrl: "https://localhost:5001/"
+  backendUrl: "https://localhost:5001/",
+
+  appInsights:{
+    instrumentationKey: 'a1c408ad-5c7c-4485-b037-f78fea63e71b'
+  },
+
 };
 
 /*

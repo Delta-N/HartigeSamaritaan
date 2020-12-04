@@ -3,26 +3,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Context;
 using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<List<Category>> GetAll();
+        Task<List<Category>> GetAllCategoriesAsync();
     }
 
     public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
         //Constructor
-        public CategoryRepository(RoosterPlannerContext dataContext) : base(dataContext)
+        public CategoryRepository(DbContext dataContext) : base(dataContext)
         {
         }
 
-        public Task<List<Category>> GetAll()
+        public Task<List<Category>> GetAllCategoriesAsync()
         {
-            IQueryable<Category> queryable = this.EntitySet.AsNoTracking().AsQueryable();
+            IQueryable<Category> queryable = EntitySet
+                .AsNoTracking();
             Task<List<Category>> categories = queryable.ToListAsync();
             return categories;
         }

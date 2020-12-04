@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using RoosterPlanner.Common;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Context;
 using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Data.Repositories
@@ -14,19 +11,20 @@ namespace RoosterPlanner.Data.Repositories
     public interface IParticipationRepository : IRepository<Participation>
     {
         Task<List<Participation>> GetActiveParticipationsAsync(Guid personId);
-        Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId);
+        Task<Participation> GetSpecificParticipationAsync(Guid personId, Guid projectId);
     }
 
     public class ParticipationRepository : Repository<Participation>, IParticipationRepository
     {
         //Constructor
-        public ParticipationRepository(RoosterPlannerContext dataContext) : base(dataContext)
+        public ParticipationRepository(DbContext dataContext) : base(dataContext)
         {
         }
 
         public Task<List<Participation>> GetActiveParticipationsAsync(Guid personId)
         {
-            return EntitySet.AsNoTracking().AsQueryable()
+            return EntitySet
+                .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
                 .Include(p => p.Availabilities)
@@ -37,9 +35,10 @@ namespace RoosterPlanner.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Participation> GetSpecificParticipation(Guid personId, Guid projectId)
+        public Task<Participation> GetSpecificParticipationAsync(Guid personId, Guid projectId)
         {
-            return EntitySet.AsNoTracking().AsQueryable()
+            return EntitySet
+                .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
                 .Include(p => p.Availabilities)

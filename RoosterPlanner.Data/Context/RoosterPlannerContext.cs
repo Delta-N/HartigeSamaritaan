@@ -161,19 +161,19 @@ namespace RoosterPlanner.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
 
             var categorySeed = new CategorySeed(modelBuilder);
-            var categorieList = categorySeed.Seed();
+            categorySeed.Seed();
 
             var personSeed = new PersonSeed(modelBuilder);
-            var personList = personSeed.Seed();
+            personSeed.Seed();
 
             var projectseed = new ProjectSeed(modelBuilder);
-            var projectList = projectseed.Seed();
+            projectseed.Seed();
 
             var participationSeed = new ParticipationSeed(modelBuilder);
-            var participationList = participationSeed.Seed();
+            participationSeed.Seed();
 
             var taskseed = new TaskSeed(modelBuilder);
-            var taskList = taskseed.Seed();
+            taskseed.Seed();
         }
     }
 }

@@ -3,9 +3,8 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class CategoryViewModel
+    public class CategoryViewModel :EntityViewModel
     {
-        public Guid Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string UrlPdf { get; set; }
@@ -14,12 +13,16 @@ namespace RoosterPlanner.Api.Models
         {
             if (category != null)
             {
-                return new CategoryViewModel()
+                return new CategoryViewModel
                 {
                     Id = category.Id,
                     Code = category.Code,
                     Name = category.Name,
-                    UrlPdf = category.UrlPdf
+                    UrlPdf = category.UrlPdf,
+                    LastEditDate = category.LastEditDate,
+                    LastEditBy = category.LastEditBy,
+                    RowVersion = category.RowVersion
+                    
                 };
             }
 
@@ -34,7 +37,10 @@ namespace RoosterPlanner.Api.Models
                 {
                     Code = categoryViewModel.Code,
                     Name = categoryViewModel.Name,
-                    UrlPdf = categoryViewModel.UrlPdf
+                    UrlPdf = categoryViewModel.UrlPdf,
+                    LastEditDate = categoryViewModel.LastEditDate,
+                    LastEditBy = categoryViewModel.LastEditBy,
+                    RowVersion = categoryViewModel.RowVersion
                 };
             }
 

@@ -24,9 +24,9 @@ namespace RoosterPlanner.Data.Common
         /// <param name="dataContext">The data context.</param>
         public Repository(DbContext dataContext)
         {
-            this.DataContext = dataContext ?? throw new ArgumentNullException("dataContext");
+            DataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
 
-            this.EntitySet = DataContext.Set<TEntity>();
+            EntitySet = DataContext.Set<TEntity>();
             if (EntitySet == null)
                 throw new InvalidOperationException($"No entity set found in the context for the type {typeof(TEntity).Name}");
         }
@@ -38,7 +38,7 @@ namespace RoosterPlanner.Data.Common
         /// <returns>The entity that matched the id or <c>null</c> if no match has been found.</returns>
         public virtual TEntity Get(Guid id)
         {
-            return this.EntitySet.FirstOrDefault(x => x.Id == id);
+            return EntitySet.FirstOrDefault(x => x.Id == id);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace RoosterPlanner.Data.Common
         /// <returns>The entity that matched the id or <c>null</c> if no match has been found.</returns>
         public virtual Task<TEntity> GetAsync(Guid id)
         {
-            return this.EntitySet.FirstOrDefaultAsync(x => x.Id == id);
+            return EntitySet.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RoosterPlanner.Data.Common
         /// <returns>The entity that matched the id's.</returns>
         public virtual TEntity Find(params Guid[] ids)
         {
-            return this.EntitySet.Find(ids);
+            return EntitySet.Find(ids);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace RoosterPlanner.Data.Common
         /// <returns>The list of records that matched one of the id's.</returns>
         public virtual async Task<TEntity> FindAsync(params Guid[] ids)
         {
-            return await this.EntitySet.FindAsync(ids);
+            return await EntitySet.FindAsync(ids);
         }
 
         /// <summary>
@@ -89,18 +89,19 @@ namespace RoosterPlanner.Data.Common
             }
             catch (ValidationException valEx)
             {
-                if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
+                if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Any())
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
                 }
-                throw valEx;
+                throw;
             }
 
-            EntityEntry<TEntity> entry = this.DataContext.Entry(entity);
+            EntityEntry<TEntity> entry = DataContext.Entry(entity);
             if (entity.Id == Guid.Empty)
                 entity.SetKey(Guid.NewGuid());
 
-            entry = this.EntitySet.Add(entity);
+            entity.LastEditDate = DateTime.UtcNow;
+            entry = EntitySet.Add(entity);
 
             return entry.Entity;
         }
@@ -122,14 +123,15 @@ namespace RoosterPlanner.Data.Common
             }
             catch (ValidationException valEx)
             {
-                if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
+                if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Any())
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
                 }
-                throw valEx;
+                throw;
             }
 
-            EntityEntry<TEntity> entry = this.EntitySet.Attach(entity);
+            entity.LastEditDate = DateTime.UtcNow;
+            EntityEntry<TEntity> entry = EntitySet.Attach(entity);
             entry.State = EntityState.Modified;
 
             return entry.Entity;
@@ -153,43 +155,45 @@ namespace RoosterPlanner.Data.Common
             }
             catch (ValidationException valEx)
             {
-                if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Count() != 0)
+                if (valEx.ValidationResult.MemberNames != null && valEx.ValidationResult.MemberNames.Any())
                 {
                     throw new ValidationException(ComposeErrorMessage(valEx), valEx);
                 }
-                throw valEx;
+                throw;
             }
 
-            EntityEntry<TEntity> entry = this.DataContext.Entry(entity);
+            EntityEntry<TEntity> entry = DataContext.Entry(entity);
 
             TEntity attachedEntity = null;
             if (entity.Id == Guid.Empty)
             {
                 //Insert
                 entity.SetKey(Guid.NewGuid());
-                entry = this.EntitySet.Add(entity);
+                entry = EntitySet.Add(entity);
             }
             else if (entry.State == EntityState.Detached)
             {
                 //Update
-                attachedEntity = this.EntitySet.Local.SingleOrDefault(e => e.Id.Equals(entity.Id));
+                attachedEntity = EntitySet.Local.SingleOrDefault(e => e.Id.Equals(entity.Id));
                 if (attachedEntity != null)
                 {
-                    this.DataContext.Entry<TEntity>(attachedEntity).CurrentValues.SetValues(entity);
+                    entity.LastEditDate = DateTime.UtcNow;
+                    DataContext.Entry(attachedEntity).CurrentValues.SetValues(entity);
                 }
                 else
                 {
-                    entry = this.EntitySet.Attach(entry.Entity);
+                    entry = EntitySet.Attach(entry.Entity);
                     entry.State = EntityState.Modified;
                 }
             }
             else
             {
-                this.EntitySet.Update(entity);
+                EntitySet.Update(entity);
             }
 
             if (attachedEntity == null)
             {
+                entity.LastEditDate = DateTime.UtcNow;
             }
 
             return entity;
@@ -204,7 +208,7 @@ namespace RoosterPlanner.Data.Common
         /// <returns>The entity in deleted state.</returns>
         public virtual TEntity Remove(Guid id, byte[] rowversion)
         {
-            return this.Remove(new { Id = id, RowVersion = rowversion } as TEntity);
+            return Remove(new { Id = id, RowVersion = rowversion } as TEntity);
         }
 
         /// <summary>
@@ -215,9 +219,7 @@ namespace RoosterPlanner.Data.Common
         /// <returns>The entity in deleted state.</returns>
         public virtual TEntity Remove(TEntity entity)
         {
-            if (entity != null)
-                return this.EntitySet.Remove(entity).Entity;
-            return entity;
+            return entity != null ? EntitySet.Remove(entity).Entity : null;
         }
 
         /// <summary>
@@ -229,7 +231,7 @@ namespace RoosterPlanner.Data.Common
         public int Delete(Guid id)
         {
             if (id != Guid.Empty)
-                return this.DataContext.Database.ExecuteSqlRaw($"DELETE FROM [{nameof(TEntity)}] WHERE[AuthorId] = @p0;", id);
+                return DataContext.Database.ExecuteSqlRaw($"DELETE FROM [{nameof(TEntity)}] WHERE[AuthorId] = @p0;", id);
             return 0;
         }
 
@@ -239,10 +241,10 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         /// <param name="validationEx"></param>
         /// <returns></returns>
-        private string ComposeErrorMessage(ValidationException validationEx)
+        private static string ComposeErrorMessage(ValidationException validationEx)
         {
             if (validationEx == null)
-                return String.Empty;
+                return string.Empty;
 
             StringBuilder msg = new StringBuilder("Het item kan niet opgeslagen worden omdat het niet geldig is.");
             if (validationEx.Data != null && validationEx.Data.Count != 0)
@@ -254,11 +256,9 @@ namespace RoosterPlanner.Data.Common
             else if (validationEx.ValidationAttribute is MaxLengthAttribute)
             {
                 string key = validationEx.ValidationResult.MemberNames.FirstOrDefault();
-                if (!String.IsNullOrEmpty(key))
-                {
-                    msg.AppendLine().AppendLine();
-                    msg.AppendFormat("Veld {0}: {1}{2}", key, validationEx.ValidationResult.ErrorMessage, Environment.NewLine);
-                }
+                if (string.IsNullOrEmpty(key)) return msg.ToString();
+                msg.AppendLine().AppendLine();
+                msg.AppendFormat("Veld {0}: {1}{2}", key, validationEx.ValidationResult.ErrorMessage, Environment.NewLine);
             }
             return msg.ToString();
         } 

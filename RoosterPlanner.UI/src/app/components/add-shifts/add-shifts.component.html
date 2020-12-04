@@ -1,5 +1,4 @@
 <span *ngIf="loaded">
-   <div class="container">
       <div class="row bar" >
          <div>
             <h1>{{title}}</h1>
@@ -8,7 +7,7 @@
       <div class="row">
          <div class="col-md-6 left">
             <form [formGroup]="checkoutForm" (ngSubmit)="save(checkoutForm.value)">
-            <div class="data-row">
+            <div class="row">
                <div class="row-name">Taak:</div>
                <div class="user-data">
                   <div>
@@ -23,7 +22,7 @@
                   </div>
                </div>
             </div>
-            <div class="data-row">
+            <div class="row">
                <div class="row-name">Vanaf:</div>
                <div class="user-data">
                   <mat-form-field>
@@ -33,15 +32,15 @@
                      <ngx-material-timepicker [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"
                                               #Starttime></ngx-material-timepicker>
                      <ng-template #cancelBtn>
-                        <button mat-button>Annuleren</button>
+                        <button mat-button class="override-button">Annuleren</button>
                      </ng-template>
                      <ng-template #confirmBtn>
-                        <button mat-button class="action-button">Opslaan</button>
+                        <button mat-button class="action-button override-button">Opslaan</button>
                      </ng-template>
                   </mat-form-field>
                </div>
             </div>
-            <div class="data-row">
+            <div class="row">
                <div class="row-name">Tot:</div>
                <div class="user-data">
                   <mat-form-field>
@@ -52,7 +51,7 @@
                   </mat-form-field>
                </div>
             </div>
-            <div class="data-row">
+            <div class="row">
                <div class="row-name">Aantal vrijwilligers:</div>
                <div class="user-data">
                   <mat-form-field>
@@ -65,7 +64,7 @@
                </div>
             </div>
             </form>
-            <div class="data-row">
+            <div class="row">
                <div class="row-name">Dagen:</div>
                <div class="user-data">
                   <mat-form-field>
@@ -78,7 +77,7 @@
                   </mat-form-field>
                </div>
             </div>
-            <div class="data-row">
+            <div class="row">
                <div class="row-name">Dagen:</div>
                <div class="user-data">
                   <mat-form-field>
@@ -89,11 +88,11 @@
                         </mat-option>
                      </mat-select>
                   </mat-form-field>
-                  <button mat-button (click)="addAllDays()">Voeg toe</button>
+                  <button mat-button class="override-button" (click)="addAllDays()">Voeg toe</button>
                </div>
             </div>
             <div class="row">
-               <a (click)="save(checkoutForm.value)" mat-button class="action-button">Opslaan</a>
+               <a (click)="save(checkoutForm.value)" mat-button class="action-button override-button">Opslaan</a>
             </div>
          </div>
          <div class="col-md-6 right">
@@ -107,5 +106,4 @@
             </mat-chip-list>
          </div>
       </div>
-   </div>
 </span>

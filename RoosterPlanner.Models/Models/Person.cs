@@ -12,7 +12,7 @@ namespace RoosterPlanner.Models
 
         [Column(Order = 1)]
         [Required, MaxLength(256)]
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
         
         [Column(Order = 2)] public PersonType Type { get; set; }
 

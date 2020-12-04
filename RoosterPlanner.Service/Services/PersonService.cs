@@ -16,18 +16,16 @@ namespace RoosterPlanner.Service
 {
     public interface IPersonService
     {
-        Task<TaskResult<User>> GetUser(Guid id);
-        Task<TaskResult<Person>> GetPerson(Guid id);
-        Task<TaskListResult<User>> GetB2CMembers(PersonFilter filter);
-
-        Task<TaskResult<User>> UpdatePerson(User user);
-
-        Task<TaskResult<Manager>> RemoveManager(Manager manager);
-        Task<TaskResult<Manager>> GetManager(Guid projectId, Guid userId);
-        Task<TaskResult<Manager>> MakeManager(Manager manager);
-        Task<TaskResult<List<Manager>>> UserManagesOtherProjects(Guid userId);
-        Task<TaskListResult<Manager>> GetManagers(Guid projectId);
-        Task<TaskListResult<Manager>> GetProjectsManagedBy(Guid userId);
+        Task<TaskResult<User>> GetUserAsync(Guid id);
+        Task<TaskResult<Person>> GetPersonAsync(Guid id);
+        Task<TaskListResult<User>> GetB2CMembersAsync(PersonFilter filter);
+        Task<TaskResult<User>> UpdatePersonAsync(User user);
+        Task<TaskResult<Manager>> RemoveManagerAsync(Manager manager);
+        Task<TaskResult<Manager>> GetManagerAsync(Guid projectId, Guid userId);
+        Task<TaskResult<Manager>> MakeManagerAsync(Manager manager);
+        Task<TaskResult<List<Manager>>> UserManagesOtherProjectsAsync(Guid userId);
+        Task<TaskListResult<Manager>> GetManagersAsync(Guid projectId);
+        Task<TaskListResult<Manager>> GetProjectsManagedByAsync(Guid userId);
     }
 
     public class PersonService : IPersonService
@@ -38,80 +36,87 @@ namespace RoosterPlanner.Service
         private readonly IPersonRepository personRepository;
         private readonly IManagerRepository managerRepository;
         private readonly IAzureB2CService azureB2CService;
-        private readonly ILogger logger;
+        private readonly ILogger<PersonService> logger;
 
         #endregion
 
         //Constructor
         public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger<PersonService> logger)
         {
-            this.unitOfWork = unitOfWork;
-            personRepository = unitOfWork.PersonRepository;
-            managerRepository = unitOfWork.ManagerRepository;
-            this.azureB2CService = azureB2CService;
-            this.logger = logger;
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            personRepository = unitOfWork.PersonRepository ?? throw new ArgumentNullException(nameof(personRepository));
+            managerRepository = unitOfWork.ManagerRepository ??
+                                throw new ArgumentNullException(nameof(managerRepository));
+            this.azureB2CService = azureB2CService ?? throw new ArgumentNullException(nameof(azureB2CService));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<TaskResult<User>> GetUser(Guid id)
+        public async Task<TaskResult<User>> GetUserAsync(Guid id)
         {
-            var taskResult = new TaskResult<User>();
+            if (id == Guid.Empty)
+                throw new ArgumentNullException(nameof(id));
+
+            TaskResult<User> result = new TaskResult<User>();
             try
             {
-                var person = await azureB2CService.GetUserAsync(id);
-                taskResult.Succeeded = person != null;
-                if (taskResult.Succeeded)
+                User person = await azureB2CService.GetUserAsync(id);
+                result.Succeeded = person != null;
+                if (!result.Succeeded)
                 {
-                    taskResult.StatusCode = HttpStatusCode.OK;
-                    taskResult.Data = person;
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    result.Message = ResponseMessage.UserNotFound;
                 }
                 else
                 {
-                    taskResult.StatusCode = HttpStatusCode.NotFound;
-                    taskResult.Message = ResponseMessage.UserNotFound;
+                    result.StatusCode = HttpStatusCode.OK;
+                    result.Data = person;
                 }
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
-                taskResult.Succeeded = false;
+                result.Message = GetType().Name + " - Error getting user " + id;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskResult<Person>> GetPerson(Guid id)
+        public async Task<TaskResult<Person>> GetPersonAsync(Guid id)
         {
             if (id == Guid.Empty)
-                throw new ArgumentNullException("id");
-            TaskResult<Person> taskResult = new TaskResult<Person>();
+                throw new ArgumentNullException(nameof(id));
+
+            TaskResult<Person> result = new TaskResult<Person>();
             try
             {
-                taskResult.Data = await this.personRepository.GetAsync(id);
-                taskResult.Succeeded = true;
+                result.Data = await personRepository.GetAsync(id);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error getting person " + id;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskListResult<User>> GetB2CMembers(PersonFilter filter)
+        public async Task<TaskListResult<User>> GetB2CMembersAsync(PersonFilter filter)
         {
             if (filter == null)
-                throw new ArgumentNullException("filter");
+                throw new ArgumentNullException(nameof(filter));
 
-            var result = TaskListResult<User>.CreateDefault();
+            TaskListResult<User> result = TaskListResult<User>.CreateDefault();
             try
             {
                 var b2CUsersResult = await azureB2CService.GetAllUsersAsync(filter);
                 if (b2CUsersResult.Succeeded)
                 {
                     result.Data = new List<User>();
-                    foreach (var user in b2CUsersResult.Data) result.Data.Add(user);
+                    foreach (var user in b2CUsersResult.Data)
+                        result.Data.Add(user);
 
                     result.Succeeded = true;
                 }
@@ -123,9 +128,9 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
+                result.Message = GetType().Name + " - Error getting users " + filter;
+                logger.LogError(ex, result.Message, filter);
                 result.Error = ex;
-                result.Succeeded = false;
             }
 
             return result;
@@ -135,154 +140,162 @@ namespace RoosterPlanner.Service
         ///     Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskResult<User>> UpdatePerson(User user)
+        public async Task<TaskResult<User>> UpdatePersonAsync(User user)
         {
-            var taskResult = new TaskResult<User>();
+            TaskResult<User> result = new TaskResult<User>();
             try
             {
-                var person = await azureB2CService.UpdateUserAsync(user);
-                taskResult.Succeeded = person.Succeeded;
-                if (taskResult.Succeeded)
+                TaskResult<User> person = await azureB2CService.UpdateUserAsync(user);
+                result.Succeeded = person.Succeeded;
+                if (!result.Succeeded)
                 {
-                    taskResult.StatusCode = HttpStatusCode.OK;
-                    taskResult.Data = person.Data;
+                    result.Succeeded = false;
+                    result.Message = person.Message;
                 }
                 else
                 {
-                    taskResult.Succeeded = false;
-                    taskResult.Message = person.Message;
+                    result.StatusCode = HttpStatusCode.OK;
+                    result.Data = person.Data;
                 }
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
-                taskResult.Succeeded = false;
+                result.Message = GetType().Name + " - Error updating user " + user.Id;
+                logger.LogError(ex, result.Message, user);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
-        public async Task<TaskListResult<Manager>> GetManagers(Guid projectId)
+
+        public async Task<TaskListResult<Manager>> GetManagersAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
-                throw new ArgumentNullException("projectId");
-            TaskListResult<Manager> taskResult = TaskListResult<Manager>.CreateDefault();
+                throw new ArgumentNullException(nameof(projectId));
+
+            TaskListResult<Manager> result = TaskListResult<Manager>.CreateDefault();
             try
             {
-                taskResult.Data = await this.managerRepository.GetAll(projectId);
-                taskResult.Succeeded = true;
+                result.Data = await managerRepository.GetProjectManagersAsync(projectId);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error getting managers " + projectId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskListResult<Manager>> GetProjectsManagedBy(Guid userId)
+        public async Task<TaskListResult<Manager>> GetProjectsManagedByAsync(Guid userId)
         {
             if (userId == Guid.Empty)
-                throw new ArgumentNullException("userId");
-            TaskListResult<Manager> taskResult = TaskListResult<Manager>.CreateDefault();
+                throw new ArgumentNullException(nameof(userId));
+
+            TaskListResult<Manager> result = TaskListResult<Manager>.CreateDefault();
             try
             {
-                taskResult.Data = await this.managerRepository.GetProjectsManagedBy(userId);
-                taskResult.Succeeded = true;
+                result.Data = await managerRepository.GetProjectsManagedByAsync(userId);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error getting projects managed by " + userId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskResult<Manager>> GetManager(Guid projectId, Guid userId)
+        public async Task<TaskResult<Manager>> GetManagerAsync(Guid projectId, Guid userId)
         {
             if (projectId == Guid.Empty)
-                throw new ArgumentNullException("projectId");
+                throw new ArgumentNullException(nameof(projectId));
 
             if (userId == Guid.Empty)
-                throw new ArgumentNullException("userId");
+                throw new ArgumentNullException(nameof(userId));
 
-            TaskResult<Manager> taskResult = new TaskResult<Manager>();
+            TaskResult<Manager> result = new TaskResult<Manager>();
             try
             {
-                taskResult.Data = await this.managerRepository.GetManager(projectId, userId);
-                if (taskResult.Data != null)
-                    taskResult.Succeeded = true;
+                result.Data = await managerRepository.GetManagerAsync(projectId, userId);
+                if (result.Data != null)
+                    result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error getting manager " + userId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskResult<Manager>> RemoveManager(Manager manager)
+        public async Task<TaskResult<Manager>> RemoveManagerAsync(Manager manager)
         {
             if (manager == null)
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
 
-            TaskResult<Manager> taskResult = new TaskResult<Manager>();
+            TaskResult<Manager> result = new TaskResult<Manager>();
             try
             {
-                taskResult.Data = managerRepository.Remove(manager);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Data = managerRepository.Remove(manager);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error removing manager " + manager.Id;
+                logger.LogError(ex, result.Message, manager);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskResult<Manager>> MakeManager(Manager manager)
+        public async Task<TaskResult<Manager>> MakeManagerAsync(Manager manager)
         {
             if (manager == null)
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
 
-            TaskResult<Manager> taskResult = new TaskResult<Manager>();
+            TaskResult<Manager> result = new TaskResult<Manager>();
             try
             {
-                taskResult.Data = managerRepository.Add(manager);
-                taskResult.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Data = managerRepository.Add(manager);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error creating manager " + manager.Id;
+                logger.LogError(ex, result.Message, manager);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
 
-        public async Task<TaskResult<List<Manager>>> UserManagesOtherProjects(Guid userId)
+        public async Task<TaskResult<List<Manager>>> UserManagesOtherProjectsAsync(Guid userId)
         {
             if (userId == Guid.Empty)
-                throw new ArgumentNullException("userId");
-            TaskResult<List<Manager>> taskResult = new TaskResult<List<Manager>>();
+                throw new ArgumentNullException(nameof(userId));
+
+            TaskResult<List<Manager>> result = new TaskResult<List<Manager>>();
             try
             {
-                taskResult.Data = await managerRepository.UserManagesOtherProjects(userId);
-                taskResult.Succeeded = true;
+                result.Data = await managerRepository.UserManagesOtherProjectsAsync(userId);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error getting projects user manages " + userId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
             }
 
-            return taskResult;
+            return result;
         }
-
-     
     }
 }

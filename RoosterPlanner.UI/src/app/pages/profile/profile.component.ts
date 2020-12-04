@@ -7,6 +7,7 @@ import {DateConverter} from "../../helpers/date-converter";
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
 import {ActivatedRoute, ParamMap} from "@angular/router";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
 
 
 @Component({
@@ -23,7 +24,9 @@ export class ProfileComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private userService: UserService,
               private authenticationService: MsalService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private breadcrumbService: BreadcrumbService) {
+    this.breadcrumbService.backcrumb();
   }
 
   async ngOnInit(): Promise<void> {

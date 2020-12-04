@@ -4,10 +4,6 @@ namespace RoosterPlanner.Data
 {
     public class TestHelper
     {
-        public TestHelper()
-        {
-        }
-
         public static IConfigurationRoot GetIConfigurationRoot(string outputPath)
         {
             return new ConfigurationBuilder()

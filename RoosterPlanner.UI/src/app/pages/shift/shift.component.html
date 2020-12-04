@@ -1,24 +1,24 @@
-<div class="container" *ngIf="loaded">
-  <div class="bar">
+<span *ngIf="loaded">
+  <div class="row bar">
     <h1>Shift</h1>
   </div>
-  <div class="data-row">
+  <div class="row">
     <div class="row-name">Taak:</div>
     <div class="user-data">{{shift.task!=null?shift.task.name:"Onbekend"}}</div>
   </div>
-  <div class="data-row">
+  <div class="row">
     <div class="row-name">Datum:</div>
     <div class="user-data">{{shift.date.toLocaleDateString()}}</div>
   </div>
-  <div class="data-row">
+  <div class="row">
     <div class="row-name">Vanaf:</div>
     <div class="user-data">{{shift.startTime}}</div>
   </div>
-  <div class="data-row">
+  <div class="row">
     <div class="row-name">Tot:</div>
     <div class="user-data">{{shift.endTime}}</div>
   </div>
-  <div class="data-row">
+  <div class="row">
     <div class="row-name">#Benodigde vrijwilligers:</div>
     <div class="user-data">{{shift.participantsRequired}}</div>
   </div>
@@ -26,4 +26,4 @@
     <a (click)="edit()" mat-button class="override-button action-button" id="editShift">Shift wijzigen</a>
     <a (click)="delete()" mat-button class="override-button"  id="deleteShift">Shift verwijderen</a>
   </div>
-</div>
+</span>

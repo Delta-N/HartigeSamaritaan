@@ -13,6 +13,7 @@ using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Task = RoosterPlanner.Models.Task;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -22,69 +23,71 @@ namespace RoosterPlanner.Api.Controllers
     {
         private readonly ITaskService taskService;
         private readonly IProjectService projectService;
-        private readonly ILogger logger;
+        private readonly ILogger<TasksController> logger;
 
         //Constructor
         public TasksController(ITaskService taskService, IProjectService projectService,
             ILogger<TasksController> logger)
         {
-            this.taskService = taskService;
-            this.projectService = projectService;
-            this.logger = logger;
+            this.taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
+            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult<TaskViewModel>> GetTaskAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                TaskResult<Task> result = await taskService.GetTask(id);
+                TaskResult<Task> result = await taskService.GetTaskAsync(id);
                 if (!result.Succeeded)
-                    return UnprocessableEntity("Cannot get task");
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null)
-                    return Ok();
+                    return NotFound();
                 return Ok(TaskViewModel.CreateVm(result.Data));
+
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TaskViewModel>>> Search(string name, int offset = 0, int pageSize = 20)
+        public async Task<ActionResult<List<TaskViewModel>>> SearchTasksAsync(string name, int offset = 0,
+            int pageSize = 20)
         {
             TaskFilter filter = new TaskFilter(offset, pageSize)
             {
-                Name = name,
+                Name = name
             };
             try
             {
                 TaskListResult<Task> result = await taskService.SearchTasksAsync(filter);
                 if (!result.Succeeded)
-                    return UnprocessableEntity(result.Message);
-                Request.HttpContext.Response.Headers.Add("totalCount", filter.TotalItemCount.ToString());
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+
                 if (result.Data == null)
-                    return Ok();
+                    return Ok(new List<TaskViewModel>());
                 List<TaskViewModel> taskVmList = result.Data.Select(TaskViewModel.CreateVm).ToList();
-                return Ok(taskVmList);
+                return Ok(new SearchResultViewModel<TaskViewModel>(filter.TotalItemCount, taskVmList));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(SearchTasksAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         //alleen een bestuurslid kan taken aanmaken of wijzigen
         [Authorize(Policy = "Boardmember")]
         [HttpPost]
-        public async Task<ActionResult> Save(TaskViewModel taskViewModel)
+        public async Task<ActionResult<TaskViewModel>> SaveTaskAsync(TaskViewModel taskViewModel)
         {
             if (taskViewModel == null)
                 return BadRequest("No valid task received");
@@ -93,39 +96,38 @@ namespace RoosterPlanner.Api.Controllers
             if (taskViewModel.Category == null)
                 return BadRequest("Category of a Task cannot be empty");
 
-            TaskResult<Task> result;
             try
             {
                 Task task = TaskViewModel.CreateTask(taskViewModel);
                 if (task == null)
                     return BadRequest("Unable to convert TaskViewModel to Task");
 
-                task.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 task.LastEditBy = oid;
 
                 task.Category = null;
 
+                TaskResult<Task> result;
                 if (task.Id == Guid.Empty)
-                    result = await taskService.CreateTask(task);
+                    result = await taskService.CreateTaskAsync(task);
                 else
                     return BadRequest("Cannot update existing Task with post method");
 
-                if (result.Succeeded)
-                    return Ok(TaskViewModel.CreateVm(result.Data));
-                return UnprocessableEntity(taskViewModel);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                return Ok(TaskViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(SaveTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpPut]
-        public async Task<ActionResult> UpdateTask(TaskViewModel taskViewModel)
+        public async Task<ActionResult<TaskViewModel>> UpdateTaskAsync(TaskViewModel taskViewModel)
         {
             if (taskViewModel == null || taskViewModel.Id == Guid.Empty)
                 return BadRequest("No valid project received");
@@ -135,7 +137,7 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("Category of a Task cannot be empty");
             try
             {
-                Task oldTask = (await taskService.GetTask(taskViewModel.Id)).Data;
+                Task oldTask = (await taskService.GetTaskAsync(taskViewModel.Id)).Data;
                 if (oldTask == null)
                     return NotFound("Task not found");
                 Task updatedTask = TaskViewModel.CreateTask(taskViewModel);
@@ -153,61 +155,61 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (updatedTask.CategoryId != Guid.Empty && oldTask.CategoryId != updatedTask.CategoryId)
                 {
-                    oldTask.Category = (await taskService.GetCategory(updatedTask.CategoryId ?? Guid.Empty)).Data;
+                    oldTask.Category = (await taskService.GetCategoryAsync(updatedTask.CategoryId ?? Guid.Empty)).Data;
                     oldTask.CategoryId = oldTask.Category.Id;
                 }
 
-                oldTask.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldTask.LastEditBy = oid;
 
-                TaskResult<Task> result = await taskService.UpdateTask(oldTask);
+                TaskResult<Task> result = await taskService.UpdateTaskAsync(oldTask);
                 if (!result.Succeeded)
-                    return UnprocessableEntity("Cannot update task");
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(TaskViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(UpdateTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> RemoveTask(Guid id)
+        public async Task<ActionResult<TaskViewModel>> RemoveTaskAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                Task task = (await taskService.GetTask(id)).Data;
+                Task task = (await taskService.GetTaskAsync(id)).Data;
                 if (task == null)
                     return NotFound("Task not found");
-                TaskResult<Task> result = await taskService.RemoveTask(task);
-                if (result.Succeeded)
-                    return Ok(result);
-                return Problem();
+                TaskResult<Task> result = await taskService.RemoveTaskAsync(task);
+                return !result.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = result.Message})
+                    : Ok(TaskViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(RemoveTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet("GetAllCategories")]
-        public async Task<ActionResult> GetAllCategories()
+        public async Task<ActionResult<List<CategoryViewModel>>> GetAllCategoriesAsync()
         {
             try
             {
-                TaskListResult<Category> result = await taskService.GetAllCategories();
+                TaskListResult<Category> result = await taskService.GetAllCategoriesAsync();
 
                 if (!result.Succeeded)
                     if (result.Data == null)
-                        return Ok();
+                        return Ok(new List<CategoryViewModel>());
                 List<CategoryViewModel> categoryViewmodels = result.Data
                     .Select(CategoryViewModel.CreateVm)
                     .ToList();
@@ -216,44 +218,43 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetAllCategoriesAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet("GetCategory/{categoryId}")]
-        public async Task<ActionResult> GetCategory(Guid categoryId)
+        public async Task<ActionResult<CategoryViewModel>> GetCategoryAsync(Guid categoryId)
         {
             if (categoryId == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                TaskResult<Category> result = await taskService.GetCategory(categoryId);
+                TaskResult<Category> result = await taskService.GetCategoryAsync(categoryId);
 
                 if (!result.Succeeded)
                     if (result.Data == null)
-                        return Ok();
+                        return NotFound();
                 CategoryViewModel categoryViewModel = CategoryViewModel.CreateVm(result.Data);
                 return Ok(categoryViewModel);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetCategoryAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpPost("SaveCategory")]
-        public async Task<ActionResult> SaveCategory(CategoryViewModel categoryViewModel)
+        public async Task<ActionResult<CategoryViewModel>> SaveCategoryAsync(CategoryViewModel categoryViewModel)
         {
             if (categoryViewModel == null)
                 return BadRequest("No valid task received");
             if (string.IsNullOrEmpty(categoryViewModel.Name))
                 return BadRequest("Name of a Category cannot be empty");
-            TaskResult<Category> result;
 
             try
             {
@@ -261,36 +262,36 @@ namespace RoosterPlanner.Api.Controllers
                 if (category == null)
                     return BadRequest("Unable to convert CategoryViewModel to Category");
 
-                category.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 category.LastEditBy = oid;
 
+                TaskResult<Category> result;
                 if (category.Id == Guid.Empty)
-                    result = await taskService.CreateCategory(category);
+                    result = await taskService.CreateCategoryAsync(category);
                 else
                     return BadRequest("Cannot update existing category with post method");
 
-                if (result.Succeeded)
-                    return Ok(CategoryViewModel.CreateVm(result.Data));
-                return UnprocessableEntity("Cannot save category");
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                return Ok(CategoryViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(SaveCategoryAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpPut("UpdateCategory")]
-        public async Task<ActionResult> UpdateCategory(CategoryViewModel categoryViewModel)
+        public async Task<ActionResult<CategoryViewModel>> UpdateCategoryAsync(CategoryViewModel categoryViewModel)
         {
             if (categoryViewModel == null || categoryViewModel.Id == Guid.Empty || categoryViewModel.Name == null)
                 return BadRequest("No valid category received");
             try
             {
-                Category oldCategory = (await taskService.GetCategory(categoryViewModel.Id)).Data;
+                Category oldCategory = (await taskService.GetCategoryAsync(categoryViewModel.Id)).Data;
                 if (oldCategory == null)
                     return NotFound("Category not found");
                 Category updatedCategory = CategoryViewModel.CreateCategory(categoryViewModel);
@@ -300,162 +301,160 @@ namespace RoosterPlanner.Api.Controllers
                 oldCategory.Name = updatedCategory.Name;
                 oldCategory.UrlPdf = updatedCategory.UrlPdf;
 
-                oldCategory.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldCategory.LastEditBy = oid;
 
-                TaskResult<Category> result = await taskService.UpdateCategory(oldCategory);
+                TaskResult<Category> result = await taskService.UpdateCategoryAsync(oldCategory);
                 if (!result.Succeeded)
-                    return UnprocessableEntity("Cannot update category");
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(CategoryViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(UpdateCategoryAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember")]
         [HttpDelete("DeleteCategory/{id}")]
-        public async Task<ActionResult> RemoveCategory(Guid id)
+        public async Task<ActionResult<CategoryViewModel>> RemoveCategoryAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                Category category = (await taskService.GetCategory(id)).Data;
+                Category category = (await taskService.GetCategoryAsync(id)).Data;
                 if (category == null)
                     return NotFound("Category not found");
-                TaskResult<Category> result = await taskService.RemoveCategory(category);
-                if (result.Succeeded)
-                    return Ok(result);
-                return Problem();
+                TaskResult<Category> result = await taskService.RemoveCategoryAsync(category);
+                return !result.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = result.Message})
+                    : Ok(CategoryViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(RemoveCategoryAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet("GetProjectTask/{id}")]
-        public async Task<ActionResult> GetProjectTask(Guid id)
+        public async Task<ActionResult<ProjectTaskViewModel>> GetProjectTaskAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                TaskResult<ProjectTask> result = await taskService.GetProjectTask(id);
+                TaskResult<ProjectTask> result = await taskService.GetProjectTaskAsync(id);
 
                 if (!result.Succeeded)
                     if (result.Data == null)
-                        return Ok();
+                        return NotFound();
                 ProjectTaskViewModel projectTaskViewModel = ProjectTaskViewModel.CreateVm(result.Data);
                 return Ok(projectTaskViewModel);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetProjectTaskAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet("GetAllProjectTasks/{projectId}")]
-        public async Task<ActionResult> GetAllProjectTasks(Guid projectId)
+        public async Task<ActionResult<List<TaskViewModel>>> GetAllProjectTasksAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
                 return BadRequest("No valid id.");
 
             try
             {
-                TaskListResult<ProjectTask> result = await taskService.GetAllProjectTasks(projectId);
+                TaskListResult<ProjectTask> result = await taskService.GetAllProjectTasksAsync(projectId);
 
                 if (!result.Succeeded)
                     if (result.Data == null)
-                        return Ok();
+                        return Ok(new List<ProjectTaskViewModel>());
 
-                List<TaskViewModel> taskViewModels = new List<TaskViewModel>();
-                foreach (ProjectTask projectTask in result.Data)
-                {
-                    taskViewModels.Add(TaskViewModel.CreateVm(projectTask.Task));
-                }
+                List<TaskViewModel> taskViewModels =
+                    result.Data.Select(projectTask => TaskViewModel.CreateVm(projectTask.Task)).ToList();
 
                 return Ok(taskViewModels);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(GetAllProjectTasksAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost("AddTaskToProject")]
-        public async Task<ActionResult> AddTaskToProject(ProjectTaskViewModel projectTaskViewModel)
+        public async Task<ActionResult<TaskViewModel>> AddTaskToProjectAsync(ProjectTaskViewModel projectTaskViewModel)
         {
             if (projectTaskViewModel == null)
                 return BadRequest("No valid ProjectTask received");
             if (projectTaskViewModel.ProjectId == Guid.Empty || projectTaskViewModel.TaskId == Guid.Empty)
                 return BadRequest("Project and/or Task Ids cannot be empty");
-            TaskResult<ProjectTask> result;
 
             try
             {
                 ProjectTask projectTask = ProjectTaskViewModel.CreateProjectTask(projectTaskViewModel);
                 if (projectTask == null)
                     return BadRequest("Unable to convert ProjectTaskViewModel to ProjectTask");
-                projectTask.Task = (await taskService.GetTask((Guid) projectTask.TaskId)).Data;
-                projectTask.Project = (await projectService.GetProjectDetails(projectTask.ProjectId)).Data;
+                projectTask.Task = (await taskService.GetTaskAsync(projectTask.TaskId)).Data;
+                projectTask.Project = (await projectService.GetProjectDetailsAsync(projectTask.ProjectId)).Data;
                 if (projectTask.Task == null || projectTask.Project == null)
                     return BadRequest("Unable to add project and or task to projecttask");
 
-                projectTask.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 projectTask.LastEditBy = oid;
 
+                TaskResult<ProjectTask> result;
                 if (projectTask.Id == Guid.Empty)
-                    result = (await taskService.AddTaskToProject(projectTask));
+                    result = await taskService.AddTaskToProjectAsync(projectTask);
                 else
                     return BadRequest("Cannot update existing ProjectTask with post method");
 
-                if (result.Succeeded)
-                    return Ok(TaskViewModel.CreateVm(result.Data.Task));
-                return UnprocessableEntity("Cannot add task to project");
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                return Ok(TaskViewModel.CreateVm(result.Data.Task));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(AddTaskToProjectAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpDelete("RemoveTaskFromProject/{projectId}/{taskId}")]
-        public async Task<ActionResult> RemoveTaskFromProject(Guid projectId, Guid taskId)
+        public async Task<ActionResult<TaskViewModel>> RemoveTaskFromProjectAsync(Guid projectId, Guid taskId)
         {
             if (projectId == Guid.Empty || taskId == Guid.Empty)
                 return BadRequest("No valid id received");
             try
             {
-                ProjectTask projectTask = (await taskService.GetProjectTask(projectId, taskId)).Data;
+                ProjectTask projectTask = (await taskService.GetProjectTaskAsync(projectId, taskId)).Data;
                 if (projectTask == null)
                     return NotFound("ProjectTask not found");
-                TaskResult<ProjectTask> result = await taskService.RemoveProjectTask(projectTask);
-                if (result.Succeeded)
-                    return Ok(result.Data.TaskId);
-                return Problem();
+                TaskResult<ProjectTask> result = await taskService.RemoveProjectTaskAsync(projectTask);
+
+                return !result.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = result.Message})
+                    : Ok(TaskViewModel.CreateVm(result.Data.Task));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity(ex.Message);
+                string message = GetType().Name + "Error in " + nameof(RemoveTaskFromProjectAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
     }

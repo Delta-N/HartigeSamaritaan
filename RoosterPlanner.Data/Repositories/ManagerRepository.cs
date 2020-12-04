@@ -10,10 +10,10 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IManagerRepository : IRepository<Manager>
     {
-        Task<Manager> GetManager(Guid projectId, Guid userId);
-        Task<List<Manager>> UserManagesOtherProjects(Guid userId);
-        Task<List<Manager>> GetAll(Guid projectId);
-        Task<List<Manager>> GetProjectsManagedBy(Guid userId);
+        Task<Manager> GetManagerAsync(Guid projectId, Guid userId);
+        Task<List<Manager>> UserManagesOtherProjectsAsync(Guid userId);
+        Task<List<Manager>> GetProjectManagersAsync(Guid projectId);
+        Task<List<Manager>> GetProjectsManagedByAsync(Guid userId);
     }
 
     public class ManagerRepository : Repository<Manager>, IManagerRepository
@@ -22,38 +22,35 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
-        public Task<Manager> GetManager(Guid projectId, Guid userId)
+        public Task<Manager> GetManagerAsync(Guid projectId, Guid userId)
         {
             if (projectId == Guid.Empty || userId == Guid.Empty)
                 return null;
 
-            return this.EntitySet
+            return EntitySet
                 .AsNoTracking()
-                .AsQueryable()
                 .Include(m => m.Person)
                 .Include(m => m.Project)
                 .Where(m => m.PersonId == userId && m.ProjectId == projectId)
                 .FirstOrDefaultAsync();
         }
 
-        public Task<List<Manager>> UserManagesOtherProjects(Guid userId)
+        public Task<List<Manager>> UserManagesOtherProjectsAsync(Guid userId)
         {
             if (userId == Guid.Empty)
                 return null;
-            return this.EntitySet
-                .AsQueryable()
+            return EntitySet
                 .AsNoTracking()
                 .Where(m => m.PersonId == userId)
                 .ToListAsync();
         }
 
-        public Task<List<Manager>> GetAll(Guid projectId)
+        public Task<List<Manager>> GetProjectManagersAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
                 return null;
 
-            return this.EntitySet
-                .AsQueryable()
+            return EntitySet
                 .AsNoTracking()
                 .Include(m => m.Person)
                 .Include(m => m.Project)
@@ -61,13 +58,12 @@ namespace RoosterPlanner.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<Manager>> GetProjectsManagedBy(Guid userId)
+        public Task<List<Manager>> GetProjectsManagedByAsync(Guid userId)
         {
             if (userId == Guid.Empty)
                 return null;
 
-            return this.EntitySet
-                .AsQueryable()
+            return EntitySet
                 .AsNoTracking()
                 .Include(m => m.Person)
                 .Include(m => m.Project)

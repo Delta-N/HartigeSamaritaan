@@ -11,8 +11,8 @@ using RoosterPlanner.Models;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Shift = RoosterPlanner.Models.Shift;
 using Task = RoosterPlanner.Models.Task;
+using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -20,7 +20,7 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ShiftController : ControllerBase
     {
-        private readonly ILogger logger;
+        private readonly ILogger<ShiftController> logger;
         private readonly IShiftService shiftService;
         private readonly IProjectService projectService;
         private readonly ITaskService taskService;
@@ -28,60 +28,60 @@ namespace RoosterPlanner.Api.Controllers
         public ShiftController(ILogger<ShiftController> logger, IShiftService shiftService,
             IProjectService projectService, ITaskService taskService)
         {
-            this.logger = logger;
-            this.shiftService = shiftService;
-            this.projectService = projectService;
-            this.taskService = taskService;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.shiftService = shiftService ?? throw new ArgumentNullException(nameof(shiftService));
+            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
+            this.taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
         }
 
         [HttpGet("project/{id}")]
-        public async Task<ActionResult> GetShifts(Guid id)
+        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return BadRequest("No valid id");
             try
             {
-                TaskListResult<Shift> result = await shiftService.GetShifts(id);
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id);
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
-                if (result.Data == null || result.Data.Count()==0)
-                    return Ok();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                if (result.Data == null || result.Data.Count == 0)
+                    return Ok(new List<ShiftViewModel>());
                 List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
                 return Ok(shiftVmList);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [HttpGet("shift/{id}")]
-        public async Task<ActionResult> GetShift(Guid id)
+        public async Task<ActionResult<ShiftViewModel>> GetShiftAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return BadRequest();
             try
             {
-                TaskResult<Shift> result = await shiftService.GetShift(id);
+                TaskResult<Shift> result = await shiftService.GetShiftAsync(id);
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null)
-                    return Ok();
+                    return NotFound();
                 return Ok(ShiftViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost]
-        public async Task<ActionResult> Save(List<ShiftViewModel> shiftViewModels)
+        public async Task<ActionResult<List<ShiftViewModel>>> SaveShiftsAsync(List<ShiftViewModel> shiftViewModels)
         {
             if (shiftViewModels == null || shiftViewModels.Count == 0)
                 return BadRequest("No valid shifts received");
@@ -91,56 +91,56 @@ namespace RoosterPlanner.Api.Controllers
                 List<Shift> shifts = shiftViewModels.Select(ShiftViewModel.CreateShift).ToList();
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                //get project and get task from db
-                Project project = projectService.GetProjectDetails(shifts[0].ProjectId).Result.Data;
-                Task task = null;
-                if (shifts[0].TaskId != null)
-                    task = taskService.GetTask((Guid) shifts[0].TaskId).Result.Data;
-
-                foreach (Shift shift in shifts)
+                if (shifts[0] != null)
                 {
-                    if (shift.Id != Guid.Empty || shift.TaskId == null || shift.ProjectId == Guid.Empty)
-                        shifts.Remove(shift);
-                    
-                    // check if projectId and taskId differs from above? getproject/task => add project and task to shift
-                    if(project.Id!=shift.ProjectId)
-                        project=projectService.GetProjectDetails(shift.ProjectId).Result.Data;
-                    
-                    if(task !=null && shift.TaskId!=null &&  task.Id!=shift.TaskId)
-                        task = taskService.GetTask((Guid) shift.TaskId).Result.Data;
+                    //get project and get task from db
+                    Project project = (await projectService.GetProjectDetailsAsync(shifts[0].ProjectId)).Data;
+                    Task task = null;
+                    if (shifts[0].TaskId != null)
+                        task = (await taskService.GetTaskAsync((Guid) shifts[0].TaskId)).Data;
 
-                    if (project == null || task == null)
-                        shifts.Remove(shift);
-                    shift.Project = project;
-                    shift.Task = task;
-                    shift.LastEditDate = DateTime.UtcNow;
-                    shift.LastEditBy = oid;
+                    foreach (Shift shift in shifts)
+                    {
+                        if (shift.Id != Guid.Empty || shift.TaskId == null || shift.ProjectId == Guid.Empty)
+                            shifts.Remove(shift);
+
+                        // check if projectId and taskId differs from above? getproject/task => add project and task to shift
+                        if (project.Id != shift.ProjectId)
+                            project = (await projectService.GetProjectDetailsAsync(shift.ProjectId)).Data;
+
+                        if (task != null && shift.TaskId != null && task.Id != shift.TaskId)
+                            task = (await taskService.GetTaskAsync((Guid) shift.TaskId)).Data;
+
+                        if (project == null || task == null)
+                            shifts.Remove(shift);
+                        shift.Project = project;
+                        shift.Task = task;
+                        shift.LastEditBy = oid;
+                    }
                 }
 
-                if (shifts.Count() != shiftViewModels.Count())
-                    return UnprocessableEntity("Could not covert al viewmodels to shifts");
+                if (shifts.Count != shiftViewModels.Count)
+                    return UnprocessableEntity(new ErrorViewModel{Type = Type.Error, Message = "Could not covert al viewmodels to shifts"});
 
-                TaskListResult<Shift> result = await shiftService.CreateShifts(shifts);
+                TaskListResult<Shift> result = await shiftService.CreateShiftsAsync(shifts);
 
-                if (result.Succeeded)
-                {
-                    List<ShiftViewModel> createdVm = result.Data.Select(ShiftViewModel.CreateVm).ToList();
-                    return Ok(createdVm);
-                }
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
 
-                return UnprocessableEntity();
+                List<ShiftViewModel> createdVm = result.Data.Select(ShiftViewModel.CreateVm).ToList();
+                return Ok(createdVm);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(SaveShiftsAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPut]
-        public async Task<ActionResult> Update(ShiftViewModel shiftViewModel)
+        public async Task<ActionResult<ShiftViewModel>> UpdateShiftAsync(ShiftViewModel shiftViewModel)
         {
             if (shiftViewModel == null || shiftViewModel.Id == Guid.Empty || shiftViewModel.Project == null ||
                 shiftViewModel.Task == null)
@@ -149,7 +149,7 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("ProjectId and or TaskId cannot be empty");
             try
             {
-                Shift oldShift = shiftService.GetShift(shiftViewModel.Id).Result.Data;
+                Shift oldShift = (await shiftService.GetShiftAsync(shiftViewModel.Id)).Data;
                 if (oldShift == null)
                     return NotFound("Shift not found");
 
@@ -160,10 +160,10 @@ namespace RoosterPlanner.Api.Controllers
                 if (updatedShift == null)
                     return BadRequest("Unable to convert ShiftViewModel to Shift");
 
-                Project project = projectService.GetProjectDetails(updatedShift.ProjectId).Result.Data;
+                Project project = (await projectService.GetProjectDetailsAsync(updatedShift.ProjectId)).Data;
                 Task task = null;
                 if (updatedShift.TaskId != null)
-                    task = taskService.GetTask((Guid) updatedShift.TaskId).Result.Data;
+                    task = (await taskService.GetTaskAsync((Guid) updatedShift.TaskId)).Data;
 
                 if (project == null || task == null)
                     return NotFound("Project and or Task Not found");
@@ -174,46 +174,45 @@ namespace RoosterPlanner.Api.Controllers
                 oldShift.Task = task;
                 oldShift.Project = project;
                 //cannot update Project, Id or Date by design
-                oldShift.LastEditDate = DateTime.UtcNow;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldShift.LastEditBy = oid;
 
-                TaskResult<Shift> result = await shiftService.UpdateShift(oldShift);
+                TaskResult<Shift> result = await shiftService.UpdateShiftAsync(oldShift);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(ShiftViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(UpdateShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
 
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpDelete]
-        public async Task<ActionResult> RemoveShift(Guid shiftId)
+        public async Task<ActionResult<ShiftViewModel>> RemoveShiftAsync(Guid shiftId)
         {
             if (shiftId == Guid.Empty)
                 return BadRequest("No valid id.");
             try
             {
-                Task<TaskResult<Shift>> shift = shiftService.GetShift(shiftId);
+                TaskResult<Shift> shift = await shiftService.GetShiftAsync(shiftId);
                 if (shift == null)
                     return NotFound("Shift not found");
 
-                TaskResult<Shift> result = await shiftService.RemoveShift(shift.Result.Data);
-                if (!result.Succeeded)
-                    return Problem();
-                return Ok(result);
+                TaskResult<Shift> result = await shiftService.RemoveShiftAsync(shift.Data);
+
+                return !result.Succeeded ? UnprocessableEntity(new ErrorViewModel
+                    {Type = Type.Error, Message = result.Message}) : Ok(result);
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, ex.ToString());
-                Response.Headers.Add("message", ex.Message);
-                return UnprocessableEntity();
+                string message = GetType().Name + "Error in " + nameof(RemoveShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
     }

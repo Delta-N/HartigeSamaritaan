@@ -1,42 +1,41 @@
-<div class="container">
-  <div class="bar">
+  <div class="row bar">
     <h1>Profiel</h1>
     <a id="push" mat-button class="override-button" (click)="logout()">Uitloggen</a>
   </div>
-</div>
-<div class="container">
+
+
   <div *ngIf="loaded===true">
-    <div class="data-row">
+    <div class="row">
       <div class="row-name">Naam:</div>
       <div class="user-data">{{user.firstName + " " + user.lastName}}</div>
     </div>
-    <div class="data-row">
+    <div class="row">
       <div class="row-name">Leeftijd:</div>
       <div class="user-data">{{age}}</div>
     </div>
-    <div class="data-row">
+    <div class="row">
       <div class="row-name">Email:</div>
       <div class="user-data">{{user.email}}</div>
     </div>
-    <div class="data-row">
+    <div class="row">
       <div class="row-name">Adres:</div>
       <div class="user-data">{{user.streetAddress}}</div>
     </div>
-    <div class="data-row">
+    <div class="row">
       <div class="row-name">Postcode:</div>
       <div class="user-data">{{user.postalCode}}</div>
     </div>
-    <div class="data-row">
+    <div class="row">
       <div class="row-name">Stad:</div>
       <div class="user-data">{{user.city}}</div>
     </div>
-    <div class="data-row">
+    <div class="row">
       <div class="row-name">Telefoonnummer:</div>
       <div class="user-data">{{user.phoneNumber}}</div>
     </div>
   </div>
-  <div class="container">
+  <div class="row">
     <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button" id="editProfile">Profiel wijzigen</a>
   </div>
-</div>
+
 

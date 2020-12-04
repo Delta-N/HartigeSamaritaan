@@ -8,6 +8,9 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from "@angular/material/table";
 import {ShiftService} from "../../services/shift.service";
 import {TextInjectorService} from "../../services/text-injector.service";
+import {TaskService} from "../../services/task.service";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 @Component({
   selector: 'app-shift-overview',
@@ -21,7 +24,7 @@ export class ShiftOverviewComponent implements OnInit {
 
   project: Project;
 
-  displayedColumns: string[]=[];
+  displayedColumns: string[] = [];
   dataSource: MatTableDataSource<Shift> = new MatTableDataSource<Shift>();
   paginator: MatPaginator;
   sort: MatSort;
@@ -39,15 +42,20 @@ export class ShiftOverviewComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private projectService: ProjectService,
               private router: Router,
-              private shiftService: ShiftService) {
-    this.displayedColumns=TextInjectorService.shiftTableColumnNames;
+              private shiftService: ShiftService,
+              private breadcrumbService: BreadcrumbService) {
+    let temp: Breadcrumb = new Breadcrumb();
+    temp.label = "Shift overzicht"
+    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, temp]
+    this.breadcrumbService.replace(breadcrumbs);
+    this.displayedColumns = TextInjectorService.shiftTableColumnNames;
   }
 
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    this.projectService.getProject(this.guid).then(project => {
+    await this.projectService.getProject(this.guid).then(async project => {
       this.project = project;
       this.title += ": " + this.project.name
     })

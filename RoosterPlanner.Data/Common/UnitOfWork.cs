@@ -18,9 +18,7 @@ namespace RoosterPlanner.Data.Common
         IShiftRepository ShiftRepository { get; }
 
         ICategoryRepository CategoryRepository { get; }
-
-        IMatchRepository MatchRepository { get; }
-
+        
         IProjectTaskRepository ProjectTaskRepository { get; }
         IManagerRepository ManagerRepository { get; }
 
@@ -53,104 +51,27 @@ namespace RoosterPlanner.Data.Common
         private IPersonRepository personRepository;
         private ITaskRepository taskRepository;
         private ICategoryRepository categoryRepository;
-
-        private IMatchRepository matchRepository;
-
         private IShiftRepository shiftRepository;
         private IProjectTaskRepository projectTaskRepository;
         private IManagerRepository managerRepository;
 
         #endregion
 
-        public IProjectRepository ProjectRepository
-        {
-            get
-            {
-                if (projectRepository == null)
-                    this.projectRepository = new ProjectRepository(this.DataContext);
-                return this.projectRepository;
-            }
-        }
+        public IProjectRepository ProjectRepository => projectRepository ??= new ProjectRepository(DataContext);
 
-        public IShiftRepository ShiftRepository
-        {
-            get
-            {
-                if (shiftRepository == null)
-                    this.shiftRepository = new ShiftRepository(this.DataContext);
-                return this.shiftRepository;
-            }
-        }
+        public IShiftRepository ShiftRepository => shiftRepository ??= new ShiftRepository(DataContext);
+        
+        public ITaskRepository TaskRepository => taskRepository ??= new TaskRepository(DataContext);
 
-        public IMatchRepository MatchRepository
-        {
-            get
-            {
-                if (matchRepository == null)
-                    this.matchRepository = new MatchRepository(this.DataContext);
-                return this.matchRepository;
-            }
-        }
+        public ICategoryRepository CategoryRepository => categoryRepository ??= new CategoryRepository(DataContext);
 
-        public ITaskRepository TaskRepository
-        {
-            get
-            {
-                if (taskRepository == null)
-                    this.taskRepository = new TaskRepository(this.DataContext);
-                return this.taskRepository;
-            }
-        }
+        public IParticipationRepository ParticipationRepository => participationRepository ??= new ParticipationRepository(DataContext);
 
-        public ICategoryRepository CategoryRepository
-        {
-            get
-            {
-                if (categoryRepository == null)
-                    this.categoryRepository = new CategoryRepository(this.DataContext);
-                return this.categoryRepository;
-            }
-        }
+        public IPersonRepository PersonRepository => personRepository ??= new PersonRepository(DataContext);
 
-        public IParticipationRepository ParticipationRepository
-        {
-            get
-            {
-                if (participationRepository == null)
-                    this.participationRepository = new ParticipationRepository(this.DataContext);
-                return this.participationRepository;
-            }
-        }
+        public IProjectTaskRepository ProjectTaskRepository => projectTaskRepository ??= new ProjectTaskRepository(DataContext);
 
-        public IPersonRepository PersonRepository
-        {
-            get
-            {
-                if (personRepository == null)
-                    this.personRepository = new PersonRepository(this.DataContext);
-                return this.personRepository;
-            }
-        }
-
-        public IProjectTaskRepository ProjectTaskRepository
-        {
-            get
-            {
-                if (projectTaskRepository == null)
-                    this.projectTaskRepository = new ProjectTaskRepository(this.DataContext);
-                return this.projectTaskRepository;
-            }
-        }
-
-        public IManagerRepository ManagerRepository
-        {
-            get
-            {
-                if (managerRepository == null)
-                    this.managerRepository = new ManagerRepository(this.DataContext);
-                return this.managerRepository;
-            }
-        }
+        public IManagerRepository ManagerRepository => managerRepository ??= new ManagerRepository(DataContext);
 
         #region Constructor
 
@@ -160,7 +81,7 @@ namespace RoosterPlanner.Data.Common
         /// <param name="dataContext">The data context.</param>
         public UnitOfWork(RoosterPlannerContext dataContext)
         {
-            this.DataContext = dataContext;
+            DataContext = dataContext;
         }
 
         #endregion
@@ -188,7 +109,7 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         public void Dispose()
         {
-            this.DataContext.Dispose();
+            DataContext.Dispose();
         }
 
         #endregion

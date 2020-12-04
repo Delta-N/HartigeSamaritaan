@@ -30,7 +30,7 @@ namespace RoosterPlanner.Models
 
 
         //Constructor
-        public Participation() : base()
+        public Participation()
         {
             Availabilities = new List<Availability>();
             WantsToWorkWith=new List<Collaboration>();

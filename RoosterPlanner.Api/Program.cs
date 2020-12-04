@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.Hosting;
 
-
 namespace RoosterPlanner.Api
 {
     public class Program
@@ -17,7 +16,7 @@ namespace RoosterPlanner.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-        return Host.CreateDefaultBuilder(args)
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     var configuration = config.Build();

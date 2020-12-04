@@ -12,11 +12,11 @@ namespace RoosterPlanner.Service
         public static void Register(IServiceCollection services, IConfiguration configuration)
         {
             if (services == null)
-                throw new ArgumentNullException("services");
+                throw new ArgumentNullException(nameof(services));
 
             services.AddDbContext<RoosterPlannerContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("RoosterPlannerDatabase")));
-            services.BuildServiceProvider().GetService<RoosterPlannerContext>().Database.Migrate();
+            services.BuildServiceProvider().GetService<RoosterPlannerContext>()?.Database.Migrate();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }

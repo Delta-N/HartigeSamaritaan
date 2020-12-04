@@ -16,11 +16,11 @@ namespace RoosterPlanner.Service
 
     public class BlobService : IBlobService
     {
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly BlobServiceClient blobServiceClient;
 
         public BlobService(IOptions<AzureBlobConfig> azureBlobConfig)
         {
-            _blobServiceClient = new BlobServiceClient(azureBlobConfig.Value.AzureBlobConnectionstring);
+            blobServiceClient = new BlobServiceClient(azureBlobConfig.Value.AzureBlobConnectionstring);
         }
 
         public async Task<Uri> UploadFileBlobAsync(string blobContainerName, string blobName, Stream content,
@@ -41,7 +41,7 @@ namespace RoosterPlanner.Service
 
         private BlobContainerClient GetContainerClient(string blobContainerName)
         {
-            BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(blobContainerName);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainerName);
             containerClient.CreateIfNotExists(PublicAccessType.Blob);
             return containerClient;
         }

@@ -15,11 +15,7 @@ namespace RoosterPlanner.Api.Models.Constants
 
         public static Extensions GetInstance(AzureAuthenticationConfig azureB2CConfig)
         {
-            if (_extensions == null)
-            {
-                _extensions=new Extensions(azureB2CConfig);
-            }
-            return _extensions;
+            return _extensions ??= new Extensions(azureB2CConfig);
         }
 
         public string UserRoleExtension =>

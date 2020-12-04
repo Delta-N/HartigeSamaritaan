@@ -4,9 +4,8 @@ using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
-    public class ProjectDetailsViewModel
+    public class ProjectDetailsViewModel : EntityViewModel
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
@@ -23,11 +22,11 @@ namespace RoosterPlanner.Api.Models
         //Constructor
         public ProjectDetailsViewModel()
         {
-            this.Tasks = new List<Task>();
+            Tasks = new List<Task>();
         }
         public static ProjectDetailsViewModel CreateVm(Project project)
         {
-            return new ProjectDetailsViewModel
+            return new()
             {
                 Id = project.Id,
                 Name = project.Name,
@@ -40,13 +39,16 @@ namespace RoosterPlanner.Api.Models
                 ParticipationEndDate = project.ParticipationEndDate,
                 ProjectStartDate = project.ProjectStartDate,
                 ProjectEndDate = project.ProjectEndDate,
-                Closed = project.Closed
+                Closed = project.Closed,
+                LastEditDate = project.LastEditDate,
+                LastEditBy = project.LastEditBy,
+                RowVersion = project.RowVersion
             };
         }
 
         public static Project CreateProject(ProjectDetailsViewModel projectDetailsViewModel)
         {
-            return new Project(projectDetailsViewModel.Id)
+            return new(projectDetailsViewModel.Id)
             {
                 Name = projectDetailsViewModel.Name,
                 Address = projectDetailsViewModel.Address,
@@ -58,7 +60,10 @@ namespace RoosterPlanner.Api.Models
                 ParticipationEndDate = projectDetailsViewModel.ParticipationEndDate,
                 ProjectStartDate = projectDetailsViewModel.ProjectStartDate,
                 ProjectEndDate = projectDetailsViewModel.ProjectEndDate,
-                Closed = projectDetailsViewModel.Closed
+                Closed = projectDetailsViewModel.Closed,
+                LastEditDate = projectDetailsViewModel.LastEditDate,
+                LastEditBy = projectDetailsViewModel.LastEditBy,
+                RowVersion = projectDetailsViewModel.RowVersion
             };
         }
     }
