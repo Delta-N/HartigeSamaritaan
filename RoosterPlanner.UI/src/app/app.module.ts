@@ -59,6 +59,7 @@ import {ManageGuard} from "./guards/manage.guard";
 import {AddManagerComponent} from './components/add-manager/add-manager.component';
 import {BreadcrumbComponent} from './components/breadcrumb/breadcrumb.component';
 import {ErrorHandlerService} from "./services/logging.service";
+import {AvailabilityComponent} from "./pages/availability/availability.component";
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
