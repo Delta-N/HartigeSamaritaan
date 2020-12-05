@@ -3,7 +3,7 @@
     <mat-card-title><a [routerLink]="['/project', participation.project.id]">{{participation.project.name}}</a></mat-card-title>
   </div>
   <mat-card-content>
-    <a (click)="todo()"><p>Beschikbaarheid</p></a>
+    <a [routerLink]="['/availability', participation.project.id]"><p>Beschikbaarheid</p></a>
     <a (click)="todo()"><p>Agenda</p></a>
     <a (click)="todo()"><p>Mijn Shifts</p></a>
 

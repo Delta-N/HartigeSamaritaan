@@ -128,6 +128,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     AddManagerComponent,
     ManagerFilterPipe,
     BreadcrumbComponent,
+    AvailabilityComponent,
 
   ],
   imports: [
