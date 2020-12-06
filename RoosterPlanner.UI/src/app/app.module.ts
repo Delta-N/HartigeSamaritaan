@@ -48,7 +48,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatChipsModule} from "@angular/material/chips";
 import {NgxMultipleDatesModule} from "ngx-multiple-dates";
 import {ShiftOverviewComponent} from './pages/shift-overview/shift-overview.component';
@@ -173,11 +173,11 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
       useFactory: MSALInterceptorConfigFactory
     },
     {provide: MAT_DATE_LOCALE, useValue: 'nl-NL'},
-    {
+   /* {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },
+    },*/
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
     MsalService,
     MsalGuard,
