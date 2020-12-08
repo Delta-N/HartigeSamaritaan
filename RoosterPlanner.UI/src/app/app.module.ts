@@ -48,7 +48,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import { MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatChipsModule} from "@angular/material/chips";
 import {NgxMultipleDatesModule} from "ngx-multiple-dates";
 import {ShiftOverviewComponent} from './pages/shift-overview/shift-overview.component';
@@ -60,6 +60,13 @@ import {AddManagerComponent} from './components/add-manager/add-manager.componen
 import {BreadcrumbComponent} from './components/breadcrumb/breadcrumb.component';
 import {ErrorHandlerService} from "./services/logging.service";
 import {AvailabilityComponent} from "./pages/availability/availability.component";
+import { CalendarModule, DateAdapter as CalendarDateAdapter, MOMENT, CalendarMomentDateFormatter, CalendarDateFormatter} from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/moment';
+import * as moment from 'moment';
+
+export function momentAdapterFactory() {
+  return adapterFactory(moment);
+}
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -150,6 +157,18 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     NgxMaterialTimepickerModule,
     MatChipsModule,
     NgxMultipleDatesModule,
+    CalendarModule.forRoot(
+      {
+        provide: CalendarDateAdapter,
+        useFactory: momentAdapterFactory,
+      },
+      {
+        dateFormatter: {
+          provide: CalendarDateFormatter,
+          useClass: CalendarMomentDateFormatter,
+        },
+      }
+    ),
 
   ],
   providers: [
@@ -173,11 +192,11 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
       useFactory: MSALInterceptorConfigFactory
     },
     {provide: MAT_DATE_LOCALE, useValue: 'nl-NL'},
-   /* {
+    {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },*/
+    },
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
     MsalService,
     MsalGuard,
@@ -186,7 +205,11 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     FormBuilder,
     ManageGuard,
 
-    {provide: ErrorHandler, useClass: ErrorHandlerService}
+    {provide: ErrorHandler, useClass: ErrorHandlerService},
+    {
+      provide: MOMENT,
+      useValue: moment,
+    },
   ],
   bootstrap: [AppComponent],
   entryComponents: [AddProjectComponent]

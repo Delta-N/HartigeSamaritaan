@@ -21,3 +21,9 @@ ol.bread li + li:before {
   padding: 8px;
   content: ">";
 }
+
+@media only screen and (max-width: 550px) {
+  * {
+    font-size: 12px;
+  }
+}

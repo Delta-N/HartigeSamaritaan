@@ -1,20 +1,82 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Shift} from "../../models/shift";
 import {ShiftService} from "../../services/shift.service";
+import {CalendarEventAction, CalendarView, CalendarEvent, CalendarDateFormatter} from 'angular-calendar';
+import * as moment from "moment"
+import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
 
+
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3',
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF',
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA',
+  },
+};
 @Component({
   selector: 'app-availability',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './availability.component.html',
-  styleUrls: ['./availability.component.scss']
+  styleUrls: ['./availability.component.scss'],
+  providers: [
+    {
+      provide: CalendarDateFormatter,
+      useClass: CustomDateFormatter,
+    },
+  ],
 })
 export class AvailabilityComponent implements OnInit {
   shifts: Shift[] = [];
-  view: CalendarView = CalendarView.Day;
 
-  viewDate: Date = new Date();
+  view: CalendarView = CalendarView.Day;
+  viewDate: Date = new Date(); //today
+
+  minDate: Date;
+  maxDate: Date;
+
+  startHour: number=9;
+  endHour: number=22;
+
+  dateIsValid(date: Date): boolean {
+    return date >= this.minDate && date <= this.maxDate;
+  }
+
+  changeDate(date: Date): void {
+    this.viewDate = date;
+    this.dateOrViewChanged();
+  }
+
+  increment(): void {
+    this.changeDate(moment(this.viewDate).add(1,"day").toDate());
+  }
+
+  decrement(): void {
+    this.changeDate(moment(this.viewDate).subtract(1, "day").toDate());
+  }
+
+  dateOrViewChanged(): void {
+  /*  this.prevBtnDisabled = !this.dateIsValid(
+      endOfPeriod(this.view, subPeriod(this.view, this.viewDate, 1))
+    );
+    this.nextBtnDisabled = !this.dateIsValid(
+      startOfPeriod(this.view, addPeriod(this.view, this.viewDate, 1))
+    );
+    if (this.viewDate < this.minDate) {
+      this.changeDate(this.minDate);
+    } else if (this.viewDate > this.maxDate) {
+      this.changeDate(this.maxDate);
+    }*/
+  }
 
   handleEvent(action: string, event: CalendarEvent): void {
     /*this.modalData = {event, action};
@@ -41,19 +103,24 @@ export class AvailabilityComponent implements OnInit {
   ];
 
   events: CalendarEvent[] = [
+    {
+      start: moment(new Date()).toDate(),
+      end: moment(new Date).add("hours",3).toDate(),
+      title: 'A draggable and resizable event',
+      color: colors.red,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
+      },
+      draggable: true,
+    },
 
     {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
+      start: moment(new Date()).add(1,"hour").toDate(),
+      end: moment(new Date).add(3,"hours").toDate(),
       title: 'A draggable and resizable event',
-      color: colors.yellow,
+      color: colors.red,
       actions: this.actions,
       resizable: {
         beforeStart: true,
@@ -62,6 +129,7 @@ export class AvailabilityComponent implements OnInit {
       draggable: true,
     },
   ];
+
 
   constructor(private breadcrumbService: BreadcrumbService,
               private shiftService: ShiftService,

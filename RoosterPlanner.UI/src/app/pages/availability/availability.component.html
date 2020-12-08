@@ -1,23 +1,43 @@
 <div class="row bar">
   <h1>Beschikbaarheid opgeven</h1>
 </div>
-<div [ngSwitch]="view">
-  <mwl-calendar-month-view
-    *ngSwitchCase="'month'"
-    [viewDate]="viewDate"
-    [events]="events"
-  >
-  </mwl-calendar-month-view>
-  <mwl-calendar-week-view
-    *ngSwitchCase="'week'"
-    [viewDate]="viewDate"
-    [events]="events"
-  >
-  </mwl-calendar-week-view>
-  <mwl-calendar-day-view
-    *ngSwitchCase="'day'"
-    [viewDate]="viewDate"
-    [events]="events"
-  >
-  </mwl-calendar-day-view>
+<div class="row">
+  <div class="col-2"></div>
+  <div class="col-9 date"> {{viewDate | datePipe}}</div>
+  <div class="col-1"></div>
+</div>
+<div class="row" id="box">
+
+  <div class="col-2 " >
+    <p>taak 1</p>
+    <p>taak 2</p>
+    <p>taak 3</p>
+    <p>taak 4</p>
+    <p>Agenda</p>
+  </div>
+
+
+  <div class="col-1 buttonholder">
+    <button mat-icon-button class="changeday" (click)="decrement()">
+      <mat-icon>navigate_before</mat-icon>
+    </button>
+  </div>
+
+  <div class="col-8">
+    <div class="calendarbox">
+      <mwl-calendar-day-view
+        [viewDate]="viewDate"
+        [dayStartHour]="startHour"
+        [dayEndHour]="endHour"
+        [events]="events">
+      </mwl-calendar-day-view>
+    </div>
+  </div>
+
+  <div class="col-1 buttonholder">
+    <button mat-icon-button class="changeday" (click)="increment()">
+      <mat-icon>navigate_next</mat-icon></button>
+  </div>
+
+
 </div>

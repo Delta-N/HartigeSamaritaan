@@ -1,0 +1,23 @@
+.calendarbox {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.date {
+  font-family: Lato, serif;
+  font-weight: bold;
+  font-size: 30px;
+  color: #707070;
+  display: flex;
+  justify-content: center;
+}
+
+.buttonholder {
+  align-items: center;
+  display: flex;
+}
+
+.changeday {
+  border: #707070 solid 1px;
+  border-radius: 100%;
+}
