@@ -1,14 +1,24 @@
 <div class="row bar">
   <h1>Beschikbaarheid opgeven</h1>
 </div>
-<div class="row">
-  <div class="col-2"></div>
-  <div class="col-9 date"> {{viewDate | datePipe}}</div>
+<div class="row datebox">
   <div class="col-1"></div>
+  <div class="col-1">
+    <button mat-icon-button class="changeday cdhidden" (click)="decrement()">
+      <mat-icon>navigate_before</mat-icon>
+    </button>
+  </div>
+  <div class="col-8 date" id="date"> {{viewDate | datePipe}}</div>
+  <div class="col-1">
+    <button mat-icon-button class="changeday cdhidden" (click)="increment()">
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+  </div>
 </div>
-<div class="row" id="box">
+<div class="col-1"></div>
+<div class="row box">
 
-  <div class="col-2 " >
+  <div class="col-2 calendar">
     <p>taak 1</p>
     <p>taak 2</p>
     <p>taak 3</p>
@@ -23,21 +33,23 @@
     </button>
   </div>
 
-  <div class="col-8">
-    <div class="calendarbox">
-      <mwl-calendar-day-view
-        [viewDate]="viewDate"
-        [dayStartHour]="startHour"
-        [dayEndHour]="endHour"
-        [events]="events">
-      </mwl-calendar-day-view>
-    </div>
+
+  <div class="col-8 calendarbox">
+
+    <mwl-calendar-day-view
+      [viewDate]="viewDate"
+      [dayStartHour]="startHour"
+      [dayEndHour]="endHour"
+      [events]="events"
+    >
+
+    </mwl-calendar-day-view>
   </div>
+
 
   <div class="col-1 buttonholder">
     <button mat-icon-button class="changeday" (click)="increment()">
-      <mat-icon>navigate_next</mat-icon></button>
+      <mat-icon>navigate_next</mat-icon>
+    </button>
   </div>
-
-
 </div>

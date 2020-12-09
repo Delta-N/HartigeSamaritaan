@@ -1,6 +1,26 @@
+::ng-deep .custom-button {
+  background: white;
+  font-size: 20px;
+  font-family: Lato, serif;
+  color: #707070;
+  margin-left: 5px;
+  margin-right: 5px;
+  min-width: 0;
+  line-height: 20px;
+  width: 40px;
+}
+
+::ng-deep .cal-event-action:focus {
+  outline: none;
+}
+
 .calendarbox {
   max-height: 500px;
   overflow: auto;
+}
+
+.cdhidden {
+  display: none;
 }
 
 .date {
@@ -21,3 +41,172 @@
   border: #707070 solid 1px;
   border-radius: 100%;
 }
+
+::ng-deep .cal-event {
+  position: relative;
+
+  .cal-event-title {
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    color: #707070;
+  }
+
+  .cal-event-actions {
+    position: absolute;
+    left: 18%;
+    margin-left: -5px;
+    bottom: 5px;
+
+
+    i {
+      margin-right: 5px;
+      margin-left: 5px;
+
+    }
+
+  }
+}
+
+
+.event-title-row {
+  margin: 0;
+  justify-content: center;
+
+}
+
+.action-buttons-row {
+  margin: 0;
+  position: absolute;
+  bottom: 5px;
+  left: 39%
+}
+
+.spacer {
+  height: 60%;
+}
+
+@media only screen and (max-width: 1200px) {
+  ::ng-deep .cal-event {
+    .cal-event-actions {
+      left: 10%;
+    }
+  }
+}
+
+
+@media only screen and (max-width: 992px) {
+  ::ng-deep .cal-event {
+    .cal-event-actions {
+      width: 40%;
+      height: auto;
+      position: absolute;
+      left: calc(25% - 20%);
+    }
+  }
+  ::ng-deep .custom-button {
+
+    font-size: 16px;
+    line-height: 12px;
+    width: 30px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  ::ng-deep .cal-event {
+    .cal-event-actions {
+      width: 40%;
+      height: auto;
+      position: absolute;
+      bottom: 5px;
+    }
+  }
+  .cdhidden {
+    display: initial;
+    margin-top: 5px;
+  }
+  .row {
+    display: block;
+  }
+  .buttonholder {
+    display: none;
+  }
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .calendarbox {
+    max-width: none;
+  }
+  .datebox {
+    display: flex;
+  }
+}
+
+@media only screen and (max-width: 475px) {
+  ::ng-deep .cal-event {
+    .cal-event-actions {
+      width: 40%;
+      height: auto;
+      position: absolute;
+      left: calc(20% - 20%);
+      bottom: 5px;
+    }
+  }
+  .cdhidden {
+    width: 25px;
+    height: 25px;
+    line-height: 0;
+    margin-top: 10px
+  }
+
+  .row {
+    display: block;
+  }
+  .buttonholder {
+    display: none;
+  }
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .calendarbox {
+    max-width: none;
+  }
+  .datebox {
+    display: flex;
+  }
+  ::ng-deep .custom-button {
+    display: block;
+    left: 100%;
+    margin-top: 2px;
+    margin-bottom: 3px;
+    padding: 5px !important;
+  }
+  p {
+    min-width: 100px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .date {
+    font-size: 20px;
+  }
+  .cdhidden {
+    margin-top: 5px;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+
+  ::ng-deep .cal-event {
+    .cal-event-actions {
+      width: 28%;
+    }
+
+    .cal-event-title {
+      font-size: 15px;
+    }
+  }
+}
+

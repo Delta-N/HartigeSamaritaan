@@ -7,6 +7,7 @@ import {ShiftService} from "../../services/shift.service";
 import {CalendarEventAction, CalendarView, CalendarEvent, CalendarDateFormatter} from 'angular-calendar';
 import * as moment from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
+import {DomSanitizer} from "@angular/platform-browser";
 
 
 const colors: any = {
@@ -22,7 +23,20 @@ const colors: any = {
     primary: '#e3bc08',
     secondary: '#FDF1BA',
   },
+  green: {
+    primary: '#1f931f',
+    secondary: '#c0f2c0'
+  },
+  orange: {
+    primary: '#cc5200',
+    secondary: '#ffc299'
+  },
+  pink: {
+    primary: '#cc0052',
+    secondary: '#ffb3d1'
+  }
 };
+
 @Component({
   selector: 'app-availability',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,8 +58,9 @@ export class AvailabilityComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
 
-  startHour: number=9;
-  endHour: number=22;
+  startHour: number = 17; // dit aanpassen naar start hour van eerste even
+  endHour: number = 23; //  dit aanpassen naar end hour van laatste event
+
 
   dateIsValid(date: Date): boolean {
     return date >= this.minDate && date <= this.maxDate;
@@ -57,7 +72,7 @@ export class AvailabilityComponent implements OnInit {
   }
 
   increment(): void {
-    this.changeDate(moment(this.viewDate).add(1,"day").toDate());
+    this.changeDate(moment(this.viewDate).add(1, "day").toDate());
   }
 
   decrement(): void {
@@ -65,17 +80,17 @@ export class AvailabilityComponent implements OnInit {
   }
 
   dateOrViewChanged(): void {
-  /*  this.prevBtnDisabled = !this.dateIsValid(
-      endOfPeriod(this.view, subPeriod(this.view, this.viewDate, 1))
-    );
-    this.nextBtnDisabled = !this.dateIsValid(
-      startOfPeriod(this.view, addPeriod(this.view, this.viewDate, 1))
-    );
-    if (this.viewDate < this.minDate) {
-      this.changeDate(this.minDate);
-    } else if (this.viewDate > this.maxDate) {
-      this.changeDate(this.maxDate);
-    }*/
+    /*  this.prevBtnDisabled = !this.dateIsValid(
+        endOfPeriod(this.view, subPeriod(this.view, this.viewDate, 1))
+      );
+      this.nextBtnDisabled = !this.dateIsValid(
+        startOfPeriod(this.view, addPeriod(this.view, this.viewDate, 1))
+      );
+      if (this.viewDate < this.minDate) {
+        this.changeDate(this.minDate);
+      } else if (this.viewDate > this.maxDate) {
+        this.changeDate(this.maxDate);
+      }*/
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
@@ -83,60 +98,150 @@ export class AvailabilityComponent implements OnInit {
     this.modal.open(this.modalContent, {size: 'lg'});*/
   }
 
+  maybeLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">?</div></span>');
+  yesLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button" id="yess")">V</span>');
+  noLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">X</span>');
+
+  changeBorders(event:CalendarEvent, label:String){
+    moment.locale('en')
+    let aria = "\n      " + moment(event.start).format("dddd MMMM DD,") + "\n      " + event.title + ", from " + moment(event.start).format("hh:mm A") + "\n     to " +
+      moment(event.end).format("hh:mm A");
+    let x: HTMLCollection = (document.getElementsByClassName("cal-event"))
+    for (let i = 0; i < x.length; i++) {
+      if (x[i].ariaLabel == aria) {
+        for (let j = 0; j < x[i].children.length; j++) {
+          if (x[i].children[j].localName == "mwl-calendar-event-actions") {
+            var z = x[i].children[j].children[0].children;
+            for (let k = 0; k < z.length; k++) {
+              if (z[k].ariaLabel == label) {
+                z[k].children[0].style.border = "solid 3px black";
+              } else {
+                z[k].children[0].style.border = "none";
+              }
+            }
+          }
+        }
+      }
+    }
+    //todo clear selection
+  }
 
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-      a11yLabel: 'Edit',
+
+      label: this.yesLabel,
+      a11yLabel: 'Yes',
       onClick: ({event}: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+
+        this.changeBorders(event,"Yes")
+
       },
     },
     {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
+      label: this.maybeLabel,
+      a11yLabel: 'Maybe',
       onClick: ({event}: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
+        this.changeBorders(event, "Maybe")
       },
     },
-  ];
-
-  events: CalendarEvent[] = [
     {
-      start: moment(new Date()).toDate(),
-      end: moment(new Date).add("hours",3).toDate(),
-      title: 'A draggable and resizable event',
-      color: colors.red,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
+      label: this.noLabel,
+      a11yLabel: 'No',
+      onClick: ({event}: { event: CalendarEvent }): void => {
+        this.changeBorders(event, "No")
       },
-      draggable: true,
     },
 
-    {
-      start: moment(new Date()).add(1,"hour").toDate(),
-      end: moment(new Date).add(3,"hours").toDate(),
-      title: 'A draggable and resizable event',
-      color: colors.red,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
   ];
-
+  date = new Date();
+  five = "17:00";
+  fiveFourtyFive = "17:45";
+  six = "18:00";
+  eight = "20:00";
+  eightFiveteen = "20:15";
+  eleven = "23:00";
+  elevenThirty = "23:30";
+  twelve = "24:00";
 
   constructor(private breadcrumbService: BreadcrumbService,
               private shiftService: ShiftService,
-              private route: ActivatedRoute) {
-
-
+              private route: ActivatedRoute,
+              private sanitizer: DomSanitizer) {
   }
+
+
+  events: CalendarEvent[] = [
+    {
+      start: moment(new Date())
+        .set("hour", Number(this.five.substring(0, 2)))
+        .set("minutes", Number(this.five.substring(3, 6))).toDate(),
+
+      end: moment(new Date())
+        .set("hour", Number(this.eleven.substring(0, 2)))
+        .set("minutes", Number(this.eleven.substring(3, 6))).toDate(),
+
+      title: 'Koken',
+      color: colors.red,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
+      },
+    },
+
+    {
+      start: moment(new Date())
+        .set("hour", Number(this.six.substring(0, 2)))
+        .set("minutes", Number(this.six.substring(3, 6))).toDate(),
+
+      end: moment(new Date())
+        .set("hour", Number(this.elevenThirty.substring(0, 2)))
+        .set("minutes", Number(this.elevenThirty.substring(3, 6))).toDate(),
+
+      title: 'Bediening',
+      color: colors.blue,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
+      },
+    },
+    {
+      start: moment(new Date())
+        .set("hour", Number(this.fiveFourtyFive.substring(0, 2)))
+        .set("minutes", Number(this.fiveFourtyFive.substring(3, 6))).toDate(),
+
+      end: moment(new Date())
+        .set("hour", Number(this.eight.substring(0, 2)))
+        .set("minutes", Number(this.eight.substring(3, 6))).toDate(),
+
+      title: 'Afwas',
+      color: colors.green,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
+      },
+    },
+    {
+      start: moment(new Date())
+        .set("hour", Number(this.eightFiveteen.substring(0, 2)))
+        .set("minutes", Number(this.eightFiveteen.substring(3, 6))).toDate(),
+
+      end: moment(new Date())
+        .set("hour", Number(this.twelve.substring(0, 2)))
+        .set("minutes", Number(this.twelve.substring(3, 6))).toDate(),
+
+      title: 'Afwas',
+      color: colors.green,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
+      },
+    },
+  ];
+
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(async (params: ParamMap) => {
