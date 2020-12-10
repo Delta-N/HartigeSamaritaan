@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
@@ -12,12 +14,13 @@ namespace RoosterPlanner.Api.Models
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public int ParticipantsRequired { get; set; }
+        public List<AvailabilityViewModel> Availabilities { get; set; }
 
         public static ShiftViewModel CreateVm(Shift shift)
         {
-            if (shift == null) 
+            if (shift == null)
                 return null;
-            
+
             ShiftViewModel vm = new ShiftViewModel
             {
                 Id = shift.Id,
@@ -36,8 +39,10 @@ namespace RoosterPlanner.Api.Models
             if (shift.Task != null)
                 vm.Task = TaskViewModel.CreateVm(shift.Task);
 
-            return vm;
+            if (shift.Availabilities != null && shift.Availabilities.Count > 0)
+                vm.Availabilities = shift.Availabilities.Select(AvailabilityViewModel.CreateVm).ToList();
 
+            return vm;
         }
 
         public static Shift CreateShift(ShiftViewModel shiftViewModel)
@@ -45,6 +50,13 @@ namespace RoosterPlanner.Api.Models
             if (shiftViewModel?.Project == null ||
                 shiftViewModel.Task == null)
                 return null;
+
+            List<Availability> availabilities = new List<Availability>();
+            if (shiftViewModel.Availabilities != null && shiftViewModel.Availabilities.Count > 0)
+            {
+                availabilities.AddRange(shiftViewModel.Availabilities.Select(availabilityViewModel =>
+                    AvailabilityViewModel.CreateAvailability(availabilityViewModel)));
+            }
 
             return new Shift(shiftViewModel.Id)
             {
@@ -56,11 +68,12 @@ namespace RoosterPlanner.Api.Models
                 ParticipantsRequired = shiftViewModel.ParticipantsRequired,
                 TaskId = shiftViewModel.Task.Id,
                 ProjectId = shiftViewModel.Project.Id,
+                Availabilities = availabilities,
+
                 LastEditDate = shiftViewModel.LastEditDate,
                 LastEditBy = shiftViewModel.LastEditBy,
                 RowVersion = shiftViewModel.RowVersion
             };
-
         }
     }
 }
