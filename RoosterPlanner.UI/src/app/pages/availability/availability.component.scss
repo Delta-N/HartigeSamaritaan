@@ -30,6 +30,7 @@
   outline: none;
 }
 
+
 .calendarbox {
   max-height: 500px;
   overflow: auto;
@@ -76,17 +77,11 @@
 
   .cal-event-actions {
     position: absolute;
-    left: 18%;
     margin-left: -5px;
     bottom: 5px;
-
-
-    i {
-      margin-right: 5px;
-      margin-left: 5px;
-
-    }
-
+      width: 40%;
+      height: auto;
+      left: calc(50% - calc(100%/8));
   }
 }
 

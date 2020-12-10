@@ -16,6 +16,7 @@ namespace RoosterPlanner.Service
         Task<TaskResult<Shift>> UpdateShiftAsync(Shift shift);
         Task<TaskListResult<Shift>> CreateShiftsAsync(List<Shift> shifts);
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId);
+        Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date);
     }
 
     public class ShiftService : IShiftService
@@ -127,6 +128,31 @@ namespace RoosterPlanner.Service
             try
             {
                 result.Data = await shiftRepository.GetByProjectAsync(projectId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error getting shifts with projectid " + projectId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+            if (userId == Guid.Empty)
+                throw new ArgumentNullException(nameof(userId));
+            if (date == null)
+                throw new ArgumentNullException(nameof(date));
+            
+            TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
+            try
+            {
+                result.Data = await shiftRepository.GetByProjectUserAndDateAsync(projectId,userId,date);
                 result.Succeeded = true;
             }
             catch (Exception ex)
