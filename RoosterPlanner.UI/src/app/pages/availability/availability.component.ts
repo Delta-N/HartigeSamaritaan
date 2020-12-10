@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, ViewChild} from '@angular/core';
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
 import {ActivatedRoute, ParamMap} from "@angular/router";
@@ -8,7 +8,9 @@ import {CalendarEventAction, CalendarView, CalendarEvent, CalendarDateFormatter}
 import * as moment from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
 import {DomSanitizer} from "@angular/platform-browser";
-
+import {MatCalendar} from "@angular/material/datepicker";
+import {Moment} from "moment";
+import {MatCheckboxChange} from "@angular/material/checkbox";
 
 const colors: any = {
   red: {
@@ -50,6 +52,10 @@ const colors: any = {
   ],
 })
 export class AvailabilityComponent implements OnInit {
+  @ViewChild('calendar') calendar: MatCalendar<Moment>;
+
+  selectedDate: Moment;
+
   shifts: Shift[] = [];
 
   view: CalendarView = CalendarView.Day;
@@ -69,6 +75,11 @@ export class AvailabilityComponent implements OnInit {
   changeDate(date: Date): void {
     this.viewDate = date;
     this.dateOrViewChanged();
+  }
+
+  dateChanged() {
+    this.calendar.activeDate = this.selectedDate;
+    this.changeDate(this.selectedDate.toDate())
   }
 
   increment(): void {
@@ -102,28 +113,28 @@ export class AvailabilityComponent implements OnInit {
   yesLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button" id="yess")">V</span>');
   noLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">X</span>');
 
-  changeBorders(event:CalendarEvent, label:String){
-    moment.locale('en')
+  changeBorders(event: CalendarEvent, label: String) {
     let aria = "\n      " + moment(event.start).format("dddd MMMM DD,") + "\n      " + event.title + ", from " + moment(event.start).format("hh:mm A") + "\n     to " +
       moment(event.end).format("hh:mm A");
     let x: HTMLCollection = (document.getElementsByClassName("cal-event"))
     for (let i = 0; i < x.length; i++) {
-      if (x[i].ariaLabel == aria) {
+      let element: any = x[i]
+      if (element.ariaLabel == aria) {
         for (let j = 0; j < x[i].children.length; j++) {
-          if (x[i].children[j].localName == "mwl-calendar-event-actions") {
-            var z = x[i].children[j].children[0].children;
-            for (let k = 0; k < z.length; k++) {
-              if (z[k].ariaLabel == label) {
-                z[k].children[0].style.border = "solid 3px black";
+          let child: any = element.children[j];
+          if (child.localName == "mwl-calendar-event-actions") {
+            let farDecendend = child.children[0].children;
+            for (let k = 0; k < farDecendend.length; k++) {
+              if (farDecendend[k].ariaLabel == label) {
+                farDecendend[k].children[0].style.border = "solid 3px black";
               } else {
-                z[k].children[0].style.border = "none";
+                farDecendend[k].children[0].style.border = "none";
               }
             }
           }
         }
       }
     }
-    //todo clear selection
   }
 
   actions: CalendarEventAction[] = [
@@ -132,8 +143,8 @@ export class AvailabilityComponent implements OnInit {
       label: this.yesLabel,
       a11yLabel: 'Yes',
       onClick: ({event}: { event: CalendarEvent }): void => {
-
-        this.changeBorders(event,"Yes")
+        this.colorInCalendar(new Date(),"Green")
+        this.changeBorders(event, "Yes")
 
       },
     },
@@ -167,8 +178,16 @@ export class AvailabilityComponent implements OnInit {
               private shiftService: ShiftService,
               private route: ActivatedRoute,
               private sanitizer: DomSanitizer) {
+    moment.locale('en')
   }
 
+  colorInCalendar(date: Date, color:string) {
+    let label=moment(date).format("DD MMMM YYYY").toLowerCase()
+    let element :HTMLElement = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
+    let child:any = element.children[0]
+    child.style.background = color;
+    child.style.color = 'white';
+  }
 
   events: CalendarEvent[] = [
     {
@@ -262,4 +281,6 @@ export class AvailabilityComponent implements OnInit {
 
   }
 
+  OnCheckboxChange($event: MatCheckboxChange) {
+  }
 }
