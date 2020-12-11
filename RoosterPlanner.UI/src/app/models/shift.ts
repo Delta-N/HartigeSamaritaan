@@ -1,6 +1,7 @@
 ﻿import {Entity} from "./entity.model";
 import {Task} from './task';
 import {Project} from "./project";
+import {Availability} from "./availability";
 
 export class Shift extends Entity {
   public project: Project;
@@ -9,4 +10,5 @@ export class Shift extends Entity {
   public startTime: string;
   public endTime: string;
   public participantsRequired: number;
+  public availabilities:Availability[];
 }

@@ -51,7 +51,6 @@ export class ShiftService {
       return null;
     }
     let shifts: Shift[] = [];
-    console.log(date)
     await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/${projectId}/${userId}/${date.toISOString()}`)
       .toPromise()
       .then(res => {

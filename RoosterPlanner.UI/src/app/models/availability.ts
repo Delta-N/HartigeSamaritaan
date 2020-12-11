@@ -7,6 +7,6 @@ export class Availability extends Entity {
   public participation: Participation;
   public shiftId: string;
   public shift: Shift;
-  public availabilityType: number
+  public type: number
   public preference: boolean;
 }
