@@ -44,7 +44,6 @@ export class HomeComponent implements OnInit {
 
   async getParticipations() {
     await this.participationService.getParticipations(this.currentUser.id).then(response => {
-      console.log(response)
       this.participations = response;
       this.participations.sort((a, b) => a.project.name.toLowerCase() > b.project.name.toLowerCase() ? 1 : -1);
     })

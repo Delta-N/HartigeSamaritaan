@@ -53,17 +53,19 @@ namespace RoosterPlanner.Data.Repositories
 
             foreach (Shift shift in shifts)
             {
+                List<Availability> toBeRemoved = new List<Availability>();
                 foreach (Availability shiftAvailability in shift.Availabilities)
                 {
                     if (shiftAvailability.Participation != null)
                     {
                         if (shiftAvailability.Participation.PersonId != userId)
-                            shift.Availabilities.Remove(shiftAvailability);
+                            toBeRemoved.Add(shiftAvailability);
                         shiftAvailability.Participation.Availabilities = null;
                     }
 
                     shiftAvailability.Shift = null;
                 }
+                toBeRemoved.ForEach(a=>shift.Availabilities.Remove(a));
 
                 if (shift.Task != null)
                     shift.Task.Shifts = null;
