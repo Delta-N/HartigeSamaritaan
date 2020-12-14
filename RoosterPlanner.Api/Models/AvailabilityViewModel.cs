@@ -23,15 +23,16 @@ namespace RoosterPlanner.Api.Models
                 Id = availability.Id,
                 ParticipationId = availability.ParticipationId,
                 ShiftId = availability.ShiftId,
-                Participation = ParticipationViewModel.CreateVm(availability.Participation),
-                Shift = ShiftViewModel.CreateVm(availability.Shift),
                 Type = availability.Type,
                 Preference = availability.Preference,
-
                 LastEditDate = availability.LastEditDate,
                 LastEditBy = availability.LastEditBy,
                 RowVersion = availability.RowVersion
             };
+            if (availability.Participation != null)
+                vm.Participation = ParticipationViewModel.CreateVm(availability.Participation);
+            if (availability.Shift != null)
+                ShiftViewModel.CreateVm(availability.Shift);
             return vm;
         }
 
@@ -39,10 +40,8 @@ namespace RoosterPlanner.Api.Models
         {
             if (availabilityViewModel == null)
                 return null;
-            return new Availability(availabilityViewModel.Id)
+            Availability availability = new Availability(availabilityViewModel.Id)
             {
-                Participation = ParticipationViewModel.CreateParticipation(availabilityViewModel.Participation),
-                Shift = ShiftViewModel.CreateShift(availabilityViewModel.Shift),
                 ParticipationId = availabilityViewModel.ParticipationId,
                 ShiftId = availabilityViewModel.ShiftId,
                 Type = availabilityViewModel.Type,
@@ -52,6 +51,13 @@ namespace RoosterPlanner.Api.Models
                 LastEditBy = availabilityViewModel.LastEditBy,
                 RowVersion = availabilityViewModel.RowVersion
             };
+            if (availabilityViewModel.Participation != null)
+                availability.Participation =
+                    ParticipationViewModel.CreateParticipation(availabilityViewModel.Participation);
+            if (availabilityViewModel.Shift != null)
+                availability.Shift = ShiftViewModel.CreateShift(availabilityViewModel.Shift);
+
+            return availability;
         }
     }
 }

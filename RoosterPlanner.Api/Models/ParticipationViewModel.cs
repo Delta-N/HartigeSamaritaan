@@ -22,11 +22,9 @@ namespace RoosterPlanner.Api.Models
         {
             if (participation != null)
             {
-                return new ParticipationViewModel
+                ParticipationViewModel vm = new ParticipationViewModel
                 {
                     Id = participation.Id,
-                    Person = PersonViewModel.CreateVmFromPerson(participation.Person),
-                    Project = ProjectDetailsViewModel.CreateVm(participation.Project),
                     MaxWorkingHoursPerWeek = participation.MaxWorkingHoursPerWeek,
                     Availabilities = participation.Availabilities,
                     WantsToWorkWith = participation.WantsToWorkWith,
@@ -34,6 +32,11 @@ namespace RoosterPlanner.Api.Models
                     LastEditBy = participation.LastEditBy,
                     RowVersion = participation.RowVersion
                 };
+                if(participation.Person!=null)
+                    vm.Person=PersonViewModel.CreateVmFromPerson(participation.Person);
+                if(participation.Project!=null)
+                    vm.Project=ProjectDetailsViewModel.CreateVm(participation.Project);
+                return vm;
             }
 
             return null;
@@ -41,24 +44,33 @@ namespace RoosterPlanner.Api.Models
 
         public static Participation CreateParticipation(ParticipationViewModel participationViewModel)
         {
-            if (participationViewModel != null)
+            if (participationViewModel == null) return null;
+            
+            Participation participation =  new Participation(participationViewModel.Id)
             {
-                return new Participation(participationViewModel.Id)
-                {
-                    Person = PersonViewModel.CreatePerson(participationViewModel.Person),
-                    PersonId = participationViewModel.Person.Id,
-                    Project = ProjectDetailsViewModel.CreateProject(participationViewModel.Project),
-                    ProjectId = participationViewModel.Project.Id,
-                    MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
-                    Availabilities = participationViewModel.Availabilities,
-                    WantsToWorkWith = participationViewModel.WantsToWorkWith,
-                    LastEditDate = participationViewModel.LastEditDate,
-                    LastEditBy = participationViewModel.LastEditBy,
-                    RowVersion = participationViewModel.RowVersion
-                };
+                MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
+                Availabilities = participationViewModel.Availabilities,
+                WantsToWorkWith = participationViewModel.WantsToWorkWith,
+                LastEditDate = participationViewModel.LastEditDate,
+                LastEditBy = participationViewModel.LastEditBy,
+                RowVersion = participationViewModel.RowVersion
+            };
+
+            if (participationViewModel.Person != null)
+            {
+                participation.Person = PersonViewModel.CreatePerson(participationViewModel.Person);
+                participation.PersonId = participationViewModel.Person.Id;
             }
 
-            return null;
+            if (participationViewModel.Project != null)
+            {
+                participation.Project = ProjectDetailsViewModel.CreateProject(participationViewModel.Project);
+                participation.ProjectId = participationViewModel.Project.Id;
+
+            }
+
+            return participation;
+
         }
     }
 }

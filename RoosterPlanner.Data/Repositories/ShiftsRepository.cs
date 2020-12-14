@@ -15,6 +15,7 @@ namespace RoosterPlanner.Data.Repositories
         Task<List<Shift>> AddShiftsAsync(List<Shift> shifts);
         Task<Shift> GetShiftAsync(Guid shiftId);
         Task<List<Shift>> GetByProjectUserAndDateAsync(Guid projectId, Guid userId, DateTime date);
+        Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId, Guid userId);
     }
 
     public class ShiftRepository : Repository<Shift>, IShiftRepository
@@ -34,6 +35,41 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(s => s.Task)
                 .Where(s => s.ProjectId == projectId)
                 .ToListAsync();
+        }
+
+        public async Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId, Guid userId)
+        {
+            if (projectId == Guid.Empty)
+                return await Task.FromResult<List<Shift>>(null);
+            List<Shift> shifts = await EntitySet
+                .AsNoTracking()
+                .Include(s => s.Project)
+                .Include(s => s.Task)
+                .Include(s => s.Availabilities)
+                .ThenInclude(a => a.Participation)
+                .Where(s => s.ProjectId == projectId)
+                .OrderBy(s => s.Date)
+                .ToListAsync();
+
+            foreach (Shift shift in shifts)
+            {
+                foreach (Availability shiftAvailability in shift.Availabilities)
+                {
+                    if (shiftAvailability.Participation != null)
+                    {
+                        if (shiftAvailability.Participation.PersonId != userId)
+                            shift.Availabilities.Remove(shiftAvailability);
+                        shiftAvailability.Participation.Availabilities = null;
+                    }
+
+                    shiftAvailability.Shift = null;
+                }
+
+                if (shift.Task != null)
+                    shift.Task.Shifts = null;
+            }
+
+            return shifts;
         }
 
         public Task<List<Shift>> AddShiftsAsync(List<Shift> shifts)
@@ -72,10 +108,22 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(s => s.Project)
                 .Include(s => s.Task)
                 .Include(s => s.Availabilities)
-                .ThenInclude(a=>a.Participation)
+                .ThenInclude(a => a.Participation)
                 .Where(s => s.ProjectId == projectId && s.Date == date)
                 .ToListAsync();
-            listOfShifts.ForEach(s=>s.Availabilities=s.Availabilities.Where(a=>a.Participation.PersonId==userId).ToList());
+            listOfShifts.ForEach(s =>
+                s.Availabilities = s.Availabilities.Where(a => a.Participation.PersonId == userId).ToList());
+            listOfShifts.ForEach(s =>
+            {
+                s.Task.Shifts = null;
+                s.Availabilities.ForEach(a =>
+                {
+                    a.Participation.Availabilities = null;
+                    a.Shift = null;
+                });
+            });
+            //manually delete because of circulair reference
+
             return listOfShifts; //todo testen
         }
     }

@@ -17,6 +17,7 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Shift>> CreateShiftsAsync(List<Shift> shifts);
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId);
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date);
+        Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId, Guid userId);
     }
 
     public class ShiftService : IShiftService
@@ -140,6 +141,29 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        public async Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId, Guid userId)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+            if (userId == Guid.Empty)
+                throw new ArgumentNullException(nameof(userId));
+
+            TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
+            try
+            {
+                result.Data = await shiftRepository.GetByProjectWithAvailabilitiesAsync(projectId,userId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error getting shifts with projectid " + projectId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
+            return result;
+        }
+
         public async Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date)
         {
             if (projectId == Guid.Empty)
@@ -157,7 +181,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                result.Message = GetType().Name + " - Error getting shifts with projectid " + projectId;
+                result.Message = GetType().Name + " - Error getting shifts with date " + date;
                 logger.LogError(ex, result.Message);
                 result.Error = ex;
             }

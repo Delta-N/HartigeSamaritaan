@@ -2,9 +2,10 @@
 {
     public enum AvailibilityType
     {
-        None,
+        
         Not,
         Maybe,
-        Ok
+        Ok,
+        Scheduled,
     }
 }

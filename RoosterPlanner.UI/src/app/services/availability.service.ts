@@ -37,7 +37,7 @@ export class AvailabilityService {
   }
 
   async postAvailability(availability: Availability): Promise<Availability> {
-    if (!availability || !availability.participation || !availability.shift || !availability.type) {
+    if (!availability || !availability.participation || !availability.shift || availability.type ==undefined) {
       this.errorService.error("Ongeldige availability")
       return null;
     }
@@ -58,7 +58,7 @@ export class AvailabilityService {
   }
 
   async updateAvailability(availability: Availability): Promise<Availability> {
-    if (!availability || !availability.participation || !availability.shift || !availability.type) {
+    if (!availability || !availability.participationId || !availability.shiftId || availability.type==undefined) {
       this.errorService.error("Ongeldige availability")
       return null;
     }
@@ -67,7 +67,7 @@ export class AvailabilityService {
       this.errorService.error("availabilityId is leeg")
       return null;
     }
-    await this.apiService.put<HttpResponse<Availability>>(`${HttpRoutes.taskApiUrl}`, availability)
+    await this.apiService.put<HttpResponse<Availability>>(`${HttpRoutes.availabilityApiUrl}`, availability)
       .toPromise()
       .then(res => {
           if (res.ok)
