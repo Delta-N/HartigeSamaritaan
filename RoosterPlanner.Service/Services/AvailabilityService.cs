@@ -64,7 +64,7 @@ namespace RoosterPlanner.Service
             {
                 result.Data = availabilityRepository.Update(availability);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
-                result.Data.Participation.Availabilities.ForEach(a => a.Participation = null);
+                result.Data.Participation?.Availabilities.ForEach(a => a.Participation = null);
             }
             catch (Exception ex)
             {

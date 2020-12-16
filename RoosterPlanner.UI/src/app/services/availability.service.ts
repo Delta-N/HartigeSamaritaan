@@ -36,6 +36,23 @@ export class AvailabilityService {
     return availabilityDate;
   }
 
+  async getAvailabilityDataOfProject(projectId: string): Promise<AvailabilityData> {
+    if (!projectId) {
+      this.errorService.error("projectId mag niet leeg zijn")
+      return null;
+    }
+    let availabilityDate: AvailabilityData = null;
+    await this.apiService.get<HttpResponse<AvailabilityData>>(`${HttpRoutes.availabilityApiUrl}/find/${projectId}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          availabilityDate = res.body;
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return availabilityDate;
+  }
+
   async postAvailability(availability: Availability): Promise<Availability> {
     if (!availability || !availability.participation || !availability.shift || availability.type ==undefined) {
       this.errorService.error("Ongeldige availability")

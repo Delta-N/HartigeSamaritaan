@@ -25,7 +25,7 @@ import {AuthorizationGuard} from "./guards/authorization.guard";
 import {CreateProjectComponent} from "./components/create-project/create-project.component";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AddAdminComponent} from './components/add-admin/add-admin.component';
-import {DatePipe, FilterPipe, ManagerFilterPipe, TaskFilterPipe} from "./helpers/filter.pipe";
+import {DatePipe, FilterPipe, ManagerFilterPipe, TaskFilterPipe, ScheduledPipe} from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
@@ -63,6 +63,8 @@ import {AvailabilityComponent} from "./pages/availability/availability.component
 import { CalendarModule, DateAdapter as CalendarDateAdapter, MOMENT, CalendarMomentDateFormatter, CalendarDateFormatter} from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
+import { PlanComponent } from './pages/plan/plan.component';
+import { PlanShiftComponent } from './pages/plan-shift/plan-shift.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -137,6 +139,9 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ManagerFilterPipe,
     BreadcrumbComponent,
     AvailabilityComponent,
+    PlanComponent,
+    ScheduledPipe,
+    PlanShiftComponent,
 
   ],
   imports: [

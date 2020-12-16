@@ -3,6 +3,7 @@ import {User} from "../models/user";
 import {Task} from "../models/task";
 import {DateConverter} from "./date-converter";
 import {Manager} from "../models/manager";
+import {Shift} from "../models/shift";
 
 @Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
@@ -62,5 +63,20 @@ export class TaskFilterPipe implements PipeTransform {
 export class DatePipe implements PipeTransform {
   transform(value: Date): string {
     return DateConverter.dateToString(value);
+  }
+}
+
+@Pipe({name: 'scheduledPipe'})
+export class ScheduledPipe implements PipeTransform {
+  transform(value: Shift): number {
+    console.log("hier")
+    let result: number = 0;
+    if (value.availabilities && value.availabilities.length > 0) {
+      value.availabilities.forEach(a => {
+        if (a.type === 3)
+          result+=1;
+      })
+    }
+    return result;
   }
 }

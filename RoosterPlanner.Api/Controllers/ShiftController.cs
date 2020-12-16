@@ -82,6 +82,29 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        [HttpGet("{id}/{date}")]
+        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid id, DateTime date)
+        {
+            if (id == Guid.Empty)
+                return BadRequest("No valid projectId");
+            try
+            {
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id, date);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                if (result.Data == null || result.Data.Count == 0)
+                    return Ok(new List<ShiftViewModel>());
+                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
+                return Ok(shiftVmList);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
         [HttpGet("shift/{id}")]
         public async Task<ActionResult<ShiftViewModel>> GetShiftAsync(Guid id)
         {

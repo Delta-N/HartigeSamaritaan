@@ -37,7 +37,29 @@ export class ShiftService {
     return shifts;
   }
 
-  async getAllShiftsOnDate(projectId: string,userId:string, date:Date): Promise<Shift[]> {
+  async getAllShiftsWithAvailabilities(projectId: string): Promise<Shift[]> {
+    if (!projectId) {
+      this.errorService.error("ProjectId mag niet leeg zijn")
+      return null;
+    }
+    let shifts: Shift[] = [];
+    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/withAvailabilities/${projectId}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok) {
+          shifts = res.body
+          if (shifts != null) {
+            shifts.forEach(s => s.date = new Date(s.date))
+          }
+        }
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+
+    return shifts;
+  }
+
+  async getAllShiftsOnDateWithUserAvailability(projectId: string, userId:string, date:Date): Promise<Shift[]> {
     if (!projectId) {
       this.errorService.error("ProjectId mag niet leeg zijn")
       return null;
@@ -67,6 +89,32 @@ export class ShiftService {
     return shifts;
   }
 
+  async getAllShiftsOnDate(projectId: string,date: Date): Promise<Shift[]> {
+    if (!projectId) {
+      this.errorService.error("ProjectId mag niet leeg zijn")
+      return null;
+    }
+    if (!date) {
+      this.errorService.error("Datum mag niet leeg zijn")
+      return null;
+    }
+    let shifts: Shift[] = [];
+    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/${projectId}/${date.toISOString()}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok) {
+          shifts = res.body
+          if (shifts != null) {
+            shifts.forEach(s => s.date = new Date(s.date))
+          }
+        }
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+
+    return shifts;
+  }
+
   async getShift(shiftId: string): Promise<Shift> {
     if (!shiftId) {
       this.errorService.error("ShiftId mag niet leeg zijn")
@@ -74,6 +122,25 @@ export class ShiftService {
     }
     let shift: Shift = null;
     await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/shift/${shiftId}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok) {
+          shift = res.body
+          shift.date != null ? shift.date = new Date(shift.date) : null;
+        }
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return shift;
+  }
+
+  async getShiftWithAvailabilaties(shiftId: string): Promise<Shift> {
+    if (!shiftId) {
+      this.errorService.error("ShiftId mag niet leeg zijn")
+      return null;
+    }
+    let shift: Shift = null;
+    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/availabilities/${shiftId}`)
       .toPromise()
       .then(res => {
         if (res.ok) {
