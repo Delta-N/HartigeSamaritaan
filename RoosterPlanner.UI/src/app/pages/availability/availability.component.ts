@@ -396,33 +396,40 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     });
     if (this.shifts.length > 0) {
       this.addEvents();
-      //todo
-      /*this.hiddenElements.forEach(el=>el.style.visibility="initial")
-      this.hiddenElements=[]
+      this.filterCheckboxes();
+    }
+  }
 
-      let elements: HTMLCollection = document.getElementsByClassName("checkBox")
-      console.log(elements)
-      for (let i = 0; i < elements.length; i++) {
-        let element = elements[i] as HTMLElement
+  filterCheckboxes() {
+    this.hiddenElements.forEach(el => el.style.display = "initial")
+    this.hiddenElements = []
 
-        let projectTasks:Task[]=[]
-        this.allEvents.forEach(ae=>{
-          let pt=this.availabilityData.projectTasks.find(pt=>pt.name===ae.title)
-          if(pt)
-            projectTasks.push(pt)
-        })
-        console.log(projectTasks)
+    let elements: HTMLCollection = document.getElementsByClassName("checkBox")
 
-        let found:boolean=false;
-        let pt = projectTasks.find(pt => pt.id === element.id)
-        if(pt)
-          found=true;
+    for (let i = 0; i < elements.length; i++) {
+      let element = elements[i] as HTMLElement
 
-        if (!found) {
-          this.hiddenElements.push(element)
-          element.style.visibility = "none";
-        }
-      }*/
+      let projectTasks: Task[] = []
+      this.allEvents.forEach(ae => {
+        let pt = this.availabilityData.projectTasks.find(pt => pt.name === ae.title)
+        if (pt)
+          projectTasks.push(pt)
+      })
+
+      let found: boolean = false;
+      let ptask: Task;
+      projectTasks.forEach(pt => {
+        if (pt.id === element.id)
+          ptask = pt
+      })
+
+      if (ptask)
+        found = true;
+
+      if (!found) {
+        this.hiddenElements.push(element)
+        element.style.display = "none";
+      }
     }
   }
 

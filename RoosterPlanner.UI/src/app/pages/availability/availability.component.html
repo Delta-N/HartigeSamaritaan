@@ -10,7 +10,7 @@
         </mat-calendar>
       </div>
       <div class="row tasks-container">
-        <div class="tasktoggle" *ngFor="let item of displayedProjectTasks">
+        <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
           <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
                         checked="true" color="primary">{{item.name}}</mat-checkbox>
         </div>
