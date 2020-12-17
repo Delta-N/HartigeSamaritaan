@@ -25,7 +25,15 @@ import {AuthorizationGuard} from "./guards/authorization.guard";
 import {CreateProjectComponent} from "./components/create-project/create-project.component";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AddAdminComponent} from './components/add-admin/add-admin.component';
-import {DatePipe, FilterPipe, ManagerFilterPipe, TaskFilterPipe, ScheduledPipe} from "./helpers/filter.pipe";
+import {
+  DatePipe,
+  FilterPipe,
+  ManagerFilterPipe,
+  TaskFilterPipe,
+  ScheduledPipe,
+  AgePipe,
+  ScheduledCount
+} from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
@@ -142,6 +150,8 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     PlanComponent,
     ScheduledPipe,
     PlanShiftComponent,
+    AgePipe,
+    ScheduledCount,
 
   ],
   imports: [

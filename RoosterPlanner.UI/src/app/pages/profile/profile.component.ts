@@ -45,7 +45,7 @@ export class ProfileComponent implements OnInit {
     await this.userService.getUser(this.guid).then(x => {
       if (x.id != "") {
         this.user = x;
-        this.age = this.calculateAge(this.user.dateOfBirth);
+        this.age = DateConverter.calculateAge(this.user.dateOfBirth);
         this.loaded = true;
       } else {
         this.loaded = false;
@@ -66,24 +66,8 @@ export class ProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         this.user = result;
-        this.age = this.calculateAge(this.user.dateOfBirth)
+        this.age = DateConverter.calculateAge(this.user.dateOfBirth)
       }
     })
   }
-
-  calculateAge(dateOfBirth: string): any {
-    if (dateOfBirth === null || dateOfBirth === undefined)
-      return "Onbekend";
-
-    const today = new Date();
-    const birthDate = DateConverter.toDate(dateOfBirth);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  }
-
 }

@@ -6,6 +6,7 @@ import {ApiService} from "./api.service";
 import {AvailabilityData} from "../models/availabilitydata";
 import {EntityHelper} from "../helpers/entity-helper";
 import {Availability} from "../models/availability";
+import {Schedule} from "../models/schedule";
 
 @Injectable({
   providedIn: 'root'
@@ -94,5 +95,24 @@ export class AvailabilityService {
         }
       )
     return updatedAvailability
+  }
+
+  async changeAvailabilities(scheduled: Schedule[]): Promise<boolean> {
+
+    if (!scheduled) {
+      this.errorService.error("Ongeldige schedule ontvangen")
+      return false;
+    }
+    let success: boolean = false;
+    await this.apiService.patch<HttpResponse<boolean>>(`${HttpRoutes.availabilityApiUrl}`,scheduled)
+      .toPromise()
+      .then(res => {
+          if (res.ok)
+            success = true;
+        }, Error => {
+          this.errorService.httpError(Error)
+        }
+      )
+    return success;
   }
 }

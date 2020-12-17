@@ -58,6 +58,14 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'plan/:id/:date',
+    component: PlanComponent,
+    canActivate: [
+      MsalGuard,
+      AuthorizationGuard
+    ]
+  },
+  {
     path: 'plan/:id',
     component: PlanComponent,
     canActivate: [

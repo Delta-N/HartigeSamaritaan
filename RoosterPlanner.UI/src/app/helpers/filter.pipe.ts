@@ -4,6 +4,7 @@ import {Task} from "../models/task";
 import {DateConverter} from "./date-converter";
 import {Manager} from "../models/manager";
 import {Shift} from "../models/shift";
+import {Schedule} from "../models/schedule";
 
 @Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
@@ -69,7 +70,6 @@ export class DatePipe implements PipeTransform {
 @Pipe({name: 'scheduledPipe'})
 export class ScheduledPipe implements PipeTransform {
   transform(value: Shift): number {
-    console.log("hier")
     let result: number = 0;
     if (value.availabilities && value.availabilities.length > 0) {
       value.availabilities.forEach(a => {
@@ -80,3 +80,35 @@ export class ScheduledPipe implements PipeTransform {
     return result;
   }
 }
+
+@Pipe({name: 'agePipe'})
+export class AgePipe implements PipeTransform {
+  transform(value: number): number {
+    if (value) {
+      const today = new Date();
+      const birthDate = DateConverter.toDate(value);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+  }
+}
+
+@Pipe({name: 'scheduledCount'})
+export class ScheduledCount implements PipeTransform {
+  transform(value: Schedule[]): number {
+    let result: number = 0;
+    if (value) {
+     value.forEach(v=>{
+       if(v.scheduledThisDay)
+         result++
+     })
+    }
+    return result;
+  }
+}
+

@@ -14,10 +14,12 @@ namespace RoosterPlanner.Data.Repositories
         Task<List<Shift>> GetByProjectAsync(Guid projectId);
         Task<List<Shift>> AddShiftsAsync(List<Shift> shifts);
         Task<Shift> GetShiftAsync(Guid shiftId);
+        Task<Shift> GetShiftWithAvailabilitiesAsync(Guid shiftId);
         Task<List<Shift>> GetByProjectAndDateWithAvailabilitiesAsync(Guid projectId, DateTime date);
         Task<List<Shift>> GetByProjectUserAndDateAsync(Guid projectId, Guid userId, DateTime date);
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId);
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId, Guid userId);
+        
     }
 
     public class ShiftRepository : Repository<Shift>, IShiftRepository
@@ -128,6 +130,30 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(s => s.Task)
                 .Include(s => s.Project)
                 .Where(s => s.Id == shiftId).FirstOrDefaultAsync();
+        }
+
+        public async Task<Shift> GetShiftWithAvailabilitiesAsync(Guid shiftId)
+        {
+            if (shiftId == Guid.Empty)
+                return await Task.FromResult<Shift>(null);
+
+            Shift shift = await EntitySet
+                .AsNoTracking()
+                .Include(s => s.Task)
+                .Include(s => s.Project)
+                .Include(s=>s.Availabilities)
+                .ThenInclude(a=>a.Participation)
+                .Where(s => s.Id == shiftId).FirstOrDefaultAsync();
+
+            shift.Task.Shifts = null;
+            shift.Availabilities.ForEach(a =>
+            {
+                if (a.Participation != null)
+                    a.Participation.Availabilities = null;
+                a.Shift = null;  
+            });
+            
+            return shift;
         }
 
         public async Task<List<Shift>> GetByProjectAndDateWithAvailabilitiesAsync(Guid projectId, DateTime date)

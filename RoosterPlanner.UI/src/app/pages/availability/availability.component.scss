@@ -1,3 +1,8 @@
+
+.content-container {
+  height: 75vh;
+}
+
 #title {
   flex-direction: row;
   height: initial;
@@ -80,7 +85,7 @@
 
 
 .calendarbox {
-  max-height: 500px;
+  height: 100%;
   overflow: auto;
 }
 
@@ -119,7 +124,6 @@
 
   .cal-event-title {
     font-size: 20px;
-    display: flex;
     justify-content: center;
     color: #707070;
   }
@@ -138,27 +142,16 @@
   left: 39%
 }
 
-.spacer {
-  height: 60%;
-}
 
 .tasktoggle {
   display: flex !important;
   margin: 5px;
 }
 
-
-/*@media only screen and (max-width: 1200px) {
-  ::ng-deep .cal-event {
-    .cal-event-actions {
-      left: 10%;
-    }
-  }
-}*/
-
-
 @media only screen and (max-width: 992px) {
-
+  .cal-event-title {
+    font-size: 12px;
+  }
   ::ng-deep .custom-button {
 
     font-size: 16px;
@@ -214,6 +207,12 @@
   }
 }
 
+@media only screen and (max-width: 525px) {
+  .cal-event-title {
+    font-size: 10px;
+  }
+}
+
 @media only screen and (max-width: 475px) {
   .row {
     display: block;
@@ -250,11 +249,4 @@
     margin-top: 5px;
   }
 }
-
-@media only screen and (max-width: 350px) {
-    .cal-event-title {
-      font-size: 15px;
-    }
-}
-
 

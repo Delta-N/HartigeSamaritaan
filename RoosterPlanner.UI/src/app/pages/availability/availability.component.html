@@ -1,7 +1,7 @@
 <div class="row bar">
   <h1>Beschikbaarheid opgeven</h1>
 </div>
-<div class="row">
+<div class="row content-container">
   <div class="col-4">
     <div class="calendar">
       <div class="calendar-wrapper">
@@ -10,7 +10,7 @@
         </mat-calendar>
       </div>
       <div class="row tasks-container">
-        <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
+        <div class="tasktoggle" *ngFor="let item of displayedProjectTasks">
           <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
                         checked="true" color="primary">{{item.name}}</mat-checkbox>
         </div>
@@ -69,7 +69,7 @@
       >
         <div class="flex-container">
           <div class="row flex-container" id="title">
-            <button mat-icon-button class="star"  [id]="weekEvent.event.id" (click)="changePreference(weekEvent.event)">
+            <button mat-icon-button class="star" [id]="weekEvent.event.id" (click)="changePreference(weekEvent.event)">
               <mat-icon>star_border</mat-icon>
             </button>
             <mwl-calendar-event-title

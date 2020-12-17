@@ -61,6 +61,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   participation: Participation;
   availabilityData: AvailabilityData;
   displayedProjectTasks: Task[] = [];
+  currentDayProjectTasks: Task[] = [];
   shifts: Shift[] = [];
 
   selectedDate: Moment;
@@ -86,6 +87,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   noLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">X</span>');
   scheduledLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button scheduled">Download Instructies</span>');
 
+  hiddenElements: HTMLElement[] = [];
 
   constructor(private breadcrumbService: BreadcrumbService,
               private shiftService: ShiftService,
@@ -108,7 +110,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
           this.availabilityData = res;
           this.displayedProjectTasks = this.availabilityData.projectTasks;
         })
-
 
 
       //get participation including project
@@ -390,11 +391,38 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   async getShifts(date: Date) {
-    await this.shiftService.getAllShiftsOnDate(this.projectId, this.userId, moment(date).set("hour", 12).toDate()).then(async res => {
+    await this.shiftService.getAllShiftsOnDateWithUserAvailability(this.projectId, this.userId, moment(date).set("hour", 12).toDate()).then(async res => {
       this.shifts = res;
     });
     if (this.shifts.length > 0) {
       this.addEvents();
+      //todo
+      /*this.hiddenElements.forEach(el=>el.style.visibility="initial")
+      this.hiddenElements=[]
+
+      let elements: HTMLCollection = document.getElementsByClassName("checkBox")
+      console.log(elements)
+      for (let i = 0; i < elements.length; i++) {
+        let element = elements[i] as HTMLElement
+
+        let projectTasks:Task[]=[]
+        this.allEvents.forEach(ae=>{
+          let pt=this.availabilityData.projectTasks.find(pt=>pt.name===ae.title)
+          if(pt)
+            projectTasks.push(pt)
+        })
+        console.log(projectTasks)
+
+        let found:boolean=false;
+        let pt = projectTasks.find(pt => pt.id === element.id)
+        if(pt)
+          found=true;
+
+        if (!found) {
+          this.hiddenElements.push(element)
+          element.style.visibility = "none";
+        }
+      }*/
     }
   }
 
@@ -429,13 +457,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.filterEvents();
     this.refresh.next();
 
-    setTimeout(()=>{
+    setTimeout(() => {
       if (scheduledId) {
         scheduledId.forEach(id => this.showScheduledButton(id))
       }
-    },200)
-
-
+    }, 200)
   }
 
   filterEvents() {

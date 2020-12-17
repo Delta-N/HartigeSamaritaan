@@ -24,19 +24,14 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {MatCalendar} from "@angular/material/datepicker";
 import {Moment} from "moment";
 import {MatCheckboxChange} from "@angular/material/checkbox";
-import {UserService} from "../../services/user.service";
 import {BehaviorSubject, Subject} from "rxjs";
-import {Participation} from "../../models/participation";
-import {ParticipationService} from "../../services/participation.service";
 import {AvailabilityService} from "../../services/availability.service";
-import {AvailabilityData, ScheduleStatus} from "../../models/availabilitydata";
+import {AvailabilityData} from "../../models/availabilitydata";
 import {Task} from 'src/app/models/task';
-import {Availability} from "../../models/availability";
 import {CustomEventTitleFormatter} from "../../helpers/custon-event-title-formatter.provider";
 import {take} from "rxjs/operators";
 import {Project} from "../../models/project";
 import {ProjectService} from "../../services/project.service";
-import {TaskService} from "../../services/task.service";
 
 
 @Component({
@@ -67,7 +62,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
   selectedDate: Moment;
 
   view: CalendarView = CalendarView.Day;
-  viewDate: Date = new Date();
+  viewDate: Date;
 
   minDate: Date;
   maxDate: Date;
@@ -99,6 +94,12 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       let projectId: string = params.get('id');
+      let date: string = params.get('date')
+      if (date && date !== 'Invalid Date')
+        this.viewDate = moment(date).toDate();
+      else
+        this.viewDate = new Date();
+
 
       //get basic data
       await this.availabilityService.getAvailabilityDataOfProject(projectId).then(res => {
@@ -185,7 +186,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
   actions: CalendarEventAction[] = [
     {
-      label: this.scheduledLabel, //todo aanpassen
+      label: this.scheduledLabel,
       a11yLabel: 'Schedule',
       onClick: ({event}: { event: CalendarEvent }): void => {
         this.Plan(event.id)
@@ -305,7 +306,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
       necessaryElement.innerText = shift.participantsRequired + " Nodig";
 
-      let availableNumber = shift.availabilities ? shift.availabilities.length : 0;
+      let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
       availableElement.innerText = availableNumber + " Beschikbaar";
 
       let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0

@@ -24,24 +24,18 @@ namespace RoosterPlanner.Api.Controllers
     {
         private readonly ILogger<AvailabilityController> logger;
         private readonly IAvailabilityService availabilityService;
-        private readonly IParticipationService participationService;
         private readonly IShiftService shiftService;
-        private readonly IProjectService projectService;
         private readonly ITaskService taskService;
 
         public AvailabilityController(
             ILogger<AvailabilityController> logger,
             IAvailabilityService availabilityService,
-            IParticipationService participationService,
-            IProjectService projectService,
             IShiftService shiftService,
             ITaskService taskService)
         {
             this.logger = logger;
             this.availabilityService = availabilityService;
             this.shiftService = shiftService;
-            this.participationService = participationService;
-            this.projectService = projectService;
             this.taskService = taskService;
         }
 
@@ -67,7 +61,6 @@ namespace RoosterPlanner.Api.Controllers
 
                 List<Schedule> knownAvailabilities = new List<Schedule>();
 
-                
                 foreach (IGrouping<DateTime, Shift> grouping in shiftResult.Data.GroupBy(s => s.Date))
                 {
                     int numberOfShifts = grouping.Count();
@@ -83,9 +76,10 @@ namespace RoosterPlanner.Api.Controllers
                                 scheduled = true;
                         });
                     }
-                    if(scheduled)
+
+                    if (scheduled)
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Scheduled));
-                    else if(numberOfShifts==numberOfAvailabilities)
+                    else if (numberOfShifts == numberOfAvailabilities)
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Complete));
                     else
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Incomplete));
@@ -93,7 +87,6 @@ namespace RoosterPlanner.Api.Controllers
 
                 List<TaskViewModel> taskViewModels = taskResult.Data
                     .Select(projectTask => TaskViewModel.CreateVm(projectTask.Task)).ToList();
-
 
                 AvailabilityDataViewModel vm = new AvailabilityDataViewModel
                 {
@@ -109,7 +102,7 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-        
+
         [HttpGet("find/{projectId}")]
         public async Task<ActionResult<AvailabilityDataViewModel>> GetAvailabilityData(Guid projectId)
         {
@@ -130,7 +123,6 @@ namespace RoosterPlanner.Api.Controllers
 
                 List<Schedule> knownAvailabilities = new List<Schedule>();
 
-                
                 foreach (IGrouping<DateTime, Shift> grouping in shiftResult.Data.GroupBy(s => s.Date))
                 {
                     List<AvailabilityStatus> dateStatus = new List<AvailabilityStatus>();
@@ -139,7 +131,7 @@ namespace RoosterPlanner.Api.Controllers
                         int numberOfAvailabilities = shift.Availabilities.Count;
                         int numberOfSchedule = shift.Availabilities.Count(a => a.Type == AvailibilityType.Scheduled);
                         if (numberOfSchedule >= shift.ParticipantsRequired)
-                            dateStatus.Add(AvailabilityStatus.Scheduled); 
+                            dateStatus.Add(AvailabilityStatus.Scheduled);
                         else if (numberOfAvailabilities >= shift.ParticipantsRequired)
                             dateStatus.Add(AvailabilityStatus.Complete);
                         else
@@ -149,15 +141,14 @@ namespace RoosterPlanner.Api.Controllers
                     Schedule schedule = new Schedule(grouping.Key, AvailabilityStatus.Incomplete);
                     if (dateStatus.All(a => a == AvailabilityStatus.Complete || a == AvailabilityStatus.Scheduled))
                         schedule.Status = AvailabilityStatus.Complete;
-                    if(dateStatus.All(a=>a==AvailabilityStatus.Scheduled))
+                    if (dateStatus.All(a => a == AvailabilityStatus.Scheduled))
                         schedule.Status = AvailabilityStatus.Scheduled;
-                    
+
                     knownAvailabilities.Add(schedule);
                 }
 
                 List<TaskViewModel> taskViewModels = taskResult.Data
                     .Select(projectTask => TaskViewModel.CreateVm(projectTask.Task)).ToList();
-
 
                 AvailabilityDataViewModel vm = new AvailabilityDataViewModel
                 {
@@ -235,7 +226,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 availability.Preference = availabilityViewModel.Preference;
                 availability.Type = availabilityViewModel.Type;
-                
+
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 availability.LastEditBy = oid;
 
@@ -244,8 +235,55 @@ namespace RoosterPlanner.Api.Controllers
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 AvailabilityViewModel vm = AvailabilityViewModel.CreateVm(result.Data);
-                
+
                 return Ok(vm);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(SaveAvailabilityAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
+        [HttpPatch]
+        public async Task<ActionResult<bool>> UpdateAvailabilities(List<ScheduleViewModel> scheduleViewModels)
+        {
+            if (scheduleViewModels == null)
+                return BadRequest("No Schedules received");
+            bool invalidSchedule = false;
+            scheduleViewModels.ForEach(vm =>
+            {
+                if (vm.AvailabilityId == Guid.Empty || vm.Person == null || vm.Person.Id == Guid.Empty)
+                    invalidSchedule = true;
+            });
+            if (invalidSchedule)
+                return BadRequest("Invalid Schedules received");
+
+            try
+            {
+                bool succeeded = true;
+                string message = "Error adding: ";
+                foreach (ScheduleViewModel scheduleViewModel in scheduleViewModels)
+                {
+                    Availability availability =
+                        (await availabilityService.GetAvailability(scheduleViewModel.AvailabilityId)).Data;
+
+                    if (availability == null) continue;
+                    availability.Type = scheduleViewModel.ScheduledThisDay
+                        ? AvailibilityType.Scheduled
+                        : AvailibilityType.Ok;
+                    TaskResult<Availability> result = await availabilityService.UpdateAvailability(availability);
+
+                    if (result.Succeeded) continue;
+                    succeeded = false;
+                    message += scheduleViewModel.AvailabilityId;
+                }
+
+                if (!succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+
+                return Ok(true);
             }
             catch (Exception ex)
             {

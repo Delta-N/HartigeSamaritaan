@@ -13,6 +13,7 @@ namespace RoosterPlanner.Service
     {
         Task<TaskResult<Shift>> RemoveShiftAsync(Shift shift);
         Task<TaskResult<Shift>> GetShiftAsync(Guid shiftId);
+        Task<TaskResult<Shift>> GetShiftWithAvailabilitiesAsync(Guid shiftId);
         Task<TaskResult<Shift>> UpdateShiftAsync(Shift shift);
         Task<TaskListResult<Shift>> CreateShiftsAsync(List<Shift> shifts);
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId);
@@ -20,6 +21,7 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date);
         Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId);
         Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId, Guid userId);
+        
     }
 
     public class ShiftService : IShiftService
@@ -60,7 +62,26 @@ namespace RoosterPlanner.Service
             return result;
         }
 
-        
+        public async Task<TaskResult<Shift>> GetShiftWithAvailabilitiesAsync(Guid shiftId)
+        {
+            if (shiftId == Guid.Empty)
+                throw new ArgumentNullException(nameof(shiftId));
+
+            TaskResult<Shift> result = new TaskResult<Shift>();
+            try
+            {
+                result.Data = await shiftRepository.GetShiftWithAvailabilitiesAsync(shiftId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error getting shift " + shiftId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
+            return result;
+        }
 
         public async Task<TaskResult<Shift>> UpdateShiftAsync(Shift shift)
         {

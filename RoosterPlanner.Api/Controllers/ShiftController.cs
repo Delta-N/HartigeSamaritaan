@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
+using RoosterPlanner.Api.Models.Constants;
+using RoosterPlanner.Common.Config;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.Types;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
+using Shift = RoosterPlanner.Models.Shift;
 using Task = RoosterPlanner.Models.Task;
 using Type = RoosterPlanner.Api.Models.Type;
 
@@ -20,18 +26,31 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ShiftController : ControllerBase
     {
+        private readonly AzureAuthenticationConfig azureB2CConfig;
         private readonly ILogger<ShiftController> logger;
         private readonly IShiftService shiftService;
         private readonly IProjectService projectService;
+        private readonly IPersonService personService;
         private readonly ITaskService taskService;
+        private readonly IAvailabilityService availabilityService;
 
-        public ShiftController(ILogger<ShiftController> logger, IShiftService shiftService,
-            IProjectService projectService, ITaskService taskService)
+        public ShiftController(
+            ILogger<ShiftController> logger,
+            IShiftService shiftService,
+            IProjectService projectService,
+            ITaskService taskService,
+            IPersonService personService,
+            IOptions<AzureAuthenticationConfig> azureB2CConfig,
+            IAvailabilityService availabilityService)
+
         {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.shiftService = shiftService ?? throw new ArgumentNullException(nameof(shiftService));
-            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-            this.taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
+            this.logger = logger;
+            this.shiftService = shiftService;
+            this.projectService = projectService;
+            this.personService = personService;
+            this.taskService = taskService;
+            this.azureB2CConfig = azureB2CConfig.Value;
+            this.availabilityService = availabilityService;
         }
 
         [HttpGet("project/{id}")]
@@ -66,7 +85,7 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid userI");
             try
             {
-                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id,userId,date);
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id, userId, date);
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
@@ -126,6 +145,75 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
+        
+
+        [HttpGet("schedule/{id}")]
+        public async Task<ActionResult<ScheduleDataViewModel>> GetScheduleAsync(Guid id)
+        {
+            if (id == Guid.Empty)
+                return BadRequest();
+            try
+            {
+                TaskResult<Shift> shiftResult = await shiftService.GetShiftWithAvailabilitiesAsync(id);
+                if (!shiftResult.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = shiftResult.Message});
+                if (shiftResult.Data == null)
+                    return NotFound();
+                List<ScheduleViewModel> schedules = new List<ScheduleViewModel>();
+
+                foreach (Availability availability in shiftResult.Data.Availabilities.Where(a=>a.Type==AvailibilityType.Ok || a.Type==AvailibilityType.Scheduled)) //filter for people that are registerd to be able to work
+                {
+                    //list all availabilities in this project of this person
+                    Task<TaskListResult<Availability>> availabilities = this.availabilityService.FindAvailabilitiesAsync(
+                        availability.Participation.ProjectId,
+                        availability.Participation.PersonId);
+
+                    //lookup person information in B2C
+                    Task<TaskResult<User>> person = personService.GetUserAsync(availability.Participation.PersonId);
+
+                    await System.Threading.Tasks.Task.WhenAll(availabilities, person);
+
+                    //see if person is scheduled this day and this shift
+                    if (availabilities.Result?.Data == null || availabilities.Result.Data.Count <= 0) continue;
+                    int numberOfTimeScheduledThisDay = availabilities.Result.Data.Where(a => a.Shift.Date == shiftResult.Data.Date).Count(a => a.Type == AvailibilityType.Scheduled);
+
+                    bool scheduledThisShift = availabilities.Result.Data.FirstOrDefault(a =>
+                        a.ShiftId == id && a.Type == AvailibilityType.Scheduled)!=null;
+
+                    
+                    //create viewmodel of person
+                    PersonViewModel personViewModel = null;
+                    if (person.Result?.Data != null)
+                        personViewModel=PersonViewModel.CreateVmFromUser(person.Result.Data,Extensions.GetInstance(azureB2CConfig));
+                    
+
+                    //add scheduleViewmodel to list
+                    if (personViewModel != null)
+                        schedules.Add(new ScheduleViewModel
+                     {
+                         Person = personViewModel,
+                         NumberOfTimesScheduledThisProject = numberOfTimeScheduledThisDay,
+                         ScheduledThisDay = numberOfTimeScheduledThisDay>0,
+                         ScheduledThisShift = scheduledThisShift,
+                         AvailabilityId = availability.Id,
+                         Preference = availability.Preference
+                     });
+                }
+
+                ScheduleDataViewModel vm = new ScheduleDataViewModel() {
+                    Schedules = schedules,
+                    Shift = ShiftViewModel.CreateVm(shiftResult.Data)
+                };
+                
+                return Ok(vm);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(GetScheduleAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
 
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost]
@@ -168,7 +256,8 @@ namespace RoosterPlanner.Api.Controllers
                 }
 
                 if (shifts.Count != shiftViewModels.Count)
-                    return UnprocessableEntity(new ErrorViewModel{Type = Type.Error, Message = "Could not covert al viewmodels to shifts"});
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = "Could not covert al viewmodels to shifts"});
 
                 TaskListResult<Shift> result = await shiftService.CreateShiftsAsync(shifts);
 
@@ -253,8 +342,10 @@ namespace RoosterPlanner.Api.Controllers
 
                 TaskResult<Shift> result = await shiftService.RemoveShiftAsync(shift.Data);
 
-                return !result.Succeeded ? UnprocessableEntity(new ErrorViewModel
-                    {Type = Type.Error, Message = result.Message}) : Ok(result);
+                return !result.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = result.Message})
+                    : Ok(result);
             }
             catch (Exception ex)
             {

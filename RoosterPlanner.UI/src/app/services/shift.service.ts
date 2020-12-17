@@ -5,6 +5,7 @@ import {EntityHelper} from "../helpers/entity-helper";
 import {HttpResponse} from "@angular/common/http";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {ErrorService} from "./error.service";
+import {Scheduledata} from "../models/scheduledata";
 
 @Injectable({
   providedIn: 'root'
@@ -134,23 +135,22 @@ export class ShiftService {
     return shift;
   }
 
-  async getShiftWithAvailabilaties(shiftId: string): Promise<Shift> {
+  async getScheduleData(shiftId: string): Promise<Scheduledata> {
     if (!shiftId) {
       this.errorService.error("ShiftId mag niet leeg zijn")
       return null;
     }
-    let shift: Shift = null;
-    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/availabilities/${shiftId}`)
+    let scheduledata: Scheduledata = null;
+    await this.apiService.get<HttpResponse<Scheduledata>>(`${HttpRoutes.shiftApiUrl}/schedule/${shiftId}`)
       .toPromise()
       .then(res => {
         if (res.ok) {
-          shift = res.body
-          shift.date != null ? shift.date = new Date(shift.date) : null;
+          scheduledata = res.body
         }
       }, Error => {
         this.errorService.httpError(Error)
       })
-    return shift;
+    return scheduledata;
   }
 
   async postShifts(shifts: Shift[]): Promise<Shift[]> {
