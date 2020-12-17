@@ -28,7 +28,7 @@ namespace RoosterPlanner.Api.Models
         {
             if (project == null)
                 return null;
-            return new()
+            return new ProjectDetailsViewModel()
             {
                 Id = project.Id,
                 Name = project.Name,
@@ -50,7 +50,7 @@ namespace RoosterPlanner.Api.Models
 
         public static Project CreateProject(ProjectDetailsViewModel projectDetailsViewModel)
         {
-            return new(projectDetailsViewModel.Id)
+            return new Project(projectDetailsViewModel.Id)
             {
                 Name = projectDetailsViewModel.Name,
                 Address = projectDetailsViewModel.Address,
