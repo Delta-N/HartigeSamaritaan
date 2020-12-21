@@ -8,7 +8,7 @@
                   <mat-card-title><a [routerLink]="['/project', item.id]">{{item.name}}</a></mat-card-title>
                </div>
                <mat-card-content>
-                  <a (click)="todo()"><p>Plannen</p></a>
+                  <a [routerLink]="['/plan', item.id]"><p>Plannen</p></a>
                   <a [routerLink]="['/shifts', item.id]"><p>Shiften</p></a>
                   <a (click)="todo()"><p>Medewerkers</p></a>
                </mat-card-content>

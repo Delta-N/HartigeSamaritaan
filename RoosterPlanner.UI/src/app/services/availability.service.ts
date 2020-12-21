@@ -6,6 +6,7 @@ import {ApiService} from "./api.service";
 import {AvailabilityData} from "../models/availabilitydata";
 import {EntityHelper} from "../helpers/entity-helper";
 import {Availability} from "../models/availability";
+import {Schedule} from "../models/schedule";
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,23 @@ export class AvailabilityService {
     }
     let availabilityDate: AvailabilityData = null;
     await this.apiService.get<HttpResponse<AvailabilityData>>(`${HttpRoutes.availabilityApiUrl}/find/${projectId}/${userId}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          availabilityDate = res.body;
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return availabilityDate;
+  }
+
+  async getAvailabilityDataOfProject(projectId: string): Promise<AvailabilityData> {
+    if (!projectId) {
+      this.errorService.error("projectId mag niet leeg zijn")
+      return null;
+    }
+    let availabilityDate: AvailabilityData = null;
+    await this.apiService.get<HttpResponse<AvailabilityData>>(`${HttpRoutes.availabilityApiUrl}/find/${projectId}`)
       .toPromise()
       .then(res => {
         if (res.ok)
@@ -77,5 +95,24 @@ export class AvailabilityService {
         }
       )
     return updatedAvailability
+  }
+
+  async changeAvailabilities(scheduled: Schedule[]): Promise<boolean> {
+
+    if (!scheduled) {
+      this.errorService.error("Ongeldige schedule ontvangen")
+      return false;
+    }
+    let success: boolean = false;
+    await this.apiService.patch<HttpResponse<boolean>>(`${HttpRoutes.availabilityApiUrl}`,scheduled)
+      .toPromise()
+      .then(res => {
+          if (res.ok)
+            success = true;
+        }, Error => {
+          this.errorService.httpError(Error)
+        }
+      )
+    return success;
   }
 }

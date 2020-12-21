@@ -46,4 +46,19 @@ export class DateConverter {
   static dateToMoment(date: Date) {
     return moment(date)
   }
+
+  static calculateAge(dateOfBirth: string): string {
+    if (dateOfBirth === null || dateOfBirth === undefined)
+      return "Onbekend";
+
+    const today = new Date();
+    const birthDate = DateConverter.toDate(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age.toString();
+  }
 }

@@ -16,6 +16,8 @@ import {ShiftOverviewComponent} from "./pages/shift-overview/shift-overview.comp
 import {ManageComponent} from "./pages/manage/manage.component";
 import {ManageGuard} from "./guards/manage.guard";
 import {AvailabilityComponent} from "./pages/availability/availability.component";
+import {PlanComponent} from "./pages/plan/plan.component";
+import {PlanShiftComponent} from "./pages/plan-shift/plan-shift.component";
 
 const routes: Routes = [
   {
@@ -47,6 +49,32 @@ const routes: Routes = [
       MsalGuard
     ]
   },
+  {
+    path: 'plan/shift/:id',
+    component: PlanShiftComponent,
+    canActivate: [
+      MsalGuard,
+      AuthorizationGuard
+    ]
+  },
+  {
+    path: 'plan/:id/:date',
+    component: PlanComponent,
+    canActivate: [
+      MsalGuard,
+      AuthorizationGuard
+    ]
+  },
+  {
+    path: 'plan/:id',
+    component: PlanComponent,
+    canActivate: [
+      MsalGuard,
+      AuthorizationGuard
+    ]
+  },
+
+
   {
     path: 'profile/:id',
     component: ProfileComponent,

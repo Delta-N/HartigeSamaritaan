@@ -1,5 +1,5 @@
 <div class="row bar">
-  <h1>Beschikbaarheid opgeven</h1>
+  <h1>Plannen - Overzicht</h1>
 </div>
 <div class="row content-container">
   <div class="col-4">
@@ -69,9 +69,6 @@
       >
         <div class="flex-container">
           <div class="row flex-container" id="title">
-            <button mat-icon-button class="star" [id]="weekEvent.event.id" (click)="changePreference(weekEvent.event)">
-              <mat-icon>star_border</mat-icon>
-            </button>
             <mwl-calendar-event-title
               [event]="weekEvent.tempEvent || weekEvent.event"
               [customTemplate]="eventTitleTemplate"
@@ -79,9 +76,10 @@
             ></mwl-calendar-event-title>
           </div>
           <div class="row" id="spacer">
-            <button mat-fab color="primary" class="scheduledBtn" [id]="'scheduledBtn'+weekEvent.event.id" hidden>
-              <mat-icon>check_circle_outline</mat-icon>
-            </button>
+            <div class="row" id="necessary-{{weekEvent.event.id}}">6 Nodig</div>
+            <div class="row" id="scheduled-{{weekEvent.event.id}}">6 Ingeroosterd</div>
+            <div class="row" id="available-{{weekEvent.event.id}}">6 Beschikbaar</div>
+
           </div>
           <div class="row" id="actions">
             <mwl-calendar-event-actions
