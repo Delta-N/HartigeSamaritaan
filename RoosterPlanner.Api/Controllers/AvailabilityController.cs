@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models.Enums;
 using RoosterPlanner.Models.Types;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
@@ -182,7 +183,7 @@ namespace RoosterPlanner.Api.Controllers
                     return BadRequest("Unable to convert availabilityViewModel to Availability");
 
                 if (availability.Participation == null || availability.Shift == null)
-                    return BadRequest("Unable to add Participation and/of Shfit to Availability");
+                    return BadRequest("Unable to add Participation and/of shift to Availability");
 
                 availability.Participation = null;
                 availability.Shift = null;

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using RoosterPlanner.Models.Models.Enums;
 
-namespace RoosterPlanner.Api.Models.Constants
+namespace RoosterPlanner.Api.Models
 {
     public class AvailabilityDataViewModel
     {
@@ -25,12 +26,5 @@ namespace RoosterPlanner.Api.Models.Constants
             Date = date;
             Status = status;
         }
-    }
-
-    public enum AvailabilityStatus
-    {
-        Incomplete,
-        Complete,
-        Scheduled
     }
 }
