@@ -15,6 +15,7 @@ import {AddShiftsComponent} from "./components/add-shifts/add-shifts.component";
 import {ShiftOverviewComponent} from "./pages/shift-overview/shift-overview.component";
 import {ManageComponent} from "./pages/manage/manage.component";
 import {ManageGuard} from "./guards/manage.guard";
+import {AvailabilityComponent} from "./pages/availability/availability.component";
 
 const routes: Routes = [
   {
@@ -38,9 +39,13 @@ const routes: Routes = [
       MsalGuard,
       AuthorizationGuard
     ],
-    data: {
-      breadcrumb: 'Admin'
-    }
+  },
+  {
+    path: 'availability/:id',
+    component: AvailabilityComponent,
+    canActivate: [
+      MsalGuard
+    ]
   },
   {
     path: 'profile/:id',

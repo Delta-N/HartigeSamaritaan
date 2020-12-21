@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 html, body {
   height: 100%;
@@ -200,6 +201,10 @@ h2 {
   .data-row {
     align-items: center;
   }
+  h1 {
+    font: normal normal normal 30px/50px Segoe UI;;
+  }
+
 }
 
 @media only screen and (max-width: 450px) {
@@ -213,8 +218,18 @@ h2 {
   .bar {
     display: block;
   }
+
+}
+
+@media only screen and (max-width: 350px) {
+  h1 {
+    font: normal normal normal 20px/30px Segoe UI;
+    margin: 0;
+  }
+
 }
 
 #searchbar {
   max-height: 25px;
 }
+

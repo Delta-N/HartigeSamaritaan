@@ -1,11 +1,12 @@
 ﻿import {Entity} from "./entity.model";
 import {User} from "./user";
 import {Project} from "./project";
+import {Availability} from "./availability";
 
 export class Participation extends Entity {
   public person: User;
   public project: Project;
   public maxWorkingHoursPerWeek: number;
-  public Availabilities: any; //list van availiblities maken
+  public Availabilities: Availability[];
   public WantsToWorkWith: any; //list van collaborations
 }

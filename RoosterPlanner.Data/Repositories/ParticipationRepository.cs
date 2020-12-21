@@ -27,7 +27,6 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
-                .Include(p => p.Availabilities)
                 .Include(p => p.WantsToWorkWith)
                 .Where(p => p.PersonId == personId && !p.Project.Closed && (
                     p.Project.ParticipationEndDate >= DateTime.Now ||
@@ -41,7 +40,6 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
-                .Include(p => p.Availabilities)
                 .Include(p => p.WantsToWorkWith)
                 .Where(p => p.PersonId == personId && p.ProjectId == projectId)
                 .FirstOrDefaultAsync();

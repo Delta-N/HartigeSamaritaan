@@ -1,0 +1,141 @@
+<div class="row bar">
+  <h1>Beschikbaarheid opgeven</h1>
+</div>
+<div class="row">
+  <div class="col-4">
+    <div class="calendar">
+      <div class="calendar-wrapper">
+        <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged()" [minDate]="minDate"
+                      [maxDate]="maxDate">
+        </mat-calendar>
+      </div>
+      <div class="row tasks-container">
+        <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
+          <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
+                        checked="true" color="primary">{{item.name}}</mat-checkbox>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="row datebox">
+      <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      <div class="date" id="date"> {{viewDate | datePipe}}</div>
+      <button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
+        <mat-icon>navigate_next</mat-icon>
+      </button>
+    </div>
+    <ng-template
+      #customEventTemplate
+      let-weekEvent="weekEvent"
+      let-tooltipPlacement="tooltipPlacement"
+      let-eventClicked="eventClicked"
+      let-tooltipTemplate="tooltipTemplate"
+      let-tooltipAppendToBody="tooltipAppendToBody"
+      let-tooltipDisabled="tooltipDisabled"
+      let-tooltipDelay="tooltipDelay"
+      let-column="column"
+      let-daysInWeek="daysInWeek"
+    >
+      <div
+        class="cal-event"
+        [ngStyle]="{
+         backgroundColor: weekEvent.event.color?.secondary,
+         borderColor: weekEvent.event.color?.primary
+         }"
+        [mwlCalendarTooltip]="
+         !tooltipDisabled
+         ? (weekEvent.event.title
+         | calendarEventTitle
+         : (daysInWeek === 1 ? 'dayTooltip' : 'weekTooltip')
+         : weekEvent.tempEvent || weekEvent.event)
+         : ''
+         "
+        [tooltipPlacement]="tooltipPlacement"
+        [tooltipEvent]="weekEvent.tempEvent || weekEvent.event"
+        [tooltipTemplate]="tooltipTemplate"
+        [tooltipAppendToBody]="tooltipAppendToBody"
+        [tooltipDelay]="tooltipDelay"
+        (mwlClick)="eventClicked.emit({ sourceEvent: $event })"
+        (mwlKeydownEnter)="eventClicked.emit({ sourceEvent: $event })"
+        tabindex="0"
+        role="application"
+        [attr.aria-label]="
+         { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }
+         | calendarA11y: 'eventDescription'
+         "
+      >
+        <div class="flex-container">
+          <div class="row flex-container" id="title">
+            <button mat-icon-button class="star"  [id]="weekEvent.event.id" (click)="changePreference(weekEvent.event)">
+              <mat-icon>star_border</mat-icon>
+            </button>
+            <mwl-calendar-event-title
+              [event]="weekEvent.tempEvent || weekEvent.event"
+              [customTemplate]="eventTitleTemplate"
+              [view]="daysInWeek === 1 ? 'day' : 'week'"
+            ></mwl-calendar-event-title>
+          </div>
+          <div class="row" id="spacer">
+            <button mat-fab color="primary" class="scheduledBtn" [id]="'scheduledBtn'+weekEvent.event.id" hidden>
+              <mat-icon>check_circle_outline</mat-icon>
+            </button>
+          </div>
+          <div class="row" id="actions">
+            <mwl-calendar-event-actions
+              [event]="weekEvent.tempEvent || weekEvent.event"
+              [customTemplate]="eventActionsTemplate"
+            >
+            </mwl-calendar-event-actions>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #eventTitleTemplate let-event="event" let-view="view">
+      <span
+        class="cal-event-title"
+        [innerHTML]="event.title | calendarEventTitle: view:event"
+        [attr.aria-hidden]="{} | calendarA11y: 'hideEventTitle'"
+      >
+      </span>
+    </ng-template>
+    <ng-template
+      #eventActionsTemplate
+      let-event="event"
+      let-trackByActionId="trackByActionId"
+    >
+      <span *ngIf="event.actions" class="cal-event-actions">
+      <a
+        class="cal-event-action"
+        href="javascript:;"
+        *ngFor="let action of event.actions; trackBy: trackByActionId"
+        (mwlClick)="action.onClick({ event: event, sourceEvent: $event })"
+        (mwlKeydownEnter)="
+      action.onClick({ event: event, sourceEvent: $event })
+      "
+        [ngClass]="action.cssClass"
+        [innerHtml]="action.label"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="
+      { action: action } | calendarA11y: 'actionButtonLabel'
+      "
+      >
+      </a>
+      </span>
+    </ng-template>
+    <div class="calendarbox">
+      <mwl-calendar-day-view #schedule
+                             [viewDate]="viewDate"
+                             [dayStartHour]="startHour"
+                             [dayEndHour]="endHour"
+                             [events]="filteredEvents"
+                             [refresh]="refresh"
+                             [eventTemplate]="customEventTemplate"
+      >
+      </mwl-calendar-day-view>
+    </div>
+  </div>
+</div>

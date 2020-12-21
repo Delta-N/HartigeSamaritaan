@@ -34,14 +34,14 @@ namespace RoosterPlanner.Api.Controllers
             this.taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
         }
 
-        [HttpGet("project/{id}")]
-        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid id)
+        [HttpGet("project/{projectId}")]
+        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId)
         {
-            if (id == Guid.Empty)
+            if (projectId == Guid.Empty)
                 return BadRequest("No valid id");
             try
             {
-                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id);
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(projectId);
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
@@ -57,7 +57,32 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        [HttpGet("shift/{id}")]
+        [HttpGet("{projectId}/{userId}/{date}")]
+        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date)
+        {
+            if (projectId == Guid.Empty)
+                return BadRequest("No valid projectId");
+            if (userId == Guid.Empty)
+                return BadRequest("No valid userI");
+            try
+            {
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(projectId,userId,date);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                if (result.Data == null || result.Data.Count == 0)
+                    return Ok(new List<ShiftViewModel>());
+                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
+                return Ok(shiftVmList);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
+        [HttpGet("{id}")]
         public async Task<ActionResult<ShiftViewModel>> GetShiftAsync(Guid id)
         {
             if (id == Guid.Empty)

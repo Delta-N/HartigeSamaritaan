@@ -37,13 +37,43 @@ export class ShiftService {
     return shifts;
   }
 
+  async getAllShiftsOnDate(projectId: string,userId:string, date:Date): Promise<Shift[]> {
+    if (!projectId) {
+      this.errorService.error("ProjectId mag niet leeg zijn")
+      return null;
+    }
+    if (!userId) {
+      this.errorService.error("userId mag niet leeg zijn")
+      return null;
+    }
+    if (!date) {
+      this.errorService.error("Datum mag niet leeg zijn")
+      return null;
+    }
+    let shifts: Shift[] = [];
+    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/${projectId}/${userId}/${date.toISOString()}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok) {
+          shifts = res.body
+          if (shifts != null) {
+            shifts.forEach(s => s.date = new Date(s.date))
+          }
+        }
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+
+    return shifts;
+  }
+
   async getShift(shiftId: string): Promise<Shift> {
     if (!shiftId) {
       this.errorService.error("ShiftId mag niet leeg zijn")
       return null;
     }
     let shift: Shift = null;
-    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/shift/${shiftId}`)
+    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/${shiftId}`)
       .toPromise()
       .then(res => {
         if (res.ok) {

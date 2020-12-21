@@ -29,6 +29,7 @@
     "@azure/msal-browser": "^2.7.0",
     "@microsoft/applicationinsights-web": "^2.5.10",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
+    "angular-calendar": "^0.28.22",
     "bootstrap": "^4.5.3",
     "minimatch": "^3.0.4",
     "moment": "^2.29.1",

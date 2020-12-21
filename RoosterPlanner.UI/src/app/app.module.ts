@@ -59,6 +59,14 @@ import {ManageGuard} from "./guards/manage.guard";
 import {AddManagerComponent} from './components/add-manager/add-manager.component';
 import {BreadcrumbComponent} from './components/breadcrumb/breadcrumb.component';
 import {ErrorHandlerService} from "./services/logging.service";
+import {AvailabilityComponent} from "./pages/availability/availability.component";
+import { CalendarModule, DateAdapter as CalendarDateAdapter, MOMENT, CalendarMomentDateFormatter, CalendarDateFormatter} from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/moment';
+import * as moment from 'moment';
+
+export function momentAdapterFactory() {
+  return adapterFactory(moment);
+}
 
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -128,6 +136,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     AddManagerComponent,
     ManagerFilterPipe,
     BreadcrumbComponent,
+    AvailabilityComponent,
 
   ],
   imports: [
@@ -148,6 +157,18 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     NgxMaterialTimepickerModule,
     MatChipsModule,
     NgxMultipleDatesModule,
+    CalendarModule.forRoot(
+      {
+        provide: CalendarDateAdapter,
+        useFactory: momentAdapterFactory,
+      },
+      {
+        dateFormatter: {
+          provide: CalendarDateFormatter,
+          useClass: CalendarMomentDateFormatter,
+        },
+      }
+    ),
 
   ],
   providers: [
@@ -184,7 +205,11 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     FormBuilder,
     ManageGuard,
 
-    {provide: ErrorHandler, useClass: ErrorHandlerService}
+    {provide: ErrorHandler, useClass: ErrorHandlerService},
+    {
+      provide: MOMENT,
+      useValue: moment,
+    },
   ],
   bootstrap: [AppComponent],
   entryComponents: [AddProjectComponent]

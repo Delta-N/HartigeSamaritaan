@@ -1,9 +1,10 @@
-*{
+* {
   font-family: Lato, serif;
   font-size: 16px;
   color: #707070;
 }
-ol{
+
+ol {
   padding: 0;
   margin: 0;
   height: 15px;
@@ -20,4 +21,16 @@ ol.bread li {
 ol.bread li + li:before {
   padding: 8px;
   content: ">";
+}
+
+@media only screen and (max-width: 550px) {
+  * {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+  * {
+    font-size: 10px;
+  }
 }

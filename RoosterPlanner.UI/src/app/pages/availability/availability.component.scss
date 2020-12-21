@@ -1,0 +1,260 @@
+#title {
+  flex-direction: row;
+  height: initial;
+}
+
+.star {
+  color: #707070;
+  width: 25px;
+  height: 25px;
+
+}
+
+.scheduledBtn:focus {
+  outline: none;
+}
+
+.star:focus {
+  outline: none;
+}
+
+.yellow {
+  color: #e3bc08;
+}
+
+.mat-icon {
+  vertical-align: inherit !important;
+}
+
+.tasks-container {
+  display: flex;
+}
+
+.flex-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+::ng-deep .custom-button {
+  background: white;
+  font-size: 20px;
+  font-family: Lato, serif;
+  color: #707070;
+  margin-left: 5px;
+  margin-right: 5px;
+  min-width: 0;
+  line-height: 20px;
+  width: 40px;
+}
+
+::ng-deep .scheduled {
+  width: initial;
+}
+
+.calendar {
+  padding: 0;
+}
+
+.calendar-selected-date {
+  background: green;
+  border-radius: 100%;
+}
+
+.calendar-planned-date {
+  background: blue;
+  border-radius: 100%;
+}
+
+.calendar-tbd-date {
+  background: red;
+  border-radius: 100%;
+}
+
+::ng-deep .cal-event-action:focus {
+  outline: none;
+}
+
+
+.calendarbox {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.cdhidden {
+  width: 25px;
+  height: 25px;
+  line-height: 0;
+  margin-top: 10px
+}
+
+.date {
+  font-family: Lato, serif;
+  font-weight: bold;
+  font-size: 30px;
+  color: #707070;
+  display: flex;
+  justify-content: center;
+}
+
+.datebox {
+  justify-content: center;
+}
+
+.buttonholder {
+  align-items: center;
+  display: flex;
+}
+
+.changeday {
+  border: #707070 solid 1px;
+  border-radius: 100%;
+}
+
+::ng-deep .cal-event {
+  position: relative;
+
+  .cal-event-title {
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    color: #707070;
+  }
+}
+
+.event-title-row {
+  margin: 0;
+  justify-content: center;
+
+}
+
+.action-buttons-row {
+  margin: 0;
+  position: absolute;
+  bottom: 5px;
+  left: 39%
+}
+
+.spacer {
+  height: 60%;
+}
+
+.tasktoggle {
+  display: flex !important;
+  margin: 5px;
+}
+
+
+/*@media only screen and (max-width: 1200px) {
+  ::ng-deep .cal-event {
+    .cal-event-actions {
+      left: 10%;
+    }
+  }
+}*/
+
+
+@media only screen and (max-width: 992px) {
+
+  ::ng-deep .custom-button {
+
+    font-size: 16px;
+    line-height: 12px;
+    width: 30px;
+  }
+  ::ng-deep .scheduled {
+    width: initial;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+  }
+  .calendar-wrapper {
+    max-width: 300px;
+    margin: auto;
+  }
+  .cdhidden {
+    display: initial;
+    margin-top: 10px;
+  }
+  .row {
+    display: block;
+  }
+  .buttonholder {
+    display: none;
+  }
+  .tasks-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  .calendarbox {
+    max-width: none;
+  }
+  .datebox {
+    display: flex;
+  }
+  .col-8 {
+    max-width: none;
+  }
+  .col-4 {
+    max-width: none;
+  }
+  .tasktoggle {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 475px) {
+  .row {
+    display: block;
+  }
+
+  .buttonholder {
+    display: none;
+  }
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .calendarbox {
+    max-width: none;
+  }
+  .datebox {
+    display: flex;
+  }
+  .tasks-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  p {
+    min-width: 100px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .date {
+    font-size: 20px;
+  }
+  .cdhidden {
+    margin-top: 5px;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+    .cal-event-title {
+      font-size: 15px;
+    }
+}
+
+
