@@ -63,9 +63,10 @@ namespace RoosterPlanner.Service
             var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
             var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
             var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
+            var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
 
             var user = await graphService.Users[userId.ToString()].Request()
-                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
+                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality}").GetAsync();
             await AddPersonToLocalDbAsync(user);
 
             return user;

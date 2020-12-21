@@ -28,6 +28,7 @@ namespace RoosterPlanner.Models
         [NotMapped] public string DateOfBirth { get; set; }
         [NotMapped] public string PhoneNumber { get; set; }
         [NotMapped] public string UserRole { get; set; }
+        [NotMapped] public string Nationality { get; set; }
 
         //Constructor
         public Person() : base(Guid.Empty)

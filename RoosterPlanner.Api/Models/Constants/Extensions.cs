@@ -26,5 +26,8 @@ namespace RoosterPlanner.Api.Models.Constants
 
         public string PhoneNumberExtension =>
             $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
+
+        public string NationalityExtension =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
     }
 }

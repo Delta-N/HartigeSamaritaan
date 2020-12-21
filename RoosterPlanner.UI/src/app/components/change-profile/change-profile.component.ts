@@ -1,11 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {Validator} from "../../helpers/validators"
 import {User} from "../../models/user";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {UserService} from "../../services/user.service";
 import {ToastrService} from "ngx-toastr";
 import {DateConverter} from "../../helpers/date-converter";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 @Component({
   selector: 'app-change-profile',
@@ -16,9 +17,12 @@ export class ChangeProfileComponent implements OnInit {
   user: User;
   updateUser: User;
   checkoutForm;
+  nationalities:string[] = TextInjectorService.nationalitiesDutch;
+  nationalityControl: FormControl;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private userService: UserService, private toastr: ToastrService, public dialogRef: MatDialogRef<ChangeProfileComponent>) {
     this.user = data;
+    this.nationalityControl = new FormControl('', Validators.required);
     this.checkoutForm = this.formBuilder.group({
       id: this.user.id,
       firstName: [this.user.firstName != null ? this.user.firstName : '', Validators.required],
@@ -28,10 +32,14 @@ export class ChangeProfileComponent implements OnInit {
       postalCode: [this.user.postalCode != null ? this.user.postalCode : '', Validator.postalCode],
       city: [this.user.city != null ? this.user.city : '', Validators.required],
       phoneNumber: [this.user.phoneNumber != null ? this.user.phoneNumber : '', Validator.phoneNumber],
+      nationality: this.nationalityControl,
     })
   }
 
   ngOnInit(): void {
+    if (this.user.nationality != null) {
+      this.nationalityControl.setValue(this.nationalities.find(n => n == this.user.nationality))
+    }
   }
 
   saveProfile(value: User) {

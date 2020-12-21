@@ -55,14 +55,26 @@
         <input formControlName="city" id="city" matInput placeholder="{{user.city}}" type="text">
 
       </mat-form-field>
-      <div>
       </div>
+      <div>
       <mat-form-field>
         <mat-label for="phoneNumber">
           Telefoonnummer
         </mat-label>
         <input formControlName="phoneNumber" id="phoneNumber" matInput placeholder="0612345678"
                type="text">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label for="nationality">
+          Nationaliteit
+        </mat-label>
+        <mat-select [formControl]="nationalityControl" required>
+          <mat-option *ngFor="let nationality of nationalities" [value]="nationality">
+            {{nationality}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
   </form>

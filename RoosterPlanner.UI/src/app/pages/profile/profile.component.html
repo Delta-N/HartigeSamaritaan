@@ -33,6 +33,10 @@
       <div class="row-name">Telefoonnummer:</div>
       <div class="user-data">{{user.phoneNumber}}</div>
     </div>
+    <div class="row">
+      <div class="row-name">Nationaliteit:</div>
+      <div class="user-data">{{user.nationality}}</div>
+    </div>
   </div>
   <div class="row">
     <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button" id="editProfile">Profiel wijzigen</a>

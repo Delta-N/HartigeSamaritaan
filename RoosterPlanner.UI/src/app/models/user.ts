@@ -11,4 +11,5 @@ export class User extends Entity {
   public dateOfBirth: string;
   public phoneNumber: string;
   public userRole: string;
+  public nationality:string;
 }

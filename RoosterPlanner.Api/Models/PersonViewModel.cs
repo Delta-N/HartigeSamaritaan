@@ -19,6 +19,7 @@ namespace RoosterPlanner.Api.Models
         public string DateOfBirth { get; set; }
         public string PhoneNumber { get; set; }
         public string UserRole { get; set; }
+        public string Nationality { get; set; }
 
         public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
@@ -56,6 +57,11 @@ namespace RoosterPlanner.Api.Models
                 personViewModel.PhoneNumber = user
                     .AdditionalData[extension.PhoneNumberExtension]
                     .ToString();
+
+            if (user.AdditionalData.ContainsKey(extension.NationalityExtension))
+                personViewModel.Nationality = user
+                    .AdditionalData[extension.NationalityExtension]
+                    .ToString();
             return personViewModel;
         }
 
@@ -77,7 +83,8 @@ namespace RoosterPlanner.Api.Models
                 AdditionalData = new Dictionary<string, object>
                 {
                     {extension.DateOfBirthExtension, vm.DateOfBirth},
-                    {extension.PhoneNumberExtension, vm.PhoneNumber}
+                    {extension.PhoneNumberExtension, vm.PhoneNumber},
+                    {extension.NationalityExtension, vm.Nationality}
                 },
                 
             };
@@ -101,9 +108,11 @@ namespace RoosterPlanner.Api.Models
                     DateOfBirth = vm.DateOfBirth,
                     UserRole = vm.UserRole,
                     PhoneNumber = vm.PhoneNumber,
+                    Nationality = vm.Nationality,
                     LastEditDate = vm.LastEditDate,
                     LastEditBy = vm.LastEditBy,
                     RowVersion = vm.RowVersion
+                    
                 };
             }
 
@@ -126,6 +135,7 @@ namespace RoosterPlanner.Api.Models
                     Country = person.Country,
                     DateOfBirth = person.DateOfBirth,
                     UserRole = person.UserRole,
+                    Nationality = person.Nationality,
                     PhoneNumber = person.PhoneNumber,
                     LastEditDate = person.LastEditDate,
                     LastEditBy = person.LastEditBy,
