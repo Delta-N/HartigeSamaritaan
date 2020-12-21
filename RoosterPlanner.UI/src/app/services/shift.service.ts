@@ -122,7 +122,7 @@ export class ShiftService {
       return null;
     }
     let shift: Shift = null;
-    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/shift/${shiftId}`)
+    await this.apiService.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/${shiftId}`)
       .toPromise()
       .then(res => {
         if (res.ok) {

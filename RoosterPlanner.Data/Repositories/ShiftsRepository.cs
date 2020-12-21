@@ -174,9 +174,6 @@ namespace RoosterPlanner.Data.Repositories
                     a.Shift = null;
                 });
             });
-
-
-
             return listOfShifts; 
         }
 
@@ -203,8 +200,6 @@ namespace RoosterPlanner.Data.Repositories
                     a.Shift = null;
                 });
             });
-            //manually delete because of circulair reference
-
             return listOfShifts;
         }
     }

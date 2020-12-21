@@ -195,8 +195,6 @@ namespace RoosterPlanner.Service
                 throw new ArgumentNullException(nameof(projectId));
             if (userId == Guid.Empty)
                 throw new ArgumentNullException(nameof(userId));
-            if (date == null)
-                throw new ArgumentNullException(nameof(date));
 
             TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
             try

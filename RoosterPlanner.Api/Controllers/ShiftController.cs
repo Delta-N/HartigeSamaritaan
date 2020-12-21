@@ -53,14 +53,14 @@ namespace RoosterPlanner.Api.Controllers
             this.availabilityService = availabilityService;
         }
 
-        [HttpGet("project/{id}")]
-        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid id)
+        [HttpGet("project/{projectId}")]
+        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId)
         {
-            if (id == Guid.Empty)
+            if (projectId == Guid.Empty)
                 return BadRequest("No valid id");
             try
             {
-                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id);
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(projectId);
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
@@ -76,16 +76,16 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        [HttpGet("{id}/{userId}/{date}")]
-        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid id, Guid userId, DateTime date)
+        [HttpGet("{projectId}/{userId}/{date}")]
+        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date)
         {
-            if (id == Guid.Empty)
+            if (projectId == Guid.Empty)
                 return BadRequest("No valid projectId");
             if (userId == Guid.Empty)
                 return BadRequest("No valid userI");
             try
             {
-                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id, userId, date);
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(projectId, userId, date);
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
@@ -102,13 +102,13 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [HttpGet("{id}/{date}")]
-        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid id, DateTime date)
+        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId, DateTime date)
         {
-            if (id == Guid.Empty)
+            if (projectId == Guid.Empty)
                 return BadRequest("No valid projectId");
             try
             {
-                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(id, date);
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(projectId, date);
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
@@ -124,7 +124,7 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        [HttpGet("shift/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ShiftViewModel>> GetShiftAsync(Guid id)
         {
             if (id == Guid.Empty)
