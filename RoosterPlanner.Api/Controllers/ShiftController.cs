@@ -101,7 +101,7 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        [HttpGet("{id}/{date}")]
+        [HttpGet("{projectId}/{date}")]
         public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId, DateTime date)
         {
             if (projectId == Guid.Empty)
