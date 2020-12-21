@@ -249,7 +249,7 @@ namespace RoosterPlanner.Service
                     person = new Person(Guid.Parse(user.Id)) {FirstName = user.GivenName, Oid = Guid.Parse(user.Id), LastName = user.Surname};
                     personRepository.Add(person);
                 }
-                else
+                else if(person.FirstName!=user.GivenName || person.LastName!=user.Surname)
                 {
                     person.FirstName = user.GivenName;
                     person.LastName = user.Surname;
