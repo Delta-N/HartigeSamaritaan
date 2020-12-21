@@ -113,20 +113,17 @@ namespace RoosterPlanner.Data.Repositories
                 .ThenInclude(a => a.Participation)
                 .Where(s => s.ProjectId == projectId && s.Date == date)
                 .ToListAsync();
-            listOfShifts.ForEach(s =>
-                s.Availabilities = s.Availabilities.Where(a => a.Participation.PersonId == userId).ToList());
-            listOfShifts.ForEach(s =>
+            Parallel.ForEach(listOfShifts, (shift) =>
             {
-                s.Task.Shifts = null;
-                s.Availabilities.ForEach(a =>
+                shift.Availabilities = shift.Availabilities.Where(a => a.Participation.PersonId == userId).ToList();
+                shift.Task.Shifts = null;
+                shift.Availabilities.ForEach(a =>
                 {
                     a.Participation.Availabilities = null;
                     a.Shift = null;
                 });
             });
-            //manually delete because of circulair reference
-
-            return listOfShifts; //todo testen
+            return listOfShifts; 
         }
     }
 }

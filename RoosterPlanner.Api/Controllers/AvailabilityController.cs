@@ -25,24 +25,18 @@ namespace RoosterPlanner.Api.Controllers
     {
         private readonly ILogger<AvailabilityController> logger;
         private readonly IAvailabilityService availabilityService;
-        private readonly IParticipationService participationService;
         private readonly IShiftService shiftService;
-        private readonly IProjectService projectService;
         private readonly ITaskService taskService;
 
         public AvailabilityController(
             ILogger<AvailabilityController> logger,
             IAvailabilityService availabilityService,
-            IParticipationService participationService,
-            IProjectService projectService,
             IShiftService shiftService,
             ITaskService taskService)
         {
             this.logger = logger;
             this.availabilityService = availabilityService;
             this.shiftService = shiftService;
-            this.participationService = participationService;
-            this.projectService = projectService;
             this.taskService = taskService;
         }
 
@@ -67,8 +61,7 @@ namespace RoosterPlanner.Api.Controllers
                         {Type = Type.Error, Message = shiftResult.Message});
 
                 List<Schedule> knownAvailabilities = new List<Schedule>();
-
-                var x = shiftResult.Data.GroupBy(s => s.Date);
+                
                 foreach (IGrouping<DateTime, Shift> grouping in shiftResult.Data.GroupBy(s => s.Date))
                 {
                     int numberOfShifts = grouping.Count();

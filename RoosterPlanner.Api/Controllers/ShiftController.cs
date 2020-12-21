@@ -34,7 +34,7 @@ namespace RoosterPlanner.Api.Controllers
             this.taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
         }
 
-        [HttpGet("project/{id}")]
+        [HttpGet("project/{projectId}")]
         public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
