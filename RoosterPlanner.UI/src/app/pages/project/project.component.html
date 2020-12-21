@@ -47,11 +47,15 @@
            <div class="row" *ngIf="this.participation!=null">
          <a (click)="editWorkingHours()" mat-button class="edit override-button">Max werkuren wijzigen</a>
       </div>
-           <div class="row" *ngIf="isAdmin">
+
+           <div class="row admin" *ngIf="isAdmin">
+          <h6>Administrator opties</h6>
          <a (click)="editProject()" mat-button class="edit override-button">Project wijzigen</a>
          <a (click)="closeProject()" mat-button class="override-button">{{closeButtonText}}</a>
          <a (click)="modManager()" mat-button class="override-button">Beheerders</a>
       </div>
+
+
          </div>
          <div class="col-md-6">
             <mat-card [ngClass]="[taskCardStyle]" id="taskCard">
