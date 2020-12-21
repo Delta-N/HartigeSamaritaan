@@ -21,10 +21,11 @@ namespace RoosterPlanner.Models
         [Column(Order = 3)]
         public int MaxWorkingHoursPerWeek { get; set; }
 
+        [Column(Order = 4)] 
+        public bool Active { get; set; } = true;
+
         public List<Availability> Availabilities { get; set; }
 
-        public List<Collaboration> WantsToWorkWith { get; set; }
-        public List<Collaboration> IsWantedBy { get; set; }
         
         
 
@@ -33,16 +34,11 @@ namespace RoosterPlanner.Models
         public Participation()
         {
             Availabilities = new List<Availability>();
-            WantsToWorkWith=new List<Collaboration>();
-            IsWantedBy=new List<Collaboration>();
-
         }
 
         public Participation(Guid id) : base(id)
         {
             Availabilities = new List<Availability>();
-            WantsToWorkWith=new List<Collaboration>();
-            IsWantedBy=new List<Collaboration>();
 
         }
     }

@@ -22,13 +22,16 @@ namespace RoosterPlanner.Api.Controllers
     {
         private readonly ILogger<ParticipationsController> logger;
         private readonly IParticipationService participationService;
+        private readonly IAvailabilityService availabilityService;
 
-        public ParticipationsController(ILogger<ParticipationsController> logger,
-            IParticipationService participationService)
+        public ParticipationsController(
+            ILogger<ParticipationsController> logger,
+            IParticipationService participationService,
+            IAvailabilityService availabilityService)
         {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.participationService =
-                participationService ?? throw new ArgumentNullException(nameof(participationService));
+            this.logger = logger;
+            this.participationService = participationService;
+            this.availabilityService = availabilityService;
         }
 
         [HttpGet("{personId}")]
@@ -75,7 +78,6 @@ namespace RoosterPlanner.Api.Controllers
                 ParticipationViewModel participationViewModel = ParticipationViewModel.CreateVm(result.Data);
 
                 return Ok(participationViewModel);
-
             }
             catch (Exception ex)
             {
@@ -93,14 +95,26 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid participation received");
 
             TaskResult<Participation> result = null;
+            Participation participation = null;
             try
             {
-                Participation participation = ParticipationViewModel.CreateParticipation(participationViewModel);
-                participation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-
-                if (participation.Id == Guid.Empty)
-                    //create participation
-                    result = await participationService.AddParticipationAsync(participation);
+                participation =
+                    (await participationService.GetParticipationAsync(participationViewModel.Person.Id,
+                        participationViewModel.Project.Id)).Data;
+                if (participation != null)
+                {
+                    participation.Active = true;
+                    participation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                    result = await participationService.UpdateParticipationAsync(participation);
+                }
+                else
+                {
+                    participation = ParticipationViewModel.CreateParticipation(participationViewModel);
+                    participation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                    if (participation.Id == Guid.Empty)
+                        //create participation
+                        result = await participationService.AddParticipationAsync(participation);
+                }
 
                 if (result == null || !result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result?.Message});
@@ -127,11 +141,9 @@ namespace RoosterPlanner.Api.Controllers
             TaskResult<Participation> result = new TaskResult<Participation>();
             try
             {
-                Participation oldParticipation =
-                    participationService
+                Participation oldParticipation = (await participationService
                         .GetParticipationAsync(participationViewModel.Person.Id, participationViewModel.Project.Id)
-                        .Result
-                        .Data;
+                    ).Data;
                 Participation updatedParticipation = ParticipationViewModel.CreateParticipation(participationViewModel);
 
                 if (oldParticipation.ProjectId != updatedParticipation.ProjectId)
@@ -147,9 +159,8 @@ namespace RoosterPlanner.Api.Controllers
                 }
 
                 oldParticipation.Availabilities = updatedParticipation.Availabilities;
-                oldParticipation.IsWantedBy = updatedParticipation.IsWantedBy;
-                oldParticipation.WantsToWorkWith = updatedParticipation.WantsToWorkWith;
                 oldParticipation.MaxWorkingHoursPerWeek = updatedParticipation.MaxWorkingHoursPerWeek;
+                oldParticipation.Active = updatedParticipation.Active;
 
                 oldParticipation.Person = null;
                 oldParticipation.Project = null;
@@ -180,7 +191,8 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 TaskResult<Participation> participation = await participationService.GetParticipationAsync(id);
-                if (!participation.Succeeded) BadRequest("Invalid participation");
+                if (!participation.Succeeded)
+                    BadRequest("Invalid participation");
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 if (oid == null)
@@ -189,11 +201,20 @@ namespace RoosterPlanner.Api.Controllers
                 if (oid != participation.Data.PersonId.ToString())
                     return Unauthorized();
 
-                //gebruiker mag participation verwijderen
-                TaskResult<Participation> result =
-                    await participationService.RemoveParticipationAsync(participation.Data);
+                //controleer of gebruiker niet ingeroosterd staat
+                TaskListResult<Availability>
+                    availabilities = await this.availabilityService.GetActiveAvailabilities(id);
+                if (availabilities.Data.Count > 0)
+                    return BadRequest("Je kan je niet uitschrijven voor dit project. Je bent nog ingepland.");
 
-                return !result.Succeeded ? UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message}) : Ok(result);
+                //gebruiker mag participation verwijderen
+                participation.Data.Active = false;
+                TaskResult<Participation> result =
+                    await participationService.UpdateParticipationAsync(participation.Data);
+
+                return !result.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message})
+                    : Ok(result);
             }
             catch (Exception ex)
             {

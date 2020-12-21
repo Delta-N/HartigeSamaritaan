@@ -19,13 +19,19 @@ namespace RoosterPlanner.Data.Context.Seed
                 {
                     PersonId = Guid.Parse("25E5B0E6-82EF-45FE-BBDE-EF76021EC531"),
                     ProjectId = Guid.Parse("e86bb765-27ab-404f-b140-211505d869fe"),
-                    MaxWorkingHoursPerWeek = 12
+                    MaxWorkingHoursPerWeek = 12,
+                    Active = true,
+                    LastEditBy = "SYSTEM",
+                    LastEditDate = DateTime.Now
                 },
                 new(Guid.Parse("541310c7-ffec-43f5-81a7-7b2c07f9ce81"))
                 {
                     PersonId = Guid.Parse("7F66FC12-B1C0-481F-851B-3CC1F65FD20E"),
                     ProjectId = Guid.Parse("55c92c6a-067b-442a-b33d-b8ce35cf1d8a"),
-                    MaxWorkingHoursPerWeek = 40
+                    MaxWorkingHoursPerWeek = 40,
+                    Active = true,
+                    LastEditBy = "SYSTEM",
+                    LastEditDate = DateTime.Now
                 }
             };
 

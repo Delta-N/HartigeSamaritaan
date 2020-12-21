@@ -17,7 +17,6 @@ namespace RoosterPlanner.Data.Context
         public DbSet<Participation> Participations { get; set; }
         public DbSet<Availability> Availabilities { get; set; }
         public DbSet<Shift> Shifts { get; set; }
-        public DbSet<Collaboration> Collaborations { get; set; }
         public DbSet<Manager> Managers { get; set; }
 
         //Constructor
@@ -49,7 +48,8 @@ namespace RoosterPlanner.Data.Context
 
             modelBuilder.Entity<Task>(tsk =>
             {
-                tsk.HasMany(t => t.ProjectTasks)
+                tsk
+                    .HasMany(t => t.ProjectTasks)
                     .WithOne(t => t.Task);
             });
 
@@ -67,13 +67,20 @@ namespace RoosterPlanner.Data.Context
 
             modelBuilder.Entity<Task>(tsk =>
             {
-                tsk.HasMany(t => t.Requirements)
+                tsk
+                    .HasMany(t => t.Requirements)
                     .WithOne(t => t.Task);
             });
 
-            modelBuilder.Entity<Task>().HasMany(s => s.Shifts).WithOne(t => t.Task).OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<Category>().HasMany(c => c.Tasks).WithOne(t => t.Category)
+            modelBuilder.Entity<Task>()
+                .HasMany(s => s.Shifts)
+                .WithOne(t => t.Task)
                 .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Tasks)
+                .WithOne(t => t.Category)
+                .OnDelete(DeleteBehavior.SetNull);
+            
             modelBuilder.Entity<CertificateType>(ct =>
             {
                 ct.HasMany(c => c.Requirements)
@@ -88,13 +95,14 @@ namespace RoosterPlanner.Data.Context
                 .HasOne(p => p.Participation)
                 .WithMany(a => a.Availabilities)
                 .HasForeignKey(a => a.ParticipationId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<Availability>()
                 .HasOne(s => s.Shift)
                 .WithMany(a => a.Availabilities)
                 .HasForeignKey(a => a.ShiftId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
+            
             modelBuilder.Entity<Participation>(par =>
             {
                 par.HasMany(m => m.Availabilities)
@@ -147,18 +155,7 @@ namespace RoosterPlanner.Data.Context
                 pr.HasMany(p => p.Participations)
                     .WithOne(x => x.Project);
             });
-
-            modelBuilder.Entity<Collaboration>()
-                .HasOne(p => p.WantsToWorkWith)
-                .WithMany(c => c.WantsToWorkWith)
-                .HasForeignKey(p => p.WantsToWorkWithId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Collaboration>()
-                .HasOne(p => p.IsWantedBy)
-                .WithMany(c => c.IsWantedBy)
-                .HasForeignKey(p => p.IsWantedById)
-                .OnDelete(DeleteBehavior.Restrict);
+            
 
             var categorySeed = new CategorySeed(modelBuilder);
             categorySeed.Seed();

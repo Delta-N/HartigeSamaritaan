@@ -17,7 +17,6 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Participation>> GetUserParticipationsAsync(Guid personId);
         Task<TaskResult<Participation>> GetParticipationAsync(Guid participationId);
         Task<TaskResult<Participation>> GetParticipationAsync(Guid personId, Guid projectId);
-        Task<TaskResult<Participation>> RemoveParticipationAsync(Participation participation);
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
     }
 
@@ -155,28 +154,7 @@ namespace RoosterPlanner.Service
 
             return result;
         }
-
-        public async Task<TaskResult<Participation>> RemoveParticipationAsync(Participation participation)
-        {
-            if (participation == null)
-                throw new ArgumentNullException(nameof(participation));
-
-            TaskResult<Participation> result = new TaskResult<Participation>();
-            try
-            {
-                result.Data = participationRepository.Remove(participation);
-                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
-            }
-            catch (Exception ex)
-            {
-                result.Message = GetType().Name + " - Error removing participation " + participation.Id;
-                logger.LogError(ex, result.Message, participation);
-                result.Error = ex;
-            }
-
-            return result;
-        }
-
+        
         public async Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation)
         {
             if (participation == null)

@@ -246,12 +246,13 @@ namespace RoosterPlanner.Service
                 var person = await personRepository.GetPersonByOidAsync(Guid.Parse(user.Id));
                 if (person == null)
                 {
-                    person = new Person(Guid.Parse(user.Id)) {FirstName = user.GivenName, Oid = Guid.Parse(user.Id)};
+                    person = new Person(Guid.Parse(user.Id)) {FirstName = user.GivenName, Oid = Guid.Parse(user.Id), LastName = user.Surname};
                     personRepository.Add(person);
                 }
-                else if (person.FirstName != user.GivenName)
+                else
                 {
                     person.FirstName = user.GivenName;
+                    person.LastName = user.Surname;
                     person.LastEditDate = DateTime.UtcNow;
                     person.LastEditBy = "SYSTEM";
                     personRepository.Update(person);

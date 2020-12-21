@@ -14,6 +14,7 @@ namespace RoosterPlanner.Service
         Task<TaskResult<Availability>> UpdateAvailability(Availability availability);
         Task<TaskListResult<Availability>> FindAvailabilitiesAsync(Guid projectId, Guid userId);
         Task<TaskResult<Availability>> GetAvailability(Guid id);
+        Task<TaskListResult<Availability>> GetActiveAvailabilities(Guid participationId);
     }
 
     public class AvailabilityService : IAvailabilityService
@@ -113,6 +114,27 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error getting Availability with Id " + id;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskListResult<Availability>> GetActiveAvailabilities(Guid participationId)
+        {
+            if (participationId == Guid.Empty)
+                throw new ArgumentNullException(nameof(participationId));
+            
+            TaskListResult<Availability> result = TaskListResult<Availability>.CreateDefault();
+            try
+            {
+                result.Data = await availabilityRepository.GetActiveAvailabilities(participationId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error finding active Availabilities " + participationId;
                 logger.LogError(ex, result.Message);
                 result.Error = ex;
             }

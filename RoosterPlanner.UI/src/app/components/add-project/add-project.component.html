@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <span *ngFor="let item of data">
-  <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnChange($event)">{{item.name}}</mat-checkbox>
+  <mat-checkbox class="checkBox" color="primary" id="{{item.id}}" (change)="OnChange($event)">{{item.name}}</mat-checkbox>
   </span>
 </mat-dialog-content>
 
