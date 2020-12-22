@@ -113,7 +113,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
       await this.projectService.getProject(projectId).then(res => {
         if (res) {
           this.project = res;
-          this.minDate = this.project.participationStartDate;
+          this.minDate = this.project.participationStartDate >= new Date() ? this.project.participationStartDate : new Date();
           this.maxDate = this.project.participationEndDate;
           this.calendar.minDate = moment(this.minDate);
           this.calendar.maxDate = moment(this.maxDate);

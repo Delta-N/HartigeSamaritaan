@@ -49,7 +49,7 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(s => s.Project)
                 .Include(s => s.Task)
                 .Include(s => s.Availabilities)
-                .Where(s => s.ProjectId == projectId)
+                .Where(s => s.ProjectId == projectId && s.Date>=DateTime.Today)
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
