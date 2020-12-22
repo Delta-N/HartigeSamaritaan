@@ -85,16 +85,22 @@
             ></mwl-calendar-event-title>
           </div>
           <div class="row" id="spacer">
-            <button mat-fab color="primary" class="scheduledBtn" [id]="'scheduledBtn'+weekEvent.event.id" hidden>
+            <button mat-fab color="primary" class="scheduledBtn" [id]="'scheduledBtn'+weekEvent.event.id" hidden (click)="openInstructions(weekEvent.event.id)">
               <mat-icon>check_circle_outline</mat-icon>
             </button>
           </div>
           <div class="row" id="actions">
-            <mwl-calendar-event-actions
-              [event]="weekEvent.tempEvent || weekEvent.event"
-              [customTemplate]="eventActionsTemplate"
-            >
-            </mwl-calendar-event-actions>
+
+            <button mat-icon-button aria-label="Yes" class="option-button" style="color: green;"
+                    (click)="handleEvent('Yes',weekEvent.event)">
+              <mat-icon>check</mat-icon>
+            </button>
+
+            <button mat-icon-button aria-label="No" class="option-button" style="color: red;"
+                    (click)="handleEvent('No',weekEvent.event)">
+              <mat-icon>close</mat-icon>
+            </button>
+
           </div>
         </div>
       </div>
@@ -107,31 +113,7 @@
       >
       </span>
     </ng-template>
-    <ng-template
-      #eventActionsTemplate
-      let-event="event"
-      let-trackByActionId="trackByActionId"
-    >
-      <span *ngIf="event.actions" class="cal-event-actions">
-      <a
-        class="cal-event-action"
-        href="javascript:;"
-        *ngFor="let action of event.actions; trackBy: trackByActionId"
-        (mwlClick)="action.onClick({ event: event, sourceEvent: $event })"
-        (mwlKeydownEnter)="
-      action.onClick({ event: event, sourceEvent: $event })
-      "
-        [ngClass]="action.cssClass"
-        [innerHtml]="action.label"
-        tabindex="0"
-        role="button"
-        [attr.aria-label]="
-      { action: action } | calendarA11y: 'actionButtonLabel'
-      "
-      >
-      </a>
-      </span>
-    </ng-template>
+
     <div class="calendarbox">
       <mwl-calendar-day-view #schedule
                              [viewDate]="viewDate"

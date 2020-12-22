@@ -12,7 +12,6 @@ import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Shift} from "../../models/shift";
 import {ShiftService} from "../../services/shift.service";
 import {
-  CalendarEventAction,
   CalendarView,
   CalendarEvent,
   CalendarDateFormatter,
@@ -81,11 +80,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   filteredEventsObservable: BehaviorSubject<CalendarEvent[]> = new BehaviorSubject<CalendarEvent[]>(this.filteredEvents);
   allEvents: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
-
-  maybeLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">?</div></span>');
-  yesLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">V</span>');
-  noLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">X</span>');
-  scheduledLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button scheduled">Download Instructies</span>');
 
   hiddenElements: HTMLElement[] = [];
 
@@ -268,8 +262,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   getAvailabilityTypeNumber(action: string): number {
     if (action === "No")
       return 0;
-    if (action === "Maybe")
-      return 1;
     if (action === "Yes")
       return 2;
   }
@@ -277,8 +269,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   getAvailabilityTypeActionName(actionNumber: number): string {
     if (actionNumber === 0)
       return "No"
-    if (actionNumber === 1)
-      return "Maybe"
     if (actionNumber === 2)
       return "Yes"
     if (actionNumber === 3)
@@ -308,6 +298,19 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   changeBorders(event: CalendarEvent, label: String) {
+    let farDecendend=this.getActionElement(event)
+    for (let k = 0; k < farDecendend.children.length; k++) {
+      let child:any  = farDecendend.children[k];
+      if (child.ariaLabel == label) {
+        child.style.border = "solid 3px black";
+      } else {
+        child.style.border = "none";
+      }
+    }
+    moment.locale('nl')
+  }
+
+  getActionElement(event:CalendarEvent):HTMLElement{
     moment.locale('en')
     let aria = "\n      " + moment(event.start).format("dddd MMMM DD,") + "\n      " + event.title + ", from " + moment(event.start).format("hh:mm A") + "\n     to " +
       moment(event.end).format("hh:mm A");
@@ -319,51 +322,12 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         for (let j = 0; j < itemHolder.children.length; j++) {
           let child: any = itemHolder.children[j];
           if (child.id == "actions") {
-            let farDecendend = child.children[0].children[0];
-            for (let k = 0; k < farDecendend.children.length; k++) {
-              if (farDecendend.children[k].ariaLabel == label) {
-                farDecendend.children[k].children[0].style.border = "solid 3px black";
-              } else {
-                farDecendend.children[k].children[0].style.border = "none";
-              }
-            }
+            return child;
           }
         }
       }
     }
-    moment.locale('nl')
   }
-
-  actions: CalendarEventAction[] = [
-    {
-      label: this.yesLabel,
-      a11yLabel: 'Yes',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.handleEvent("Yes", event);
-      },
-    },
-    {
-      label: this.maybeLabel,
-      a11yLabel: 'Maybe',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.handleEvent("Maybe", event);
-      },
-    },
-    {
-      label: this.noLabel,
-      a11yLabel: 'No',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.handleEvent("No", event);
-      },
-    },
-  ];
-  scheduledAction: CalendarEventAction[] = [{
-    label: this.scheduledLabel,
-    a11yLabel: 'Scheduled',
-    onClick: ({event}: { event: CalendarEvent }): void => {
-      this.openInstructions(event.id)
-    }
-  }]
 
   colorInMonth() {
 
@@ -453,7 +417,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
         title: s.task.name,
         color: this.getColor(s.task.color),
-        actions: scheduled ? this.scheduledAction : this.actions,
         id: s.id
       };
       if (scheduled)
@@ -465,8 +428,12 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.refresh.next();
 
     setTimeout(() => {
+      this.changeButtonSize();
       if (scheduledId) {
-        scheduledId.forEach(id => this.showScheduledButton(id))
+        scheduledId.forEach(id => {
+          this.showScheduledButton(id)
+          this.hideActionButton(id)
+        })
       }
     }, 200)
   }
@@ -589,6 +556,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       element.hidden = false;
   }
 
+  hideActionButton(id: string) {
+   let element = this.getActionElement(this.allEvents.find(e=>e.id===id))
+    if(element)
+      element.style.display="none";
+  }
   refuseDay() {
     this.allEvents.forEach(e => {
       this.handleEvent("No", e)
@@ -598,6 +570,23 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   acceptDay() {
     this.allEvents.forEach(e => {
       this.handleEvent("Yes", e)
+    })
+  }
+
+  changeButtonSize() {
+    this.filteredEvents.forEach(e=>{
+      if((e.end.getTime() -  e.start.getTime())/3600000<2){
+        let element = this.getActionElement(e)
+        for(let i=0; i<element.children.length;i++){
+          let child:HTMLElement = element.children[i] as HTMLElement
+          child.style.width="26px";
+          child.style.height="26px";
+          child.style.fontSize="0px";
+        }
+        let fabElement = document.getElementById("scheduledBtn" + e.id)
+        if (fabElement)
+          fabElement.classList.add("scheduledBtnSmall")
+      }
     })
   }
 }

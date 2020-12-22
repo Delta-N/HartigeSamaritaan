@@ -72,20 +72,6 @@
   padding: 0;
 }
 
-.calendar-selected-date {
-  background: green;
-  border-radius: 100%;
-}
-
-.calendar-planned-date {
-  background: blue;
-  border-radius: 100%;
-}
-
-.calendar-tbd-date {
-  background: red;
-  border-radius: 100%;
-}
 
 ::ng-deep .cal-event-action:focus {
   outline: none;

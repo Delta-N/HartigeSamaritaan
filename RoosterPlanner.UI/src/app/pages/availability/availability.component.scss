@@ -1,13 +1,29 @@
+#spacer {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.option-button {
+  outline: none;
+  background: white;
+  font-size: 30px;
+  margin-left: 3px;
+  margin-right: 3px
+
+}
+
 .rowhidden {
   display: none !important;
 }
-.schedule-button{
+
+.schedule-button {
   border: 1px solid gray;
   padding: 0 !important;
   height: 25%;
   font-size: 14px;
 }
-.refuse{
+
+.refuse {
   background: #E74B3B;
   margin-left: auto;
   margin-right: 15px;
@@ -19,6 +35,7 @@
   margin-right: auto;
   margin-left: 15px;
 }
+
 .content-container {
   height: 75vh;
 }
@@ -33,6 +50,24 @@
   width: 25px;
   height: 25px;
 
+}
+
+.scheduledBtnSmall {
+  width: 20px;
+  height: 20px;
+  line-height: 14px;
+  font-size: 14px;
+
+  &::ng-deep .mat-button-wrapper {
+    line-height: 14px;
+    padding: 0;
+
+    .mat-icon {
+      font-size: 14px;
+      padding-right: 4px;
+      padding-top: 4px;
+    }
+  }
 }
 
 .scheduledBtn:focus {
@@ -82,21 +117,6 @@
 
 .calendar {
   padding: 0;
-}
-
-.calendar-selected-date {
-  background: green;
-  border-radius: 100%;
-}
-
-.calendar-planned-date {
-  background: blue;
-  border-radius: 100%;
-}
-
-.calendar-tbd-date {
-  background: red;
-  border-radius: 100%;
 }
 
 ::ng-deep .cal-event-action:focus {
@@ -188,7 +208,7 @@
   .date {
     font-size: 20px;
   }
-  .accept{
+  .accept {
     margin-left: 0;
   }
   .refuse {
@@ -286,12 +306,16 @@
   .schedule-button {
     font-size: 9px;
   }
-  .btnhidden{
+  .btnhidden {
     display: none;
   }
-  .rowhidden{
+  .rowhidden {
     display: flex !important;
-
+  }
+  .option-button {
+    width: 25px;
+    height: 25px;
+    font-size: 0;
   }
 }
 
