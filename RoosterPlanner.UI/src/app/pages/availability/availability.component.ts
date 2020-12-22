@@ -117,7 +117,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         .then(async res => {
           if (res) {
             this.participation = res
-            this.minDate = this.participation.project.participationStartDate;
+            this.minDate = this.participation.project.participationStartDate>=new Date()?this.participation.project.participationStartDate:new Date();
             this.maxDate = this.participation.project.participationEndDate;
 
             this.calendar.minDate = moment(this.minDate);
