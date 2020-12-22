@@ -588,4 +588,16 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     if (element)
       element.hidden = false;
   }
+
+  refuseDay() {
+    this.allEvents.forEach(e => {
+      this.handleEvent("No", e)
+    })
+  }
+
+  acceptDay() {
+    this.allEvents.forEach(e => {
+      this.handleEvent("Yes", e)
+    })
+  }
 }

@@ -19,6 +19,7 @@
   </div>
   <div class="col-8">
     <div class="row datebox">
+      <button mat-button class="accept btnhidden schedule-button" (click)="acceptDay()">Beschikbaar</button>
       <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
         <mat-icon>navigate_before</mat-icon>
       </button>
@@ -26,6 +27,11 @@
       <button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
         <mat-icon>navigate_next</mat-icon>
       </button>
+      <button mat-button class="refuse btnhidden schedule-button" (click)="refuseDay()">Onbeschikbaar</button>
+    </div>
+    <div class="row rowhidden">
+      <button mat-button class="accept schedule-button" (click)="acceptDay()">Beschikbaar</button>
+      <button mat-button class="refuse schedule-button" (click)="refuseDay()">Onbeschikbaar</button>
     </div>
     <ng-template
       #customEventTemplate

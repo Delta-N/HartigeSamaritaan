@@ -1,4 +1,24 @@
+.rowhidden {
+  display: none !important;
+}
+.schedule-button{
+  border: 1px solid gray;
+  padding: 0 !important;
+  height: 25%;
+  font-size: 14px;
+}
+.refuse{
+  background: #E74B3B;
+  margin-left: auto;
+  margin-right: 15px;
+  color: white;
+}
 
+.accept {
+  background: #DDFCE0;
+  margin-right: auto;
+  margin-left: 15px;
+}
 .content-container {
   height: 75vh;
 }
@@ -148,6 +168,7 @@
   margin: 5px;
 }
 
+
 @media only screen and (max-width: 992px) {
   .cal-event-title {
     font-size: 12px;
@@ -160,6 +181,18 @@
   }
   ::ng-deep .scheduled {
     width: initial;
+  }
+  .schedule-button {
+    font-size: 12px;
+  }
+  .date {
+    font-size: 20px;
+  }
+  .accept{
+    margin-left: 0;
+  }
+  .refuse {
+    margin-right: 0;
   }
 }
 
@@ -205,6 +238,7 @@
     display: flex;
     justify-content: center;
   }
+
 }
 
 @media only screen and (max-width: 525px) {
@@ -217,6 +251,7 @@
   .row {
     display: block;
   }
+
 
   .buttonholder {
     display: none;
@@ -247,6 +282,16 @@
   }
   .cdhidden {
     margin-top: 5px;
+  }
+  .schedule-button {
+    font-size: 9px;
+  }
+  .btnhidden{
+    display: none;
+  }
+  .rowhidden{
+    display: flex !important;
+
   }
 }
 
