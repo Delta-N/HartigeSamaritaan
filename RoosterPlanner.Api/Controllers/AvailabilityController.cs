@@ -104,6 +104,7 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpGet("find/{projectId}")]
         public async Task<ActionResult<AvailabilityDataViewModel>> GetAvailabilityData(Guid projectId)
         {
@@ -224,6 +225,8 @@ namespace RoosterPlanner.Api.Controllers
                 Availability availability = (await availabilityService.GetAvailability(availabilityViewModel.Id)).Data;
                 if (availability == null)
                     return BadRequest("Unable to convert availabilityViewModel to Availability");
+                if (availability.Type == AvailibilityType.Scheduled)
+                    return BadRequest("Cannot modify availability when user is already scheduled");
 
                 availability.Preference = availabilityViewModel.Preference;
                 availability.Type = availabilityViewModel.Type;
@@ -247,6 +250,7 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPatch]
         public async Task<ActionResult<bool>> UpdateAvailabilities(List<ScheduleViewModel> scheduleViewModels)
         {

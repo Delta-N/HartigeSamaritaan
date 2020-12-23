@@ -13,7 +13,6 @@ export class ErrorService {
   }
 
   httpError(httpResponse: HttpErrorResponse) {
-    console.log(httpResponse)
     if (httpResponse.status === 422) {
       let error: ErrorMessage = httpResponse.error
       if (error.type === 1)
