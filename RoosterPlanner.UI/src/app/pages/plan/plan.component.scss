@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   line-height: 20px;
-  font-size: 12px;
+  font-size: 18px;
   color: #707070;
 }
 
@@ -54,7 +54,9 @@
 
 ::ng-deep .custom-button {
   background: white;
-  font-size: 20px;
+  font-size: 18px;
+  bottom: 5px;
+  border: 1px solid black;
   font-family: Lato, serif;
   color: #707070;
   margin-left: 5px;

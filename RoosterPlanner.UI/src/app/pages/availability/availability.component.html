@@ -12,7 +12,8 @@
       <div class="row tasks-container">
         <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
           <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
-                        checked="true" color="primary" [disabled]="activeProjectTasks|checkboxFilter: item.id">{{item.name}}</mat-checkbox>
+                        checked="true" color="primary" [disabled]="activeProjectTasks|checkboxFilter: item.id"
+                        [matTooltip]=item.description>{{item.name}}</mat-checkbox>
         </div>
       </div>
     </div>
@@ -35,39 +36,14 @@
     </div>
     <ng-template
       #customEventTemplate
-      let-weekEvent="weekEvent"
-      let-tooltipPlacement="tooltipPlacement"
-      let-eventClicked="eventClicked"
-      let-tooltipTemplate="tooltipTemplate"
-      let-tooltipAppendToBody="tooltipAppendToBody"
-      let-tooltipDisabled="tooltipDisabled"
-      let-tooltipDelay="tooltipDelay"
-      let-column="column"
-      let-daysInWeek="daysInWeek"
-    >
+      let-weekEvent="weekEvent">
       <div
         class="cal-event"
         [ngStyle]="{
          backgroundColor: weekEvent.event.color?.secondary,
          borderColor: weekEvent.event.color?.primary
          }"
-        [mwlCalendarTooltip]="
-         !tooltipDisabled
-         ? (weekEvent.event.title
-         | calendarEventTitle
-         : (daysInWeek === 1 ? 'dayTooltip' : 'weekTooltip')
-         : weekEvent.tempEvent || weekEvent.event)
-         : ''
-         "
-        [tooltipPlacement]="tooltipPlacement"
-        [tooltipEvent]="weekEvent.tempEvent || weekEvent.event"
-        [tooltipTemplate]="tooltipTemplate"
-        [tooltipAppendToBody]="tooltipAppendToBody"
-        [tooltipDelay]="tooltipDelay"
-        (mwlClick)="eventClicked.emit({ sourceEvent: $event })"
-        (mwlKeydownEnter)="eventClicked.emit({ sourceEvent: $event })"
-        tabindex="0"
-        role="application"
+        [mwlCalendarTooltip]="availabilityData.projectTasks|calendarTooltip:weekEvent.event.title"
         [attr.aria-label]="
          { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }
          | calendarA11y: 'eventDescription'
@@ -78,14 +54,11 @@
             <button mat-icon-button class="star" [id]="weekEvent.event.id" (click)="changePreference(weekEvent.event)">
               <mat-icon>star_border</mat-icon>
             </button>
-            <mwl-calendar-event-title
-              [event]="weekEvent.tempEvent || weekEvent.event"
-              [customTemplate]="eventTitleTemplate"
-              [view]="daysInWeek === 1 ? 'day' : 'week'"
-            ></mwl-calendar-event-title>
+            <div class="cal-event-title">{{weekEvent.event.title}}</div>
           </div>
           <div class="row" id="spacer">
-            <button mat-fab color="primary" class="scheduledBtn" [id]="'scheduledBtn'+weekEvent.event.id" hidden (click)="openInstructions(weekEvent.event.id)">
+            <button mat-fab color="primary" class="scheduledBtn" [id]="'scheduledBtn'+weekEvent.event.id" hidden
+                    (click)="openInstructions(weekEvent.event.id)">
               <mat-icon>check_circle_outline</mat-icon>
             </button>
           </div>

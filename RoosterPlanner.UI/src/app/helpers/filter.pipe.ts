@@ -5,6 +5,7 @@ import {DateConverter} from "./date-converter";
 import {Manager} from "../models/manager";
 import {Shift} from "../models/shift";
 import {Schedule} from "../models/schedule";
+import {CalendarEvent} from "angular-calendar";
 
 @Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
@@ -117,6 +118,32 @@ export class CheckboxFilter implements PipeTransform {
   transform(listOfTasks: Task[], id: string): boolean {
     let result = listOfTasks.find(t => t.id === id)
     return !result;
+  }
+}
+
+@Pipe({name: 'calendarTooltip'})
+export class CalendarTooltip implements PipeTransform {
+  transform(listOfTasks: Task[], title: string): string {
+    let result = listOfTasks.find(t => t.name === title)
+    return result.description;
+  }
+}
+
+@Pipe({name: 'planTooltip'})
+export class PlanTooltip implements PipeTransform {
+  transform(listOfShifts: Shift[], event: CalendarEvent): string {
+    let shift = listOfShifts.find(s => s.id == event.id)
+
+    if ((event.end.getTime() - event.start.getTime()) / 3600000 <= 2) {
+      let result: string = shift.participantsRequired + " Nodig "
+
+      let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
+      result += availableNumber + " Beschikbaar ";
+
+      let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
+      result += scheduledNumber + " Ingeroosterd ";
+      return result;
+    }
   }
 }
 

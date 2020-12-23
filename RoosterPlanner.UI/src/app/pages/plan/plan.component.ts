@@ -12,11 +12,10 @@ import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {Shift} from "../../models/shift";
 import {ShiftService} from "../../services/shift.service";
 import {
-  CalendarEventAction,
   CalendarView,
   CalendarEvent,
   CalendarDateFormatter,
-  CalendarEventTitleFormatter, CalendarDayViewComponent
+  CalendarDayViewComponent
 } from 'angular-calendar';
 import * as moment from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
@@ -28,7 +27,6 @@ import {BehaviorSubject, Subject} from "rxjs";
 import {AvailabilityService} from "../../services/availability.service";
 import {AvailabilityData} from "../../models/availabilitydata";
 import {Task} from 'src/app/models/task';
-import {CustomEventTitleFormatter} from "../../helpers/custon-event-title-formatter.provider";
 import {take} from "rxjs/operators";
 import {Project} from "../../models/project";
 import {ProjectService} from "../../services/project.service";
@@ -43,10 +41,6 @@ import {ProjectService} from "../../services/project.service";
     {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter,
-    },
-    {
-      provide: CalendarEventTitleFormatter,
-      useClass: CustomEventTitleFormatter,
     },
   ],
 })
@@ -184,16 +178,6 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
   }
 
-  actions: CalendarEventAction[] = [
-    {
-      label: this.scheduledLabel,
-      a11yLabel: 'Schedule',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.Plan(event.id)
-      },
-    },
-  ]
-
   colorInMonth() {
 
     for (const ka of this.availabilityData.knownAvailabilities) {
@@ -247,7 +231,6 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
         title: s.task.name,
         color: this.getColor(s.task.color),
-        actions: this.actions,
         id: s.id
       };
 
@@ -299,18 +282,25 @@ export class PlanComponent implements OnInit, AfterViewInit {
   fillSpacer() {
     this.filteredEvents.forEach(e => {
       let shift = this.shifts.find(s => s.id == e.id)
+      if ((e.end.getTime() - e.start.getTime()) / 3600000 > 2) {
 
-      let necessaryElement = document.getElementById('necessary-' + shift.id);
-      let scheduledElement = document.getElementById('scheduled-' + shift.id)
-      let availableElement = document.getElementById('available-' + shift.id)
 
-      necessaryElement.innerText = shift.participantsRequired + " Nodig";
+        let necessaryElement = document.getElementById('necessary-' + shift.id);
+        let scheduledElement = document.getElementById('scheduled-' + shift.id)
 
-      let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
-      availableElement.innerText = availableNumber + " Beschikbaar";
+        let availableElement = document.getElementById('available-' + shift.id)
+        necessaryElement.innerText = shift.participantsRequired + " Nodig";
 
-      let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
-      scheduledElement.innerText = scheduledNumber + " Ingeroosterd";
+        let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
+        availableElement.innerText = availableNumber + " Beschikbaar";
+
+        let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
+        scheduledElement.innerText = scheduledNumber + " Ingeroosterd";
+
+      }else{
+        let planElement = document.getElementById('plan-' + shift.id)
+        planElement.style.cssText = "padding: 3px !important";
+      }
     })
 
   }
@@ -369,5 +359,4 @@ export class PlanComponent implements OnInit, AfterViewInit {
         return colors.pink
     }
   }
-
 }

@@ -12,7 +12,7 @@
       <div class="row tasks-container">
         <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
           <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
-                        checked="true" color="primary">{{item.name}}</mat-checkbox>
+                        checked="true" color="primary" [matTooltip]=item.description>{{item.name}}</mat-checkbox>
         </div>
       </div>
     </div>
@@ -30,14 +30,6 @@
     <ng-template
       #customEventTemplate
       let-weekEvent="weekEvent"
-      let-tooltipPlacement="tooltipPlacement"
-      let-eventClicked="eventClicked"
-      let-tooltipTemplate="tooltipTemplate"
-      let-tooltipAppendToBody="tooltipAppendToBody"
-      let-tooltipDisabled="tooltipDisabled"
-      let-tooltipDelay="tooltipDelay"
-      let-column="column"
-      let-daysInWeek="daysInWeek"
     >
       <div
         class="cal-event"
@@ -45,84 +37,30 @@
          backgroundColor: weekEvent.event.color?.secondary,
          borderColor: weekEvent.event.color?.primary
          }"
-        [mwlCalendarTooltip]="
-         !tooltipDisabled
-         ? (weekEvent.event.title
-         | calendarEventTitle
-         : (daysInWeek === 1 ? 'dayTooltip' : 'weekTooltip')
-         : weekEvent.tempEvent || weekEvent.event)
-         : ''
-         "
-        [tooltipPlacement]="tooltipPlacement"
-        [tooltipEvent]="weekEvent.tempEvent || weekEvent.event"
-        [tooltipTemplate]="tooltipTemplate"
-        [tooltipAppendToBody]="tooltipAppendToBody"
-        [tooltipDelay]="tooltipDelay"
-        (mwlClick)="eventClicked.emit({ sourceEvent: $event })"
-        (mwlKeydownEnter)="eventClicked.emit({ sourceEvent: $event })"
-        tabindex="0"
-        role="application"
+        [mwlCalendarTooltip]="shifts|planTooltip:weekEvent.event"
         [attr.aria-label]="
          { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }
          | calendarA11y: 'eventDescription'
-         "
-      >
+         ">
         <div class="flex-container">
           <div class="row flex-container" id="title">
-            <mwl-calendar-event-title
-              [event]="weekEvent.tempEvent || weekEvent.event"
-              [customTemplate]="eventTitleTemplate"
-              [view]="daysInWeek === 1 ? 'day' : 'week'"
-            ></mwl-calendar-event-title>
+            <span class="cal-event-title">{{weekEvent.event.title}}</span>
+
           </div>
           <div class="row" id="spacer">
-            <div class="row" id="necessary-{{weekEvent.event.id}}">6 Nodig</div>
-            <div class="row" id="scheduled-{{weekEvent.event.id}}">6 Ingeroosterd</div>
-            <div class="row" id="available-{{weekEvent.event.id}}">6 Beschikbaar</div>
+            <div class="row" id="necessary-{{weekEvent.event.id}}"></div>
+            <div class="row" id="scheduled-{{weekEvent.event.id}}"></div>
+            <div class="row" id="available-{{weekEvent.event.id}}"></div>
 
           </div>
           <div class="row" id="actions">
-            <mwl-calendar-event-actions
-              [event]="weekEvent.tempEvent || weekEvent.event"
-              [customTemplate]="eventActionsTemplate"
-            >
-            </mwl-calendar-event-actions>
+            <button mat-button aria-label="Plannen" class="custom-button scheduled" id="plan-{{weekEvent.event.id}}"
+                    (click)="Plan(weekEvent.event.id)">
+              Plannen
+            </button>
           </div>
         </div>
       </div>
-    </ng-template>
-    <ng-template #eventTitleTemplate let-event="event" let-view="view">
-      <span
-        class="cal-event-title"
-        [innerHTML]="event.title | calendarEventTitle: view:event"
-        [attr.aria-hidden]="{} | calendarA11y: 'hideEventTitle'"
-      >
-      </span>
-    </ng-template>
-    <ng-template
-      #eventActionsTemplate
-      let-event="event"
-      let-trackByActionId="trackByActionId"
-    >
-      <span *ngIf="event.actions" class="cal-event-actions">
-      <a
-        class="cal-event-action"
-        href="javascript:;"
-        *ngFor="let action of event.actions; trackBy: trackByActionId"
-        (mwlClick)="action.onClick({ event: event, sourceEvent: $event })"
-        (mwlKeydownEnter)="
-      action.onClick({ event: event, sourceEvent: $event })
-      "
-        [ngClass]="action.cssClass"
-        [innerHtml]="action.label"
-        tabindex="0"
-        role="button"
-        [attr.aria-label]="
-      { action: action } | calendarA11y: 'actionButtonLabel'
-      "
-      >
-      </a>
-      </span>
     </ng-template>
     <div class="calendarbox">
       <mwl-calendar-day-view #schedule

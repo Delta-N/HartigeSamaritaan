@@ -15,7 +15,7 @@ import {
   CalendarView,
   CalendarEvent,
   CalendarDateFormatter,
-  CalendarEventTitleFormatter, CalendarDayViewComponent
+  CalendarDayViewComponent
 } from 'angular-calendar';
 import * as moment from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
@@ -31,7 +31,6 @@ import {AvailabilityService} from "../../services/availability.service";
 import {AvailabilityData, ScheduleStatus} from "../../models/availabilitydata";
 import {Task} from 'src/app/models/task';
 import {Availability} from "../../models/availability";
-import {CustomEventTitleFormatter} from "../../helpers/custon-event-title-formatter.provider";
 import {take} from "rxjs/operators";
 
 
@@ -44,10 +43,6 @@ import {take} from "rxjs/operators";
     {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter,
-    },
-    {
-      provide: CalendarEventTitleFormatter,
-      useClass: CustomEventTitleFormatter,
     },
   ],
 })
@@ -303,7 +298,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     for (let k = 0; k < farDecendend.children.length; k++) {
       let child: any = farDecendend.children[k];
       if (child.ariaLabel == label) {
-        child.style.border = "solid 3px black";
+        child.style.border = "solid 2px black";
       } else {
         child.style.border = "none";
       }

@@ -32,7 +32,7 @@ import {
   TaskFilterPipe,
   ScheduledPipe,
   AgePipe,
-  ScheduledCount, CheckboxFilter
+  ScheduledCount, CheckboxFilter, CalendarTooltip, PlanTooltip
 } from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
@@ -73,6 +73,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
 import { PlanComponent } from './pages/plan/plan.component';
 import { PlanShiftComponent } from './pages/plan-shift/plan-shift.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -153,6 +154,8 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     AgePipe,
     ScheduledCount,
     CheckboxFilter,
+    CalendarTooltip,
+    PlanTooltip,
   ],
   imports: [
     CommonModule,
@@ -184,6 +187,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
         },
       }
     ),
+    MatTooltipModule,
 
   ],
   providers: [
