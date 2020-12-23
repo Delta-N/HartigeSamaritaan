@@ -80,7 +80,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   filteredEventsObservable: BehaviorSubject<CalendarEvent[]> = new BehaviorSubject<CalendarEvent[]>(this.filteredEvents);
   allEvents: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
-  activeProjectTasks: Task[]=[];
+  activeProjectTasks: Task[] = [];
 
   constructor(private breadcrumbService: BreadcrumbService,
               private shiftService: ShiftService,
@@ -110,7 +110,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         .then(async res => {
           if (res) {
             this.participation = res
-            this.minDate = this.participation.project.participationStartDate>=new Date()?this.participation.project.participationStartDate:new Date();
+            this.minDate = this.participation.project.participationStartDate >= new Date() ? this.participation.project.participationStartDate : new Date();
             this.maxDate = this.participation.project.participationEndDate;
 
             this.calendar.minDate = moment(this.minDate);
@@ -206,7 +206,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
       await this.availabilityService.updateAvailability(availability)
     }
-
     //no? create
     else {
       availability = new Availability();
@@ -297,9 +296,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   changeBorders(event: CalendarEvent, label: String) {
-    let farDecendend=this.getActionElement(event)
+    if (label === "Preference")
+      label = "Yes";
+    let farDecendend = this.getActionElement(event)
     for (let k = 0; k < farDecendend.children.length; k++) {
-      let child:any  = farDecendend.children[k];
+      let child: any = farDecendend.children[k];
       if (child.ariaLabel == label) {
         child.style.border = "solid 3px black";
       } else {
@@ -309,7 +310,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     moment.locale('nl')
   }
 
-  getActionElement(event:CalendarEvent):HTMLElement{
+  getActionElement(event: CalendarEvent): HTMLElement {
     moment.locale('en')
     let aria = "\n      " + moment(event.start).format("dddd MMMM DD,") + "\n      " + event.title + ", from " + moment(event.start).format("hh:mm A") + "\n     to " +
       moment(event.end).format("hh:mm A");
@@ -385,9 +386,9 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         color: this.getColor(s.task.color),
         id: s.id
       };
-      if (scheduled){
+      if (scheduled) {
         scheduledId.push(s.id)
-        event.color.primary="#5b5bdc";
+        event.color.primary = "#5b5bdc";
       }
 
       this.activeProjectTasks.push(s.task)
@@ -526,10 +527,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   hideActionButton(id: string) {
-   let element = this.getActionElement(this.allEvents.find(e=>e.id===id))
-    if(element)
-      element.style.display="none";
+    let element = this.getActionElement(this.allEvents.find(e => e.id === id))
+    if (element)
+      element.style.display = "none";
   }
+
   refuseDay() {
     this.allEvents.forEach(e => {
       this.handleEvent("No", e)
@@ -543,14 +545,14 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   changeButtonSize() {
-    this.filteredEvents.forEach(e=>{
-      if((e.end.getTime() -  e.start.getTime())/3600000<2){
+    this.filteredEvents.forEach(e => {
+      if ((e.end.getTime() - e.start.getTime()) / 3600000 < 2) {
         let element = this.getActionElement(e)
-        for(let i=0; i<element.children.length;i++){
-          let child:HTMLElement = element.children[i] as HTMLElement
-          child.style.width="26px";
-          child.style.height="26px";
-          child.style.fontSize="0px";
+        for (let i = 0; i < element.children.length; i++) {
+          let child: HTMLElement = element.children[i] as HTMLElement
+          child.style.width = "26px";
+          child.style.height = "26px";
+          child.style.fontSize = "0px";
         }
         let fabElement = document.getElementById("scheduledBtn" + e.id)
         if (fabElement)
