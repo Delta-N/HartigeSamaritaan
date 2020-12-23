@@ -113,7 +113,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
       await this.projectService.getProject(projectId).then(res => {
         if (res) {
           this.project = res;
-          this.minDate = this.project.participationStartDate >= new Date() ? this.project.participationStartDate : new Date();
+          this.minDate = this.project.participationStartDate >= new Date() ? this.project.participationStartDate : moment().startOf("day").toDate();
           this.maxDate = this.project.participationEndDate;
           this.calendar.minDate = moment(this.minDate);
           this.calendar.maxDate = moment(this.maxDate);
@@ -174,8 +174,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.prevBtnDisabled = moment(this.viewDate).subtract(1, "day") < moment(this.minDate);
-    this.nextBtnDisabled = moment(this.viewDate).add(1, "day") > moment(this.maxDate)
+    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate);
+    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate)
   }
 
 

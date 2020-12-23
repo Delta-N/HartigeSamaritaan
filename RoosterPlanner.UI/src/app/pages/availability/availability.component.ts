@@ -110,7 +110,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         .then(async res => {
           if (res) {
             this.participation = res
-            this.minDate = this.participation.project.participationStartDate >= new Date() ? this.participation.project.participationStartDate : new Date();
+
+            this.minDate = this.participation.project.participationStartDate >= new Date() ? this.participation.project.participationStartDate : moment().startOf("day").toDate();
             this.maxDate = this.participation.project.participationEndDate;
 
             this.calendar.minDate = moment(this.minDate);
@@ -182,8 +183,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       }, 300);
     });
 
-    this.prevBtnDisabled = moment(this.viewDate).subtract(1, "day") < moment(this.minDate);
-    this.nextBtnDisabled = moment(this.viewDate).add(1, "day") > moment(this.maxDate)
+    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate);
+    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate)
   }
 
   async handleEvent(action: string, event: CalendarEvent): Promise<void> {
