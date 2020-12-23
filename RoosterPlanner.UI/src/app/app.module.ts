@@ -32,7 +32,7 @@ import {
   TaskFilterPipe,
   ScheduledPipe,
   AgePipe,
-  ScheduledCount, CheckboxFilter, CalendarTooltip, PlanTooltip
+  ScheduledCount, CheckboxFilter, CalendarTooltip, PlanTooltip, AvailabilityPipe
 } from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
@@ -156,6 +156,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     CheckboxFilter,
     CalendarTooltip,
     PlanTooltip,
+    AvailabilityPipe,
   ],
   imports: [
     CommonModule,

@@ -6,6 +6,7 @@ import {Manager} from "../models/manager";
 import {Shift} from "../models/shift";
 import {Schedule} from "../models/schedule";
 import {CalendarEvent} from "angular-calendar";
+import {Availability} from "../models/availability";
 
 @Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
@@ -144,6 +145,40 @@ export class PlanTooltip implements PipeTransform {
       result += scheduledNumber + " Ingeroosterd ";
       return result;
     }
+  }
+}
+
+@Pipe({name: 'availabilityPipe'})
+export class AvailabilityPipe implements PipeTransform {
+  transform(listOfAvailabilities: Availability[]): string {
+    let result: string = "Is vandaag beschikbaar voor: \n";
+    listOfAvailabilities.forEach(a=>{
+      if(a.preference===true)
+        result+="(voorkeur) "
+      if(a.type===2)
+        result+=a.shift.task.name + " " + a.shift.startTime +"-"+a.shift.endTime+"\n"
+
+    })
+    let found:boolean=false
+    let append:string="Is vandaag ingeroosterd op: \n";
+
+    listOfAvailabilities.forEach(a=>{
+
+      if(a.type===3)
+      {
+        found=true
+        append+=a.shift.task.name + " " + a.shift.startTime +"-"+a.shift.endTime+"\n"
+      }
+
+
+    })
+    if(found){
+      result+="\n";
+      result+=append
+    }
+
+    return result;
+
   }
 }
 

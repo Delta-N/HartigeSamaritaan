@@ -22,28 +22,43 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
-        public Task<List<Availability>> FindAvailabilitiesAsync(Guid projectId, Guid userId)
+        public async Task<List<Availability>> FindAvailabilitiesAsync(Guid projectId, Guid userId)
         {
             if (projectId == Guid.Empty || userId == Guid.Empty)
                 return null;
-            return EntitySet
+            List<Availability> availabilities = await EntitySet
                 .AsNoTracking()
                 .Include(a=>a.Participation)
                 .Include(a=>a.Shift)
+                .ThenInclude(s=>s.Task)
                 .Where(a => a.Participation.ProjectId == projectId && a.Participation.PersonId==userId)
                 .ToListAsync();
+            availabilities.ForEach(a =>
+            {
+                a.Participation.Availabilities = null;
+                a.Shift.Availabilities = null;
+                a.Shift.Task.Shifts = null;
+            });
+
+            return availabilities;
         }
 
-        public Task<List<Availability>> GetActiveAvailabilities(Guid participationId)
+        public async Task<List<Availability>> GetActiveAvailabilities(Guid participationId)
         {
             if (participationId == Guid.Empty)
                 return null;
-            return EntitySet
+            List<Availability> availabilities = await EntitySet
                 .AsNoTracking()
                 .Include(a=>a.Shift)
                 .Where(a => a.ParticipationId == participationId && a.Type == AvailibilityType.Scheduled &&
                             a.Shift.Date >= DateTime.Today)
                 .ToListAsync();
+            availabilities.ForEach(a =>
+            {
+                a.Shift.Availabilities = null;
+                a.Shift.Task.Shifts = null;
+            });
+            return availabilities;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RoosterPlanner.Api.Models
 {
@@ -10,5 +11,6 @@ namespace RoosterPlanner.Api.Models
         public bool ScheduledThisDay { get; set; }
         public bool ScheduledThisShift { get; set; }
         public bool Preference { get; set; }
+        public List<AvailabilityViewModel> Availabilities { get; set; }
     }
 }

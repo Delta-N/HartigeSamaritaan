@@ -32,7 +32,7 @@ namespace RoosterPlanner.Api.Models
             if (availability.Participation != null)
                 vm.Participation = ParticipationViewModel.CreateVm(availability.Participation);
             if (availability.Shift != null)
-                ShiftViewModel.CreateVm(availability.Shift);
+                vm.Shift=ShiftViewModel.CreateVm(availability.Shift);
             return vm;
         }
 

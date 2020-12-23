@@ -1,4 +1,5 @@
 ﻿import {User} from "./user";
+import {Availability} from "./availability";
 
 export class Schedule {
 
@@ -8,4 +9,5 @@ export class Schedule {
   public scheduledThisDay: boolean;
   public scheduledThisShift: boolean;
   public preference: boolean;
+  public availabilities: Availability[];
 }
