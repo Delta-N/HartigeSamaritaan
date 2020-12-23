@@ -74,7 +74,7 @@ export class ScheduledPipe implements PipeTransform {
     if (value.availabilities && value.availabilities.length > 0) {
       value.availabilities.forEach(a => {
         if (a.type === 3)
-          result+=1;
+          result += 1;
       })
     }
     return result;
@@ -103,12 +103,20 @@ export class ScheduledCount implements PipeTransform {
   transform(value: Schedule[]): number {
     let result: number = 0;
     if (value) {
-     value.forEach(v=>{
-       if(v.scheduledThisDay)
-         result++
-     })
+      value.forEach(v => {
+        if (v.scheduledThisDay)
+          result++
+      })
     }
     return result;
+  }
+}
+
+@Pipe({name: 'checkboxFilter'})
+export class CheckboxFilter implements PipeTransform {
+  transform(listOfTasks: Task[], id: string): boolean {
+    let result = listOfTasks.find(t => t.id === id)
+    return !result;
   }
 }
 

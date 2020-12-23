@@ -32,7 +32,7 @@ import {
   TaskFilterPipe,
   ScheduledPipe,
   AgePipe,
-  ScheduledCount
+  ScheduledCount, CheckboxFilter
 } from "./helpers/filter.pipe";
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {ProjectComponent} from './pages/project/project.component';
@@ -152,7 +152,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     PlanShiftComponent,
     AgePipe,
     ScheduledCount,
-
+    CheckboxFilter,
   ],
   imports: [
     CommonModule,

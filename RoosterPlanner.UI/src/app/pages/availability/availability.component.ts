@@ -80,8 +80,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   filteredEventsObservable: BehaviorSubject<CalendarEvent[]> = new BehaviorSubject<CalendarEvent[]>(this.filteredEvents);
   allEvents: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
-
-  hiddenElements: HTMLElement[] = [];
+  activeProjectTasks: Task[]=[];
 
   constructor(private breadcrumbService: BreadcrumbService,
               private shiftService: ShiftService,
@@ -360,40 +359,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     });
     if (this.shifts.length > 0) {
       this.addEvents();
-      this.filterCheckboxes();
-    }
-  }
-
-  filterCheckboxes() {
-    this.hiddenElements.forEach(el => el.style.display = "initial")
-    this.hiddenElements = []
-
-    let elements: HTMLCollection = document.getElementsByClassName("checkBox")
-
-    for (let i = 0; i < elements.length; i++) {
-      let element = elements[i] as HTMLElement
-
-      let projectTasks: Task[] = []
-      this.allEvents.forEach(ae => {
-        let pt = this.availabilityData.projectTasks.find(pt => pt.name === ae.title)
-        if (pt)
-          projectTasks.push(pt)
-      })
-
-      let found: boolean = false;
-      let ptask: Task;
-      projectTasks.forEach(pt => {
-        if (pt.id === element.id)
-          ptask = pt
-      })
-
-      if (ptask)
-        found = true;
-
-      if (!found) {
-        this.hiddenElements.push(element)
-        element.style.display = "none";
-      }
     }
   }
 
@@ -401,6 +366,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     let scheduledId: string[] = [];
 
     this.allEvents = [];
+    this.activeProjectTasks = []
     this.shifts.forEach(s => {
       let scheduled = false;
       if (s.availabilities && s.availabilities[0] && s.availabilities[0].type === 3)
@@ -424,7 +390,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         event.color.primary="#5b5bdc";
       }
 
-
+      this.activeProjectTasks.push(s.task)
       this.allEvents.push(event)
     })
     this.filterEvents();
