@@ -307,7 +307,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         child.style.border = "none";
       }
     }
-    moment.locale('nl')
+
   }
 
   getActionElement(event: CalendarEvent): HTMLElement {
@@ -355,6 +355,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   async getShifts(date: Date) {
+    moment.locale("nl")
     await this.shiftService.getAllShiftsOnDateWithUserAvailability(this.projectId, this.userId, moment(date).set("hour", 12).toDate()).then(async res => {
       this.shifts = res;
     });
