@@ -419,8 +419,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         color: this.getColor(s.task.color),
         id: s.id
       };
-      if (scheduled)
+      if (scheduled){
         scheduledId.push(s.id)
+        event.color.primary="#5b5bdc";
+      }
+
 
       this.allEvents.push(event)
     })
