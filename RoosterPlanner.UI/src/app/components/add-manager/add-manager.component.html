@@ -10,34 +10,36 @@
 
   </div>
   <mat-tab-group animationDuration="500ms" (selectedTabChange)="changeTab($event)">
-    <mat-tab label="Toevoegen" id="add">
+    <mat-tab label="Toevoegen" id="add" [disabled]="removedManagers.length>0">
       <div class="container">
         <div class="names">
          <span
            *ngFor="let user of users| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
-            <p><a (click)="modManager(user.id, false)">{{user.firstName}} {{user.lastName}} </a></p>
+           <a (click)="modManager(user.id, false)"> <p id="{{user.id}}">{{user.firstName}} {{user.lastName}}</p> </a>
          </span>
         </div>
         <div class="row">
           <button mat-raised-button (click)="prevPage()"><</button>
           <button mat-raised-button (click)="nextPage()">></button>
           <button mat-button (click)="close()" class="override-button closebutton">Annuleren</button>
+          <button mat-button (click)="send()" class="override-button action-button">Versturen</button>
         </div>
       </div>
     </mat-tab>
-    <mat-tab label="Verwijderen">
+    <mat-tab label="Verwijderen" [disabled]="addedManagers.length>0">
       <div class="container">
         <div class="names">
       <span
         *ngFor="let manager of managers| managerFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
-            <p><a
-              (click)="modManager(manager.person.id, true)">{{manager.person.firstName}} {{manager.person.lastName}}</a></p>
+            <a (click)="modManager(manager.personId, true)"><p id="{{manager.person.id}}">{{manager.person.firstName}} {{manager.person.lastName}}</p> </a>
       </span>
         </div>
         <div class="row">
           <button mat-raised-button (click)="prevPage()"><</button>
           <button mat-raised-button (click)="nextPage()">></button>
           <button mat-button (click)="close()" class="override-button closebutton ">Annuleren</button>
+          <button mat-button (click)="send()" class="override-button action-button">Versturen</button>
+
         </div>
       </div>
     </mat-tab>

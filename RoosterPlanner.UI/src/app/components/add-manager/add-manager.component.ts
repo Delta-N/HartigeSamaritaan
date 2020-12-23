@@ -20,6 +20,9 @@ export class AddManagerComponent implements OnInit {
   projectId: string;
   currentTabIndex: number = 0;
 
+  addedManagers: string[] = [];
+  removedManagers: string[] = [];
+
   constructor(private userService: UserService,
               @Inject(MAT_DIALOG_DATA) public data: any,
               public dialogRef: MatDialogRef<AddManagerComponent>,) {
@@ -56,26 +59,64 @@ export class AddManagerComponent implements OnInit {
 
   async modManager(id: string, alreadyManager: boolean) {
     if (!alreadyManager) {
-      await this.userService.makeManager(this.projectId, id).then(res => {
-        if (res) {
-          this.dialogRef.close(this.users.find(u => u.id == id).firstName)
-        }
-      })
+      let index = this.addedManagers.indexOf(id)
+      if (index > -1)
+        this.addedManagers.splice(index, 1)
+      else
+        this.addedManagers.push(id)
+
+      console.log(this.addedManagers)
+
 
     } else {
-      await this.userService.removeManager(this.projectId, id).then(res => {
-        if (res) {
-          this.dialogRef.close(this.managers.find(m => m.personId == id).person.firstName)
-        }
-      })
-    }
+      let index = this.removedManagers.indexOf(id)
+      if (index > -1)
+        this.removedManagers.splice(index, 1)
+      else
+        this.removedManagers.push(id)
 
+      console.log(this.removedManagers)
+      /* await this.userService.removeManager(this.projectId, id).then(res => {
+         if (res) {
+           this.dialogRef.close(this.managers.find(m => m.personId == id).person.firstName)
+         }
+       })*/
+    }
+    this.changeBackground()
+
+  }
+
+  changeBackground() {
+    this.users.forEach(u => {
+      let element = document.getElementById(u.id)
+      if (element) {
+        let index = this.addedManagers.find(m => m === u.id)
+        if (index)
+          element.style.background = "whitesmoke"
+        else
+          element.style.background = "white";
+      }
+    })
+
+    this.managers.forEach(u => {
+      let element = document.getElementById(u.personId)
+      if (element) {
+        let index = this.removedManagers.find(m => m === u.personId)
+        if (index)
+          element.style.background = "whitesmoke"
+        else
+          element.style.background = "white";
+      }
+    })
   }
 
   prevPage() {
     if (this.currentPage != 1) {
       this.currentPage--;
     }
+    setTimeout(()=>{
+      this.changeBackground()
+    },100)
   }
 
   nextPage() {
@@ -88,6 +129,9 @@ export class AddManagerComponent implements OnInit {
         this.currentPage++;
       }
     }
+    setTimeout(() => {
+      this.changeBackground()
+    }, 100)
   }
 
   close() {
@@ -98,5 +142,15 @@ export class AddManagerComponent implements OnInit {
     this.searchText = '';
     this.currentPage = 1;
     this.currentTabIndex = $event.index;
+  }
+
+  async send() {
+    for (const am of this.addedManagers) {
+      this.userService.makeManager(this.projectId, am)
+    }
+    for(const rm of this.removedManagers){
+      this.userService.removeManager(this.projectId,rm)
+    }
+    this.dialogRef.close()
   }
 }
