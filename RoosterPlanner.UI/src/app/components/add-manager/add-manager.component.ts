@@ -4,6 +4,7 @@ import {UserService} from "../../services/user.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Manager} from "../../models/manager";
 import {MatTabChangeEvent} from "@angular/material/tabs";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-add-manager',
@@ -25,7 +26,8 @@ export class AddManagerComponent implements OnInit {
 
   constructor(private userService: UserService,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              public dialogRef: MatDialogRef<AddManagerComponent>,) {
+              public dialogRef: MatDialogRef<AddManagerComponent>,
+              private toastr: ToastrService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -64,10 +66,6 @@ export class AddManagerComponent implements OnInit {
         this.addedManagers.splice(index, 1)
       else
         this.addedManagers.push(id)
-
-      console.log(this.addedManagers)
-
-
     } else {
       let index = this.removedManagers.indexOf(id)
       if (index > -1)
@@ -75,15 +73,8 @@ export class AddManagerComponent implements OnInit {
       else
         this.removedManagers.push(id)
 
-      console.log(this.removedManagers)
-      /* await this.userService.removeManager(this.projectId, id).then(res => {
-         if (res) {
-           this.dialogRef.close(this.managers.find(m => m.personId == id).person.firstName)
-         }
-       })*/
     }
     this.changeBackground()
-
   }
 
   changeBackground() {
@@ -114,9 +105,9 @@ export class AddManagerComponent implements OnInit {
     if (this.currentPage != 1) {
       this.currentPage--;
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       this.changeBackground()
-    },100)
+    }, 100)
   }
 
   nextPage() {
@@ -146,10 +137,17 @@ export class AddManagerComponent implements OnInit {
 
   async send() {
     for (const am of this.addedManagers) {
-      this.userService.makeManager(this.projectId, am)
+      this.userService.makeManager(this.projectId, am).then(res => {
+        if (res)
+          this.toastr.success(this.users.find(u => u.id === am).firstName + " is succesvol toegevoegd")
+      })
+
     }
-    for(const rm of this.removedManagers){
-      this.userService.removeManager(this.projectId,rm)
+    for (const rm of this.removedManagers) {
+      this.userService.removeManager(this.projectId, rm).then(res => {
+        if (res)
+          this.toastr.success(this.managers.find(u => u.personId === rm).person.firstName + " is succesvol verwijderd")
+      })
     }
     this.dialogRef.close()
   }

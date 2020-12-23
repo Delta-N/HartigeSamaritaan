@@ -14,7 +14,6 @@ import {TaskService} from "../../services/task.service";
 import {AddProjectTaskComponent} from "../../components/add-project-task/add-project-task.component";
 import {Task} from 'src/app/models/task';
 import {AddManagerComponent} from "../../components/add-manager/add-manager.component";
-import {Breadcrumb} from "../../models/breadcrumb";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 
 @Component({
@@ -224,10 +223,5 @@ export class ProjectComponent implements OnInit {
       }
     });
     dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.toastr.success("De rol van " + result + " is gewijzigd.")
-      }
-    });
   }
 }
