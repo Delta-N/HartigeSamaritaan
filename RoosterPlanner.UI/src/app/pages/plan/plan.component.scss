@@ -1,3 +1,15 @@
+.legend-button {
+  border: 1px black solid;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: white;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-evenly;
+}
 #spacer {
   display: flex;
   flex-direction: column;
@@ -144,16 +156,6 @@
   margin: 5px;
 }
 
-
-/*@media only screen and (max-width: 1200px) {
-  ::ng-deep .cal-event {
-    .cal-event-actions {
-      left: 10%;
-    }
-  }
-}*/
-
-
 @media only screen and (max-width: 992px) {
 
   ::ng-deep .custom-button {
@@ -165,6 +167,7 @@
   ::ng-deep .scheduled {
     width: initial;
   }
+
 }
 
 @media only screen and (max-width: 768px) {
@@ -209,6 +212,9 @@
     display: flex;
     justify-content: center;
   }
+  .legend {
+    display: flex;
+  }
 }
 
 @media only screen and (max-width: 525px) {
@@ -242,6 +248,9 @@
   }
   p {
     min-width: 100px;
+  }
+  .legend {
+    display: flex;
   }
 }
 

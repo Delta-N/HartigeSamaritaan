@@ -19,12 +19,11 @@ import {
 } from 'angular-calendar';
 import * as moment from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
-import {DomSanitizer} from "@angular/platform-browser";
 import {MatCalendar} from "@angular/material/datepicker";
 import {Moment} from "moment";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {UserService} from "../../services/user.service";
-import {BehaviorSubject, Subject} from "rxjs";
+import {Subject} from "rxjs";
 import {Participation} from "../../models/participation";
 import {ParticipationService} from "../../services/participation.service";
 import {AvailabilityService} from "../../services/availability.service";
@@ -32,6 +31,7 @@ import {AvailabilityData, ScheduleStatus} from "../../models/availabilitydata";
 import {Task} from 'src/app/models/task';
 import {Availability} from "../../models/availability";
 import {take} from "rxjs/operators";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 
 @Component({
@@ -55,7 +55,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   participation: Participation;
   availabilityData: AvailabilityData;
   displayedProjectTasks: Task[] = [];
-  currentDayProjectTasks: Task[] = [];
   shifts: Shift[] = [];
 
   selectedDate: Moment;
@@ -72,7 +71,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   nextBtnDisabled: boolean;
 
   filteredEvents: CalendarEvent[] = [];
-  filteredEventsObservable: BehaviorSubject<CalendarEvent[]> = new BehaviorSubject<CalendarEvent[]>(this.filteredEvents);
   allEvents: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
   activeProjectTasks: Task[] = [];
@@ -83,7 +81,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
               private participationService: ParticipationService,
               private availabilityService: AvailabilityService,
               private route: ActivatedRoute,
-              private sanitizer: DomSanitizer,
               private renderer: Renderer2) {
   }
 
@@ -294,39 +291,22 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   changeBorders(event: CalendarEvent, label: String) {
     if (label === "Preference")
       label = "Yes";
-    let farDecendend = this.getActionElement(event)
-    for (let k = 0; k < farDecendend.children.length; k++) {
-      let child: any = farDecendend.children[k];
+    let actionElement = this.getActionElement(event)
+    for (let k = 0; k < actionElement.children.length; k++) {
+      let child: any = actionElement.children[k];
       if (child.ariaLabel == label) {
         child.style.border = "solid 2px black";
       } else {
         child.style.border = "none";
       }
     }
-
   }
 
   getActionElement(event: CalendarEvent): HTMLElement {
-    moment.locale('en')
-    let aria = "\n      " + moment(event.start).format("dddd MMMM DD,") + "\n      " + event.title + ", from " + moment(event.start).format("hh:mm A") + "\n     to " +
-      moment(event.end).format("hh:mm A");
-    let x: HTMLCollection = (document.getElementsByClassName("cal-event"))
-    for (let i = 0; i < x.length; i++) {
-      let element: any = x[i]
-      if (element.ariaLabel == aria) {
-        let itemHolder = element.children[0];
-        for (let j = 0; j < itemHolder.children.length; j++) {
-          let child: any = itemHolder.children[j];
-          if (child.id == "actions") {
-            return child;
-          }
-        }
-      }
-    }
+   return document.getElementById("actions-"+event.id)
   }
 
   colorInMonth() {
-
     for (const ka of this.availabilityData.knownAvailabilities) {
       let date: Date = moment(ka.date).toDate();
       let color: string = "Red"
@@ -380,7 +360,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
           .set("minutes", Number(s.endTime.substring(3, 6))).toDate(),
 
         title: s.task.name,
-        color: this.getColor(s.task.color),
+        color: TextInjectorService.getColor(s.task.color),
         id: s.id
       };
       if (scheduled) {
@@ -417,8 +397,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       if (contains)
         this.filteredEvents.push(e);
     })
-
-
     this.setHours()
   }
 
@@ -452,51 +430,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     } else {
       this.displayedProjectTasks = this.displayedProjectTasks.filter(t => t !== task)
     }
-    this.filterEvents();
-  }
-
-  getColor(color: string) {
-    const colors: any = {
-      red: {
-        primary: '#ad2121',
-        secondary: '#FAE3E3',
-      },
-      blue: {
-        primary: '#1e90ff',
-        secondary: '#D1E8FF',
-      },
-      yellow: {
-        primary: '#e3bc08',
-        secondary: '#FDF1BA',
-      },
-      green: {
-        primary: '#1f931f',
-        secondary: '#c0f2c0'
-      },
-      orange: {
-        primary: '#cc5200',
-        secondary: '#ffc299'
-      },
-      pink: {
-        primary: '#cc0052',
-        secondary: '#ffb3d1'
-      }
-    };
-
-    switch (color.toLowerCase()) {
-      case "red":
-        return colors.red
-      case "blue":
-        return colors.blue
-      case "yellow":
-        return colors.yellow
-      case "green":
-        return colors.green
-      case "orange":
-        return colors.orange
-      case "pink":
-        return colors.pink
-    }
+    this.addEvents()
   }
 
   changePreference(event) {

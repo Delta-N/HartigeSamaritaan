@@ -2,6 +2,7 @@
   <h1>Plannen - Overzicht</h1>
 </div>
 <div class="row content-container">
+
   <div class="col-4">
     <div class="calendar">
       <div class="calendar-wrapper">
@@ -15,8 +16,23 @@
                         checked="true" color="primary" [matTooltip]=item.description>{{item.name}}</mat-checkbox>
         </div>
       </div>
+      <div class="row legend">
+        <div class="mat-calendar-body-cell-content legend-button"
+             matTooltip="Er zijn onvoldoende mensen beschikbaar op deze dag."
+             style="background: red">1
+        </div>
+        <div class="mat-calendar-body-cell-content legend-button"
+             matTooltip="Er zijn voldoende mensen beschikbaar op deze dag."
+             style="background: green">2
+        </div>
+        <div class="mat-calendar-body-cell-content legend-button"
+             matTooltip="Alle diensten op deze dag zijn ingeroosterd."
+             style="background: blue">3
+        </div>
+      </div>
     </div>
   </div>
+
   <div class="col-8">
     <div class="row datebox">
       <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
@@ -29,19 +45,12 @@
     </div>
     <ng-template
       #customEventTemplate
-      let-weekEvent="weekEvent"
-    >
+      let-weekEvent="weekEvent">
       <div
         class="cal-event"
-        [ngStyle]="{
-         backgroundColor: weekEvent.event.color?.secondary,
-         borderColor: weekEvent.event.color?.primary
-         }"
+        [ngStyle]="{backgroundColor: weekEvent.event.color?.secondary,borderColor: weekEvent.event.color?.primary}"
         [mwlCalendarTooltip]="shifts|planTooltip:weekEvent.event"
-        [attr.aria-label]="
-         { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }
-         | calendarA11y: 'eventDescription'
-         ">
+        [attr.aria-label]=" { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
         <div class="flex-container">
           <div class="row flex-container" id="title">
             <span class="cal-event-title">{{weekEvent.event.title}}</span>
@@ -55,8 +64,7 @@
           </div>
           <div class="row" id="actions">
             <button mat-button aria-label="Plannen" class="custom-button scheduled" id="plan-{{weekEvent.event.id}}"
-                    (click)="Plan(weekEvent.event.id)">
-              Plannen
+                    (click)="Plan(weekEvent.event.id)"> Plannen
             </button>
           </div>
         </div>

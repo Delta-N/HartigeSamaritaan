@@ -217,4 +217,48 @@ export class TextInjectorService {
 
   constructor() {
   }
+
+ static getColor(color: string) {
+    const colors: any = {
+      red: {
+        primary: '#ad2121',
+        secondary: '#FAE3E3',
+      },
+      blue: {
+        primary: '#1e90ff',
+        secondary: '#D1E8FF',
+      },
+      yellow: {
+        primary: '#e3bc08',
+        secondary: '#FDF1BA',
+      },
+      green: {
+        primary: '#1f931f',
+        secondary: '#c0f2c0'
+      },
+      orange: {
+        primary: '#cc5200',
+        secondary: '#ffc299'
+      },
+      pink: {
+        primary: '#cc0052',
+        secondary: '#ffb3d1'
+      }
+    };
+
+    switch (color.toLowerCase()) {
+      case "red":
+        return colors.red
+      case "blue":
+        return colors.blue
+      case "yellow":
+        return colors.yellow
+      case "green":
+        return colors.green
+      case "orange":
+        return colors.orange
+      case "pink":
+        return colors.pink
+    }
+  }
 }

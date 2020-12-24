@@ -16,11 +16,25 @@
                         [matTooltip]=item.description>{{item.name}}</mat-checkbox>
         </div>
       </div>
+      <div class="row legend">
+        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je kan nog wat beschikbaarheden opgeven."
+             style="background: red">1
+        </div>
+        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je hebt alle beschikbaarheden ingevuld."
+             style="background: green">2
+        </div>
+        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je bent ingeroosterd."
+             style="background: blue">3
+        </div>
+
+      </div>
     </div>
   </div>
+
+
   <div class="col-8">
     <div class="row datebox">
-      <button mat-button class="accept btnhidden schedule-button" (click)="acceptDay()">Beschikbaar</button>
+      <button mat-button class="accept btnhidden schedule-button" matTooltip="Je bent de hele dag beschikbaar" (click)="acceptDay()">Beschikbaar</button>
       <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
         <mat-icon>navigate_before</mat-icon>
       </button>
@@ -28,7 +42,7 @@
       <button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
         <mat-icon>navigate_next</mat-icon>
       </button>
-      <button mat-button class="refuse btnhidden schedule-button" (click)="refuseDay()">Onbeschikbaar</button>
+      <button mat-button class="refuse btnhidden schedule-button" matTooltip="Je bent de hele dag onbeschikbaar" (click)="refuseDay()">Onbeschikbaar</button>
     </div>
     <div class="row rowhidden">
       <button mat-button class="accept schedule-button" (click)="acceptDay()">Beschikbaar</button>
@@ -39,31 +53,26 @@
       let-weekEvent="weekEvent">
       <div
         class="cal-event"
-        [ngStyle]="{
-         backgroundColor: weekEvent.event.color?.secondary,
-         borderColor: weekEvent.event.color?.primary
-         }"
+        [ngStyle]="{backgroundColor: weekEvent.event.color?.secondary,borderColor: weekEvent.event.color?.primary}"
         [mwlCalendarTooltip]="availabilityData.projectTasks|calendarTooltip:weekEvent.event.title"
-        [attr.aria-label]="
-         { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }
-         | calendarA11y: 'eventDescription'
-         "
-      >
+        [attr.aria-label]="{ event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
         <div class="flex-container">
+
           <div class="row flex-container" id="title">
             <button mat-icon-button class="star" [id]="weekEvent.event.id" (click)="changePreference(weekEvent.event)">
               <mat-icon>star_border</mat-icon>
             </button>
             <div class="cal-event-title">{{weekEvent.event.title}}</div>
           </div>
+
           <div class="row" id="spacer">
             <button mat-fab color="primary" class="scheduledBtn" [id]="'scheduledBtn'+weekEvent.event.id" hidden
                     (click)="openInstructions(weekEvent.event.id)">
               <mat-icon>check_circle_outline</mat-icon>
             </button>
           </div>
-          <div class="row" id="actions">
 
+          <div class="row" id="actions-{{weekEvent.event.id}}">
             <button mat-icon-button aria-label="Yes" class="option-button" style="color: green;"
                     (click)="handleEvent('Yes',weekEvent.event)">
               <mat-icon>check</mat-icon>
@@ -73,20 +82,11 @@
                     (click)="handleEvent('No',weekEvent.event)">
               <mat-icon>close</mat-icon>
             </button>
-
           </div>
+
         </div>
       </div>
     </ng-template>
-    <ng-template #eventTitleTemplate let-event="event" let-view="view">
-      <span
-        class="cal-event-title"
-        [innerHTML]="event.title | calendarEventTitle: view:event"
-        [attr.aria-hidden]="{} | calendarA11y: 'hideEventTitle'"
-      >
-      </span>
-    </ng-template>
-
     <div class="calendarbox">
       <mwl-calendar-day-view #schedule
                              [viewDate]="viewDate"
@@ -94,8 +94,7 @@
                              [dayEndHour]="endHour"
                              [events]="filteredEvents"
                              [refresh]="refresh"
-                             [eventTemplate]="customEventTemplate"
-      >
+                             [eventTemplate]="customEventTemplate">
       </mwl-calendar-day-view>
     </div>
   </div>
