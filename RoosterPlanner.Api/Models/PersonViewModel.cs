@@ -74,6 +74,7 @@ namespace RoosterPlanner.Api.Models
             {
                 Id = vm.Id.ToString(),
                 GivenName = vm.FirstName,
+                DisplayName = vm.FirstName,
                 Surname = vm.LastName,
                 Mail = vm.Email,
                 StreetAddress = vm.StreetAddress,

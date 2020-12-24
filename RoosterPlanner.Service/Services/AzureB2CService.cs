@@ -134,8 +134,6 @@ namespace RoosterPlanner.Service
 
                 if (users.Count == 0)
                     throw new NullReferenceException("No users found");
-                //dit is heel tijdrovend. keuze maken om personen alleen in te voegen en updaten bij het individueel ophalen/updaten van gebruikers
-                //foreach (var user in users) AddPersonToLocalDb(user);
 
                 result.StatusCode = HttpStatusCode.OK;
                 result.Succeeded = true;
