@@ -48,7 +48,15 @@
                   </ng-container>
                   <ng-container matColumnDef="#Ingeroosterd">
                      <th mat-header-cell mat-sort-header *matHeaderCellDef>#Ingeroosterd</th>
-                     <td mat-cell *matCellDef="let row">{{row.numberOfTimesScheduledThisProject}}</td>
+                     <td mat-cell *matCellDef="let row">{{row.numberOfTimesScheduledThisProject}} keer</td>
+                  </ng-container>
+                 <ng-container matColumnDef="Ingeroosterd">
+                     <th mat-header-cell mat-sort-header *matHeaderCellDef>Ingeroosterd</th>
+                     <td mat-cell *matCellDef="let row">{{row.hoursScheduledThisWeek}} uur</td>
+                  </ng-container>
+                 <ng-container matColumnDef="Inzetbaarheid">
+                     <th mat-header-cell mat-sort-header *matHeaderCellDef>Inzetbaarheid</th>
+                     <td mat-cell *matCellDef="let row">{{row.employability}} uur</td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row [matTooltip]="row.availabilities | availabilityPipe" [matTooltipClass]="'multiline-tooltip'" *matRowDef="let row; columns: displayedColumns;" (click)="(!row.scheduledThisDay ||(row.scheduledThisDay && row.scheduledThisShift) )&& select(row)"

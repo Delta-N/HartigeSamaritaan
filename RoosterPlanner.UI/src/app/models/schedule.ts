@@ -10,4 +10,6 @@ export class Schedule {
   public scheduledThisShift: boolean;
   public preference: boolean;
   public availabilities: Availability[];
+  public hoursScheduledThisWeek: number;
+  public employability: number;
 }

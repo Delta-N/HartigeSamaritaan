@@ -12,5 +12,7 @@ namespace RoosterPlanner.Api.Models
         public bool ScheduledThisShift { get; set; }
         public bool Preference { get; set; }
         public List<AvailabilityViewModel> Availabilities { get; set; }
+        public double HoursScheduledThisWeek { get; set; }
+        public double Employability { get; set; }
     }
 }

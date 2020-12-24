@@ -153,7 +153,6 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-
         [HttpGet("schedule/{id}")]
         public async Task<ActionResult<ScheduleDataViewModel>> GetScheduleAsync(Guid id)
         {
@@ -166,10 +165,21 @@ namespace RoosterPlanner.Api.Controllers
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = shiftResult.Message});
                 if (shiftResult.Data == null)
                     return NotFound();
+
                 List<ScheduleViewModel> schedules = new List<ScheduleViewModel>();
 
-                foreach (Availability availability in shiftResult.Data.Availabilities.Where(a =>
-                    a.Type == AvailibilityType.Ok || a.Type == AvailibilityType.Scheduled)
+                //get a list with all days this week
+                var culture = System.Threading.Thread.CurrentThread.CurrentCulture;
+                int numberOfDaysBetweenNowAndStart =
+                    shiftResult.Data.Date.DayOfWeek - culture.DateTimeFormat.FirstDayOfWeek;
+                DateTime firstDateThisWeek =
+                    shiftResult.Data.Date.Subtract(TimeSpan.FromDays(numberOfDaysBetweenNowAndStart));
+                List<DateTime> allDaysThisWeek = new List<DateTime>();
+                for (int i = 0; i < 7; i++)
+                    allDaysThisWeek.Add(firstDateThisWeek.AddDays(i));
+
+                foreach (Availability availability in shiftResult.Data.Availabilities
+                    .Where(a => a.Type == AvailibilityType.Ok || a.Type == AvailibilityType.Scheduled)
                 ) //filter for people that are registerd to be able to work
                 {
                     //list all availabilities in this project of this person
@@ -180,7 +190,6 @@ namespace RoosterPlanner.Api.Controllers
 
                     //lookup person information in B2C
                     Task<TaskResult<User>> person = personService.GetUserAsync(availability.Participation.PersonId);
-
                     await System.Threading.Tasks.Task.WhenAll(availabilities, person);
 
                     //see if person is scheduled this day and this shift
@@ -192,29 +201,29 @@ namespace RoosterPlanner.Api.Controllers
                     bool scheduledThisShift = availabilities.Result.Data.FirstOrDefault(a =>
                         a.ShiftId == id && a.Type == AvailibilityType.Scheduled) != null;
 
-
-                    //create viewmodel of person
-                    PersonViewModel personViewModel = null;
-                    if (person.Result?.Data != null)
-                        personViewModel = PersonViewModel.CreateVmFromUser(person.Result.Data,
-                            Extensions.GetInstance(azureB2CConfig));
-
+                    //calculate the number of hours person is scheduled this week
+                    double numberOfHoursScheduleThisWeek = (availabilities.Result.Data)
+                        .Where(a => a.Type == AvailibilityType.Scheduled && allDaysThisWeek.Contains(a.Shift.Date))
+                        .Sum(availability1 =>
+                            availability1.Shift.EndTime.Subtract(availability1.Shift.StartTime).TotalHours);
 
                     //add scheduleViewmodel to list
-                    if (personViewModel != null)
-                        schedules.Add(new ScheduleViewModel
-                        {
-                            Person = personViewModel,
-                            NumberOfTimesScheduledThisProject = numberOfTimeScheduledThisDay,
-                            ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
-                            ScheduledThisShift = scheduledThisShift,
-                            AvailabilityId = availability.Id,
-                            Preference = availability.Preference,
-                            Availabilities = (await availabilities).Data
-                                .Where(a => a.Shift.Date == shiftResult.Data.Date)
-                                .Select(availability1 => AvailabilityViewModel.CreateVm(availability1))
-                                .ToList()
-                        });
+                    schedules.Add(new ScheduleViewModel
+                    {
+                        Person = PersonViewModel.CreateVmFromUser(person.Result.Data,
+                            Extensions.GetInstance(azureB2CConfig)),
+                        NumberOfTimesScheduledThisProject = numberOfTimeScheduledThisDay,
+                        ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
+                        ScheduledThisShift = scheduledThisShift,
+                        AvailabilityId = availability.Id,
+                        Preference = availability.Preference,
+                        Availabilities = (await availabilities).Data
+                            .Where(a => a.Shift.Date == shiftResult.Data.Date)
+                            .Select(availability1 => AvailabilityViewModel.CreateVm(availability1))
+                            .ToList(),
+                        HoursScheduledThisWeek = numberOfHoursScheduleThisWeek,
+                        Employability = availability.Participation.MaxWorkingHoursPerWeek
+                    });
                 }
 
                 ScheduleDataViewModel vm = new ScheduleDataViewModel()

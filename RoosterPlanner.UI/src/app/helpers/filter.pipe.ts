@@ -153,7 +153,6 @@ export class AvailabilityPipe implements PipeTransform {
   transform(listOfAvailabilities: Availability[]): string {
     let result: string = "Is vandaag beschikbaar voor: \n";
     listOfAvailabilities.forEach(a=>{
-      console.log(a)
       if(a.preference===true && a.type===2)
         result+="☆ "
       if(a.type===2)
