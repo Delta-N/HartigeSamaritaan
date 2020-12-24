@@ -1,89 +1,95 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatRadioModule } from '@angular/material/radio';
-import {MatNativeDateModule, MatOptionModule, MatRippleModule} from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { NgModule } from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatChipsModule} from "@angular/material/chips";
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatChip, MatChipsModule} from "@angular/material/chips";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatNativeDateModule, MatOptionModule, MatRippleModule} from '@angular/material/core';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import {MatTabsModule} from "@angular/material/tabs";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
     FlexLayoutModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
+    FormsModule,
+    ReactiveFormsModule,
+
     MatButtonModule,
-    MatStepperModule,
-    MatFormFieldModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatListModule,
-    MatTableModule,
     MatCardModule,
     MatCheckboxModule,
-    MatNativeDateModule,
-    MatRippleModule,
-    MatButtonModule,
-    MatCardModule,
+    MatChipsModule,
     MatDatepickerModule,
+    MatDialogModule,
+    MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatToolbarModule,
-    MatChipsModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatOptionModule,
     MatPaginatorModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
     MatSortModule,
+    MatStepperModule,
+    MatTableModule,
     MatTabsModule,
-
+    MatToolbarModule,
+    MatTooltipModule,
 
   ],
   exports: [
-    MatToolbarModule,
+    CommonModule,
     FlexLayoutModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
-    MatButtonModule,
-    MatStepperModule,
-    MatFormFieldModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatListModule,
-    MatTableModule,
-    MatNativeDateModule,
-    MatRippleModule,
+    FormsModule,
+    ReactiveFormsModule,
+
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
     MatDatepickerModule,
+    MatDialogModule,
+    MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatToolbarModule,
-    MatChip,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatOptionModule,
     MatPaginatorModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
     MatSortModule,
+    MatStepperModule,
+    MatTableModule,
     MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+
   ]
 })
 export class MaterialModule {}

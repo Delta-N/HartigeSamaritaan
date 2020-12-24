@@ -34,7 +34,7 @@
         </div>
         <mat-card-content>
         <span *ngFor="let item of categories">
-            <a [routerLink]="['/category', item.id]"><p>{{item.name}}</p></a>
+            <a [routerLink]="['category', item.id]"><p>{{item.name}}</p></a>
           </span>
           <mat-card-actions class="action-anchor"></mat-card-actions>
         </mat-card-content>

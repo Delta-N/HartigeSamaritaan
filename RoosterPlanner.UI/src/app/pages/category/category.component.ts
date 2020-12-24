@@ -67,7 +67,7 @@ export class CategoryComponent implements OnInit {
       if (dialogResult === true) {
         await this.categoryService.deleteCategory(this.guid).then(async response => {
           if (response) {
-            this.router.navigateByUrl("/tasks")
+            this.router.navigate(['admin/tasks']).then();
           }
         })
       }

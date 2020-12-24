@@ -85,7 +85,7 @@ export class TaskComponent implements OnInit {
         }
         this.taskService.deleteTask(this.guid).then(response => {
           if (response === true) {
-            this.router.navigateByUrl("/admin").then()
+            this.router.navigate(['admin/tasks']).then();
           }
         })
       }

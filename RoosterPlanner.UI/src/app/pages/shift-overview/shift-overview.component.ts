@@ -8,7 +8,6 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from "@angular/material/table";
 import {ShiftService} from "../../services/shift.service";
 import {TextInjectorService} from "../../services/text-injector.service";
-import {TaskService} from "../../services/task.service";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
 
@@ -110,6 +109,6 @@ export class ShiftOverviewComponent implements OnInit {
   }
 
   details(id: string) {
-    this.router.navigate(['/shift', id]).then();
+    this.router.navigate(['manage/shift', id]).then();
   }
 }

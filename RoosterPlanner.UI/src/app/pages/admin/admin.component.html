@@ -45,7 +45,7 @@
         </div>
         <mat-card-content>
           <span *ngFor="let item of administrators">
-            <a [routerLink]="['/profile', item.id]"><p>{{item.firstName}} {{item.lastName}}</p></a>
+            <a [routerLink]="['profile', item.id]"><p>{{item.firstName}} {{item.lastName}}</p></a>
           </span>
         </mat-card-content>
         <mat-card-actions class="action-anchor">
@@ -59,7 +59,7 @@
         <mat-card-title>Gegevens</mat-card-title>
       </div>
       <mat-card-content>
-        <a routerLink="/tasks"><p>Taken</p></a>
+        <a routerLink="tasks"><p>Taken</p></a>
         <a (click)="todo()"><p>Lijst medewerkers</p></a>
         <a (click)="todo()"><p>Statistieken exporteren</p></a>
         <mat-card-actions class="action-anchor"></mat-card-actions>

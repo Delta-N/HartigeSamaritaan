@@ -211,7 +211,7 @@ export class PlanShiftComponent implements OnInit {
             await this.availabilityService.changeAvailabilities(schedule).then(res => {
               if (res) {
                 this.toastr.success("Diensten zijn succesvol ingepland")
-                this.router.navigate(['/plan', this.scheduledata.shift.project.id, this.scheduledata.shift.date])
+                this.router.navigate(['manage/plan', this.scheduledata.shift.project.id, this.scheduledata.shift.date])
               } else
                 this.toastr.error("Fout tijdens het plannen")
             })

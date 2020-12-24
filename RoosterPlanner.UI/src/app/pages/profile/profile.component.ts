@@ -24,10 +24,7 @@ export class ProfileComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private userService: UserService,
               private authenticationService: MsalService,
-              private dialog: MatDialog,
-              private breadcrumbService: BreadcrumbService) {
-    this.breadcrumbService.backcrumb();
-  }
+              private dialog: MatDialog,) {}
 
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {

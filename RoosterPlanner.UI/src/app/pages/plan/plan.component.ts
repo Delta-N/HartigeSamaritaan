@@ -169,7 +169,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
 
   Plan(id: string | number) {
-    this.router.navigate(['/plan/shift', id]).then();
+    this.router.navigate(['manage/plan/shift', id]).then();
 
   }
 
