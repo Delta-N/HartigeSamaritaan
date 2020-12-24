@@ -153,8 +153,9 @@ export class AvailabilityPipe implements PipeTransform {
   transform(listOfAvailabilities: Availability[]): string {
     let result: string = "Is vandaag beschikbaar voor: \n";
     listOfAvailabilities.forEach(a=>{
-      if(a.preference===true)
-        result+="(voorkeur) "
+      console.log(a)
+      if(a.preference===true && a.type===2)
+        result+="☆ "
       if(a.type===2)
         result+=a.shift.task.name + " " + a.shift.startTime +"-"+a.shift.endTime+"\n"
 
@@ -167,7 +168,7 @@ export class AvailabilityPipe implements PipeTransform {
       if(a.type===3)
       {
         found=true
-        append+=a.shift.task.name + " " + a.shift.startTime +"-"+a.shift.endTime+"\n"
+        append+=a.shift.task.name + " " + a.shift.startTime +" - "+a.shift.endTime+"\n"
       }
 
 
