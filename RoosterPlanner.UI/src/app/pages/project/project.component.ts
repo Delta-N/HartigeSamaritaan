@@ -174,7 +174,6 @@ export class ProjectComponent implements OnInit {
             this.displayProject(response.project);
         });
       } else {
-        this.toastr.error("fout tijdens het updaten van maximaal aantal werkuren")
         this.loaded = true;
       }
     });

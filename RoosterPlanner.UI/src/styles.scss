@@ -75,10 +75,10 @@ h2 {
 .cardholder {
   display: flex;
   overflow-x: auto;
-  align-items: flex-start;
   padding-top: 30px;
   flex-wrap: wrap;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .card-title-icon {
@@ -236,7 +236,7 @@ h2 {
     margin-bottom: 30px;
   }
   .bar {
-    display: block;
+    display: flex;
   }
 
 }
