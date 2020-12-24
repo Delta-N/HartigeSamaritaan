@@ -62,8 +62,8 @@
                <div>
                   <mat-card-title>
                      Project taken
-                     <button [disabled]="projectTasksExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandTaskCard()">
-                        <mat-icon>zoom_out_map</mat-icon>
+                     <button [disabled]="projectTasksExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandTaskCard(viewProject.id)">
+                        <mat-icon id="icon{{viewProject.id}}">zoom_out_map</mat-icon>
                      </button>
                   </mat-card-title>
                </div>

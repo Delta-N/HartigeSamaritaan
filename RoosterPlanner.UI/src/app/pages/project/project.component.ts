@@ -179,16 +179,33 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  expandTaskCard() {
-    if (this.taskCardStyle == 'expanded-card') {
-      document.getElementById("left").hidden = false;
-      document.getElementById("pictureFrame").hidden = false;
+  expandTaskCard(id: string) {
+    let element = document.getElementById("icon" + id)
+    if (element) {
+      if (this.taskCardStyle === 'expanded-card')
+        element.innerText = "zoom_out_map"
+      else
+        element.innerText = "fullscreen_exit"
+    }
+
+    let pictureElement = document.getElementById("pictureFrame")
+    let leftElement = document.getElementById("left")
+    if (this.taskCardStyle === 'expanded-card') {
+      if (leftElement)
+        leftElement.hidden = false;
+
+      if (pictureElement)
+        pictureElement.hidden = false;
       this.taskCardStyle = 'card';
       this.itemsPerCard = 5;
       this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
-    } else {
-      document.getElementById("left").hidden = true;
-      document.getElementById("pictureFrame").hidden = true;
+    } else if (this.taskCardStyle === 'card') {
+      if (leftElement)
+        leftElement.hidden = true;
+
+      if (pictureElement)
+        pictureElement.hidden = true;
+
       this.taskCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
       this.getProjectTasks().then(() => {

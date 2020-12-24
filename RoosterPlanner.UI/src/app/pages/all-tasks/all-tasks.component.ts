@@ -110,13 +110,23 @@ export class AllTasksComponent implements OnInit {
   }
 
   expandTaskCard() {
+    let categoryCardElement = document.getElementById("categoryCard")
+    let element = document.getElementById("taskIcon")
+    if (element) {
+      if (this.taskCardStyle === 'expanded-card')
+        element.innerText = "zoom_out_map"
+      else
+        element.innerText = "fullscreen_exit"
+    }
     if (this.taskCardStyle == 'expanded-card') {
-      document.getElementById("categoryCard").hidden = false;
+      if(categoryCardElement)
+        categoryCardElement.hidden = false;
       this.taskCardStyle = 'card';
       this.itemsPerCard = 5;
       this.tasks = this.tasks.slice(0, this.itemsPerCard);
     } else {
-      document.getElementById("categoryCard").hidden = true;
+      if (categoryCardElement)
+        categoryCardElement.hidden = true;
       this.taskCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
       this.getTasks(0, this.itemsPerCard).then(() => {
@@ -127,13 +137,23 @@ export class AllTasksComponent implements OnInit {
   }
 
   expandCategoryCard() {
+    let taskCardElement = document.getElementById("taskCard")
+    let element = document.getElementById("categoryIcon")
+    if (element) {
+      if (this.categoryCardStyle === 'expanded-card')
+        element.innerText = "zoom_out_map"
+      else
+        element.innerText = "fullscreen_exit"
+    }
     if (this.categoryCardStyle == 'expanded-card') {
-      document.getElementById("taskCard").hidden = false;
+      if (taskCardElement)
+        taskCardElement.hidden = false;
       this.categoryCardStyle = 'card';
       this.itemsPerCard = 5;
       this.categories = this.categories.slice(0, this.itemsPerCard);
     } else {
-      document.getElementById("taskCard").hidden = true;
+      if (taskCardElement)
+        taskCardElement.hidden = true;
       this.categoryCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
       this.getCategories(0, this.itemsPerCard).then(() => {

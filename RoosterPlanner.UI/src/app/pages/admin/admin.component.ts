@@ -125,15 +125,29 @@ export class AdminComponent implements OnInit {
   }
 
   expandProjectCard() {
+
+    let dataCardElement = document.getElementById("dataCard")
+    let adminCardElement = document.getElementById("adminCard")
+    let element = document.getElementById("projectIcon")
+    if (element) {
+      if (this.projectCardStyle === 'expanded-card')
+        element.innerText = "zoom_out_map"
+      else
+        element.innerText = "fullscreen_exit"
+    }
     if (this.projectCardStyle == 'expanded-card') {
-      document.getElementById("adminCard").hidden = false;
-      document.getElementById("dataCard").hidden = false;
+      if (adminCardElement)
+        adminCardElement.hidden = false;
+      if (dataCardElement)
+        dataCardElement.hidden = false;
       this.projectCardStyle = 'card';
       this.itemsPerCard = 5;
       this.projects = this.projects.slice(0, this.itemsPerCard);
     } else {
-      document.getElementById("adminCard").hidden = true;
-      document.getElementById("dataCard").hidden = true;
+      if (adminCardElement)
+        adminCardElement.hidden = true;
+      if (dataCardElement)
+        dataCardElement.hidden = true;
       this.projectCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger
       this.getProjects(0, this.itemsPerCard).then(() => {
@@ -144,15 +158,30 @@ export class AdminComponent implements OnInit {
   }
 
   expandAdminCard() {
+    let projectCardElement = document.getElementById("projectCard")
+    let dataCardElement = document.getElementById("dataCard")
+    let element = document.getElementById("adminIcon")
+    if (element) {
+      if (this.adminCardStyle === 'expanded-card')
+        element.innerText = "zoom_out_map"
+      else
+        element.innerText = "fullscreen_exit"
+    }
+
     if (this.adminCardStyle == 'expanded-card') {
-      document.getElementById("projectCard").hidden = false;
-      document.getElementById("dataCard").hidden = false;
+      if(projectCardElement)
+        projectCardElement.hidden = false;
+      if(dataCardElement)
+        dataCardElement.hidden = false;
+
       this.adminCardStyle = 'card';
       this.itemsPerCard = 5;
       this.administrators = this.administrators.slice(0, this.itemsPerCard);
     } else {
-      document.getElementById("projectCard").hidden = true;
-      document.getElementById("dataCard").hidden = true;
+      if (projectCardElement)
+        projectCardElement.hidden = true
+      if (dataCardElement)
+        dataCardElement.hidden = true;
       this.adminCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
       this.getAdministrators(0, this.itemsPerCard).then(() => {
