@@ -32,8 +32,6 @@ import {AuthorizationGuard} from "../../guards/authorization.guard";
     AdminRoutingModule,
     MaterialModule,
   ],
-  providers:[
-    AuthorizationGuard,
-  ]
+  providers:[]
 })
 export class AdminModule { }

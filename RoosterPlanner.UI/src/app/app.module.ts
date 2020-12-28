@@ -1,6 +1,5 @@
 import * as moment from 'moment';
 import {AddProjectComponent} from './components/add-project/add-project.component';
-import {AdminModule} from "./modules/admin/admin.module";
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {AvailabilityComponent} from "./pages/availability/availability.component";
@@ -32,6 +31,9 @@ import {TaskComponent} from './pages/task/task.component';
 import {ToastrModule} from "ngx-toastr";
 import {adapterFactory} from 'angular-calendar/date-adapters/moment';
 import {environment} from "../environments/environment";
+import {AuthorizationGuard} from "./guards/authorization.guard";
+import {ManageGuard} from "./guards/manage.guard";
+import {AdminModule} from "./modules/admin/admin.module";
 
 
 export function momentAdapterFactory() {
@@ -92,14 +94,12 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
 
   ],
   imports: [
-    AdminModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     CommonModule,
     FormsModule,
     HttpClientModule,
-    ManageModule,
     MaterialModule,
     NgbModule,
     ReactiveFormsModule,
@@ -117,9 +117,13 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
         },
       }
     ),
+    ManageModule,
+    AdminModule
 
   ],
   providers: [
+    AuthorizationGuard,
+    ManageGuard,
     MsalService,
     MsalGuard,
     MsalBroadcastService,

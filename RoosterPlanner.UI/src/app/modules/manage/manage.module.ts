@@ -28,7 +28,6 @@ import {
   MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter
 } from "@angular/material-moment-adapter";
-import {ManageGuard} from "../../guards/manage.guard";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -94,7 +93,6 @@ export function momentAdapterFactory() {
     {
       provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS
     },
-    ManageGuard,
   ]
 })
 export class ManageModule { }

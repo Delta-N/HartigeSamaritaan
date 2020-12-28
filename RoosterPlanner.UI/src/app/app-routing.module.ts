@@ -7,67 +7,30 @@ import {ProfileComponent} from "./pages/profile/profile.component";
 import {ProjectComponent} from "./pages/project/project.component";
 import {RouterModule, Routes} from '@angular/router';
 import {TaskComponent} from "./pages/task/task.component";
+import {AuthorizationGuard} from "./guards/authorization.guard";
+import {ManageGuard} from "./guards/manage.guard";
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: HomeComponent,
-    canActivate: [
-      MsalGuard
-    ]
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [
-      MsalGuard
-    ]
-  },
-  {
-    path: 'availability/:id',
-    component: AvailabilityComponent,
-    canActivate: [
-      MsalGuard
-    ]
-  },
-  {
-    path: 'profile',
-    component: ProfileComponent,
-    canActivate: [
-      MsalGuard
-    ]
-  },
+  {path: 'home', component: HomeComponent, canActivate: [MsalGuard]},
+  {path: 'availability/:id', component: AvailabilityComponent, canActivate: [MsalGuard]},
+  {path: 'profile', component: ProfileComponent, canActivate: [MsalGuard]},
+  {path: 'project/:id', component: ProjectComponent, canActivate: [MsalGuard]},
+  {path: 'task/:id', component: TaskComponent, canActivate: [MsalGuard]},
+  {path: 'manage',loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule),canLoad: [ManageGuard]  },
+  {path: 'admin',loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),canLoad: [AuthorizationGuard]},
+  {path: '', component: HomeComponent, canActivate: [MsalGuard]},
+  {path: '**', component: NotFoundComponent,}
+]
 
-  {
-    path: 'project/:id',
-    component: ProjectComponent,
-    canActivate: [
-      MsalGuard
-    ]
-  },
-  {
-    path: 'task/:id',
-    component: TaskComponent,
-    canActivate: [
-      MsalGuard
-    ]
-  },
-  { path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule) },
-  { path: 'manage', loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule) },
 
-  {
-    path: '**',
-    component: NotFoundComponent
-  }
-];
 const isIframe = window !== window.parent && !window.opener;
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
     useHash: false,
     // Don't perform initial navigation in iframes
-    initialNavigation: !isIframe ? 'enabled' : 'disabled'
+    initialNavigation: !isIframe ? 'enabled' : 'disabled',
   })],
   exports: [RouterModule]
 })
