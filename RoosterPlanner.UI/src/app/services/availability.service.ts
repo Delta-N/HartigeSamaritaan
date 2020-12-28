@@ -37,6 +37,25 @@ export class AvailabilityService {
     return availabilityDate;
   }
 
+  async getScheduledAvailabilities(participationId:string):Promise<Availability[]>{
+    if(!participationId)
+    {
+      this.errorService.error("participationId mag niet leeg zijn")
+      return null;
+    }
+    let availabilities:Availability[]
+    await this.apiService.get<HttpResponse<Availability[]>>(`${HttpRoutes.availabilityApiUrl}/scheduled/${participationId}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          availabilities = res.body;
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return availabilities;
+
+  }
+
   async getAvailabilityDataOfProject(projectId: string): Promise<AvailabilityData> {
     if (!projectId) {
       this.errorService.error("projectId mag niet leeg zijn")

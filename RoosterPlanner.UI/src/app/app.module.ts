@@ -34,6 +34,7 @@ import {environment} from "../environments/environment";
 import {AuthorizationGuard} from "./guards/authorization.guard";
 import {ManageGuard} from "./guards/manage.guard";
 import {AdminModule} from "./modules/admin/admin.module";
+import { ScheduleComponent } from './pages/schedule/schedule.component';
 
 
 export function momentAdapterFactory() {
@@ -91,6 +92,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ProjectCardComponent,
     ProjectComponent,
     TaskComponent,
+    ScheduleComponent,
 
   ],
   imports: [

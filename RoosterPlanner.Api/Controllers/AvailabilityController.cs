@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
-using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.Models.Enums;
 using RoosterPlanner.Models.Types;
@@ -38,6 +37,33 @@ namespace RoosterPlanner.Api.Controllers
             this.availabilityService = availabilityService;
             this.shiftService = shiftService;
             this.taskService = taskService;
+        }
+
+        [HttpGet("scheduled/{participationId}")]
+        public async Task<ActionResult<List<AvailabilityViewModel>>> GetScheduledAvailabilities(Guid participationId)
+        {
+            if (participationId == Guid.Empty)
+                return BadRequest("No vaild participationId");
+            try
+            {
+                TaskListResult<Availability> taskListResult =
+                    await availabilityService.GetScheduledAvailabilities(participationId);
+
+                if (!taskListResult.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = taskListResult.Message});
+
+                if (taskListResult.Data.Count == 0)
+                    return NotFound();
+                List<AvailabilityViewModel> list = taskListResult.Data.Select(AvailabilityViewModel.CreateVm).ToList();
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(GetScheduledAvailabilities);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
         }
 
         [HttpGet("find/{projectId}/{userId}")]

@@ -6,6 +6,7 @@ import {Injectable} from '@angular/core';
 export class TextInjectorService {
   public static calenderSelectionOptions: string[] = ['Elke dag', 'Elke maandag', 'Elke dinsdag', 'Elke woensdag', 'Elke donderdag', 'Elke vrijdag', 'Elke zaterdag', 'Elke zondag', 'Verwijder selectie'];
   public static shiftTableColumnNames: string[] = ['Taak', 'Datum', 'Vanaf', 'Tot', '#Benodigde vrijwilligers'];
+  public static availabilitiesTableColumnNames: string[] = ['Datum', 'Taak', 'Vanaf', 'Tot','Instructies'];
   public static planShiftTableColumnNames: string[] = ['select', 'Naam', 'Leeftijd', 'Nationaliteit', '#Ingeroosterd', 'Ingeroosterd', 'Inzetbaarheid'];
   public static nationalitiesDutch: string[] = [
     "Afghaans",

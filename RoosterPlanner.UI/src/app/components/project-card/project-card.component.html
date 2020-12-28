@@ -4,8 +4,7 @@
   </div>
   <mat-card-content>
     <a [routerLink]="['/availability', participation.project.id]"><p>Beschikbaarheid</p></a>
-    <a (click)="todo()"><p>Agenda</p></a>
-    <a (click)="todo()"><p>Mijn Shifts</p></a>
+    <a [routerLink]="['/schedule', participation.id]"><p>Mijn Shifts</p></a>
 
   </mat-card-content>
   <mat-card-actions class="action-anchor">

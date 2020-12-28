@@ -13,6 +13,7 @@ namespace RoosterPlanner.Data.Repositories
     {
         Task<List<Availability>> FindAvailabilitiesAsync(Guid projectId, Guid userId);
         Task<List<Availability>> GetActiveAvailabilities(Guid participationId);
+        Task<List<Availability>> GetScheduledAvailabilities(Guid participationId);
     }
 
     public class AvailabilityRepository : Repository<Availability>, IAvailabilityRepository
@@ -52,6 +53,25 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(a=>a.Shift)
                 .Where(a => a.ParticipationId == participationId && a.Type == AvailibilityType.Scheduled &&
                             a.Shift.Date >= DateTime.Today)
+                .ToListAsync();
+            availabilities.ForEach(a =>
+            {
+                a.Shift.Availabilities = null;
+                a.Shift.Task.Shifts = null;
+            });
+            return availabilities;
+        }
+
+        public async Task<List<Availability>> GetScheduledAvailabilities(Guid participationId)
+        {
+            if (participationId == Guid.Empty)
+                return null;
+            List<Availability> availabilities = await EntitySet
+                .AsNoTracking()
+                .Include(a => a.Shift)
+                .ThenInclude(s=>s.Task)
+                .Where(a => a.ParticipationId == participationId && a.Type == AvailibilityType.Scheduled)
+                .OrderBy(a=>a.Shift.Date)
                 .ToListAsync();
             availabilities.ForEach(a =>
             {
