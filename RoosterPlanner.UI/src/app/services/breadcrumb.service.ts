@@ -31,7 +31,7 @@ export class BreadcrumbService {
     this.managecrumb.url = "/manage";
     this.managecrumb.label = "Beheer";
 
-    this.takencrumb.url = "/tasks";
+    this.takencrumb.url = "admin/tasks";
     this.takencrumb.label = "Taken";
 
     router.events.pipe(filter(event => event instanceof NavigationStart))

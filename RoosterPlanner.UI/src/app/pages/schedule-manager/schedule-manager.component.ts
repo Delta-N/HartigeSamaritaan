@@ -9,6 +9,8 @@ import {MatSort} from "@angular/material/sort";
 import {AvailabilityService} from "../../services/availability.service";
 import {TextInjectorService} from "../../services/text-injector.service";
 import {ProjectService} from "../../services/project.service";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 @Component({
   selector: 'app-schedule-manager',
@@ -45,7 +47,14 @@ export class ScheduleManagerComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router:Router,
               private availabilityService: AvailabilityService,
-              private projectService:ProjectService) {
+              private projectService:ProjectService,
+              private breadcrumbService:BreadcrumbService) {
+    let breadcrumb: Breadcrumb = new Breadcrumb();
+    breadcrumb.label = 'Rooster';
+    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
+      this.breadcrumbService.managecrumb, breadcrumb];
+
+    this.breadcrumbService.replace(array);
   }
 
   ngOnInit(): void {

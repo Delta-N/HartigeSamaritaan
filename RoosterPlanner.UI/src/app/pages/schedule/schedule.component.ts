@@ -7,6 +7,8 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {TextInjectorService} from "../../services/text-injector.service";
 import * as moment from "moment"
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 
 @Component({
@@ -34,7 +36,8 @@ export class ScheduleComponent implements OnInit {
   }
 
   constructor(private route: ActivatedRoute,
-              private availabilityService: AvailabilityService) {
+              private availabilityService: AvailabilityService,
+              private breadcrumbService:BreadcrumbService) {
   }
 
   ngOnInit(): void {
@@ -71,6 +74,13 @@ export class ScheduleComponent implements OnInit {
                   return item[property];
               }
             };
+            let previous: Breadcrumb = new Breadcrumb();
+            previous.label = res[0].participation.project.name
+            previous.url = "/project/" + res[0].participation.project.id
+            let current: Breadcrumb = new Breadcrumb();
+            current.label = 'Mijn shifts';
+            let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous,current];
+            this.breadcrumbService.replace(array);
             this.loaded=true;
           }
         })

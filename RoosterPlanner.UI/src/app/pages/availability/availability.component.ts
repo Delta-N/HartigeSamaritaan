@@ -191,7 +191,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       shift.availabilities = [];
 
     //yes? mod
-    if (availability) {
+    if (availability && availability.type!==3) {
       if (action !== "Preference")
         availability.type = this.getAvailabilityTypeNumber(action)
       else if (action === "Preference")
@@ -303,7 +303,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   getActionElement(event: CalendarEvent): HTMLElement {
-   return document.getElementById("actions-"+event.id)
+    return document.getElementById("actions-" + event.id)
   }
 
   colorInMonth() {

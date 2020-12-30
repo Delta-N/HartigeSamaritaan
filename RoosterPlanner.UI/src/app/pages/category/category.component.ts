@@ -7,6 +7,8 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confi
 import {CategoryService} from "../../services/category.service";
 import {Category} from "../../models/category";
 import {AddCategoryComponent} from "../../components/add-category/add-category.component";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 @Component({
   selector: 'app-category',
@@ -27,7 +29,15 @@ export class CategoryComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private categoryService: CategoryService,
-    private router: Router) {
+    private router: Router,
+    private breadcrumbService:BreadcrumbService) {
+
+    let breadcrumb: Breadcrumb = new Breadcrumb();
+    breadcrumb.label = 'Category';
+    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
+      this.breadcrumbService.admincrumb, this.breadcrumbService.takencrumb, breadcrumb];
+
+    this.breadcrumbService.replace(array);
   }
 
   ngOnInit(): void {
