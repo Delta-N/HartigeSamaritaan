@@ -7,6 +7,7 @@ import {ToastrService} from "ngx-toastr";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DateConverter} from "../../helpers/date-converter";
 import {UploadService} from "../../services/upload.service";
+import {Document} from "../../models/document";
 
 @Component({
   selector: 'app-create-project',
@@ -17,7 +18,7 @@ export class CreateProjectComponent implements OnInit {
   project: Project = new Project();
   updatedProject: Project;
   checkoutForm;
-  title: string="Project toevoegen";
+  title: string = "Project toevoegen";
   files: FileList;
 
 
@@ -26,13 +27,13 @@ export class CreateProjectComponent implements OnInit {
               private toastr: ToastrService,
               public dialogRef: MatDialogRef<CreateProjectComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private uploadService:UploadService) {
+              private uploadService: UploadService) {
 
     let today = DateConverter.todayString()
     if (!this.data.createProject) {
       this.project = this.data.project;
     }
-    this.title=this.data.title;
+    this.title = this.data.title;
     this.checkoutForm = this.formBuilder.group({
       id: this.project.id != null ? this.project.id : '',
       name: [this.project.name != null ? this.project.name : '', Validators.required],
@@ -86,13 +87,28 @@ export class CreateProjectComponent implements OnInit {
         const formData = new FormData();
         formData.append(this.files[0].name, this.files[0]);
 
-        if (this.updatedProject.pictureUri != null)
-          await this.uploadService.deleteIfExists(this.updatedProject.pictureUri).then();
-
+        let uri: string = null;
         await this.uploadService.uploadProjectPicture(formData).then(url => {
           if (url && url.path && url.path.trim().length > 0)
-            this.updatedProject.pictureUri = url.path.trim();
+            uri = url.path.trim();
         });
+
+        if (this.project.pictureUri != null) {
+          await this.uploadService.deleteIfExists(this.project.pictureUri.documentUri).then();
+          this.project.pictureUri.documentUri = uri;
+          await this.uploadService.updateDocument(this.project.pictureUri).then(res => {
+            if (res)
+              this.updatedProject.pictureUri = res;
+          })
+        }else{
+          let document = new Document();
+          document.name = "projectpicture"
+          document.documentUri = uri;
+          await this.uploadService.postDocument(document).then(res => {
+            if (res)
+              this.updatedProject.pictureUri = res;
+          })
+        }
       }
 
       //create new project

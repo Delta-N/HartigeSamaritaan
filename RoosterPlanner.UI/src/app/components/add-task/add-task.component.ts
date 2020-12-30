@@ -8,6 +8,7 @@ import {Category} from "../../models/category";
 import {TaskService} from "../../services/task.service";
 import {CategoryService} from "../../services/category.service";
 import {UploadService} from "../../services/upload.service";
+import {Document} from "../../models/document";
 
 @Component({
   selector: 'app-add-task',
@@ -68,16 +69,33 @@ export class AddTaskComponent implements OnInit {
         const formData = new FormData();
         formData.append(this.files[0].name, this.files[0]);
 
-        if (this.task.documentUri != null)
-          await this.uploadService.deleteIfExists(this.task.documentUri).then(); //do nothing with result
 
-
+        let uri: string = null;
         await this.uploadService.uploadInstruction(formData).then(url => {
           if (url && url.path && url.path.trim().length > 0)
-            this.updatedTask.documentUri = url.path.trim();
+            uri = url.path.trim();
         });
+
+        if (this.task.instruction) {
+          await this.uploadService.deleteIfExists(this.task.instruction.documentUri).then(); //delete blob if exists
+          this.task.instruction.documentUri = uri;
+          await this.uploadService.updateDocument(this.task.instruction).then(res => {
+            if (res)
+              this.updatedTask.instruction = res;
+          })
+        } else {
+          let document = new Document();
+          document.name = "instruction"
+          document.documentUri = uri;
+          await this.uploadService.postDocument(document).then(res => {
+            console.log(res)
+            if (res)
+              this.updatedTask.instruction = res;
+          })
+        }
+
       } else
-        this.updatedTask.documentUri = this.task.documentUri;
+        this.updatedTask.instruction = this.task.instruction;
 
 
       if (this.modifier === 'toevoegen') {

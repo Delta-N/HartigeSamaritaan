@@ -36,6 +36,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
+                .ThenInclude(t=>t.Instruction)
                 .Where(s => s.ProjectId == projectId)
                 .ToListAsync();
         }
@@ -48,6 +49,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
                 .Where(s => s.ProjectId == projectId && s.Date>=DateTime.Today)
                 .OrderBy(s => s.Date)
@@ -75,6 +77,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
                 .ThenInclude(a => a.Participation)
                 .Where(s => s.ProjectId == projectId && s.Date>=DateTime.Today)
@@ -128,6 +131,7 @@ namespace RoosterPlanner.Data.Repositories
             return EntitySet
                 .AsNoTracking()
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Project)
                 .Where(s => s.Id == shiftId).FirstOrDefaultAsync();
         }
@@ -140,6 +144,7 @@ namespace RoosterPlanner.Data.Repositories
             Shift shift = await EntitySet
                 .AsNoTracking()
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Project)
                 .Include(s => s.Availabilities)
                 .ThenInclude(a => a.Participation)
@@ -164,6 +169,7 @@ namespace RoosterPlanner.Data.Repositories
             List<Shift> listOfShifts = await EntitySet
                 .AsNoTracking()
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
                 .Where(s => s.ProjectId == projectId && s.Date == date && s.Task != null)
                 .ToListAsync();
@@ -184,6 +190,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
                 .ThenInclude(a => a.Participation)
                 .Where(s => s.ProjectId == projectId && s.Date == date && s.Task!=null)

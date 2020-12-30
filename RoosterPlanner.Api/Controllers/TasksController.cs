@@ -22,16 +22,18 @@ namespace RoosterPlanner.Api.Controllers
     public class TasksController : ControllerBase
     {
         private readonly ITaskService taskService;
+        private readonly IDocumentService documentService;
         private readonly IProjectService projectService;
         private readonly ILogger<TasksController> logger;
 
         //Constructor
         public TasksController(ITaskService taskService, IProjectService projectService,
-            ILogger<TasksController> logger)
+            ILogger<TasksController> logger, IDocumentService documentService)
         {
             this.taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
             this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.documentService = documentService;
         }
 
         [HttpGet("{id}")]
@@ -47,7 +49,6 @@ namespace RoosterPlanner.Api.Controllers
                 if (result.Data == null)
                     return NotFound();
                 return Ok(TaskViewModel.CreateVm(result.Data));
-
             }
             catch (Exception ex)
             {
@@ -106,6 +107,7 @@ namespace RoosterPlanner.Api.Controllers
                 task.LastEditBy = oid;
 
                 task.Category = null;
+                task.Instruction = null;
 
                 TaskResult<Task> result;
                 if (task.Id == Guid.Empty)
@@ -147,17 +149,17 @@ namespace RoosterPlanner.Api.Controllers
                 oldTask.Color = updatedTask.Color;
                 oldTask.Description = updatedTask.Description;
                 oldTask.Name = updatedTask.Name;
-                oldTask.Requirements = updatedTask.Requirements;
-                oldTask.Shifts = updatedTask.Shifts; //gevaarlijk goed testen?
-                oldTask.DocumentUri = updatedTask.DocumentUri;
+                oldTask.Instruction = (await documentService.GetDocumentAsync(updatedTask.InstructionId ?? Guid.Empty))
+                    .Data;
+                oldTask.InstructionId = oldTask.Instruction.Id;
                 oldTask.ProjectTasks = updatedTask.ProjectTasks;
-                oldTask.DeletedDateTime = updatedTask.DeletedDateTime;
 
                 if (updatedTask.CategoryId != Guid.Empty && oldTask.CategoryId != updatedTask.CategoryId)
                 {
                     oldTask.Category = (await taskService.GetCategoryAsync(updatedTask.CategoryId ?? Guid.Empty)).Data;
                     oldTask.CategoryId = oldTask.Category.Id;
                 }
+                
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldTask.LastEditBy = oid;
@@ -299,7 +301,6 @@ namespace RoosterPlanner.Api.Controllers
                     return BadRequest("Unable to convert CategoryViewModel to Category");
                 oldCategory.Code = updatedCategory.Code;
                 oldCategory.Name = updatedCategory.Name;
-                oldCategory.UrlPdf = updatedCategory.UrlPdf;
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldCategory.LastEditBy = oid;

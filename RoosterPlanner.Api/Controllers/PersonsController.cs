@@ -249,7 +249,7 @@ namespace RoosterPlanner.Api.Controllers
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
-                    return NotFound();
+                    return Ok(new List<ManagerViewModel>());
                 List<ManagerViewModel> managerVmList = result.Data.Select(ManagerViewModel.CreateVm).ToList();
                 return Ok(managerVmList);
             }

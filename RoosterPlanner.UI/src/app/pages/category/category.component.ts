@@ -51,8 +51,10 @@ export class CategoryComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(async result => {
-      this.category = result;
-      this.toastr.success(result.name + " is gewijzigd")
+      if (result && result !== 'false') {
+        this.category = result;
+        this.toastr.success(result.name + " is gewijzigd")
+      }
     });
   }
 

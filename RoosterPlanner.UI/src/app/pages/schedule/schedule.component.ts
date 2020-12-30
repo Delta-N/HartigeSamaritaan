@@ -47,7 +47,7 @@ export class ScheduleComponent implements OnInit {
             let old: Availability[] = []
             let all: Availability[] = []
             res.forEach(a => {
-              if (moment(a.shift.date).toDate() < this.today)
+              if (moment(a.shift.date).startOf("day").toDate() < moment().startOf("day").toDate())
                 old.push(a)
               else
                 all.push(a)

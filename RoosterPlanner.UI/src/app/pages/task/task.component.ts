@@ -63,7 +63,7 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result && result!=='false') {
         this.toastr.success(result.name + " is gewijzigd")
         this.task = result;
 
@@ -80,9 +80,6 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult === true) {
-        if (this.task.documentUri != null) {
-          this.uploadService.deleteIfExists(this.task.documentUri).then()
-        }
         this.taskService.deleteTask(this.guid).then(response => {
           if (response === true) {
             this.router.navigate(['admin/tasks']).then();

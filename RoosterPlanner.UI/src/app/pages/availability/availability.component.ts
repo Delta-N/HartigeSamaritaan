@@ -245,7 +245,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   openInstructions(id: string | number) {
-    let url: string = this.shifts.find(s => s.id === id).task?.documentUri;
+    let url: string = this.shifts.find(s => s.id === id).task?.instruction?.documentUri;
     if (url)
       window.open(url, "_blank")
   }

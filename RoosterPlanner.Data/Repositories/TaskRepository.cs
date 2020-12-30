@@ -28,11 +28,12 @@ namespace RoosterPlanner.Data.Repositories
 
             IQueryable<Task> queryable = EntitySet
                 .AsNoTracking()
-                .Include(t => t.Category);
+                .Include(t => t.Category)
+                .Include(t => t.Instruction);
 
             //Name
             if (!string.IsNullOrEmpty(filter.Name))
-                queryable = queryable.Where(t =>  t.Name.Contains(filter.Name));
+                queryable = queryable.Where(t => t.Name.Contains(filter.Name));
 
             queryable = filter.SetFilter(queryable);
 
@@ -50,7 +51,7 @@ namespace RoosterPlanner.Data.Repositories
         {
             return EntitySet
                 .Include(t => t.Category)
-                .Include(t => t.Requirements)
+                .Include(t => t.Instruction)
                 .Where(t => t.Id == id).FirstOrDefaultAsync();
         }
     }

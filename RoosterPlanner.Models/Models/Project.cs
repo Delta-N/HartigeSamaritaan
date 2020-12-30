@@ -36,7 +36,11 @@ namespace RoosterPlanner.Models
         public DateTime ProjectEndDate { get; set; }
 
         [Column(Order = 9)]
-        public string PictureUri { get; set; }
+
+        public Guid? PictureUriId { get; set; }
+
+        [ForeignKey("PictureUriId")]
+        public Document PictureUri { get; set; }
 
         [Column(Order = 10)]
         public string WebsiteUrl { get; set; }

@@ -1,4 +1,5 @@
 import {Entity} from "./entity.model";
+import {Document} from "./document";
 
 export class User extends Entity {
   public firstName: string;
@@ -12,4 +13,5 @@ export class User extends Entity {
   public phoneNumber: string;
   public userRole: string;
   public nationality:string;
+  public profilePicture:Document
 }

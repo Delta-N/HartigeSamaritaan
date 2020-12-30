@@ -22,6 +22,7 @@ namespace RoosterPlanner.Data.Common
         IProjectTaskRepository ProjectTaskRepository { get; }
         IManagerRepository ManagerRepository { get; }
         IAvailabilityRepository AvailabilityRepository { get; }
+        IDocumentRepository DocumentRepository { get; }
 
         /// <summary>
         /// Saves the changes.
@@ -56,6 +57,7 @@ namespace RoosterPlanner.Data.Common
         private IProjectTaskRepository projectTaskRepository;
         private IManagerRepository managerRepository;
         private IAvailabilityRepository availabilityRepository;
+        private IDocumentRepository documentRepository;
 
         #endregion
 
@@ -75,6 +77,7 @@ namespace RoosterPlanner.Data.Common
 
         public IManagerRepository ManagerRepository => managerRepository ??= new ManagerRepository(DataContext);
         public IAvailabilityRepository AvailabilityRepository => availabilityRepository ??= new AvailabilityRepository(DataContext);
+        public IDocumentRepository DocumentRepository => documentRepository ??= new DocumentRepository(DataContext);
 
         #region Constructor
 

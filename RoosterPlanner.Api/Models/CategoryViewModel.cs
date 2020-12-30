@@ -18,7 +18,6 @@ namespace RoosterPlanner.Api.Models
                     Id = category.Id,
                     Code = category.Code,
                     Name = category.Name,
-                    UrlPdf = category.UrlPdf,
                     LastEditDate = category.LastEditDate,
                     LastEditBy = category.LastEditBy,
                     RowVersion = category.RowVersion
@@ -37,7 +36,6 @@ namespace RoosterPlanner.Api.Models
                 {
                     Code = categoryViewModel.Code,
                     Name = categoryViewModel.Name,
-                    UrlPdf = categoryViewModel.UrlPdf,
                     LastEditDate = categoryViewModel.LastEditDate,
                     LastEditBy = categoryViewModel.LastEditBy,
                     RowVersion = categoryViewModel.RowVersion

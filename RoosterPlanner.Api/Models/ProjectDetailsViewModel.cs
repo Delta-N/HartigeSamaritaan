@@ -14,7 +14,7 @@ namespace RoosterPlanner.Api.Models
         public DateTime? ParticipationEndDate { get; set; }
         public DateTime ProjectStartDate { get; set; }
         public DateTime ProjectEndDate { get; set; }
-        public string PictureUri { get; set; }
+        public DocumentViewModel PictureUri { get; set; }
         public string WebsiteUrl { get; set; }
         public bool Closed { get; set; }
         public List<Task> Tasks { get; set; }
@@ -28,16 +28,15 @@ namespace RoosterPlanner.Api.Models
         {
             if (project == null)
                 return null;
-            return new ProjectDetailsViewModel()
+            ProjectDetailsViewModel vm = new ProjectDetailsViewModel()
             {
                 Id = project.Id,
                 Name = project.Name,
                 Address = project.Address,
                 City = project.City,
                 Description = project.Description,
-                PictureUri = project.PictureUri,
-                WebsiteUrl = project.WebsiteUrl,
                 ParticipationStartDate = project.ParticipationStartDate,
+                WebsiteUrl = project.WebsiteUrl,
                 ParticipationEndDate = project.ParticipationEndDate,
                 ProjectStartDate = project.ProjectStartDate,
                 ProjectEndDate = project.ProjectEndDate,
@@ -46,17 +45,21 @@ namespace RoosterPlanner.Api.Models
                 LastEditBy = project.LastEditBy,
                 RowVersion = project.RowVersion
             };
+            if (project.PictureUri != null)
+                vm.PictureUri = DocumentViewModel.CreateVm(project.PictureUri);
+            return vm;
         }
 
         public static Project CreateProject(ProjectDetailsViewModel projectDetailsViewModel)
         {
-            return new Project(projectDetailsViewModel.Id)
+            if (projectDetailsViewModel == null)
+                return null;
+            Project project = new Project(projectDetailsViewModel.Id)
             {
                 Name = projectDetailsViewModel.Name,
                 Address = projectDetailsViewModel.Address,
                 City = projectDetailsViewModel.City,
                 Description = projectDetailsViewModel.Description,
-                PictureUri = projectDetailsViewModel.PictureUri,
                 WebsiteUrl = projectDetailsViewModel.WebsiteUrl,
                 ParticipationStartDate = projectDetailsViewModel.ParticipationStartDate,
                 ParticipationEndDate = projectDetailsViewModel.ParticipationEndDate,
@@ -67,6 +70,12 @@ namespace RoosterPlanner.Api.Models
                 LastEditBy = projectDetailsViewModel.LastEditBy,
                 RowVersion = projectDetailsViewModel.RowVersion
             };
+            if (projectDetailsViewModel.PictureUri != null)
+            {
+                project.PictureUri = DocumentViewModel.CreateDocument(projectDetailsViewModel.PictureUri);
+                project.PictureUriId = project.PictureUri.Id;
+            }
+            return project;
         }
     }
 }

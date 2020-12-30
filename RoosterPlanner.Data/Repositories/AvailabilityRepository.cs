@@ -33,6 +33,7 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(a=>a.Participation)
                 .Include(a=>a.Shift)
                 .ThenInclude(s=>s.Task)
+                .ThenInclude(t=>t.Instruction)
                 .Where(a => a.Participation.ProjectId == projectId && a.Participation.PersonId==userId)
                 .ToListAsync();
             availabilities.ForEach(a =>
@@ -71,6 +72,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(a => a.Shift)
                 .ThenInclude(s=>s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Where(a => a.ParticipationId == participationId && a.Type == AvailibilityType.Scheduled)
                 .OrderBy(a=>a.Shift.Date)
                 .ToListAsync();
@@ -92,6 +94,7 @@ namespace RoosterPlanner.Data.Repositories
                 .ThenInclude(p=>p.Person)
                 .Include(a => a.Shift)
                 .ThenInclude(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Where(a => a.Participation.ProjectId == projectId && a.Type == AvailibilityType.Scheduled && a.Shift.Date==dateTime)
                 .OrderBy(a => a.Shift.StartTime)
                 .ThenBy(a=>a.Shift.EndTime)

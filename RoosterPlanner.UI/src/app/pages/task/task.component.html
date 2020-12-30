@@ -20,9 +20,9 @@
     <div class="user-data">{{task.color}}</div>
   </div>
 
-  <div class="row" *ngIf="task.documentUri!=null">
+  <div class="row" *ngIf="task.instruction">
     <div class="row-name">Instructiedocument:</div>
-    <div class="user-data"><a [href]="task.documentUri">Klik hier om te lezen</a></div>
+    <div class="user-data"><a [href]="task.instruction.documentUri" target="_blank">Klik hier om te lezen</a></div>
   </div>
 
   <div class="row">

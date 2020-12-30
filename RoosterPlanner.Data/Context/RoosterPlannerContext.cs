@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Context.Seed;
 using RoosterPlanner.Models;
 
@@ -9,7 +10,6 @@ namespace RoosterPlanner.Data.Context
         public DbSet<Person> Persons { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<CertificateType> CertificateTypes { get; set; }
-        public DbSet<Requirement> Requirements { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
@@ -18,6 +18,7 @@ namespace RoosterPlanner.Data.Context
         public DbSet<Availability> Availabilities { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Manager> Managers { get; set; }
+        public DbSet<Document> Documents { get; set; }
 
         //Constructor
         public RoosterPlannerContext(DbContextOptions<RoosterPlannerContext> options) : base(options)
@@ -53,24 +54,20 @@ namespace RoosterPlanner.Data.Context
                     .WithOne(t => t.Task);
             });
 
-            modelBuilder.Entity<Requirement>()
-                .HasOne(t => t.Task)
-                .WithMany(req => req.Requirements)
-                .HasForeignKey(req => req.TaskId)
+            modelBuilder.Entity<Document>()
+                .HasMany(d=>d.Instructions)
+                .WithOne(i=>i.Instruction)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Requirement>()
-                .HasOne(cer => cer.CertificateType)
-                .WithMany(req => req.Requirements)
-                .HasForeignKey(req => req.CertificateTypeId)
+            modelBuilder.Entity<Document>()
+                .HasMany(d => d.ProfilePictures)
+                .WithOne(i => i.ProfilePicture)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Task>(tsk =>
-            {
-                tsk
-                    .HasMany(t => t.Requirements)
-                    .WithOne(t => t.Task);
-            });
+            modelBuilder.Entity<Document>()
+                .HasMany(d => d.ProjectPictures)
+                .WithOne(i => i.PictureUri)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Task>()
                 .HasMany(s => s.Shifts)
@@ -81,11 +78,6 @@ namespace RoosterPlanner.Data.Context
                 .WithOne(t => t.Category)
                 .OnDelete(DeleteBehavior.SetNull);
             
-            modelBuilder.Entity<CertificateType>(ct =>
-            {
-                ct.HasMany(c => c.Requirements)
-                    .WithOne(req => req.CertificateType);
-            });
 
             modelBuilder.Entity<Person>()
                 .HasIndex(p => p.Oid)
@@ -171,6 +163,9 @@ namespace RoosterPlanner.Data.Context
 
             var taskseed = new TaskSeed(modelBuilder);
             taskseed.Seed();
+
+            var documentSeed = new DocumentSeed(modelBuilder);
+            documentSeed.Seed();
         }
     }
 }

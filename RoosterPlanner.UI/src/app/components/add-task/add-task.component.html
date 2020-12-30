@@ -40,12 +40,12 @@
       </mat-form-field>
     </div>
 
-    <div *ngIf="task.documentUri!=null">
-      <mat-label><a [href]=task.documentUri>Huidige instructie :</a></mat-label>
+    <div *ngIf="task.instruction && task.instruction.documentUri">
+      <mat-label><a [href]=task.instruction.documentUri target="_blank">Huidige instructie :</a></mat-label>
     </div>
 
     <div>
-      <label for="file" class="custom-file-upload">{{this.task.documentUri == null ? "Instructies toevoegen" : "Instructies vervangen"}}</label>
+      <label for="file" class="custom-file-upload">{{this.task.instruction == null ? "Instructies toevoegen" : "Instructies vervangen"}}</label>
       <span *ngIf="this.files!=null">{{this.files[0].name}}</span>
       <input #fileInput type="file" id="file" (change)="uploadInstructions(fileInput.files)"/>
     </div>
