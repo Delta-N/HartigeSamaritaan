@@ -7,7 +7,6 @@ import {DateConverter} from "../../helpers/date-converter";
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
 import {ActivatedRoute, ParamMap} from "@angular/router";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
 
 
 @Component({

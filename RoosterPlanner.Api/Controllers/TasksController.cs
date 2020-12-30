@@ -17,6 +17,7 @@ using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TasksController : ControllerBase
@@ -30,9 +31,9 @@ namespace RoosterPlanner.Api.Controllers
         public TasksController(ITaskService taskService, IProjectService projectService,
             ILogger<TasksController> logger, IDocumentService documentService)
         {
-            this.taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
-            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.taskService = taskService;
+            this.projectService = projectService;
+            this.logger = logger;
             this.documentService = documentService;
         }
 
@@ -149,10 +150,14 @@ namespace RoosterPlanner.Api.Controllers
                 oldTask.Color = updatedTask.Color;
                 oldTask.Description = updatedTask.Description;
                 oldTask.Name = updatedTask.Name;
-                oldTask.Instruction = (await documentService.GetDocumentAsync(updatedTask.InstructionId ?? Guid.Empty))
-                    .Data;
-                oldTask.InstructionId = oldTask.Instruction.Id;
                 oldTask.ProjectTasks = updatedTask.ProjectTasks;
+                if (updatedTask.Instruction != null)
+                {
+                    oldTask.Instruction =
+                        (await documentService.GetDocumentAsync(updatedTask.InstructionId ?? Guid.Empty))
+                        .Data;
+                    oldTask.InstructionId = oldTask.Instruction.Id;
+                }
 
                 if (updatedTask.CategoryId != Guid.Empty && oldTask.CategoryId != updatedTask.CategoryId)
                 {

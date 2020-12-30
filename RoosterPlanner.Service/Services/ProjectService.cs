@@ -33,9 +33,9 @@ namespace RoosterPlanner.Service
         //Constructor
         public ProjectService(IUnitOfWork unitOfWork, ILogger<ProjectService> logger)
         {
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            projectRepository = unitOfWork.ProjectRepository ?? throw new ArgumentNullException(nameof(projectRepository));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.unitOfWork = unitOfWork;
+            projectRepository = unitOfWork.ProjectRepository;
+            this.logger = logger;
         }
 
         /// <summary>

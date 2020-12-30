@@ -36,6 +36,9 @@ import {ManageGuard} from "./guards/manage.guard";
 import {AdminModule} from "./modules/admin/admin.module";
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { ScheduleManagerComponent } from './pages/schedule-manager/schedule-manager.component';
+import { AcceptPrivacyPolicyComponent } from './components/accept-privacy-policy/accept-privacy-policy.component';
+import {NgxDocViewerModule} from "ngx-doc-viewer";
+import { PrivacyComponent } from './pages/privacy/privacy.component';
 
 
 export function momentAdapterFactory() {
@@ -95,6 +98,8 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     TaskComponent,
     ScheduleComponent,
     ScheduleManagerComponent,
+    AcceptPrivacyPolicyComponent,
+    PrivacyComponent,
 
   ],
   imports: [
@@ -108,7 +113,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     NgbModule,
     ReactiveFormsModule,
     ToastrModule.forRoot(),
-
+    NgxDocViewerModule,
     CalendarModule.forRoot(
       {
         provide: CalendarDateAdapter,

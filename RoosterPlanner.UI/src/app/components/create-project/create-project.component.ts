@@ -8,6 +8,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DateConverter} from "../../helpers/date-converter";
 import {UploadService} from "../../services/upload.service";
 import {Document} from "../../models/document";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 @Component({
   selector: 'app-create-project',
@@ -100,7 +101,7 @@ export class CreateProjectComponent implements OnInit {
             if (res)
               this.updatedProject.pictureUri = res;
           })
-        }else{
+        } else {
           let document = new Document();
           document.name = "projectpicture"
           document.documentUri = uri;
@@ -130,6 +131,17 @@ export class CreateProjectComponent implements OnInit {
   }
 
   uploadPicture(files: FileList) {
-    this.files = files;
+    let correctExtention: boolean = true;
+    let acceptedExtentions = TextInjectorService.acceptedImageExtentions;
+    for (let i = 0; i < files.length; i++) {
+      let extention: string = files[i].name.substring(files[i].name.lastIndexOf('.') + 1)
+      let index: number = acceptedExtentions.indexOf(extention)
+      if (index < 0) {
+        this.toastr.warning("Controleer het formaat van de afbeelding")
+        correctExtention = false;
+      }
+    }
+    if (correctExtention)
+      this.files = files;
   }
 }

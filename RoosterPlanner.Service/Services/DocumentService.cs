@@ -15,6 +15,7 @@ namespace RoosterPlanner.Service
         Task<TaskResult<Document>> CreateDocumentAsync(Document document);
         Task<TaskResult<Document>> UpdateDocumentAsync(Document document);
         Task<TaskResult<Document>> DeleteDocumentAsync(Document document);
+        Task<TaskResult<Document>> GetPPAsync();
     }
 
     public class DocumentService : IDocumentService
@@ -76,7 +77,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                result.Message = GetType().Name + " - Error updateing document " + document.Id;
+                result.Message = GetType().Name + " - Error creating document " + document.Id;
                 logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
@@ -98,7 +99,7 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                result.Message = GetType().Name + " - Error updateing document " + document.Id;
+                result.Message = GetType().Name + " - Error updating document " + document.Id;
                 logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
@@ -124,7 +125,26 @@ namespace RoosterPlanner.Service
             }
             catch (Exception ex)
             {
-                result.Message = GetType().Name + " - Error updateing document " + document.Id;
+                result.Message = GetType().Name + " - Error deleting document " + document.Id;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskResult<Document>> GetPPAsync()
+        {
+            TaskResult<Document> result = new TaskResult<Document>();
+            try
+            {
+                result.Data = await documentRepository.GetPPAsync();
+                if (result.Data != null)
+                    result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error getting Privacy Policy ";
                 logger.LogError(ex, result.Message);
                 result.Error = ex;
             }

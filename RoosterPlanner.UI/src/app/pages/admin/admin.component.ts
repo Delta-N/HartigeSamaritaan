@@ -8,6 +8,7 @@ import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 import {AddAdminComponent} from "../../components/add-admin/add-admin.component";
 import {ToastrService} from "ngx-toastr";
+import {UploadPrivacyPolicyComponent} from "../../components/upload-privacy-policy/upload-privacy-policy.component";
 
 //
 @Component({
@@ -169,9 +170,9 @@ export class AdminComponent implements OnInit {
     }
 
     if (this.adminCardStyle == 'expanded-card') {
-      if(projectCardElement)
+      if (projectCardElement)
         projectCardElement.hidden = false;
-      if(dataCardElement)
+      if (dataCardElement)
         dataCardElement.hidden = false;
 
       this.adminCardStyle = 'card';
@@ -189,5 +190,17 @@ export class AdminComponent implements OnInit {
       })
 
     }
+  }
+
+  uploadPP() {
+    const dialogRef = this.dialog.open(UploadPrivacyPolicyComponent, {
+      width: '400px',
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result !== 'false') {
+        this.toastr.success("De privacy policy is gewijzigd")
+      }
+    });
   }
 }

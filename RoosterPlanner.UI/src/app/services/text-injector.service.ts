@@ -4,6 +4,7 @@ import {Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class TextInjectorService {
+  public static acceptedImageExtentions:string[]=['png','jpg','jpeg','gif','jfif','pjp','pjpeg']
   public static calenderSelectionOptions: string[] = ['Elke dag', 'Elke maandag', 'Elke dinsdag', 'Elke woensdag', 'Elke donderdag', 'Elke vrijdag', 'Elke zaterdag', 'Elke zondag', 'Verwijder selectie'];
   public static shiftTableColumnNames: string[] = ['Taak', 'Datum', 'Vanaf', 'Tot', '#Benodigde vrijwilligers'];
   public static availabilitiesTableColumnNames: string[] = ['Datum', 'Taak', 'Vanaf', 'Tot','Instructies'];

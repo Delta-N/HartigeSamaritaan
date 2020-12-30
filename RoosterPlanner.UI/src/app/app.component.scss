@@ -45,4 +45,16 @@ img {
   min-width: 100px
 }
 
+#footer {
+  position: absolute;
+  z-index: 1000;
+  bottom: 0;
+  height: 27px;
+}
+
+.footerbutton {
+  padding: 0 !important;
+  font-size: 12px;
+}
+
 

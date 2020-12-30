@@ -10,6 +10,11 @@ import {ParticipationService} from "../../services/participation.service";
 import {ToastrService} from "ngx-toastr";
 import {EntityHelper} from "../../helpers/entity-helper";
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
+import {UploadService} from "../../services/upload.service";
+import {Document} from "../../models/document";
+import * as moment from "moment"
+import {AcceptPrivacyPolicyComponent} from "../../components/accept-privacy-policy/accept-privacy-policy.component";
+import {JwtHelper} from "../../helpers/jwt-helper";
 
 @Component({
   selector: 'app-home',
@@ -22,6 +27,7 @@ export class HomeComponent implements OnInit {
   participations: Participation[] = [];
   currentUser: User;
   selectedProjects: Project[];
+  PP: Document;
 
 
   constructor(public dialog: MatDialog,
@@ -29,14 +35,40 @@ export class HomeComponent implements OnInit {
               private userService: UserService,
               private participationService: ParticipationService,
               private toastr: ToastrService,
+              private uploadService: UploadService
   ) {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.userService.getCurrentUser().then(async user => {
+    await this.uploadService.getPP().then(res => {
+      if (res)
+        this.PP = res;
+    })
+
+    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
+    await this.userService.getUser(idToken.oid).then(async user => {
       if (user) {
         this.currentUser = user
         this.getParticipations().then(() => this.loaded = true)
+      }
+    });
+
+    if (this.PP && (!this.currentUser.termsOfUseConsented || moment(this.PP.lastEditDate) > moment(this.currentUser.termsOfUseConsented)))
+      this.promptPPAccept();
+  }
+
+
+  promptPPAccept() {
+    const dialogRef = this.dialog.open(AcceptPrivacyPolicyComponent, {
+      width: '95vw',
+      height:'95vh',
+      data: this.PP
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result === 'true') {
+        this.currentUser.termsOfUseConsented = moment().subtract(moment().utcOffset(), "minutes").toDate().toISOString()
+        this.userService.updateUser(this.currentUser)
       }
     });
   }

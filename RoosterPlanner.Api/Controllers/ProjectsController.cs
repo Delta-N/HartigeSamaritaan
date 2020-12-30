@@ -27,8 +27,8 @@ namespace RoosterPlanner.Api.Controllers
         //Constructor
         public ProjectsController(IProjectService projectService, ILogger<ProjectsController> logger)
         {
-            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.projectService = projectService;
+            this.logger = logger;
         }
 
         [HttpGet("{id}")]

@@ -43,12 +43,11 @@ namespace RoosterPlanner.Service
         //Constructor
         public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger<PersonService> logger)
         {
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            personRepository = unitOfWork.PersonRepository ?? throw new ArgumentNullException(nameof(personRepository));
-            managerRepository = unitOfWork.ManagerRepository ??
-                                throw new ArgumentNullException(nameof(managerRepository));
-            this.azureB2CService = azureB2CService ?? throw new ArgumentNullException(nameof(azureB2CService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.unitOfWork = unitOfWork;
+            personRepository = unitOfWork.PersonRepository;
+            managerRepository = unitOfWork.ManagerRepository;
+            this.azureB2CService = azureB2CService ;
+            this.logger = logger;
         }
 
         public async Task<TaskResult<User>> GetUserAsync(Guid id)

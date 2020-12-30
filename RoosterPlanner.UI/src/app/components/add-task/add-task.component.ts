@@ -88,7 +88,6 @@ export class AddTaskComponent implements OnInit {
           document.name = "instruction"
           document.documentUri = uri;
           await this.uploadService.postDocument(document).then(res => {
-            console.log(res)
             if (res)
               this.updatedTask.instruction = res;
           })
@@ -119,6 +118,14 @@ export class AddTaskComponent implements OnInit {
   }
 
   uploadInstructions(files: FileList) {
-    this.files = files;
+    let correctExtention: boolean = true;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].name.substring(files[i].name.lastIndexOf('.') + 1) !== "pdf") {
+        this.toastr.warning("Er mogen alleen PDF instructies geupload worden")
+        correctExtention = false;
+      }
+    }
+    if (correctExtention)
+      this.files = files;
   }
 }

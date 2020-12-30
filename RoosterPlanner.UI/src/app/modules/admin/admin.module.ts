@@ -11,7 +11,7 @@ import {AddTaskComponent} from "../../components/add-task/add-task.component";
 import {AddManagerComponent} from "../../components/add-manager/add-manager.component";
 import {CreateProjectComponent} from "../../components/create-project/create-project.component";
 import {CategoryComponent} from "../../pages/category/category.component";
-import {AuthorizationGuard} from "../../guards/authorization.guard";
+import {UploadPrivacyPolicyComponent} from "../../components/upload-privacy-policy/upload-privacy-policy.component";
 
 
 @NgModule({
@@ -26,6 +26,7 @@ import {AuthorizationGuard} from "../../guards/authorization.guard";
     AddManagerComponent,
     CreateProjectComponent,
     CategoryComponent,
+    UploadPrivacyPolicyComponent
   ],
   imports: [
     CommonModule,

@@ -14,4 +14,5 @@ export class User extends Entity {
   public userRole: string;
   public nationality:string;
   public profilePicture:Document
+  public termsOfUseConsented:string
 }

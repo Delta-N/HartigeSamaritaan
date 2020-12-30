@@ -59,6 +59,21 @@ export class UploadService {
     return uploadResult
   }
 
+  async uploadPP(formData: FormData): Promise<Uploadresult> {
+    if (!formData) {
+      this.errorService.error("TOS-bestand is leeg")
+      return null;
+    }
+    let uploadResult: Uploadresult = new Uploadresult();
+    await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadPP`, formData)
+      .toPromise()
+      .then(res => {
+        if (res.succeeded)
+          uploadResult = res;
+      });
+    return uploadResult
+  }
+
   async deleteIfExists(url: string): Promise<Uploadresult> {
     if (!url) {
       this.errorService.error("url is leeg")
@@ -71,6 +86,19 @@ export class UploadService {
         uploadResult = res;
       });
     return uploadResult;
+  }
+
+  async getPP(): Promise<Document> {
+    let TOS: Document = null;
+    await this.apiService.get<HttpResponse<Document>>(`${HttpRoutes.uploadApiUrl}/PrivacyPolicy`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          TOS = res.body
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return TOS;
   }
 
   async postDocument(document: Document): Promise<Document> {
