@@ -20,6 +20,7 @@ namespace RoosterPlanner.Api.Models
         public string PhoneNumber { get; set; }
         public string UserRole { get; set; }
         public string Nationality { get; set; }
+        public string TermsOfUseConsented { get; set; }
 
         public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
@@ -62,6 +63,12 @@ namespace RoosterPlanner.Api.Models
                 personViewModel.Nationality = user
                     .AdditionalData[extension.NationalityExtension]
                     .ToString();
+            
+            if (user.AdditionalData.ContainsKey(extension.TermsOfUseConsented))
+                personViewModel.TermsOfUseConsented = user
+                    .AdditionalData[extension.TermsOfUseConsented]
+                    .ToString();
+            
             return personViewModel;
         }
 
@@ -76,7 +83,6 @@ namespace RoosterPlanner.Api.Models
                 GivenName = vm.FirstName,
                 DisplayName = vm.FirstName,
                 Surname = vm.LastName,
-                Mail = vm.Email,
                 StreetAddress = vm.StreetAddress,
                 PostalCode = vm.PostalCode,
                 City = vm.City,
@@ -85,7 +91,8 @@ namespace RoosterPlanner.Api.Models
                 {
                     {extension.DateOfBirthExtension, vm.DateOfBirth},
                     {extension.PhoneNumberExtension, vm.PhoneNumber},
-                    {extension.NationalityExtension, vm.Nationality}
+                    {extension.NationalityExtension, vm.Nationality},
+                    {extension.TermsOfUseConsented, vm.TermsOfUseConsented}
                 },
                 
             };

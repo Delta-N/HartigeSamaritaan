@@ -33,13 +33,16 @@ namespace RoosterPlanner.Api.Controllers
         private readonly IProjectService projectService;
 
         //Constructor
-        public PersonsController(IPersonService personService, ILogger<PersonsController> logger,
-            IOptions<AzureAuthenticationConfig> azureB2CConfig, IProjectService projectService)
+        public PersonsController(
+            IPersonService personService,
+            IOptions<AzureAuthenticationConfig> azureB2CConfig, 
+            ILogger<PersonsController> logger,
+            IProjectService projectService)
         {
-            this.personService = personService ?? throw new ArgumentNullException(nameof(personService));
-            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.azureB2CConfig = azureB2CConfig.Value ?? throw new ArgumentNullException(nameof(azureB2CConfig));
+            this.personService = personService;
+            this.projectService = projectService;
+            this.logger = logger;
+            this.azureB2CConfig = azureB2CConfig.Value;
         }
 
         [HttpGet("{id}")]
@@ -249,7 +252,7 @@ namespace RoosterPlanner.Api.Controllers
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
-                    return NotFound();
+                    return Ok(new List<ManagerViewModel>());
                 List<ManagerViewModel> managerVmList = result.Data.Select(ManagerViewModel.CreateVm).ToList();
                 return Ok(managerVmList);
             }

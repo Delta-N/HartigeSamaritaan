@@ -20,11 +20,8 @@ export class ErrorService {
 
       if (error.type === 2)
         this.toastr.error(error.message)
-    } else if(httpResponse.status===400){
+    } else {
       this.error(httpResponse.error)
-    }
-    else {
-      this.error(httpResponse.error.title);
     }
   }
 

@@ -11,20 +11,22 @@ namespace RoosterPlanner.Models
         [Required, MaxLength(64)]
         public string Name { get; set; }
 
-        [Column(Order = 2)] public DateTime? DeletedDateTime { get; set; } //NODIG?
+        [Column(Order = 2)] public Guid? CategoryId { get; set; }
 
-        [Column(Order = 3)] public Guid? CategoryId { get; set; }
+        [Column(Order = 3)] [MaxLength(12)] public string Color { get; set; }
 
-        [Column(Order = 4)] [MaxLength(12)] public string Color { get; set; }
+        [Column(Order = 4)] 
+        public Guid? InstructionId { get; set; }
 
-        [Column(Order = 5)] [MaxLength(256)] public string DocumentUri { get; set; }
+        [ForeignKey("InstructionId")] 
+        public Document Instruction { get; set; }
 
-        [Column(Order = 6)] [MaxLength(256)] public string Description { get; set; }
+        [Column(Order = 5)] [MaxLength(256)] public string Description { get; set; }
 
         [ForeignKey("CategoryId")] public Category Category { get; set; }
 
         public List<ProjectTask> ProjectTasks { get; set; }
-        public List<Requirement> Requirements { get; set; }
+
         public List<Shift> Shifts { get; set; }
 
         //Constructor
@@ -32,7 +34,6 @@ namespace RoosterPlanner.Models
         {
             ProjectTasks = new List<ProjectTask>();
             Shifts = new List<Shift>();
-            Requirements = new List<Requirement>();
         }
 
         //Constructor
@@ -40,7 +41,6 @@ namespace RoosterPlanner.Models
         {
             ProjectTasks = new List<ProjectTask>();
             Shifts = new List<Shift>();
-            Requirements = new List<Requirement>();
         }
     }
 }

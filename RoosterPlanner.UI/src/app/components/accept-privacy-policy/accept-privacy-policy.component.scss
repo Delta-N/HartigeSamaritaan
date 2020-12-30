@@ -1,0 +1,13 @@
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.policy {
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.left {
+  margin-right: auto;
+}

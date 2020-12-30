@@ -47,11 +47,10 @@ namespace RoosterPlanner.Service
         public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
             ILogger<AzureB2CService> logger)
         {
-            this.azureB2CConfig = azureB2CConfig.Value ?? throw new ArgumentNullException(nameof(azureB2CConfig));
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            personRepository = unitOfWork.PersonRepository ??
-                               throw new ArgumentNullException(nameof(unitOfWork.PersonRepository));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.azureB2CConfig = azureB2CConfig.Value;
+            this.unitOfWork = unitOfWork;
+            personRepository = unitOfWork.PersonRepository;
+            this.logger = logger;
         }
 
         public async Task<User> GetUserAsync(Guid userId)
@@ -64,9 +63,10 @@ namespace RoosterPlanner.Service
             var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
             var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
             var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+            var termsofuseconsented = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
 
             var user = await graphService.Users[userId.ToString()].Request()
-                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality}").GetAsync();
+                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented}").GetAsync();
             await AddPersonToLocalDbAsync(user);
 
             return user;
@@ -86,6 +86,9 @@ namespace RoosterPlanner.Service
                 var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
                 var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_dateOfBirth";
                 var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_phoneNumber";
+                var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+                var termsofuseconsented =
+                    $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
                 var tenant = azureB2CConfig.AzureTenantName;
 
                 var filterString = "";
@@ -119,7 +122,7 @@ namespace RoosterPlanner.Service
                 var currentUsers = await graphService.Users
                     .Request()
                     .Filter(filterString)
-                    .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}")
+                    .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented}")
                     .GetAsync();
                 while (currentUsers.Count > 0)
                 {

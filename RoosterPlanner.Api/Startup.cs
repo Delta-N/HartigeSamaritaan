@@ -84,6 +84,7 @@ namespace RoosterPlanner.Api
             services.AddTransient<IShiftService, ShiftService>();
             services.AddTransient<IBlobService, BlobService>();
             services.AddTransient<IAvailabilityService, AvailabilityService>();
+            services.AddTransient<IDocumentService, DocumentService>();
 
             services.AddLogging();
 

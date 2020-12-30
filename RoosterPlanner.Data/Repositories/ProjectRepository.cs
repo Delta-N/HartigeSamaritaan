@@ -91,8 +91,11 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<Project> GetProjectDetailsAsync(Guid id)
         {
-            return EntitySet.Include(x => x.ProjectTasks)
-                .Where(p => p.Id == id).FirstOrDefaultAsync();
+            return EntitySet
+                .Include(x => x.ProjectTasks)
+                .Include(p=>p.PictureUri)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
         }
     }
 }

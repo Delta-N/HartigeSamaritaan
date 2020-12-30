@@ -1,0 +1,50 @@
+table {
+  width: 100%;
+}
+
+td, th {
+  width: 25%;
+}
+
+@media only screen and (max-width: 768px) {
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+  }
+  .calendar-wrapper {
+    max-width: 300px;
+    margin: auto;
+  }
+  .row {
+    display: block;
+  }
+
+
+  .col-8 {
+    max-width: none;
+  }
+  .col-4 {
+    max-width: none;
+  }
+
+}
+
+@media only screen and (max-width: 525px) {
+
+}
+
+@media only screen and (max-width: 475px) {
+  .row {
+    display: block;
+  }
+
+
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+}
+

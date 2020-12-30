@@ -33,10 +33,16 @@ namespace RoosterPlanner.Models
         [NotMapped] public string Nationality { get; set; }
 
         [Column(Order = 4)] 
+        public Guid? ProfilePictureId { get; set; }
+        
+        [ForeignKey("ProfilePictureId")] 
+        public Document ProfilePicture { get; set; }
+
+        [Column(Order = 5)] 
         [MaxLength(256)]
         public string PersonalRemark { get; set; }
 
-        [Column(Order = 5)] 
+        [Column(Order = 6)] 
         [MaxLength(256)]
         public string StaffRemark { get; set; }
 

@@ -2,7 +2,6 @@
 
 namespace RoosterPlanner.Api.Models.Constants
 {
-
     public class Extensions
     {
         private static Extensions _extensions;
@@ -29,5 +28,8 @@ namespace RoosterPlanner.Api.Models.Constants
 
         public string NationalityExtension =>
             $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+
+        public string TermsOfUseConsented =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
     }
 }

@@ -79,8 +79,8 @@
       <label for="file"
              class="custom-file-upload">{{this.project.pictureUri == null ? "Afbeelding toevoegen" : "Afbeelding vervangen"}}</label>
       <span *ngIf="this.files!=null">{{this.files[0].name}}</span>
-      <input #fileInput type="file" id="file" (change)="uploadPicture(fileInput.files)"/>
-      <img *ngIf="project.pictureUri!=null" id="pictureFrame" src="{{project.pictureUri}}"
+      <input #fileInput type="file" id="file" accept="image/x-png,image/gif,image/jpeg" (change)="uploadPicture(fileInput.files)"/>
+      <img *ngIf="project.pictureUri!=null" id="pictureFrame" src="{{project.pictureUri.documentUri}}"
            alt="Project picture"/>
     </div>
 

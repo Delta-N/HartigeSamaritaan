@@ -1,4 +1,6 @@
 import {Entity} from "./entity.model";
+import {Document} from "./document";
+
 
 export class Project extends Entity {
   public name: string;
@@ -9,7 +11,7 @@ export class Project extends Entity {
   public participationEndDate?: Date;
   public projectStartDate: Date;
   public projectEndDate: Date;
-  public pictureUri?: string;
+  public pictureUri?: Document;
   public websiteUrl?: string;
   public closed?: boolean;
 }

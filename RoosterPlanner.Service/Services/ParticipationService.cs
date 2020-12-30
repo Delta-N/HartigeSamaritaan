@@ -36,12 +36,11 @@ namespace RoosterPlanner.Service
         public ParticipationService(IUnitOfWork unitOfWork, ILogger<ParticipationService> logger,
             IAzureB2CService azureB2CService, IPersonService personService)
         {
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            participationRepository = unitOfWork.ParticipationRepository ??
-                                      throw new ArgumentNullException(nameof(participationRepository));
-            this.azureB2CService = azureB2CService ?? throw new ArgumentNullException(nameof(azureB2CService));
-            this.personService = personService ?? throw new ArgumentNullException(nameof(personService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.unitOfWork = unitOfWork;
+            participationRepository = unitOfWork.ParticipationRepository;
+            this.azureB2CService = azureB2CService;
+            this.personService = personService;
+            this.logger = logger;
         }
 
         /// <summary>
