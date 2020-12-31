@@ -11,3 +11,16 @@
 .left {
   margin-right: auto;
 }
+
+@media only screen and (max-width: 550px) {
+  .policy {
+    max-height: 65vh;
+  }
+  h2{
+    font-size: 20px;
+  }
+  .action-row{
+    display: block;
+    font-size: 10px;
+  }
+}
