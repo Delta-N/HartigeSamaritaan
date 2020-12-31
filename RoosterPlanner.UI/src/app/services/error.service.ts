@@ -20,7 +20,14 @@ export class ErrorService {
 
       if (error.type === 2)
         this.toastr.error(error.message)
+
     } else {
+      if (httpResponse.error === "Outdated entity received"){
+        this.toastr.warning("Pagina word opnieuw geladen...")
+        setTimeout(()=>{
+          window.location.reload()
+        },1000)
+      }
       this.error(httpResponse.error)
     }
   }

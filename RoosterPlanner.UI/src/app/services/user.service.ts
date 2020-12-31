@@ -190,8 +190,25 @@ export class UserService {
       this.errorService.error("UpdateUser mag niet leeg zijn");
       return null;
     }
-    let user: User = new User();
+    let user: User = null;
     await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/`, updateUser)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          user = res.body
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return user
+  }
+
+  async updatePerson(updateUser: User): Promise<User> {
+    if (!updateUser) {
+      this.errorService.error("UpdateUser mag niet leeg zijn");
+      return null;
+    }
+    let user: User = null;
+    await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/UpdatePerson`, updateUser)
       .toPromise()
       .then(res => {
         if (res.ok)

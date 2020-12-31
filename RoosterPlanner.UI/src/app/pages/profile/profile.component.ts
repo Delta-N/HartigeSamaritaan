@@ -16,35 +16,38 @@ import {ActivatedRoute, ParamMap} from "@angular/router";
 })
 export class ProfileComponent implements OnInit {
   user: User;
-  age: any;
-  loaded: boolean = false;
+  age: string;
+  loaded: boolean;
   guid: string;
+  isStaff: boolean;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
               private authenticationService: MsalService,
-              private dialog: MatDialog,) {}
+              private dialog: MatDialog,) {
+  }
 
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
     });
-    if (this.guid == null) {
+    if (!this.guid) {
       const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
       this.guid = idToken.oid;
     }
     this.loadUserProfile().then();
+    this.isStaff = this.userService.userIsProjectAdminFrontEnd();
+
   }
 
   async loadUserProfile() {
 
-    await this.userService.getUser(this.guid).then(x => {
-      if (x.id != "") {
-        this.user = x;
+    await this.userService.getUser(this.guid).then(res => {
+      if (res.id) {
+        this.user = res;
+        console.log(this.user)
         this.age = DateConverter.calculateAge(this.user.dateOfBirth);
         this.loaded = true;
-      } else {
-        this.loaded = false;
       }
     });
   }
@@ -58,12 +61,35 @@ export class ProfileComponent implements OnInit {
       width: '500px',
       data: this.user
     });
-    dialogRef.disableClose=true;
+    dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         this.user = result;
         this.age = DateConverter.calculateAge(this.user.dateOfBirth)
       }
     })
+  }
+
+  editRemark(id: string) {
+    let element = document.getElementById(id);
+    let textAreaId = id === 'personalbutton' ? 'personalremark' : 'staffremark'
+    let originalText = id === 'personalbutton' ? this.user.personalRemark : this.user.staffRemark
+    let textareaElement = document.getElementById(textAreaId) as HTMLInputElement
+
+    if (element.innerText === 'Aanpassen') {
+      element.innerText = 'Opslaan'
+      textareaElement.disabled = false;
+    } else {
+      element.innerText = 'Aanpassen'
+      textareaElement.disabled = true;
+      if (textareaElement.value !== originalText) {
+        id === 'personalbutton' ? this.user.personalRemark = textareaElement.value : this.user.staffRemark = textareaElement.value
+        this.userService.updatePerson(this.user).then(res => {
+          console.log(res)
+          if (res)
+            this.user = res;
+        })
+      }
+    }
   }
 }

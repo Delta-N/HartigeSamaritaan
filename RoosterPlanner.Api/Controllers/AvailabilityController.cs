@@ -69,14 +69,15 @@ namespace RoosterPlanner.Api.Controllers
         }
 
         [HttpGet("scheduled/{projectId}/{date}")]
-        public async Task<ActionResult<List<AvailabilityViewModel>>> GetScheduledAvailabilities(Guid projectId,DateTime date)
+        public async Task<ActionResult<List<AvailabilityViewModel>>> GetScheduledAvailabilities(Guid projectId,
+            DateTime date)
         {
             if (projectId == Guid.Empty)
                 return BadRequest("No vaild projectId");
             try
             {
                 TaskListResult<Availability> taskListResult =
-                    await availabilityService.GetScheduledAvailabilities(projectId,date);
+                    await availabilityService.GetScheduledAvailabilities(projectId, date);
 
                 if (!taskListResult.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
@@ -234,7 +235,14 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                Availability availability = AvailabilityViewModel.CreateAvailability(availabilityViewModel);
+                Availability availability =
+                    (await availabilityService.GetAvailability((Guid) availabilityViewModel.ParticipationId,
+                        availabilityViewModel.ShiftId)).Data;
+                if (availability != null)
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = "Availability already exists"});
+
+                availability = AvailabilityViewModel.CreateAvailability(availabilityViewModel);
                 if (availability == null)
                     return BadRequest("Unable to convert availabilityViewModel to Availability");
 
@@ -282,6 +290,8 @@ namespace RoosterPlanner.Api.Controllers
                     return BadRequest("Unable to convert availabilityViewModel to Availability");
                 if (availability.Type == AvailibilityType.Scheduled)
                     return BadRequest("Cannot modify availability when user is already scheduled");
+                if (!availability.RowVersion.SequenceEqual(availabilityViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
 
                 availability.Preference = availabilityViewModel.Preference;
                 availability.Type = availabilityViewModel.Type;

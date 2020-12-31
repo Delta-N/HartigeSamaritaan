@@ -1,5 +1,6 @@
 #push {
   margin-left: auto;
+  border:none;
 }
 
 .mat-button {
@@ -15,4 +16,26 @@
   display: flex;
   margin-top: 9px;
   margin-bottom: 9px;
+}
+.col-6{
+  padding: 0;
+
+}
+.text-box{
+  border: 1px gray solid;
+  min-height: 20vh;
+  width: 80%;
+  font-size: 15px;
+
+}
+
+@media only screen and (max-width: 550px) {
+  .text-box{
+    font-size: 12px;
+  }
+  .override-button{
+    padding: 2px!important;
+    font-size: 12px!important;
+  }
+
 }

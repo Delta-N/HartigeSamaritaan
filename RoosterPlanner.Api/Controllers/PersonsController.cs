@@ -18,6 +18,7 @@ using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Person = RoosterPlanner.Models.Person;
+using Task = RoosterPlanner.Models.Task;
 using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
@@ -35,7 +36,7 @@ namespace RoosterPlanner.Api.Controllers
         //Constructor
         public PersonsController(
             IPersonService personService,
-            IOptions<AzureAuthenticationConfig> azureB2CConfig, 
+            IOptions<AzureAuthenticationConfig> azureB2CConfig,
             ILogger<PersonsController> logger,
             IProjectService projectService)
         {
@@ -52,21 +53,39 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid id.");
             try
             {
-                TaskResult<User> result;
+                Task<TaskResult<User>> userResult;
+                Task<TaskResult<Person>> personResult;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                if (id.ToString() == oid || await UserHasRole(oid, UserRole.Boardmember))
-                    result = await personService.GetUserAsync(id);
+                bool userIsBoardmember = await UserHasRole(oid, UserRole.Boardmember);
+
+                if (id.ToString() == oid || userIsBoardmember)
+                {
+                    userResult = personService.GetUserAsync(id);
+                    personResult = personService.GetPersonAsync(id);
+                    await System.Threading.Tasks.Task.WhenAll(userResult, personResult);
+                }
                 else
                     return Unauthorized();
 
-                if (!result.Succeeded)
-                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
-                if (result.Data == null)
+                if (!userResult.Result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = userResult.Result.Message});
+                if (!personResult.Result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = personResult.Result.Message});
+
+                if (userResult.Result.Data == null || personResult.Result.Data == null)
                     return NotFound();
 
-                PersonViewModel personVm =
-                    PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(azureB2CConfig));
+                PersonViewModel personVm = PersonViewModel.CreateVmFromUserAndPerson(userResult.Result.Data,
+                    personResult.Result.Data, Extensions.GetInstance(azureB2CConfig));
+
+                //check if user != boardmember || != Committeemember
+                bool userIsCommitteemember = await UserHasRole(oid, UserRole.Committeemember);
+                if (!userIsBoardmember && !userIsCommitteemember)
+                    personVm.StaffRemark = null;
+
                 return Ok(personVm);
             }
             catch (Exception ex)
@@ -149,6 +168,50 @@ namespace RoosterPlanner.Api.Controllers
             catch (Exception ex)
             {
                 string message = GetType().Name + "Error in " + nameof(UpdateUserAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
+        [HttpPut("UpdatePerson")]
+        public async Task<ActionResult<PersonViewModel>> UpdatePerson(PersonViewModel personViewModel)
+        {
+            if (personViewModel == null || personViewModel.Id == Guid.Empty)
+                return BadRequest("Invalid Person");
+            try
+            {
+                TaskResult<Person> personResult = await personService.GetPersonAsync(personViewModel.Id);
+                if (personResult == null)
+                    return NotFound("Person not found in database");
+                if (!personResult.Data.RowVersion.SequenceEqual(personViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
+
+                Person person = personResult.Data;
+
+                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                bool userIsCommitteemember = await UserHasRole(oid, UserRole.Committeemember);
+                bool userIsBoardmember = await UserHasRole(oid, UserRole.Boardmember);
+
+                person.PersonalRemark = personViewModel.PersonalRemark;
+
+                if (userIsBoardmember || userIsCommitteemember) //staff
+                    person.StaffRemark = personViewModel.StaffRemark;
+
+                if (personViewModel.ProfilePicture != null)
+                    person.ProfilePictureId = personViewModel.ProfilePicture.Id;
+
+                TaskResult<Person> result = await personService.UpdatePersonAsync(person);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+
+                personViewModel.LastEditBy = result.Data.LastEditBy;
+                personViewModel.LastEditDate = result.Data.LastEditDate;
+                personViewModel.RowVersion = result.Data.RowVersion;
+                return Ok(personViewModel);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(UpdatePerson);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }

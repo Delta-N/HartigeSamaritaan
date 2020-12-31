@@ -19,7 +19,7 @@ export class UploadService {
       this.errorService.error("Instuctie-bestand is leeg")
       return null;
     }
-    let uploadResult: Uploadresult = new Uploadresult();
+    let uploadResult: Uploadresult = null;
     await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}`, formData)
       .toPromise()
       .then(res => {
@@ -34,7 +34,7 @@ export class UploadService {
       this.errorService.error("Projectfoto-bestand is leeg")
       return null;
     }
-    let uploadResult: Uploadresult = new Uploadresult();
+    let uploadResult: Uploadresult = null;
     await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadProjectPicture`, formData)
       .toPromise()
       .then(res => {
@@ -49,7 +49,7 @@ export class UploadService {
       this.errorService.error("Profielfoto-bestand is leeg")
       return null;
     }
-    let uploadResult: Uploadresult = new Uploadresult();
+    let uploadResult: Uploadresult = null;
     await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadProfilePicture`, formData)
       .toPromise()
       .then(res => {
@@ -64,7 +64,7 @@ export class UploadService {
       this.errorService.error("TOS-bestand is leeg")
       return null;
     }
-    let uploadResult: Uploadresult = new Uploadresult();
+    let uploadResult: Uploadresult = null;
     await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadPP`, formData)
       .toPromise()
       .then(res => {
@@ -78,7 +78,7 @@ export class UploadService {
     if (!url) {
       this.errorService.error("url is leeg")
     }
-    let uploadResult: Uploadresult = new Uploadresult();
+    let uploadResult: Uploadresult = null;
 
     await this.apiService.delete<Uploadresult>(`${HttpRoutes.uploadApiUrl}?Url=${url}`)
       .toPromise()

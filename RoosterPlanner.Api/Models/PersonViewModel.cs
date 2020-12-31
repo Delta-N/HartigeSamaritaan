@@ -20,6 +20,12 @@ namespace RoosterPlanner.Api.Models
         public string PhoneNumber { get; set; }
         public string UserRole { get; set; }
         public string Nationality { get; set; }
+
+        public string PersonalRemark { get; set; }
+
+        public DocumentViewModel ProfilePicture { get; set; }
+
+        public string StaffRemark { get; set; }
         public string TermsOfUseConsented { get; set; }
 
         public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
@@ -102,55 +108,82 @@ namespace RoosterPlanner.Api.Models
 
         public static Person CreatePerson(PersonViewModel vm)
         {
-            if (vm != null)
-            {
-                return new Person(vm.Id)
-                {
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Email = vm.Email,
-                    StreetAddress = vm.StreetAddress,
-                    PostalCode = vm.PostalCode,
-                    City = vm.City,
-                    Country = vm.Country,
-                    DateOfBirth = vm.DateOfBirth,
-                    UserRole = vm.UserRole,
-                    PhoneNumber = vm.PhoneNumber,
-                    Nationality = vm.Nationality,
-                    LastEditDate = vm.LastEditDate,
-                    LastEditBy = vm.LastEditBy,
-                    RowVersion = vm.RowVersion
-                    
-                };
-            }
+            if (vm == null) return null;
 
-            return null;
+            Person person = new Person(vm.Id)
+            {
+                FirstName = vm.FirstName,
+                LastName = vm.LastName,
+                Email = vm.Email,
+                StreetAddress = vm.StreetAddress,
+                PostalCode = vm.PostalCode,
+                City = vm.City,
+                Country = vm.Country,
+                DateOfBirth = vm.DateOfBirth,
+                UserRole = vm.UserRole,
+                PhoneNumber = vm.PhoneNumber,
+                Nationality = vm.Nationality,
+                LastEditDate = vm.LastEditDate,
+                LastEditBy = vm.LastEditBy,
+                RowVersion = vm.RowVersion,
+                PersonalRemark = vm.PersonalRemark,
+                StaffRemark = vm.StaffRemark,
+            };
+            if (vm.ProfilePicture == null) return person;
+
+            person.ProfilePicture = DocumentViewModel.CreateDocument(vm.ProfilePicture);
+            person.ProfilePictureId = person.ProfilePicture.Id;
+
+            return person;
         }
 
         public static PersonViewModel CreateVmFromPerson(Person person)
         {
-            if (person != null)
+            if (person == null) return null;
+            PersonViewModel vm = new PersonViewModel
             {
-                return new PersonViewModel
-                {
-                    Id = person.Id,
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
-                    Email = person.Email,
-                    StreetAddress = person.StreetAddress,
-                    PostalCode = person.PostalCode,
-                    City = person.City,
-                    Country = person.Country,
-                    DateOfBirth = person.DateOfBirth,
-                    UserRole = person.UserRole,
-                    Nationality = person.Nationality,
-                    PhoneNumber = person.PhoneNumber,
-                    LastEditDate = person.LastEditDate,
-                    LastEditBy = person.LastEditBy,
-                    RowVersion = person.RowVersion
-                };
-            }
-            return null;
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                Email = person.Email,
+                StreetAddress = person.StreetAddress,
+                PostalCode = person.PostalCode,
+                City = person.City,
+                Country = person.Country,
+                DateOfBirth = person.DateOfBirth,
+                UserRole = person.UserRole,
+                Nationality = person.Nationality,
+                PhoneNumber = person.PhoneNumber,
+                LastEditDate = person.LastEditDate,
+                LastEditBy = person.LastEditBy,
+                RowVersion = person.RowVersion,
+                PersonalRemark = person.PersonalRemark,
+                StaffRemark = person.StaffRemark,
+            };
+
+            if (person.ProfilePicture != null)
+                vm.ProfilePicture = DocumentViewModel.CreateVm(person.ProfilePicture);
+
+            return vm;
+        }
+
+        public static PersonViewModel CreateVmFromUserAndPerson(User user, Person person, Extensions extension)
+        {
+            if (user == null || person == null)
+                return null;
+
+            PersonViewModel vmFromUser = PersonViewModel.CreateVmFromUser(user, extension);
+
+            vmFromUser.StaffRemark = person.StaffRemark;
+            vmFromUser.PersonalRemark = person.PersonalRemark;
+            vmFromUser.LastEditBy = person.LastEditBy;
+            vmFromUser.LastEditDate = person.LastEditDate;
+            vmFromUser.RowVersion = person.RowVersion;
+
+            if (person.ProfilePicture != null)
+                vmFromUser.ProfilePicture = DocumentViewModel.CreateVm(person.ProfilePicture);
+
+            return vmFromUser;
         }
     }
 }

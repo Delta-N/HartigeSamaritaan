@@ -117,12 +117,13 @@ export class ProjectComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      if (result !== 'false') {
+      if (result && result !== 'false') {
         setTimeout(() => {
           this.toastr.success(result.name + " is gewijzigd")
-          this.getProject();
+
         }, 500);
       }
+      this.getProject();
     });
   }
 
@@ -170,8 +171,11 @@ export class ProjectComponent implements OnInit {
         dialogResult <= 40) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
         await this.participationService.updateParticipation(this.participation).then(async response => {
+          console.log(response)
           if (response)
             this.displayProject(response.project);
+          else
+            window.location.reload()
         });
       } else {
         this.loaded = true;

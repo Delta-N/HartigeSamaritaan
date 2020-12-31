@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { ManageRoutingModule } from './manage-routing.module';
+import {ManageRoutingModule} from './manage-routing.module';
 import {ShiftOverviewComponent} from "../../pages/shift-overview/shift-overview.component";
 import {AddShiftsComponent} from "../../components/add-shifts/add-shifts.component";
 import {EditShiftComponent} from "../../components/edit-shift/edit-shift.component";
@@ -28,6 +28,7 @@ import {
   MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter
 } from "@angular/material-moment-adapter";
+import {ShiftComponent} from "../../pages/shift/shift.component";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -47,7 +48,7 @@ export function momentAdapterFactory() {
     CalendarTooltip,
     CheckboxFilter,
     AddProjectTaskComponent,
-
+    ShiftComponent,
     PlanTooltip,
     AvailabilityPipe,
     TaskFilterPipe,
@@ -75,12 +76,12 @@ export function momentAdapterFactory() {
     ),
 
   ],
-  exports:[
+  exports: [
     DatePipe,
     CalendarTooltip,
     CheckboxFilter
   ],
-  providers:[
+  providers: [
     {
       provide: MAT_DATE_LOCALE,
       useValue: 'nl-NL'
@@ -95,4 +96,5 @@ export function momentAdapterFactory() {
     },
   ]
 })
-export class ManageModule { }
+export class ManageModule {
+}

@@ -12,7 +12,9 @@ export class User extends Entity {
   public dateOfBirth: string;
   public phoneNumber: string;
   public userRole: string;
-  public nationality:string;
-  public profilePicture:Document
-  public termsOfUseConsented:string
+  public nationality: string;
+  public profilePicture: Document;
+  public termsOfUseConsented: string;
+  public personalRemark: string;
+  public staffRemark: string;
 }

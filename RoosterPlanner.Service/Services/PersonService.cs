@@ -11,6 +11,7 @@ using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Person = RoosterPlanner.Models.Person;
+using Task = System.Threading.Tasks.Task;
 
 namespace RoosterPlanner.Service
 {
@@ -20,6 +21,7 @@ namespace RoosterPlanner.Service
         Task<TaskResult<Person>> GetPersonAsync(Guid id);
         Task<TaskListResult<User>> GetB2CMembersAsync(PersonFilter filter);
         Task<TaskResult<User>> UpdatePersonAsync(User user);
+        Task<TaskResult<Person>> UpdatePersonAsync(Person person);
         Task<TaskResult<Manager>> RemoveManagerAsync(Manager manager);
         Task<TaskResult<Manager>> GetManagerAsync(Guid projectId, Guid userId);
         Task<TaskResult<Manager>> MakeManagerAsync(Manager manager);
@@ -46,8 +48,42 @@ namespace RoosterPlanner.Service
             this.unitOfWork = unitOfWork;
             personRepository = unitOfWork.PersonRepository;
             managerRepository = unitOfWork.ManagerRepository;
-            this.azureB2CService = azureB2CService ;
+            this.azureB2CService = azureB2CService;
             this.logger = logger;
+        }
+
+        private async Task AddPersonToLocalDbAsync(User user)
+        {
+            if (user?.Id == null)
+                throw new ArgumentNullException(nameof(user));
+
+            var result = new TaskResult<Person>();
+            try
+            {
+                var person = await personRepository.GetPersonByOidAsync(Guid.Parse(user.Id));
+                if (person == null)
+                {
+                    person = new Person(Guid.Parse(user.Id))
+                        {FirstName = user.GivenName, Oid = Guid.Parse(user.Id), LastName = user.Surname};
+                    personRepository.Add(person);
+                }
+                else if (person.FirstName != user.GivenName || person.LastName != user.Surname)
+                {
+                    person.FirstName = user.GivenName;
+                    person.LastName = user.Surname;
+                    person.LastEditDate = DateTime.UtcNow;
+                    person.LastEditBy = "SYSTEM";
+                    personRepository.Update(person);
+                }
+
+                await unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error adding person to LocalDB " + user.Id;
+                logger.LogError(ex, result.Message, user);
+                result.Error = ex;
+            }
         }
 
         public async Task<TaskResult<User>> GetUserAsync(Guid id)
@@ -69,6 +105,7 @@ namespace RoosterPlanner.Service
                 {
                     result.StatusCode = HttpStatusCode.OK;
                     result.Data = person;
+                    await AddPersonToLocalDbAsync(person);
                 }
             }
             catch (Exception ex)
@@ -155,12 +192,34 @@ namespace RoosterPlanner.Service
                 {
                     result.StatusCode = HttpStatusCode.OK;
                     result.Data = person.Data;
+                    await AddPersonToLocalDbAsync(person.Data);
                 }
             }
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error updating user " + user.Id;
                 logger.LogError(ex, result.Message, user);
+                result.Error = ex;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskResult<Person>> UpdatePersonAsync(Person person)
+        {
+            if (person == null)
+                throw new ArgumentNullException(nameof(person));
+
+            TaskResult<Person> result = new TaskResult<Person>();
+            try
+            {
+                result.Data = personRepository.Update(person);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error updating person " + person.Id;
+                logger.LogError(ex, result.Message, person);
                 result.Error = ex;
             }
 

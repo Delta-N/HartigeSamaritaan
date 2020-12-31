@@ -16,8 +16,6 @@ namespace RoosterPlanner.Models
 
         [Column(Order = 2)] 
         public string LastName { get; set; }
-        [Column(Order = 3)] 
-        public PersonType Type { get; set; }
 
         public List<Participation> Participations { get; set; }
         public List<Certificate> Certificates { get; set; }

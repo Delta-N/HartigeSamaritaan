@@ -328,6 +328,9 @@ namespace RoosterPlanner.Api.Controllers
                 if (oldShift.ProjectId != shiftViewModel.Project.Id)
                     return BadRequest("Cannot change the project of a shift");
 
+                if (!oldShift.RowVersion.SequenceEqual(shiftViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
+
                 Shift updatedShift = ShiftViewModel.CreateShift(shiftViewModel);
                 if (updatedShift == null)
                     return BadRequest("Unable to convert ShiftViewModel to Shift");

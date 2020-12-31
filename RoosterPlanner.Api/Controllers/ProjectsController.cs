@@ -149,6 +149,10 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 Project oldProject = (await projectService.GetProjectDetailsAsync(projectDetails.Id)).Data;
+                
+                if (!oldProject.RowVersion.SequenceEqual(projectDetails.RowVersion))
+                    return BadRequest("Outdated entity received");
+                
                 Project updatedProject = ProjectDetailsViewModel.CreateProject(projectDetails);
                 oldProject.Address = updatedProject.Address;
                 oldProject.City = updatedProject.City;

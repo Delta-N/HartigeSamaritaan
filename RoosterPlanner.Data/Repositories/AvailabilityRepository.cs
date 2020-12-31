@@ -15,6 +15,7 @@ namespace RoosterPlanner.Data.Repositories
         Task<List<Availability>> GetActiveAvailabilities(Guid participationId);
         Task<List<Availability>> GetScheduledAvailabilities(Guid participationId);
         Task<List<Availability>> GetScheduledAvailabilities(Guid projectId, DateTime dateTime);
+        Task<Availability> GetAvailability(Guid participationId, Guid shiftId);
     }
 
     public class AvailabilityRepository : Repository<Availability>, IAvailabilityRepository
@@ -111,6 +112,14 @@ namespace RoosterPlanner.Data.Repositories
                 a.Participation.Availabilities = null;
             });
             return availabilities;
+        }
+
+        public Task<Availability> GetAvailability(Guid participationId, Guid shiftId)
+        {
+            return EntitySet
+                .AsNoTracking()
+                .Where(a => a.ParticipationId == participationId && a.ShiftId == shiftId)
+                .FirstOrDefaultAsync();
         }
     }
 }

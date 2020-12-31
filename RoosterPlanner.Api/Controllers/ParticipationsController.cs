@@ -144,6 +144,9 @@ namespace RoosterPlanner.Api.Controllers
                 Participation oldParticipation = (await participationService
                         .GetParticipationAsync(participationViewModel.Person.Id, participationViewModel.Project.Id)
                     ).Data;
+                if (!oldParticipation.RowVersion.SequenceEqual(participationViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
+                
                 Participation updatedParticipation = ParticipationViewModel.CreateParticipation(participationViewModel);
 
                 if (oldParticipation.ProjectId != updatedParticipation.ProjectId)

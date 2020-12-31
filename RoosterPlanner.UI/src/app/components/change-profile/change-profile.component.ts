@@ -33,6 +33,7 @@ export class ChangeProfileComponent implements OnInit {
       city: [this.user.city != null ? this.user.city : '', Validators.required],
       phoneNumber: [this.user.phoneNumber != null ? this.user.phoneNumber : '', Validator.phoneNumber],
       nationality: this.nationalityControl,
+      termsOfUseConsented: this.user.termsOfUseConsented
     })
   }
 

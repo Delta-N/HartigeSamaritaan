@@ -67,8 +67,7 @@ namespace RoosterPlanner.Service
 
             var user = await graphService.Users[userId.ToString()].Request()
                 .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented}").GetAsync();
-            await AddPersonToLocalDbAsync(user);
-
+            
             return user;
         }
 
@@ -187,8 +186,7 @@ namespace RoosterPlanner.Service
                 updatedUser.Message = "Error during patching of user";
                 throw;
             }
-
-            await AddPersonToLocalDbAsync(updatedUser.Data);
+            
             return updatedUser;
         }
 
@@ -236,39 +234,7 @@ namespace RoosterPlanner.Service
 
             return graphService;
         }
-
-        private async Task AddPersonToLocalDbAsync(User user)
-        {
-            if (user?.Id == null)
-                throw new ArgumentNullException(nameof(user));
-            var result = new TaskResult<Person>();
-            try
-            {
-                var person = await personRepository.GetPersonByOidAsync(Guid.Parse(user.Id));
-                if (person == null)
-                {
-                    person = new Person(Guid.Parse(user.Id)) {FirstName = user.GivenName, Oid = Guid.Parse(user.Id), LastName = user.Surname};
-                    personRepository.Add(person);
-                }
-                else if(person.FirstName!=user.GivenName || person.LastName!=user.Surname)
-                {
-                    person.FirstName = user.GivenName;
-                    person.LastName = user.Surname;
-                    person.LastEditDate = DateTime.UtcNow;
-                    person.LastEditBy = "SYSTEM";
-                    personRepository.Update(person);
-                }
-
-                await unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                result.Message = GetType().Name + " - Error adding person to LocalDB " + user.Id;
-                logger.LogError(ex,result.Message, user);
-                result.Error = ex;
-            }
-        }
-
+        
         public class GraphUserData
         {
             [JsonProperty("odata.metadata")] public string OdataMetadata { get; set; }

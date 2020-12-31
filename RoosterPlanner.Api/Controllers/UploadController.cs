@@ -160,8 +160,7 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<DocumentViewModel>> UpdateDocument(DocumentViewModel documentViewModel)
         {
-            if (documentViewModel == null || documentViewModel.Name == null || documentViewModel.DocumentUri == null ||
-                documentViewModel.Id == Guid.Empty)
+            if (documentViewModel?.Name == null || documentViewModel.DocumentUri == null || documentViewModel.Id == Guid.Empty)
                 return BadRequest("No valid document received");
             try
             {
@@ -173,9 +172,13 @@ namespace RoosterPlanner.Api.Controllers
                 Document updatedDocument = DocumentViewModel.CreateDocument(documentViewModel);
                 if (updatedDocument == null)
                     return BadRequest("Unable to convert DocumentViewModel to Document");
+                
                 Document oldDocument = (await documentService.GetDocumentAsync(updatedDocument.Id)).Data;
                 if (oldDocument == null)
                     return NotFound("Document not found");
+                if (!oldDocument.RowVersion.SequenceEqual(documentViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
+                
                 oldDocument.Name = updatedDocument.Name;
                 oldDocument.DocumentUri = updatedDocument.DocumentUri;
 

@@ -143,6 +143,8 @@ namespace RoosterPlanner.Api.Controllers
                 Task oldTask = (await taskService.GetTaskAsync(taskViewModel.Id)).Data;
                 if (oldTask == null)
                     return NotFound("Task not found");
+                if (!oldTask.RowVersion.SequenceEqual(taskViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
                 Task updatedTask = TaskViewModel.CreateTask(taskViewModel);
                 if (updatedTask == null)
                     return BadRequest("Unable to convert TaskViewModel to Task");
@@ -301,6 +303,9 @@ namespace RoosterPlanner.Api.Controllers
                 Category oldCategory = (await taskService.GetCategoryAsync(categoryViewModel.Id)).Data;
                 if (oldCategory == null)
                     return NotFound("Category not found");
+                if (!oldCategory.RowVersion.SequenceEqual(categoryViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
+                
                 Category updatedCategory = CategoryViewModel.CreateCategory(categoryViewModel);
                 if (updatedCategory == null)
                     return BadRequest("Unable to convert CategoryViewModel to Category");

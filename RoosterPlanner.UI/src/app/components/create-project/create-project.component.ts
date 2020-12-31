@@ -115,6 +115,7 @@ export class CreateProjectComponent implements OnInit {
       //create new project
       if (this.data.createProject) {
         await this.projectService.postProject(this.updatedProject).then(async response => this.updatedProject = response);
+        this.dialogRef.close(this.updatedProject);
       }
       //edit project
       else {
@@ -122,11 +123,13 @@ export class CreateProjectComponent implements OnInit {
         this.updatedProject.lastEditDate = this.project.lastEditDate;
         this.updatedProject.rowVersion = this.project.rowVersion;
         await this.projectService.updateProject(this.updatedProject).then(async response => {
-          this.project = response
+          if(response){
+            this.project = response;
+            this.dialogRef.close(this.updatedProject);
+          }else
+            this.dialogRef.close('false');
         });
-
       }
-      this.dialogRef.close(this.updatedProject);
     }
   }
 
