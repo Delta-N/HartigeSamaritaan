@@ -10,7 +10,12 @@ import {EventMessage, EventType, InteractionType} from "@azure/msal-browser";
 import {filter, takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
 import * as moment from "moment"
-import {LoggingService} from "./services/logging.service";
+import {JwtHelper} from "./helpers/jwt-helper";
+import {ChangeProfilePictureComponent} from "./components/change-profile-picture/change-profile-picture.component";
+import {Document} from "./models/document";
+import {UploadService} from "./services/upload.service";
+import {AcceptPrivacyPolicyComponent} from "./components/accept-privacy-policy/accept-privacy-policy.component";
+
 
 @Component({
   selector: 'app-root',
@@ -28,6 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
   isManager: boolean;
 
   user: User = new User();
+  PP: Document;
+
   private readonly _destroying$ = new Subject<void>();
 
 
@@ -35,10 +42,11 @@ export class AppComponent implements OnInit, OnDestroy {
               private userService: UserService,
               @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
               private authService: MsalService,
-              private msalBroadcastService: MsalBroadcastService,) {
+              private msalBroadcastService: MsalBroadcastService,
+              private uploadService: UploadService) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     moment.locale('nl')
     this.isIframe = window !== window.parent && !window.opener;
     this.isAuthenticated();
@@ -54,7 +62,20 @@ export class AppComponent implements OnInit, OnDestroy {
         this.checkAccount();
       });
 
+    await this.uploadService.getPP().then(res => {
+      if (res)
+        this.PP = res;
+    })
 
+    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
+    await this.userService.getUser(idToken.oid).then(async user => {
+      if (user) {
+        this.user = user
+
+        if (this.PP && (!this.user.termsOfUseConsented || moment(this.PP.lastEditDate) > moment(this.user.termsOfUseConsented)))
+          this.promptPPAccept();
+      }
+    });
   }
 
   async checkAccount() {
@@ -88,6 +109,38 @@ export class AppComponent implements OnInit, OnDestroy {
   private isAuthenticated(): void {
     const account = this.authService.getAllAccounts()[0];
     this.hasUser = !!account;
+  }
+
+  promptPPAccept() {
+    const dialogRef = this.dialog.open(AcceptPrivacyPolicyComponent, {
+      width: '95vw',
+      height: '95vh',
+      data: this.PP
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result === 'true') {
+        this.user.termsOfUseConsented = moment().subtract(moment().utcOffset(), "minutes").toDate().toISOString()
+        this.userService.updateUser(this.user)
+      }
+    });
+  }
+
+  changeProfilePicture() {
+    const dialogRef = this.dialog.open(ChangeProfilePictureComponent, {
+      width: '300px',
+      data: this.user
+    });
+    dialogRef.disableClose = false;
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        if (res === 'removed')
+          this.user.profilePicture = null
+        else
+          this.user = res
+      }
+
+    });
   }
 }
 

@@ -84,9 +84,9 @@ export class PlanComponent implements OnInit, AfterViewInit {
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       let projectId: string = params.get('id');
       let date: string = params.get('date')
-      if (date && date !== 'Invalid Date')
+      if (date && date !== 'Invalid Date') {
         this.viewDate = moment(date).toDate();
-      else
+      } else
         this.viewDate = new Date();
 
 
@@ -106,7 +106,9 @@ export class PlanComponent implements OnInit, AfterViewInit {
           this.maxDate = this.project.participationEndDate;
           this.calendar.minDate = moment(this.minDate);
           this.calendar.maxDate = moment(this.maxDate);
+          this.calendar.activeDate = moment(this.viewDate);
           this.calendar.updateTodaysDate()
+
         }
       })
 
@@ -134,6 +136,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
         this.colorInMonth();
       })
     })
+
   }
 
   changeDate(date: Date): void {
@@ -292,7 +295,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
         let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
         scheduledElement.innerText = scheduledNumber + " Ingeroosterd";
 
-      }else{
+      } else {
         let planElement = document.getElementById('plan-' + shift.id)
         planElement.style.cssText = "padding: 3px !important";
       }
@@ -309,8 +312,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
       this.displayedProjectTasks = this.displayedProjectTasks.filter(t => t !== task)
     }
     this.filterEvents();
-    setTimeout(()=>{
+    setTimeout(() => {
       this.fillSpacer();
-    },100)
+    }, 100)
   }
 }

@@ -57,7 +57,7 @@ export class ShiftComponent implements OnInit {
 
   delete() {
     const message = "Weet je zeker dat je deze shift wilt verwijderen?"
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput");
+    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData

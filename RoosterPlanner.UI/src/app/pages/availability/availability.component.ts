@@ -144,22 +144,37 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     })
   }
 
-  changeDate(date: Date): void {
+  async changeDate(date: Date): Promise<void> {
     this.viewDate = date;
-    this.dateOrViewChanged();
+    this.calendar.activeDate = moment(this.viewDate);
+    setTimeout(async () => {
+      this.colorInMonth()
+      await this.dateOrViewChanged();
+    }, 100)
+
+
+
   }
 
   dateChanged() {
-    this.calendar.activeDate = this.selectedDate;
     this.changeDate(this.selectedDate.toDate())
   }
 
   increment(): void {
     this.changeDate(moment(this.viewDate).add(1, "day").toDate());
+    this.highlight()
   }
 
   decrement(): void {
     this.changeDate(moment(this.viewDate).subtract(1, "day").toDate());
+    this.highlight()
+  }
+  highlight():void{
+    let dateElement = document.getElementById("date")
+    dateElement.classList.add('highlight')
+    setTimeout(()=>{
+      dateElement.classList.remove('highlight')
+    },500)
   }
 
   async dateOrViewChanged(): Promise<void> {
@@ -191,6 +206,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       shift.availabilities = [];
 
     //yes? mod
+    console.log(availability)
     if (availability && availability.type!==3) {
       if (action !== "Preference")
         availability.type = this.getAvailabilityTypeNumber(action)
@@ -200,7 +216,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       await this.availabilityService.updateAvailability(availability)
     }
     //no? create
-    else {
+    else if(!availability){
       availability = new Availability();
       availability.participation = this.participation;
       availability.participationId = this.participation.id;
@@ -320,14 +336,18 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   colorInDay(date: Date, color: string) {
-    let label = moment(date).local().format("D MMMM YYYY").toLowerCase()
-    let element: HTMLElement = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
+   let element=this.getDayElement(date)
 
     if (element) {
       let child: any = element.children[0]
       child.style.background = color;
       child.style.color = 'white';
     }
+  }
+  getDayElement(date:Date):HTMLElement{
+    let label = moment(date).local().format("D MMMM YYYY").toLowerCase()
+    let element: HTMLElement = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
+    return element
   }
 
   async getShifts(date: Date) {
@@ -463,16 +483,18 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       element.style.display = "none";
   }
 
-  refuseDay() {
-    this.allEvents.forEach(e => {
-      this.handleEvent("No", e)
-    })
+  async refuseDay() {
+    for (const e of this.allEvents) {
+      await this.handleEvent("No", e)
+    }
+    this.increment()
   }
 
-  acceptDay() {
-    this.allEvents.forEach(e => {
-      this.handleEvent("Yes", e)
-    })
+  async acceptDay() {
+    for (const e of this.allEvents) {
+      await this.handleEvent("Yes", e)
+    }
+    this.increment()
   }
 
   changeButtonSize() {

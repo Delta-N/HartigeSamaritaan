@@ -177,6 +177,9 @@ export class AvailabilityPipe implements PipeTransform {
       result+=append
     }
 
+    if(listOfAvailabilities[0]&& listOfAvailabilities[0].participation&& listOfAvailabilities[0].participation.remark)
+      result+="\n Werkt graag samen met:\n" + listOfAvailabilities[0].participation.remark;
+
     return result;
 
   }

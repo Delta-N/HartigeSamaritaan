@@ -9,6 +9,7 @@ namespace RoosterPlanner.Api.Models
         public PersonViewModel Person { get; set; }
         public ProjectDetailsViewModel Project { get; set; }
         public int MaxWorkingHoursPerWeek { get; set; }
+        public string Remark { get; set; }
         public List<Availability> Availabilities { get; set; }
 
         public ParticipationViewModel()
@@ -25,9 +26,10 @@ namespace RoosterPlanner.Api.Models
                 Id = participation.Id,
                 MaxWorkingHoursPerWeek = participation.MaxWorkingHoursPerWeek,
                 Availabilities = participation.Availabilities,
+                Remark = participation.Remark,
                 LastEditDate = participation.LastEditDate,
                 LastEditBy = participation.LastEditBy,
-                RowVersion = participation.RowVersion
+                RowVersion = participation.RowVersion,
             };
             if(participation.Person!=null)
                 vm.Person=PersonViewModel.CreateVmFromPerson(participation.Person);
@@ -46,6 +48,7 @@ namespace RoosterPlanner.Api.Models
             {
                 MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
                 Availabilities = participationViewModel.Availabilities,
+                Remark = participationViewModel.Remark,
                 LastEditDate = participationViewModel.LastEditDate,
                 LastEditBy = participationViewModel.LastEditBy,
                 RowVersion = participationViewModel.RowVersion

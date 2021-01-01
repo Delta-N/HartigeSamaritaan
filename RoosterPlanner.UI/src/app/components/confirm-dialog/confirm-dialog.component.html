@@ -6,10 +6,18 @@
   <p>{{message}}</p>
   <span *ngIf="type==='NumberInput'">
   <mat-form-field>
-        <mat-label for="workingHours">
-          Aantal uur
+        <mat-label for="number">
+          Aantal
         </mat-label>
-        <input  [(ngModel)]="workingHours" id="workingHours" matInput type="number" min="0" max="40">
+        <input [(ngModel)]="value" id="number" matInput type="number" min="0" max="40" >
+      </mat-form-field>
+  </span>
+  <span *ngIf="type==='TextInput'">
+  <mat-form-field id="textinput">
+        <mat-label for="text">
+          Invoer
+        </mat-label>
+    <textarea [(ngModel)]="value" id="text" matInput type="text" rows="5"></textarea>
       </mat-form-field>
   </span>
 
@@ -22,9 +30,9 @@
   </div>
 </div>
 
-<div mat-dialog-actions *ngIf="type==='NumberInput'" >
+<div mat-dialog-actions *ngIf="type==='NumberInput' || type==='TextInput'" >
   <div class="align-right">
-  <button mat-raised-button class="action-button override-button" (click)="sendInput(this.workingHours)">Bevestig</button>
+  <button mat-raised-button class="action-button override-button" (click)="sendInput(this.value)">Bevestig</button>
   <button mat-button class="override-button" (click)="onDismiss()">Annuleren</button>
   </div>
 </div>

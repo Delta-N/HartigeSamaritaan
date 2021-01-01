@@ -39,6 +39,7 @@ import { ScheduleManagerComponent } from './pages/schedule-manager/schedule-mana
 import { AcceptPrivacyPolicyComponent } from './components/accept-privacy-policy/accept-privacy-policy.component';
 import {NgxDocViewerModule} from "ngx-doc-viewer";
 import { PrivacyComponent } from './pages/privacy/privacy.component';
+import {ChangeProfilePictureComponent} from "./components/change-profile-picture/change-profile-picture.component";
 
 
 export function momentAdapterFactory() {
@@ -100,6 +101,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ScheduleManagerComponent,
     AcceptPrivacyPolicyComponent,
     PrivacyComponent,
+    ChangeProfilePictureComponent,
 
   ],
   imports: [

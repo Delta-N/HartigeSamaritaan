@@ -45,7 +45,6 @@ export class ProfileComponent implements OnInit {
     await this.userService.getUser(this.guid).then(res => {
       if (res.id) {
         this.user = res;
-        console.log(this.user)
         this.age = DateConverter.calculateAge(this.user.dateOfBirth);
         this.loaded = true;
       }
@@ -85,7 +84,6 @@ export class ProfileComponent implements OnInit {
       if (textareaElement.value !== originalText) {
         id === 'personalbutton' ? this.user.personalRemark = textareaElement.value : this.user.staffRemark = textareaElement.value
         this.userService.updatePerson(this.user).then(res => {
-          console.log(res)
           if (res)
             this.user = res;
         })

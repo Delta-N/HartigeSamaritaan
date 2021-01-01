@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RoosterPlanner.Data.Migrations
 {
-    public partial class removedType : Migration
+    public partial class addedRemark : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -210,6 +210,7 @@ namespace RoosterPlanner.Data.Migrations
                     ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MaxWorkingHoursPerWeek = table.Column<int>(type: "int", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
+                    Remark = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     LastEditBy = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     LastEditDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
@@ -326,16 +327,16 @@ namespace RoosterPlanner.Data.Migrations
                 columns: new[] { "Id", "Code", "LastEditBy", "LastEditDate", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"), "KEUKEN", "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 259, DateTimeKind.Local).AddTicks(2311), "Keuken" },
-                    { new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"), "BEDIENING", "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 259, DateTimeKind.Local).AddTicks(2630), "Bediening" },
-                    { new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"), "LOGISTIEK", "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 259, DateTimeKind.Local).AddTicks(2644), "Logistiek" },
-                    { new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"), "OVERIGE", "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 259, DateTimeKind.Local).AddTicks(2648), "Overige" }
+                    { new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"), "KEUKEN", "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 363, DateTimeKind.Local).AddTicks(7950), "Keuken" },
+                    { new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"), "BEDIENING", "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 363, DateTimeKind.Local).AddTicks(8254), "Bediening" },
+                    { new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"), "LOGISTIEK", "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 363, DateTimeKind.Local).AddTicks(8267), "Logistiek" },
+                    { new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"), "OVERIGE", "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 363, DateTimeKind.Local).AddTicks(8272), "Overige" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Documents",
                 columns: new[] { "Id", "DocumentUri", "LastEditBy", "LastEditDate", "Name" },
-                values: new object[] { new Guid("103d6c9a-91d4-4d76-bff5-c3f829fcd1a9"), "https://hackatonstoragedev.blob.core.windows.net/projectpicture/037efc9a-0836-4513-8ae3-282c597631c4.jfif", "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 262, DateTimeKind.Local).AddTicks(4938), "TermsOfService" });
+                values: new object[] { new Guid("8917b7d2-074c-458a-a5f2-bd2411f25670"), "https://hackatonstoragedev.blob.core.windows.net/projectpicture/037efc9a-0836-4513-8ae3-282c597631c4.jfif", "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 367, DateTimeKind.Local).AddTicks(1448), "TermsOfService" });
 
             migrationBuilder.InsertData(
                 table: "Persons",
@@ -351,17 +352,17 @@ namespace RoosterPlanner.Data.Migrations
                 columns: new[] { "Id", "Address", "City", "Closed", "Description", "LastEditBy", "LastEditDate", "Name", "ParticipationEndDate", "ParticipationStartDate", "PictureUriId", "ProjectEndDate", "ProjectStartDate", "WebsiteUrl" },
                 values: new object[,]
                 {
-                    { new Guid("e86bb765-27ab-404f-b140-211505d869fe"), "Stationsplein 2", "Voorburg", false, "Leuk project in Voorburg", "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1696), "Voorburg 2020", new DateTime(2021, 1, 29, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1061), new DateTime(2021, 1, 1, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(801), null, new DateTime(2021, 1, 30, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1514), new DateTime(2020, 12, 31, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1303), null },
-                    { new Guid("55c92c6a-067b-442a-b33d-b8ce35cf1d8a"), "Laan van Waalhaven 450", "Den Haag", false, "Leuk project in Den Haag", "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1736), "Den Haag 2018", new DateTime(2021, 1, 29, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1729), new DateTime(2021, 1, 1, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1726), null, new DateTime(2021, 1, 30, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1734), new DateTime(2020, 12, 31, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(1732), null }
+                    { new Guid("e86bb765-27ab-404f-b140-211505d869fe"), "Stationsplein 2", "Voorburg", false, "Leuk project in Voorburg", "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(6553), "Voorburg 2020", new DateTime(2021, 1, 30, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(5875), new DateTime(2021, 1, 2, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(5613), null, new DateTime(2021, 1, 31, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(6362), new DateTime(2021, 1, 1, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(6128), null },
+                    { new Guid("55c92c6a-067b-442a-b33d-b8ce35cf1d8a"), "Laan van Waalhaven 450", "Den Haag", false, "Leuk project in Den Haag", "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(6592), "Den Haag 2018", new DateTime(2021, 1, 30, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(6585), new DateTime(2021, 1, 2, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(6582), null, new DateTime(2021, 1, 31, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(6590), new DateTime(2021, 1, 1, 9, 42, 16, 365, DateTimeKind.Local).AddTicks(6588), null }
                 });
 
             migrationBuilder.InsertData(
                 table: "Participations",
-                columns: new[] { "Id", "Active", "LastEditBy", "LastEditDate", "MaxWorkingHoursPerWeek", "PersonId", "ProjectId" },
+                columns: new[] { "Id", "Active", "LastEditBy", "LastEditDate", "MaxWorkingHoursPerWeek", "PersonId", "ProjectId", "Remark" },
                 values: new object[,]
                 {
-                    { new Guid("66e971cf-16f2-4521-befb-aaca981f642f"), true, "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(5753), 12, new Guid("25e5b0e6-82ef-45fe-bbde-ef76021ec531"), new Guid("e86bb765-27ab-404f-b140-211505d869fe") },
-                    { new Guid("541310c7-ffec-43f5-81a7-7b2c07f9ce81"), true, "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 261, DateTimeKind.Local).AddTicks(5786), 40, new Guid("7f66fc12-b1c0-481f-851b-3cc1f65fd20e"), new Guid("55c92c6a-067b-442a-b33d-b8ce35cf1d8a") }
+                    { new Guid("66e971cf-16f2-4521-befb-aaca981f642f"), true, "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 366, DateTimeKind.Local).AddTicks(1091), 12, new Guid("25e5b0e6-82ef-45fe-bbde-ef76021ec531"), new Guid("e86bb765-27ab-404f-b140-211505d869fe"), null },
+                    { new Guid("541310c7-ffec-43f5-81a7-7b2c07f9ce81"), true, "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 366, DateTimeKind.Local).AddTicks(1126), 40, new Guid("7f66fc12-b1c0-481f-851b-3cc1f65fd20e"), new Guid("55c92c6a-067b-442a-b33d-b8ce35cf1d8a"), null }
                 });
 
             migrationBuilder.InsertData(
@@ -369,10 +370,10 @@ namespace RoosterPlanner.Data.Migrations
                 columns: new[] { "Id", "CategoryId", "Color", "Description", "InstructionId", "LastEditBy", "LastEditDate", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("09d1bef0-c6fd-4b28-a17f-7f368acb8129"), new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"), "Blue", "Een leuke beschrijving van de werkzaamheden van een chef", null, "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 262, DateTimeKind.Local).AddTicks(1593), "Chef" },
-                    { new Guid("b1f63215-2b1c-4a74-bc39-e8fc17dbf4e0"), new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"), "Red", "Een leuke beschrijving van de werkzaamheden van een runner", null, "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 262, DateTimeKind.Local).AddTicks(1632), "Runner" },
-                    { new Guid("f5939453-f9cb-4402-96ea-6e7fc81e3b62"), new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"), "Yellow", "Een leuke beschrijving van de werkzaamheden van een chauffeur", null, "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 262, DateTimeKind.Local).AddTicks(1640), "Chauffeur" },
-                    { new Guid("e1a6b6c8-7d91-477f-ad2e-a42bbd63fd61"), new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"), "Green", "Een leuke beschrijving van de werkzaamheden van een klusser", null, "SYSTEM", new DateTime(2020, 12, 31, 8, 56, 19, 262, DateTimeKind.Local).AddTicks(1645), "Klusser" }
+                    { new Guid("ae052a88-60fe-425e-876c-fd7aba9510ed"), new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"), "Blue", "Een leuke beschrijving van de werkzaamheden van een chef", null, "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 366, DateTimeKind.Local).AddTicks(6402), "Chef" },
+                    { new Guid("6dc8e369-bdb1-4e08-84f9-268464cc0944"), new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"), "Red", "Een leuke beschrijving van de werkzaamheden van een runner", null, "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 366, DateTimeKind.Local).AddTicks(6448), "Runner" },
+                    { new Guid("021213fe-62a5-4ca4-bb29-9f09b49b60bc"), new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"), "Yellow", "Een leuke beschrijving van de werkzaamheden van een chauffeur", null, "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 366, DateTimeKind.Local).AddTicks(6456), "Chauffeur" },
+                    { new Guid("4096fb3a-0190-4692-9ac6-f5c9e7ad4aa3"), new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"), "Green", "Een leuke beschrijving van de werkzaamheden van een klusser", null, "SYSTEM", new DateTime(2021, 1, 1, 9, 42, 16, 366, DateTimeKind.Local).AddTicks(6462), "Klusser" }
                 });
 
             migrationBuilder.CreateIndex(

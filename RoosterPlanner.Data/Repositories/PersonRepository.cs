@@ -25,7 +25,10 @@ namespace RoosterPlanner.Data.Repositories
         /// <returns>List of projects that are not closed.</returns>
         public Task<Person> GetPersonByOidAsync(Guid oid)
         {
-            return EntitySet.Where(p => p.Oid == oid).FirstOrDefaultAsync();
+            return EntitySet
+                .Include(p=>p.ProfilePicture)
+                .Where(p => p.Oid == oid)
+                .FirstOrDefaultAsync();
         }
     }
 }

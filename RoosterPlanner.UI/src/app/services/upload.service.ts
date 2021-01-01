@@ -136,4 +136,22 @@ export class UploadService {
       );
     return updatedDocument
   }
+
+  async removeDocument(document: Document): Promise<boolean> {
+    if (!document) {
+      this.errorService.error("Document is ongeldig")
+      return null;
+    }
+    let deleted: boolean = false;
+    await this.apiService.delete<HttpResponse<Document>>(`${HttpRoutes.uploadApiUrl}/document/${document.id}`)
+      .toPromise()
+      .then(res => {
+          if (res.ok)
+            deleted = true;
+          }, Error => {
+          this.errorService.httpError(Error)
+        }
+      );
+    return deleted
+  }
 }

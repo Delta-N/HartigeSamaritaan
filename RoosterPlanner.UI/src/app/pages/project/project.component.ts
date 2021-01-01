@@ -131,7 +131,7 @@ export class ProjectComponent implements OnInit {
     let messageVariable: string;
     this.project.closed ? messageVariable = "openen" : messageVariable = "sluiten";
     const message = "Weet je zeker dat je dit project wilt " + messageVariable + " ?"
-    const dialogData = new ConfirmDialogModel("Bevestig wijziging", message, "ConfirmationInput");
+    const dialogData = new ConfirmDialogModel("Bevestig wijziging", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -157,7 +157,7 @@ export class ProjectComponent implements OnInit {
 
   editWorkingHours() {
     const message = "Hoeveel uur per week wil je maximaal meewerken aan dit project?"
-    const dialogData = new ConfirmDialogModel("Maximale inzet ", message, "NumberInput");
+    const dialogData = new ConfirmDialogModel("Maximale inzet ", message, "NumberInput",this.participation.maxWorkingHoursPerWeek);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -171,7 +171,6 @@ export class ProjectComponent implements OnInit {
         dialogResult <= 40) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
         await this.participationService.updateParticipation(this.participation).then(async response => {
-          console.log(response)
           if (response)
             this.displayProject(response.project);
           else

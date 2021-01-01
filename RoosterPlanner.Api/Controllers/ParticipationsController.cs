@@ -164,7 +164,7 @@ namespace RoosterPlanner.Api.Controllers
                 oldParticipation.Availabilities = updatedParticipation.Availabilities;
                 oldParticipation.MaxWorkingHoursPerWeek = updatedParticipation.MaxWorkingHoursPerWeek;
                 oldParticipation.Active = updatedParticipation.Active;
-
+                oldParticipation.Remark = updatedParticipation.Remark;
                 oldParticipation.Person = null;
                 oldParticipation.Project = null;
                 oldParticipation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);

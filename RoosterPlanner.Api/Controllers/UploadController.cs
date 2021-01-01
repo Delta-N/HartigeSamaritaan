@@ -32,7 +32,7 @@ namespace RoosterPlanner.Api.Controllers
         private readonly IPersonService personService;
 
         public UploadController(
-            IBlobService blobService, 
+            IBlobService blobService,
             ILogger<UploadController> logger,
             IDocumentService documentService,
             IPersonService personService,
@@ -126,15 +126,15 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPost("document")]
         public async Task<ActionResult<DocumentViewModel>> CreateDocument(DocumentViewModel documentViewModel)
         {
-            if (documentViewModel == null || documentViewModel.Name == null || documentViewModel.DocumentUri == null)
+            if (documentViewModel?.Name == null || documentViewModel.DocumentUri == null)
                 return BadRequest("No valid document received");
             try
             {
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                if (documentViewModel.Name == "TOS" && !await UserHasRole(oid,UserRole.Boardmember))
+                if (documentViewModel.Name == "Privacy Policy" && !await UserHasRole(oid, UserRole.Boardmember))
                     return Unauthorized();
-                
+
                 Document document = DocumentViewModel.CreateDocument(documentViewModel);
                 if (document == null)
                     return BadRequest("Unable to convert DocumentViewModel to Document");
@@ -160,7 +160,8 @@ namespace RoosterPlanner.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<DocumentViewModel>> UpdateDocument(DocumentViewModel documentViewModel)
         {
-            if (documentViewModel?.Name == null || documentViewModel.DocumentUri == null || documentViewModel.Id == Guid.Empty)
+            if (documentViewModel?.Name == null || documentViewModel.DocumentUri == null ||
+                documentViewModel.Id == Guid.Empty)
                 return BadRequest("No valid document received");
             try
             {
@@ -168,17 +169,17 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (documentViewModel.Name == "TOS" && !await UserHasRole(oid, UserRole.Boardmember))
                     return Unauthorized();
-                
+
                 Document updatedDocument = DocumentViewModel.CreateDocument(documentViewModel);
                 if (updatedDocument == null)
                     return BadRequest("Unable to convert DocumentViewModel to Document");
-                
+
                 Document oldDocument = (await documentService.GetDocumentAsync(updatedDocument.Id)).Data;
                 if (oldDocument == null)
                     return NotFound("Document not found");
                 if (!oldDocument.RowVersion.SequenceEqual(documentViewModel.RowVersion))
                     return BadRequest("Outdated entity received");
-                
+
                 oldDocument.Name = updatedDocument.Name;
                 oldDocument.DocumentUri = updatedDocument.DocumentUri;
 
@@ -212,6 +213,34 @@ namespace RoosterPlanner.Api.Controllers
                 string message = GetType().Name + "Error in " + nameof(CreateDocument);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
+        [HttpDelete("document/{id}")]
+        public async Task<ActionResult<DocumentViewModel>> DeleteDocumentAsync(Guid id)
+        {
+            if (id == Guid.Empty)
+                return BadRequest("No valid id.");
+            try
+            {
+                Document document = (await documentService.GetDocumentAsync(id)).Data;
+                if (document == null)
+                    return NotFound("Document not found");
+
+                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
+                if (document.Name != "profilepicture" && !await UserHasRole(oid, UserRole.Boardmember))
+                    return Unauthorized("User is cannot delete this file");
+                
+                TaskResult<Document> removeDocumentResult = await documentService.DeleteDocumentAsync(document);
+                return !removeDocumentResult.Succeeded
+                    ? UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = removeDocumentResult.Message})
+                    : Ok(DocumentViewModel.CreateVm(removeDocumentResult.Data));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, GetType().Name + "Error in " + nameof(DeleteAsync));
+                return UnprocessableEntity(new UploadResultViewModel {Succeeded = false});
             }
         }
 

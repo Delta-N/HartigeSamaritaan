@@ -126,7 +126,7 @@ namespace RoosterPlanner.Service
             TaskResult<Person> result = new TaskResult<Person>();
             try
             {
-                result.Data = await personRepository.GetAsync(id);
+                result.Data = await personRepository.GetPersonByOidAsync(id);
                 result.Succeeded = true;
             }
             catch (Exception ex)

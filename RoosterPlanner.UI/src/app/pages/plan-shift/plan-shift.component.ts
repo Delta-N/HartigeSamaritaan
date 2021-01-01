@@ -142,7 +142,7 @@ export class PlanShiftComponent implements OnInit {
 
   confirmDeselect(row: Schedule) {
     const message = "Weet je zeker dat je deze persoon wilt uitroosteren?"
-    const dialogData = new ConfirmDialogModel("Bevestig uitroostering", message, "ConfirmationInput");
+    const dialogData = new ConfirmDialogModel("Bevestig uitroostering", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -170,7 +170,7 @@ export class PlanShiftComponent implements OnInit {
       this.toastr.warning("Er hebben geen wijzigingen plaats gevonden")
     else {
       const message = "Weet je zeker dat je deze je deze personen wilt in- en uitroosteren?"
-      const dialogData = new ConfirmDialogModel("Bevestig roostering", message, "ConfirmationInput");
+      const dialogData = new ConfirmDialogModel("Bevestig roostering", message, "ConfirmationInput",null);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: "400px",
         data: dialogData

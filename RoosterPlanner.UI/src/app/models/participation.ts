@@ -8,5 +8,5 @@ export class Participation extends Entity {
   public project: Project;
   public maxWorkingHoursPerWeek: number;
   public Availabilities: Availability[];
-  public WantsToWorkWith: any; //list van collaborations
+  public remark:string;
 }
