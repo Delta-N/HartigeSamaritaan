@@ -28,21 +28,15 @@ namespace RoosterPlanner.Api.Controllers
         private readonly IBlobService blobService;
         private readonly IDocumentService documentService;
         private readonly ILogger<UploadController> logger;
-        private readonly AzureAuthenticationConfig azureB2CConfig;
-        private readonly IPersonService personService;
 
         public UploadController(
             IBlobService blobService,
             ILogger<UploadController> logger,
-            IDocumentService documentService,
-            IPersonService personService,
-            IOptions<AzureAuthenticationConfig> azureB2CConfig)
+            IDocumentService documentService)
         {
             this.blobService = blobService;
             this.logger = logger;
             this.documentService = documentService;
-            this.personService = personService;
-            this.azureB2CConfig = azureB2CConfig.Value;
         }
 
         [Authorize(Policy = "Boardmember")]
@@ -132,7 +126,9 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                if (documentViewModel.Name == "Privacy Policy" && !await UserHasRole(oid, UserRole.Boardmember))
+                if (documentViewModel.Name == "Privacy Policy" && !PersonsController.UserHasRole(oid,
+                    UserRole.Boardmember,
+                    (ClaimsIdentity) HttpContext.User.Identity))
                     return Unauthorized();
 
                 Document document = DocumentViewModel.CreateDocument(documentViewModel);
@@ -167,7 +163,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                if (documentViewModel.Name == "TOS" && !await UserHasRole(oid, UserRole.Boardmember))
+                if (documentViewModel.Name == "TOS" && !PersonsController.UserHasRole(oid, UserRole.Boardmember,
+                    (ClaimsIdentity) HttpContext.User.Identity))
                     return Unauthorized();
 
                 Document updatedDocument = DocumentViewModel.CreateDocument(documentViewModel);
@@ -228,9 +225,10 @@ namespace RoosterPlanner.Api.Controllers
                     return NotFound("Document not found");
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-                if (document.Name != "profilepicture" && !await UserHasRole(oid, UserRole.Boardmember))
+                if (document.Name != "profilepicture" && !PersonsController.UserHasRole(oid, UserRole.Boardmember,
+                    (ClaimsIdentity) HttpContext.User.Identity))
                     return Unauthorized("User is cannot delete this file");
-                
+
                 TaskResult<Document> removeDocumentResult = await documentService.DeleteDocumentAsync(document);
                 return !removeDocumentResult.Succeeded
                     ? UnprocessableEntity(new ErrorViewModel
@@ -242,14 +240,6 @@ namespace RoosterPlanner.Api.Controllers
                 logger.LogError(ex, GetType().Name + "Error in " + nameof(DeleteAsync));
                 return UnprocessableEntity(new UploadResultViewModel {Succeeded = false});
             }
-        }
-
-        private async Task<bool> UserHasRole(string oid, UserRole userRole)
-        {
-            PersonViewModel personVm = PersonViewModel.CreateVmFromUser(
-                (await personService.GetUserAsync(Guid.Parse(oid))).Data,
-                Extensions.GetInstance(azureB2CConfig));
-            return personVm.UserRole == userRole.ToString();
         }
     }
 }

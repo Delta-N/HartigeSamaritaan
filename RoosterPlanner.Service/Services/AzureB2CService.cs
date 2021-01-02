@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -83,8 +84,8 @@ namespace RoosterPlanner.Service
 
                 var graphService = GetGraphServiceClient();
                 var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
-                var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_dateOfBirth";
-                var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_phoneNumber";
+                var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
+                var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
                 var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
                 var termsofuseconsented =
                     $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
@@ -136,10 +137,10 @@ namespace RoosterPlanner.Service
 
                 if (users.Count == 0)
                     throw new NullReferenceException("No users found");
-
+     
                 result.StatusCode = HttpStatusCode.OK;
                 result.Succeeded = true;
-                result.Data = users;
+                result.Data = users.OrderBy(u => u.DisplayName).ToList(); ;
                 return result;
             }
 

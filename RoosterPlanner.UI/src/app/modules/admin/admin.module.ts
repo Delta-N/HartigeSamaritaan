@@ -12,6 +12,8 @@ import {AddManagerComponent} from "../../components/add-manager/add-manager.comp
 import {CreateProjectComponent} from "../../components/create-project/create-project.component";
 import {CategoryComponent} from "../../pages/category/category.component";
 import {UploadPrivacyPolicyComponent} from "../../components/upload-privacy-policy/upload-privacy-policy.component";
+import {EmployeeComponent} from "../../pages/employee/employee.component";
+import {ManageModule} from "../manage/manage.module";
 
 
 @NgModule({
@@ -26,13 +28,15 @@ import {UploadPrivacyPolicyComponent} from "../../components/upload-privacy-poli
     AddManagerComponent,
     CreateProjectComponent,
     CategoryComponent,
-    UploadPrivacyPolicyComponent
+    UploadPrivacyPolicyComponent,
+    EmployeeComponent
   ],
-  imports: [
-    CommonModule,
-    AdminRoutingModule,
-    MaterialModule,
-  ],
+    imports: [
+        CommonModule,
+        AdminRoutingModule,
+        MaterialModule,
+        ManageModule,
+    ],
   providers:[]
 })
 export class AdminModule { }

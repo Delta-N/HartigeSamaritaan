@@ -8,6 +8,7 @@ import {PlanComponent} from "../../pages/plan/plan.component";
 import {ShiftComponent} from "../../pages/shift/shift.component";
 import {ScheduleManagerComponent} from "../../pages/schedule-manager/schedule-manager.component";
 import {ProfileComponent} from "../../pages/profile/profile.component";
+import {EmployeeComponent} from "../../pages/employee/employee.component";
 
 const routes: Routes = [
   {path: '', component: ManageComponent,},
@@ -19,7 +20,7 @@ const routes: Routes = [
   {path: 'plan/:id', component: PlanComponent,},
   {path: 'schedule/:id', component: ScheduleManagerComponent,},
   {path: 'profile/:id', component: ProfileComponent},
-
+  {path: 'employee/:id', component: EmployeeComponent}
 ];
 
 @NgModule({

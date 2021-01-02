@@ -11,7 +11,7 @@
                   <a [routerLink]="['plan', item.id]"><p>Inroosteren</p></a>
                   <a [routerLink]="['shifts', item.id]"><p>Shiften</p></a>
                   <a [routerLink]="['schedule', item.id]"><p>Rooster</p></a>
-                  <a (click)="todo()"><p>Medewerkers</p></a>
+                  <a [routerLink]="['employee', item.id]"><p>Medewerkers</p></a>
                </mat-card-content>
                <mat-card-actions class="action-anchor">
                </mat-card-actions>

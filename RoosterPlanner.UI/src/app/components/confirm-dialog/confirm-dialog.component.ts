@@ -19,7 +19,6 @@ export class ConfirmDialogComponent implements OnInit {
     this.message = data.message;
     this.type = data.type;
     this.value = data.inputvalue;
-    console.log(this.value)
   }
 
   ngOnInit() {

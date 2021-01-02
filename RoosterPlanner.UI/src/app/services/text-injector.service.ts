@@ -10,6 +10,7 @@ export class TextInjectorService {
   public static availabilitiesTableColumnNames: string[] = ['Datum', 'Taak', 'Vanaf', 'Tot','Instructies'];
   public static scheduleTableColumnNames: string[] = ['Naam','Taak', 'Vanaf', 'Tot'];
   public static planShiftTableColumnNames: string[] = ['select', 'Naam', 'Leeftijd', 'Nationaliteit', '#Ingeroosterd', 'Ingeroosterd', 'Inzetbaarheid'];
+  public static employeeTableColumnNames: string[] = ['Naam', 'Leeftijd', 'Nationaliteit'];
   public static nationalitiesDutch: string[] = [
     "Afghaans",
     "Afrika",

@@ -76,11 +76,12 @@ export function momentAdapterFactory() {
     ),
 
   ],
-  exports: [
-    DatePipe,
-    CalendarTooltip,
-    CheckboxFilter
-  ],
+    exports: [
+        DatePipe,
+        CalendarTooltip,
+        CheckboxFilter,
+        AgePipe
+    ],
   providers: [
     {
       provide: MAT_DATE_LOCALE,

@@ -18,7 +18,6 @@ using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Person = RoosterPlanner.Models.Person;
-using Task = RoosterPlanner.Models.Task;
 using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
@@ -32,18 +31,21 @@ namespace RoosterPlanner.Api.Controllers
         private readonly ILogger<PersonsController> logger;
         private readonly IPersonService personService;
         private readonly IProjectService projectService;
+        private readonly IParticipationService participationService;
 
         //Constructor
         public PersonsController(
             IPersonService personService,
             IOptions<AzureAuthenticationConfig> azureB2CConfig,
             ILogger<PersonsController> logger,
-            IProjectService projectService)
+            IProjectService projectService,
+            IParticipationService participationService)
         {
             this.personService = personService;
             this.projectService = projectService;
             this.logger = logger;
             this.azureB2CConfig = azureB2CConfig.Value;
+            this.participationService = participationService;
         }
 
         [HttpGet("{id}")]
@@ -53,36 +55,37 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid id.");
             try
             {
-                Task<TaskResult<User>> userResult;
-                Task<TaskResult<Person>> personResult;
+                TaskResult<User> userResult;
+                TaskResult<Person> personResult;
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                bool userIsBoardmember = await UserHasRole(oid, UserRole.Boardmember);
+                bool userIsBoardmember = UserHasRole(oid, UserRole.Boardmember,
+                    (ClaimsIdentity) HttpContext.User.Identity);
 
                 if (id.ToString() == oid || userIsBoardmember)
                 {
-                    userResult = personService.GetUserAsync(id);
-                    personResult = personService.GetPersonAsync(id);
-                    await System.Threading.Tasks.Task.WhenAll(userResult, personResult);
+                    userResult = await personService.GetUserAsync(id);
+                    personResult = await personService.GetPersonAsync(id);
                 }
                 else
                     return Unauthorized();
 
-                if (!userResult.Result.Succeeded)
+                if (!userResult.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
-                        {Type = Type.Error, Message = userResult.Result.Message});
-                if (!personResult.Result.Succeeded)
+                        {Type = Type.Error, Message = userResult.Message});
+                if (!personResult.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
-                        {Type = Type.Error, Message = personResult.Result.Message});
+                        {Type = Type.Error, Message = personResult.Message});
 
-                if (userResult.Result.Data == null || personResult.Result.Data == null)
+                if (userResult.Data == null || personResult.Data == null)
                     return NotFound();
 
-                PersonViewModel personVm = PersonViewModel.CreateVmFromUserAndPerson(userResult.Result.Data,
-                    personResult.Result.Data, Extensions.GetInstance(azureB2CConfig));
+                PersonViewModel personVm = PersonViewModel.CreateVmFromUserAndPerson(userResult.Data,
+                    personResult.Data, Extensions.GetInstance(azureB2CConfig));
 
                 //check if user != boardmember || != Committeemember
-                bool userIsCommitteemember = await UserHasRole(oid, UserRole.Committeemember);
+                bool userIsCommitteemember = UserHasRole(oid, UserRole.Committeemember,
+                    (ClaimsIdentity) HttpContext.User.Identity);
                 if (!userIsBoardmember && !userIsCommitteemember)
                     personVm.StaffRemark = null;
 
@@ -143,6 +146,39 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Boardmember&Committeemember")]
+        [HttpGet("participants/{projectId}")]
+        public async Task<ActionResult<List<PersonViewModel>>> GetParticipants(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                return BadRequest("No valid id");
+            try
+            {
+                TaskListResult<Participation> participationResult =
+                    await participationService.GetParticipationsAsync(projectId);
+                if(!participationResult.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = participationResult.Message});
+
+                List<PersonViewModel> persons = new List<PersonViewModel>();
+                foreach (Participation participation in participationResult.Data)
+                {
+                    TaskResult<User> userResult = await personService.GetUserAsync(participation.PersonId);
+                    if(userResult!=null)
+                        persons.Add(PersonViewModel.CreateVmFromUser(userResult.Data, Extensions.GetInstance(azureB2CConfig)));
+                }
+
+                return Ok(persons);
+
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(GetParticipants);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
+
         [HttpPut]
         public async Task<ActionResult<PersonViewModel>> UpdateUserAsync([FromBody] PersonViewModel personViewModel)
         {
@@ -154,7 +190,8 @@ namespace RoosterPlanner.Api.Controllers
                 if (oid == null) return BadRequest("Invalid User");
 
                 //only the owner of a profile or a boardmember can update user data
-                if (personViewModel.Id.ToString() != oid && !await UserHasRole(oid, UserRole.Boardmember))
+                if (personViewModel.Id.ToString() != oid && !UserHasRole(oid, UserRole.Boardmember,
+                    (ClaimsIdentity) HttpContext.User.Identity))
                     return BadRequest("Invalid User");
 
                 User user = PersonViewModel.CreateUser(personViewModel, Extensions.GetInstance(azureB2CConfig));
@@ -189,8 +226,10 @@ namespace RoosterPlanner.Api.Controllers
                 Person person = personResult.Data;
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-                bool userIsCommitteemember = await UserHasRole(oid, UserRole.Committeemember);
-                bool userIsBoardmember = await UserHasRole(oid, UserRole.Boardmember);
+                bool userIsCommitteemember = UserHasRole(oid, UserRole.Committeemember,
+                    (ClaimsIdentity) HttpContext.User.Identity);
+                bool userIsBoardmember = UserHasRole(oid, UserRole.Boardmember,
+                    (ClaimsIdentity) HttpContext.User.Identity);
 
                 person.PersonalRemark = personViewModel.PersonalRemark;
 
@@ -360,7 +399,8 @@ namespace RoosterPlanner.Api.Controllers
                 };
 
                 TaskResult<Manager> result = await personService.MakeManagerAsync(manager);
-                if (!await UserHasRole(person.Oid.ToString(), UserRole.Boardmember))
+                if (!UserHasRole(person.Oid.ToString(), UserRole.Boardmember,
+                    (ClaimsIdentity) HttpContext.User.Identity))
                     await ModAdminAsync(userId, 2); //make user a manager in B2C
 
                 if (!result.Succeeded)
@@ -394,7 +434,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (userManagesOtherProjects?.Data != null &&
                     userManagesOtherProjects.Data.Count == 0)
-                    if (!await UserHasRole(manager.PersonId.ToString(), UserRole.Boardmember))
+                    if (!UserHasRole(manager.PersonId.ToString(), UserRole.Boardmember, (ClaimsIdentity) HttpContext.User.Identity))
                         await ModAdminAsync(userId, 4); //remove user as a manager in B2C}
 
                 if (!result.Succeeded)
@@ -409,12 +449,10 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        private async Task<bool> UserHasRole(string oid, UserRole userRole)
+        public static bool UserHasRole(string oid, UserRole userRole, ClaimsIdentity identity)
         {
-            PersonViewModel personVm = PersonViewModel.CreateVmFromUser(
-                (await personService.GetUserAsync(Guid.Parse(oid))).Data,
-                Extensions.GetInstance(azureB2CConfig));
-            return personVm.UserRole == userRole.ToString();
+            int role = Convert.ToInt32(identity.FindFirst("extension_UserRole")?.Value);
+            return (int) userRole == role;
         }
     }
 }

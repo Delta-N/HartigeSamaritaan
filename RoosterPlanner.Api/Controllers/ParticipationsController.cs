@@ -87,13 +87,41 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Boardmember&Committeemember")]
+        [HttpGet("project/{projectId}")]
+        public async Task<ActionResult<List<ParticipationViewModel>>> GetParticipationsAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                return BadRequest("No valid id.");
+            try
+            {
+                TaskListResult<Participation> result = await participationService.GetParticipationsAsync(projectId);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+
+                if (result.Data.Count == 0)
+                    return Ok(new List<ParticipationViewModel>());
+
+                List<ParticipationViewModel> participationViewModels = result.Data
+                    .Select(ParticipationViewModel.CreateVm)
+                    .ToList();
+
+                return Ok(participationViewModels);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(GetParticipationsAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<ParticipationViewModel>> SaveParticipationAsync(
             [FromBody] ParticipationViewModel participationViewModel)
         {
             if (participationViewModel?.Person == null || participationViewModel.Project == null)
                 return BadRequest("No valid participation received");
-
             TaskResult<Participation> result = null;
             Participation participation = null;
             try
@@ -107,6 +135,7 @@ namespace RoosterPlanner.Api.Controllers
                     participation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                     result = await participationService.UpdateParticipationAsync(participation);
                 }
+
                 else
                 {
                     participation = ParticipationViewModel.CreateParticipation(participationViewModel);
@@ -117,7 +146,10 @@ namespace RoosterPlanner.Api.Controllers
                 }
 
                 if (result == null || !result.Succeeded)
-                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result?.Message});
+                    return UnprocessableEntity(new ErrorViewModel
+                    {
+                        Type = Type.Error, Message = result?.Message
+                    });
                 return Ok(ParticipationViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
@@ -146,7 +178,7 @@ namespace RoosterPlanner.Api.Controllers
                     ).Data;
                 if (!oldParticipation.RowVersion.SequenceEqual(participationViewModel.RowVersion))
                     return BadRequest("Outdated entity received");
-                
+
                 Participation updatedParticipation = ParticipationViewModel.CreateParticipation(participationViewModel);
 
                 if (oldParticipation.ProjectId != updatedParticipation.ProjectId)

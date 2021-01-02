@@ -15,7 +15,7 @@ namespace RoosterPlanner.Data.Context.Seed
         {
             var participations = new List<Participation>
             {
-                new(Guid.Parse("66e971cf-16f2-4521-befb-aaca981f642f"))
+                /*new(Guid.Parse("66e971cf-16f2-4521-befb-aaca981f642f"))
                 {
                     PersonId = Guid.Parse("25E5B0E6-82EF-45FE-BBDE-EF76021EC531"),
                     ProjectId = Guid.Parse("e86bb765-27ab-404f-b140-211505d869fe"),
@@ -32,7 +32,7 @@ namespace RoosterPlanner.Data.Context.Seed
                     Active = true,
                     LastEditBy = "SYSTEM",
                     LastEditDate = DateTime.Now
-                }
+                }*/
             };
 
             modelBuilder.Entity<Participation>().HasData(participations.ToArray());

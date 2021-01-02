@@ -25,6 +25,7 @@ export class PlanShiftComponent implements OnInit {
   guid: string;
   loaded: boolean = false;
   title: string = "Plannen";
+
   dataSource: MatTableDataSource<Schedule> = new MatTableDataSource<Schedule>();
   displayedColumns: string[] = [];
   paginator: MatPaginator;
@@ -86,8 +87,8 @@ export class PlanShiftComponent implements OnInit {
     this.dataSource.filterPredicate = (data, filter) => {
       return DateConverter.calculateAge(data.person.dateOfBirth).toLocaleLowerCase().includes(filter) ||
         (data.person != null && (data.person.firstName + " " + data.person.lastName).toLocaleLowerCase().includes(filter) ||
-          (data.person.country == null && 'Onbekend'.toLocaleLowerCase().includes(filter)) ||
-          (data.person.country != null && data.person.country.toLocaleLowerCase().includes(filter)) ||
+          (data.person.nationality == null && 'Onbekend'.toLocaleLowerCase().includes(filter)) ||
+          (data.person.nationality != null && data.person.country.toLocaleLowerCase().includes(filter)) ||
           data.numberOfTimesScheduledThisProject.toString().toLocaleLowerCase().includes(filter))
     }
 

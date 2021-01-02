@@ -206,7 +206,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       shift.availabilities = [];
 
     //yes? mod
-    console.log(availability)
     if (availability && availability.type!==3) {
       if (action !== "Preference")
         availability.type = this.getAvailabilityTypeNumber(action)
