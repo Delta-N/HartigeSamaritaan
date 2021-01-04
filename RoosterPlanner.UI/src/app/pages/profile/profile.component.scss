@@ -18,6 +18,13 @@
   padding: 0;
 
 }
+
+.mat-card {
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  max-width: 325px;
+}
 .text-box{
   border: 1px gray solid;
   min-height: 20vh;
@@ -33,6 +40,22 @@
   .override-button{
     padding: 2px!important;
     font-size: 12px!important;
+  }
+
+  .mat-card{
+    min-width: initial;
+    width: 250px;
+
+    .mat-card-title{
+      font-size: 16px;
+    }
+    .mat-card-content{
+      font-size: 14px;
+    }
+
+    .mat-card-actions .mat-button{
+      font-size: 16px;
+    }
   }
 
 }

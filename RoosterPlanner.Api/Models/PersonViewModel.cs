@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models.Constants;
+using RoosterPlanner.Models;
 using RoosterPlanner.Models.Models.Enums;
 using Person = RoosterPlanner.Models.Person;
 
@@ -27,6 +28,8 @@ namespace RoosterPlanner.Api.Models
 
         public string StaffRemark { get; set; }
         public string TermsOfUseConsented { get; set; }
+
+        public List<CertificateViewModel> Certificates { get; set; } = new List<CertificateViewModel>();
 
         public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
@@ -172,7 +175,7 @@ namespace RoosterPlanner.Api.Models
             if (user == null || person == null)
                 return null;
 
-            PersonViewModel vmFromUser = PersonViewModel.CreateVmFromUser(user, extension);
+            PersonViewModel vmFromUser = CreateVmFromUser(user, extension);
 
             vmFromUser.StaffRemark = person.StaffRemark;
             vmFromUser.PersonalRemark = person.PersonalRemark;
@@ -182,7 +185,12 @@ namespace RoosterPlanner.Api.Models
 
             if (person.ProfilePicture != null)
                 vmFromUser.ProfilePicture = DocumentViewModel.CreateVm(person.ProfilePicture);
-
+           
+            if (person.Certificates != null)
+                foreach (Certificate certificate in person.Certificates)
+                    vmFromUser.Certificates.Add(CertificateViewModel.CreateVm(certificate));
+                
+            
             return vmFromUser;
         }
     }

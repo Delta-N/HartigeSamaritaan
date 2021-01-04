@@ -11,6 +11,7 @@ import {AuthorizationGuard} from "./guards/authorization.guard";
 import {ManageGuard} from "./guards/manage.guard";
 import {ScheduleComponent} from "./pages/schedule/schedule.component";
 import {PrivacyComponent} from "./pages/privacy/privacy.component";
+import {CertificateComponent} from "./pages/certificate/certificate.component";
 
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: 'task/:id', component: TaskComponent, canActivate: [MsalGuard]},
   {path: 'schedule/:id', component: ScheduleComponent, canActivate: [MsalGuard]},
   {path: 'privacy', component: PrivacyComponent},
+  {path: 'certificate/:id', component: CertificateComponent},
   {path: 'manage',loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule),canLoad: [ManageGuard]  },
   {path: 'admin',loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),canLoad: [AuthorizationGuard]},
   {path: '', component: HomeComponent, canActivate: [MsalGuard]},

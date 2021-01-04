@@ -217,8 +217,11 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<Category> result = await taskService.GetAllCategoriesAsync();
 
                 if (!result.Succeeded)
-                    if (result.Data == null)
-                        return Ok(new List<CategoryViewModel>());
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                
+                if(result.Data.Count==0)
+                    return Ok(new List<CategoryViewModel>());
+
                 List<CategoryViewModel> categoryViewmodels = result.Data
                     .Select(CategoryViewModel.CreateVm)
                     .ToList();
@@ -387,8 +390,10 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<ProjectTask> result = await taskService.GetAllProjectTasksAsync(projectId);
 
                 if (!result.Succeeded)
-                    if (result.Data == null)
-                        return Ok(new List<ProjectTaskViewModel>());
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+
+                if (result.Data.Count == 0)
+                    return Ok(new List<ProjectTaskViewModel>());
 
                 List<TaskViewModel> taskViewModels =
                     result.Data.Select(projectTask => TaskViewModel.CreateVm(projectTask.Task)).ToList();

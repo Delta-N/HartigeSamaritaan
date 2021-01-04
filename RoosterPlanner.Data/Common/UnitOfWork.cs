@@ -18,11 +18,13 @@ namespace RoosterPlanner.Data.Common
         IShiftRepository ShiftRepository { get; }
 
         ICategoryRepository CategoryRepository { get; }
-        
+
         IProjectTaskRepository ProjectTaskRepository { get; }
         IManagerRepository ManagerRepository { get; }
         IAvailabilityRepository AvailabilityRepository { get; }
         IDocumentRepository DocumentRepository { get; }
+        ICertificateTypeRepository CertificateTypeRepository { get; }
+        ICertificateRepository CertificateRepository { get; }
 
         /// <summary>
         /// Saves the changes.
@@ -43,6 +45,7 @@ namespace RoosterPlanner.Data.Common
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         #region Fields
+
         /// <summary>
         /// Gets the data context.
         /// </summary>
@@ -58,26 +61,39 @@ namespace RoosterPlanner.Data.Common
         private IManagerRepository managerRepository;
         private IAvailabilityRepository availabilityRepository;
         private IDocumentRepository documentRepository;
+        private ICertificateTypeRepository certificateTypeRepository;
+        private ICertificateRepository certificateRepository;
 
         #endregion
 
         public IProjectRepository ProjectRepository => projectRepository ??= new ProjectRepository(DataContext);
 
         public IShiftRepository ShiftRepository => shiftRepository ??= new ShiftRepository(DataContext);
-        
+
         public ITaskRepository TaskRepository => taskRepository ??= new TaskRepository(DataContext);
 
         public ICategoryRepository CategoryRepository => categoryRepository ??= new CategoryRepository(DataContext);
 
-        public IParticipationRepository ParticipationRepository => participationRepository ??= new ParticipationRepository(DataContext);
+        public IParticipationRepository ParticipationRepository =>
+            participationRepository ??= new ParticipationRepository(DataContext);
 
         public IPersonRepository PersonRepository => personRepository ??= new PersonRepository(DataContext);
 
-        public IProjectTaskRepository ProjectTaskRepository => projectTaskRepository ??= new ProjectTaskRepository(DataContext);
+        public IProjectTaskRepository ProjectTaskRepository =>
+            projectTaskRepository ??= new ProjectTaskRepository(DataContext);
 
         public IManagerRepository ManagerRepository => managerRepository ??= new ManagerRepository(DataContext);
-        public IAvailabilityRepository AvailabilityRepository => availabilityRepository ??= new AvailabilityRepository(DataContext);
+
+        public IAvailabilityRepository AvailabilityRepository =>
+            availabilityRepository ??= new AvailabilityRepository(DataContext);
+
         public IDocumentRepository DocumentRepository => documentRepository ??= new DocumentRepository(DataContext);
+
+        public ICertificateTypeRepository CertificateTypeRepository =>
+            certificateTypeRepository ??= new CertificateTypeRepository(DataContext);
+
+        public ICertificateRepository CertificateRepository =>
+            certificateRepository ??= new CertificateRepository(DataContext);
 
         #region Constructor
 

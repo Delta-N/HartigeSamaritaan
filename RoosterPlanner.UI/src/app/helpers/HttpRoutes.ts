@@ -9,6 +9,7 @@ export class HttpRoutes {
   private static uploadController = 'api/upload';
   private static shiftController = 'api/shift';
   private static availabilityController = 'api/availability';
+  private static certificateController = 'api/certificate';
 
   public static personApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.personController}`;
   public static projectApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.projectController}`;
@@ -17,4 +18,5 @@ export class HttpRoutes {
   public static uploadApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.uploadController}`;
   public static shiftApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.shiftController}`
   public static availabilityApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.availabilityController}`
+  public static certificateApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.certificateController}`
 }

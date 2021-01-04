@@ -40,6 +40,7 @@ import { AcceptPrivacyPolicyComponent } from './components/accept-privacy-policy
 import {NgxDocViewerModule} from "ngx-doc-viewer";
 import { PrivacyComponent } from './pages/privacy/privacy.component';
 import {ChangeProfilePictureComponent} from "./components/change-profile-picture/change-profile-picture.component";
+import { CertificateComponent } from './pages/certificate/certificate.component';
 
 
 export function momentAdapterFactory() {
@@ -102,6 +103,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     AcceptPrivacyPolicyComponent,
     PrivacyComponent,
     ChangeProfilePictureComponent,
+    CertificateComponent,
 
   ],
   imports: [

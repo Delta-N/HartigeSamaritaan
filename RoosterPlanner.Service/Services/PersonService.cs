@@ -66,6 +66,7 @@ namespace RoosterPlanner.Service
                     person = new Person(Guid.Parse(user.Id))
                         {FirstName = user.GivenName, Oid = Guid.Parse(user.Id), LastName = user.Surname};
                     personRepository.Add(person);
+                    await unitOfWork.SaveChangesAsync();
                 }
                 else if (person.FirstName != user.GivenName || person.LastName != user.Surname)
                 {
@@ -74,9 +75,8 @@ namespace RoosterPlanner.Service
                     person.LastEditDate = DateTime.UtcNow;
                     person.LastEditBy = "SYSTEM";
                     personRepository.Update(person);
+                    await unitOfWork.SaveChangesAsync();
                 }
-
-                await unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
             {

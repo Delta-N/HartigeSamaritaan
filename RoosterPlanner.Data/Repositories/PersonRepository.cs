@@ -23,12 +23,20 @@ namespace RoosterPlanner.Data.Repositories
         /// Returns a list of open projects.
         /// </summary>
         /// <returns>List of projects that are not closed.</returns>
-        public Task<Person> GetPersonByOidAsync(Guid oid)
+        public async Task<Person> GetPersonByOidAsync(Guid oid)
         {
-            return EntitySet
-                .Include(p=>p.ProfilePicture)
+            Person person = await EntitySet
+                .Include(p => p.ProfilePicture)
+                .Include(p => p.Certificates)
+                .ThenInclude(c => c.CertificateType)
                 .Where(p => p.Oid == oid)
                 .FirstOrDefaultAsync();
+
+            if (person == null || person.Certificates == null) return person;
+            foreach (var personCertificate in person.Certificates.Where(personCertificate => personCertificate.CertificateType != null))
+                personCertificate.CertificateType.Certificates = null;
+            
+            return person;
         }
     }
 }

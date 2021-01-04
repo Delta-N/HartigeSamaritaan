@@ -30,7 +30,7 @@ namespace RoosterPlanner.Data.Context
         {
             //Call base method first.
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.Entity<ProjectTask>()
                 .HasOne(pt => pt.Project)
                 .WithMany(p => p.ProjectTasks)
@@ -55,8 +55,8 @@ namespace RoosterPlanner.Data.Context
             });
 
             modelBuilder.Entity<Document>()
-                .HasMany(d=>d.Instructions)
-                .WithOne(i=>i.Instruction)
+                .HasMany(d => d.Instructions)
+                .WithOne(i => i.Instruction)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Document>()
@@ -77,7 +77,6 @@ namespace RoosterPlanner.Data.Context
                 .HasMany(c => c.Tasks)
                 .WithOne(t => t.Category)
                 .OnDelete(DeleteBehavior.SetNull);
-            
 
             modelBuilder.Entity<Person>()
                 .HasIndex(p => p.Oid)
@@ -87,14 +86,14 @@ namespace RoosterPlanner.Data.Context
                 .HasOne(p => p.Participation)
                 .WithMany(a => a.Availabilities)
                 .HasForeignKey(a => a.ParticipationId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Availability>()
                 .HasOne(s => s.Shift)
                 .WithMany(a => a.Availabilities)
                 .HasForeignKey(a => a.ShiftId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             modelBuilder.Entity<Participation>(par =>
             {
                 par.HasMany(m => m.Availabilities)
@@ -111,6 +110,7 @@ namespace RoosterPlanner.Data.Context
                 .HasOne(p => p.Person)
                 .WithMany(c => c.Certificates)
                 .HasForeignKey(c => c.PersonId);
+            
             modelBuilder.Entity<Certificate>()
                 .HasOne(ct => ct.CertificateType)
                 .WithMany(c => c.Certificates)
@@ -147,7 +147,6 @@ namespace RoosterPlanner.Data.Context
                 pr.HasMany(p => p.Participations)
                     .WithOne(x => x.Project);
             });
-            
 
             var categorySeed = new CategorySeed(modelBuilder);
             categorySeed.Seed();
@@ -166,6 +165,9 @@ namespace RoosterPlanner.Data.Context
 
             var documentSeed = new DocumentSeed(modelBuilder);
             documentSeed.Seed();
+
+            var certificateTypeSeed = new CertificateTypeSeed(modelBuilder);
+            certificateTypeSeed.Seed();
         }
     }
 }

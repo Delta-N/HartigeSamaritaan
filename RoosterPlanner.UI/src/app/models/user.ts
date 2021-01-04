@@ -1,5 +1,6 @@
 import {Entity} from "./entity.model";
 import {Document} from "./document";
+import {Certificate} from "./Certificate";
 
 export class User extends Entity {
   public city: string;
@@ -17,4 +18,5 @@ export class User extends Entity {
   public streetAddress: string;
   public termsOfUseConsented: string;
   public userRole: string;
+  public certificates:Certificate[]
 }

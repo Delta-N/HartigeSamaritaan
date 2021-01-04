@@ -12,7 +12,7 @@ namespace RoosterPlanner.Models
         public string Name { get; set; }
 
         [Column(Order = 2)]
-        [Required, MaxLength(256)]
+        [MaxLength(256)]
         public string Level { get; set; }
 
         public List<Certificate> Certificates { get; set; }

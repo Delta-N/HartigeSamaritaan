@@ -69,7 +69,7 @@ export class CategoryComponent implements OnInit {
   }
 
   delete() {
-    const message = "Weet je zeker dat je deze category wilt verwijderen? Hiermee verwijder je ook alle taken die hieraan hangen" //set null instellen
+    const message = "Weet je zeker dat je deze category wilt verwijderen?"
     const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",

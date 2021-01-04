@@ -14,6 +14,9 @@ import {CategoryComponent} from "../../pages/category/category.component";
 import {UploadPrivacyPolicyComponent} from "../../components/upload-privacy-policy/upload-privacy-policy.component";
 import {EmployeeComponent} from "../../pages/employee/employee.component";
 import {ManageModule} from "../manage/manage.module";
+import {AddCertificatetypeComponent} from "../../components/add-certificatetype/add-certificatetype.component";
+import {CertificateTypeComponent} from "../../pages/certificate-type/certificate-type.component";
+import {AddCertificateComponent} from "../../components/add-certificate/add-certificate.component";
 
 
 @NgModule({
@@ -29,7 +32,10 @@ import {ManageModule} from "../manage/manage.module";
     CreateProjectComponent,
     CategoryComponent,
     UploadPrivacyPolicyComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    AddCertificatetypeComponent,
+    CertificateTypeComponent,
+    AddCertificateComponent
   ],
     imports: [
         CommonModule,

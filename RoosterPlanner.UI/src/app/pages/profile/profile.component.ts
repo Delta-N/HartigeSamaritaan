@@ -7,6 +7,9 @@ import {DateConverter} from "../../helpers/date-converter";
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
 import {ActivatedRoute, ParamMap} from "@angular/router";
+import {Certificate} from "../../models/Certificate";
+import {AddProjectTaskComponent} from "../../components/add-project-task/add-project-task.component";
+import {AddCertificateComponent} from "../../components/add-certificate/add-certificate.component";
 
 
 @Component({
@@ -20,6 +23,14 @@ export class ProfileComponent implements OnInit {
   loaded: boolean;
   guid: string;
   isStaff: boolean;
+  isAdmin: boolean;
+
+  certificates: Certificate[] = [];
+  certificateStyle = 'card';
+  itemsPerCard = 5;
+  reasonableMaxInteger = 10000;
+  certificateElementHeight: number;
+  CertificateExpandbtnDisabled: boolean = true;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -37,22 +48,22 @@ export class ProfileComponent implements OnInit {
     }
     this.loadUserProfile().then();
     this.isStaff = this.userService.userIsProjectAdminFrontEnd();
+    this.isAdmin = this.userService.userIsAdminFrontEnd()
 
   }
 
   async loadUserProfile() {
 
     await this.userService.getUser(this.guid).then(res => {
-      if (res.id) {
+      if (res) {
         this.user = res;
+        this.certificates = this.user.certificates.slice(0, this.itemsPerCard)
+        if(this.user.certificates.length>5)
+          this.CertificateExpandbtnDisabled=false;
         this.age = DateConverter.calculateAge(this.user.dateOfBirth);
         this.loaded = true;
       }
     });
-  }
-
-  logout() {
-    this.authenticationService.logout();
   }
 
   edit() {
@@ -85,9 +96,57 @@ export class ProfileComponent implements OnInit {
         id === 'personalbutton' ? this.user.personalRemark = textareaElement.value : this.user.staffRemark = textareaElement.value
         this.userService.updatePerson(this.user).then(res => {
           if (res)
-            this.user = res;
+            this.loadUserProfile()
         })
       }
     }
+  }
+
+  expandCertificateCard() {
+    let element = document.getElementById("icon")
+    if (element) {
+      if (this.certificateStyle === 'expanded-card')
+        element.innerText = "zoom_out_map"
+      else
+        element.innerText = "fullscreen_exit"
+    }
+
+    let leftElement = document.getElementById("left")
+    let remarkElement = document.getElementById("remark")
+    if (this.certificateStyle === 'expanded-card') {
+      if (leftElement)
+        leftElement.hidden = false;
+      if(remarkElement)
+        remarkElement.hidden = false;
+
+      this.certificateStyle = 'card';
+      this.itemsPerCard = 5;
+      this.certificates = this.user.certificates.slice(0, this.itemsPerCard);
+    } else if (this.certificateStyle === 'card') {
+      if (leftElement)
+        leftElement.hidden = true;
+      if (remarkElement)
+        remarkElement.hidden = true;
+      this.certificateStyle = 'expanded-card';
+      this.itemsPerCard = this.reasonableMaxInteger;
+      this.certificates = this.user.certificates;
+      this.certificateElementHeight = this.certificates.length * 48;
+    }
+  }
+
+  modCertificate(modifier: string) {
+    const dialogRef = this.dialog.open(AddCertificateComponent, {
+      width: '500px',
+      data: {
+        modifier: modifier,
+        person: this.user,
+      }
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.loadUserProfile()
+      }
+    })
   }
 }

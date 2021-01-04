@@ -10,6 +10,9 @@ import {CategoryService} from "../../services/category.service";
 import {AddCategoryComponent} from "../../components/add-category/add-category.component";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
+import {AddCertificatetypeComponent} from "../../components/add-certificatetype/add-certificatetype.component";
+import {CertificateService} from "../../services/certificate.service";
+import {CertificateType} from "../../models/CertificateType";
 
 @Component({
   selector: 'app-all-tasks',
@@ -23,13 +26,16 @@ export class AllTasksComponent implements OnInit {
   reasonableMaxInteger: number = 10000; //aanpassen na 10k projecten/admins ;)
   tasks: Task[] = [];
   taskCardStyle = 'card';
-  tasksElementHeight: number;
+  tasksExpandbtnDisabled: boolean = true;
+
 
   categoryCardStyle = 'card';
-  categoryElementHeight: number;
   categories: Category[];
-  tasksExpandbtnDisabled: boolean = true;
   categoryExpandbtnDisabled: boolean = true;
+
+  certificateCardStyle='card';
+  certificateExpandbtnDisabled: boolean=true;
+  certificatesTypes:CertificateType[];
 
 
   constructor(public dialog: MatDialog,
@@ -37,6 +43,7 @@ export class AllTasksComponent implements OnInit {
               private toastr: ToastrService,
               private taskService: TaskService,
               private categoryService: CategoryService,
+              private certificiateService:CertificateService,
               private breadcrumbService: BreadcrumbService) {
     let tempcrumb:Breadcrumb= this.breadcrumbService.takencrumb;
     tempcrumb.url=null;
@@ -46,6 +53,7 @@ export class AllTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCategories(0, this.itemsPerCard).then()
+    this.getCertificates(0,this.itemsPerCard).then()
     this.getTasks(0, this.itemsPerCard).then(() => this.loaded = true)
   }
 
@@ -68,6 +76,18 @@ export class AllTasksComponent implements OnInit {
         this.categoryExpandbtnDisabled = false;
       }
       this.categories = this.categories.splice(offset, pageSize)
+    })
+  }
+
+  async getCertificates(offset: number, pageSize: number) {
+    await this.certificiateService.getAllCertificateTypes().then(res => {
+      if(res)
+        this.certificatesTypes= res;
+      this.certificatesTypes.sort((a, b) => a.name > b.name ? 1 : -1)
+      if (this.certificatesTypes.length >= 5) {
+        this.certificateExpandbtnDisabled = false;
+      }
+      this.certificatesTypes = this.certificatesTypes.splice(offset, pageSize)
     })
   }
 
@@ -109,9 +129,29 @@ export class AllTasksComponent implements OnInit {
     }
   }
 
+  modCertificate(modifier: string) {
+    if (modifier === 'add') {
+      const dialogRef = this.dialog.open(AddCertificatetypeComponent, {
+        width: '400px',
+        data: {
+          modifier: 'toevoegen',
+        }
+      });
+      dialogRef.disableClose = true;
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== 'false') {
+          this.getCertificates(0, this.itemsPerCard).then()
+          this.toastr.success(result.body.name + " is toegevoegd")
+        }
+      });
+    }
+  }
+
   expandTaskCard() {
     let categoryCardElement = document.getElementById("categoryCard")
+    let certificateCardElement = document.getElementById("certificateCard")
     let element = document.getElementById("taskIcon")
+
     if (element) {
       if (this.taskCardStyle === 'expanded-card')
         element.innerText = "zoom_out_map"
@@ -121,23 +161,25 @@ export class AllTasksComponent implements OnInit {
     if (this.taskCardStyle == 'expanded-card') {
       if(categoryCardElement)
         categoryCardElement.hidden = false;
+      if (certificateCardElement)
+        certificateCardElement.hidden = false;
       this.taskCardStyle = 'card';
       this.itemsPerCard = 5;
       this.tasks = this.tasks.slice(0, this.itemsPerCard);
     } else {
       if (categoryCardElement)
         categoryCardElement.hidden = true;
+      if (certificateCardElement)
+        certificateCardElement.hidden = true;
       this.taskCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
-      this.getTasks(0, this.itemsPerCard).then(() => {
-        this.tasksElementHeight = (this.tasks.length * 48);
-      })
-
+      this.getTasks(0, this.itemsPerCard)
     }
   }
 
   expandCategoryCard() {
     let taskCardElement = document.getElementById("taskCard")
+    let certificateCardElement = document.getElementById("certificateCard")
     let element = document.getElementById("categoryIcon")
     if (element) {
       if (this.categoryCardStyle === 'expanded-card')
@@ -148,17 +190,52 @@ export class AllTasksComponent implements OnInit {
     if (this.categoryCardStyle == 'expanded-card') {
       if (taskCardElement)
         taskCardElement.hidden = false;
+      if (certificateCardElement)
+        certificateCardElement.hidden = false;
+
       this.categoryCardStyle = 'card';
       this.itemsPerCard = 5;
       this.categories = this.categories.slice(0, this.itemsPerCard);
     } else {
       if (taskCardElement)
         taskCardElement.hidden = true;
+      if (certificateCardElement)
+        certificateCardElement.hidden = true;
       this.categoryCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
-      this.getCategories(0, this.itemsPerCard).then(() => {
-        this.categoryElementHeight = (this.categories.length * 48);
-      })
+      this.getCategories(0, this.itemsPerCard)
+    }
+  }
+
+  expandCertificateCard() {
+    let taskCardElement = document.getElementById("taskCard")
+    let categoryCardElement = document.getElementById("categoryCard")
+    let element = document.getElementById("certificateIcon")
+    if (element) {
+      if (this.certificateCardStyle === 'expanded-card')
+        element.innerText = "zoom_out_map"
+      else
+        element.innerText = "fullscreen_exit"
+    }
+    if (this.certificateCardStyle == 'expanded-card') {
+      if (taskCardElement)
+        taskCardElement.hidden = false;
+
+      if (categoryCardElement)
+        categoryCardElement.hidden = false;
+
+      this.certificateCardStyle = 'card';
+      this.itemsPerCard = 5;
+      this.certificatesTypes = this.certificatesTypes.slice(0, this.itemsPerCard);
+    } else {
+      if (taskCardElement)
+        taskCardElement.hidden = true;
+      if (categoryCardElement)
+        categoryCardElement.hidden = true;
+
+      this.certificateCardStyle = 'expanded-card';
+      this.itemsPerCard = this.reasonableMaxInteger;
+      this.getCertificates(0, this.itemsPerCard)
     }
   }
 }

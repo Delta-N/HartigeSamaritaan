@@ -34,7 +34,6 @@ export class ProjectComponent implements OnInit {
   taskCardStyle = 'card';
   itemsPerCard = 5;
   reasonableMaxInteger = 10000;
-  tasksElementHeight: number;
   projectTasksExpandbtnDisabled: boolean = true;
   isManager: boolean = false;
 
@@ -182,8 +181,8 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  expandTaskCard(id: string) {
-    let element = document.getElementById("icon" + id)
+  expandTaskCard() {
+    let element = document.getElementById("icon")
     if (element) {
       if (this.taskCardStyle === 'expanded-card')
         element.innerText = "zoom_out_map"
@@ -211,9 +210,7 @@ export class ProjectComponent implements OnInit {
 
       this.taskCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
-      this.getProjectTasks().then(() => {
-        this.tasksElementHeight = (this.projectTasks.length * 48);
-      })
+      this.getProjectTasks()
     }
   }
 
