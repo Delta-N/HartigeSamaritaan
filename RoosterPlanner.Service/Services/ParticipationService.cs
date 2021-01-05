@@ -17,7 +17,8 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Participation>> GetUserParticipationsAsync(Guid personId);
         Task<TaskResult<Participation>> GetParticipationAsync(Guid participationId);
         Task<TaskResult<Participation>> GetParticipationAsync(Guid personId, Guid projectId);
-        Task<TaskResult<Participation>> RemoveParticipationAsync(Participation participation);
+        Task<TaskListResult<Participation>> GetParticipationsAsync(Guid projectId);
+        Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId);
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
     }
 
@@ -37,12 +38,11 @@ namespace RoosterPlanner.Service
         public ParticipationService(IUnitOfWork unitOfWork, ILogger<ParticipationService> logger,
             IAzureB2CService azureB2CService, IPersonService personService)
         {
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            participationRepository = unitOfWork.ParticipationRepository ??
-                                      throw new ArgumentNullException(nameof(participationRepository));
-            this.azureB2CService = azureB2CService ?? throw new ArgumentNullException(nameof(azureB2CService));
-            this.personService = personService ?? throw new ArgumentNullException(nameof(personService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.unitOfWork = unitOfWork;
+            participationRepository = unitOfWork.ParticipationRepository;
+            this.azureB2CService = azureB2CService;
+            this.personService = personService;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -156,21 +156,41 @@ namespace RoosterPlanner.Service
             return result;
         }
 
-        public async Task<TaskResult<Participation>> RemoveParticipationAsync(Participation participation)
+        public async Task<TaskListResult<Participation>> GetParticipationsAsync(Guid projectId)
         {
-            if (participation == null)
-                throw new ArgumentNullException(nameof(participation));
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
 
-            TaskResult<Participation> result = new TaskResult<Participation>();
+            TaskListResult<Participation> result = TaskListResult<Participation>.CreateDefault();
             try
             {
-                result.Data = participationRepository.Remove(participation);
-                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Data = await participationRepository.GetParticipations(projectId);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                result.Message = GetType().Name + " - Error removing participation " + participation.Id;
-                logger.LogError(ex, result.Message, participation);
+                result.Message = GetType().Name + " - Error finding participations " + projectId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+            return result;
+        }
+
+        public async Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+
+            TaskListResult<Participation> result = TaskListResult<Participation>.CreateDefault();
+            try
+            {
+                result.Data = await participationRepository.GetParticipationsWithAvailabilities(projectId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error finding participations " + projectId;
+                logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
 

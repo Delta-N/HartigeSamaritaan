@@ -7,6 +7,8 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confi
 import {CategoryService} from "../../services/category.service";
 import {Category} from "../../models/category";
 import {AddCategoryComponent} from "../../components/add-category/add-category.component";
+import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {Breadcrumb} from "../../models/breadcrumb";
 
 @Component({
   selector: 'app-category',
@@ -27,7 +29,15 @@ export class CategoryComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private categoryService: CategoryService,
-    private router: Router) {
+    private router: Router,
+    private breadcrumbService:BreadcrumbService) {
+
+    let breadcrumb: Breadcrumb = new Breadcrumb();
+    breadcrumb.label = 'Category';
+    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
+      this.breadcrumbService.admincrumb, this.breadcrumbService.takencrumb, breadcrumb];
+
+    this.breadcrumbService.replace(array);
   }
 
   ngOnInit(): void {
@@ -51,14 +61,16 @@ export class CategoryComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(async result => {
-      this.category = result;
-      this.toastr.success(result.name + " is gewijzigd")
+      if (result && result !== 'false') {
+        this.category = result;
+        this.toastr.success(result.name + " is gewijzigd")
+      }
     });
   }
 
   delete() {
-    const message = "Weet je zeker dat je deze category wilt verwijderen? Hiermee verwijder je ook alle taken die hieraan hangen" //set null instellen
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput");
+    const message = "Weet je zeker dat je deze category wilt verwijderen?"
+    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -67,7 +79,7 @@ export class CategoryComponent implements OnInit {
       if (dialogResult === true) {
         await this.categoryService.deleteCategory(this.guid).then(async response => {
           if (response) {
-            this.router.navigateByUrl("/tasks")
+            this.router.navigate(['admin/tasks']).then();
           }
         })
       }

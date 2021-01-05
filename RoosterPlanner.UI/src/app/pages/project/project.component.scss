@@ -1,3 +1,8 @@
+.admin{
+  border: 1px solid #707070;
+  background: whitesmoke;
+  align-items: center;
+}
 img {
   max-width: 400px;
   height: auto;
@@ -36,6 +41,19 @@ img {
     max-width: 400px;
   }
   .mat-card {
-    display: none;
+    min-width: initial;
+    width: 250px;
+
+    .mat-card-title {
+      font-size: 16px;
+    }
+
+    .mat-card-content {
+      font-size: 14px;
+    }
+
+    .mat-card-actions .mat-button {
+      font-size: 14px;
+    }
   }
 }

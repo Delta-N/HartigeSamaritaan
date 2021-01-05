@@ -12,26 +12,24 @@ import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {Shift} from "../../models/shift";
 import {ShiftService} from "../../services/shift.service";
 import {
-  CalendarEventAction,
   CalendarView,
   CalendarEvent,
   CalendarDateFormatter,
-  CalendarEventTitleFormatter, CalendarDayViewComponent
+  CalendarDayViewComponent
 } from 'angular-calendar';
 import * as moment from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
-import {DomSanitizer} from "@angular/platform-browser";
 import {MatCalendar} from "@angular/material/datepicker";
 import {Moment} from "moment";
 import {MatCheckboxChange} from "@angular/material/checkbox";
-import {BehaviorSubject, Subject} from "rxjs";
+import {Subject} from "rxjs";
 import {AvailabilityService} from "../../services/availability.service";
 import {AvailabilityData} from "../../models/availabilitydata";
 import {Task} from 'src/app/models/task';
-import {CustomEventTitleFormatter} from "../../helpers/custon-event-title-formatter.provider";
 import {take} from "rxjs/operators";
 import {Project} from "../../models/project";
 import {ProjectService} from "../../services/project.service";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 
 @Component({
@@ -43,10 +41,6 @@ import {ProjectService} from "../../services/project.service";
     {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter,
-    },
-    {
-      provide: CalendarEventTitleFormatter,
-      useClass: CustomEventTitleFormatter,
     },
   ],
 })
@@ -73,18 +67,13 @@ export class PlanComponent implements OnInit, AfterViewInit {
   nextBtnDisabled: boolean;
 
   filteredEvents: CalendarEvent[] = [];
-  filteredEventsObservable: BehaviorSubject<CalendarEvent[]> = new BehaviorSubject<CalendarEvent[]>(this.filteredEvents);
   allEvents: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
-
-  scheduledLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button scheduled">Plannen</span>');
-
 
   constructor(private breadcrumbService: BreadcrumbService,
               private shiftService: ShiftService,
               private availabilityService: AvailabilityService,
               private route: ActivatedRoute,
-              private sanitizer: DomSanitizer,
               private renderer: Renderer2,
               private projectService: ProjectService,
               private router: Router,) {
@@ -95,9 +84,9 @@ export class PlanComponent implements OnInit, AfterViewInit {
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       let projectId: string = params.get('id');
       let date: string = params.get('date')
-      if (date && date !== 'Invalid Date')
+      if (date && date !== 'Invalid Date') {
         this.viewDate = moment(date).toDate();
-      else
+      } else
         this.viewDate = new Date();
 
 
@@ -113,11 +102,13 @@ export class PlanComponent implements OnInit, AfterViewInit {
       await this.projectService.getProject(projectId).then(res => {
         if (res) {
           this.project = res;
-          this.minDate = this.project.participationStartDate;
+          this.minDate = this.project.participationStartDate >= new Date() ? this.project.participationStartDate : moment().startOf("day").toDate();
           this.maxDate = this.project.participationEndDate;
           this.calendar.minDate = moment(this.minDate);
           this.calendar.maxDate = moment(this.maxDate);
+          this.calendar.activeDate = moment(this.viewDate);
           this.calendar.updateTodaysDate()
+
         }
       })
 
@@ -145,6 +136,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
         this.colorInMonth();
       })
     })
+
   }
 
   changeDate(date: Date): void {
@@ -174,25 +166,15 @@ export class PlanComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.prevBtnDisabled = moment(this.viewDate).subtract(1, "day") < moment(this.minDate);
-    this.nextBtnDisabled = moment(this.viewDate).add(1, "day") > moment(this.maxDate)
+    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate);
+    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate)
   }
 
 
   Plan(id: string | number) {
-    this.router.navigate(['/plan/shift', id]).then();
+    this.router.navigate(['manage/plan/shift', id]).then();
 
   }
-
-  actions: CalendarEventAction[] = [
-    {
-      label: this.scheduledLabel,
-      a11yLabel: 'Schedule',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.Plan(event.id)
-      },
-    },
-  ]
 
   colorInMonth() {
 
@@ -246,8 +228,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
           .set("minutes", Number(s.endTime.substring(3, 6))).toDate(),
 
         title: s.task.name,
-        color: this.getColor(s.task.color),
-        actions: this.actions,
+        color: TextInjectorService.getColor(s.task.color),
         id: s.id
       };
 
@@ -299,18 +280,25 @@ export class PlanComponent implements OnInit, AfterViewInit {
   fillSpacer() {
     this.filteredEvents.forEach(e => {
       let shift = this.shifts.find(s => s.id == e.id)
+      if ((e.end.getTime() - e.start.getTime()) / 3600000 > 2) {
 
-      let necessaryElement = document.getElementById('necessary-' + shift.id);
-      let scheduledElement = document.getElementById('scheduled-' + shift.id)
-      let availableElement = document.getElementById('available-' + shift.id)
 
-      necessaryElement.innerText = shift.participantsRequired + " Nodig";
+        let necessaryElement = document.getElementById('necessary-' + shift.id);
+        let scheduledElement = document.getElementById('scheduled-' + shift.id)
 
-      let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
-      availableElement.innerText = availableNumber + " Beschikbaar";
+        let availableElement = document.getElementById('available-' + shift.id)
+        necessaryElement.innerText = shift.participantsRequired + " Nodig";
 
-      let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
-      scheduledElement.innerText = scheduledNumber + " Ingeroosterd";
+        let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
+        availableElement.innerText = availableNumber + " Beschikbaar";
+
+        let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
+        scheduledElement.innerText = scheduledNumber + " Ingeroosterd";
+
+      } else {
+        let planElement = document.getElementById('plan-' + shift.id)
+        planElement.style.cssText = "padding: 3px !important";
+      }
     })
 
   }
@@ -324,50 +312,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
       this.displayedProjectTasks = this.displayedProjectTasks.filter(t => t !== task)
     }
     this.filterEvents();
+    setTimeout(() => {
+      this.fillSpacer();
+    }, 100)
   }
-
-  getColor(color: string) {
-    const colors: any = {
-      red: {
-        primary: '#ad2121',
-        secondary: '#FAE3E3',
-      },
-      blue: {
-        primary: '#1e90ff',
-        secondary: '#D1E8FF',
-      },
-      yellow: {
-        primary: '#e3bc08',
-        secondary: '#FDF1BA',
-      },
-      green: {
-        primary: '#1f931f',
-        secondary: '#c0f2c0'
-      },
-      orange: {
-        primary: '#cc5200',
-        secondary: '#ffc299'
-      },
-      pink: {
-        primary: '#cc0052',
-        secondary: '#ffb3d1'
-      }
-    };
-
-    switch (color.toLowerCase()) {
-      case "red":
-        return colors.red
-      case "blue":
-        return colors.blue
-      case "yellow":
-        return colors.yellow
-      case "green":
-        return colors.green
-      case "orange":
-        return colors.orange
-      case "pink":
-        return colors.pink
-    }
-  }
-
 }

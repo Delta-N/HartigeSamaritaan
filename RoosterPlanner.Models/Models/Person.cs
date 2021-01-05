@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using RoosterPlanner.Models.Types;
 
 namespace RoosterPlanner.Models
 {
@@ -13,13 +12,13 @@ namespace RoosterPlanner.Models
         [Column(Order = 1)]
         [Required, MaxLength(256)]
         public string FirstName { get; set; }
-        
-        [Column(Order = 2)] public PersonType Type { get; set; }
+
+        [Column(Order = 2)] 
+        public string LastName { get; set; }
 
         public List<Participation> Participations { get; set; }
         public List<Certificate> Certificates { get; set; }
-
-        [NotMapped] public string LastName { get; set; }
+        
         [NotMapped] public string Email { get; set; }
         [NotMapped] public string StreetAddress { get; set; }
         [NotMapped] public string PostalCode { get; set; }
@@ -28,6 +27,24 @@ namespace RoosterPlanner.Models
         [NotMapped] public string DateOfBirth { get; set; }
         [NotMapped] public string PhoneNumber { get; set; }
         [NotMapped] public string UserRole { get; set; }
+        [NotMapped] public string Nationality { get; set; }
+
+        [Column(Order = 4)] 
+        public Guid? ProfilePictureId { get; set; }
+        
+        [ForeignKey("ProfilePictureId")] 
+        public Document ProfilePicture { get; set; }
+
+        [Column(Order = 5)] 
+        [MaxLength(256)]
+        public string PersonalRemark { get; set; }
+
+        [Column(Order = 6)] 
+        [MaxLength(256)]
+        public string StaffRemark { get; set; }
+
+        [Column(Order = 7)]
+        public bool PushDisabled { get; set; }
 
         //Constructor
         public Person() : base(Guid.Empty)

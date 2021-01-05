@@ -1,9 +1,9 @@
-table {
+.mat-form-field {
+  font-size: 14px;
   width: 100%;
 }
 
-.mat-form-field {
-  font-size: 14px;
+table {
   width: 100%;
 }
 
@@ -11,9 +11,10 @@ td, th {
   width: 25%;
 }
 
-.sa{
+.sa {
   display: flex;
 }
-.star{
+
+.star {
   color: #e3bc08;
 }

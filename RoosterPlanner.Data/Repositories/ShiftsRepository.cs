@@ -19,7 +19,6 @@ namespace RoosterPlanner.Data.Repositories
         Task<List<Shift>> GetByProjectUserAndDateAsync(Guid projectId, Guid userId, DateTime date);
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId);
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId, Guid userId);
-        
     }
 
     public class ShiftRepository : Repository<Shift>, IShiftRepository
@@ -37,6 +36,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
+                .ThenInclude(t=>t.Instruction)
                 .Where(s => s.ProjectId == projectId)
                 .ToListAsync();
         }
@@ -49,18 +49,19 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
-                .Where(s => s.ProjectId == projectId)
+                .Where(s => s.ProjectId == projectId && s.Date>=DateTime.Today)
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
             foreach (Shift shift in shifts)
             {
-                
                 foreach (Availability shiftAvailability in shift.Availabilities)
                 {
                     shiftAvailability.Shift = null;
                 }
+
                 if (shift.Task != null)
                     shift.Task.Shifts = null;
             }
@@ -76,9 +77,10 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
                 .ThenInclude(a => a.Participation)
-                .Where(s => s.ProjectId == projectId)
+                .Where(s => s.ProjectId == projectId && s.Date>=DateTime.Today)
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
@@ -96,7 +98,8 @@ namespace RoosterPlanner.Data.Repositories
 
                     shiftAvailability.Shift = null;
                 }
-                toBeRemoved.ForEach(a=>shift.Availabilities.Remove(a));
+
+                toBeRemoved.ForEach(a => shift.Availabilities.Remove(a));
 
                 if (shift.Task != null)
                     shift.Task.Shifts = null;
@@ -128,6 +131,7 @@ namespace RoosterPlanner.Data.Repositories
             return EntitySet
                 .AsNoTracking()
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Project)
                 .Where(s => s.Id == shiftId).FirstOrDefaultAsync();
         }
@@ -140,19 +144,21 @@ namespace RoosterPlanner.Data.Repositories
             Shift shift = await EntitySet
                 .AsNoTracking()
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Project)
-                .Include(s=>s.Availabilities)
-                .ThenInclude(a=>a.Participation)
-                .Where(s => s.Id == shiftId).FirstOrDefaultAsync();
+                .Include(s => s.Availabilities)
+                .ThenInclude(a => a.Participation)
+                .Where(s => s.Id == shiftId)
+                .FirstOrDefaultAsync();
 
             shift.Task.Shifts = null;
             shift.Availabilities.ForEach(a =>
             {
                 if (a.Participation != null)
                     a.Participation.Availabilities = null;
-                a.Shift = null;  
+                a.Shift = null;
             });
-            
+
             return shift;
         }
 
@@ -163,18 +169,17 @@ namespace RoosterPlanner.Data.Repositories
             List<Shift> listOfShifts = await EntitySet
                 .AsNoTracking()
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
-                .Where(s => s.ProjectId == projectId && s.Date == date)
+                .Where(s => s.ProjectId == projectId && s.Date == date && s.Task != null)
                 .ToListAsync();
-            listOfShifts?.ForEach(s =>
+            listOfShifts?.ForEach(shift =>
             {
-                s.Task.Shifts = null;
-                s.Availabilities.ForEach(a =>
-                {
-                    a.Shift = null;
-                });
+                if (shift.Task != null)
+                    shift.Task.Shifts = null;
+                shift.Availabilities.ForEach(a => { a.Shift = null; });
             });
-            return listOfShifts; 
+            return listOfShifts;
         }
 
         public async Task<List<Shift>> GetByProjectUserAndDateAsync(Guid projectId, Guid userId, DateTime date)
@@ -185,16 +190,19 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
+                .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
                 .ThenInclude(a => a.Participation)
-                .Where(s => s.ProjectId == projectId && s.Date == date)
+                .Where(s => s.ProjectId == projectId && s.Date == date && s.Task!=null)
                 .ToListAsync();
-            listOfShifts?.ForEach(s =>
-                s.Availabilities = s.Availabilities.Where(a => a.Participation.PersonId == userId).ToList());
-            listOfShifts?.ForEach(s =>
+
+            Parallel.ForEach(listOfShifts, shift =>
             {
-                s.Task.Shifts = null;
-                s.Availabilities.ForEach(a =>
+                shift.Availabilities = shift.Availabilities.Where(a => a.Participation.PersonId == userId).ToList();
+                if (shift.Task != null)
+                    shift.Task.Shifts = null;
+
+                shift.Availabilities.ForEach(a =>
                 {
                     a.Participation.Availabilities = null;
                     a.Shift = null;

@@ -20,16 +20,19 @@ export class DateConverter {
   }
 
 //alle dates worden alleen naar de gebruiker toe geconverteerd naar een leesbarevorm
-  static toReadableString(date: string) {
+  static toReadableStringFromString(date: string) {
     return moment(date, "YYYY-MM-DDTHH:mm").format("DD-MM-YYYY")
+  }
 
+  static toReadableStringFromDate(date: Date) {
+    return moment(date, "YYYY-MM-DDTHH:mm").format("DD-MM-YYYY")
   }
 
   static formatProjectDateReadable(project): Project {
-    project.participationStartDate = DateConverter.toReadableString(project.participationStartDate);
-    project.participationEndDate != null ? project.participationEndDate = DateConverter.toReadableString(project.participationEndDate) : project.participationEndDate = null;
-    project.projectEndDate = DateConverter.toReadableString(project.projectEndDate);
-    project.projectStartDate = DateConverter.toReadableString(project.projectStartDate);
+    project.participationStartDate = DateConverter.toReadableStringFromString(project.participationStartDate);
+    project.participationEndDate != null ? project.participationEndDate = DateConverter.toReadableStringFromString(project.participationEndDate) : project.participationEndDate = null;
+    project.projectEndDate = DateConverter.toReadableStringFromString(project.projectEndDate);
+    project.projectStartDate = DateConverter.toReadableStringFromString(project.projectStartDate);
     return project
   }
 

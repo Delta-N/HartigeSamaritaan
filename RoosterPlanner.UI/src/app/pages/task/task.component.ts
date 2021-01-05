@@ -63,7 +63,7 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result && result!=='false') {
         this.toastr.success(result.name + " is gewijzigd")
         this.task = result;
 
@@ -73,19 +73,16 @@ export class TaskComponent implements OnInit {
 
   delete() {
     const message = "Weet je zeker dat je deze taak wilt verwijderen?"
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput");
+    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult === true) {
-        if (this.task.documentUri != null) {
-          this.uploadService.deleteIfExists(this.task.documentUri).then()
-        }
         this.taskService.deleteTask(this.guid).then(response => {
           if (response === true) {
-            this.router.navigateByUrl("/admin").then()
+            this.router.navigate(['admin/tasks']).then();
           }
         })
       }

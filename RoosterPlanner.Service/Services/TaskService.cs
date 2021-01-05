@@ -38,19 +38,22 @@ namespace RoosterPlanner.Service
         private readonly ITaskRepository taskRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IProjectTaskRepository projectTaskRepository;
+        private readonly IDocumentService documentService;
 
         #endregion
 
         //Constructor
-        public TaskService(IUnitOfWork unitOfWork, ILogger<TaskService> logger)
+        public TaskService(
+            IUnitOfWork unitOfWork,
+            ILogger<TaskService> logger,
+            IDocumentService documentService)
         {
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            taskRepository = unitOfWork.TaskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
-            categoryRepository = unitOfWork.CategoryRepository ??
-                                 throw new ArgumentNullException(nameof(categoryRepository));
-            projectTaskRepository = unitOfWork.ProjectTaskRepository ??
-                                    throw new ArgumentNullException(nameof(projectTaskRepository));
+            this.unitOfWork = unitOfWork;
+            this.logger = logger;
+            taskRepository = unitOfWork.TaskRepository;
+            categoryRepository = unitOfWork.CategoryRepository;
+            projectTaskRepository = unitOfWork.ProjectTaskRepository;
+            this.documentService = documentService;
         }
 
         public async Task<TaskResult<Task>> GetTaskAsync(Guid id)
@@ -143,6 +146,9 @@ namespace RoosterPlanner.Service
             TaskResult<Task> result = new TaskResult<Task>();
             try
             {
+                if (task.Instruction != null)
+                    await documentService.DeleteDocumentAsync(task.Instruction);
+
                 result.Data = taskRepository.Remove(task);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }

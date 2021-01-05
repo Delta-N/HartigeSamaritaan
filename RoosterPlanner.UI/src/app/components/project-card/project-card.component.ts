@@ -28,7 +28,7 @@ export class ProjectCardComponent implements OnInit {
 
   removeParticipation(participation: Participation) {
     const message = "Weet je zeker dat je wilt uitschrijven voor dit project?"
-    const dialogData = new ConfirmDialogModel("Bevestig uitschrijving", message, "ConfirmationInput");
+    const dialogData = new ConfirmDialogModel("Bevestig uitschrijving", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -37,7 +37,7 @@ export class ProjectCardComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async dialogResult => {
       if (dialogResult === true) {
         await this.participationService.deleteParticipation(participation).then(async response => {
-            if (response !== null) {
+            if (response) {
               window.location.reload();
             }
           }
@@ -46,7 +46,25 @@ export class ProjectCardComponent implements OnInit {
     });
   }
 
-  todo() {
-    this.toastr.warning("Deze functie moet nog geschreven worden")
+  collaborate(participation: Participation) {
+    const message = "Met wie wil je samenwerken?"
+    const dialogData = new ConfirmDialogModel("Samenwerking", message, "TextInput",participation.remark);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(async dialogResult => {
+
+      if (dialogResult) {
+        participation.remark=dialogResult.toString()
+        await this.participationService.updateParticipation(participation).then(async response => {
+            if (response) {
+              this.toastr.success("Samenwerkingsvoorkeur is gewijzigd")
+            }
+          }
+        );
+      }
+    });
   }
 }

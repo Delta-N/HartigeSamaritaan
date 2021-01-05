@@ -12,6 +12,8 @@ namespace RoosterPlanner.Data.Repositories
     {
         Task<List<Participation>> GetActiveParticipationsAsync(Guid personId);
         Task<Participation> GetSpecificParticipationAsync(Guid personId, Guid projectId);
+        Task<List<Participation>> GetParticipations(Guid projectId);
+        Task<List<Participation>> GetParticipationsWithAvailabilities(Guid projectId);
     }
 
     public class ParticipationRepository : Repository<Participation>, IParticipationRepository
@@ -27,8 +29,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
-                .Include(p => p.WantsToWorkWith)
-                .Where(p => p.PersonId == personId && !p.Project.Closed && (
+                .Where(p => p.PersonId == personId && !p.Project.Closed && p.Active && (
                     p.Project.ParticipationEndDate >= DateTime.Now ||
                     p.Project.ParticipationEndDate == null))
                 .ToListAsync();
@@ -40,9 +41,28 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
-                .Include(p => p.WantsToWorkWith)
                 .Where(p => p.PersonId == personId && p.ProjectId == projectId)
                 .FirstOrDefaultAsync();
+        }
+
+        public Task<List<Participation>> GetParticipations(Guid projectId)
+        {
+            return EntitySet
+                .AsNoTracking()
+                .Include(p=>p.Project)
+                .Where(p => p.ProjectId == projectId)
+                .ToListAsync();
+        }
+
+        public Task<List<Participation>> GetParticipationsWithAvailabilities(Guid projectId)
+        {
+            return EntitySet
+                .Include(p=>p.Project)
+                .Include(p=>p.Availabilities)
+                .ThenInclude(a=>a.Shift)
+                .ThenInclude(s=>s.Task)
+                .Where(p => p.ProjectId == projectId)
+                .ToListAsync();
         }
     }
 }

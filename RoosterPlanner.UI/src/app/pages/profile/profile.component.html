@@ -1,41 +1,109 @@
-  <div class="row bar">
-    <h1>Profiel</h1>
-    <a id="push" mat-button class="override-button" (click)="logout()">Uitloggen</a>
+<div class="row bar">
+  <h1>Profiel</h1>
+  <div id="push">
+    <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button action-button">Profiel wijzigen</a>
+    <a *ngIf="user!=null" (click)="push()" mat-button class="override-button">{{user.pushDisabled?"Pushberichten inschakelen":"Pushberichten uitschakelen"}}</a>
   </div>
+</div>
 
 
-  <div *ngIf="loaded===true">
-    <div class="row">
-      <div class="row-name">Naam:</div>
-      <div class="user-data">{{user.firstName + " " + user.lastName}}</div>
-    </div>
-    <div class="row">
-      <div class="row-name">Leeftijd:</div>
-      <div class="user-data">{{age}}</div>
-    </div>
-    <div class="row">
-      <div class="row-name">Email:</div>
-      <div class="user-data">{{user.email}}</div>
-    </div>
-    <div class="row">
-      <div class="row-name">Adres:</div>
-      <div class="user-data">{{user.streetAddress}}</div>
-    </div>
-    <div class="row">
-      <div class="row-name">Postcode:</div>
-      <div class="user-data">{{user.postalCode}}</div>
-    </div>
-    <div class="row">
-      <div class="row-name">Stad:</div>
-      <div class="user-data">{{user.city}}</div>
-    </div>
-    <div class="row">
-      <div class="row-name">Telefoonnummer:</div>
-      <div class="user-data">{{user.phoneNumber}}</div>
-    </div>
-  </div>
+<div *ngIf="loaded===true">
   <div class="row">
-    <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button" id="editProfile">Profiel wijzigen</a>
+    <div class="col-md-6" id="left">
+      <div class="row">
+        <div class="row-name">Naam:</div>
+        <div class="user-data">{{user.firstName + " " + user.lastName}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Leeftijd:</div>
+        <div class="user-data">{{age}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Email:</div>
+        <div class="user-data">{{user.email}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Adres:</div>
+        <div class="user-data">{{user.streetAddress}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Postcode:</div>
+        <div class="user-data">{{user.postalCode}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Stad:</div>
+        <div class="user-data">{{user.city}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Telefoonnummer:</div>
+        <div class="user-data">{{user.phoneNumber}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Nationaliteit:</div>
+        <div class="user-data">{{user.nationality}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Land van Herkomst:</div>
+        <div class="user-data">{{user.country}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Moedertaal:</div>
+        <div class="user-data">{{user.nativeLanguage}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Nederlands taalniveau</div>
+        <div class="user-data">{{user.dutchProficiency}}</div>
+      </div>
+    </div>
+    <div class="col-md-6" id="right">
+
+      <mat-card [ngClass]="[certificateStyle]" id="CertificateCard">
+        <div>
+          <mat-card-title>
+            Certificaten
+            <button [disabled]="CertificateExpandbtnDisabled" class="card-title-icon" mat-icon-button
+                    (click)="expandCertificateCard()">
+              <mat-icon id="icon">zoom_out_map</mat-icon>
+            </button>
+          </mat-card-title>
+        </div>
+        <mat-card-content>
+                  <span *ngFor="let item of certificates">
+                     <a [routerLink]="['/certificate', item.id]">
+                        <p>{{item.certificateType?item.certificateType.name:"Onbekend"}}</p>
+                     </a>
+                  </span>
+          <span *ngIf="!user.certificates || user.certificates.length==0">N.B.</span>
+          <mat-card-actions class="action-anchor"></mat-card-actions>
+        </mat-card-content>
+        <mat-card-actions class="action-anchor" *ngIf="isAdmin">
+          <button mat-button (click)="modCertificate('toevoegen')">Nieuwe toevoegen</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
+  <div class="row" id="remark">
+    <div class="col-6">
+
+      <div class="row-name">Persoonlijke opmerking:
+        <button mat-button class="override-button" id="personalbutton"
+                (click)="editRemark('personalbutton')">Aanpassen
+        </button>
+      </div>
+      <textarea id="personalremark" matInput disabled class="text-box">{{user.personalRemark}}</textarea>
+
+    </div>
+
+    <div class="col-6" *ngIf="isStaff">
+
+      <div class="row-name">(Verborgen) opmerking:
+        <button mat-button class="override-button" id="staffbutton" (click)="editRemark('staffbutton')">Aanpassen
+        </button>
+      </div>
+      <textarea id="staffremark" disabled class="text-box" matInput>{{user.staffRemark}}</textarea>
+
+    </div>
+  </div>
+</div>
 
 

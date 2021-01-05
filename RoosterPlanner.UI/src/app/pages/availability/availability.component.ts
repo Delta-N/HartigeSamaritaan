@@ -12,28 +12,26 @@ import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Shift} from "../../models/shift";
 import {ShiftService} from "../../services/shift.service";
 import {
-  CalendarEventAction,
   CalendarView,
   CalendarEvent,
   CalendarDateFormatter,
-  CalendarEventTitleFormatter, CalendarDayViewComponent
+  CalendarDayViewComponent
 } from 'angular-calendar';
 import * as moment from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
-import {DomSanitizer} from "@angular/platform-browser";
 import {MatCalendar} from "@angular/material/datepicker";
 import {Moment} from "moment";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {UserService} from "../../services/user.service";
-import {BehaviorSubject, Subject} from "rxjs";
+import {Subject} from "rxjs";
 import {Participation} from "../../models/participation";
 import {ParticipationService} from "../../services/participation.service";
 import {AvailabilityService} from "../../services/availability.service";
 import {AvailabilityData, ScheduleStatus} from "../../models/availabilitydata";
 import {Task} from 'src/app/models/task';
 import {Availability} from "../../models/availability";
-import {CustomEventTitleFormatter} from "../../helpers/custon-event-title-formatter.provider";
 import {take} from "rxjs/operators";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 
 @Component({
@@ -46,10 +44,6 @@ import {take} from "rxjs/operators";
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter,
     },
-    {
-      provide: CalendarEventTitleFormatter,
-      useClass: CustomEventTitleFormatter,
-    },
   ],
 })
 export class AvailabilityComponent implements OnInit, AfterViewInit {
@@ -61,7 +55,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   participation: Participation;
   availabilityData: AvailabilityData;
   displayedProjectTasks: Task[] = [];
-  currentDayProjectTasks: Task[] = [];
   shifts: Shift[] = [];
 
   selectedDate: Moment;
@@ -78,16 +71,9 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   nextBtnDisabled: boolean;
 
   filteredEvents: CalendarEvent[] = [];
-  filteredEventsObservable: BehaviorSubject<CalendarEvent[]> = new BehaviorSubject<CalendarEvent[]>(this.filteredEvents);
   allEvents: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
-
-  maybeLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">?</div></span>');
-  yesLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">V</span>');
-  noLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button">X</span>');
-  scheduledLabel: any = this.sanitizer.bypassSecurityTrustHtml('<span class="mat-button custom-button scheduled">Download Instructies</span>');
-
-  hiddenElements: HTMLElement[] = [];
+  activeProjectTasks: Task[] = [];
 
   constructor(private breadcrumbService: BreadcrumbService,
               private shiftService: ShiftService,
@@ -95,7 +81,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
               private participationService: ParticipationService,
               private availabilityService: AvailabilityService,
               private route: ActivatedRoute,
-              private sanitizer: DomSanitizer,
               private renderer: Renderer2) {
   }
 
@@ -117,7 +102,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         .then(async res => {
           if (res) {
             this.participation = res
-            this.minDate = this.participation.project.participationStartDate;
+
+            this.minDate = this.participation.project.participationStartDate >= new Date() ? this.participation.project.participationStartDate : moment().startOf("day").toDate();
             this.maxDate = this.participation.project.participationEndDate;
 
             this.calendar.minDate = moment(this.minDate);
@@ -158,22 +144,37 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     })
   }
 
-  changeDate(date: Date): void {
+  async changeDate(date: Date): Promise<void> {
     this.viewDate = date;
-    this.dateOrViewChanged();
+    this.calendar.activeDate = moment(this.viewDate);
+    setTimeout(async () => {
+      this.colorInMonth()
+      await this.dateOrViewChanged();
+    }, 100)
+
+
+
   }
 
   dateChanged() {
-    this.calendar.activeDate = this.selectedDate;
     this.changeDate(this.selectedDate.toDate())
   }
 
   increment(): void {
     this.changeDate(moment(this.viewDate).add(1, "day").toDate());
+    this.highlight()
   }
 
   decrement(): void {
     this.changeDate(moment(this.viewDate).subtract(1, "day").toDate());
+    this.highlight()
+  }
+  highlight():void{
+    let dateElement = document.getElementById("date")
+    dateElement.classList.add('highlight')
+    setTimeout(()=>{
+      dateElement.classList.remove('highlight')
+    },500)
   }
 
   async dateOrViewChanged(): Promise<void> {
@@ -189,8 +190,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       }, 300);
     });
 
-    this.prevBtnDisabled = moment(this.viewDate).subtract(1, "day") < moment(this.minDate);
-    this.nextBtnDisabled = moment(this.viewDate).add(1, "day") > moment(this.maxDate)
+    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate);
+    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate)
   }
 
   async handleEvent(action: string, event: CalendarEvent): Promise<void> {
@@ -205,7 +206,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       shift.availabilities = [];
 
     //yes? mod
-    if (availability) {
+    if (availability && availability.type!==3) {
       if (action !== "Preference")
         availability.type = this.getAvailabilityTypeNumber(action)
       else if (action === "Preference")
@@ -213,9 +214,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
       await this.availabilityService.updateAvailability(availability)
     }
-
     //no? create
-    else {
+    else if(!availability){
       availability = new Availability();
       availability.participation = this.participation;
       availability.participationId = this.participation.id;
@@ -260,7 +260,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   openInstructions(id: string | number) {
-    let url: string = this.shifts.find(s => s.id === id).task?.documentUri;
+    let url: string = this.shifts.find(s => s.id === id).task?.instruction?.documentUri;
     if (url)
       window.open(url, "_blank")
   }
@@ -268,8 +268,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   getAvailabilityTypeNumber(action: string): number {
     if (action === "No")
       return 0;
-    if (action === "Maybe")
-      return 1;
     if (action === "Yes")
       return 2;
   }
@@ -277,8 +275,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   getAvailabilityTypeActionName(actionNumber: number): string {
     if (actionNumber === 0)
       return "No"
-    if (actionNumber === 1)
-      return "Maybe"
     if (actionNumber === 2)
       return "Yes"
     if (actionNumber === 3)
@@ -308,65 +304,24 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   changeBorders(event: CalendarEvent, label: String) {
-    moment.locale('en')
-    let aria = "\n      " + moment(event.start).format("dddd MMMM DD,") + "\n      " + event.title + ", from " + moment(event.start).format("hh:mm A") + "\n     to " +
-      moment(event.end).format("hh:mm A");
-    let x: HTMLCollection = (document.getElementsByClassName("cal-event"))
-    for (let i = 0; i < x.length; i++) {
-      let element: any = x[i]
-      if (element.ariaLabel == aria) {
-        let itemHolder = element.children[0];
-        for (let j = 0; j < itemHolder.children.length; j++) {
-          let child: any = itemHolder.children[j];
-          if (child.id == "actions") {
-            let farDecendend = child.children[0].children[0];
-            for (let k = 0; k < farDecendend.children.length; k++) {
-              if (farDecendend.children[k].ariaLabel == label) {
-                farDecendend.children[k].children[0].style.border = "solid 3px black";
-              } else {
-                farDecendend.children[k].children[0].style.border = "none";
-              }
-            }
-          }
-        }
+    if (label === "Preference")
+      label = "Yes";
+    let actionElement = this.getActionElement(event)
+    for (let k = 0; k < actionElement.children.length; k++) {
+      let child: any = actionElement.children[k];
+      if (child.ariaLabel == label) {
+        child.style.border = "solid 2px black";
+      } else {
+        child.style.border = "none";
       }
     }
-    moment.locale('nl')
   }
 
-  actions: CalendarEventAction[] = [
-    {
-      label: this.yesLabel,
-      a11yLabel: 'Yes',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.handleEvent("Yes", event);
-      },
-    },
-    {
-      label: this.maybeLabel,
-      a11yLabel: 'Maybe',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.handleEvent("Maybe", event);
-      },
-    },
-    {
-      label: this.noLabel,
-      a11yLabel: 'No',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.handleEvent("No", event);
-      },
-    },
-  ];
-  scheduledAction: CalendarEventAction[] = [{
-    label: this.scheduledLabel,
-    a11yLabel: 'Scheduled',
-    onClick: ({event}: { event: CalendarEvent }): void => {
-      this.openInstructions(event.id)
-    }
-  }]
+  getActionElement(event: CalendarEvent): HTMLElement {
+    return document.getElementById("actions-" + event.id)
+  }
 
   colorInMonth() {
-
     for (const ka of this.availabilityData.knownAvailabilities) {
       let date: Date = moment(ka.date).toDate();
       let color: string = "Red"
@@ -380,8 +335,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   colorInDay(date: Date, color: string) {
-    let label = moment(date).local().format("D MMMM YYYY").toLowerCase()
-    let element: HTMLElement = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
+   let element=this.getDayElement(date)
 
     if (element) {
       let child: any = element.children[0]
@@ -389,47 +343,19 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       child.style.color = 'white';
     }
   }
+  getDayElement(date:Date):HTMLElement{
+    let label = moment(date).local().format("D MMMM YYYY").toLowerCase()
+    let element: HTMLElement = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
+    return element
+  }
 
   async getShifts(date: Date) {
+    moment.locale("nl")
     await this.shiftService.getAllShiftsOnDateWithUserAvailability(this.projectId, this.userId, moment(date).set("hour", 12).toDate()).then(async res => {
       this.shifts = res;
     });
     if (this.shifts.length > 0) {
       this.addEvents();
-      this.filterCheckboxes();
-    }
-  }
-
-  filterCheckboxes() {
-    this.hiddenElements.forEach(el => el.style.display = "initial")
-    this.hiddenElements = []
-
-    let elements: HTMLCollection = document.getElementsByClassName("checkBox")
-
-    for (let i = 0; i < elements.length; i++) {
-      let element = elements[i] as HTMLElement
-
-      let projectTasks: Task[] = []
-      this.allEvents.forEach(ae => {
-        let pt = this.availabilityData.projectTasks.find(pt => pt.name === ae.title)
-        if (pt)
-          projectTasks.push(pt)
-      })
-
-      let found: boolean = false;
-      let ptask: Task;
-      projectTasks.forEach(pt => {
-        if (pt.id === element.id)
-          ptask = pt
-      })
-
-      if (ptask)
-        found = true;
-
-      if (!found) {
-        this.hiddenElements.push(element)
-        element.style.display = "none";
-      }
     }
   }
 
@@ -437,6 +363,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     let scheduledId: string[] = [];
 
     this.allEvents = [];
+    this.activeProjectTasks = []
     this.shifts.forEach(s => {
       let scheduled = false;
       if (s.availabilities && s.availabilities[0] && s.availabilities[0].type === 3)
@@ -452,21 +379,27 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
           .set("minutes", Number(s.endTime.substring(3, 6))).toDate(),
 
         title: s.task.name,
-        color: this.getColor(s.task.color),
-        actions: scheduled ? this.scheduledAction : this.actions,
+        color: TextInjectorService.getColor(s.task.color),
         id: s.id
       };
-      if (scheduled)
+      if (scheduled) {
         scheduledId.push(s.id)
+        event.color.primary = "#5b5bdc";
+      }
 
+      this.activeProjectTasks.push(s.task)
       this.allEvents.push(event)
     })
     this.filterEvents();
     this.refresh.next();
 
     setTimeout(() => {
+      this.changeButtonSize();
       if (scheduledId) {
-        scheduledId.forEach(id => this.showScheduledButton(id))
+        scheduledId.forEach(id => {
+          this.showScheduledButton(id)
+          this.hideActionButton(id)
+        })
       }
     }, 200)
   }
@@ -483,8 +416,6 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       if (contains)
         this.filteredEvents.push(e);
     })
-
-
     this.setHours()
   }
 
@@ -518,51 +449,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     } else {
       this.displayedProjectTasks = this.displayedProjectTasks.filter(t => t !== task)
     }
-    this.filterEvents();
-  }
-
-  getColor(color: string) {
-    const colors: any = {
-      red: {
-        primary: '#ad2121',
-        secondary: '#FAE3E3',
-      },
-      blue: {
-        primary: '#1e90ff',
-        secondary: '#D1E8FF',
-      },
-      yellow: {
-        primary: '#e3bc08',
-        secondary: '#FDF1BA',
-      },
-      green: {
-        primary: '#1f931f',
-        secondary: '#c0f2c0'
-      },
-      orange: {
-        primary: '#cc5200',
-        secondary: '#ffc299'
-      },
-      pink: {
-        primary: '#cc0052',
-        secondary: '#ffb3d1'
-      }
-    };
-
-    switch (color.toLowerCase()) {
-      case "red":
-        return colors.red
-      case "blue":
-        return colors.blue
-      case "yellow":
-        return colors.yellow
-      case "green":
-        return colors.green
-      case "orange":
-        return colors.orange
-      case "pink":
-        return colors.pink
-    }
+    this.addEvents()
   }
 
   changePreference(event) {
@@ -587,5 +474,42 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     let element = document.getElementById(searchId);
     if (element)
       element.hidden = false;
+  }
+
+  hideActionButton(id: string) {
+    let element = this.getActionElement(this.allEvents.find(e => e.id === id))
+    if (element)
+      element.style.display = "none";
+  }
+
+  async refuseDay() {
+    for (const e of this.allEvents) {
+      await this.handleEvent("No", e)
+    }
+    this.increment()
+  }
+
+  async acceptDay() {
+    for (const e of this.allEvents) {
+      await this.handleEvent("Yes", e)
+    }
+    this.increment()
+  }
+
+  changeButtonSize() {
+    this.filteredEvents.forEach(e => {
+      if ((e.end.getTime() - e.start.getTime()) / 3600000 < 2) {
+        let element = this.getActionElement(e)
+        for (let i = 0; i < element.children.length; i++) {
+          let child: HTMLElement = element.children[i] as HTMLElement
+          child.style.width = "26px";
+          child.style.height = "26px";
+          child.style.fontSize = "0px";
+        }
+        let fabElement = document.getElementById("scheduledBtn" + e.id)
+        if (fabElement)
+          fabElement.classList.add("scheduledBtnSmall")
+      }
+    })
   }
 }

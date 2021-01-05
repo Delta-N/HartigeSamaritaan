@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RoosterPlanner.Common.Config;
+using RoosterPlanner.Email;
 using RoosterPlanner.Service;
 
 namespace RoosterPlanner.Api
@@ -23,7 +24,9 @@ namespace RoosterPlanner.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #if DEBUG
             IdentityModelEventSource.ShowPII = true; // temp for more logging
+            #endif
 
             // Enable Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry(Configuration);
@@ -73,6 +76,9 @@ namespace RoosterPlanner.Api
                 Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
             services.Configure<AzureBlobConfig>(
                 Configuration.GetSection(AzureBlobConfig.ConfigSectionName));
+            services.Configure<EmailConfig>(
+                Configuration.GetSection(EmailConfig.ConfigSectionName));
+            
 
             services.AddTransient<IAzureB2CService, AzureB2CService>();
             services.AddTransient<IProjectService, ProjectService>();
@@ -82,6 +88,9 @@ namespace RoosterPlanner.Api
             services.AddTransient<IShiftService, ShiftService>();
             services.AddTransient<IBlobService, BlobService>();
             services.AddTransient<IAvailabilityService, AvailabilityService>();
+            services.AddTransient<IDocumentService, DocumentService>();
+            services.AddTransient<ICertificateService, CertificateService>();
+            services.AddTransient<IEmailService, SMTPEmailService>();
 
             services.AddLogging();
 

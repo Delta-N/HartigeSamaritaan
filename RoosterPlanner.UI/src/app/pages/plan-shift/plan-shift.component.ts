@@ -25,6 +25,7 @@ export class PlanShiftComponent implements OnInit {
   guid: string;
   loaded: boolean = false;
   title: string = "Plannen";
+
   dataSource: MatTableDataSource<Schedule> = new MatTableDataSource<Schedule>();
   displayedColumns: string[] = [];
   paginator: MatPaginator;
@@ -86,8 +87,8 @@ export class PlanShiftComponent implements OnInit {
     this.dataSource.filterPredicate = (data, filter) => {
       return DateConverter.calculateAge(data.person.dateOfBirth).toLocaleLowerCase().includes(filter) ||
         (data.person != null && (data.person.firstName + " " + data.person.lastName).toLocaleLowerCase().includes(filter) ||
-          (data.person.country == null && 'Onbekend'.toLocaleLowerCase().includes(filter)) ||
-          (data.person.country != null && data.person.country.toLocaleLowerCase().includes(filter)) ||
+          (data.person.nationality == null && 'Onbekend'.toLocaleLowerCase().includes(filter)) ||
+          (data.person.nationality != null && data.person.country.toLocaleLowerCase().includes(filter)) ||
           data.numberOfTimesScheduledThisProject.toString().toLocaleLowerCase().includes(filter))
     }
 
@@ -142,7 +143,7 @@ export class PlanShiftComponent implements OnInit {
 
   confirmDeselect(row: Schedule) {
     const message = "Weet je zeker dat je deze persoon wilt uitroosteren?"
-    const dialogData = new ConfirmDialogModel("Bevestig uitroostering", message, "ConfirmationInput");
+    const dialogData = new ConfirmDialogModel("Bevestig uitroostering", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -170,7 +171,7 @@ export class PlanShiftComponent implements OnInit {
       this.toastr.warning("Er hebben geen wijzigingen plaats gevonden")
     else {
       const message = "Weet je zeker dat je deze je deze personen wilt in- en uitroosteren?"
-      const dialogData = new ConfirmDialogModel("Bevestig roostering", message, "ConfirmationInput");
+      const dialogData = new ConfirmDialogModel("Bevestig roostering", message, "ConfirmationInput",null);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: "400px",
         data: dialogData
@@ -211,7 +212,7 @@ export class PlanShiftComponent implements OnInit {
             await this.availabilityService.changeAvailabilities(schedule).then(res => {
               if (res) {
                 this.toastr.success("Diensten zijn succesvol ingepland")
-                this.router.navigate(['/plan', this.scheduledata.shift.project.id, this.scheduledata.shift.date])
+                this.router.navigate(['manage/plan', this.scheduledata.shift.project.id, this.scheduledata.shift.date])
               } else
                 this.toastr.error("Fout tijdens het plannen")
             })

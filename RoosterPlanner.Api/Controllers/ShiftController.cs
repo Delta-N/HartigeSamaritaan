@@ -22,6 +22,7 @@ using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ShiftController : ControllerBase
@@ -65,12 +66,14 @@ namespace RoosterPlanner.Api.Controllers
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
                     return Ok(new List<ShiftViewModel>());
-                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
+                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm)
+                    .ToList();
                 return Ok(shiftVmList);
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetShiftAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
@@ -90,12 +93,14 @@ namespace RoosterPlanner.Api.Controllers
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
                     return Ok(new List<ShiftViewModel>());
-                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
+                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm)
+                    .ToList();
                 return Ok(shiftVmList);
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetShiftAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
@@ -113,12 +118,14 @@ namespace RoosterPlanner.Api.Controllers
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
                     return Ok(new List<ShiftViewModel>());
-                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm).ToList();
+                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm)
+                    .ToList();
                 return Ok(shiftVmList);
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetShiftAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
@@ -140,12 +147,12 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(GetShiftAsync);
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetShiftAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-        
 
         [HttpGet("schedule/{id}")]
         public async Task<ActionResult<ScheduleDataViewModel>> GetScheduleAsync(Guid id)
@@ -159,57 +166,81 @@ namespace RoosterPlanner.Api.Controllers
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = shiftResult.Message});
                 if (shiftResult.Data == null)
                     return NotFound();
+
                 List<ScheduleViewModel> schedules = new List<ScheduleViewModel>();
 
-                foreach (Availability availability in shiftResult.Data.Availabilities.Where(a=>a.Type==AvailibilityType.Ok || a.Type==AvailibilityType.Scheduled)) //filter for people that are registerd to be able to work
+                //get a list with all days this week
+                var culture = System.Threading.Thread.CurrentThread.CurrentCulture;
+                int numberOfDaysBetweenNowAndStart =
+                    shiftResult.Data.Date.DayOfWeek - culture.DateTimeFormat.FirstDayOfWeek;
+                if (numberOfDaysBetweenNowAndStart < 0)
+                    numberOfDaysBetweenNowAndStart += 7;
+                DateTime firstDateThisWeek =
+                    shiftResult.Data.Date.Subtract(TimeSpan.FromDays(numberOfDaysBetweenNowAndStart));
+                List<DateTime> allDaysThisWeek = new List<DateTime>();
+                for (int i = 0; i < 7; i++)
+                    allDaysThisWeek.Add(firstDateThisWeek.AddDays(i));
+
+                foreach (Availability availability in shiftResult.Data.Availabilities
+                    .Where(a => a.Type == AvailibilityType.Ok || a.Type == AvailibilityType.Scheduled)
+                ) //filter for people that are registerd to be able to work
                 {
                     //list all availabilities in this project of this person
-                    Task<TaskListResult<Availability>> availabilities = this.availabilityService.FindAvailabilitiesAsync(
-                        availability.Participation.ProjectId,
-                        availability.Participation.PersonId);
+                    Task<TaskListResult<Availability>> availabilities =
+                        availabilityService.FindAvailabilitiesAsync(
+                            availability.Participation.ProjectId,
+                            availability.Participation.PersonId);
 
                     //lookup person information in B2C
                     Task<TaskResult<User>> person = personService.GetUserAsync(availability.Participation.PersonId);
-
                     await System.Threading.Tasks.Task.WhenAll(availabilities, person);
 
                     //see if person is scheduled this day and this shift
                     if (availabilities.Result?.Data == null || availabilities.Result.Data.Count <= 0) continue;
-                    int numberOfTimeScheduledThisDay = availabilities.Result.Data.Where(a => a.Shift.Date == shiftResult.Data.Date).Count(a => a.Type == AvailibilityType.Scheduled);
+                    int numberOfTimeScheduledThisDay = availabilities.Result.Data
+                        .Where(a => a.Shift.Date == shiftResult.Data.Date)
+                        .Count(a => a.Type == AvailibilityType.Scheduled);
 
                     bool scheduledThisShift = availabilities.Result.Data.FirstOrDefault(a =>
-                        a.ShiftId == id && a.Type == AvailibilityType.Scheduled)!=null;
+                        a.ShiftId == id && a.Type == AvailibilityType.Scheduled) != null;
 
-                    
-                    //create viewmodel of person
-                    PersonViewModel personViewModel = null;
-                    if (person.Result?.Data != null)
-                        personViewModel=PersonViewModel.CreateVmFromUser(person.Result.Data,Extensions.GetInstance(azureB2CConfig));
-                    
+                    //calculate the number of hours person is scheduled this week
+                    double numberOfHoursScheduleThisWeek = availabilities.Result.Data
+                        .Where(a => a.Type == AvailibilityType.Scheduled && allDaysThisWeek.Contains(a.Shift.Date))
+                        .Sum(availability1 =>
+                            availability1.Shift.EndTime.Subtract(availability1.Shift.StartTime).TotalHours);
 
                     //add scheduleViewmodel to list
-                    if (personViewModel != null)
-                        schedules.Add(new ScheduleViewModel
-                     {
-                         Person = personViewModel,
-                         NumberOfTimesScheduledThisProject = numberOfTimeScheduledThisDay,
-                         ScheduledThisDay = numberOfTimeScheduledThisDay>0,
-                         ScheduledThisShift = scheduledThisShift,
-                         AvailabilityId = availability.Id,
-                         Preference = availability.Preference
-                     });
+                    schedules.Add(new ScheduleViewModel
+                    {
+                        Person = PersonViewModel.CreateVmFromUser(person.Result.Data,
+                            Extensions.GetInstance(azureB2CConfig)),
+                        NumberOfTimesScheduledThisProject = availabilities.Result.Data.Count(a=>a.Type==AvailibilityType.Scheduled),
+                        ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
+                        ScheduledThisShift = scheduledThisShift,
+                        AvailabilityId = availability.Id,
+                        Preference = availability.Preference,
+                        Availabilities = (await availabilities).Data
+                            .Where(a => a.Shift.Date == shiftResult.Data.Date)
+                            .Select(AvailabilityViewModel.CreateVm)
+                            .ToList(),
+                        HoursScheduledThisWeek = numberOfHoursScheduleThisWeek,
+                        Employability = availability.Participation.MaxWorkingHoursPerWeek
+                    });
                 }
 
-                ScheduleDataViewModel vm = new ScheduleDataViewModel() {
+                ScheduleDataViewModel vm = new ScheduleDataViewModel
+                {
                     Schedules = schedules,
                     Shift = ShiftViewModel.CreateVm(shiftResult.Data)
                 };
-                
+
                 return Ok(vm);
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(GetScheduleAsync);
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetScheduleAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
@@ -224,16 +255,20 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                List<Shift> shifts = shiftViewModels.Select(ShiftViewModel.CreateShift).ToList();
+                List<Shift> shifts = shiftViewModels.Select(ShiftViewModel.CreateShift)
+                    .ToList();
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
                 if (shifts[0] != null)
                 {
                     //get project and get task from db
-                    Project project = (await projectService.GetProjectDetailsAsync(shifts[0].ProjectId)).Data;
+                    Project project = (await projectService.GetProjectDetailsAsync(shifts[0]
+                        .ProjectId)).Data;
                     Task task = null;
-                    if (shifts[0].TaskId != null)
-                        task = (await taskService.GetTaskAsync((Guid) shifts[0].TaskId)).Data;
+                    if (shifts[0]
+                        .TaskId != null)
+                        task = (await taskService.GetTaskAsync((Guid) shifts[0]
+                            .TaskId)).Data;
 
                     foreach (Shift shift in shifts)
                     {
@@ -264,12 +299,14 @@ namespace RoosterPlanner.Api.Controllers
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
 
-                List<ShiftViewModel> createdVm = result.Data.Select(ShiftViewModel.CreateVm).ToList();
+                List<ShiftViewModel> createdVm = result.Data.Select(ShiftViewModel.CreateVm)
+                    .ToList();
                 return Ok(createdVm);
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(SaveShiftsAsync);
+                string message = GetType()
+                    .Name + "Error in " + nameof(SaveShiftsAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
@@ -292,6 +329,9 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (oldShift.ProjectId != shiftViewModel.Project.Id)
                     return BadRequest("Cannot change the project of a shift");
+
+                if (!oldShift.RowVersion.SequenceEqual(shiftViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
 
                 Shift updatedShift = ShiftViewModel.CreateShift(shiftViewModel);
                 if (updatedShift == null)
@@ -322,7 +362,8 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(UpdateShiftAsync);
+                string message = GetType()
+                    .Name + "Error in " + nameof(UpdateShiftAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
@@ -349,7 +390,8 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(RemoveShiftAsync);
+                string message = GetType()
+                    .Name + "Error in " + nameof(RemoveShiftAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }

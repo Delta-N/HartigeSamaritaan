@@ -1,5 +1,6 @@
 #push {
   margin-left: auto;
+  border:none;
 }
 
 .mat-button {
@@ -8,11 +9,53 @@
   border-radius: 5px;
 }
 
-#editProfile {
-  background-color: #DDFCE0
-}
 .row{
   display: flex;
   margin-top: 9px;
   margin-bottom: 9px;
+}
+.col-6{
+  padding: 0;
+
+}
+
+.mat-card {
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  max-width: 325px;
+}
+.text-box{
+  border: 1px gray solid;
+  min-height: 20vh;
+  width: 80%;
+  font-size: 15px;
+
+}
+
+@media only screen and (max-width: 550px) {
+  .text-box{
+    font-size: 12px;
+  }
+  .override-button{
+    padding: 2px!important;
+    font-size: 12px!important;
+  }
+
+  .mat-card{
+    min-width: initial;
+    width: 250px;
+
+    .mat-card-title{
+      font-size: 16px;
+    }
+    .mat-card-content{
+      font-size: 14px;
+    }
+
+    .mat-card-actions .mat-button{
+      font-size: 16px;
+    }
+  }
+
 }

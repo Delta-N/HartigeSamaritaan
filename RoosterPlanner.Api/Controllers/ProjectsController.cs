@@ -27,8 +27,8 @@ namespace RoosterPlanner.Api.Controllers
         //Constructor
         public ProjectsController(IProjectService projectService, ILogger<ProjectsController> logger)
         {
-            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.projectService = projectService;
+            this.logger = logger;
         }
 
         [HttpGet("{id}")]
@@ -90,7 +90,7 @@ namespace RoosterPlanner.Api.Controllers
             catch (Exception ex)
             {
                 string message = GetType().Name + "Error in " + nameof(SearchProjectsAsync);
-                logger.LogError(ex,message);
+                logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
@@ -112,6 +112,7 @@ namespace RoosterPlanner.Api.Controllers
                 Project project = ProjectDetailsViewModel.CreateProject(projectDetails);
                 if (project == null)
                     return BadRequest("Unable to convert ProjectDetailsViewmodel to Project");
+                project.PictureUri = null;
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 project.LastEditBy = oid;
@@ -125,7 +126,6 @@ namespace RoosterPlanner.Api.Controllers
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 return Ok(ProjectDetailsViewModel.CreateVm(result.Data));
-                
             }
             catch (Exception ex)
             {
@@ -149,6 +149,10 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 Project oldProject = (await projectService.GetProjectDetailsAsync(projectDetails.Id)).Data;
+                
+                if (!oldProject.RowVersion.SequenceEqual(projectDetails.RowVersion))
+                    return BadRequest("Outdated entity received");
+                
                 Project updatedProject = ProjectDetailsViewModel.CreateProject(projectDetails);
                 oldProject.Address = updatedProject.Address;
                 oldProject.City = updatedProject.City;
@@ -158,7 +162,7 @@ namespace RoosterPlanner.Api.Controllers
                 oldProject.Participations = updatedProject.Participations;
                 oldProject.Shifts = updatedProject.Shifts;
                 oldProject.ParticipationEndDate = updatedProject.ParticipationEndDate;
-                oldProject.PictureUri = updatedProject.PictureUri;
+                oldProject.PictureUriId = updatedProject.PictureUriId;
                 oldProject.ParticipationStartDate = updatedProject.ParticipationStartDate;
                 oldProject.WebsiteUrl = updatedProject.WebsiteUrl;
                 oldProject.ProjectStartDate = updatedProject.ProjectStartDate;

@@ -55,8 +55,8 @@
         <input formControlName="city" id="city" matInput placeholder="{{user.city}}" type="text">
 
       </mat-form-field>
-      <div>
-      </div>
+    </div>
+    <div>
       <mat-form-field>
         <mat-label for="phoneNumber">
           Telefoonnummer
@@ -65,12 +65,64 @@
                type="text">
       </mat-form-field>
     </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label for="country">
+          Land van Herkomst
+        </mat-label>
+        <mat-select [formControl]="countryControl" required>
+          <mat-option *ngFor="let country of countries" [value]="country">
+            {{country}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label for="nationality">
+          Nationaliteit
+        </mat-label>
+        <mat-select [formControl]="nationalityControl" required>
+          <mat-option *ngFor="let nationality of nationalities" [value]="nationality">
+            {{nationality}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label for="nativeLanguage">
+          Moedertaal
+        </mat-label>
+        <input formControlName="nativeLanguage" id="nativeLanguage" matInput placeholder="Bijv. Nederlands of Spaans"
+               type="text">
+      </mat-form-field>
+    </div>
+
+
+    <div>
+      <mat-form-field>
+        <mat-label for="dutchProficiency">
+          Nederlands taalniveau
+        </mat-label>
+        <mat-select [formControl]="languagueControl" required>
+          <mat-option *ngFor="let item of level" [value]="item">
+            {{item}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <input formControlName="termsOfUseConsented" id="termsOfUseConsented" type="hidden">
   </form>
 
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="align-right">
-  <button class="action-button override-button" (click)="saveProfile(checkoutForm.value)" mat-button>Opslaan</button>
-  <button mat-button class="override-button" (click)="close()">Annuleren</button>
+    <button class="action-button override-button" (click)="saveProfile(checkoutForm.value)" mat-button>Opslaan</button>
+    <button mat-button class="override-button" (click)="close()">Annuleren</button>
   </div>
 </mat-dialog-actions>

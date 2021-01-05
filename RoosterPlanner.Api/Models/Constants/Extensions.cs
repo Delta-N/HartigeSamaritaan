@@ -2,7 +2,6 @@
 
 namespace RoosterPlanner.Api.Models.Constants
 {
-
     public class Extensions
     {
         private static Extensions _extensions;
@@ -26,5 +25,17 @@ namespace RoosterPlanner.Api.Models.Constants
 
         public string PhoneNumberExtension =>
             $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
+
+        public string NationalityExtension =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+
+        public string NativeLanguageExtention =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
+
+        public string DutchProficiencyExtention =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
+
+        public string TermsOfUseConsentedExtention =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
     }
 }

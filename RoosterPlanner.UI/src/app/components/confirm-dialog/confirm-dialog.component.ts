@@ -1,5 +1,5 @@
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, OnInit, Inject } from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {Component, OnInit, Inject} from '@angular/core';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -9,14 +9,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 export class ConfirmDialogComponent implements OnInit {
   title: string;
   message: string;
-  type:string;
-  workingHours: number;
+  type: string;
+  value: any;
+
 
   constructor(public dialogRef: MatDialogRef<ConfirmDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel) {
     this.title = data.title;
     this.message = data.message;
     this.type = data.type;
+    this.value = data.inputvalue;
   }
 
   ngOnInit() {
@@ -30,13 +32,13 @@ export class ConfirmDialogComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  sendInput(workingHours: number) {
-    this.dialogRef.close(workingHours)
+  sendInput(input: any) {
+    this.dialogRef.close(input)
   }
 }
 
 export class ConfirmDialogModel {
 
-  constructor(public title: string, public message: string, public type:string) {
+  constructor(public title: string, public message: string, public type: string,public inputvalue:any) {
   }
 }

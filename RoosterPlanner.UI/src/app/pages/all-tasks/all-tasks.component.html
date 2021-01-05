@@ -1,5 +1,5 @@
   <div class="row bar">
-    <h1>Taken</h1>
+    <h1>Taken, Categorieën, Certificaten</h1>
   </div>
 
   <div class="row cardholder" *ngIf="loaded===true">
@@ -8,7 +8,7 @@
           <mat-card-title>Taken
             <button [disabled]="tasksExpandbtnDisabled" class="card-title-icon" mat-icon-button
                     (click)="expandTaskCard()">
-              <mat-icon>zoom_out_map</mat-icon>
+              <mat-icon id="taskIcon">zoom_out_map</mat-icon>
             </button>
           </mat-card-title>
         </div>
@@ -16,7 +16,6 @@
         <span *ngFor="let item of tasks">
             <a [routerLink]="['/task', item.id]"><p>{{item.name}}</p></a>
           </span>
-          <mat-card-actions class="action-anchor"></mat-card-actions>
         </mat-card-content>
         <mat-card-actions class="action-anchor">
           <button mat-button (click)="modTask('add')">+ nieuwe toevoegen</button>
@@ -28,19 +27,40 @@
           <mat-card-title>Categorieën
             <button [disabled]="categoryExpandbtnDisabled" class="card-title-icon" mat-icon-button
                     (click)="expandCategoryCard()">
-              <mat-icon>zoom_out_map</mat-icon>
+              <mat-icon id="categoryIcon">zoom_out_map</mat-icon>
             </button>
           </mat-card-title>
         </div>
         <mat-card-content>
         <span *ngFor="let item of categories">
-            <a [routerLink]="['/category', item.id]"><p>{{item.name}}</p></a>
+            <a [routerLink]="['category', item.id]"><p>{{item.name}}</p></a>
           </span>
-          <mat-card-actions class="action-anchor"></mat-card-actions>
         </mat-card-content>
         <mat-card-actions class="action-anchor">
           <button mat-button (click)="modCategory('add')">+ nieuwe toevoegen</button>
         </mat-card-actions>
       </mat-card>
+
+    <mat-card [ngClass]="[certificateCardStyle]" id="certificateCard">
+      <div>
+        <mat-card-title>Certificaattypes
+          <button [disabled]="certificateExpandbtnDisabled" class="card-title-icon" mat-icon-button
+                  (click)="expandCertificateCard()">
+            <mat-icon id="certificateIcon">zoom_out_map</mat-icon>
+          </button>
+        </mat-card-title>
+      </div>
+      <mat-card-content>
+
+      <span *ngFor="let item of certificatesTypes">
+            <a [routerLink]="['certificatetype', item.id]"><p>{{item.name}}</p></a>
+          </span>
+
+        <mat-card-actions class="action-anchor"></mat-card-actions>
+      </mat-card-content>
+      <mat-card-actions class="action-anchor">
+        <button mat-button (click)="modCertificate('add')">+ nieuwe toevoegen</button>
+      </mat-card-actions>
+    </mat-card>
 
     </div>

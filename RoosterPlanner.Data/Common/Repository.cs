@@ -24,7 +24,7 @@ namespace RoosterPlanner.Data.Common
         /// <param name="dataContext">The data context.</param>
         public Repository(DbContext dataContext)
         {
-            DataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            DataContext = dataContext;
 
             EntitySet = DataContext.Set<TEntity>();
             if (EntitySet == null)

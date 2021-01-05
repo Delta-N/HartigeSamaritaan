@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -10,11 +11,9 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using RoosterPlanner.Common.Config;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
-using Person = RoosterPlanner.Models.Person;
+
 
 namespace RoosterPlanner.Service
 {
@@ -34,9 +33,6 @@ namespace RoosterPlanner.Service
         private readonly AzureAuthenticationConfig azureB2CConfig;
         private GraphServiceClient graphServiceClient;
         private DateTime graphServiceClientTimestamp;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IPersonRepository personRepository;
-        private readonly ILogger<AzureB2CService> logger;
 
         private const string GraphSelectList =
             "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
@@ -47,11 +43,7 @@ namespace RoosterPlanner.Service
         public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
             ILogger<AzureB2CService> logger)
         {
-            this.azureB2CConfig = azureB2CConfig.Value ?? throw new ArgumentNullException(nameof(azureB2CConfig));
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            personRepository = unitOfWork.PersonRepository ??
-                               throw new ArgumentNullException(nameof(unitOfWork.PersonRepository));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.azureB2CConfig = azureB2CConfig.Value;
         }
 
         public async Task<User> GetUserAsync(Guid userId)
@@ -63,11 +55,14 @@ namespace RoosterPlanner.Service
             var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
             var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
             var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
+            var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+            var nativeLanguage = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
+            var dutchProficiency = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
+            var termsofuseconsented = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
 
             var user = await graphService.Users[userId.ToString()].Request()
-                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}").GetAsync();
-            await AddPersonToLocalDbAsync(user);
-
+                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented},{nativeLanguage},{dutchProficiency}").GetAsync();
+            
             return user;
         }
 
@@ -83,8 +78,15 @@ namespace RoosterPlanner.Service
 
                 var graphService = GetGraphServiceClient();
                 var userRole = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
-                var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_dateOfBirth";
-                var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_phoneNumber";
+                var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
+                var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
+                var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+                var nativeLanguage =
+                    $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
+                var dutchProficiency =
+                    $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
+                var termsofuseconsented =
+                    $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
                 var tenant = azureB2CConfig.AzureTenantName;
 
                 var filterString = "";
@@ -118,7 +120,7 @@ namespace RoosterPlanner.Service
                 var currentUsers = await graphService.Users
                     .Request()
                     .Filter(filterString)
-                    .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber}")
+                    .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented},{nativeLanguage},{dutchProficiency}")
                     .GetAsync();
                 while (currentUsers.Count > 0)
                 {
@@ -133,12 +135,10 @@ namespace RoosterPlanner.Service
 
                 if (users.Count == 0)
                     throw new NullReferenceException("No users found");
-                //dit is heel tijdrovend. keuze maken om personen alleen in te voegen en updaten bij het individueel ophalen/updaten van gebruikers
-                //foreach (var user in users) AddPersonToLocalDb(user);
-
+     
                 result.StatusCode = HttpStatusCode.OK;
                 result.Succeeded = true;
-                result.Data = users;
+                result.Data = users.OrderBy(u => u.DisplayName).ToList();
                 return result;
             }
 
@@ -185,8 +185,7 @@ namespace RoosterPlanner.Service
                 updatedUser.Message = "Error during patching of user";
                 throw;
             }
-
-            await AddPersonToLocalDbAsync(updatedUser.Data);
+            
             return updatedUser;
         }
 
@@ -234,38 +233,7 @@ namespace RoosterPlanner.Service
 
             return graphService;
         }
-
-        private async Task AddPersonToLocalDbAsync(User user)
-        {
-            if (user?.Id == null)
-                throw new ArgumentNullException(nameof(user));
-            var result = new TaskResult<Person>();
-            try
-            {
-                var person = await personRepository.GetPersonByOidAsync(Guid.Parse(user.Id));
-                if (person == null)
-                {
-                    person = new Person(Guid.Parse(user.Id)) {FirstName = user.GivenName, Oid = Guid.Parse(user.Id)};
-                    personRepository.Add(person);
-                }
-                else if (person.FirstName != user.GivenName)
-                {
-                    person.FirstName = user.GivenName;
-                    person.LastEditDate = DateTime.UtcNow;
-                    person.LastEditBy = "SYSTEM";
-                    personRepository.Update(person);
-                }
-
-                await unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                result.Message = GetType().Name + " - Error adding person to LocalDB " + user.Id;
-                logger.LogError(ex,result.Message, user);
-                result.Error = ex;
-            }
-        }
-
+        
         public class GraphUserData
         {
             [JsonProperty("odata.metadata")] public string OdataMetadata { get; set; }

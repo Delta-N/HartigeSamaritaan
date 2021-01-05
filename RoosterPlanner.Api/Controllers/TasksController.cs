@@ -17,21 +17,24 @@ using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TasksController : ControllerBase
     {
         private readonly ITaskService taskService;
+        private readonly IDocumentService documentService;
         private readonly IProjectService projectService;
         private readonly ILogger<TasksController> logger;
 
         //Constructor
         public TasksController(ITaskService taskService, IProjectService projectService,
-            ILogger<TasksController> logger)
+            ILogger<TasksController> logger, IDocumentService documentService)
         {
-            this.taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
-            this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.taskService = taskService;
+            this.projectService = projectService;
+            this.logger = logger;
+            this.documentService = documentService;
         }
 
         [HttpGet("{id}")]
@@ -47,7 +50,6 @@ namespace RoosterPlanner.Api.Controllers
                 if (result.Data == null)
                     return NotFound();
                 return Ok(TaskViewModel.CreateVm(result.Data));
-
             }
             catch (Exception ex)
             {
@@ -106,6 +108,7 @@ namespace RoosterPlanner.Api.Controllers
                 task.LastEditBy = oid;
 
                 task.Category = null;
+                task.Instruction = null;
 
                 TaskResult<Task> result;
                 if (task.Id == Guid.Empty)
@@ -140,6 +143,8 @@ namespace RoosterPlanner.Api.Controllers
                 Task oldTask = (await taskService.GetTaskAsync(taskViewModel.Id)).Data;
                 if (oldTask == null)
                     return NotFound("Task not found");
+                if (!oldTask.RowVersion.SequenceEqual(taskViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
                 Task updatedTask = TaskViewModel.CreateTask(taskViewModel);
                 if (updatedTask == null)
                     return BadRequest("Unable to convert TaskViewModel to Task");
@@ -147,17 +152,21 @@ namespace RoosterPlanner.Api.Controllers
                 oldTask.Color = updatedTask.Color;
                 oldTask.Description = updatedTask.Description;
                 oldTask.Name = updatedTask.Name;
-                oldTask.Requirements = updatedTask.Requirements;
-                oldTask.Shifts = updatedTask.Shifts; //gevaarlijk goed testen?
-                oldTask.DocumentUri = updatedTask.DocumentUri;
                 oldTask.ProjectTasks = updatedTask.ProjectTasks;
-                oldTask.DeletedDateTime = updatedTask.DeletedDateTime;
+                if (updatedTask.Instruction != null)
+                {
+                    oldTask.Instruction =
+                        (await documentService.GetDocumentAsync(updatedTask.InstructionId ?? Guid.Empty))
+                        .Data;
+                    oldTask.InstructionId = oldTask.Instruction.Id;
+                }
 
                 if (updatedTask.CategoryId != Guid.Empty && oldTask.CategoryId != updatedTask.CategoryId)
                 {
                     oldTask.Category = (await taskService.GetCategoryAsync(updatedTask.CategoryId ?? Guid.Empty)).Data;
                     oldTask.CategoryId = oldTask.Category.Id;
                 }
+                
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldTask.LastEditBy = oid;
@@ -208,8 +217,11 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<Category> result = await taskService.GetAllCategoriesAsync();
 
                 if (!result.Succeeded)
-                    if (result.Data == null)
-                        return Ok(new List<CategoryViewModel>());
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                
+                if(result.Data.Count==0)
+                    return Ok(new List<CategoryViewModel>());
+
                 List<CategoryViewModel> categoryViewmodels = result.Data
                     .Select(CategoryViewModel.CreateVm)
                     .ToList();
@@ -294,12 +306,14 @@ namespace RoosterPlanner.Api.Controllers
                 Category oldCategory = (await taskService.GetCategoryAsync(categoryViewModel.Id)).Data;
                 if (oldCategory == null)
                     return NotFound("Category not found");
+                if (!oldCategory.RowVersion.SequenceEqual(categoryViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
+                
                 Category updatedCategory = CategoryViewModel.CreateCategory(categoryViewModel);
                 if (updatedCategory == null)
                     return BadRequest("Unable to convert CategoryViewModel to Category");
                 oldCategory.Code = updatedCategory.Code;
                 oldCategory.Name = updatedCategory.Name;
-                oldCategory.UrlPdf = updatedCategory.UrlPdf;
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldCategory.LastEditBy = oid;
@@ -376,8 +390,10 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<ProjectTask> result = await taskService.GetAllProjectTasksAsync(projectId);
 
                 if (!result.Succeeded)
-                    if (result.Data == null)
-                        return Ok(new List<ProjectTaskViewModel>());
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+
+                if (result.Data.Count == 0)
+                    return Ok(new List<ProjectTaskViewModel>());
 
                 List<TaskViewModel> taskViewModels =
                     result.Data.Select(projectTask => TaskViewModel.CreateVm(projectTask.Task)).ToList();

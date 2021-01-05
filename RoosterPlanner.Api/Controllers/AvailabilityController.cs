@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Api.Models;
-using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.Models.Enums;
 using RoosterPlanner.Models.Types;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
+using Schedule = RoosterPlanner.Api.Models.Schedule;
+using Shift = RoosterPlanner.Models.Shift;
 using Type = RoosterPlanner.Api.Models.Type;
 
 namespace RoosterPlanner.Api.Controllers
@@ -38,6 +39,61 @@ namespace RoosterPlanner.Api.Controllers
             this.availabilityService = availabilityService;
             this.shiftService = shiftService;
             this.taskService = taskService;
+        }
+
+        [HttpGet("scheduled/{participationId}")]
+        public async Task<ActionResult<List<AvailabilityViewModel>>> GetScheduledAvailabilities(Guid participationId)
+        {
+            if (participationId == Guid.Empty)
+                return BadRequest("No vaild participationId");
+            try
+            {
+                TaskListResult<Availability> taskListResult =
+                    await availabilityService.GetScheduledAvailabilities(participationId);
+
+                if (!taskListResult.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = taskListResult.Message});
+
+                if (taskListResult.Data.Count == 0)
+                    return Ok(new List<AvailabilityViewModel>());
+                List<AvailabilityViewModel> list = taskListResult.Data.Select(AvailabilityViewModel.CreateVm).ToList();
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(GetScheduledAvailabilities);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
+        [HttpGet("scheduled/{projectId}/{date}")]
+        public async Task<ActionResult<List<AvailabilityViewModel>>> GetScheduledAvailabilities(Guid projectId,
+            DateTime date)
+        {
+            if (projectId == Guid.Empty)
+                return BadRequest("No vaild projectId");
+            try
+            {
+                TaskListResult<Availability> taskListResult =
+                    await availabilityService.GetScheduledAvailabilities(projectId, date);
+
+                if (!taskListResult.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = taskListResult.Message});
+
+                if (taskListResult.Data.Count == 0)
+                    return Ok(new List<AvailabilityViewModel>());
+                List<AvailabilityViewModel> list = taskListResult.Data.Select(AvailabilityViewModel.CreateVm).ToList();
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType().Name + "Error in " + nameof(GetScheduledAvailabilities);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
         }
 
         [HttpGet("find/{projectId}/{userId}")]
@@ -104,6 +160,7 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpGet("find/{projectId}")]
         public async Task<ActionResult<AvailabilityDataViewModel>> GetAvailabilityData(Guid projectId)
         {
@@ -178,7 +235,14 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
-                Availability availability = AvailabilityViewModel.CreateAvailability(availabilityViewModel);
+                Availability availability =
+                    (await availabilityService.GetAvailability((Guid) availabilityViewModel.ParticipationId,
+                        availabilityViewModel.ShiftId)).Data;
+                if (availability != null)
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = "Availability already exists"});
+
+                availability = AvailabilityViewModel.CreateAvailability(availabilityViewModel);
                 if (availability == null)
                     return BadRequest("Unable to convert availabilityViewModel to Availability");
 
@@ -224,6 +288,10 @@ namespace RoosterPlanner.Api.Controllers
                 Availability availability = (await availabilityService.GetAvailability(availabilityViewModel.Id)).Data;
                 if (availability == null)
                     return BadRequest("Unable to convert availabilityViewModel to Availability");
+                if (availability.Type == AvailibilityType.Scheduled)
+                    return BadRequest("Cannot modify availability when user is already scheduled");
+                if (!availability.RowVersion.SequenceEqual(availabilityViewModel.RowVersion))
+                    return BadRequest("Outdated entity received");
 
                 availability.Preference = availabilityViewModel.Preference;
                 availability.Type = availabilityViewModel.Type;
@@ -247,6 +315,7 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPatch]
         public async Task<ActionResult<bool>> UpdateAvailabilities(List<ScheduleViewModel> scheduleViewModels)
         {

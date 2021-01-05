@@ -12,12 +12,6 @@ namespace RoosterPlanner.Data.Repositories
     public interface IProjectRepository : IRepository<Project>
     {
         /// <summary>
-        /// Returns a list of open projects.
-        /// </summary>
-        /// <returns>List of projects that are not closed.</returns>
-        Task<List<Project>> GetActiveProjectsAsync();
-
-        /// <summary>
         /// Search for projects based on given filter.
         /// </summary>
         /// <param name="filter"></param>
@@ -91,8 +85,11 @@ namespace RoosterPlanner.Data.Repositories
 
         public Task<Project> GetProjectDetailsAsync(Guid id)
         {
-            return EntitySet.Include(x => x.ProjectTasks)
-                .Where(p => p.Id == id).FirstOrDefaultAsync();
+            return EntitySet
+                .Include(x => x.ProjectTasks)
+                .Include(p=>p.PictureUri)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
         }
     }
 }

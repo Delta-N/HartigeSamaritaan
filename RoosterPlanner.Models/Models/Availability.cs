@@ -24,6 +24,9 @@ namespace RoosterPlanner.Models
         [Column(Order = 4)]
         public bool Preference { get; set; }
 
+        [Column(Order = 5)] 
+        public bool PushEmailSend { get; set; }
+
         //Constructor
         public Availability() : this(Guid.Empty)
         {

@@ -14,7 +14,6 @@ import {TaskService} from "../../services/task.service";
 import {AddProjectTaskComponent} from "../../components/add-project-task/add-project-task.component";
 import {Task} from 'src/app/models/task';
 import {AddManagerComponent} from "../../components/add-manager/add-manager.component";
-import {Breadcrumb} from "../../models/breadcrumb";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 
 @Component({
@@ -35,7 +34,6 @@ export class ProjectComponent implements OnInit {
   taskCardStyle = 'card';
   itemsPerCard = 5;
   reasonableMaxInteger = 10000;
-  tasksElementHeight: number;
   projectTasksExpandbtnDisabled: boolean = true;
   isManager: boolean = false;
 
@@ -118,12 +116,13 @@ export class ProjectComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      if (result !== 'false') {
+      if (result && result !== 'false') {
         setTimeout(() => {
           this.toastr.success(result.name + " is gewijzigd")
-          this.getProject();
+
         }, 500);
       }
+      this.getProject();
     });
   }
 
@@ -131,7 +130,7 @@ export class ProjectComponent implements OnInit {
     let messageVariable: string;
     this.project.closed ? messageVariable = "openen" : messageVariable = "sluiten";
     const message = "Weet je zeker dat je dit project wilt " + messageVariable + " ?"
-    const dialogData = new ConfirmDialogModel("Bevestig wijziging", message, "ConfirmationInput");
+    const dialogData = new ConfirmDialogModel("Bevestig wijziging", message, "ConfirmationInput",null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -157,7 +156,7 @@ export class ProjectComponent implements OnInit {
 
   editWorkingHours() {
     const message = "Hoeveel uur per week wil je maximaal meewerken aan dit project?"
-    const dialogData = new ConfirmDialogModel("Maximale inzet ", message, "NumberInput");
+    const dialogData = new ConfirmDialogModel("Maximale inzet ", message, "NumberInput",this.participation.maxWorkingHoursPerWeek);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -173,29 +172,45 @@ export class ProjectComponent implements OnInit {
         await this.participationService.updateParticipation(this.participation).then(async response => {
           if (response)
             this.displayProject(response.project);
+          else
+            window.location.reload()
         });
       } else {
-        this.toastr.error("fout tijdens het updaten van maximaal aantal werkuren")
         this.loaded = true;
       }
     });
   }
 
   expandTaskCard() {
-    if (this.taskCardStyle == 'expanded-card') {
-      document.getElementById("left").hidden = false;
-      document.getElementById("pictureFrame").hidden = false;
+    let element = document.getElementById("icon")
+    if (element) {
+      if (this.taskCardStyle === 'expanded-card')
+        element.innerText = "zoom_out_map"
+      else
+        element.innerText = "fullscreen_exit"
+    }
+
+    let pictureElement = document.getElementById("pictureFrame")
+    let leftElement = document.getElementById("left")
+    if (this.taskCardStyle === 'expanded-card') {
+      if (leftElement)
+        leftElement.hidden = false;
+
+      if (pictureElement)
+        pictureElement.hidden = false;
       this.taskCardStyle = 'card';
       this.itemsPerCard = 5;
       this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
-    } else {
-      document.getElementById("left").hidden = true;
-      document.getElementById("pictureFrame").hidden = true;
+    } else if (this.taskCardStyle === 'card') {
+      if (leftElement)
+        leftElement.hidden = true;
+
+      if (pictureElement)
+        pictureElement.hidden = true;
+
       this.taskCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
-      this.getProjectTasks().then(() => {
-        this.tasksElementHeight = (this.projectTasks.length * 48);
-      })
+      this.getProjectTasks()
     }
   }
 
@@ -224,10 +239,5 @@ export class ProjectComponent implements OnInit {
       }
     });
     dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.toastr.success("De rol van " + result + " is gewijzigd.")
-      }
-    });
   }
 }

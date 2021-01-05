@@ -9,4 +9,5 @@ export class Availability extends Entity {
   public shift: Shift;
   public type: number
   public preference: boolean;
+  public pushEmailSend: boolean;
 }

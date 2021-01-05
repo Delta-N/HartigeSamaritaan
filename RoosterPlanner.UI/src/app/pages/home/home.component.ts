@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {AddProjectComponent} from "../../components/add-project/add-project.component";
 import {Project} from "../../models/project";
@@ -10,6 +10,7 @@ import {ParticipationService} from "../../services/participation.service";
 import {ToastrService} from "ngx-toastr";
 import {EntityHelper} from "../../helpers/entity-helper";
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
+import {JwtHelper} from "../../helpers/jwt-helper";
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,7 @@ export class HomeComponent implements OnInit {
 
   loaded: boolean = false;
   participations: Participation[] = [];
-  currentUser: User;
+  @Input() user: User;
   selectedProjects: Project[];
 
 
@@ -33,17 +34,20 @@ export class HomeComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.userService.getCurrentUser().then(async user => {
-      if (user) {
-        this.currentUser = user
+
+    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
+    await this.userService.getUser(idToken.oid).then(async res => {
+      if (res) {
+        this.user = res
         this.getParticipations().then(() => this.loaded = true)
       }
     });
+
   }
 
 
   async getParticipations() {
-    await this.participationService.getParticipations(this.currentUser.id).then(response => {
+    await this.participationService.getParticipations(this.user.id).then(response => {
       this.participations = response;
       this.participations.sort((a, b) => a.project.name.toLowerCase() > b.project.name.toLowerCase() ? 1 : -1);
     })
@@ -56,7 +60,7 @@ export class HomeComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ChangeProfileComponent, {
       width: '500px',
-      data: this.currentUser
+      data: this.user
     });
     dialogRef.disableClose = true;
 
@@ -88,7 +92,7 @@ export class HomeComponent implements OnInit {
                 for (const project of this.selectedProjects) {
                   let participation: Participation = new Participation();
                   participation.id = EntityHelper.returnEmptyGuid();
-                  participation.person = this.currentUser;
+                  participation.person = this.user;
                   participation.project = project
                   await this.participationService.postParticipation(participation).then(res => {
                     if (res) {

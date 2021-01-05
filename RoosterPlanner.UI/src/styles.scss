@@ -55,6 +55,12 @@ h2 {
 
 .action-button {
   background-color: #DDFCE0;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.active {
+  font-weight: bold !important;
+  text-decoration: underline !important;
 }
 
 .align-right {
@@ -70,10 +76,10 @@ h2 {
 .cardholder {
   display: flex;
   overflow-x: auto;
-  align-items: flex-start;
   padding-top: 30px;
   flex-wrap: wrap;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .card-title-icon {
@@ -85,7 +91,6 @@ h2 {
 .custom-file-upload {
   border: 1px solid #ccc;
   display: inline-block;
-  padding: 6px 12px;
   cursor: pointer;
 }
 
@@ -159,6 +164,13 @@ h2 {
 .mobilecard {
   margin-bottom: 30px !important;
 }
+.multiline-tooltip{
+   white-space: pre-line;
+  background: #E74B3B;
+  font-size: 20px;
+  min-width: 300px;
+ }
+
 
 #push {
   font: normal normal normal 17px/17px Segoe UI;
@@ -180,7 +192,7 @@ h2 {
 
 .user-data {
   text-align: left;
-  font: normal normal normal 20px/45px Segoe UI !important;
+  font: normal normal normal 20px/35px Segoe UI !important;
   letter-spacing: 0;
   color: #000000 !important;
   opacity: 1;
@@ -201,10 +213,10 @@ h2 {
 
   .row-name {
     font: normal normal normal 15px Segoe UI !important;
-    min-width: 175px;
+    min-width: 125px;
   }
   .user-data {
-    font: normal normal normal 15px/45px Segoe UI !important;
+    font: normal normal normal 14px/30px Segoe UI !important;
   }
   .data-row {
     align-items: center;
@@ -224,7 +236,7 @@ h2 {
     margin-bottom: 30px;
   }
   .bar {
-    display: block;
+    display: flex;
   }
 
 }

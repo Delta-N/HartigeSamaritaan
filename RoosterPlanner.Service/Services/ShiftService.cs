@@ -37,9 +37,9 @@ namespace RoosterPlanner.Service
         //Constructor
         public ShiftService(IUnitOfWork unitOfWork, ILogger<ShiftService> logger)
         {
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            shiftRepository = unitOfWork.ShiftRepository ?? throw new ArgumentNullException(nameof(shiftRepository));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.unitOfWork = unitOfWork;
+            shiftRepository = unitOfWork.ShiftRepository;
+            this.logger = logger;
         }
 
         public async Task<TaskResult<Shift>> RemoveShiftAsync(Shift shift)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models.Constants;
+using RoosterPlanner.Models;
 using RoosterPlanner.Models.Models.Enums;
 using Person = RoosterPlanner.Models.Person;
 
@@ -19,6 +20,19 @@ namespace RoosterPlanner.Api.Models
         public string DateOfBirth { get; set; }
         public string PhoneNumber { get; set; }
         public string UserRole { get; set; }
+        public string Nationality { get; set; }
+
+        public string NativeLanguage { get; set; }
+        public string DutchProficiency { get; set; }
+
+        public string PersonalRemark { get; set; }
+
+        public DocumentViewModel ProfilePicture { get; set; }
+        public bool PushDisabled { get; set; }
+        public string StaffRemark { get; set; }
+        public string TermsOfUseConsented { get; set; }
+
+        public List<CertificateViewModel> Certificates { get; set; } = new();
 
         public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
@@ -31,7 +45,7 @@ namespace RoosterPlanner.Api.Models
                 StreetAddress = user.StreetAddress,
                 PostalCode = user.PostalCode,
                 City = user.City,
-                Country = user.Country,
+                Country = user.Country
             };
             if (user.Identities != null && personViewModel.Email == null)
                 foreach (ObjectIdentity objectIdentity in user.Identities)
@@ -56,6 +70,28 @@ namespace RoosterPlanner.Api.Models
                 personViewModel.PhoneNumber = user
                     .AdditionalData[extension.PhoneNumberExtension]
                     .ToString();
+
+            if (user.AdditionalData.ContainsKey(extension.NationalityExtension))
+                personViewModel.Nationality = user
+                    .AdditionalData[extension.NationalityExtension]
+                    .ToString();
+
+            if (user.AdditionalData.ContainsKey(extension.NativeLanguageExtention))
+                personViewModel.NativeLanguage = user
+                    .AdditionalData[extension.NativeLanguageExtention]
+                    .ToString();
+
+            if (user.AdditionalData.ContainsKey(extension.DutchProficiencyExtention))
+                personViewModel.DutchProficiency = user
+                    .AdditionalData[extension.DutchProficiencyExtention]
+                    .ToString();
+            
+            if (user.AdditionalData.ContainsKey(extension.TermsOfUseConsentedExtention))
+                personViewModel.TermsOfUseConsented = user
+                    .AdditionalData[extension.TermsOfUseConsentedExtention]
+                    .ToString();
+            
+            
             return personViewModel;
         }
 
@@ -68,8 +104,8 @@ namespace RoosterPlanner.Api.Models
             {
                 Id = vm.Id.ToString(),
                 GivenName = vm.FirstName,
+                DisplayName = vm.FirstName,
                 Surname = vm.LastName,
-                Mail = vm.Email,
                 StreetAddress = vm.StreetAddress,
                 PostalCode = vm.PostalCode,
                 City = vm.City,
@@ -77,8 +113,12 @@ namespace RoosterPlanner.Api.Models
                 AdditionalData = new Dictionary<string, object>
                 {
                     {extension.DateOfBirthExtension, vm.DateOfBirth},
-                    {extension.PhoneNumberExtension, vm.PhoneNumber}
-                },
+                    {extension.PhoneNumberExtension, vm.PhoneNumber},
+                    {extension.NationalityExtension, vm.Nationality},
+                    {extension.NativeLanguageExtention, vm.NativeLanguage},
+                    {extension.DutchProficiencyExtention, vm.DutchProficiency},
+                    {extension.TermsOfUseConsentedExtention, vm.TermsOfUseConsented}
+                }
                 
             };
             return user;
@@ -87,52 +127,90 @@ namespace RoosterPlanner.Api.Models
 
         public static Person CreatePerson(PersonViewModel vm)
         {
-            if (vm != null)
-            {
-                return new Person(vm.Id)
-                {
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Email = vm.Email,
-                    StreetAddress = vm.StreetAddress,
-                    PostalCode = vm.PostalCode,
-                    City = vm.City,
-                    Country = vm.Country,
-                    DateOfBirth = vm.DateOfBirth,
-                    UserRole = vm.UserRole,
-                    PhoneNumber = vm.PhoneNumber,
-                    LastEditDate = vm.LastEditDate,
-                    LastEditBy = vm.LastEditBy,
-                    RowVersion = vm.RowVersion
-                };
-            }
+            if (vm == null) return null;
 
-            return null;
+            Person person = new Person(vm.Id)
+            {
+                FirstName = vm.FirstName,
+                LastName = vm.LastName,
+                Email = vm.Email,
+                StreetAddress = vm.StreetAddress,
+                PostalCode = vm.PostalCode,
+                City = vm.City,
+                Country = vm.Country,
+                DateOfBirth = vm.DateOfBirth,
+                UserRole = vm.UserRole,
+                PhoneNumber = vm.PhoneNumber,
+                Nationality = vm.Nationality,
+                LastEditDate = vm.LastEditDate,
+                LastEditBy = vm.LastEditBy,
+                RowVersion = vm.RowVersion,
+                PersonalRemark = vm.PersonalRemark,
+                PushDisabled = vm.PushDisabled,
+                StaffRemark = vm.StaffRemark
+            };
+            if (vm.ProfilePicture == null) return person;
+
+            person.ProfilePicture = DocumentViewModel.CreateDocument(vm.ProfilePicture);
+            person.ProfilePictureId = person.ProfilePicture.Id;
+
+            return person;
         }
 
         public static PersonViewModel CreateVmFromPerson(Person person)
         {
-            if (person != null)
+            if (person == null) return null;
+            PersonViewModel vm = new PersonViewModel
             {
-                return new PersonViewModel
-                {
-                    Id = person.Id,
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
-                    Email = person.Email,
-                    StreetAddress = person.StreetAddress,
-                    PostalCode = person.PostalCode,
-                    City = person.City,
-                    Country = person.Country,
-                    DateOfBirth = person.DateOfBirth,
-                    UserRole = person.UserRole,
-                    PhoneNumber = person.PhoneNumber,
-                    LastEditDate = person.LastEditDate,
-                    LastEditBy = person.LastEditBy,
-                    RowVersion = person.RowVersion
-                };
-            }
-            return null;
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                Email = person.Email,
+                StreetAddress = person.StreetAddress,
+                PostalCode = person.PostalCode,
+                City = person.City,
+                Country = person.Country,
+                DateOfBirth = person.DateOfBirth,
+                UserRole = person.UserRole,
+                Nationality = person.Nationality,
+                PhoneNumber = person.PhoneNumber,
+                LastEditDate = person.LastEditDate,
+                LastEditBy = person.LastEditBy,
+                RowVersion = person.RowVersion,
+                PersonalRemark = person.PersonalRemark,
+                PushDisabled = person.PushDisabled,
+                StaffRemark = person.StaffRemark
+            };
+
+            if (person.ProfilePicture != null)
+                vm.ProfilePicture = DocumentViewModel.CreateVm(person.ProfilePicture);
+
+            return vm;
+        }
+
+        public static PersonViewModel CreateVmFromUserAndPerson(User user, Person person, Extensions extension)
+        {
+            if (user == null || person == null)
+                return null;
+
+            PersonViewModel vmFromUser = CreateVmFromUser(user, extension);
+
+            vmFromUser.StaffRemark = person.StaffRemark;
+            vmFromUser.PersonalRemark = person.PersonalRemark;
+            vmFromUser.PushDisabled = person.PushDisabled;
+            vmFromUser.LastEditBy = person.LastEditBy;
+            vmFromUser.LastEditDate = person.LastEditDate;
+            vmFromUser.RowVersion = person.RowVersion;
+
+            if (person.ProfilePicture != null)
+                vmFromUser.ProfilePicture = DocumentViewModel.CreateVm(person.ProfilePicture);
+
+            if (person.Certificates == null) return vmFromUser;
+            foreach (Certificate certificate in person.Certificates)
+                vmFromUser.Certificates.Add(CertificateViewModel.CreateVm(certificate));
+
+
+            return vmFromUser;
         }
     }
 }

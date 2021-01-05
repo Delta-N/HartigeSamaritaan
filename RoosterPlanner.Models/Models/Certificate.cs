@@ -12,7 +12,7 @@ namespace RoosterPlanner.Models
         
         [Display(Name = "Datum verlopen")]
         [Column(TypeName = "datetime2", Order = 2)]
-        public DateTime DateExpired { get; set; }
+        public DateTime? DateExpired { get; set; }
 
         [Column(Order = 3)]
         public Guid PersonId { get; set; }

@@ -14,9 +14,6 @@ namespace RoosterPlanner.Models
         [Column(Order = 2)]
         [Required, MaxLength(32)]
         public string Name { get; set; }
-
-        [Column(Order = 3)]
-        public string UrlPdf { get; set; }
         
         public List<Task> Tasks { get; set; }
 

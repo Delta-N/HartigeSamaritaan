@@ -50,6 +50,23 @@ export class ParticipationService {
     return participation;
   }
 
+  async getAllParticipations(projectId:string):Promise<Participation[]>{
+    if (!projectId) {
+      this.errorService.error("projectId mag niet leeg zijn")
+      return null;
+    }
+    let participations: Participation[] = [];
+    await this.apiService.get<HttpResponse<Participation[]>>(`${HttpRoutes.participationApiUrl}/project/${projectId}`)
+      .toPromise()
+      .then(res => {
+        if (res.ok)
+          participations = res.body;
+      }, Error => {
+        this.errorService.httpError(Error)
+      })
+    return participations;
+  }
+
   async postParticipation(participation: Participation): Promise<Participation> {
     if (!participation) {
       this.errorService.error("Lege participation in participationservice")
