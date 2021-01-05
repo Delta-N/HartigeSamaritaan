@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Project} from "../../models/project";
 import {UserService} from "../../services/user.service";
-import {Manager} from "../../models/manager";
 import {ToastrService} from "ngx-toastr";
+import {EmailService} from "../../services/email.service";
 
 @Component({
   selector: 'app-manage',
@@ -14,7 +14,8 @@ export class ManageComponent implements OnInit {
   projects: Project[] = [];
 
   constructor(private userService: UserService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private emailService: EmailService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -29,5 +30,25 @@ export class ManageComponent implements OnInit {
 
   todo() {
     this.toastr.warning("Deze functie moet nog geschreven worden")
+  }
+
+  async requestAvailability(id: string) {
+    if (id) {
+      await this.emailService.requestAvailability(id).then(res=>{
+        if(res){
+          this.toastr.success("Berichten verzonden")
+        }
+      })
+    }
+  }
+
+  async sendSchedule(id: string) {
+    if (id) {
+      await this.emailService.sendSchedule(id).then(res => {
+        if (res) {
+          this.toastr.success("Rooster verzonden")
+        }
+      })
+    }
   }
 }

@@ -36,7 +36,7 @@ namespace RoosterPlanner.Service
 
         {
             this.unitOfWork = unitOfWork;
-            this.documentRepository = unitOfWork.DocumentRepository;
+            documentRepository = unitOfWork.DocumentRepository;
             this.logger = logger;
             this.blobService = blobService;
         }

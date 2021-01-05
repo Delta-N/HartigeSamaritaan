@@ -19,6 +19,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\RoosterPlanner.Common\RoosterPlanner.Common.csproj" />
+    <ProjectReference Include="..\RoosterPlanner.Email\RoosterPlanner.Email.csproj" />
     <ProjectReference Include="..\RoosterPlanner.Service\RoosterPlanner.Service.csproj" />
   </ItemGroup>
   

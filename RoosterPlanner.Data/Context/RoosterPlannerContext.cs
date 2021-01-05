@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Context.Seed;
 using RoosterPlanner.Models;
 

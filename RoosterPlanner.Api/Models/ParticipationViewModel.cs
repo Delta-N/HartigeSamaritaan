@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
@@ -29,7 +28,7 @@ namespace RoosterPlanner.Api.Models
                 Remark = participation.Remark,
                 LastEditDate = participation.LastEditDate,
                 LastEditBy = participation.LastEditBy,
-                RowVersion = participation.RowVersion,
+                RowVersion = participation.RowVersion
             };
             if(participation.Person!=null)
                 vm.Person=PersonViewModel.CreateVmFromPerson(participation.Person);

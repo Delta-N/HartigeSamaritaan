@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using RoosterPlanner.Models.FilterModels;
 
 namespace RoosterPlanner.Api.Models
 {

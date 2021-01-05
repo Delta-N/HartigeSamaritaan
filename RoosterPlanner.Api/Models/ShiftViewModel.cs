@@ -53,10 +53,8 @@ namespace RoosterPlanner.Api.Models
 
             List<Availability> availabilities = new List<Availability>();
             if (shiftViewModel.Availabilities != null && shiftViewModel.Availabilities.Count > 0)
-            {
-                availabilities.AddRange(shiftViewModel.Availabilities.Select(availabilityViewModel =>
-                    AvailabilityViewModel.CreateAvailability(availabilityViewModel)));
-            }
+                availabilities.AddRange(shiftViewModel.Availabilities.Select(AvailabilityViewModel.CreateAvailability));
+            
 
             return new Shift(shiftViewModel.Id)
             {

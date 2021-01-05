@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {ApiService} from "./api.service";
 import {Category} from "../models/category";
 import {HttpResponse} from "@angular/common/http";
-import {Task} from "../models/task";
 import {HttpRoutes} from "../helpers/HttpRoutes";
 import {EntityHelper} from "../helpers/entity-helper";
 import {ErrorService} from "./error.service";

@@ -1,5 +1,4 @@
-﻿using System;
-using RoosterPlanner.Models;
+﻿using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {

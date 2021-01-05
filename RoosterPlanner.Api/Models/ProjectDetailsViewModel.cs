@@ -28,7 +28,7 @@ namespace RoosterPlanner.Api.Models
         {
             if (project == null)
                 return null;
-            ProjectDetailsViewModel vm = new ProjectDetailsViewModel()
+            ProjectDetailsViewModel vm = new ProjectDetailsViewModel
             {
                 Id = project.Id,
                 Name = project.Name,
@@ -70,11 +70,9 @@ namespace RoosterPlanner.Api.Models
                 LastEditBy = projectDetailsViewModel.LastEditBy,
                 RowVersion = projectDetailsViewModel.RowVersion
             };
-            if (projectDetailsViewModel.PictureUri != null)
-            {
-                project.PictureUri = DocumentViewModel.CreateDocument(projectDetailsViewModel.PictureUri);
-                project.PictureUriId = project.PictureUri.Id;
-            }
+            if (projectDetailsViewModel.PictureUri == null) return project;
+            project.PictureUri = DocumentViewModel.CreateDocument(projectDetailsViewModel.PictureUri);
+            project.PictureUriId = project.PictureUri.Id;
             return project;
         }
     }

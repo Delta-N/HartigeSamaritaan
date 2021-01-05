@@ -11,11 +11,9 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using RoosterPlanner.Common.Config;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
-using Person = RoosterPlanner.Models.Person;
+
 
 namespace RoosterPlanner.Service
 {
@@ -35,9 +33,6 @@ namespace RoosterPlanner.Service
         private readonly AzureAuthenticationConfig azureB2CConfig;
         private GraphServiceClient graphServiceClient;
         private DateTime graphServiceClientTimestamp;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IPersonRepository personRepository;
-        private readonly ILogger<AzureB2CService> logger;
 
         private const string GraphSelectList =
             "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
@@ -49,9 +44,6 @@ namespace RoosterPlanner.Service
             ILogger<AzureB2CService> logger)
         {
             this.azureB2CConfig = azureB2CConfig.Value;
-            this.unitOfWork = unitOfWork;
-            personRepository = unitOfWork.PersonRepository;
-            this.logger = logger;
         }
 
         public async Task<User> GetUserAsync(Guid userId)
@@ -146,7 +138,7 @@ namespace RoosterPlanner.Service
      
                 result.StatusCode = HttpStatusCode.OK;
                 result.Succeeded = true;
-                result.Data = users.OrderBy(u => u.DisplayName).ToList(); ;
+                result.Data = users.OrderBy(u => u.DisplayName).ToList();
                 return result;
             }
 

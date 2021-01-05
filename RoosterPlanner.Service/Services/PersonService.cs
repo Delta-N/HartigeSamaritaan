@@ -11,7 +11,6 @@ using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Person = RoosterPlanner.Models.Person;
-using Task = System.Threading.Tasks.Task;
 
 namespace RoosterPlanner.Service
 {
@@ -52,21 +51,22 @@ namespace RoosterPlanner.Service
             this.logger = logger;
         }
 
-        private async Task AddPersonToLocalDbAsync(User user)
+        private async Task<TaskResult<Person>> AddPersonToLocalDbAsync(User user)
         {
             if (user?.Id == null)
                 throw new ArgumentNullException(nameof(user));
 
-            var result = new TaskResult<Person>();
+            TaskResult<Person> result = new TaskResult<Person>();
             try
             {
-                var person = await personRepository.GetPersonByOidAsync(Guid.Parse(user.Id));
+                Person person = await personRepository.GetAsync(Guid.Parse(user.Id));
                 if (person == null)
                 {
                     person = new Person(Guid.Parse(user.Id))
                         {FirstName = user.GivenName, Oid = Guid.Parse(user.Id), LastName = user.Surname};
-                    personRepository.Add(person);
-                    await unitOfWork.SaveChangesAsync();
+                    
+                    result.Data=personRepository.Add(person);
+                    result.Succeeded = await unitOfWork.SaveChangesAsync()==1;
                 }
                 else if (person.FirstName != user.GivenName || person.LastName != user.Surname)
                 {
@@ -74,9 +74,12 @@ namespace RoosterPlanner.Service
                     person.LastName = user.Surname;
                     person.LastEditDate = DateTime.UtcNow;
                     person.LastEditBy = "SYSTEM";
-                    personRepository.Update(person);
-                    await unitOfWork.SaveChangesAsync();
+                    
+                    result.Data=personRepository.Update(person);
+                    result.Succeeded=await unitOfWork.SaveChangesAsync()==1;
                 }
+               
+                
             }
             catch (Exception ex)
             {
@@ -84,6 +87,8 @@ namespace RoosterPlanner.Service
                 logger.LogError(ex, result.Message, user);
                 result.Error = ex;
             }
+
+            return result;
         }
 
         public async Task<TaskResult<User>> GetUserAsync(Guid id)

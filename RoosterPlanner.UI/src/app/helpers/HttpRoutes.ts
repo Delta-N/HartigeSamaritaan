@@ -10,6 +10,7 @@ export class HttpRoutes {
   private static shiftController = 'api/shift';
   private static availabilityController = 'api/availability';
   private static certificateController = 'api/certificate';
+  private static emailController = 'api/email';
 
   public static personApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.personController}`;
   public static projectApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.projectController}`;
@@ -19,4 +20,5 @@ export class HttpRoutes {
   public static shiftApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.shiftController}`
   public static availabilityApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.availabilityController}`
   public static certificateApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.certificateController}`
+  public static emailApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.emailController}`
 }

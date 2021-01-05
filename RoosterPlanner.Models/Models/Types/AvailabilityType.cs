@@ -6,6 +6,6 @@
         Not,
         Maybe,
         Ok,
-        Scheduled,
+        Scheduled
     }
 }

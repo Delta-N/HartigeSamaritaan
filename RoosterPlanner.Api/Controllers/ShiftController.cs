@@ -173,6 +173,8 @@ namespace RoosterPlanner.Api.Controllers
                 var culture = System.Threading.Thread.CurrentThread.CurrentCulture;
                 int numberOfDaysBetweenNowAndStart =
                     shiftResult.Data.Date.DayOfWeek - culture.DateTimeFormat.FirstDayOfWeek;
+                if (numberOfDaysBetweenNowAndStart < 0)
+                    numberOfDaysBetweenNowAndStart += 7;
                 DateTime firstDateThisWeek =
                     shiftResult.Data.Date.Subtract(TimeSpan.FromDays(numberOfDaysBetweenNowAndStart));
                 List<DateTime> allDaysThisWeek = new List<DateTime>();
@@ -185,7 +187,7 @@ namespace RoosterPlanner.Api.Controllers
                 {
                     //list all availabilities in this project of this person
                     Task<TaskListResult<Availability>> availabilities =
-                        this.availabilityService.FindAvailabilitiesAsync(
+                        availabilityService.FindAvailabilitiesAsync(
                             availability.Participation.ProjectId,
                             availability.Participation.PersonId);
 
@@ -203,7 +205,7 @@ namespace RoosterPlanner.Api.Controllers
                         a.ShiftId == id && a.Type == AvailibilityType.Scheduled) != null;
 
                     //calculate the number of hours person is scheduled this week
-                    double numberOfHoursScheduleThisWeek = (availabilities.Result.Data)
+                    double numberOfHoursScheduleThisWeek = availabilities.Result.Data
                         .Where(a => a.Type == AvailibilityType.Scheduled && allDaysThisWeek.Contains(a.Shift.Date))
                         .Sum(availability1 =>
                             availability1.Shift.EndTime.Subtract(availability1.Shift.StartTime).TotalHours);
@@ -213,21 +215,21 @@ namespace RoosterPlanner.Api.Controllers
                     {
                         Person = PersonViewModel.CreateVmFromUser(person.Result.Data,
                             Extensions.GetInstance(azureB2CConfig)),
-                        NumberOfTimesScheduledThisProject = numberOfTimeScheduledThisDay,
+                        NumberOfTimesScheduledThisProject = availabilities.Result.Data.Count(a=>a.Type==AvailibilityType.Scheduled),
                         ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
                         ScheduledThisShift = scheduledThisShift,
                         AvailabilityId = availability.Id,
                         Preference = availability.Preference,
                         Availabilities = (await availabilities).Data
                             .Where(a => a.Shift.Date == shiftResult.Data.Date)
-                            .Select(availability1 => AvailabilityViewModel.CreateVm(availability1))
+                            .Select(AvailabilityViewModel.CreateVm)
                             .ToList(),
                         HoursScheduledThisWeek = numberOfHoursScheduleThisWeek,
                         Employability = availability.Participation.MaxWorkingHoursPerWeek
                     });
                 }
 
-                ScheduleDataViewModel vm = new ScheduleDataViewModel()
+                ScheduleDataViewModel vm = new ScheduleDataViewModel
                 {
                     Schedules = schedules,
                     Shift = ShiftViewModel.CreateVm(shiftResult.Data)

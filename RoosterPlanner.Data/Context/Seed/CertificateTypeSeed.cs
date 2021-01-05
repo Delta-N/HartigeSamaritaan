@@ -40,7 +40,7 @@ namespace RoosterPlanner.Data.Context.Seed
                     Name = "HACCP",
                     LastEditBy = "SYSTEM",
                     LastEditDate = DateTime.Now
-                },
+                }
             };
 
             modelBuilder.Entity<CertificateType>().HasData(certificateTypes.ToArray());

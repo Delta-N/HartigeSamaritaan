@@ -18,6 +18,7 @@ namespace RoosterPlanner.Service
         Task<TaskResult<Participation>> GetParticipationAsync(Guid participationId);
         Task<TaskResult<Participation>> GetParticipationAsync(Guid personId, Guid projectId);
         Task<TaskListResult<Participation>> GetParticipationsAsync(Guid projectId);
+        Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId);
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
     }
 
@@ -172,6 +173,27 @@ namespace RoosterPlanner.Service
                 logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
+            return result;
+        }
+
+        public async Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+
+            TaskListResult<Participation> result = TaskListResult<Participation>.CreateDefault();
+            try
+            {
+                result.Data = await participationRepository.GetParticipationsWithAvailabilities(projectId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error finding participations " + projectId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
             return result;
         }
 

@@ -32,7 +32,7 @@ namespace RoosterPlanner.Api.Models
         public string StaffRemark { get; set; }
         public string TermsOfUseConsented { get; set; }
 
-        public List<CertificateViewModel> Certificates { get; set; } = new List<CertificateViewModel>();
+        public List<CertificateViewModel> Certificates { get; set; } = new();
 
         public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
@@ -45,7 +45,7 @@ namespace RoosterPlanner.Api.Models
                 StreetAddress = user.StreetAddress,
                 PostalCode = user.PostalCode,
                 City = user.City,
-                Country = user.Country,
+                Country = user.Country
             };
             if (user.Identities != null && personViewModel.Email == null)
                 foreach (ObjectIdentity objectIdentity in user.Identities)
@@ -118,7 +118,7 @@ namespace RoosterPlanner.Api.Models
                     {extension.NativeLanguageExtention, vm.NativeLanguage},
                     {extension.DutchProficiencyExtention, vm.DutchProficiency},
                     {extension.TermsOfUseConsentedExtention, vm.TermsOfUseConsented}
-                },
+                }
                 
             };
             return user;
@@ -147,7 +147,7 @@ namespace RoosterPlanner.Api.Models
                 RowVersion = vm.RowVersion,
                 PersonalRemark = vm.PersonalRemark,
                 PushDisabled = vm.PushDisabled,
-                StaffRemark = vm.StaffRemark,
+                StaffRemark = vm.StaffRemark
             };
             if (vm.ProfilePicture == null) return person;
 
@@ -179,7 +179,7 @@ namespace RoosterPlanner.Api.Models
                 RowVersion = person.RowVersion,
                 PersonalRemark = person.PersonalRemark,
                 PushDisabled = person.PushDisabled,
-                StaffRemark = person.StaffRemark,
+                StaffRemark = person.StaffRemark
             };
 
             if (person.ProfilePicture != null)
@@ -204,12 +204,12 @@ namespace RoosterPlanner.Api.Models
 
             if (person.ProfilePicture != null)
                 vmFromUser.ProfilePicture = DocumentViewModel.CreateVm(person.ProfilePicture);
-           
-            if (person.Certificates != null)
-                foreach (Certificate certificate in person.Certificates)
-                    vmFromUser.Certificates.Add(CertificateViewModel.CreateVm(certificate));
-                
-            
+
+            if (person.Certificates == null) return vmFromUser;
+            foreach (Certificate certificate in person.Certificates)
+                vmFromUser.Certificates.Add(CertificateViewModel.CreateVm(certificate));
+
+
             return vmFromUser;
         }
     }

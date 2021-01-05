@@ -12,12 +12,6 @@ namespace RoosterPlanner.Data.Repositories
     public interface IProjectRepository : IRepository<Project>
     {
         /// <summary>
-        /// Returns a list of open projects.
-        /// </summary>
-        /// <returns>List of projects that are not closed.</returns>
-        Task<List<Project>> GetActiveProjectsAsync();
-
-        /// <summary>
         /// Search for projects based on given filter.
         /// </summary>
         /// <param name="filter"></param>

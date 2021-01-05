@@ -196,7 +196,7 @@ namespace RoosterPlanner.Data.Repositories
                 .Where(s => s.ProjectId == projectId && s.Date == date && s.Task!=null)
                 .ToListAsync();
 
-            Parallel.ForEach(listOfShifts, (shift) =>
+            Parallel.ForEach(listOfShifts, shift =>
             {
                 shift.Availabilities = shift.Availabilities.Where(a => a.Participation.PersonId == userId).ToList();
                 if (shift.Task != null)

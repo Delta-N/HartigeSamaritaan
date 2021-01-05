@@ -1,5 +1,4 @@
-﻿using System;
-using RoosterPlanner.Models;
+﻿using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
@@ -17,25 +16,22 @@ namespace RoosterPlanner.Api.Models
 
         public static TaskViewModel CreateVm(Task task)
         {
-            if (task != null)
+            if (task == null) return null;
+            TaskViewModel vm =  new TaskViewModel
             {
-                TaskViewModel vm =  new TaskViewModel
-                {
-                    Id = task.Id,
-                    Name = task.Name,
-                    Category = CategoryViewModel.CreateVm(task.Category),
-                    Color = task.Color,
-                    Description = task.Description,
-                    LastEditDate = task.LastEditDate,
-                    LastEditBy = task.LastEditBy,
-                    RowVersion = task.RowVersion
-                };
-                if (task.Instruction != null)
-                    vm.Instruction = DocumentViewModel.CreateVm(task.Instruction);
-                return vm;
-            }
+                Id = task.Id,
+                Name = task.Name,
+                Category = CategoryViewModel.CreateVm(task.Category),
+                Color = task.Color,
+                Description = task.Description,
+                LastEditDate = task.LastEditDate,
+                LastEditBy = task.LastEditBy,
+                RowVersion = task.RowVersion
+            };
+            if (task.Instruction != null)
+                vm.Instruction = DocumentViewModel.CreateVm(task.Instruction);
+            return vm;
 
-            return null;
         }
 
         public static Task CreateTask(TaskViewModel taskViewModel)
@@ -58,12 +54,10 @@ namespace RoosterPlanner.Api.Models
                 task.Category = CategoryViewModel.CreateCategory(taskViewModel.Category);
             }
 
-            if (taskViewModel.Instruction != null)
-            {
-                task.Instruction = DocumentViewModel.CreateDocument(taskViewModel.Instruction);
-                task.InstructionId = taskViewModel.Instruction.Id;
-            }
-            
+            if (taskViewModel.Instruction == null) return task;
+            task.Instruction = DocumentViewModel.CreateDocument(taskViewModel.Instruction);
+            task.InstructionId = taskViewModel.Instruction.Id;
+
             return task;
         }
     }

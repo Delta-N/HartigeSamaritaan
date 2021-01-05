@@ -32,7 +32,7 @@ namespace RoosterPlanner.Data.Repositories
                 .Where(p => p.Oid == oid)
                 .FirstOrDefaultAsync();
 
-            if (person == null || person.Certificates == null) return person;
+            if (person?.Certificates == null) return person;
             foreach (var personCertificate in person.Certificates.Where(personCertificate => personCertificate.CertificateType != null))
                 personCertificate.CertificateType.Certificates = null;
             
