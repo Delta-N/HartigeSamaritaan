@@ -80,7 +80,7 @@ export class CertificateComponent implements OnInit {
       if (dialogResult === true) {
         await this.certificateService.deleteCertificate(this.guid).then(async response => {
           if (response) {
-            this.router.navigateByUrl(this.breadcrumbService.previousUrl)
+            window.history.back()
           }
         })
       }
