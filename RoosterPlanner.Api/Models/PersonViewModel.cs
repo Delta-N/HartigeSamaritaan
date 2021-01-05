@@ -22,10 +22,13 @@ namespace RoosterPlanner.Api.Models
         public string UserRole { get; set; }
         public string Nationality { get; set; }
 
+        public string NativeLanguage { get; set; }
+        public string DutchProficiency { get; set; }
+
         public string PersonalRemark { get; set; }
 
         public DocumentViewModel ProfilePicture { get; set; }
-
+        public bool PushDisabled { get; set; }
         public string StaffRemark { get; set; }
         public string TermsOfUseConsented { get; set; }
 
@@ -72,11 +75,22 @@ namespace RoosterPlanner.Api.Models
                 personViewModel.Nationality = user
                     .AdditionalData[extension.NationalityExtension]
                     .ToString();
-            
-            if (user.AdditionalData.ContainsKey(extension.TermsOfUseConsented))
-                personViewModel.TermsOfUseConsented = user
-                    .AdditionalData[extension.TermsOfUseConsented]
+
+            if (user.AdditionalData.ContainsKey(extension.NativeLanguageExtention))
+                personViewModel.NativeLanguage = user
+                    .AdditionalData[extension.NativeLanguageExtention]
                     .ToString();
+
+            if (user.AdditionalData.ContainsKey(extension.DutchProficiencyExtention))
+                personViewModel.DutchProficiency = user
+                    .AdditionalData[extension.DutchProficiencyExtention]
+                    .ToString();
+            
+            if (user.AdditionalData.ContainsKey(extension.TermsOfUseConsentedExtention))
+                personViewModel.TermsOfUseConsented = user
+                    .AdditionalData[extension.TermsOfUseConsentedExtention]
+                    .ToString();
+            
             
             return personViewModel;
         }
@@ -101,7 +115,9 @@ namespace RoosterPlanner.Api.Models
                     {extension.DateOfBirthExtension, vm.DateOfBirth},
                     {extension.PhoneNumberExtension, vm.PhoneNumber},
                     {extension.NationalityExtension, vm.Nationality},
-                    {extension.TermsOfUseConsented, vm.TermsOfUseConsented}
+                    {extension.NativeLanguageExtention, vm.NativeLanguage},
+                    {extension.DutchProficiencyExtention, vm.DutchProficiency},
+                    {extension.TermsOfUseConsentedExtention, vm.TermsOfUseConsented}
                 },
                 
             };
@@ -130,6 +146,7 @@ namespace RoosterPlanner.Api.Models
                 LastEditBy = vm.LastEditBy,
                 RowVersion = vm.RowVersion,
                 PersonalRemark = vm.PersonalRemark,
+                PushDisabled = vm.PushDisabled,
                 StaffRemark = vm.StaffRemark,
             };
             if (vm.ProfilePicture == null) return person;
@@ -161,6 +178,7 @@ namespace RoosterPlanner.Api.Models
                 LastEditBy = person.LastEditBy,
                 RowVersion = person.RowVersion,
                 PersonalRemark = person.PersonalRemark,
+                PushDisabled = person.PushDisabled,
                 StaffRemark = person.StaffRemark,
             };
 
@@ -179,6 +197,7 @@ namespace RoosterPlanner.Api.Models
 
             vmFromUser.StaffRemark = person.StaffRemark;
             vmFromUser.PersonalRemark = person.PersonalRemark;
+            vmFromUser.PushDisabled = person.PushDisabled;
             vmFromUser.LastEditBy = person.LastEditBy;
             vmFromUser.LastEditDate = person.LastEditDate;
             vmFromUser.RowVersion = person.RowVersion;

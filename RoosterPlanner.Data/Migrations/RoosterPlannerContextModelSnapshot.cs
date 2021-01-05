@@ -37,6 +37,9 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<bool>("Preference")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("PushEmailSend")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -94,7 +97,7 @@ namespace RoosterPlanner.Data.Migrations
                             Id = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
                             Code = "KEUKEN",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 110, DateTimeKind.Local).AddTicks(8114),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 827, DateTimeKind.Local).AddTicks(6592),
                             Name = "Keuken"
                         },
                         new
@@ -102,7 +105,7 @@ namespace RoosterPlanner.Data.Migrations
                             Id = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
                             Code = "BEDIENING",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 110, DateTimeKind.Local).AddTicks(8418),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 827, DateTimeKind.Local).AddTicks(6887),
                             Name = "Bediening"
                         },
                         new
@@ -110,7 +113,7 @@ namespace RoosterPlanner.Data.Migrations
                             Id = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
                             Code = "LOGISTIEK",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 110, DateTimeKind.Local).AddTicks(8434),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 827, DateTimeKind.Local).AddTicks(6905),
                             Name = "Logistiek"
                         },
                         new
@@ -118,7 +121,7 @@ namespace RoosterPlanner.Data.Migrations
                             Id = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
                             Code = "OVERIGE",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 110, DateTimeKind.Local).AddTicks(8440),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 827, DateTimeKind.Local).AddTicks(6913),
                             Name = "Overige"
                         });
                 });
@@ -194,31 +197,31 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3a1a7954-c0c9-4a4f-b1e4-ab479b6dce76"),
+                            Id = new Guid("f117190b-4f09-4f36-9538-6fe08de42334"),
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(8872),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(8741),
                             Name = "Biefstuk-capable"
                         },
                         new
                         {
-                            Id = new Guid("98b3d87c-89b9-4866-9a0b-8e3269fa8183"),
+                            Id = new Guid("9d0f0d8d-15c7-4b72-a991-f27495faa546"),
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(9116),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(9099),
                             Level = "B",
                             Name = "Rijbewijs"
                         },
                         new
                         {
-                            Id = new Guid("b16a0b16-c0dd-43d7-b6c7-9853c0a6229d"),
+                            Id = new Guid("53ed34cf-0bb9-4534-9e4a-8e358955adbd"),
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(9132),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(9116),
                             Name = "Barcertificaat"
                         },
                         new
                         {
-                            Id = new Guid("87719cc4-8985-4860-9294-b2f1c2337376"),
+                            Id = new Guid("58bf35fe-b73d-4258-92a3-a8f70befaf09"),
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(9143),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(9122),
                             Name = "HACCP"
                         });
                 });
@@ -257,10 +260,10 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a8b01392-b3d7-4999-815e-2deee8714447"),
+                            Id = new Guid("7fff7993-8a1b-4c2f-90ad-2e71c144cfa5"),
                             DocumentUri = "https://hackatonstoragedev.blob.core.windows.net/projectpicture/037efc9a-0836-4513-8ae3-282c597631c4.jfif",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(4926),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(4722),
                             Name = "TermsOfService"
                         });
                 });
@@ -369,6 +372,9 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<Guid?>("ProfilePictureId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("PushDisabled")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -458,12 +464,12 @@ namespace RoosterPlanner.Data.Migrations
                             Closed = false,
                             Description = "Leuk project in Voorburg",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(4279),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3344),
                             Name = "Voorburg 2020",
-                            ParticipationEndDate = new DateTime(2021, 2, 2, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(3596),
-                            ParticipationStartDate = new DateTime(2021, 1, 5, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(3311),
-                            ProjectEndDate = new DateTime(2021, 2, 3, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(4079),
-                            ProjectStartDate = new DateTime(2021, 1, 4, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(3855)
+                            ParticipationEndDate = new DateTime(2021, 2, 3, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(2661),
+                            ParticipationStartDate = new DateTime(2021, 1, 6, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(2391),
+                            ProjectEndDate = new DateTime(2021, 2, 4, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3144),
+                            ProjectStartDate = new DateTime(2021, 1, 5, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(2920)
                         },
                         new
                         {
@@ -473,12 +479,12 @@ namespace RoosterPlanner.Data.Migrations
                             Closed = false,
                             Description = "Leuk project in Den Haag",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(4325),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3442),
                             Name = "Den Haag 2018",
-                            ParticipationEndDate = new DateTime(2021, 2, 2, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(4318),
-                            ParticipationStartDate = new DateTime(2021, 1, 5, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(4313),
-                            ProjectEndDate = new DateTime(2021, 2, 3, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(4323),
-                            ProjectStartDate = new DateTime(2021, 1, 4, 11, 51, 37, 112, DateTimeKind.Local).AddTicks(4320)
+                            ParticipationEndDate = new DateTime(2021, 2, 3, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3431),
+                            ParticipationStartDate = new DateTime(2021, 1, 6, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3426),
+                            ProjectEndDate = new DateTime(2021, 2, 4, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3438),
+                            ProjectStartDate = new DateTime(2021, 1, 5, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3435)
                         });
                 });
 
@@ -605,42 +611,42 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bcc9a242-8505-493c-a47a-18b703701ae6"),
+                            Id = new Guid("026149d8-1d01-4380-b9d2-fc2576518c5a"),
                             CategoryId = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
                             Color = "Blue",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chef",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(1208),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(801),
                             Name = "Chef"
                         },
                         new
                         {
-                            Id = new Guid("2039730b-b4fd-4e47-addf-1d4dd50cfaf6"),
+                            Id = new Guid("bee3d875-418d-46fb-92b0-917cd41bfec3"),
                             CategoryId = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
                             Color = "Red",
                             Description = "Een leuke beschrijving van de werkzaamheden van een runner",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(1311),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(861),
                             Name = "Runner"
                         },
                         new
                         {
-                            Id = new Guid("02f92fb5-7257-4814-8427-85bcc8c4bea9"),
+                            Id = new Guid("31f8801c-95ec-4a26-97ee-631052898fdd"),
                             CategoryId = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
                             Color = "Yellow",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chauffeur",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(1323),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(877),
                             Name = "Chauffeur"
                         },
                         new
                         {
-                            Id = new Guid("fd8d3cc5-ba72-420b-b358-871b1fee76e8"),
+                            Id = new Guid("7edba13d-3cf3-4eeb-abe9-af1d2ff4104b"),
                             CategoryId = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
                             Color = "Green",
                             Description = "Een leuke beschrijving van de werkzaamheden van een klusser",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 4, 11, 51, 37, 113, DateTimeKind.Local).AddTicks(1330),
+                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(901),
                             Name = "Klusser"
                         });
                 });

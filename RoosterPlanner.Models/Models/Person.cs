@@ -44,6 +44,9 @@ namespace RoosterPlanner.Models
         [MaxLength(256)]
         public string StaffRemark { get; set; }
 
+        [Column(Order = 7)]
+        public bool PushDisabled { get; set; }
+
         //Constructor
         public Person() : base(Guid.Empty)
         {

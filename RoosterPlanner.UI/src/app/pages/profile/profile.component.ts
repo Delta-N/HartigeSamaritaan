@@ -8,8 +8,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Certificate} from "../../models/Certificate";
-import {AddProjectTaskComponent} from "../../components/add-project-task/add-project-task.component";
 import {AddCertificateComponent} from "../../components/add-certificate/add-certificate.component";
+import {ToastrService} from "ngx-toastr";
 
 
 @Component({
@@ -35,7 +35,8 @@ export class ProfileComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private userService: UserService,
               private authenticationService: MsalService,
-              private dialog: MatDialog,) {
+              private dialog: MatDialog,
+              private toastr: ToastrService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -58,8 +59,8 @@ export class ProfileComponent implements OnInit {
       if (res) {
         this.user = res;
         this.certificates = this.user.certificates.slice(0, this.itemsPerCard)
-        if(this.user.certificates.length>5)
-          this.CertificateExpandbtnDisabled=false;
+        if (this.user.certificates.length > 5)
+          this.CertificateExpandbtnDisabled = false;
         this.age = DateConverter.calculateAge(this.user.dateOfBirth);
         this.loaded = true;
       }
@@ -116,7 +117,7 @@ export class ProfileComponent implements OnInit {
     if (this.certificateStyle === 'expanded-card') {
       if (leftElement)
         leftElement.hidden = false;
-      if(remarkElement)
+      if (remarkElement)
         remarkElement.hidden = false;
 
       this.certificateStyle = 'card';
@@ -143,9 +144,21 @@ export class ProfileComponent implements OnInit {
       }
     });
     dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(res => {
+    dialogRef.afterClosed().subscribe(async res => {
+      if (res) {
+        await this.loadUserProfile()
+      }
+    })
+  }
+
+  async push() {
+    this.user.pushDisabled = !this.user.pushDisabled
+    await this.userService.updatePerson(this.user).then(res => {
       if (res) {
         this.loadUserProfile()
+        let message = "Push berichten zijn ";
+        message += this.user.pushDisabled ? "uitgeschakeld" : "ingeschakeld"
+        this.toastr.success(message)
       }
     })
   }

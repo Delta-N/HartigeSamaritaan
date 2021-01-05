@@ -231,6 +231,7 @@ namespace RoosterPlanner.Api.Controllers
                 bool userIsBoardmember = UserHasRole(oid, UserRole.Boardmember,
                     (ClaimsIdentity) HttpContext.User.Identity);
 
+                person.PushDisabled = personViewModel.PushDisabled;
                 person.PersonalRemark = personViewModel.PersonalRemark;
 
                 if (userIsBoardmember || userIsCommitteemember) //staff

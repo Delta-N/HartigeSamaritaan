@@ -2,6 +2,7 @@
   <h1>Profiel</h1>
   <div id="push">
     <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button action-button">Profiel wijzigen</a>
+    <a *ngIf="user!=null" (click)="push()" mat-button class="override-button">{{user.pushDisabled?"Pushberichten inschakelen":"Pushberichten uitschakelen"}}</a>
   </div>
 </div>
 
@@ -40,6 +41,18 @@
       <div class="row">
         <div class="row-name">Nationaliteit:</div>
         <div class="user-data">{{user.nationality}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Land van Herkomst:</div>
+        <div class="user-data">{{user.country}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Moedertaal:</div>
+        <div class="user-data">{{user.nativeLanguage}}</div>
+      </div>
+      <div class="row">
+        <div class="row-name">Nederlands taalniveau</div>
+        <div class="user-data">{{user.dutchProficiency}}</div>
       </div>
     </div>
     <div class="col-md-6" id="right">

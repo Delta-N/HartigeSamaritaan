@@ -29,7 +29,13 @@ namespace RoosterPlanner.Api.Models.Constants
         public string NationalityExtension =>
             $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
 
-        public string TermsOfUseConsented =>
+        public string NativeLanguageExtention =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
+
+        public string DutchProficiencyExtention =>
+            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
+
+        public string TermsOfUseConsentedExtention =>
             $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
     }
 }

@@ -12,6 +12,7 @@ namespace RoosterPlanner.Api.Models
         public ShiftViewModel Shift { get; set; }
         public AvailibilityType Type { get; set; }
         public bool Preference { get; set; }
+        public bool PushEmailSend { get; set; }
 
         public static AvailabilityViewModel CreateVm(Availability availability)
         {
@@ -25,6 +26,7 @@ namespace RoosterPlanner.Api.Models
                 ShiftId = availability.ShiftId,
                 Type = availability.Type,
                 Preference = availability.Preference,
+                PushEmailSend = availability.PushEmailSend,
                 LastEditDate = availability.LastEditDate,
                 LastEditBy = availability.LastEditBy,
                 RowVersion = availability.RowVersion
@@ -46,7 +48,7 @@ namespace RoosterPlanner.Api.Models
                 ShiftId = availabilityViewModel.ShiftId,
                 Type = availabilityViewModel.Type,
                 Preference = availabilityViewModel.Preference,
-
+                PushEmailSend = availabilityViewModel.PushEmailSend,
                 LastEditDate = availabilityViewModel.LastEditDate,
                 LastEditBy = availabilityViewModel.LastEditBy,
                 RowVersion = availabilityViewModel.RowVersion

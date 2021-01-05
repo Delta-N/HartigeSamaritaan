@@ -64,10 +64,12 @@ namespace RoosterPlanner.Service
             var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
             var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
             var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+            var nativeLanguage = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
+            var dutchProficiency = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
             var termsofuseconsented = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
 
             var user = await graphService.Users[userId.ToString()].Request()
-                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented}").GetAsync();
+                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented},{nativeLanguage},{dutchProficiency}").GetAsync();
             
             return user;
         }
@@ -87,6 +89,10 @@ namespace RoosterPlanner.Service
                 var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
                 var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
                 var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+                var nativeLanguage =
+                    $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
+                var dutchProficiency =
+                    $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
                 var termsofuseconsented =
                     $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
                 var tenant = azureB2CConfig.AzureTenantName;
@@ -122,7 +128,7 @@ namespace RoosterPlanner.Service
                 var currentUsers = await graphService.Users
                     .Request()
                     .Filter(filterString)
-                    .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented}")
+                    .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented},{nativeLanguage},{dutchProficiency}")
                     .GetAsync();
                 while (currentUsers.Count > 0)
                 {
