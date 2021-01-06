@@ -60,7 +60,8 @@ namespace RoosterPlanner.Data.Repositories
             availabilities.ForEach(a =>
             {
                 a.Shift.Availabilities = null;
-                a.Shift.Task.Shifts = null;
+                if (a.Shift.Task != null)
+                    a.Shift.Task.Shifts = null;
             });
             return availabilities;
         }
