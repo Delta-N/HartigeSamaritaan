@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
-using RoosterPlanner.Common.Config;
+using RoosterPlanner.Service.Config;
 
 namespace RoosterPlanner.Service
 {

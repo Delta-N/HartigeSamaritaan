@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RoosterPlanner.Common\RoosterPlanner.Common.csproj" />
     <ProjectReference Include="..\RoosterPlanner.Data\RoosterPlanner.Data.csproj" />
     <ProjectReference Include="..\RoosterPlanner.Email\RoosterPlanner.Email.csproj" />
     <ProjectReference Include="..\RoosterPlanner.Models\RoosterPlanner.Models.csproj" />

@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using RoosterPlanner.Common;
 using RoosterPlanner.Data.Context;
 using RoosterPlanner.Models;
 

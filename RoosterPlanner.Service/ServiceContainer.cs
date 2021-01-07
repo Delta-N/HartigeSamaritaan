@@ -4,10 +4,10 @@ using System.Net.Mail;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterPlanner.Common.Config;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
 using RoosterPlanner.Email;
+using RoosterPlanner.Service.Config;
 
 namespace RoosterPlanner.Service
 {

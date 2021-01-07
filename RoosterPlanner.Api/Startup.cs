@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using RoosterPlanner.Common.Config;
 using RoosterPlanner.Service;
+using RoosterPlanner.Service.Config;
 
 namespace RoosterPlanner.Api
 {

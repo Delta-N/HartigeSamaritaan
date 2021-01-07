@@ -1,4 +1,4 @@
-﻿using RoosterPlanner.Common.Config;
+﻿using RoosterPlanner.Service.Config;
 
 namespace RoosterPlanner.Api.Models.Constants
 {

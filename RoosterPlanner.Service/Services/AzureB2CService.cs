@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
-using RoosterPlanner.Common.Config;
+using RoosterPlanner.Service.Config;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
