@@ -4,13 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using RoosterPlanner.Service.Config;
-using RoosterPlanner.Data.Common;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 
@@ -40,8 +38,7 @@ namespace RoosterPlanner.Service
         #endregion
 
         //Constructor
-        public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
-            ILogger<AzureB2CService> logger)
+        public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig)
         {
             this.azureB2CConfig = azureB2CConfig.Value;
         }

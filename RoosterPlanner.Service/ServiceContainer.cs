@@ -23,7 +23,15 @@ namespace RoosterPlanner.Service
             services.BuildServiceProvider().GetService<RoosterPlannerContext>()?.Database.Migrate();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            
+
+            services.Configure<EmailConfig>(options =>
+                configuration.GetSection(EmailConfig.ConfigSectionName).Bind(options));
+
+            services.Configure<AzureBlobConfig>(options=>
+                configuration.GetSection(AzureBlobConfig.ConfigSectionName).Bind(options));
+
+            services.Configure<AzureAuthenticationConfig>(options=>
+                configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName).Bind(options));
 
             EmailConfig config = new EmailConfig();
             configuration.Bind(EmailConfig.ConfigSectionName,config);
@@ -33,7 +41,7 @@ namespace RoosterPlanner.Service
                 Credentials = new NetworkCredential(config.Emailadres, config.Password),
                 EnableSsl = config.EnableSsl
             };
-            services.AddScoped<IEmailService>(s => new SMTPEmailService(smtpClient,config.Emailadres));
+            services.AddScoped<IEmailService>(_ => new SMTPEmailService(smtpClient,config.Emailadres));
         }
     }
 }

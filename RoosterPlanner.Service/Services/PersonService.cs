@@ -11,6 +11,7 @@ using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Person = RoosterPlanner.Models.Person;
+using Task = System.Threading.Tasks.Task;
 
 namespace RoosterPlanner.Service
 {
@@ -51,7 +52,7 @@ namespace RoosterPlanner.Service
             this.logger = logger;
         }
 
-        private async Task<TaskResult<Person>> AddPersonToLocalDbAsync(User user)
+        private async Task AddPersonToLocalDbAsync(User user)
         {
             if (user?.Id == null)
                 throw new ArgumentNullException(nameof(user));
@@ -91,8 +92,6 @@ namespace RoosterPlanner.Service
                 logger.LogError(ex, result.Message, user);
                 result.Error = ex;
             }
-
-            return result;
         }
 
         public async Task<TaskResult<User>> GetUserAsync(Guid id)

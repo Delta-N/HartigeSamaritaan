@@ -129,12 +129,10 @@ namespace RoosterPlanner.Api.Controllers
             if (participationViewModel?.Person == null || participationViewModel.Project == null)
                 return BadRequest("No valid participation received");
             TaskResult<Participation> result = null;
-            Participation participation = null;
             try
             {
-                participation =
-                    (await participationService.GetParticipationAsync(participationViewModel.Person.Id,
-                        participationViewModel.Project.Id)).Data;
+                Participation participation = (await participationService.GetParticipationAsync(participationViewModel.Person.Id,
+                    participationViewModel.Project.Id)).Data;
                 if (participation != null)
                 {
                     participation.Active = true;
@@ -209,8 +207,8 @@ namespace RoosterPlanner.Api.Controllers
 
                 result = await participationService.UpdateParticipationAsync(oldParticipation);
 
-                if (result == null || !result.Succeeded)
-                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result?.Message});
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
 
                 result.Data.Person = updatedParticipation.Person;
                 result.Data.Project = updatedParticipation.Project;
@@ -244,7 +242,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 //controleer of gebruiker niet ingeroosterd staat
                 TaskListResult<Availability>
-                    availabilities = await this.availabilityService.GetActiveAvailabilities(id);
+                    availabilities = await availabilityService.GetActiveAvailabilities(id);
                 if (availabilities.Data.Count > 0)
                     return BadRequest("Je kan je niet uitschrijven voor dit project. Je bent nog ingepland.");
 

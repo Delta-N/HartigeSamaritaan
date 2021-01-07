@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RoosterPlanner.Service;
-using RoosterPlanner.Service.Config;
 
 namespace RoosterPlanner.Api
 {
@@ -71,13 +70,10 @@ namespace RoosterPlanner.Api
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
 
-            services.Configure<AzureAuthenticationConfig>(
-                Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
-            services.Configure<AzureBlobConfig>(
-                Configuration.GetSection(AzureBlobConfig.ConfigSectionName));
+           
+            services.AddSingleton(
+                Configuration.GetValue<string>("AzureAuthentication:B2CExtentionApplicationId"));
             
-            
-
             services.AddTransient<IAzureB2CService, AzureB2CService>();
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<IPersonService, PersonService>();

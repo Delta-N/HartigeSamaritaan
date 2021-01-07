@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.Types;
 using RoosterPlanner.Service;
-using RoosterPlanner.Service.Config;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Shift = RoosterPlanner.Models.Shift;
@@ -27,13 +25,14 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ShiftController : ControllerBase
     {
-        private readonly AzureAuthenticationConfig azureB2CConfig;
         private readonly ILogger<ShiftController> logger;
         private readonly IShiftService shiftService;
         private readonly IProjectService projectService;
         private readonly IPersonService personService;
         private readonly ITaskService taskService;
         private readonly IAvailabilityService availabilityService;
+        private readonly string b2CExtentionApplicationId;
+
 
         public ShiftController(
             ILogger<ShiftController> logger,
@@ -41,8 +40,8 @@ namespace RoosterPlanner.Api.Controllers
             IProjectService projectService,
             ITaskService taskService,
             IPersonService personService,
-            IOptions<AzureAuthenticationConfig> azureB2CConfig,
-            IAvailabilityService availabilityService)
+            IAvailabilityService availabilityService,
+            string b2CExtentionApplicationId)
 
         {
             this.logger = logger;
@@ -50,8 +49,9 @@ namespace RoosterPlanner.Api.Controllers
             this.projectService = projectService;
             this.personService = personService;
             this.taskService = taskService;
-            this.azureB2CConfig = azureB2CConfig.Value;
             this.availabilityService = availabilityService;
+            this.b2CExtentionApplicationId = b2CExtentionApplicationId;
+            
         }
 
         [HttpGet("project/{projectId}")]
@@ -214,7 +214,7 @@ namespace RoosterPlanner.Api.Controllers
                     schedules.Add(new ScheduleViewModel
                     {
                         Person = PersonViewModel.CreateVmFromUser(person.Data,
-                            Extensions.GetInstance(azureB2CConfig)),
+                            Extensions.GetInstance(b2CExtentionApplicationId)),
                         NumberOfTimesScheduledThisProject = availabilities.Data.Count(a=>a.Type==AvailibilityType.Scheduled),
                         ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
                         ScheduledThisShift = scheduledThisShift,
@@ -276,7 +276,7 @@ namespace RoosterPlanner.Api.Controllers
                             shifts.Remove(shift);
 
                         // check if projectId and taskId differs from above? getproject/task => add project and task to shift
-                        if (project.Id != shift.ProjectId)
+                        if (project != null && project.Id != shift.ProjectId)
                             project = (await projectService.GetProjectDetailsAsync(shift.ProjectId)).Data;
 
                         if (task != null && shift.TaskId != null && task.Id != shift.TaskId)
