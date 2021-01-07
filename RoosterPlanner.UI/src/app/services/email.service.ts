@@ -19,7 +19,7 @@ export class EmailService {
       return null;
     }
     let result = null
-    await this.apiService.post<HttpResponse<boolean>>(`${HttpRoutes.emailApiUrl}/availability/${projectId}`)
+    await this.apiService.post<HttpResponse<boolean>>(`${HttpRoutes.participationApiUrl}/availability/${projectId}`)
       .toPromise()
       .then(res => {
         result = res
@@ -33,7 +33,7 @@ export class EmailService {
       return null;
     }
     let result = null
-    await this.apiService.post<HttpResponse<boolean>>(`${HttpRoutes.emailApiUrl}/Schedule/${projectId}`)
+    await this.apiService.post<HttpResponse<boolean>>(`${HttpRoutes.participationApiUrl}/Schedule/${projectId}`)
       .toPromise()
       .then(res => {
         console.log(res)

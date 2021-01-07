@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RoosterPlanner.Common.Config;
-using RoosterPlanner.Email;
 using RoosterPlanner.Service;
 
 namespace RoosterPlanner.Api
@@ -76,8 +75,7 @@ namespace RoosterPlanner.Api
                 Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
             services.Configure<AzureBlobConfig>(
                 Configuration.GetSection(AzureBlobConfig.ConfigSectionName));
-            services.Configure<EmailConfig>(
-                Configuration.GetSection(EmailConfig.ConfigSectionName));
+            
             
 
             services.AddTransient<IAzureB2CService, AzureB2CService>();
@@ -90,7 +88,6 @@ namespace RoosterPlanner.Api
             services.AddTransient<IAvailabilityService, AvailabilityService>();
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<ICertificateService, CertificateService>();
-            services.AddTransient<IEmailService, SMTPEmailService>();
 
             services.AddLogging();
 

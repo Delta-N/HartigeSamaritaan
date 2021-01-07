@@ -1,9 +1,11 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
+using RoosterPlanner.Email;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
@@ -20,6 +22,7 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Participation>> GetParticipationsAsync(Guid projectId);
         Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId);
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
+        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender);
     }
 
     public class ParticipationService : IParticipationService
@@ -30,18 +33,20 @@ namespace RoosterPlanner.Service
         private readonly IParticipationRepository participationRepository;
         private readonly IAzureB2CService azureB2CService;
         private readonly IPersonService personService;
+        private readonly IEmailService emailService;
         private readonly ILogger<ParticipationService> logger;
 
         #endregion
 
         //Constructor
         public ParticipationService(IUnitOfWork unitOfWork, ILogger<ParticipationService> logger,
-            IAzureB2CService azureB2CService, IPersonService personService)
+            IAzureB2CService azureB2CService, IPersonService personService, IEmailService emailService)
         {
             this.unitOfWork = unitOfWork;
             participationRepository = unitOfWork.ParticipationRepository;
             this.azureB2CService = azureB2CService;
             this.personService = personService;
+            this.emailService = emailService;
             this.logger = logger;
         }
 
@@ -173,6 +178,7 @@ namespace RoosterPlanner.Service
                 logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
+
             return result;
         }
 
@@ -216,6 +222,13 @@ namespace RoosterPlanner.Service
             }
 
             return result;
+        }
+
+        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender)
+        {
+            if (recipient == null || subject == null || body == null)
+                throw new ArgumentNullException("Email parameters");
+            emailService.SendEmail(recipient, subject, body, isBodyHtml, sender);
         }
     }
 }

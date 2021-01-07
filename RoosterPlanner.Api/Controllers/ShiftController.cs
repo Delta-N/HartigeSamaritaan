@@ -186,26 +186,26 @@ namespace RoosterPlanner.Api.Controllers
                 ) //filter for people that are registerd to be able to work
                 {
                     //list all availabilities in this project of this person
-                    Task<TaskListResult<Availability>> availabilities =
-                        availabilityService.FindAvailabilitiesAsync(
+                    TaskListResult<Availability> availabilities =
+                        await availabilityService.FindAvailabilitiesAsync(
                             availability.Participation.ProjectId,
                             availability.Participation.PersonId);
 
                     //lookup person information in B2C
-                    Task<TaskResult<User>> person = personService.GetUserAsync(availability.Participation.PersonId);
-                    await System.Threading.Tasks.Task.WhenAll(availabilities, person);
+                    TaskResult<User> person = await personService.GetUserAsync(availability.Participation.PersonId);
+                    
 
                     //see if person is scheduled this day and this shift
-                    if (availabilities.Result?.Data == null || availabilities.Result.Data.Count <= 0) continue;
-                    int numberOfTimeScheduledThisDay = availabilities.Result.Data
+                    if (availabilities.Data == null || availabilities.Data.Count <= 0) continue;
+                    int numberOfTimeScheduledThisDay = availabilities.Data
                         .Where(a => a.Shift.Date == shiftResult.Data.Date)
                         .Count(a => a.Type == AvailibilityType.Scheduled);
 
-                    bool scheduledThisShift = availabilities.Result.Data.FirstOrDefault(a =>
+                    bool scheduledThisShift = availabilities.Data.FirstOrDefault(a =>
                         a.ShiftId == id && a.Type == AvailibilityType.Scheduled) != null;
 
                     //calculate the number of hours person is scheduled this week
-                    double numberOfHoursScheduleThisWeek = availabilities.Result.Data
+                    double numberOfHoursScheduleThisWeek = availabilities.Data
                         .Where(a => a.Type == AvailibilityType.Scheduled && allDaysThisWeek.Contains(a.Shift.Date))
                         .Sum(availability1 =>
                             availability1.Shift.EndTime.Subtract(availability1.Shift.StartTime).TotalHours);
@@ -213,14 +213,14 @@ namespace RoosterPlanner.Api.Controllers
                     //add scheduleViewmodel to list
                     schedules.Add(new ScheduleViewModel
                     {
-                        Person = PersonViewModel.CreateVmFromUser(person.Result.Data,
+                        Person = PersonViewModel.CreateVmFromUser(person.Data,
                             Extensions.GetInstance(azureB2CConfig)),
-                        NumberOfTimesScheduledThisProject = availabilities.Result.Data.Count(a=>a.Type==AvailibilityType.Scheduled),
+                        NumberOfTimesScheduledThisProject = availabilities.Data.Count(a=>a.Type==AvailibilityType.Scheduled),
                         ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
                         ScheduledThisShift = scheduledThisShift,
                         AvailabilityId = availability.Id,
                         Preference = availability.Preference,
-                        Availabilities = (await availabilities).Data
+                        Availabilities = availabilities.Data
                             .Where(a => a.Shift.Date == shiftResult.Data.Date)
                             .Select(AvailabilityViewModel.CreateVm)
                             .ToList(),

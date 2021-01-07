@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Net;
+using System.Net.Mail;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RoosterPlanner.Common.Config;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Context;
+using RoosterPlanner.Email;
 
 namespace RoosterPlanner.Service
 {
@@ -19,6 +23,17 @@ namespace RoosterPlanner.Service
             services.BuildServiceProvider().GetService<RoosterPlannerContext>()?.Database.Migrate();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+
+            EmailConfig config = new EmailConfig();
+            configuration.Bind(EmailConfig.ConfigSectionName,config);
+            SmtpClient smtpClient = new SmtpClient(config.SMTPadres)
+            {
+                Port = config.Port,
+                Credentials = new NetworkCredential(config.Emailadres, config.Password),
+                EnableSsl = config.EnableSsl
+            };
+            services.AddScoped<IEmailService>(s => new SMTPEmailService(smtpClient,config.Emailadres));
         }
     }
 }

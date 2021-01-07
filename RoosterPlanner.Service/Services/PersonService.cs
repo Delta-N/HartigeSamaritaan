@@ -63,7 +63,11 @@ namespace RoosterPlanner.Service
                 if (person == null)
                 {
                     person = new Person(Guid.Parse(user.Id))
-                        {FirstName = user.GivenName, Oid = Guid.Parse(user.Id), LastName = user.Surname};
+                    {
+                        FirstName = user.GivenName, 
+                        Oid = Guid.Parse(user.Id), 
+                        LastName = user.Surname
+                    };
                     
                     result.Data=personRepository.Add(person);
                     result.Succeeded = await unitOfWork.SaveChangesAsync()==1;
