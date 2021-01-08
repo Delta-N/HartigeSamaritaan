@@ -11,8 +11,8 @@
                   <a [routerLink]="['plan', item.id]"><p>Inroosteren</p></a>
                   <a [routerLink]="['shifts', item.id]"><p>Shiften</p></a>
                   <a [routerLink]="['schedule', item.id]"><p>Rooster</p></a>
-                  <a (click)="requestAvailability(item.id)"><p>Verzoek opgave beschikbaarheid</p></a>
-                  <a (click)="sendSchedule(item.id)"><p>Verstuur rooster</p></a>
+                  <a id="request" (click)="requestAvailability(item.id)"><p>Verzoek opgave beschikbaarheid</p></a>
+                  <a id="schedule" (click)="sendSchedule(item.id)"><p>Verstuur rooster</p></a>
                   <a [routerLink]="['employee', item.id]"><p>Medewerkers</p></a>
                </mat-card-content>
                <mat-card-actions class="action-anchor">

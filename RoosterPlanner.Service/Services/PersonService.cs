@@ -192,10 +192,7 @@ namespace RoosterPlanner.Service
                 TaskResult<User> person = await azureB2CService.UpdateUserAsync(user);
                 result.Succeeded = person.Succeeded;
                 if (!result.Succeeded)
-                {
-                    result.Succeeded = false;
                     result.Message = person.Message;
-                }
                 else
                 {
                     result.StatusCode = HttpStatusCode.OK;
@@ -330,6 +327,8 @@ namespace RoosterPlanner.Service
             TaskResult<Manager> result = new TaskResult<Manager>();
             try
             {
+                manager.Person = null;
+                manager.Project = null;
                 result.Data = managerRepository.Add(manager);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }

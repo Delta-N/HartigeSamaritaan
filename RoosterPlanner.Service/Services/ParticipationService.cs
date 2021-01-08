@@ -71,8 +71,8 @@ namespace RoosterPlanner.Service
                 if (project == null)
                     throw new RecordNotFoundException("Project: " + participation.ProjectId);
 
-                participation.Person = person;
-                participation.Project = project; //todo test if add participation still works
+                participation.Person = null;
+                participation.Project = null; 
 
                 result.Data = participationRepository.Add(participation);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;

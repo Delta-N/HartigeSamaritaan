@@ -26,6 +26,7 @@ namespace RoosterPlanner.Data.Repositories
         public async Task<Person> GetPersonByOidAsync(Guid oid)
         {
             Person person = await EntitySet
+                .AsNoTracking()
                 .Include(p => p.ProfilePicture)
                 .Include(p => p.Certificates)
                 .ThenInclude(c => c.CertificateType)

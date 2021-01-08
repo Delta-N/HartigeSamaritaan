@@ -34,6 +34,7 @@ export class ManageComponent implements OnInit {
 
   async requestAvailability(id: string) {
     if (id) {
+      this.toastr.warning("Berichten aan het versturen...")
       await this.emailService.requestAvailability(id).then(res=>{
         if(res){
           this.toastr.success("Berichten verzonden")
@@ -44,6 +45,7 @@ export class ManageComponent implements OnInit {
 
   async sendSchedule(id: string) {
     if (id) {
+      this.toastr.warning("Berichten aan het versturen...")
       await this.emailService.sendSchedule(id).then(res => {
         if (res) {
           this.toastr.success("Rooster verzonden")

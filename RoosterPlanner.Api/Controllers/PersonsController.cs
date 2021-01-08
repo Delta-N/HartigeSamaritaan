@@ -230,6 +230,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 person.PushDisabled = personViewModel.PushDisabled;
                 person.PersonalRemark = personViewModel.PersonalRemark;
+                
 
                 if (userIsBoardmember || userIsCommitteemember) //staff
                     person.StaffRemark = personViewModel.StaffRemark;

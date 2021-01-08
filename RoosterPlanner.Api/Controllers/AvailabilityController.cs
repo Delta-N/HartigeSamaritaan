@@ -186,7 +186,7 @@ namespace RoosterPlanner.Api.Controllers
                     List<AvailabilityStatus> dateStatus = new List<AvailabilityStatus>();
                     foreach (Shift shift in grouping)
                     {
-                        int numberOfAvailabilities = shift.Availabilities.Count;
+                        int numberOfAvailabilities = shift.Availabilities.Where(a=>a.Type==AvailibilityType.Ok).Count();
                         int numberOfSchedule = shift.Availabilities.Count(a => a.Type == AvailibilityType.Scheduled);
                         if (numberOfSchedule >= shift.ParticipantsRequired)
                             dateStatus.Add(AvailabilityStatus.Scheduled);
