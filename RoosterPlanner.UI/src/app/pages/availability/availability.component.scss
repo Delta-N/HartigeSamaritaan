@@ -7,10 +7,19 @@
   width: 40px;
   height: 40px;
   color: white;
+  margin-right: 5px;
 }
 .legend{
-  display: flex;
-  justify-content: space-evenly;
+  display: block;
+  background: snow;
+  border: 1px solid #707070;
+  h5 {
+    text-align: center;
+  }
+}
+.legend-item{
+  margin:5px;
+  line-height: 35px;
 }
 
 #spacer {
@@ -224,6 +233,10 @@
   .date {
     font-size: 20px;
   }
+  .legend-item{
+    font-size: 14px;
+    display: flex !important;
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -275,6 +288,13 @@
   }
   .legend{
     display: flex;
+    justify-content: flex-start;
+    h5{
+      width: 100%;
+    }
+  }
+  .legend-item{
+    min-width: 225px;
   }
 
 }
@@ -283,13 +303,20 @@
   .cal-event-title {
     font-size: 18px;
   }
+  .legend-item{
+    font-size: 12px;
+    min-width: 195px;
+  }
 }
 
 @media only screen and (max-width: 475px) {
   .row {
     display: block;
   }
-
+  .legend-button {
+    width: 25px;
+    height: 25px;
+  }
 
   .buttonholder {
     display: none;

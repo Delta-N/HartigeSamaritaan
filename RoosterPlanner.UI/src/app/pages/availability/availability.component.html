@@ -17,16 +17,31 @@
         </div>
       </div>
       <div class="row legend">
-        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je kan nog wat beschikbaarheden opgeven."
-             style="background: red">1
-        </div>
-        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je hebt alle beschikbaarheden ingevuld."
-             style="background: green">2
-        </div>
-        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je bent ingeroosterd."
-             style="background: blue">3
+        <h5>Legenda</h5>
+        <div class="row legend-item">
+
+          <div class="mat-calendar-body-cell-content legend-button" style="background: gray">
+          </div>
+          Geef je beschikbaarheid door
         </div>
 
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: red">
+          </div>
+          Onbeschikbaar voor shift(s)
+        </div>
+
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: green">
+          </div>
+          Beschikbaar voor shift(s)
+        </div>
+
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: blue">
+          </div>
+          Ingeroosterd voor shift(s)
+        </div>
       </div>
     </div>
   </div>
@@ -34,7 +49,9 @@
 
   <div class="col-8">
     <div class="row datebox">
-      <button mat-button class="accept btnhidden schedule-button" matTooltip="Je bent de hele dag beschikbaar" (click)="acceptDay()">Beschikbaar</button>
+      <button mat-button class="accept btnhidden schedule-button" matTooltip="Je bent de hele dag beschikbaar"
+              (click)="acceptDay()">Beschikbaar
+      </button>
       <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
         <mat-icon>navigate_before</mat-icon>
       </button>
@@ -42,7 +59,9 @@
       <button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
         <mat-icon>navigate_next</mat-icon>
       </button>
-      <button mat-button class="refuse btnhidden schedule-button" matTooltip="Je bent de hele dag onbeschikbaar" (click)="refuseDay()">Onbeschikbaar</button>
+      <button mat-button class="refuse btnhidden schedule-button" matTooltip="Je bent de hele dag onbeschikbaar"
+              (click)="refuseDay()">Onbeschikbaar
+      </button>
     </div>
     <div class="row rowhidden">
       <button mat-button class="accept schedule-button" (click)="acceptDay()">Beschikbaar</button>
