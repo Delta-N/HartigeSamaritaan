@@ -36,7 +36,6 @@ export class EmailService {
     await this.apiService.post<HttpResponse<boolean>>(`${HttpRoutes.participationApiUrl}/Schedule/${projectId}`)
       .toPromise()
       .then(res => {
-        console.log(res)
         result = res
       })
     return result

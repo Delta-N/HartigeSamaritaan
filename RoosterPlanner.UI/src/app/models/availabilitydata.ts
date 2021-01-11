@@ -10,6 +10,7 @@ export class ScheduleStatus{
   public date:string;
   public status: number;
   // 0= incomplete
-  // 1= complete (all days filled in by user)
+  // 1= At least one day availabilbe
   // 2 = scheduled
+  // 3 = unavailable
 }

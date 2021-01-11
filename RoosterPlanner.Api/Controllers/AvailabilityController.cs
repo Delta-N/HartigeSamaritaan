@@ -123,6 +123,7 @@ namespace RoosterPlanner.Api.Controllers
                     int numberOfShifts = grouping.Count();
                     int numberOfAvailabilities = 0;
                     bool scheduled = false;
+                    bool anyAvailable = false;
                     foreach (Shift shift in grouping)
                     {
                         if (shift.Availabilities.Count <= 0) continue;
@@ -131,13 +132,17 @@ namespace RoosterPlanner.Api.Controllers
                         {
                             if (a.Type == AvailibilityType.Scheduled)
                                 scheduled = true;
+                            else if (a.Type == AvailibilityType.Ok)
+                                anyAvailable = true;
                         });
                     }
 
                     if (scheduled)
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Scheduled));
-                    else if (numberOfShifts == numberOfAvailabilities)
+                    else if (numberOfShifts == numberOfAvailabilities && anyAvailable)
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Complete));
+                    else if (numberOfShifts == numberOfAvailabilities && !anyAvailable)
+                        knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Unavailable));
                     else
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Incomplete));
                 }

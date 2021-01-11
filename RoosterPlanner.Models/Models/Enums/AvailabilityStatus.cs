@@ -4,6 +4,7 @@
     {
         Incomplete,
         Complete,
-        Scheduled
+        Scheduled,
+        Unavailable
     }
 }

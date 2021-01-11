@@ -102,13 +102,14 @@ export class PlanComponent implements OnInit, AfterViewInit {
       await this.projectService.getProject(projectId).then(res => {
         if (res) {
           this.project = res;
-          this.minDate = this.project.participationStartDate >= new Date() ? this.project.participationStartDate : moment().startOf("day").toDate();
+          this.minDate = moment(this.project.participationStartDate).toDate() >= new Date() ? moment(this.project.participationStartDate).toDate() : moment().startOf("day").toDate();
           this.maxDate = this.project.participationEndDate;
           this.calendar.minDate = moment(this.minDate);
           this.calendar.maxDate = moment(this.maxDate);
+          this.viewDate = this.minDate
           this.calendar.activeDate = moment(this.viewDate);
           this.calendar.updateTodaysDate()
-
+          this.dateOrViewChanged()
         }
       })
 
@@ -141,6 +142,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
   changeDate(date: Date): void {
     this.viewDate = date;
+    this.calendar.selected = moment(this.viewDate)
+    this.calendar.activeDate = moment(this.viewDate);
     this.dateOrViewChanged();
   }
 

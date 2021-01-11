@@ -103,12 +103,16 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
           if (res) {
             this.participation = res
 
-            this.minDate = this.participation.project.participationStartDate >= new Date() ? this.participation.project.participationStartDate : moment().startOf("day").toDate();
+            this.minDate = moment(this.participation.project.participationStartDate).toDate() >= new Date() ? moment(this.participation.project.participationStartDate).toDate() : moment().startOf("day").toDate();
             this.maxDate = this.participation.project.participationEndDate;
+
+            this.viewDate=this.minDate
+            this.calendar.activeDate = moment(this.viewDate);
 
             this.calendar.minDate = moment(this.minDate);
             this.calendar.maxDate = moment(this.maxDate);
             this.calendar.updateTodaysDate()
+            this.dateOrViewChanged()
             setTimeout(() => {
               this.changeLoadedShiftBordersAndStar()
             }, 750) // dit is best nog wel tricky
@@ -146,12 +150,13 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
   async changeDate(date: Date): Promise<void> {
     this.viewDate = date;
+    this.calendar.selected = moment(this.viewDate)
     this.calendar.activeDate = moment(this.viewDate);
     setTimeout(async () => {
       this.colorInMonth()
       await this.dateOrViewChanged();
-    }, 100)
 
+    }, 100)
 
 
   }
@@ -169,12 +174,13 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.changeDate(moment(this.viewDate).subtract(1, "day").toDate());
     this.highlight()
   }
-  highlight():void{
+
+  highlight(): void {
     let dateElement = document.getElementById("date")
     dateElement.classList.add('highlight')
-    setTimeout(()=>{
+    setTimeout(() => {
       dateElement.classList.remove('highlight')
-    },500)
+    }, 500)
   }
 
   async dateOrViewChanged(): Promise<void> {
@@ -189,8 +195,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         this.changeLoadedShiftBordersAndStar()
       }, 300);
     });
-
-    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate);
+    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate).startOf("day");
     this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate)
   }
 
@@ -206,16 +211,20 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       shift.availabilities = [];
 
     //yes? mod
-    if (availability && availability.type!==3) {
+    if (availability && availability.type !== 3) {
       if (action !== "Preference")
         availability.type = this.getAvailabilityTypeNumber(action)
       else if (action === "Preference")
         availability.preference = !availability.preference
 
-      await this.availabilityService.updateAvailability(availability)
+      await this.availabilityService.updateAvailability(availability).then(res=>{
+        availability=res;
+        shift.availabilities[0]=res
+      })
+      this.changeColor()
     }
     //no? create
-    else if(!availability){
+    else if (!availability) {
       availability = new Availability();
       availability.participation = this.participation;
       availability.participationId = this.participation.id;
@@ -236,27 +245,38 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
           shift.availabilities.push(res)
 
           //color in calender
-          let counter: number = 0;
-          let color: string = "Red"
-          this.shifts.forEach(s => {
-            if (s.availabilities && s.availabilities.length > 0 && s.availabilities[0].type == 3)
-              color = "Blue"
-            else if (s.availabilities && s.availabilities.length > 0)
-              counter++;
-          });
-          if (counter === this.shifts.length) {
-            color = "Green";
-            let daySchedule = new ScheduleStatus();
-            daySchedule.date = this.viewDate.toISOString()
-            daySchedule.status = 1;
-            this.availabilityData.knownAvailabilities.push(daySchedule)
-          }
-
-          this.colorInDay(this.viewDate, color)
+          this.changeColor()
         }
       })
     }
     this.changeBorders(event, action)
+  }
+
+  changeColor(){
+    //color in calender
+    let counter: number = 0;
+    let color: string = "Gray"
+    this.shifts.forEach(s => {
+      if (s.availabilities && s.availabilities.length > 0 && s.availabilities[0].type === 3)
+        color = "Blue"
+      else if (s.availabilities && s.availabilities.length > 0)
+        counter++;
+    });
+    if (counter === this.shifts.length) {
+      let available: boolean = false;
+      this.shifts.forEach(s => {
+        if (s && s.availabilities && s.availabilities.length > 0 && s.availabilities[0].type === 2)
+          available = true;
+      })
+      color = available ? "Green" : "Red";
+      let daySchedule = this.availabilityData.knownAvailabilities.find(ka=>ka.date===this.viewDate.toISOString())
+      if(!daySchedule)
+        daySchedule=new ScheduleStatus()
+      daySchedule.date = this.viewDate.toISOString()
+      daySchedule.status = available?1:3;
+      this.availabilityData.knownAvailabilities.push(daySchedule)
+    }
+    this.colorInDay(this.viewDate, color)
   }
 
   openInstructions(id: string | number) {
@@ -324,18 +344,20 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   colorInMonth() {
     for (const ka of this.availabilityData.knownAvailabilities) {
       let date: Date = moment(ka.date).toDate();
-      let color: string = "Red"
+      let color: string = "Gray"
       if (ka.status === 1)
         color = "Green"
       else if (ka.status === 2)
         color = "Blue"
+      else if (ka.status === 3)
+        color = "Red"
 
       this.colorInDay(date, color)
     }
   }
 
   colorInDay(date: Date, color: string) {
-   let element=this.getDayElement(date)
+    let element = this.getDayElement(date)
 
     if (element) {
       let child: any = element.children[0]
@@ -343,7 +365,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       child.style.color = 'white';
     }
   }
-  getDayElement(date:Date):HTMLElement{
+
+  getDayElement(date: Date): HTMLElement {
     let label = moment(date).local().format("D MMMM YYYY").toLowerCase()
     let element: HTMLElement = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
     return element
