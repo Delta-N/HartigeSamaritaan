@@ -104,21 +104,22 @@ export class ProfileComponent implements OnInit {
   }
 
   expandCertificateCard() {
-    let element = document.getElementById("icon")
-    if (element) {
-      if (this.certificateStyle === 'expanded-card')
-        element.innerText = "zoom_out_map"
-      else
-        element.innerText = "fullscreen_exit"
-    }
 
     let leftElement = document.getElementById("left")
+    let rightElement = document.getElementById("right")
+    let expendedCardElement = document.getElementById("expanded-card")
     let remarkElement = document.getElementById("remark")
+
     if (this.certificateStyle === 'expanded-card') {
       if (leftElement)
         leftElement.hidden = false;
+      if (rightElement)
+        rightElement.hidden = false;
       if (remarkElement)
         remarkElement.hidden = false;
+      if(expendedCardElement)
+        expendedCardElement.hidden=true;
+
 
       this.certificateStyle = 'card';
       this.itemsPerCard = 5;
@@ -126,8 +127,13 @@ export class ProfileComponent implements OnInit {
     } else if (this.certificateStyle === 'card') {
       if (leftElement)
         leftElement.hidden = true;
+      if (rightElement)
+        rightElement.hidden = true;
       if (remarkElement)
         remarkElement.hidden = true;
+      if (expendedCardElement)
+        expendedCardElement.hidden = false;
+
       this.certificateStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
       this.certificates = this.user.certificates;

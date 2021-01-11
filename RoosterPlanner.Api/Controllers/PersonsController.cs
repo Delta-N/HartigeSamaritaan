@@ -154,19 +154,18 @@ namespace RoosterPlanner.Api.Controllers
             {
                 TaskListResult<Participation> participationResult =
                     await participationService.GetParticipationsAsync(projectId);
-                if(!participationResult.Succeeded)
+                if (!participationResult.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = participationResult.Message});
 
                 List<PersonViewModel> persons = new List<PersonViewModel>();
                 foreach (Participation participation in participationResult.Data)
                 {
                     TaskResult<User> userResult = await personService.GetUserAsync(participation.PersonId);
-                    if(userResult!=null)
+                    if (userResult != null)
                         persons.Add(PersonViewModel.CreateVmFromUser(userResult.Data, Extensions.GetInstance(b2CExtentionApplicationId)));
                 }
 
                 return Ok(persons);
-
             }
             catch (Exception ex)
             {
@@ -175,7 +174,6 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-
 
         [HttpPut]
         public async Task<ActionResult<PersonViewModel>> UpdateUserAsync([FromBody] PersonViewModel personViewModel)
@@ -230,7 +228,8 @@ namespace RoosterPlanner.Api.Controllers
 
                 person.PushDisabled = personViewModel.PushDisabled;
                 person.PersonalRemark = personViewModel.PersonalRemark;
-                
+                foreach (Certificate certificate in person.Certificates)
+                    certificate.CertificateType = null;
 
                 if (userIsBoardmember || userIsCommitteemember) //staff
                     person.StaffRemark = personViewModel.StaffRemark;

@@ -51,8 +51,34 @@
         <div class="user-data">{{user.dutchProficiency}}</div>
       </div>
     </div>
-    <div class="col-md-6" id="right">
+    <div hidden id="expanded-card">
+    <mat-card [ngClass]="[certificateStyle]" >
+      <div>
+        <mat-card-title>
+          Certificaten
+          <button [disabled]="CertificateExpandbtnDisabled" class="card-title-icon" mat-icon-button
+                  (click)="expandCertificateCard()">
+            <mat-icon >fullscreen_exit</mat-icon>
+          </button>
+        </mat-card-title>
+      </div>
+      <mat-card-content>
+                  <span *ngFor="let item of certificates">
+                     <a [routerLink]="['/certificate', item.id]">
+                        <p>{{item.certificateType ? item.certificateType.name : "Onbekend"}}</p>
+                     </a>
+                  </span>
+        <span *ngIf="!user.certificates || user.certificates.length==0">N.B.</span>
+        <mat-card-actions class="action-anchor"></mat-card-actions>
+      </mat-card-content>
+      <mat-card-actions class="action-anchor" *ngIf="isAdmin">
+        <button mat-button (click)="modCertificate('toevoegen')">Nieuwe toevoegen</button>
+      </mat-card-actions>
+    </mat-card>
+    </div>
 
+    <div class="right col-md-6" id="right">
+    <div id="card">
       <mat-card [ngClass]="[certificateStyle]" id="CertificateCard">
         <div>
           <mat-card-title>
@@ -77,7 +103,15 @@
         </mat-card-actions>
       </mat-card>
     </div>
+    <div *ngIf="user.profilePicture?.documentUri" id="pictureFrame">
+
+      <img *ngIf="user.profilePicture && user.profilePicture.documentUri"
+           src="{{user.profilePicture.documentUri}}"
+           alt="Profile picture"/>
+    </div>
+    </div>
   </div>
+
   <div class="row" id="remark">
     <div class="col-6">
 

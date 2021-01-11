@@ -81,7 +81,7 @@
                   <button mat-button (click)="modTask('remove')">Verwijderen</button>
                </mat-card-actions>
             </mat-card>
-            <img *ngIf="project.pictureUri" id="pictureFrame" src="{{project.pictureUri.documentUri}}"
+            <img *ngIf="project.pictureUri && project.pictureUri.documentUri" id="pictureFrame" src="{{project.pictureUri.documentUri}}"
                  alt="Project picture"/>
          </div>
       </div>
