@@ -23,7 +23,7 @@ export class ScheduleComponent implements OnInit {
   dataSource: MatTableDataSource<Availability> = new MatTableDataSource<Availability>();
   paginator: MatPaginator;
   sort: MatSort;
-  loaded: boolean=false;
+
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -81,7 +81,7 @@ export class ScheduleComponent implements OnInit {
             current.label = 'Mijn shifts';
             let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous,current];
             this.breadcrumbService.replace(array);
-            this.loaded=true;
+
           }
         })
     })
