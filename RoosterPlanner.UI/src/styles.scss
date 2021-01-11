@@ -115,6 +115,15 @@ h2 {
   border: 1px solid gray !important;
 }
 
+.mat-calendar-body-selected{
+  background: none;
+  color: initial;
+  border:1px solid black;
+}
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical){
+  border: initial;
+}
+
 .mat-card {
   margin-right: 30px;
   border-radius: 20px !important;
