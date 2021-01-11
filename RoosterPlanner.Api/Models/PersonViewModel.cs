@@ -16,7 +16,6 @@ namespace RoosterPlanner.Api.Models
         public string StreetAddress { get; set; }
         public string PostalCode { get; set; }
         public string City { get; set; }
-        public string Country { get; set; }
         public string DateOfBirth { get; set; }
         public string PhoneNumber { get; set; }
         public string UserRole { get; set; }
@@ -45,7 +44,6 @@ namespace RoosterPlanner.Api.Models
                 StreetAddress = user.StreetAddress,
                 PostalCode = user.PostalCode,
                 City = user.City,
-                Country = user.Country
             };
             if (user.Identities != null && personViewModel.Email == null)
                 foreach (ObjectIdentity objectIdentity in user.Identities)
@@ -109,7 +107,6 @@ namespace RoosterPlanner.Api.Models
                 StreetAddress = vm.StreetAddress,
                 PostalCode = vm.PostalCode,
                 City = vm.City,
-                Country = vm.Country,
                 AdditionalData = new Dictionary<string, object>
                 {
                     {extension.DateOfBirthExtension, vm.DateOfBirth},
@@ -137,7 +134,6 @@ namespace RoosterPlanner.Api.Models
                 StreetAddress = vm.StreetAddress,
                 PostalCode = vm.PostalCode,
                 City = vm.City,
-                Country = vm.Country,
                 DateOfBirth = vm.DateOfBirth,
                 UserRole = vm.UserRole,
                 PhoneNumber = vm.PhoneNumber,
@@ -169,7 +165,6 @@ namespace RoosterPlanner.Api.Models
                 StreetAddress = person.StreetAddress,
                 PostalCode = person.PostalCode,
                 City = person.City,
-                Country = person.Country,
                 DateOfBirth = person.DateOfBirth,
                 UserRole = person.UserRole,
                 Nationality = person.Nationality,

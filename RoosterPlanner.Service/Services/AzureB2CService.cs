@@ -33,7 +33,7 @@ namespace RoosterPlanner.Service
         private DateTime graphServiceClientTimestamp;
 
         private const string GraphSelectList =
-            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
+            "id,identities,displayName,givenName,surname,mail,otherMails,mailNickname,mobilePhone,streetAddress,postalCode,city,country,extensions,AdditionalData";
 
         #endregion
 

@@ -88,7 +88,7 @@ export class PlanShiftComponent implements OnInit {
       return DateConverter.calculateAge(data.person.dateOfBirth).toLocaleLowerCase().includes(filter) ||
         (data.person != null && (data.person.firstName + " " + data.person.lastName).toLocaleLowerCase().includes(filter) ||
           (data.person.nationality == null && 'Onbekend'.toLocaleLowerCase().includes(filter)) ||
-          (data.person.nationality != null && data.person.country.toLocaleLowerCase().includes(filter)) ||
+          (data.person.nationality != null && data.person.nationality.toLocaleLowerCase().includes(filter)) ||
           data.numberOfTimesScheduledThisProject.toString().toLocaleLowerCase().includes(filter))
     }
 
@@ -99,7 +99,7 @@ export class PlanShiftComponent implements OnInit {
         case 'Leeftijd':
           return DateConverter.calculateAge(item.person.dateOfBirth);
         case 'Nationaliteit':
-          return item.person != null ? item.person.country : null;
+          return item.person != null ? item.person.nationality : null;
         case '#Ingeroosterd':
           return item.numberOfTimesScheduledThisProject;
         default:

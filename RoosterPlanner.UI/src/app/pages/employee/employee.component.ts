@@ -85,7 +85,7 @@ export class EmployeeComponent implements OnInit {
         case 'Leeftijd':
           return DateConverter.calculateAge(item.dateOfBirth);
         case 'Nationaliteit':
-          return item != null ? item.country : null;
+          return item != null ? item.nationality : null;
         default:
           return item[property];
       }
