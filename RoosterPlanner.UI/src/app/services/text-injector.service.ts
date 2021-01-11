@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class TextInjectorService {
-  public static level:string[]=['Goed','Matig','Slecht']
+  public static level:string[]=['A1','A2','B1','B2','Moedertaal']
   public static countries:string[]=['Afghanistan',
     'Albanië',
     'Algerije',
