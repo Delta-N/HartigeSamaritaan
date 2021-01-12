@@ -74,6 +74,17 @@ img {
 
 #footer {
   height: 27px;
+  align-items: center;
+  justify-content: center;
+  .toolbarbutton{
+    text-align: center;
+  }
+  a{
+    margin-right: 25px;
+    i{
+      color: white;
+    }
+  }
 }
 
 .footerbutton {
