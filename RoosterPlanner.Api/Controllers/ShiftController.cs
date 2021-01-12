@@ -255,6 +255,9 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
+                //filter duplicate dates
+                shiftViewModels=shiftViewModels.GroupBy(s => s.Date.Date).Select(g => g.OrderByDescending(x => x.Date.Date).First()).ToList();
+                
                 List<Shift> shifts = shiftViewModels.Select(ShiftViewModel.CreateShift)
                     .ToList();
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);

@@ -112,7 +112,7 @@ export class AddShiftsComponent implements OnInit {
   }
 
   addAllDays() {
-    let currentDates: Date[] = this.shiftDates;
+    let currentDates: any[] = this.shiftDates;
     let allDates: Date[] = this.getDatesBetweenDates(new Date(this.min), new Date(this.max));
 
     //filter alldates depending on action
@@ -161,15 +161,15 @@ export class AddShiftsComponent implements OnInit {
 
     allDates.forEach(date => {
       let found: boolean = false;
-      let dateMoment: Moment = DateConverter.dateToMoment(date);
+      let dateMoment: Moment = moment([date.getFullYear(),date.getMonth(),date.getDate()])
 
       currentDates.forEach(storedDate => {
-        if (dateMoment.toJSON() == storedDate.toJSON()) {
+        if (dateMoment.toJSON() === storedDate.toJSON()) {
           found = true;
         }
       })
       if (!found) {
-        currentDates.push(date)
+        currentDates.push(dateMoment)
       }
     })
     this.datepicker.writeValue(currentDates)
