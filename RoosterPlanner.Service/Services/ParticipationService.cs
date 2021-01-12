@@ -9,7 +9,9 @@ using RoosterPlanner.Email;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
+using Attachment = System.Net.Mail.Attachment;
 using Person = RoosterPlanner.Models.Person;
+
 
 namespace RoosterPlanner.Service
 {
@@ -22,7 +24,8 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Participation>> GetParticipationsAsync(Guid projectId);
         Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId);
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
-        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender);
+        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
+            System.Net.Mail.Attachment? attachment);
     }
 
     public class ParticipationService : IParticipationService
@@ -224,11 +227,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
-        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender)
+        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
+            Attachment? attachment)
         {
             if (recipient == null || subject == null || body == null)
                 throw new ArgumentNullException("Email parameters");
-            emailService.SendEmail(recipient, subject, body, isBodyHtml, sender);
+            emailService.SendEmail(recipient, subject, body, isBodyHtml, sender,attachment);
         }
     }
 }

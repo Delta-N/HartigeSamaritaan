@@ -6,8 +6,8 @@ namespace RoosterPlanner.Email
 {
     public interface IEmailService
     {
-        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender);
-        void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml, string? sender);
+        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,Attachment? attachment);
+        void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml, string? sender, Attachment? attachment);
     }
 
     public class SMTPEmailService : IEmailService
@@ -21,7 +21,8 @@ namespace RoosterPlanner.Email
             this.smtpClient = smtpClient;
         }
 
-        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender)
+        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
+            Attachment? attachment)
         {
             sender ??= this.sender;
             var mailMessage = new MailMessage
@@ -31,12 +32,15 @@ namespace RoosterPlanner.Email
                 Body = body,
                 IsBodyHtml = isBodyHtml
             };
+            if(attachment!=null)
+                mailMessage.Attachments.Add(attachment);
+
             mailMessage.To.Add(recipient);
             smtpClient.Send(mailMessage);
         }
 
         public void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml,
-            string? sender)
+            string? sender, Attachment? attachment)
         {
             sender ??= this.sender;
             var mailMessage = new MailMessage
@@ -46,6 +50,8 @@ namespace RoosterPlanner.Email
                 Body = body,
                 IsBodyHtml = isBodyHtml
             };
+            if(attachment!=null)
+                mailMessage.Attachments.Add(attachment);
 
             foreach (string recipient in recipients)
                 mailMessage.To.Add(recipient);
