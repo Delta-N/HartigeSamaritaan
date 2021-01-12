@@ -443,6 +443,7 @@ export class TextInjectorService {
     "Zweeds",
     "Zwitsers",
   ];
+  public static colors: string[] = ["Red", "Blue", "Yellow", "Green", "Orange", "Pink"];
 
   constructor() {
   }

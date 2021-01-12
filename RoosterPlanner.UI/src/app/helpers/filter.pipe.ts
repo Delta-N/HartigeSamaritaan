@@ -152,36 +152,70 @@ export class PlanTooltip implements PipeTransform {
 export class AvailabilityPipe implements PipeTransform {
   transform(listOfAvailabilities: Availability[]): string {
     let result: string = "Is vandaag beschikbaar voor: \n";
-    listOfAvailabilities.forEach(a=>{
-      if(a.preference===true && a.type===2)
-        result+="☆ "
-      if(a.type===2)
-        result+=a.shift.task.name + " " + a.shift.startTime +"-"+a.shift.endTime+"\n"
+    listOfAvailabilities.forEach(a => {
+      if (a.preference === true && a.type === 2)
+        result += "☆ "
+      if (a.type === 2)
+        result += a.shift.task.name + " " + a.shift.startTime + "-" + a.shift.endTime + "\n"
 
     })
-    let found:boolean=false
-    let append:string="Is vandaag ingeroosterd op: \n";
+    let found: boolean = false
+    let append: string = "Is vandaag ingeroosterd op: \n";
 
-    listOfAvailabilities.forEach(a=>{
+    listOfAvailabilities.forEach(a => {
 
-      if(a.type===3)
-      {
-        found=true
-        append+=a.shift.task.name + " " + a.shift.startTime +" - "+a.shift.endTime+"\n"
+      if (a.type === 3) {
+        found = true
+        append += a.shift.task.name + " " + a.shift.startTime + " - " + a.shift.endTime + "\n"
       }
 
 
     })
-    if(found){
-      result+="\n";
-      result+=append
+    if (found) {
+      result += "\n";
+      result += append
     }
 
-    if(listOfAvailabilities[0]&& listOfAvailabilities[0].participation&& listOfAvailabilities[0].participation.remark)
-      result+="\n Werkt graag samen met:\n" + listOfAvailabilities[0].participation.remark;
+    if (listOfAvailabilities[0] && listOfAvailabilities[0].participation && listOfAvailabilities[0].participation.remark)
+      result += "\n Werkt graag samen met:\n" + listOfAvailabilities[0].participation.remark;
 
     return result;
 
+  }
+
+}
+
+@Pipe({name: 'colorPipe'})
+export class ColorPipe implements PipeTransform {
+  transform(color: string): string {
+    switch (color) {
+      case "Red":
+        return "Rood";
+      case "Blue":
+        return "Blauw";
+      case "Yellow":
+        return "Geel";
+      case "Green":
+        return "Groen";
+      case "Orange":
+        return "Oranje";
+      case "Pink":
+        return "Roze";
+      case "Rood":
+        return "Red";
+      case "Blauw":
+        return "Blue";
+      case "Geel":
+        return "Yellow";
+      case "Groen":
+        return "Green";
+      case "Oranje":
+        return "Orange";
+      case "Roze":
+        return "Pink";
+      default:
+        return "Gray";
+    }
   }
 }
 
