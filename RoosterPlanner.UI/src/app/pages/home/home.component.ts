@@ -60,7 +60,10 @@ export class HomeComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ChangeProfileComponent, {
       width: '500px',
-      data: this.user
+      data: {
+        user:this.user,
+        title:"Update je profiel voordat je je aanmeldt"
+      }
     });
     dialogRef.disableClose = true;
 

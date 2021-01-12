@@ -70,7 +70,10 @@ export class ProfileComponent implements OnInit {
   edit() {
     const dialogRef = this.dialog.open(ChangeProfileComponent, {
       width: '500px',
-      data: this.user
+      data: {
+        user: this.user,
+        title: "Profiel wijzigen"
+      }
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {

@@ -22,10 +22,12 @@ export class ChangeProfileComponent implements OnInit {
   level:string[]=TextInjectorService.level;
   nationalityControl: FormControl;
   languagueControl: FormControl;
+  title: string = "Profiel wijzigen";
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private userService: UserService, private toastr: ToastrService, public dialogRef: MatDialogRef<ChangeProfileComponent>) {
-    this.user = data;
+    this.user = data.user;
+    this.title=data.title
     this.nationalityControl = new FormControl('', Validators.required);
     this.languagueControl = new FormControl('', Validators.required);
 
