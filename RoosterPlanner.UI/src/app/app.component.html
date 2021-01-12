@@ -40,22 +40,23 @@
         </div>
       </mat-sidenav>
 
-      <mat-sidenav-content>
+      <mat-sidenav-content class="sidenav-content">
+        <main class="content">
         <div class="container">
           <div class="row">
             <app-breadcrumb></app-breadcrumb>
           </div>
           <router-outlet></router-outlet>
-        </div>
 
+        </div>
+        </main>
+        <mat-toolbar color="primary" id="footer">
+          <a mat-button class="toolbarbutton footerbutton" routerLink="/privacy" routerLinkActive="active">Privacy
+            policy</a>
+        </mat-toolbar>
       </mat-sidenav-content>
 
     </mat-sidenav-container>
   </div>
-
-
 </div>
-<mat-toolbar color="primary" id="footer">
-  <a mat-button class="toolbarbutton footerbutton" routerLink="/privacy" routerLinkActive="active">Privacy policy</a>
-</mat-toolbar>
 

@@ -13,6 +13,29 @@
   bottom: 1px;
   left: 0;
   right: 0;
+  min-height: calc(100vh - 75px);
+}
+
+.sidenav-content {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 75px);
+}
+
+.content {
+  flex: 1;
+}
+
+main {
+
+  display: flex;
+  flex-direction: column;
+
+  > *:not(router-outlet) {
+
+    flex: 1;
+    display: block;
+  }
 }
 
 img {
@@ -45,10 +68,11 @@ img {
   min-width: 100px
 }
 
+.container {
+  height: calc(100% - 27px);
+}
+
 #footer {
-  position: absolute;
-  z-index: 1000;
-  bottom: 0;
   height: 27px;
 }
 
