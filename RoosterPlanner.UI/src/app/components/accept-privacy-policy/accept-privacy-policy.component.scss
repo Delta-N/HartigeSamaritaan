@@ -1,16 +1,22 @@
+.mat-dialog-container{
+  overflow: hidden;
+}
 .action-row {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-left: 75%;
+  button{
+    max-width: 100px;
+  }
 }
 
 .policy {
-  max-height: 80vh;
-  overflow: auto;
+  max-height: 75vh;
+  overflow: hidden;
 }
 
-.left {
-  margin-right: auto;
-}
+
 
 @media only screen and (max-width: 550px) {
   .policy {
@@ -18,9 +24,5 @@
   }
   h2{
     font-size: 20px;
-  }
-  .action-row{
-    display: block;
-    font-size: 10px;
   }
 }
