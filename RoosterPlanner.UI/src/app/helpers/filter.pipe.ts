@@ -7,6 +7,7 @@ import {Shift} from "../models/shift";
 import {Schedule} from "../models/schedule";
 import {CalendarEvent} from "angular-calendar";
 import {Availability} from "../models/availability";
+import {Project} from "../models/project";
 
 @Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
@@ -216,6 +217,14 @@ export class ColorPipe implements PipeTransform {
       default:
         return "Gray";
     }
+  }
+}
+
+@Pipe({name: 'projectClosed'})
+export class ProjectClosedPipe implements PipeTransform {
+  transform(project: Project): boolean {
+    return project.closed || new Date(project.projectEndDate) < new Date();
+
   }
 }
 

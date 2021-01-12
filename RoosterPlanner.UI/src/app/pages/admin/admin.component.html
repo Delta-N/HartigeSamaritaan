@@ -30,7 +30,8 @@
         </div>
         <mat-card-content [style.height.px]="projectsElementHeight">
           <span *ngFor="let item of projects" class="mobilecard">
-            <a [routerLink]="['/project', item.id]"><p>{{item.name}}</p></a>
+            <a [routerLink]="['/project', item.id]"><p [ngStyle]="{'text-decoration':(item|projectClosed)?'line-through':'initial'}">{{item.name}}
+             </p> <mat-icon style="color: red" *ngIf="item|projectClosed">close</mat-icon></a>
           </span>
         </mat-card-content>
         <mat-card-actions class="action-anchor">
