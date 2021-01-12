@@ -29,6 +29,7 @@ import {
   MomentDateAdapter
 } from "@angular/material-moment-adapter";
 import {ShiftComponent} from "../../pages/shift/shift.component";
+import {EmailDialogComponent} from "../../components/email-dialog/email-dialog.component";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -52,6 +53,7 @@ export function momentAdapterFactory() {
     PlanTooltip,
     AvailabilityPipe,
     TaskFilterPipe,
+    EmailDialogComponent,
 
     ScheduledPipe,
     AgePipe,

@@ -131,7 +131,8 @@ namespace RoosterPlanner.Api.Controllers
             TaskResult<Participation> result = null;
             try
             {
-                Participation participation = (await participationService.GetParticipationAsync(participationViewModel.Person.Id,
+                Participation participation = (await participationService.GetParticipationAsync(
+                    participationViewModel.Person.Id,
                     participationViewModel.Project.Id)).Data;
                 if (participation != null)
                 {
@@ -323,7 +324,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(RequestAvailability);
+                string message = GetType().Name + "Error in " + nameof(SendEmailAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
@@ -331,10 +332,12 @@ namespace RoosterPlanner.Api.Controllers
 
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost("availability/{projectId}")]
-        public async Task<ActionResult<bool>> RequestAvailability(Guid projectId)
+        public async Task<ActionResult<bool>> SendEmailAsync(Guid projectId, MessageViewModel emailMessage)
         {
             if (projectId == Guid.Empty)
                 return BadRequest("No valid id.");
+            if (emailMessage?.Body == null || emailMessage.Subject == null)
+                return BadRequest("No valid message.");
 
             try
             {
@@ -353,15 +356,11 @@ namespace RoosterPlanner.Api.Controllers
 
                     string email = user.Data.Identities.FirstOrDefault()?.IssuerAssignedId;
                     if (email == null) continue;
-
-                    string body = "Beste " + user.Data.DisplayName + ",<br><br>";
-                    body += "Je kunt jezelf opgeven voor nieuwe diensten voor het project: <b>" +
-                            participation.Project?.Name + "</b><br><br>";
-                    body += "Groeten, <br><br> Het Hartige Samaritaan Team";
+                    emailMessage.Body = emailMessage.Body.Replace("\n", "<br>");
 
                     participationService.SendEmail(email,
-                        "Je kunt je opgeven voor diensten",
-                        body,
+                        emailMessage.Subject,
+                        emailMessage.Body,
                         true, null);
                 }
 
@@ -369,7 +368,7 @@ namespace RoosterPlanner.Api.Controllers
             }
             catch (Exception ex)
             {
-                string message = GetType().Name + "Error in " + nameof(RequestAvailability);
+                string message = GetType().Name + "Error in " + nameof(SendEmailAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }

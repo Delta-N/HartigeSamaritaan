@@ -3,6 +3,8 @@ import {Project} from "../../models/project";
 import {UserService} from "../../services/user.service";
 import {ToastrService} from "ngx-toastr";
 import {EmailService} from "../../services/email.service";
+import {MatDialog} from "@angular/material/dialog";
+import {EmailDialogComponent} from "../../components/email-dialog/email-dialog.component";
 
 @Component({
   selector: 'app-manage',
@@ -15,7 +17,8 @@ export class ManageComponent implements OnInit {
 
   constructor(private userService: UserService,
               private toastr: ToastrService,
-              private emailService: EmailService) {
+              private emailService: EmailService,
+              public dialog: MatDialog,) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -32,12 +35,19 @@ export class ManageComponent implements OnInit {
     this.toastr.warning("Deze functie moet nog geschreven worden")
   }
 
-  async requestAvailability(id: string) {
+  async sendEmail(id: string) {
     if (id) {
-      this.toastr.warning("Berichten aan het versturen...")
-      await this.emailService.requestAvailability(id).then(res=>{
-        if(res){
-          this.toastr.success("Berichten verzonden")
+      const dialogRef = this.dialog.open(EmailDialogComponent, {
+        width: '750px',
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result && result !== 'false') {
+          this.toastr.warning("Berichten aan het versturen...")
+          this.emailService.sendEmail(id, result).then(res => {
+            if (res) {
+              this.toastr.success("Berichten verzonden")
+            }
+          })
         }
       })
     }
