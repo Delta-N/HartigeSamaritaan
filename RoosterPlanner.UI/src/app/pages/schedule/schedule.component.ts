@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {Availability} from "../../models/availability";
 import {AvailabilityService} from "../../services/availability.service";
 import {MatTableDataSource} from "@angular/material/table";
@@ -39,7 +39,8 @@ export class ScheduleComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private availabilityService: AvailabilityService,
-              private breadcrumbService: BreadcrumbService) {
+              private breadcrumbService: BreadcrumbService,
+              private router: Router,) {
   }
 
   ngOnInit(): void {
@@ -103,8 +104,8 @@ export class ScheduleComponent implements OnInit {
 
   getExactDate(date: Date, time: string): Date {
     let outputDate = moment(date);
-    let outputTime = moment(time,"HH,mm")
-    outputDate.set({hour:outputTime.get("hour"),minute:outputTime.get("minute"),second:0})
+    let outputTime = moment(time, "HH,mm")
+    outputDate.set({hour: outputTime.get("hour"), minute: outputTime.get("minute"), second: 0})
 
     return outputDate.toDate()
   }
@@ -124,11 +125,11 @@ export class ScheduleComponent implements OnInit {
         events.push(event)
       })
       let ics = this.createEvent(events)
-      this.download("MijnShifts.ics",ics)
+      this.download("MijnShifts.ics", ics)
     }
   }
 
-  download(filename:string,text:string){
+  download(filename: string, text: string) {
     const element = document.createElement('a')
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
     element.setAttribute('download', filename)
@@ -177,5 +178,9 @@ END:VEVENT`
     VCALENDAR += `END:VCALENDAR`
 
     return VCALENDAR
+  }
+
+  details(id) {
+    this.router.navigate(['task', id]).then()
   }
 }
