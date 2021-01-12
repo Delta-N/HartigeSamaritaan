@@ -45,26 +45,4 @@ export class ProjectCardComponent implements OnInit {
       }
     });
   }
-
-  collaborate(participation: Participation) {
-    const message = "Met wie wil je samenwerken?"
-    const dialogData = new ConfirmDialogModel("Samenwerking", message, "TextInput",participation.remark);
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: "400px",
-      data: dialogData
-    });
-
-    dialogRef.afterClosed().subscribe(async dialogResult => {
-
-      if (dialogResult) {
-        participation.remark=dialogResult.toString()
-        await this.participationService.updateParticipation(participation).then(async response => {
-            if (response) {
-              this.toastr.success("Samenwerkingsvoorkeur is gewijzigd")
-            }
-          }
-        );
-      }
-    });
-  }
 }

@@ -47,8 +47,10 @@
                <div class="row-name">Max uur per week:</div>
                <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
             </div>
-           <div class="row" *ngIf="this.participation!=null">
+           <div class="row" *ngIf="this.participation">
          <a (click)="editWorkingHours()" mat-button class="edit override-button">Max werkuren wijzigen</a>
+             <a (click)="collaborate(participation)" mat-button class="edit override-button">Voorkeur samenwerking</a>
+
       </div>
 
            <div class="row admin" *ngIf="isAdmin">
@@ -65,7 +67,8 @@
                <div>
                   <mat-card-title>
                      Project taken
-                     <button [disabled]="projectTasksExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandTaskCard()">
+                     <button [disabled]="projectTasksExpandbtnDisabled" class="card-title-icon" mat-icon-button
+                             (click)="expandTaskCard()">
                         <mat-icon id="icon">zoom_out_map</mat-icon>
                      </button>
                   </mat-card-title>
@@ -84,7 +87,8 @@
                   <button mat-button (click)="modTask('remove')">Verwijderen</button>
                </mat-card-actions>
             </mat-card>
-            <img *ngIf="project.pictureUri && project.pictureUri.documentUri" id="pictureFrame" src="{{project.pictureUri.documentUri}}"
+            <img *ngIf="project.pictureUri && project.pictureUri.documentUri" id="pictureFrame"
+                 src="{{project.pictureUri.documentUri}}"
                  alt="Project picture"/>
          </div>
       </div>

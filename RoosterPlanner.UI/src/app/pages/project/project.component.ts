@@ -130,7 +130,7 @@ export class ProjectComponent implements OnInit {
     let messageVariable: string;
     this.project.closed ? messageVariable = "openen" : messageVariable = "sluiten";
     const message = "Weet je zeker dat je dit project wilt " + messageVariable + " ?"
-    const dialogData = new ConfirmDialogModel("Bevestig wijziging", message, "ConfirmationInput",null);
+    const dialogData = new ConfirmDialogModel("Bevestig wijziging", message, "ConfirmationInput", null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -156,7 +156,7 @@ export class ProjectComponent implements OnInit {
 
   editWorkingHours() {
     const message = "Hoeveel uur per week wil je maximaal meewerken aan dit project?"
-    const dialogData = new ConfirmDialogModel("Maximale inzet ", message, "NumberInput",this.participation.maxWorkingHoursPerWeek);
+    const dialogData = new ConfirmDialogModel("Maximale inzet ", message, "NumberInput", this.participation.maxWorkingHoursPerWeek);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -170,8 +170,10 @@ export class ProjectComponent implements OnInit {
         dialogResult <= 40) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
         await this.participationService.updateParticipation(this.participation).then(async response => {
-          if (response)
+          if (response){
+            this.participation=response
             this.displayProject(response.project);
+          }
           else
             window.location.reload()
         });
@@ -239,5 +241,31 @@ export class ProjectComponent implements OnInit {
       }
     });
     dialogRef.disableClose = true;
+  }
+
+  collaborate(participation: Participation) {
+    const message = "Met wie wil je samenwerken?"
+    const dialogData = new ConfirmDialogModel("Samenwerking", message, "TextInput", participation.remark);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(async dialogResult => {
+      this.loaded = false;
+      if (dialogResult) {
+        participation.remark = dialogResult.toString()
+        await this.participationService.updateParticipation(participation).then(async response => {
+            if (response) {
+              this.toastr.success("Samenwerkingsvoorkeur is gewijzigd")
+              this.participation=response;
+              this.displayProject(response.project);
+            } else
+              window.location.reload()
+          }
+        );
+      }
+      this.loaded=true;
+    });
   }
 }
