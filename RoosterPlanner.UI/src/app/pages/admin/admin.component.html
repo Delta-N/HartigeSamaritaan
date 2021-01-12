@@ -4,8 +4,10 @@
   </div>
 
 
-
-  <div class="row cardholder" *ngIf="loaded===true">
+  <div class="spinner" *ngIf="!loaded">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="row cardholder" *ngIf="loaded">
 
     <span *ngIf="projects.length===0">
       <mat-card class="card">

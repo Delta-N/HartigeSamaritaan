@@ -198,6 +198,13 @@ h2 {
   opacity: 1;
 
 }
+.spinner{
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+}
 
 .user-data {
   text-align: left;

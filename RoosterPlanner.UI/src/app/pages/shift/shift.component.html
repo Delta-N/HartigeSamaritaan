@@ -1,10 +1,13 @@
+<div class="spinner" *ngIf="!loaded">
+  <mat-spinner></mat-spinner>
+</div>
 <span *ngIf="loaded">
   <div class="row bar">
     <h1>Shift</h1>
   </div>
   <div class="row">
     <div class="row-name">Taak:</div>
-    <div class="user-data">{{shift.task!=null?shift.task.name:"Onbekend"}}</div>
+    <div class="user-data">{{shift.task != null ? shift.task.name : "Onbekend"}}</div>
   </div>
   <div class="row">
     <div class="row-name">Datum:</div>
@@ -24,6 +27,6 @@
   </div>
   <div *ngIf="authorized" class="row">
     <a (click)="edit()" mat-button class="override-button action-button" id="editShift">Shift wijzigen</a>
-    <a (click)="delete()" mat-button class="override-button"  id="deleteShift">Shift verwijderen</a>
+    <a (click)="delete()" mat-button class="override-button" id="deleteShift">Shift verwijderen</a>
   </div>
 </span>
