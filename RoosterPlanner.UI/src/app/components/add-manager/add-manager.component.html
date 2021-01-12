@@ -15,7 +15,7 @@
         <div class="names">
          <span
            *ngFor="let user of users| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
-           <a (click)="modManager(user.id, false)"> <p id="{{user.id}}">{{user.firstName}} {{user.lastName}}</p> </a>
+           <a (click)="modManager(user.id, false)"> <p id="{{user.id}}">{{user.firstName}} {{user.lastName}}</p><mat-icon style="color: green" hidden id="check{{user.id}}"> check </mat-icon></a>
          </span>
         </div>
         <div class="row">
@@ -31,7 +31,8 @@
         <div class="names">
       <span
         *ngFor="let manager of managers| managerFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
-            <a (click)="modManager(manager.personId, true)"><p id="{{manager.person.id}}">{{manager.person.firstName}} {{manager.person.lastName}}</p> </a>
+            <a (click)="modManager(manager.personId, true)"><p id="{{manager.person.id}}">{{manager.person.firstName}} {{manager.person.lastName}}</p><mat-icon
+              hidden id="check{{manager.id}}" style="color: red">close</mat-icon> </a>
       </span>
         </div>
         <div class="row">

@@ -80,23 +80,32 @@ export class AddManagerComponent implements OnInit {
   changeBackground() {
     this.users.forEach(u => {
       let element = document.getElementById(u.id)
+      let checkElement = document.getElementById("check" + u.id)
       if (element) {
         let index = this.addedManagers.find(m => m === u.id)
-        if (index)
+        if (index) {
           element.style.background = "whitesmoke"
-        else
+          checkElement.hidden = false;
+        } else {
           element.style.background = "white";
+          checkElement.hidden = true;
+        }
       }
     })
 
     this.managers.forEach(u => {
       let element = document.getElementById(u.personId)
+      let closeElement = document.getElementById("check" + u.id)
       if (element) {
         let index = this.removedManagers.find(m => m === u.personId)
-        if (index)
+        if (index) {
           element.style.background = "whitesmoke"
-        else
+          closeElement.hidden = false;
+        } else {
           element.style.background = "white";
+          closeElement.hidden = true;
+        }
+
       }
     })
   }
