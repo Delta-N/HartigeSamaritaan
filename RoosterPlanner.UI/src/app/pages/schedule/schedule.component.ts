@@ -17,7 +17,7 @@ import {Breadcrumb} from "../../models/breadcrumb";
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-
+  loaded: boolean = false;
   today: Date = new Date();
   displayedColumns: string[] = [];
   dataSource: MatTableDataSource<Availability> = new MatTableDataSource<Availability>();
@@ -37,7 +37,7 @@ export class ScheduleComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private availabilityService: AvailabilityService,
-              private breadcrumbService:BreadcrumbService) {
+              private breadcrumbService: BreadcrumbService) {
   }
 
   ngOnInit(): void {
@@ -45,7 +45,7 @@ export class ScheduleComponent implements OnInit {
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       await this.availabilityService.getScheduledAvailabilities(params.get('id'))
         .then(res => {
-          if (res) {
+          if (res&& res.length>0) {
             //push old availabilities to the back
             let old: Availability[] = []
             let all: Availability[] = []
@@ -79,10 +79,11 @@ export class ScheduleComponent implements OnInit {
             previous.url = "/project/" + res[0].participation.project.id
             let current: Breadcrumb = new Breadcrumb();
             current.label = 'Mijn shifts';
-            let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous,current];
+            let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current];
             this.breadcrumbService.replace(array);
 
           }
+          this.loaded = true
         })
     })
   }
