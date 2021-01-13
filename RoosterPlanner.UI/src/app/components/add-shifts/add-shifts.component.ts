@@ -77,7 +77,7 @@ export class AddShiftsComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
 
-      let previous: Breadcrumb = new Breadcrumb("Shift overzicht", "/manage/shifts/"+this.guid);
+      let previous: Breadcrumb = new Breadcrumb("Shift overzicht", "/manage/shifts/" + this.guid);
       let current: Breadcrumb = new Breadcrumb("Shift toevoegen", null);
 
       let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
@@ -90,7 +90,7 @@ export class AddShiftsComponent implements OnInit {
 
     await this.projectService.getProject(this.guid).then(async project => {
       this.project = project;
-      this.min = this.project.participationStartDate;
+      this.min = new Date(this.project.participationStartDate) < new Date() ? new Date() : this.project.participationStartDate;
       this.max = this.project.participationEndDate;
 
       this.loaded = true;
@@ -157,7 +157,7 @@ export class AddShiftsComponent implements OnInit {
 
     allDates.forEach(date => {
       let found: boolean = false;
-      let dateMoment: Moment = moment([date.getFullYear(),date.getMonth(),date.getDate()])
+      let dateMoment: Moment = moment([date.getFullYear(), date.getMonth(), date.getDate()])
 
       currentDates.forEach(storedDate => {
         if (dateMoment.toJSON() === storedDate.toJSON()) {

@@ -377,6 +377,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     });
     if (this.shifts.length > 0) {
       this.addEvents();
+    }else{
+      this.setDefaultHours();
     }
   }
 
@@ -440,6 +442,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.setHours()
   }
 
+  setDefaultHours() {
+    this.startHour = 12;
+    this.endHour = 17;
+    this.refresh.next();
+  }
   setHours() {
     let start: Date[] = []
     this.filteredEvents.forEach(fe => start.push(fe.start))
@@ -450,7 +457,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     end.sort()
 
     if (start && start.length > 0)
-      this.startHour = moment(start[0]).subtract(1, "hour").hour()
+      this.startHour = moment(start[0]).hour()
     else
       this.startHour = 12;
     if (end && end.length > 0)

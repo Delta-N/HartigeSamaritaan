@@ -61,8 +61,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
   minDate: Date;
   maxDate: Date;
 
-  startHour: number = 0;
-  endHour: number = 23;
+  startHour: number = 12;
+  endHour: number = 17;
   prevBtnDisabled: boolean;
   nextBtnDisabled: boolean;
 
@@ -84,18 +84,12 @@ export class PlanComponent implements OnInit, AfterViewInit {
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       let projectId: string = params.get('id');
       let date: string = params.get('date')
-      if (date && date !== 'Invalid Date') {
-        this.viewDate = moment(date).toDate();
-      } else
-        this.viewDate = new Date();
-
 
       //get basic data
       await this.availabilityService.getAvailabilityDataOfProject(projectId).then(res => {
         if (res)
           this.availabilityData = res;
         this.displayedProjectTasks = this.availabilityData.projectTasks;
-
       })
 
       //getproject
@@ -106,10 +100,14 @@ export class PlanComponent implements OnInit, AfterViewInit {
           this.maxDate = this.project.participationEndDate;
           this.calendar.minDate = moment(this.minDate);
           this.calendar.maxDate = moment(this.maxDate);
-          this.viewDate = this.minDate
+          if (date && date !== 'Invalid Date') {
+            this.viewDate = moment(date).toDate();
+          } else
+            this.viewDate = this.minDate;
           this.calendar.activeDate = moment(this.viewDate);
           this.calendar.updateTodaysDate()
           this.dateOrViewChanged()
+
         }
       })
 
@@ -213,6 +211,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.fillSpacer()
       }, 100)
+    }else{
+      this.setDefaultHours()
     }
   }
 
@@ -258,6 +258,11 @@ export class PlanComponent implements OnInit, AfterViewInit {
     this.setHours()
   }
 
+  setDefaultHours(){
+    this.startHour=12;
+    this.endHour=17;
+    this.refresh.next();
+  }
   setHours() {
     let start: Date[] = []
     this.filteredEvents.forEach(fe => start.push(fe.start))
@@ -268,9 +273,10 @@ export class PlanComponent implements OnInit, AfterViewInit {
     end.sort()
 
     if (start && start.length > 0)
-      this.startHour = moment(start[0]).subtract(1, "hour").hour()
+        this.startHour = moment(start[0]).hour()
     else
       this.startHour = 12;
+
     if (end && end.length > 0)
       this.endHour = moment(end[end.length - 1]).hour()
     else

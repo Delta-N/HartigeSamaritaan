@@ -14,12 +14,14 @@
   left: 0;
   right: 0;
   min-height: calc(100vh - 75px);
+
 }
 
 .sidenav-content {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 75px);
+
 }
 
 .content {
@@ -35,6 +37,7 @@ main {
 
     flex: 1;
     display: block;
+
   }
 }
 

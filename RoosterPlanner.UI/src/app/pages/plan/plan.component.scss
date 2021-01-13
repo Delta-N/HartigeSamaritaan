@@ -29,10 +29,6 @@
   color: #707070;
 }
 
-.content-container {
-  height: 75vh;
-}
-
 #title {
   flex-direction: row;
   height: initial;
@@ -103,7 +99,7 @@
 
 
 .calendarbox {
-  height: 100%;
+  max-height: 75vh;
   overflow: auto;
 }
 
@@ -205,7 +201,13 @@
     margin-top: 10px;
   }
   .row {
-    display: block;
+    display: initial;
+  }
+  .bar {
+    display: flex;
+  }
+  .content-container{
+    margin:0;
   }
   .buttonholder {
     display: none;
@@ -255,10 +257,6 @@
 }
 
 @media only screen and (max-width: 475px) {
-  .row {
-    display: block;
-  }
-
   .buttonholder {
     display: none;
   }
