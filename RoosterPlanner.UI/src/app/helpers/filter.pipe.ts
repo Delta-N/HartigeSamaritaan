@@ -131,6 +131,15 @@ export class CalendarTooltip implements PipeTransform {
   }
 }
 
+@Pipe({name: 'calendarTaskLink'})
+export class CalendarTaskLink implements PipeTransform {
+  transform(listOfTasks: Task[], title: string): string {
+    let result = listOfTasks.find(t => t.name === title)
+    return result.id;
+  }
+}
+
+
 @Pipe({name: 'planTooltip'})
 export class PlanTooltip implements PipeTransform {
   transform(listOfShifts: Shift[], event: CalendarEvent): string {

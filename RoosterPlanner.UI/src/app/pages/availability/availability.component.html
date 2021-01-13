@@ -11,12 +11,14 @@
       </div>
       <div class="row tasks-container">
         <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
-          <ng-template #popContent>{{item.description}}<br> <a href="task/{{item.id}}" style="text-decoration: underline; color: blue">details</a></ng-template>
+          <ng-template #popContent>{{item.description}}<br> <a href="task/{{item.id}}"
+                                                               style="text-decoration: underline; color: blue">details</a>
+          </ng-template>
           <mat-checkbox class="checkBox" [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
                         [closeDelay]="1250" [openDelay]="500"
-                        popoverTitle="{{item.name}}" id="{{item.id}}" (change)="OnCheckboxChange($event)"
+                        id="{{item.id}}" (change)="OnCheckboxChange($event)"
                         checked="true" color="primary" [disabled]="activeProjectTasks|checkboxFilter: item.id"
-                        >{{item.name}} </mat-checkbox>
+          >{{item.name}} </mat-checkbox>
         </div>
       </div>
       <div class="row legend">
@@ -73,10 +75,15 @@
     <ng-template
       #customEventTemplate
       let-weekEvent="weekEvent">
+      <ng-template #eventTooltip>
+        {{availabilityData.projectTasks|calendarTooltip:weekEvent.event.title}}
+        <br> <a href="task/{{availabilityData.projectTasks|calendarTaskLink:weekEvent.event.title}}" style="text-decoration: underline; color: blue">details</a>
+      </ng-template>
       <div
         class="cal-event"
         [ngStyle]="{backgroundColor: weekEvent.event.color?.secondary,borderColor: weekEvent.event.color?.primary}"
-        [mwlCalendarTooltip]="availabilityData.projectTasks|calendarTooltip:weekEvent.event.title"
+        [ngbPopover]="eventTooltip" triggers="mouseenter:mouseleave" container="body"
+        [closeDelay]="1250" [openDelay]="500"
         [attr.aria-label]="{ event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
         <div class="flex-container">
 

@@ -457,7 +457,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     end.sort()
 
     if (start && start.length > 0)
-      this.startHour = moment(start[0]).hour()
+      this.startHour = moment(start[0]).hour()>0?moment(start[0]).subtract(1,"hour").hour():0
     else
       this.startHour = 12;
     if (end && end.length > 0)
