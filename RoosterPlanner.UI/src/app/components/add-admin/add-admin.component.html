@@ -1,28 +1,51 @@
 <div *ngIf="loaded" class="container">
-  <h2 mat-dialog-title>Administrator {{title}}</h2>
-
+  <h2 mat-dialog-title>Administrator</h2>
   <div class="search">
+
     <mat-form-field>
       <input matInput class="form-control" type="text" name="search" [(ngModel)]="searchText"
              (ngModelChange)="resetPage()"
              autocomplete="off" placeholder="Zoek gebruiker" id="searchbar">
       <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
+
   </div>
+  <mat-tab-group animationDuration="500ms" (selectedTabChange)="changeTab($event)">
+    <mat-tab label="Toevoegen" id="add">
+      <div class="container">
+        <div class="names">
+         <span
+           *ngFor="let user of users| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
+           <a (click)="modAdmin(user.id, false)"> <p id="{{user.id}}">{{user.firstName}} {{user.lastName}}</p><mat-icon
+             style="color: green" hidden id="check{{user.id}}"> check </mat-icon></a>
+         </span>
+        </div>
+        <div class="row">
+          <button mat-raised-button (click)="prevPage()"><</button>
+          <button mat-raised-button (click)="nextPage()">></button>
+          <button mat-button (click)="close()" class="override-button closebutton">Annuleren</button>
+          <button mat-button (click)="send()" class="override-button action-button">Versturen</button>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Verwijderen">
+      <div class="container">
+        <div class="names">
+      <span
+        *ngFor="let admin of admins| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
+            <a (click)="modAdmin(admin.id, true)"><p
+              id="{{admin.id}}">{{admin.firstName}} {{admin.lastName}}</p><mat-icon
+              hidden id="check{{admin.id}}" style="color: red">close</mat-icon> </a>
+      </span>
+        </div>
+        <div class="row">
+          <button mat-raised-button (click)="prevPage()"><</button>
+          <button mat-raised-button (click)="nextPage()">></button>
+          <button mat-button (click)="close()" class="override-button closebutton ">Annuleren</button>
+          <button mat-button (click)="send()" class="override-button action-button">Versturen</button>
 
-  <mat-dialog-content id="content">
-<span *ngFor="let user of users| userFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
-  <p><a (click)="modAdmin(user.id)" mat-dialog-close="{{user.firstName}}">{{user.firstName}} {{user.lastName}} </a></p>
-</span>
-  </mat-dialog-content>
-
-  <mat-dialog-actions id="actions-bar">
-    <div>
-      <button mat-raised-button (click)="prevPage()"><</button>
-      <button mat-raised-button (click)="nextPage()">></button>
-    </div>
-    <div class="align-right">
-      <button mat-button class="override-button"  (click)="close()">Annuleren</button>
-    </div>
-  </mat-dialog-actions>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>

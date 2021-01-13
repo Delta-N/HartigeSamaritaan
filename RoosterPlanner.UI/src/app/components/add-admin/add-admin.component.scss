@@ -1,18 +1,27 @@
+a {
+  display: flex;
+}
+
 .mat-form-field {
   width: 100%;
 }
 
-.container {
-  min-height: 400px;
-}
-
-#content {
-  min-height: 225px;
-}
-
-
-.align-right {
+.closebutton {
   margin-left: auto;
 }
 
+.names {
+  min-height: 225px;
+}
 
+::ng-deep .mat-tab-body-wrapper {
+  margin-top: 10px;
+}
+
+::ng-deep .mat-tab-body {
+  min-height: 300px;
+
+  .mat-tab-body-content {
+    overflow: hidden;
+  }
+}
