@@ -11,9 +11,12 @@
       </div>
       <div class="row tasks-container">
         <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
-          <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
+          <ng-template #popContent>{{item.description}}<br> <a href="task/{{item.id}}" style="text-decoration: underline; color: blue">details</a></ng-template>
+          <mat-checkbox class="checkBox" [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
+                        [closeDelay]="1250" [openDelay]="500"
+                        popoverTitle="{{item.name}}" id="{{item.id}}" (change)="OnCheckboxChange($event)"
                         checked="true" color="primary" [disabled]="activeProjectTasks|checkboxFilter: item.id"
-                        [matTooltip]=item.description>{{item.name}}</mat-checkbox>
+                        >{{item.name}} </mat-checkbox>
         </div>
       </div>
       <div class="row legend">
