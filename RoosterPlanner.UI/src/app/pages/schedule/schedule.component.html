@@ -31,17 +31,16 @@
           <th mat-header-cell mat-sort-header *matHeaderCellDef>Tot</th>
           <td mat-cell *matCellDef="let row">{{row.shift.endTime}}</td>
         </ng-container>
-        <ng-container matColumnDef="Instructies">
-          <th mat-header-cell *matHeaderCellDef>Instructies</th>
+        <ng-container matColumnDef="Details">
+          <th mat-header-cell *matHeaderCellDef>Details</th>
           <td mat-cell *matCellDef="let row">
-            <button mat-button class="override-button" *ngIf="row.shift.task && row.shift.task.instruction"
-                    (click)="openInstructions(row.shift.task.instruction.documentUri)">Instructie
+            <button mat-button class="override-button">Details
             </button>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr (click)="details(row.shift.task.id)" mat-row *matRowDef="let row; columns: displayedColumns;"
-            [ngStyle]="row.shift.date<today.toISOString() && {'background-color': 'whitesmoke'} || row.shift.date>=today.toISOString() && {'background-color': 'white'}" ></tr>
+            [ngStyle]="row.shift.date<today.toISOString() && {'background-color': 'whitesmoke'} || row.shift.date>=today.toISOString() && {'background-color': 'white'}"></tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" colspan="5">Geen resultaten gevonden</td>
         </tr>

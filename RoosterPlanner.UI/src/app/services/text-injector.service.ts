@@ -232,7 +232,7 @@ export class TextInjectorService {
   public static acceptedImageExtentions:string[]=['png','jpg','jpeg','gif','jfif','pjp','pjpeg']
   public static calenderSelectionOptions: string[] = ['Elke dag', 'Elke maandag', 'Elke dinsdag', 'Elke woensdag', 'Elke donderdag', 'Elke vrijdag', 'Elke zaterdag', 'Elke zondag', 'Verwijder selectie'];
   public static shiftTableColumnNames: string[] = ['Taak', 'Datum', 'Vanaf', 'Tot', '#Benodigde vrijwilligers'];
-  public static availabilitiesTableColumnNames: string[] = ['Datum', 'Taak', 'Vanaf', 'Tot','Instructies'];
+  public static availabilitiesTableColumnNames: string[] = ['Datum', 'Taak', 'Vanaf', 'Tot','Details'];
   public static scheduleTableColumnNames: string[] = ['Naam','Taak', 'Vanaf', 'Tot'];
   public static planShiftTableColumnNames: string[] = ['select', 'Naam', 'Leeftijd', 'Nationaliteit', '#Ingeroosterd', 'Ingeroosterd', 'Inzetbaarheid'];
   public static employeeTableColumnNames: string[] = ['Naam', 'Leeftijd', 'Nationaliteit'];
