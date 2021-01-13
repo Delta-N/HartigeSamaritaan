@@ -33,10 +33,10 @@ export class TaskComponent implements OnInit {
     private uploadService: UploadService,
     private breadcrumbService: BreadcrumbService) {
 
-    let breadcrumb: Breadcrumb = new Breadcrumb();
-    breadcrumb.label = 'Taak';
+    let breadcrumb: Breadcrumb = new Breadcrumb('Taak',null);
+    let takencrumb: Breadcrumb = new Breadcrumb("Taken", "admin/tasks");
     let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
-      this.breadcrumbService.admincrumb, this.breadcrumbService.takencrumb, breadcrumb];
+      this.breadcrumbService.admincrumb, takencrumb, breadcrumb];
 
     this.breadcrumbService.replace(array);
   }

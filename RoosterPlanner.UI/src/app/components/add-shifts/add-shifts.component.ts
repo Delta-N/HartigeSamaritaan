@@ -57,16 +57,6 @@ export class AddShiftsComponent implements OnInit {
     private _location: Location,
     private breadcrumbService: BreadcrumbService) {
 
-    let previous: Breadcrumb = new Breadcrumb();
-    previous.label = "Shift overzicht";
-    previous.url = this.breadcrumbService.previousUrl;
-
-    let current: Breadcrumb = new Breadcrumb();
-    current.label = "Shift toevoegen";
-
-    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
-    this.breadcrumbService.replace(breadcrumbs);
-
     this.selectionOptions = TextInjectorService.calenderSelectionOptions;
 
     this.taskControl = new FormControl('', Validators.required);
@@ -86,6 +76,12 @@ export class AddShiftsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
+
+      let previous: Breadcrumb = new Breadcrumb("Shift overzicht", "/manage/shifts/"+this.guid);
+      let current: Breadcrumb = new Breadcrumb("Shift toevoegen", null);
+
+      let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
+      this.breadcrumbService.replace(breadcrumbs);
     });
 
     this.taskService.getAllProjectTasks(this.guid).then(tasks => {

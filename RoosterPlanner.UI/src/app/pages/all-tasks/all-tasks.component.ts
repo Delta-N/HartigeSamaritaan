@@ -33,9 +33,9 @@ export class AllTasksComponent implements OnInit {
   categories: Category[];
   categoryExpandbtnDisabled: boolean = true;
 
-  certificateCardStyle='card';
-  certificateExpandbtnDisabled: boolean=true;
-  certificatesTypes:CertificateType[];
+  certificateCardStyle = 'card';
+  certificateExpandbtnDisabled: boolean = true;
+  certificatesTypes: CertificateType[];
 
 
   constructor(public dialog: MatDialog,
@@ -43,17 +43,17 @@ export class AllTasksComponent implements OnInit {
               private toastr: ToastrService,
               private taskService: TaskService,
               private categoryService: CategoryService,
-              private certificiateService:CertificateService,
+              private certificiateService: CertificateService,
               private breadcrumbService: BreadcrumbService) {
-    let tempcrumb:Breadcrumb= this.breadcrumbService.takencrumb;
-    tempcrumb.url=null;
-    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.admincrumb,tempcrumb ];
+    let takencrumb: Breadcrumb = new Breadcrumb("Taken", null);
+
+    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.admincrumb, takencrumb];
     this.breadcrumbService.replace(array);
   }
 
   ngOnInit(): void {
     this.getCategories(0, this.itemsPerCard).then()
-    this.getCertificates(0,this.itemsPerCard).then()
+    this.getCertificates(0, this.itemsPerCard).then()
     this.getTasks(0, this.itemsPerCard).then(() => this.loaded = true)
   }
 
@@ -81,8 +81,8 @@ export class AllTasksComponent implements OnInit {
 
   async getCertificates(offset: number, pageSize: number) {
     await this.certificiateService.getAllCertificateTypes().then(res => {
-      if(res)
-        this.certificatesTypes= res;
+      if (res)
+        this.certificatesTypes = res;
       this.certificatesTypes.sort((a, b) => a.name > b.name ? 1 : -1)
       if (this.certificatesTypes.length >= 5) {
         this.certificateExpandbtnDisabled = false;
@@ -159,7 +159,7 @@ export class AllTasksComponent implements OnInit {
         element.innerText = "fullscreen_exit"
     }
     if (this.taskCardStyle == 'expanded-card') {
-      if(categoryCardElement)
+      if (categoryCardElement)
         categoryCardElement.hidden = false;
       if (certificateCardElement)
         certificateCardElement.hidden = false;

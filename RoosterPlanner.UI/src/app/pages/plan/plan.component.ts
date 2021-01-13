@@ -115,8 +115,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
 
       //create breadcrumbs
-      let current: Breadcrumb = new Breadcrumb();
-      current.label = 'Plannen';
+      let current: Breadcrumb = new Breadcrumb('Plannen',null);
+
       let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, current];
       this.breadcrumbService.replace(array);
     })

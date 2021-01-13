@@ -32,10 +32,11 @@ export class CategoryComponent implements OnInit {
     private router: Router,
     private breadcrumbService:BreadcrumbService) {
 
-    let breadcrumb: Breadcrumb = new Breadcrumb();
-    breadcrumb.label = 'Category';
+    let breadcrumb: Breadcrumb = new Breadcrumb('Categorie',null);
+    let takencrumb: Breadcrumb = new Breadcrumb("Taken", "admin/tasks");
+
     let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
-      this.breadcrumbService.admincrumb, this.breadcrumbService.takencrumb, breadcrumb];
+      this.breadcrumbService.admincrumb, takencrumb, breadcrumb];
 
     this.breadcrumbService.replace(array);
   }

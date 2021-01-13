@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Breadcrumb} from "../models/breadcrumb";
-import {Observable, of, from, BehaviorSubject} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 import {filter} from "rxjs/operators";
 import {NavigationStart, Router} from "@angular/router";
 
@@ -12,33 +12,16 @@ export class BreadcrumbService {
   breadcrumbs: Breadcrumb[] = [];
   behaviourSubject: BehaviorSubject<Breadcrumb[]> = new BehaviorSubject<Breadcrumb[]>(this.breadcrumbs);
 
-  previousUrl: string;
-  currentUrl: string;
-
-  dashboardcrumb: Breadcrumb = new Breadcrumb();
-  admincrumb: Breadcrumb = new Breadcrumb();
-  managecrumb: Breadcrumb = new Breadcrumb();
-  takencrumb: Breadcrumb = new Breadcrumb();
-  shiftOverviewCrumb: Breadcrumb = new Breadcrumb();
+  dashboardcrumb: Breadcrumb = new Breadcrumb("Dashboard", "/home");
+  admincrumb: Breadcrumb = new Breadcrumb("Admin", "/admin");
+  managecrumb: Breadcrumb = new Breadcrumb("Beheer", "/manage");
 
   constructor(private router: Router) {
-    this.dashboardcrumb.url = "/home";
-    this.dashboardcrumb.label = "Dashboard";
 
-    this.admincrumb.url = "/admin";
-    this.admincrumb.label = "Admin";
-
-    this.managecrumb.url = "/manage";
-    this.managecrumb.label = "Beheer";
-
-    this.takencrumb.url = "admin/tasks";
-    this.takencrumb.label = "Taken";
 
     router.events.pipe(filter(event => event instanceof NavigationStart))
       .subscribe((event: NavigationStart) => {
         this.clear();
-        this.previousUrl = this.currentUrl;
-        this.currentUrl = event.url;
       });
   }
 
@@ -53,9 +36,7 @@ export class BreadcrumbService {
   }
 
   backcrumb() {
-    let backcrumb: Breadcrumb = new Breadcrumb();
-    backcrumb.url = this.previousUrl;
-    backcrumb.label = "Terug";
+    let backcrumb: Breadcrumb = new Breadcrumb("Terug", null);
     this.breadcrumbs = [backcrumb];
     this.behaviourSubject.next(this.breadcrumbs);
   }

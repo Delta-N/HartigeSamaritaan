@@ -78,14 +78,16 @@ export class ScheduleComponent implements OnInit {
                   return item[property];
               }
             };
-            let previous: Breadcrumb = new Breadcrumb();
-            previous.label = res[0].participation.project.name
-            previous.url = "/project/" + res[0].participation.project.id
-            let current: Breadcrumb = new Breadcrumb();
-            current.label = 'Mijn shifts';
+
+            let previous: Breadcrumb = new Breadcrumb(res[0].participation.project.name, "/project/" + res[0].participation.project.id);
+            let current: Breadcrumb = new Breadcrumb('Mijn shifts',null);
+
             let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current];
             this.breadcrumbService.replace(array);
 
+          }else{
+            let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb];
+            this.breadcrumbService.replace(array);
           }
           this.loaded = true
         })
@@ -115,7 +117,6 @@ export class ScheduleComponent implements OnInit {
 
     if (this.availabilities && this.availabilities.length > 0) {
       this.availabilities.forEach(a => {
-        console.log(a)
         let event: Event = new Event();
         event.start = this.getExactDate(a.shift.date, a.shift.startTime)
         event.end = this.getExactDate(a.shift.date, a.shift.endTime)

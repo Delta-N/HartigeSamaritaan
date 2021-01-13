@@ -62,14 +62,6 @@ export class PlanShiftComponent implements OnInit {
       this.guid = params.get('id');
     });
 
-    let previous: Breadcrumb = new Breadcrumb();
-    previous.label = "Plannen - Overzicht"
-    previous.url = this.breadcrumbService.previousUrl;
-    let temp: Breadcrumb = new Breadcrumb();
-    temp.label = "Plannen"
-    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, temp]
-    this.breadcrumbService.replace(breadcrumbs);
-
     this.displayedColumns = TextInjectorService.planShiftTableColumnNames;
 
     await this.shiftService.getScheduleData(this.guid).then(res => {
@@ -78,6 +70,12 @@ export class PlanShiftComponent implements OnInit {
 
       if (this.scheduledata)
         this.dataSource = new MatTableDataSource<Schedule>(this.scheduledata.schedules)
+
+      let previous: Breadcrumb = new Breadcrumb("Plannen - Overzicht", "/manage/plan/" + this.scheduledata.shift.project.id);
+      let current: Breadcrumb = new Breadcrumb("Plannen", null);
+
+      let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
+      this.breadcrumbService.replace(breadcrumbs);
       this.loaded = true;
     })
 

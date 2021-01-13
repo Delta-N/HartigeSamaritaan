@@ -30,10 +30,12 @@ export class CertificateTypeComponent implements OnInit {
               private certificateService:CertificateService,
               private userService: UserService,
   ) {
-    let breadcrumb: Breadcrumb = new Breadcrumb();
-    breadcrumb.label = 'Certificaattype';
+    let breadcrumb: Breadcrumb = new Breadcrumb('Certificaattype',null);
+    let takencrumb: Breadcrumb = new Breadcrumb("Taken", "admin/tasks");
+
+
     let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
-      this.breadcrumbService.admincrumb, this.breadcrumbService.takencrumb, breadcrumb];
+      this.breadcrumbService.admincrumb, takencrumb, breadcrumb];
 
     this.breadcrumbService.replace(array);
   }
@@ -46,7 +48,6 @@ export class CertificateTypeComponent implements OnInit {
     this.certificateService.getCertificateType(this.guid).then(response => {
       this.certificateType = response;
       this.loaded = true;
-      console.log(response)
     })
   }
 

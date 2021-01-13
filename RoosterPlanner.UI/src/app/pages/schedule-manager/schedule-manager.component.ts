@@ -49,8 +49,8 @@ export class ScheduleManagerComponent implements OnInit {
               private availabilityService: AvailabilityService,
               private projectService:ProjectService,
               private breadcrumbService:BreadcrumbService) {
-    let breadcrumb: Breadcrumb = new Breadcrumb();
-    breadcrumb.label = 'Rooster';
+    let breadcrumb: Breadcrumb = new Breadcrumb('Rooster',null);
+
     let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
       this.breadcrumbService.managecrumb, breadcrumb];
 

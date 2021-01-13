@@ -43,9 +43,9 @@ export class ShiftOverviewComponent implements OnInit {
               private router: Router,
               private shiftService: ShiftService,
               private breadcrumbService: BreadcrumbService) {
-    let temp: Breadcrumb = new Breadcrumb();
-    temp.label = "Shift overzicht"
-    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, temp]
+    let current: Breadcrumb = new Breadcrumb("Shift overzicht",null);
+
+    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, current]
     this.breadcrumbService.replace(breadcrumbs);
     this.displayedColumns = TextInjectorService.shiftTableColumnNames;
   }

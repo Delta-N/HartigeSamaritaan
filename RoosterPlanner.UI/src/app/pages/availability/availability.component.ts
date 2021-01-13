@@ -119,11 +119,9 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
           }
 
           //create breadcrumbs
-          let current: Breadcrumb = new Breadcrumb();
-          current.label = 'Beschikbaarheid opgeven';
-          let previous: Breadcrumb = new Breadcrumb();
-          previous.label = this.participation.project.name
-          previous.url = "/project/" + this.participation.project.id
+          let current: Breadcrumb = new Breadcrumb('Beschikbaarheid opgeven',null);
+          let previous: Breadcrumb = new Breadcrumb(this.participation.project.name,"/project/" + this.participation.project.id);
+
           let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current];
           this.breadcrumbService.replace(array);
         })
