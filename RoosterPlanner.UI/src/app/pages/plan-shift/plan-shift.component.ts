@@ -15,6 +15,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {DateConverter} from "../../helpers/date-converter";
 import {AvailabilityService} from "../../services/availability.service";
 import {ToastrService} from "ngx-toastr";
+import {Availability} from "../../models/availability";
+import {Shift} from "../../models/shift";
 
 @Component({
   selector: 'app-plan-shift',
@@ -135,15 +137,53 @@ export class PlanShiftComponent implements OnInit {
   }
 
   select(row: Schedule) {
-    if (this.scheduledata.schedules[this.scheduledata.schedules.indexOf(row)].scheduledThisDay === true) {
+    let conflict = this.calulateScheduleConflict(row.availabilities, this.scheduledata.shift)
+    if (this.scheduledata.schedules[this.scheduledata.schedules.indexOf(row)].scheduledThisShift === true) {
       this.confirmDeselect(row);
-    } else
-      this.addPerson(row)
+    } else {
+      switch (conflict) {
+        case 0:
+          this.addPerson(row)
+          break;
+        case 1:
+          this.toastr.warning("LET OP: deze persoon werkt vandaag al op een andere shift (geen overlap)")
+          this.addPerson(row)
+          break;
+        case 2:
+          this.toastr.error("LET OP: deze persoon werkt vandaag al op een andere shift die overlapt!")
+          this.addPerson(row)
+          break;
+      }
+    }
+  }
+
+  calulateScheduleConflict(listOfAvailabilities: Availability[], shift: Shift): number {
+    let alreadyScheduled: boolean = false;
+    let scheduledOnConflictingTime: boolean = false;
+    listOfAvailabilities.forEach(a => {
+      if (a.type === 3 && a.shiftId !== shift.id) {
+        alreadyScheduled = true
+
+
+        let segements = [[shift.startTime, shift.endTime], [a.shift.startTime, a.shift.endTime]]
+        segements.sort((seg1, seg2) => seg1[0].localeCompare(seg2[0]))
+
+        let endTime = segements[0][1];
+        let nextStarttime = segements[1][0];
+        if (endTime > nextStarttime)
+          scheduledOnConflictingTime = true;
+
+      }
+    })
+    return scheduledOnConflictingTime ? 2 : alreadyScheduled ? 1 : 0;
+    //0 no problem
+    //1 schedule but no overlap in time
+    //2 scheduled and overlap = impossible
   }
 
   confirmDeselect(row: Schedule) {
     const message = "Weet je zeker dat je deze persoon wilt uitroosteren?"
-    const dialogData = new ConfirmDialogModel("Bevestig uitroostering", message, "ConfirmationInput",null);
+    const dialogData = new ConfirmDialogModel("Bevestig uitroostering", message, "ConfirmationInput", null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -171,7 +211,7 @@ export class PlanShiftComponent implements OnInit {
       this.toastr.warning("Er hebben geen wijzigingen plaats gevonden")
     else {
       const message = "Weet je zeker dat je deze je deze personen wilt in- en uitroosteren?"
-      const dialogData = new ConfirmDialogModel("Bevestig roostering", message, "ConfirmationInput",null);
+      const dialogData = new ConfirmDialogModel("Bevestig roostering", message, "ConfirmationInput", null);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: "400px",
         data: dialogData

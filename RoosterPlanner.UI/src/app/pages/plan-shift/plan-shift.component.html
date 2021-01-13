@@ -62,7 +62,7 @@
                      <td mat-cell *matCellDef="let row">{{row.employability}} uur</td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row [matTooltip]="row.availabilities | availabilityPipe" [matTooltipClass]="'multiline-tooltip'" *matRowDef="let row; columns: displayedColumns;" (click)="(!row.scheduledThisDay ||(row.scheduledThisDay && row.scheduledThisShift) )&& select(row)"
+                  <tr mat-row [matTooltip]="row.availabilities | availabilityPipe" [matTooltipClass]="'multiline-tooltip'" *matRowDef="let row; columns: displayedColumns;" (click)="(select(row))"
                       [ngStyle]="(row.scheduledThisDay && !row.scheduledThisShift) && {'background-color': 'whitesmoke'}"></tr>
                   <tr class="mat-row" *matNoDataRow>
                      <td class="mat-cell" colspan="5">Geen resultaten gevonden</td>
@@ -73,3 +73,4 @@
          </div>
       </div>
 </span>
+
