@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using Task = System.Threading.Tasks.Task;
 
 namespace RoosterPlanner.Data.Repositories
@@ -19,6 +21,8 @@ namespace RoosterPlanner.Data.Repositories
         Task<List<Shift>> GetByProjectUserAndDateAsync(Guid projectId, Guid userId, DateTime date);
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId);
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId, Guid userId);
+        Task<List<Shift>> SearchProjectsAsync(ShiftFilter filter);
+        Task<ShiftData> GetUniqueDataAsync(Guid projectId);
     }
 
     public class ShiftRepository : Repository<Shift>, IShiftRepository
@@ -104,6 +108,52 @@ namespace RoosterPlanner.Data.Repositories
                 if (shift.Task != null)
                     shift.Task.Shifts = null;
             }
+
+            return shifts;
+        }
+
+        public async Task<ShiftData> GetUniqueDataAsync(Guid projectId)
+        {
+            if(projectId==Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+            ShiftData data = new ShiftData();
+
+            var q = EntitySet
+                .AsNoTracking()
+                .Include(s => s.Task)
+                .Where(s=>s.ProjectId==projectId);
+            data.Tasks =  await q.Select(s => s.Task).Distinct().ToListAsync();
+            data.Dates = await q.Select(s => s.Date).Distinct().ToListAsync();
+            data.StartTimes = await q.Select(s => s.StartTime.ToString("hh\\:mm")).Distinct().ToListAsync();
+            data.EndTimes = await q.Select(s => s.EndTime.ToString("hh\\:mm")).Distinct().ToListAsync();
+            data.ParticipantsRequired = await q.Select(s => s.ParticipantsRequired).Distinct().ToListAsync();
+            return data;
+        }
+
+        public Task<List<Shift>> SearchProjectsAsync(ShiftFilter filter)
+        {
+            if (filter == null)
+                throw new ArgumentNullException(nameof(filter));
+            var q = EntitySet
+                .AsNoTracking()
+                .Include(s=>s.Task)
+                .Where(s=>s.ProjectId==filter.ProjectId);
+            q = filter.SetFilter(q);
+           
+
+            q = q.Where(x => filter.Tasks.Any(t=>t==x.TaskId.ToString()));
+            q = q.Where(x => x.Date >= filter.Date);
+            
+            q = q.Where(x => x.StartTime >= TimeSpan.Parse(filter.Start));
+            q = q.Where(x => x.EndTime >= TimeSpan.Parse(filter.End));
+            q = q.Where(x => x.ParticipantsRequired >= filter.ParticipantsRequired);
+            q = filter.SetFilter(q);
+            filter.TotalItemCount = q.Count();
+            Task<List<Shift>> shifts;
+            if (filter.Offset >= 0 && filter.PageSize != 0)
+                shifts = q.Skip(filter.Offset).Take(filter.PageSize).ToListAsync();
+            else
+                shifts = q.ToListAsync();
 
             return shifts;
         }

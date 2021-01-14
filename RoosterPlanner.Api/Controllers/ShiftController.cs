@@ -10,6 +10,8 @@ using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Models.Types;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
@@ -69,6 +71,55 @@ namespace RoosterPlanner.Api.Controllers
                 List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm)
                     .ToList();
                 return Ok(shiftVmList);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
+        [Authorize(Policy = "Boardmember&Committeemember")]
+        [HttpGet("unique/{projectId}")]
+        public async Task<ActionResult<ShiftData>> GetUniqueDataAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                return BadRequest("No valid id");
+            try
+            {
+                TaskResult<ShiftData> result = await shiftService.GetUniqueDataAsync(projectId); 
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                
+                return Ok(result.Data);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetUniqueDataAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+        [Authorize(Policy = "Boardmember&Committeemember")]
+        [HttpPost("search")]
+        public async Task<ActionResult<SearchResultViewModel<ShiftViewModel>>> GetShiftsAsync(ShiftFilter filter)
+        {
+            if (filter==null)
+                return BadRequest("No filter received");
+            try
+            {
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(filter);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                if (result.Data == null || result.Data.Count == 0)
+                    return Ok(new SearchResultViewModel<ShiftViewModel>(0,new List<ShiftViewModel>()));
+                
+                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm)
+                    .ToList();
+                return Ok(new SearchResultViewModel<ShiftViewModel>(filter.TotalItemCount,shiftVmList));
             }
             catch (Exception ex)
             {

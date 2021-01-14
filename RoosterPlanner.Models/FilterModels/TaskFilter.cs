@@ -23,17 +23,17 @@
         #endregion
 
         //Constructor
-        public TaskFilter() : base()
+        public TaskFilter()
         {
-            Sort = new string[] {"Name", "ASC"};
+            Sort = new[] {"Name", "ASC"};
             Offset = 0;
             PageSize = 0;
         }
 
         //Constructor - Overload
-        public TaskFilter(int offset, int pageSize) : base()
+        public TaskFilter(int offset, int pageSize)
         {
-            Sort = new string[] {"Name", "ASC"};
+            Sort = new[] {"Name", "ASC"};
             Offset = offset;
             PageSize = 20;
             if (pageSize > 0 && pageSize < 1000)

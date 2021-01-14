@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
@@ -21,7 +23,9 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date);
         Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId);
         Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId, Guid userId);
-        
+
+        Task<TaskListResult<Shift>> GetShiftsAsync(ShiftFilter filter);
+        Task<TaskResult<ShiftData>> GetUniqueDataAsync(Guid projectId);
     }
 
     public class ShiftService : IShiftService
@@ -254,6 +258,44 @@ namespace RoosterPlanner.Service
             return result;
         }
 
-       
+        public async Task<TaskListResult<Shift>> GetShiftsAsync(ShiftFilter filter)
+        {
+            if (filter == null)
+                throw new ArgumentNullException(nameof(filter));
+            TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
+            try
+            {
+                result.Data = await shiftRepository.SearchProjectsAsync(filter);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error finding shifts with filter: " + filter;
+                logger.LogError(ex, result.Message, filter);
+                result.Error = ex;
+            }
+
+            return result; 
+        }
+
+        public async Task<TaskResult<ShiftData>> GetUniqueDataAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+            TaskResult<ShiftData> result = new TaskResult<ShiftData>();
+            try
+            {
+                result.Data = await shiftRepository.GetUniqueDataAsync(projectId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error getting shiftdata of project: " + projectId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
+            return result;
+        }
     }
 }
