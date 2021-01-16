@@ -98,10 +98,6 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  todo() {
-    this.toastr.warning("Deze functie moet nog geschreven worden")
-  }
-
   expandProjectCard() {
 
     let dataCardElement = document.getElementById("dataCard")

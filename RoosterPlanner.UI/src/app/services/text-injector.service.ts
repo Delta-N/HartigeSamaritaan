@@ -230,6 +230,7 @@ export class TextInjectorService {
     'Zwitserland',
   ];
   public static shiftExportHeaders: string[] = ["Taaknaam", "Taakcategorie", "Datum", "Begintijd", "Endtijd", "NaamMedewerker", "Leeftijd", "Woonplaats", "Nationaliteit", "Moedertaal", "NLtaalniveau"];
+  public static employeeExportHeaders: string[] = ["NaamMedewerker", "Leeftijd", "Email", "Telefoonnummer", "Adres", "Postcode", "Woonplaats", "Nationaliteit", "Moedertaal", "NLtaalniveau","PushBerichten","DatumAkkoordPrivacyPolicy"];
   public static acceptedImageExtentions: string[] = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'pjp', 'pjpeg']
   public static calenderSelectionOptions: string[] = ['Elke dag', 'Elke maandag', 'Elke dinsdag', 'Elke woensdag', 'Elke donderdag', 'Elke vrijdag', 'Elke zaterdag', 'Elke zondag', 'Verwijder selectie'];
   public static shiftTableColumnNames: string[] = ['Task', 'Date', 'StartTime', 'EndTime', 'ParticipantsRequired'];

@@ -19,6 +19,7 @@ import {CsvService} from "../../services/csv.service";
 import {ShiftService} from "../../services/shift.service";
 import {AgePipe} from "../../helpers/filter.pipe";
 import {TextInjectorService} from "../../services/text-injector.service";
+import {User} from "../../models/user";
 
 @Component({
   selector: 'app-project',
@@ -64,7 +65,6 @@ export class ProjectComponent implements OnInit {
     });
     await this.getParticipation().then();
     await this.getProjectTasks().then();
-    console.log(this.project)
   }
 
   async getProject() {
@@ -274,7 +274,7 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  async statistics() {
+  async exportShifts() {
     let pipe: AgePipe = new AgePipe();
     let headers = TextInjectorService.shiftExportHeaders;
 
@@ -283,9 +283,8 @@ export class ProjectComponent implements OnInit {
       guid = this.participation.project.id
     else
       guid = this.project.id
-
+    this.loaded=false;
     await this.shiftService.GetExportableData(guid).then(res => {
-      console.log(res)
       let statistics: any[] = []
       res.forEach(shift => {
         shift.availabilities.forEach(avail => {
@@ -308,5 +307,46 @@ export class ProjectComponent implements OnInit {
       })
       this.csvService.downloadFile(statistics, headers, "Shift export - " + this.project.name)
     })
+    this.loaded = true;
   }
-}
+
+  async exportUsers() {
+    let pipe: AgePipe = new AgePipe();
+    let headers = TextInjectorService.employeeExportHeaders;
+    let users: User[] = []
+    this.loaded = false;
+    if (this.guid) {
+      await this.userService.getAllParticipants(this.guid).then(res => {
+        users = res;
+      })
+    } else {
+      await this.userService.getAllUsers().then(res => {
+        if (res)
+          users = res;
+      })
+    }
+
+    let statistics: any[] = []
+    users.forEach(u => {
+      let statistic = {
+        NaamMedewerker: u.firstName && u.lastName ? u.firstName?.replace(",", ".") + " " + u.lastName?.replace(",", ".") : "Onbekend",
+        Leeftijd: u.dateOfBirth ? pipe.transform(u.dateOfBirth) : "Onbekend",
+        Email: u.email ? u.email.replace(",", ".") : "Onbekend",
+        Telefoonnummer: u.phoneNumber ? u.phoneNumber.replace(",", ".") : "Onbekend",
+
+        Adres: u.streetAddress ? u.streetAddress.replace(",", ".") : "Onbekend",
+        Postcode: u.postalCode ? u.postalCode.replace(",", ".") : "Onbekend",
+        Woonplaats: u.city ? u.city.replace(",", ".") : "Onbekend",
+        Nationaliteit: u.nationality ? u.nationality.replace(",", ".") : "Onbekend",
+        Moedertaal: u.nativeLanguage ? u.nativeLanguage.replace(",", ".") : "Onbekend",
+        NLtaalniveau: u.dutchProficiency ? u.dutchProficiency.replace(",", ".") : "Onbekend",
+
+        PushBerichten: u.pushDisabled ? "Uitgeschakeld" : "Ingeschakeld",
+        DatumAkkoordPrivacyPolicy: u.termsOfUseConsented ? DateConverter.toReadableStringFromString(u.termsOfUseConsented) : "Onbekend",
+      }
+      statistics.push(statistic)
+    })
+
+    this.csvService.downloadFile(statistics, headers, "Employee Export")
+    this.loaded = true;
+  }}
