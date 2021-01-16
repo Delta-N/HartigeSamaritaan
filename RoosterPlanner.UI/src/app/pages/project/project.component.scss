@@ -2,6 +2,9 @@
   border: 1px solid #707070;
   background: whitesmoke;
   align-items: center;
+  .row{
+   margin: 0;
+  }
 }
 img {
   max-width: 400px;
@@ -34,6 +37,12 @@ img {
   display: flex;
   margin-top: 9px;
   margin-bottom: 9px;
+}
+#admin-control-title{
+ justify-content: center;
+}
+#admin-control-actions{
+  justify-content: center;
 }
 
 @media only screen and (max-width: 550px) {

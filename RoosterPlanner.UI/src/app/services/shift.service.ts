@@ -63,21 +63,22 @@ export class ShiftService {
 
     return searchResult;
   }
-  async getShiftData(projectId:string):Promise<Shiftdata>{
-    if (!projectId || projectId=== EntityHelper.returnEmptyGuid()) {
+
+  async getShiftData(projectId: string): Promise<Shiftdata> {
+    if (!projectId || projectId === EntityHelper.returnEmptyGuid()) {
       this.errorService.error("Ongeldige Id")
       return null;
     }
-    let data:Shiftdata=null;
+    let data: Shiftdata = null;
     await this.apiService.get<HttpResponse<Shiftdata>>(`${HttpRoutes.shiftApiUrl}/unique/${projectId}`)
       .toPromise()
       .then(res => {
         if (res.ok) {
           data = res.body
-          if (data.dates && data.dates.length>0) {
-            let dates:Date[]=[]
+          if (data.dates && data.dates.length > 0) {
+            let dates: Date[] = []
             data.dates.forEach(d => dates.push(new Date(d)))
-            data.dates=dates
+            data.dates = dates
           }
         }
       }, Error => {
@@ -266,5 +267,25 @@ export class ShiftService {
         }
       );
     return deleted;
+  }
+
+  async GetExportableData(projectId: string): Promise<Shift[]> {
+    if (!projectId) {
+      this.errorService.error("ShiftId mag niet leeg zijn")
+      return null;
+    }
+    let data: Shift[] = null;
+    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/export/${projectId}`)
+      .toPromise()
+      .then(res => {
+          if (res.ok) {
+            data = res.body;
+          }
+        }
+        , Error => {
+          this.errorService.httpError(Error)
+        }
+      );
+    return data;
   }
 }

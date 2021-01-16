@@ -4,9 +4,10 @@ import {Project} from "./project";
 import {Availability} from "./availability";
 
 export class Participation extends Entity {
+  public Availabilities: Availability[];
+  public active: boolean;
+  public maxWorkingHoursPerWeek: number;
   public person: User;
   public project: Project;
-  public maxWorkingHoursPerWeek: number;
-  public Availabilities: Availability[];
-  public remark:string;
+  public remark: string;
 }

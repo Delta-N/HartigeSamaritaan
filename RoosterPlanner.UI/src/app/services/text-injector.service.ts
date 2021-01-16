@@ -4,8 +4,8 @@ import {Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class TextInjectorService {
-  public static level:string[]=['A1','A2','B1','B2','Moedertaal']
-  public static countries:string[]=['Afghanistan',
+  public static level: string[] = ['A1', 'A2', 'B1', 'B2', 'Moedertaal']
+  public static countries: string[] = ['Afghanistan',
     'Albanië',
     'Algerije',
     'Amerikaanse Maagdeneilanden',
@@ -229,11 +229,12 @@ export class TextInjectorService {
     'Zweden',
     'Zwitserland',
   ];
-  public static acceptedImageExtentions:string[]=['png','jpg','jpeg','gif','jfif','pjp','pjpeg']
+  public static shiftExportHeaders: string[] = ["Taaknaam", "Taakcategorie", "Datum", "Begintijd", "Endtijd", "NaamMedewerker", "Leeftijd", "Woonplaats", "Nationaliteit", "Moedertaal", "NLtaalniveau"];
+  public static acceptedImageExtentions: string[] = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'pjp', 'pjpeg']
   public static calenderSelectionOptions: string[] = ['Elke dag', 'Elke maandag', 'Elke dinsdag', 'Elke woensdag', 'Elke donderdag', 'Elke vrijdag', 'Elke zaterdag', 'Elke zondag', 'Verwijder selectie'];
   public static shiftTableColumnNames: string[] = ['Task', 'Date', 'StartTime', 'EndTime', 'ParticipantsRequired'];
-  public static availabilitiesTableColumnNames: string[] = ['Datum', 'Taak', 'Vanaf', 'Tot','Details'];
-  public static scheduleTableColumnNames: string[] = ['Naam','Taak', 'Vanaf', 'Tot'];
+  public static availabilitiesTableColumnNames: string[] = ['Datum', 'Taak', 'Vanaf', 'Tot', 'Details'];
+  public static scheduleTableColumnNames: string[] = ['Naam', 'Taak', 'Vanaf', 'Tot'];
   public static planShiftTableColumnNames: string[] = ['select', 'Naam', 'Leeftijd', 'Nationaliteit', '#Ingeroosterd', 'Ingeroosterd', 'Inzetbaarheid'];
   public static employeeTableColumnNames: string[] = ['Naam', 'Leeftijd', 'Nationaliteit'];
   public static nationalitiesDutch: string[] = [
@@ -448,7 +449,7 @@ export class TextInjectorService {
   constructor() {
   }
 
- static getColor(color: string) {
+  static getColor(color: string) {
     const colors: any = {
       red: {
         primary: '#ad2121',

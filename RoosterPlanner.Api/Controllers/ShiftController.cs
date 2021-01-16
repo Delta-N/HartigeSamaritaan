@@ -450,5 +450,58 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
+
+        [Authorize(Policy = "Boardmember")]
+        [HttpGet("export/{projectId}")]
+        public async Task<ActionResult<List<ShiftViewModel>>> ExportDataAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                return BadRequest("No valid id.");
+            try
+            {
+                TaskListResult<Shift> result = await shiftService.ExportDataAsync(projectId);
+                
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                if (result.Data == null || result.Data.Count == 0)
+                    return Ok(new List<ShiftViewModel>());
+
+                List<ShiftViewModel> shiftVmList = new List<ShiftViewModel>();
+                List<PersonViewModel> personViewModels = new List<PersonViewModel>();
+                foreach (Shift shift in result.Data)
+                {
+                    ShiftViewModel shiftVm = ShiftViewModel.CreateVm(shift);
+                    shiftVm.Availabilities = new List<AvailabilityViewModel>();
+                    foreach (Availability availability in shift.Availabilities)
+                    {
+                        PersonViewModel pvm;
+                        Guid id = availability.Participation.PersonId;
+                        if (personViewModels.FirstOrDefault(pvms=>pvms.Id==id)==null)
+                        {
+                            TaskResult<User> person = await personService.GetUserAsync(id);
+                            pvm = PersonViewModel.CreateVmFromUser(person.Data,
+                                Extensions.GetInstance(b2CExtentionApplicationId));
+                            personViewModels.Add(pvm);
+                        }
+                        else
+                            pvm = personViewModels.FirstOrDefault(pvm => pvm.Id == id);
+                        AvailabilityViewModel avm = AvailabilityViewModel.CreateVm(availability);
+                        avm.Participation.Person = pvm;
+                        shiftVm.Availabilities.Add(avm);
+                    }
+                    shiftVmList.Add(shiftVm);
+                }
+                return Ok(shiftVmList);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+            
+        }
+
     }
 }

@@ -40,6 +40,7 @@ namespace RoosterPlanner.Data.Repositories
             return EntitySet
                 .AsNoTracking()
                 .Include(p => p.Project)
+                .ThenInclude(p=>p.PictureUri)
                 .Include(p => p.Person)
                 .Where(p => p.PersonId == personId && p.ProjectId == projectId)
                 .FirstOrDefaultAsync();

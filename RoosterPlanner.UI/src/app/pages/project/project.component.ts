@@ -15,6 +15,10 @@ import {AddProjectTaskComponent} from "../../components/add-project-task/add-pro
 import {Task} from 'src/app/models/task';
 import {AddManagerComponent} from "../../components/add-manager/add-manager.component";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
+import {CsvService} from "../../services/csv.service";
+import {ShiftService} from "../../services/shift.service";
+import {AgePipe} from "../../helpers/filter.pipe";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 @Component({
   selector: 'app-project',
@@ -45,7 +49,9 @@ export class ProjectComponent implements OnInit {
               private toastr: ToastrService,
               public dialog: MatDialog,
               private taskService: TaskService,
-              private breadcrumbService: BreadcrumbService) {
+              private breadcrumbService: BreadcrumbService,
+              private csvService: CsvService,
+              private shiftService: ShiftService) {
     this.breadcrumbService.backcrumb();
 
   }
@@ -58,21 +64,21 @@ export class ProjectComponent implements OnInit {
     });
     await this.getParticipation().then();
     await this.getProjectTasks().then();
-
+    console.log(this.project)
   }
 
   async getProject() {
-    await this.projectService.getProject(this.guid).then(project => {
-      if (project != null) {
-        this.project = project;
-        this.displayProject(project);
+    await this.projectService.getProject(this.guid).then(res => {
+      if (res) {
+        this.project = res;
+        this.displayProject(res);
       }
     })
   }
 
   async getProjectTasks() {
-    this.taskService.getAllProjectTasks(this.guid).then(tasks => {
-      this.projectTasks = tasks.filter(t => t != null);
+    this.taskService.getAllProjectTasks(this.guid).then(res => {
+      this.projectTasks = res.filter(t => t != null);
       this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
       if (this.projectTasks.length >= 5) {
         this.projectTasksExpandbtnDisabled = false;
@@ -83,9 +89,9 @@ export class ProjectComponent implements OnInit {
   }
 
   async getParticipation() {
-    await this.participationService.getParticipation(this.userService.getCurrentUserId(), this.guid).then(async par => {
-      if (par != null) {
-        this.participation = par;
+    await this.participationService.getParticipation(this.userService.getCurrentUserId(), this.guid).then(async res => {
+      if (res) {
+        this.participation = res;
         this.displayProject(this.participation.project)
       } else {
         await this.getProject().then();
@@ -170,11 +176,10 @@ export class ProjectComponent implements OnInit {
         dialogResult <= 40) {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
         await this.participationService.updateParticipation(this.participation).then(async response => {
-          if (response){
-            this.participation=response
+          if (response) {
+            this.participation = response
             this.displayProject(response.project);
-          }
-          else
+          } else
             window.location.reload()
         });
       } else {
@@ -258,14 +263,50 @@ export class ProjectComponent implements OnInit {
         await this.participationService.updateParticipation(participation).then(async response => {
             if (response) {
               this.toastr.success("Samenwerkingsvoorkeur is gewijzigd")
-              this.participation=response;
+              this.participation = response;
               this.displayProject(response.project);
             } else
               window.location.reload()
           }
         );
       }
-      this.loaded=true;
+      this.loaded = true;
     });
+  }
+
+  async statistics() {
+    let pipe: AgePipe = new AgePipe();
+    let headers = TextInjectorService.shiftExportHeaders;
+
+    let guid: string;
+    if (this.participation)
+      guid = this.participation.project.id
+    else
+      guid = this.project.id
+
+    await this.shiftService.GetExportableData(guid).then(res => {
+      console.log(res)
+      let statistics: any[] = []
+      res.forEach(shift => {
+        shift.availabilities.forEach(avail => {
+          let statistic = {
+            Taaknaam: shift.task.name.replace(",","."),
+            Taakcategorie: shift.task.category.name.replace(",", "."),
+            Datum: DateConverter.toReadableStringFromDate(shift.date).replace(",", "."),
+            Begintijd: shift.startTime.replace(",", "."),
+            Endtijd: shift.endTime.replace(",", "."),
+            NaamMedewerker: avail.participation.person.firstName.replace(",", ".") + " " + avail.participation.person.lastName.replace(",", "."),
+            Leeftijd: pipe.transform(avail.participation.person.dateOfBirth),
+            Woonplaats: avail.participation.person.city.replace(",", "."),
+            Nationaliteit: avail.participation.person.nationality.replace(",", "."),
+            Moedertaal: avail.participation.person.nativeLanguage.replace(",", "."),
+            NLtaalniveau: avail.participation.person.dutchProficiency.replace(",", ".")
+          }
+
+          statistics.push(statistic);
+        })
+      })
+      this.csvService.downloadFile(statistics, headers, "Shift export - " + this.project.name)
+    })
   }
 }

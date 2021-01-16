@@ -7,6 +7,7 @@ using RoosterPlanner.Data.Common;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Models.Models;
+using RoosterPlanner.Models.Types;
 using Task = System.Threading.Tasks.Task;
 
 namespace RoosterPlanner.Data.Repositories
@@ -23,6 +24,7 @@ namespace RoosterPlanner.Data.Repositories
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId, Guid userId);
         Task<List<Shift>> SearchProjectsAsync(ShiftFilter filter);
         Task<ShiftData> GetUniqueDataAsync(Guid projectId);
+        Task<List<Shift>> ExportDataAsync(Guid projectId);
     }
 
     public class ShiftRepository : Repository<Shift>, IShiftRepository
@@ -40,7 +42,7 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(s => s.Project)
                 .Include(s => s.Task)
-                .ThenInclude(t=>t.Instruction)
+                .ThenInclude(t => t.Instruction)
                 .Where(s => s.ProjectId == projectId)
                 .ToListAsync();
         }
@@ -55,7 +57,7 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(s => s.Task)
                 .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
-                .Where(s => s.ProjectId == projectId && s.Date>=DateTime.Today)
+                .Where(s => s.ProjectId == projectId && s.Date >= DateTime.Today)
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
@@ -84,7 +86,7 @@ namespace RoosterPlanner.Data.Repositories
                 .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
                 .ThenInclude(a => a.Participation)
-                .Where(s => s.ProjectId == projectId && s.Date>=DateTime.Today)
+                .Where(s => s.ProjectId == projectId && s.Date >= DateTime.Today)
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
@@ -114,20 +116,52 @@ namespace RoosterPlanner.Data.Repositories
 
         public async Task<ShiftData> GetUniqueDataAsync(Guid projectId)
         {
-            if(projectId==Guid.Empty)
+            if (projectId == Guid.Empty)
                 throw new ArgumentNullException(nameof(projectId));
             ShiftData data = new ShiftData();
 
             var q = EntitySet
                 .AsNoTracking()
                 .Include(s => s.Task)
-                .Where(s=>s.ProjectId==projectId);
-            data.Tasks =  await q.Select(s => s.Task).Distinct().ToListAsync();
+                .Where(s => s.ProjectId == projectId);
+            data.Tasks = await q.Select(s => s.Task).Distinct().ToListAsync();
             data.Dates = await q.Select(s => s.Date).Distinct().ToListAsync();
             data.StartTimes = await q.Select(s => s.StartTime.ToString("hh\\:mm")).Distinct().ToListAsync();
             data.EndTimes = await q.Select(s => s.EndTime.ToString("hh\\:mm")).Distinct().ToListAsync();
             data.ParticipantsRequired = await q.Select(s => s.ParticipantsRequired).Distinct().ToListAsync();
             return data;
+        }
+
+        public async Task<List<Shift>> ExportDataAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+            List<Shift> shifts = await EntitySet
+                .AsNoTracking()
+                .Include(s => s.Task)
+                .ThenInclude(t=>t.Category)
+                .Include(s => s.Availabilities)
+                .ThenInclude(a => a.Participation)
+                .Where(s => s.ProjectId == projectId &&s.Availabilities.Any(a => a.Type==AvailibilityType.Scheduled))
+                .OrderBy(s => s.Date)
+                .ToListAsync();
+
+            shifts.ForEach(s =>
+            {
+                List<Availability> availabilities = new List<Availability>();
+                foreach (Availability objAvailability in s.Availabilities)
+                {
+                    if (objAvailability.Type != AvailibilityType.Scheduled) continue;
+                    objAvailability.Participation.Availabilities = null;
+                    objAvailability.Shift = null;
+                    availabilities.Add(objAvailability);
+
+                }
+
+                s.Availabilities = availabilities;
+                s.Task.Shifts = null;
+            });
+            return shifts;
         }
 
         public Task<List<Shift>> SearchProjectsAsync(ShiftFilter filter)
@@ -136,14 +170,13 @@ namespace RoosterPlanner.Data.Repositories
                 throw new ArgumentNullException(nameof(filter));
             var q = EntitySet
                 .AsNoTracking()
-                .Include(s=>s.Task)
-                .Where(s=>s.ProjectId==filter.ProjectId);
+                .Include(s => s.Task)
+                .Where(s => s.ProjectId == filter.ProjectId);
             q = filter.SetFilter(q);
-           
 
-            q = q.Where(x => filter.Tasks.Any(t=>t==x.TaskId.ToString()));
+            q = q.Where(x => filter.Tasks.Any(t => t == x.TaskId.ToString()));
             q = q.Where(x => x.Date >= filter.Date);
-            
+
             q = q.Where(x => x.StartTime >= TimeSpan.Parse(filter.Start));
             q = q.Where(x => x.EndTime >= TimeSpan.Parse(filter.End));
             q = q.Where(x => x.ParticipantsRequired >= filter.ParticipantsRequired);
@@ -243,7 +276,7 @@ namespace RoosterPlanner.Data.Repositories
                 .ThenInclude(t => t.Instruction)
                 .Include(s => s.Availabilities)
                 .ThenInclude(a => a.Participation)
-                .Where(s => s.ProjectId == projectId && s.Date == date && s.Task!=null)
+                .Where(s => s.ProjectId == projectId && s.Date == date && s.Task != null)
                 .ToListAsync();
 
             Parallel.ForEach(listOfShifts, shift =>

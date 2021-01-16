@@ -86,7 +86,7 @@ export class ScheduledPipe implements PipeTransform {
 
 @Pipe({name: 'agePipe'})
 export class AgePipe implements PipeTransform {
-  transform(value: number): number {
+  transform(value: string): number {
     if (value) {
       const today = new Date();
       const birthDate = DateConverter.toDate(value);
