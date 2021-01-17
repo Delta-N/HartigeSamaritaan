@@ -84,6 +84,7 @@ namespace RoosterPlanner.Api
             services.AddTransient<IAvailabilityService, AvailabilityService>();
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<ICertificateService, CertificateService>();
+            services.AddTransient<IRequirementService, RequirementService>();
 
             services.AddLogging();
 

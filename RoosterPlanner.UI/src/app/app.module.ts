@@ -42,6 +42,7 @@ import { PrivacyComponent } from './pages/privacy/privacy.component';
 import {ChangeProfilePictureComponent} from "./components/change-profile-picture/change-profile-picture.component";
 import { CertificateComponent } from './pages/certificate/certificate.component';
 import {CalendarTaskLink} from "./helpers/filter.pipe";
+import { RequirementComponent } from './pages/requirement/requirement.component';
 
 
 export function momentAdapterFactory() {
@@ -106,6 +107,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     ChangeProfilePictureComponent,
     CertificateComponent,
     CalendarTaskLink,
+    RequirementComponent,
 
   ],
   imports: [

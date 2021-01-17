@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Requirement {{modifier}}</h2>
+
+
+<mat-dialog-content>
+  <form [formGroup]="checkoutForm" (ngSubmit)="addRequirement(checkoutForm.value)">
+    <input formControlName="id" id="id" type="hidden">
+
+    <div>
+      <mat-form-field>
+        <mat-label for="task"> Taak</mat-label>
+        <input formControlName="taskName" id="taskName" matInput placeholder="Taak naam" value="{{requirement?.task?.name}}" type="text" disabled>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label for="certificateType"> Certificaattype</mat-label>
+        <mat-select [formControl]="certificateTypeControl" required>
+          <mat-option *ngFor="let certificateType of allCertificateTypes" [value]="certificateType">
+            {{certificateType.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions id="actions">
+
+  <div class="align-right">
+    <button class="action-button override-button" (click)="addRequirement(checkoutForm.value)" mat-button>Opslaan
+    </button>
+    <button mat-button class="override-button" (click)="close()">Annuleren</button>
+  </div>
+</mat-dialog-actions>
+

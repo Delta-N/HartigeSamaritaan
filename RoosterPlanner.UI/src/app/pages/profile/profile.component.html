@@ -2,7 +2,7 @@
   <h1>Profiel</h1>
   <div id="push">
     <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button action-button">Profiel wijzigen</a>
-    <a *ngIf="user!=null" (click)="push()" mat-button class="override-button">{{user.pushDisabled?"Pushberichten inschakelen":"Pushberichten uitschakelen"}}</a>
+    <a *ngIf="user!=null" (click)="push()" mat-button class="override-button">{{user.pushDisabled?"E-mailberichten inschakelen":"E-mailberichten uitschakelen"}}</a>
   </div>
 </div>
 

@@ -1,4 +1,5 @@
-﻿using RoosterPlanner.Models;
+﻿using System.Collections.Generic;
+using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models
 {
@@ -11,13 +12,14 @@ namespace RoosterPlanner.Api.Models
         public string Color { get; set; }
 
         public DocumentViewModel Instruction { get; set; }
-        
+
         public string Description { get; set; }
+        public List<RequirementViewModel> Requirements { get; set; }
 
         public static TaskViewModel CreateVm(Task task)
         {
             if (task == null) return null;
-            TaskViewModel vm =  new TaskViewModel
+            TaskViewModel vm = new TaskViewModel
             {
                 Id = task.Id,
                 Name = task.Name,
@@ -30,8 +32,13 @@ namespace RoosterPlanner.Api.Models
             };
             if (task.Instruction != null)
                 vm.Instruction = DocumentViewModel.CreateVm(task.Instruction);
-            return vm;
 
+            vm.Requirements = new List<RequirementViewModel>();
+            if (task.Requirements != null)
+                foreach (Requirement requirement in task.Requirements)
+                    vm.Requirements.Add(RequirementViewModel.CreateVm(requirement));
+
+            return vm;
         }
 
         public static Task CreateTask(TaskViewModel taskViewModel)
@@ -53,6 +60,11 @@ namespace RoosterPlanner.Api.Models
                 task.CategoryId = taskViewModel.Category.Id;
                 task.Category = CategoryViewModel.CreateCategory(taskViewModel.Category);
             }
+
+            task.Requirements = new List<Requirement>();
+            if (taskViewModel.Requirements != null)
+                foreach (RequirementViewModel requirement in taskViewModel.Requirements)
+                    task.Requirements.Add(RequirementViewModel.CreateRequirement(requirement));
 
             if (taskViewModel.Instruction == null) return task;
             task.Instruction = DocumentViewModel.CreateDocument(taskViewModel.Instruction);

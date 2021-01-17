@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
-using Newtonsoft.Json;
 using RoosterPlanner.Service.Config;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
@@ -229,15 +228,6 @@ namespace RoosterPlanner.Service
                 }));
 
             return graphService;
-        }
-        
-        public class GraphUserData
-        {
-            [JsonProperty("odata.metadata")] public string OdataMetadata { get; set; }
-
-            [JsonProperty("odata.nextLink")] public string OdataNextLink { get; set; }
-
-            [JsonProperty("value")] public List<User> Value { get; set; }
         }
     }
 }

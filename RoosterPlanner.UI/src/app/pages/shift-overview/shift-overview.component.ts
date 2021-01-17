@@ -45,7 +45,7 @@ export class ShiftOverviewComponent implements OnInit {
   end: string;
   participantReq: number;
 
-  pageSort:string[]=["date","asc"];
+  pageSort: string[] = ["date", "asc"];
   offset: number = 0;
   pageSize: number = 10;
   index: number = 0;
@@ -59,7 +59,7 @@ export class ShiftOverviewComponent implements OnInit {
     this.sort = ms;
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0
-      this.pageSort=[this.sort.active,this.sort.direction]
+      this.pageSort = [this.sort.active, this.sort.direction]
       this.filter()
     });
     this.setDataSourceAttributes()
@@ -93,7 +93,7 @@ export class ShiftOverviewComponent implements OnInit {
     })
 
     await this.shiftService.getShiftData(this.guid).then(res => {
-      if (res){
+      if (res) {
         this.shiftData = res;
         this.shiftData.tasks.sort((a, b) => a.name > b.name ? 1 : -1)
         this.shiftData.dates.sort((a, b) => a > b ? 1 : -1)
@@ -194,14 +194,16 @@ export class ShiftOverviewComponent implements OnInit {
     filter.participantsRequired = this.participantReq;
 
 
-    await this.shiftService.getShifts(filter).then(res => {
-      if (res) {
-        this.searchResult = res
-        this.dataSource.data = res.resultList
-      }
-    })
-    this.paginator.length = this.searchResult.totalcount
-    this.paginator.pageIndex = this.index
+    if (filter.start && filter.end) {
+      await this.shiftService.getShifts(filter).then(res => {
+        if (res) {
+          this.searchResult = res
+          this.dataSource.data = res.resultList
+        }
+      })
+      this.paginator.length = this.searchResult.totalcount
+      this.paginator.pageIndex = this.index
+    }
   }
 
   changePage($event: PageEvent) {

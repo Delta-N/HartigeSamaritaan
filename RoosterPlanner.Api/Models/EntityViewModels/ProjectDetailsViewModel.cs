@@ -18,6 +18,7 @@ namespace RoosterPlanner.Api.Models
         public string WebsiteUrl { get; set; }
         public bool Closed { get; set; }
         public List<Task> Tasks { get; set; }
+        public string ContactAdres { get; set; }
 
         //Constructor
         public ProjectDetailsViewModel()
@@ -41,6 +42,7 @@ namespace RoosterPlanner.Api.Models
                 ProjectStartDate = project.ProjectStartDate,
                 ProjectEndDate = project.ProjectEndDate,
                 Closed = project.Closed,
+                ContactAdres = project.ContactAdres,
                 LastEditDate = project.LastEditDate,
                 LastEditBy = project.LastEditBy,
                 RowVersion = project.RowVersion
@@ -66,6 +68,7 @@ namespace RoosterPlanner.Api.Models
                 ProjectStartDate = projectDetailsViewModel.ProjectStartDate,
                 ProjectEndDate = projectDetailsViewModel.ProjectEndDate,
                 Closed = projectDetailsViewModel.Closed,
+                ContactAdres = projectDetailsViewModel.ContactAdres,
                 LastEditDate = projectDetailsViewModel.LastEditDate,
                 LastEditBy = projectDetailsViewModel.LastEditBy,
                 RowVersion = projectDetailsViewModel.RowVersion

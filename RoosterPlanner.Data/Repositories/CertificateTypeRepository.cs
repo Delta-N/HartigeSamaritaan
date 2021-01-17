@@ -22,7 +22,9 @@ namespace RoosterPlanner.Data.Repositories
         {
             IQueryable<CertificateType> queryable = EntitySet
                 .AsNoTracking();
-            Task<List<CertificateType>> certificateTypes = queryable.ToListAsync();
+            Task<List<CertificateType>> certificateTypes = queryable
+                .OrderBy(c=>c.Name)
+                .ToListAsync();
             return certificateTypes;
         }
     }

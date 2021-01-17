@@ -14,4 +14,5 @@ export class Project extends Entity {
   public pictureUri?: Document;
   public websiteUrl?: string;
   public closed?: boolean;
+  public contactAdres:string;
 }

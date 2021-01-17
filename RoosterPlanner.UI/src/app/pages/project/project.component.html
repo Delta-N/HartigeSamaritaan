@@ -39,6 +39,10 @@
             <div class="row-name">Deelname Einddatum:</div>
             <div class="user-data">{{viewProject.participationEndDate}}</div>
          </div>
+        <div class="row" *ngIf="viewProject.contactAdres">
+            <div class="row-name">Contact E-mailadres:</div>
+            <div class="user-data">{{viewProject.contactAdres}}</div>
+         </div>
          <div class="row" *ngIf="viewProject.websiteUrl">
             <div class="row-name">Website:</div>
             <div class="user-data"><a href="{{viewProject.websiteUrl}}">Link</a></div>

@@ -30,7 +30,6 @@
                                     (change)="$event ? select(row) : null"
                                     [checked]="selection.isSelected(row)"
                                     [aria-label]="checkboxLabel(row)"
-                                    [disabled]="scheduledata.schedules[scheduledata.schedules.indexOf(row)].scheduledThisDay===true"
                                     color="primary">
                       </mat-checkbox>
                     </td>

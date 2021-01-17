@@ -19,7 +19,8 @@ namespace RoosterPlanner.Service
                 throw new ArgumentNullException(nameof(services));
 
             services.AddDbContext<RoosterPlannerContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("RoosterPlannerDatabase")));
+                options
+                    .UseSqlServer(configuration.GetConnectionString("RoosterPlannerDatabase"),o=>o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery)));
             services.BuildServiceProvider().GetService<RoosterPlannerContext>()?.Database.Migrate();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

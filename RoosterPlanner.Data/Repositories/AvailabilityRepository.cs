@@ -35,7 +35,8 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(a => a.Shift)
                 .ThenInclude(s => s.Task)
                 .ThenInclude(t => t.Instruction)
-                .Where(a => a.Participation.ProjectId == projectId && a.Participation.PersonId == userId)
+                .Where(a => a.Participation.ProjectId == projectId && 
+                            a.Participation.PersonId == userId)
                 .ToListAsync();
             availabilities.ForEach(a =>
             {
@@ -54,7 +55,8 @@ namespace RoosterPlanner.Data.Repositories
             List<Availability> availabilities = await EntitySet
                 .AsNoTracking()
                 .Include(a => a.Shift)
-                .Where(a => a.ParticipationId == participationId && a.Type == AvailibilityType.Scheduled &&
+                .Where(a => a.ParticipationId == participationId && 
+                            a.Type == AvailibilityType.Scheduled &&
                             a.Shift.Date >= DateTime.Today)
                 .ToListAsync();
             availabilities.ForEach(a =>
@@ -77,7 +79,8 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(a => a.Shift)
                 .ThenInclude(s => s.Task)
                 .ThenInclude(t => t.Instruction)
-                .Where(a => a.ParticipationId == participationId && a.Type == AvailibilityType.Scheduled)
+                .Where(a => a.ParticipationId == participationId && 
+                            a.Type == AvailibilityType.Scheduled)
                 .OrderBy(a => a.Shift.Date)
                 .ToListAsync();
             availabilities.ForEach(a =>
@@ -100,7 +103,8 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(a => a.Shift)
                 .ThenInclude(s => s.Task)
                 .ThenInclude(t => t.Instruction)
-                .Where(a => a.Participation.ProjectId == projectId && a.Type == AvailibilityType.Scheduled &&
+                .Where(a => a.Participation.ProjectId == projectId && 
+                            a.Type == AvailibilityType.Scheduled &&
                             a.Shift.Date == dateTime)
                 .OrderBy(a => a.Shift.StartTime)
                 .ThenBy(a => a.Shift.EndTime)
@@ -119,7 +123,8 @@ namespace RoosterPlanner.Data.Repositories
         {
             return EntitySet
                 .AsNoTracking()
-                .Where(a => a.ParticipationId == participationId && a.ShiftId == shiftId)
+                .Where(a => a.ParticipationId == participationId && 
+                            a.ShiftId == shiftId)
                 .FirstOrDefaultAsync();
         }
     }

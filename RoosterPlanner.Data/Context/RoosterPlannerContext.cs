@@ -12,6 +12,7 @@ namespace RoosterPlanner.Data.Context
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
+        public DbSet<Requirement> Requirements { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Participation> Participations { get; set; }
         public DbSet<Availability> Availabilities { get; set; }
@@ -30,20 +31,24 @@ namespace RoosterPlanner.Data.Context
             //Call base method first.
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ProjectTask>()
-                .HasOne(pt => pt.Project)
-                .WithMany(p => p.ProjectTasks)
-                .HasForeignKey(pt => pt.ProjectId);
-            modelBuilder.Entity<ProjectTask>()
-                .HasOne(pt => pt.Task)
-                .WithMany(t => t.ProjectTasks)
-                .HasForeignKey(pt => pt.TaskId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ProjectTask>(p =>
+            {
+                p.HasOne(pt => pt.Project)
+                    .WithMany(pt => pt.ProjectTasks)
+                    .HasForeignKey(pt => pt.ProjectId);
+
+                p.HasOne(pt => pt.Task)
+                    .WithMany(t => t.ProjectTasks)
+                    .HasForeignKey(pt => pt.TaskId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<Project>(pro =>
             {
                 pro.HasMany(pt => pt.ProjectTasks)
                     .WithOne(p => p.Project);
+                pro.HasMany(p => p.Participations)
+                    .WithOne(x => x.Project);
             });
 
             modelBuilder.Entity<Task>(tsk =>
@@ -51,100 +56,101 @@ namespace RoosterPlanner.Data.Context
                 tsk
                     .HasMany(t => t.ProjectTasks)
                     .WithOne(t => t.Task);
+
+                tsk.HasMany(s => s.Shifts)
+                    .WithOne(t => t.Task)
+                    .OnDelete(DeleteBehavior.SetNull);
+                tsk
+                    .HasMany(t => t.Requirements)
+                    .WithOne(t => t.Task);
             });
 
-            modelBuilder.Entity<Document>()
-                .HasMany(d => d.Instructions)
-                .WithOne(i => i.Instruction)
-                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Document>(doc =>
+            {
+                doc.HasMany(d => d.Instructions)
+                    .WithOne(i => i.Instruction)
+                    .OnDelete(DeleteBehavior.SetNull);
+                doc.HasMany(d => d.ProfilePictures)
+                    .WithOne(i => i.ProfilePicture)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
 
-            modelBuilder.Entity<Document>()
-                .HasMany(d => d.ProfilePictures)
-                .WithOne(i => i.ProfilePicture)
-                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Category>(cat =>
+            {
+                cat.HasMany(c => c.Tasks)
+                    .WithOne(t => t.Category)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
 
-            modelBuilder.Entity<Document>()
-                .HasMany(d => d.ProjectPictures)
-                .WithOne(i => i.PictureUri)
-                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Person>(p =>
+            {
+                p.HasIndex(per => per.Oid)
+                    .IsUnique();
+                p.HasMany(cer => cer.Certificates)
+                    .WithOne(x => x.Person);
+                p.HasMany(par => par.Participations)
+                    .WithOne(x => x.Person);
+            });
 
-            modelBuilder.Entity<Task>()
-                .HasMany(s => s.Shifts)
-                .WithOne(t => t.Task)
-                .OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<Category>()
-                .HasMany(c => c.Tasks)
-                .WithOne(t => t.Category)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<Person>()
-                .HasIndex(p => p.Oid)
-                .IsUnique();
-
-            modelBuilder.Entity<Availability>()
-                .HasOne(p => p.Participation)
-                .WithMany(a => a.Availabilities)
-                .HasForeignKey(a => a.ParticipationId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Availability>()
-                .HasOne(s => s.Shift)
-                .WithMany(a => a.Availabilities)
-                .HasForeignKey(a => a.ShiftId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Availability>(ava =>
+            {
+                ava.HasOne(p => p.Participation)
+                    .WithMany(a => a.Availabilities)
+                    .HasForeignKey(a => a.ParticipationId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                ava.HasOne(s => s.Shift)
+                    .WithMany(a => a.Availabilities)
+                    .HasForeignKey(a => a.ShiftId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<Participation>(par =>
             {
                 par.HasMany(m => m.Availabilities)
                     .WithOne(p => p.Participation);
+                par.HasOne(p => p.Person)
+                    .WithMany(ppar => ppar.Participations)
+                    .HasForeignKey(ppar => ppar.PersonId);
+                par.HasOne(p => p.Project)
+                    .WithMany(ppar => ppar.Participations)
+                    .HasForeignKey(ppar => ppar.ProjectId);
             });
 
-            modelBuilder.Entity<Shift>(tsk =>
+            modelBuilder.Entity<Shift>(shf =>
             {
-                tsk.HasMany(m => m.Availabilities)
+                shf.HasMany(m => m.Availabilities)
                     .WithOne(t => t.Shift);
             });
 
-            modelBuilder.Entity<Certificate>()
-                .HasOne(p => p.Person)
-                .WithMany(c => c.Certificates)
-                .HasForeignKey(c => c.PersonId);
-            
-            modelBuilder.Entity<Certificate>()
-                .HasOne(ct => ct.CertificateType)
-                .WithMany(c => c.Certificates)
-                .HasForeignKey(c => c.CertificateTypeId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<Person>(per =>
+            modelBuilder.Entity<Certificate>(cer =>
             {
-                per.HasMany(cer => cer.Certificates)
-                    .WithOne(p => p.Person);
+                cer.HasOne(p => p.Person)
+                    .WithMany(c => c.Certificates)
+                    .HasForeignKey(c => c.PersonId);
+                cer.HasOne(ct => ct.CertificateType)
+                    .WithMany(c => c.Certificates)
+                    .HasForeignKey(c => c.CertificateTypeId)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
+
             modelBuilder.Entity<CertificateType>(ct =>
             {
                 ct.HasMany(c => c.Certificates)
                     .WithOne(x => x.CertificateType);
+                ct.HasMany(c => c.Requirements)
+                    .WithOne(req => req.CertificateType);
             });
 
-            modelBuilder.Entity<Participation>()
-                .HasOne(p => p.Person)
-                .WithMany(par => par.Participations)
-                .HasForeignKey(par => par.PersonId);
-            modelBuilder.Entity<Participation>()
-                .HasOne(p => p.Project)
-                .WithMany(par => par.Participations)
-                .HasForeignKey(par => par.ProjectId);
-
-            modelBuilder.Entity<Person>(per =>
+            modelBuilder.Entity<Requirement>(req =>
             {
-                per.HasMany(p => p.Participations)
-                    .WithOne(x => x.Person);
-            });
-            modelBuilder.Entity<Project>(pr =>
-            {
-                pr.HasMany(p => p.Participations)
-                    .WithOne(x => x.Project);
+                req.HasOne(t => t.Task)
+                    .WithMany(reqt => reqt.Requirements)
+                    .HasForeignKey(reqt => reqt.TaskId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                req.HasOne(cer => cer.CertificateType)
+                    .WithMany(reqt => reqt.Requirements)
+                    .HasForeignKey(reqt => reqt.CertificateTypeId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             var categorySeed = new CategorySeed(modelBuilder);

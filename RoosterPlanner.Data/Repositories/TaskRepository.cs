@@ -47,12 +47,22 @@ namespace RoosterPlanner.Data.Repositories
             return tasks;
         }
 
-        public System.Threading.Tasks.Task<Task> GetTaskAsync(Guid id)
+        public async System.Threading.Tasks.Task<Task> GetTaskAsync(Guid id)
         {
-            return EntitySet
+            Task task = await EntitySet
+                .AsNoTracking()
                 .Include(t => t.Category)
                 .Include(t => t.Instruction)
-                .Where(t => t.Id == id).FirstOrDefaultAsync();
+                .Include(t=>t.Requirements)
+                .ThenInclude(r=>r.CertificateType)
+                .Where(t=>t.Id==id)
+                .FirstOrDefaultAsync();
+
+            task.Category.Tasks = null;
+            foreach (Requirement taskRequirement in task.Requirements)
+                taskRequirement.Task = null;
+            
+            return task;
         }
     }
 }

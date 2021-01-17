@@ -17,6 +17,7 @@ import {ManageModule} from "../manage/manage.module";
 import {AddCertificatetypeComponent} from "../../components/add-certificatetype/add-certificatetype.component";
 import {CertificateTypeComponent} from "../../pages/certificate-type/certificate-type.component";
 import {AddCertificateComponent} from "../../components/add-certificate/add-certificate.component";
+import {AddRequirementComponent} from "../../components/add-requirement/add-requirement.component";
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {AddCertificateComponent} from "../../components/add-certificate/add-cert
     CertificateTypeComponent,
     AddCertificateComponent,
     ColorPipe,
-    ProjectClosedPipe
+    ProjectClosedPipe,
+    AddRequirementComponent
   ],
     imports: [
         CommonModule,

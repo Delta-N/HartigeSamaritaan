@@ -97,7 +97,7 @@ namespace RoosterPlanner.Data.Migrations
                             Id = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
                             Code = "KEUKEN",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 827, DateTimeKind.Local).AddTicks(6592),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 948, DateTimeKind.Local).AddTicks(7837),
                             Name = "Keuken"
                         },
                         new
@@ -105,7 +105,7 @@ namespace RoosterPlanner.Data.Migrations
                             Id = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
                             Code = "BEDIENING",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 827, DateTimeKind.Local).AddTicks(6887),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 948, DateTimeKind.Local).AddTicks(8144),
                             Name = "Bediening"
                         },
                         new
@@ -113,7 +113,7 @@ namespace RoosterPlanner.Data.Migrations
                             Id = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
                             Code = "LOGISTIEK",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 827, DateTimeKind.Local).AddTicks(6905),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 948, DateTimeKind.Local).AddTicks(8167),
                             Name = "Logistiek"
                         },
                         new
@@ -121,7 +121,7 @@ namespace RoosterPlanner.Data.Migrations
                             Id = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
                             Code = "OVERIGE",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 827, DateTimeKind.Local).AddTicks(6913),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 948, DateTimeKind.Local).AddTicks(8173),
                             Name = "Overige"
                         });
                 });
@@ -197,31 +197,31 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f117190b-4f09-4f36-9538-6fe08de42334"),
+                            Id = new Guid("81eeaa95-8998-4025-a140-625e9b98f4d2"),
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(8741),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 952, DateTimeKind.Local).AddTicks(84),
                             Name = "Biefstuk-capable"
                         },
                         new
                         {
-                            Id = new Guid("9d0f0d8d-15c7-4b72-a991-f27495faa546"),
+                            Id = new Guid("df8a8e2e-5388-4780-98b3-a72774a7d6d2"),
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(9099),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 952, DateTimeKind.Local).AddTicks(349),
                             Level = "B",
                             Name = "Rijbewijs"
                         },
                         new
                         {
-                            Id = new Guid("53ed34cf-0bb9-4534-9e4a-8e358955adbd"),
+                            Id = new Guid("f268f9f0-de5e-4bca-bad9-7e09e8ef8cd0"),
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(9116),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 952, DateTimeKind.Local).AddTicks(361),
                             Name = "Barcertificaat"
                         },
                         new
                         {
-                            Id = new Guid("58bf35fe-b73d-4258-92a3-a8f70befaf09"),
+                            Id = new Guid("f12dcdaf-0cac-4105-b858-294ce083a769"),
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(9122),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 952, DateTimeKind.Local).AddTicks(365),
                             Name = "HACCP"
                         });
                 });
@@ -260,10 +260,10 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7fff7993-8a1b-4c2f-90ad-2e71c144cfa5"),
+                            Id = new Guid("c406b225-2131-43a7-b762-8d4d376b04bb"),
                             DocumentUri = "https://hackatonstoragedev.blob.core.windows.net/projectpicture/037efc9a-0836-4513-8ae3-282c597631c4.jfif",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(4722),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 951, DateTimeKind.Local).AddTicks(5723),
                             Name = "TermsOfService"
                         });
                 });
@@ -410,6 +410,9 @@ namespace RoosterPlanner.Data.Migrations
                     b.Property<bool>("Closed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ContactAdres")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
@@ -464,12 +467,12 @@ namespace RoosterPlanner.Data.Migrations
                             Closed = false,
                             Description = "Leuk project in Voorburg",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3344),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(4156),
                             Name = "Voorburg 2020",
-                            ParticipationEndDate = new DateTime(2021, 2, 3, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(2661),
-                            ParticipationStartDate = new DateTime(2021, 1, 6, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(2391),
-                            ProjectEndDate = new DateTime(2021, 2, 4, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3144),
-                            ProjectStartDate = new DateTime(2021, 1, 5, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(2920)
+                            ParticipationEndDate = new DateTime(2021, 2, 15, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(3451),
+                            ParticipationStartDate = new DateTime(2021, 1, 18, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(3199),
+                            ProjectEndDate = new DateTime(2021, 2, 16, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(3954),
+                            ProjectStartDate = new DateTime(2021, 1, 17, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(3696)
                         },
                         new
                         {
@@ -479,12 +482,12 @@ namespace RoosterPlanner.Data.Migrations
                             Closed = false,
                             Description = "Leuk project in Den Haag",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3442),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(4203),
                             Name = "Den Haag 2018",
-                            ParticipationEndDate = new DateTime(2021, 2, 3, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3431),
-                            ParticipationStartDate = new DateTime(2021, 1, 6, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3426),
-                            ProjectEndDate = new DateTime(2021, 2, 4, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3438),
-                            ProjectStartDate = new DateTime(2021, 1, 5, 8, 10, 52, 829, DateTimeKind.Local).AddTicks(3435)
+                            ParticipationEndDate = new DateTime(2021, 2, 15, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(4196),
+                            ParticipationStartDate = new DateTime(2021, 1, 18, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(4193),
+                            ProjectEndDate = new DateTime(2021, 2, 16, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(4201),
+                            ProjectStartDate = new DateTime(2021, 1, 17, 8, 32, 57, 950, DateTimeKind.Local).AddTicks(4199)
                         });
                 });
 
@@ -518,6 +521,40 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasIndex("TaskId");
 
                     b.ToTable("ProjectTasks");
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.Requirement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CertificateTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastEditBy")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("LastEditDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid?>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("CertificateTypeId", "TaskId")
+                        .IsUnique()
+                        .HasFilter("[CertificateTypeId] IS NOT NULL AND [TaskId] IS NOT NULL");
+
+                    b.ToTable("Requirements");
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Shift", b =>
@@ -611,42 +648,42 @@ namespace RoosterPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("026149d8-1d01-4380-b9d2-fc2576518c5a"),
+                            Id = new Guid("9fc7296d-8ad8-41e6-8680-e017cd5c1996"),
                             CategoryId = new Guid("bd065d8a-c6f2-4ec5-84fd-92636f52f309"),
                             Color = "Blue",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chef",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(801),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 951, DateTimeKind.Local).AddTicks(2029),
                             Name = "Chef"
                         },
                         new
                         {
-                            Id = new Guid("bee3d875-418d-46fb-92b0-917cd41bfec3"),
+                            Id = new Guid("b53378b1-5844-4dbd-a4eb-516e7168f1b3"),
                             CategoryId = new Guid("4c23384e-76bd-4957-a7e7-2ba9bd44dc00"),
                             Color = "Red",
                             Description = "Een leuke beschrijving van de werkzaamheden van een runner",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(861),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 951, DateTimeKind.Local).AddTicks(2079),
                             Name = "Runner"
                         },
                         new
                         {
-                            Id = new Guid("31f8801c-95ec-4a26-97ee-631052898fdd"),
+                            Id = new Guid("6d93d45c-053b-4003-bebe-0eddf803d86c"),
                             CategoryId = new Guid("c547a3d4-f726-4db8-bd40-8c27c5e8cb05"),
                             Color = "Yellow",
                             Description = "Een leuke beschrijving van de werkzaamheden van een chauffeur",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(877),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 951, DateTimeKind.Local).AddTicks(2087),
                             Name = "Chauffeur"
                         },
                         new
                         {
-                            Id = new Guid("7edba13d-3cf3-4eeb-abe9-af1d2ff4104b"),
+                            Id = new Guid("7f523f71-7729-4aa1-a6c1-0abe9082b6f4"),
                             CategoryId = new Guid("ba35a8ac-5f2a-4e67-9146-63f62ade6ad2"),
                             Color = "Green",
                             Description = "Een leuke beschrijving van de werkzaamheden van een klusser",
                             LastEditBy = "SYSTEM",
-                            LastEditDate = new DateTime(2021, 1, 5, 8, 10, 52, 830, DateTimeKind.Local).AddTicks(901),
+                            LastEditDate = new DateTime(2021, 1, 17, 8, 32, 57, 951, DateTimeKind.Local).AddTicks(2093),
                             Name = "Klusser"
                         });
                 });
@@ -739,8 +776,7 @@ namespace RoosterPlanner.Data.Migrations
                 {
                     b.HasOne("RoosterPlanner.Models.Document", "PictureUri")
                         .WithMany("ProjectPictures")
-                        .HasForeignKey("PictureUriId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("PictureUriId");
 
                     b.Navigation("PictureUri");
                 });
@@ -760,6 +796,23 @@ namespace RoosterPlanner.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
+
+                    b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("RoosterPlanner.Models.Requirement", b =>
+                {
+                    b.HasOne("RoosterPlanner.Models.CertificateType", "CertificateType")
+                        .WithMany("Requirements")
+                        .HasForeignKey("CertificateTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RoosterPlanner.Models.Task", "Task")
+                        .WithMany("Requirements")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("CertificateType");
 
                     b.Navigation("Task");
                 });
@@ -807,6 +860,8 @@ namespace RoosterPlanner.Data.Migrations
             modelBuilder.Entity("RoosterPlanner.Models.CertificateType", b =>
                 {
                     b.Navigation("Certificates");
+
+                    b.Navigation("Requirements");
                 });
 
             modelBuilder.Entity("RoosterPlanner.Models.Document", b =>
@@ -847,6 +902,8 @@ namespace RoosterPlanner.Data.Migrations
             modelBuilder.Entity("RoosterPlanner.Models.Task", b =>
                 {
                     b.Navigation("ProjectTasks");
+
+                    b.Navigation("Requirements");
 
                     b.Navigation("Shifts");
                 });

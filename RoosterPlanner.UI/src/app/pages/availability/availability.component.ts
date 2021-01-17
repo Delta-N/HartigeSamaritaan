@@ -106,7 +106,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
             this.minDate = moment(this.participation.project.participationStartDate).toDate() >= new Date() ? moment(this.participation.project.participationStartDate).toDate() : moment().startOf("day").toDate();
             this.maxDate = this.participation.project.participationEndDate;
 
-            this.viewDate=this.minDate
+            this.viewDate = this.minDate
             this.calendar.activeDate = moment(this.viewDate);
 
             this.calendar.minDate = moment(this.minDate);
@@ -119,8 +119,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
           }
 
           //create breadcrumbs
-          let current: Breadcrumb = new Breadcrumb('Beschikbaarheid opgeven',null);
-          let previous: Breadcrumb = new Breadcrumb(this.participation.project.name,"/project/" + this.participation.project.id);
+          let current: Breadcrumb = new Breadcrumb('Beschikbaarheid opgeven', null);
+          let previous: Breadcrumb = new Breadcrumb(this.participation.project.name, "/project/" + this.participation.project.id);
 
           let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current];
           this.breadcrumbService.replace(array);
@@ -214,10 +214,12 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         availability.type = this.getAvailabilityTypeNumber(action)
       else if (action === "Preference")
         availability.preference = !availability.preference
+      if (availability.preference)
+        availability.type = 2;
 
-      await this.availabilityService.updateAvailability(availability).then(res=>{
-        availability=res;
-        shift.availabilities[0]=res
+      await this.availabilityService.updateAvailability(availability).then(res => {
+        availability = res;
+        shift.availabilities[0] = res
       })
       this.changeColor()
     }
@@ -250,7 +252,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.changeBorders(event, action)
   }
 
-  changeColor(){
+  changeColor() {
     //color in calender
     let counter: number = 0;
     let color: string = "Gray"
@@ -260,18 +262,22 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       else if (s.availabilities && s.availabilities.length > 0)
         counter++;
     });
-    if (counter === this.shifts.length) {
+    if (counter > 0 && color !== "Blue") {
       let available: boolean = false;
+      let unavailable: boolean = false;
       this.shifts.forEach(s => {
-        if (s && s.availabilities && s.availabilities.length > 0 && s.availabilities[0].type === 2)
-          available = true;
+        if (s && s.availabilities && s.availabilities.length > 0)
+          if (s.availabilities[0].type === 2)
+            available = true;
+          else if (s.availabilities[0].type === 0)
+            unavailable = true;
       })
-      color = available ? "Green" : "Red";
-      let daySchedule = this.availabilityData.knownAvailabilities.find(ka=>ka.date===this.viewDate.toISOString())
-      if(!daySchedule)
-        daySchedule=new ScheduleStatus()
+      color = available ? "Green" : unavailable ? "Red" : "Gray";
+      let daySchedule = this.availabilityData.knownAvailabilities.find(ka => ka.date === this.viewDate.toISOString())
+      if (!daySchedule)
+        daySchedule = new ScheduleStatus()
       daySchedule.date = this.viewDate.toISOString()
-      daySchedule.status = available?1:3;
+      daySchedule.status = available ? 1 : 3;
       this.availabilityData.knownAvailabilities.push(daySchedule)
     }
     this.colorInDay(this.viewDate, color)
@@ -377,7 +383,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     });
     if (this.shifts.length > 0) {
       this.addEvents();
-    }else{
+    } else {
       this.setDefaultHours();
     }
   }
@@ -457,7 +463,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     end.sort()
 
     if (start && start.length > 0)
-      this.startHour = moment(start[0]).hour()>0?moment(start[0]).subtract(1,"hour").hour():0
+      this.startHour = moment(start[0]).hour() > 0 ? moment(start[0]).subtract(1, "hour").hour() : 0
     else
       this.startHour = 12;
     if (end && end.length > 0)

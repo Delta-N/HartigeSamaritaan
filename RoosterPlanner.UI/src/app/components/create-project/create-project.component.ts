@@ -46,7 +46,8 @@ export class CreateProjectComponent implements OnInit {
       projectStartDate: [this.project.projectStartDate != null ? this.project.projectStartDate : today, Validator.date],
       projectEndDate: [this.project.projectEndDate != null ? this.project.projectEndDate : '', Validator.date],
       pictureUri: this.project.pictureUri != null ? this.project.pictureUri : null,
-      websiteUrl: this.project.websiteUrl != null ? this.project.websiteUrl : ''
+      websiteUrl: this.project.websiteUrl != null ? this.project.websiteUrl : '',
+      contactAdres: [this.project.contactAdres != null ? this.project.contactAdres : '',Validator.email]
     })
 
   }

@@ -127,6 +127,15 @@ namespace RoosterPlanner.Service
             {
                 result.Data = taskRepository.Update(task);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                
+                result.Data.Category.Tasks = null;
+                foreach (Requirement requirement in result.Data.Requirements)
+                {
+                    requirement.CertificateType.Requirements = null;
+                    requirement.Task.Requirements = null;
+
+                }
+               
             }
             catch (Exception ex)
             {
@@ -150,7 +159,7 @@ namespace RoosterPlanner.Service
                     await documentService.DeleteDocumentAsync(task.Instruction);
 
                 result.Data = taskRepository.Remove(task);
-                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Succeeded = await unitOfWork.SaveChangesAsync() > 0;
             }
             catch (Exception ex)
             {
@@ -337,6 +346,8 @@ namespace RoosterPlanner.Service
             TaskResult<ProjectTask> result = new TaskResult<ProjectTask>();
             try
             {
+                projectTask.Project = null;
+                projectTask.Task = null;
                 result.Data = projectTaskRepository.Add(projectTask);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }

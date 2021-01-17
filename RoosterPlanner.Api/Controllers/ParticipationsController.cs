@@ -147,6 +147,7 @@ namespace RoosterPlanner.Api.Controllers
                 else
                 {
                     participation = ParticipationViewModel.CreateParticipation(participationViewModel);
+                    participation.Active = true;
                     participation.LastEditBy = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                     if (participation.Id == Guid.Empty)
                         //create participation

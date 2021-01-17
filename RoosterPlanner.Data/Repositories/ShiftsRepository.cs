@@ -84,31 +84,43 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(s => s.Project)
                 .Include(s => s.Task)
                 .ThenInclude(t => t.Instruction)
-                .Include(s => s.Availabilities)
+                .Include(s => s.Task)
+                .ThenInclude(t => t.Requirements)
+                .ThenInclude(r => r.CertificateType)
+                .ThenInclude(ct => ct.Certificates)
+                .Include(s => s.Availabilities
+                    .Where(a => a.Participation.PersonId == userId))
                 .ThenInclude(a => a.Participation)
-                .Where(s => s.ProjectId == projectId && s.Date >= DateTime.Today)
+                .Where(s => s.ProjectId == projectId && s.Date >= DateTime.Today &&
+                            s.Task.Requirements //user must have required certificate
+                                .All(r => r.CertificateType.Certificates
+                                    .Where(cert =>
+                                        (cert.DateExpired != null && cert.DateExpired >= DateTime.UtcNow) ||
+                                        cert.DateExpired == null).Any(cert => cert.PersonId == userId)))
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
             foreach (Shift shift in shifts)
             {
-                List<Availability> toBeRemoved = new List<Availability>();
                 foreach (Availability shiftAvailability in shift.Availabilities)
                 {
                     if (shiftAvailability.Participation != null)
-                    {
-                        if (shiftAvailability.Participation.PersonId != userId)
-                            toBeRemoved.Add(shiftAvailability);
                         shiftAvailability.Participation.Availabilities = null;
-                    }
 
                     shiftAvailability.Shift = null;
                 }
 
-                toBeRemoved.ForEach(a => shift.Availabilities.Remove(a));
+                shift.Project.Shifts = null;
 
-                if (shift.Task != null)
-                    shift.Task.Shifts = null;
+                if (shift.Task == null) continue;
+                foreach (Requirement requirement in shift.Task.Requirements)
+                {
+                    requirement.Task.Requirements = null;
+                    requirement.CertificateType.Certificates = null;
+                    requirement.CertificateType.Requirements = null;
+                }
+
+                shift.Task.Shifts = null;
             }
 
             return shifts;
@@ -139,26 +151,21 @@ namespace RoosterPlanner.Data.Repositories
             List<Shift> shifts = await EntitySet
                 .AsNoTracking()
                 .Include(s => s.Task)
-                .ThenInclude(t=>t.Category)
-                .Include(s => s.Availabilities)
+                .ThenInclude(t => t.Category)
+                .Include(s => s.Availabilities.Where(a => a.Type == AvailibilityType.Scheduled))
                 .ThenInclude(a => a.Participation)
-                .Where(s => s.ProjectId == projectId &&s.Availabilities.Any(a => a.Type==AvailibilityType.Scheduled))
+                .Where(s => s.ProjectId == projectId && s.Availabilities.Any(a => a.Type == AvailibilityType.Scheduled))
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
             shifts.ForEach(s =>
             {
-                List<Availability> availabilities = new List<Availability>();
                 foreach (Availability objAvailability in s.Availabilities)
                 {
-                    if (objAvailability.Type != AvailibilityType.Scheduled) continue;
                     objAvailability.Participation.Availabilities = null;
                     objAvailability.Shift = null;
-                    availabilities.Add(objAvailability);
-
                 }
 
-                s.Availabilities = availabilities;
                 s.Task.Shifts = null;
             });
             return shifts;
@@ -200,6 +207,9 @@ namespace RoosterPlanner.Data.Repositories
                 if (shift.Id == Guid.Empty)
                     shift.SetKey(Guid.NewGuid());
                 shift.LastEditDate = DateTime.UtcNow;
+                shift.Task = null;
+                shift.Project = null;
+
                 EntitySet.AddAsync(shift);
             }
 
@@ -274,14 +284,24 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(s => s.Project)
                 .Include(s => s.Task)
                 .ThenInclude(t => t.Instruction)
-                .Include(s => s.Availabilities)
+                .Include(s => s.Task)
+                .ThenInclude(t => t.Requirements)
+                .ThenInclude(r => r.CertificateType)
+                .ThenInclude(c => c.Certificates)
+                .Include(s => s.Availabilities.Where(a => a.Participation.PersonId == userId))
                 .ThenInclude(a => a.Participation)
-                .Where(s => s.ProjectId == projectId && s.Date == date && s.Task != null)
+                .Where(s => s.ProjectId == projectId &&
+                            s.Date == date && s.Task != null &&
+                            s.Task.Requirements //user must have required certificate
+                                .All(r => r.CertificateType.Certificates
+                                    .Where(cert =>
+                                        (cert.DateExpired != null && cert.DateExpired >= DateTime.UtcNow) ||
+                                        cert.DateExpired == null)
+                                    .Any(cert => cert.PersonId == userId)))
                 .ToListAsync();
 
             Parallel.ForEach(listOfShifts, shift =>
             {
-                shift.Availabilities = shift.Availabilities.Where(a => a.Participation.PersonId == userId).ToList();
                 if (shift.Task != null)
                     shift.Task.Shifts = null;
 
@@ -290,6 +310,11 @@ namespace RoosterPlanner.Data.Repositories
                     a.Participation.Availabilities = null;
                     a.Shift = null;
                 });
+                if (shift.Task != null)
+                {
+                    shift.Task.Shifts = null;
+                    shift.Task.Requirements.ForEach(r => r.Task = null);
+                }
             });
             return listOfShifts;
         }

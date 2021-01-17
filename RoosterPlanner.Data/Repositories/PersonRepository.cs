@@ -34,7 +34,7 @@ namespace RoosterPlanner.Data.Repositories
                 .FirstOrDefaultAsync();
 
             if (person?.Certificates == null) return person;
-            foreach (var personCertificate in person.Certificates.Where(personCertificate => personCertificate.CertificateType != null))
+            foreach (Certificate personCertificate in person.Certificates.Where(personCertificate => personCertificate.CertificateType != null))
                 personCertificate.CertificateType.Certificates = null;
             
             return person;
