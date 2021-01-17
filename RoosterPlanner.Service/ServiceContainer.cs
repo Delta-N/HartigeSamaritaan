@@ -33,7 +33,7 @@ namespace RoosterPlanner.Service
 
             services.Configure<AzureAuthenticationConfig>(options=>
                 configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName).Bind(options));
-
+            
             EmailConfig config = new EmailConfig();
             configuration.Bind(EmailConfig.ConfigSectionName,config);
             SmtpClient smtpClient = new SmtpClient(config.SMTPadres)

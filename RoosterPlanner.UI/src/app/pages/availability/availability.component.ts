@@ -194,7 +194,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       }, 300);
     });
     this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate).startOf("day");
-    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate)
+    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate).startOf("day")
   }
 
   async handleEvent(action: string, event: CalendarEvent): Promise<void> {

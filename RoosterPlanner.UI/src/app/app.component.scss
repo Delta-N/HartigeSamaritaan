@@ -1,6 +1,9 @@
 .mat-toolbar {
   height: 75px;
   background-color: #E74B3B;
+  a{
+    height: 100%;
+  }
 }
 
 .sidenav-spacer {
@@ -21,7 +24,6 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 75px);
-  overflow: hidden;
 }
 
 .content {

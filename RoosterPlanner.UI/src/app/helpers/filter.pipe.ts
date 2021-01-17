@@ -107,7 +107,7 @@ export class ScheduledCount implements PipeTransform {
     let result: number = 0;
     if (value) {
       value.forEach(v => {
-        if (v.scheduledThisDay)
+        if (v.scheduledThisShift)
           result++
       })
     }

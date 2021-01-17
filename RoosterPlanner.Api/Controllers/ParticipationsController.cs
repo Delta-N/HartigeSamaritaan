@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
+using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.Types;
 using RoosterPlanner.Service;
@@ -30,17 +32,24 @@ namespace RoosterPlanner.Api.Controllers
         private readonly IParticipationService participationService;
         private readonly IAvailabilityService availabilityService;
         private readonly IPersonService personService;
+        private readonly WebUrlConfig webUrlConfig;
+ 
+
 
         public ParticipationsController(
             ILogger<ParticipationsController> logger,
             IParticipationService participationService,
             IAvailabilityService availabilityService,
-            IPersonService personService)
+            IPersonService personService,
+            IOptions<WebUrlConfig> options
+)
         {
             this.logger = logger;
             this.participationService = participationService;
             this.availabilityService = availabilityService;
             this.personService = personService;
+            webUrlConfig = options.Value;
+
         }
 
         [HttpGet("{personId}")]
@@ -352,7 +361,7 @@ namespace RoosterPlanner.Api.Controllers
                     await participationService.UpdateParticipationAsync(participation);
 
                     if (body == null) continue;
-                    body += "Bekijk via <u><a href=\"http://localhost:4200/schedule/"+participation.Id+"\">deze link</a></u> alle shifts waarvoor je staat ingeroosterd.<br>"; //todo deze link aanpassen zodra dns definitief is
+                    body += "Bekijk via <u><a href=\""+webUrlConfig.Url+"/schedule/"+participation.Id+"\">deze link</a></u> alle shifts waarvoor je staat ingeroosterd.<br>"; 
                     body += "Via deze pagina kun je ook de beschrijving en instructies voor je shift zien.<br><br>";
                     body += "Hartige groetjes en tot ziens!";
 

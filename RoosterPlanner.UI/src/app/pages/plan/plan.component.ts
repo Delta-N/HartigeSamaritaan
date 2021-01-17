@@ -166,9 +166,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
         this.changeDate(this.maxDate);
       }
     });
-
-    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate);
-    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate)
+    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate).startOf("day");
+    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate).startOf("day")
   }
 
 

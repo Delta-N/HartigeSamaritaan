@@ -99,7 +99,8 @@
             </div>
          </div>
          <div class="col-md-6 right">
-            <h2 *ngIf="shiftDates.length">Gekozen dagen</h2>
+            <h2>Gekozen dagen:</h2>
+           <p *ngIf="shiftDates.length==0">N.N.T.B</p>
             <mat-chip-list>
                <mat-chip *ngFor="let day of shiftDates" [selectable]="selectable" [removable]="removable"
                          (removed)="remove(day)">
