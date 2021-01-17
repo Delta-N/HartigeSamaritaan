@@ -58,7 +58,8 @@ namespace RoosterPlanner.Data.Repositories
                 .Where(t=>t.Id==id)
                 .FirstOrDefaultAsync();
 
-            task.Category.Tasks = null;
+            if(task.Category!=null)
+                task.Category.Tasks = null;
             foreach (Requirement taskRequirement in task.Requirements)
                 taskRequirement.Task = null;
             

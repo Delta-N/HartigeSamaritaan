@@ -84,7 +84,7 @@ export class TaskComponent implements OnInit {
   }
 
   delete() {
-    const message = "Weet je zeker dat je deze taak wilt verwijderen?"
+    const message = "Weet je zeker dat je deze taak wilt verwijderen?  Dit heeft veel gevolgen voor shiften. Je zult zelf handmatig een taak moeten toewijzen aan elke(!) shift."
     const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput", null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",

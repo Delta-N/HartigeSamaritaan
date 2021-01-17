@@ -289,8 +289,8 @@ export class ProjectComponent implements OnInit {
       res.forEach(shift => {
         shift.availabilities.forEach(avail => {
           let statistic = {
-            Taaknaam: shift.task.name.replace(",","."),
-            Taakcategorie: shift.task.category.name.replace(",", "."),
+            Taaknaam: shift.task?shift.task.name.replace(",","."):"Onbekend",
+            Taakcategorie: shift.task&&shift.task.category?shift.task.category.name.replace(",", "."):"Onbekend",
             Datum: DateConverter.toReadableStringFromDate(shift.date).replace(",", "."),
             Begintijd: shift.startTime.replace(",", "."),
             Endtijd: shift.endTime.replace(",", "."),

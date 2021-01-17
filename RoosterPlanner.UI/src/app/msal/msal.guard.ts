@@ -62,7 +62,6 @@ export class MsalGuard implements CanActivate {
               authority: environment.authorities.resetPassword.authority,
               scopes: environment.scopes
             })
-            //todo zorgen dat er automatisch doorverwezen word nadat password gereset is.
             this.authService.logout()
             return of(true);
           }

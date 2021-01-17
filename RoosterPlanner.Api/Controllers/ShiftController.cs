@@ -54,31 +54,7 @@ namespace RoosterPlanner.Api.Controllers
             this.b2CExtentionApplicationId = b2CExtentionApplicationId;
         }
 
-        [HttpGet("project/{projectId}")]
-        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId)
-        {
-            if (projectId == Guid.Empty)
-                return BadRequest("No valid id");
-            try
-            {
-                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(projectId);
-                if (!result.Succeeded)
-                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
-                if (result.Data == null || result.Data.Count == 0)
-                    return Ok(new List<ShiftViewModel>());
-                List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm)
-                    .ToList();
-                return Ok(shiftVmList);
-            }
-            catch (Exception ex)
-            {
-                string message = GetType()
-                    .Name + "Error in " + nameof(GetShiftAsync);
-                logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
-            }
-        }
-
+        
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpGet("unique/{projectId}")]
         public async Task<ActionResult<ShiftData>> GetUniqueDataAsync(Guid projectId)
@@ -413,6 +389,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                result.Data.Task.Requirements = null;
                 return Ok(ShiftViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)

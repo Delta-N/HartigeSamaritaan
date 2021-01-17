@@ -20,28 +20,6 @@ export class ShiftService {
               private errorService: ErrorService) {
   }
 
-  async getAllShifts(projectId: string): Promise<Shift[]> {
-    if (!projectId) {
-      this.errorService.error("ProjectId mag niet leeg zijn")
-      return null;
-    }
-    let shifts: Shift[] = [];
-    await this.apiService.get<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}/project/${projectId}`)
-      .toPromise()
-      .then(res => {
-        if (res.ok) {
-          shifts = res.body
-          if (shifts != null) {
-            shifts.forEach(s => s.date = new Date(s.date))
-          }
-        }
-      }, Error => {
-        this.errorService.httpError(Error)
-      })
-
-    return shifts;
-  }
-
   async getShifts(filter: ShiftFilter): Promise<Searchresult<Shift>> {
     if (!filter || !filter.projectId) {
       this.errorService.error("Ongeldige filter")

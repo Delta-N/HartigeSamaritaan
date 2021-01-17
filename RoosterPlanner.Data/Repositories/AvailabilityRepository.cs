@@ -35,14 +35,19 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(a => a.Shift)
                 .ThenInclude(s => s.Task)
                 .ThenInclude(t => t.Instruction)
-                .Where(a => a.Participation.ProjectId == projectId && 
+                .Where(a => a.Participation.ProjectId == projectId &&
                             a.Participation.PersonId == userId)
                 .ToListAsync();
             availabilities.ForEach(a =>
             {
-                a.Participation.Availabilities = null;
-                a.Shift.Availabilities = null;
-                a.Shift.Task.Shifts = null;
+                if (a.Participation != null)
+                    a.Participation.Availabilities = null;
+                if (a.Shift != null)
+                {
+                    a.Shift.Availabilities = null;
+                    if(a.Shift.Task!=null)
+                        a.Shift.Task.Shifts = null;
+                }
             });
 
             return availabilities;
@@ -55,7 +60,7 @@ namespace RoosterPlanner.Data.Repositories
             List<Availability> availabilities = await EntitySet
                 .AsNoTracking()
                 .Include(a => a.Shift)
-                .Where(a => a.ParticipationId == participationId && 
+                .Where(a => a.ParticipationId == participationId &&
                             a.Type == AvailibilityType.Scheduled &&
                             a.Shift.Date >= DateTime.Today)
                 .ToListAsync();
@@ -75,19 +80,23 @@ namespace RoosterPlanner.Data.Repositories
             List<Availability> availabilities = await EntitySet
                 .AsNoTracking()
                 .Include(a => a.Participation)
-                .ThenInclude(p=>p.Project)
+                .ThenInclude(p => p.Project)
                 .Include(a => a.Shift)
                 .ThenInclude(s => s.Task)
                 .ThenInclude(t => t.Instruction)
-                .Where(a => a.ParticipationId == participationId && 
+                .Where(a => a.ParticipationId == participationId &&
                             a.Type == AvailibilityType.Scheduled)
                 .OrderBy(a => a.Shift.Date)
                 .ToListAsync();
             availabilities.ForEach(a =>
             {
+                if (a.Shift == null) return;
+                if (a.Shift.Task != null)
+                    a.Shift.Task.Shifts = null;
+
                 a.Shift.Availabilities = null;
-                a.Shift.Task.Shifts = null;
-                a.Participation.Availabilities = null;
+                if (a.Participation != null)
+                    a.Participation.Availabilities = null;
             });
             return availabilities;
         }
@@ -103,7 +112,7 @@ namespace RoosterPlanner.Data.Repositories
                 .Include(a => a.Shift)
                 .ThenInclude(s => s.Task)
                 .ThenInclude(t => t.Instruction)
-                .Where(a => a.Participation.ProjectId == projectId && 
+                .Where(a => a.Participation.ProjectId == projectId &&
                             a.Type == AvailibilityType.Scheduled &&
                             a.Shift.Date == dateTime)
                 .OrderBy(a => a.Shift.StartTime)
@@ -112,7 +121,8 @@ namespace RoosterPlanner.Data.Repositories
             availabilities.ForEach(a =>
             {
                 a.Shift.Availabilities = null;
-                a.Shift.Task.Shifts = null;
+                if (a.Shift.Task != null)
+                    a.Shift.Task.Shifts = null;
                 a.Participation.Person.Participations = null;
                 a.Participation.Availabilities = null;
             });
@@ -123,7 +133,7 @@ namespace RoosterPlanner.Data.Repositories
         {
             return EntitySet
                 .AsNoTracking()
-                .Where(a => a.ParticipationId == participationId && 
+                .Where(a => a.ParticipationId == participationId &&
                             a.ShiftId == shiftId)
                 .FirstOrDefaultAsync();
         }

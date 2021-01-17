@@ -9,7 +9,7 @@
       </div>
       <div class="row SA">
         <div class="col-md-2 shift">
-          <h2>{{scheduledata.shift.task.name}}</h2>
+          <h2>{{scheduledata.shift.task?scheduledata.shift.task.name:"Onbekend"}}</h2>
           <h6>{{(scheduledata.shift.date | datePipe)}}</h6>
           <h6>{{(scheduledata.shift.startTime + " - " + scheduledata.shift.endTime)}}</h6>
           <p>{{("Aantal nodig: " + scheduledata.shift.participantsRequired)}}</p>

@@ -95,6 +95,8 @@ export class ShiftOverviewComponent implements OnInit {
     await this.shiftService.getShiftData(this.guid).then(res => {
       if (res) {
         this.shiftData = res;
+        this.shiftData.tasks=this.shiftData.tasks.filter(t=>t)
+
         this.shiftData.tasks.sort((a, b) => a.name > b.name ? 1 : -1)
         this.shiftData.dates.sort((a, b) => a > b ? 1 : -1)
         this.shiftData.startTimes.sort((a, b) => a > b ? 1 : -1)

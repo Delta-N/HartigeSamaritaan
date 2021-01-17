@@ -33,8 +33,6 @@ namespace RoosterPlanner.Api.Controllers
         private readonly IAvailabilityService availabilityService;
         private readonly IPersonService personService;
         private readonly WebUrlConfig webUrlConfig;
- 
-
 
         public ParticipationsController(
             ILogger<ParticipationsController> logger,
@@ -42,14 +40,13 @@ namespace RoosterPlanner.Api.Controllers
             IAvailabilityService availabilityService,
             IPersonService personService,
             IOptions<WebUrlConfig> options
-)
+        )
         {
             this.logger = logger;
             this.participationService = participationService;
             this.availabilityService = availabilityService;
             this.personService = personService;
             webUrlConfig = options.Value;
-
         }
 
         [HttpGet("{personId}")]
@@ -285,14 +282,13 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid id.");
             try
             {
-                
                 TaskListResult<Participation> participations =
                     await participationService.GetParticipationsWithAvailabilitiesAsync(projectId);
                 if (!participations.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
                         {Type = Type.Error, Message = participations.Message});
                 CultureInfo culture = new CultureInfo("en-US");
-                
+
                 foreach (Participation participation in participations.Data.Where(participation =>
                     participation.Availabilities.Count > 0))
                 {
@@ -311,43 +307,46 @@ namespace RoosterPlanner.Api.Controllers
                     sb.AppendLine("PRODID:-//Compnay Inc//Product Application//EN");
                     sb.AppendLine("VERSION:2.0");
                     sb.AppendLine("METHOD:PUBLISH");
-                    
 
                     string body = null;
                     foreach (Availability availability in participation.Availabilities
                         .Where(a => a.Type == AvailibilityType.Scheduled && !a.PushEmailSend)
                         .OrderBy(a => a.Shift.Date))
                     {
-
                         DateTime dtStart = availability.Shift.Date + availability.Shift.StartTime;
                         DateTime dtEnd = availability.Shift.Date + availability.Shift.EndTime;
+                        string description = availability.Shift.Task != null
+                            ? availability.Shift.Task.Description
+                            : "Onbekende omschrijving";
+                        string taskName = availability.Shift.Task != null ? availability.Shift.Task.Name : "Onbekend";
+
                         sb.AppendLine("BEGIN:VEVENT");
                         sb.AppendLine("DTSTART:" + dtStart.ToUniversalTime().ToString(DateFormat));
                         sb.AppendLine("DTEND:" + dtEnd.ToUniversalTime().ToString(DateFormat));
                         sb.AppendLine("DTSTAMP:" + now);
                         sb.AppendLine("UID:" + Guid.NewGuid());
                         sb.AppendLine("CREATED:" + now);
-                        sb.AppendLine("X-ALT-DESC;FMTTYPE=text/html:" + availability.Shift.Task.Description);
+                        sb.AppendLine("X-ALT-DESC;FMTTYPE=text/html:" + description);
                         //sb.AppendLine("DESCRIPTION:" + res.Details);
                         sb.AppendLine("LAST-MODIFIED:" + now);
-                        sb.AppendLine("LOCATION:" + participation.Project.Address+" "+participation.Project.City);
+                        sb.AppendLine("LOCATION:" + participation.Project.Address + " " + participation.Project.City);
                         sb.AppendLine("SEQUENCE:0");
                         sb.AppendLine("STATUS:CONFIRMED");
-                        sb.AppendLine("SUMMARY:" + availability.Shift.Task.Name);
+                        sb.AppendLine("SUMMARY:" + taskName);
                         sb.AppendLine("TRANSP:OPAQUE");
                         sb.AppendLine("END:VEVENT");
-                        
+
                         if (body == null)
                         {
                             body += "Beste " + user.Data.DisplayName + ",<br><br>";
                             body += "Je bent zojuist ingeroosterd voor de volgende diensten:<br><br>";
                         }
 
-                        body += "<b>" + availability.Shift.Date.ToString("dddd, dd MMMM yyyy",culture) + " - " +
-                                availability.Shift.Task.Name + "</b><br>" +
+                        body += "<b>" + availability.Shift.Date.ToString("dddd, dd MMMM yyyy", culture) + " - " +
+                                taskName + "</b><br>" +
                                 "Van: " + availability.Shift.StartTime.ToString("hh\\:mm") + "uur<br>" +
                                 "Tot: " + availability.Shift.EndTime.ToString("hh\\:mm") + "uur<br><br>";
-                        
+
                         //change attribute in db
                         availability.PushEmailSend = true;
                     }
@@ -361,14 +360,15 @@ namespace RoosterPlanner.Api.Controllers
                     await participationService.UpdateParticipationAsync(participation);
 
                     if (body == null) continue;
-                    body += "Bekijk via <u><a href=\""+webUrlConfig.Url+"/schedule/"+participation.Id+"\">deze link</a></u> alle shifts waarvoor je staat ingeroosterd.<br>"; 
+                    body += "Bekijk via <u><a href=\"" + webUrlConfig.Url + "/schedule/" + participation.Id +
+                            "\">deze link</a></u> alle shifts waarvoor je staat ingeroosterd.<br>";
                     body += "Via deze pagina kun je ook de beschrijving en instructies voor je shift zien.<br><br>";
                     body += "Hartige groetjes en tot ziens!";
 
                     participationService.SendEmail(email,
                         "Je bent ingeroosterd",
                         body,
-                        true, null,attachment);
+                        true, null, attachment);
                 }
 
                 return Ok();
@@ -412,7 +412,7 @@ namespace RoosterPlanner.Api.Controllers
                     participationService.SendEmail(email,
                         emailMessage.Subject,
                         emailMessage.Body,
-                        true, null,null);
+                        true, null, null);
                 }
 
                 return Ok();

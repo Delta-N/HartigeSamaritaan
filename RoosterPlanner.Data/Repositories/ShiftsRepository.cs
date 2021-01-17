@@ -14,7 +14,6 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IShiftRepository : IRepository<Shift>
     {
-        Task<List<Shift>> GetByProjectAsync(Guid projectId);
         Task<List<Shift>> AddShiftsAsync(List<Shift> shifts);
         Task<Shift> GetShiftAsync(Guid shiftId);
         Task<Shift> GetShiftWithAvailabilitiesAsync(Guid shiftId);
@@ -33,20 +32,7 @@ namespace RoosterPlanner.Data.Repositories
         public ShiftRepository(DbContext dataContext) : base(dataContext)
         {
         }
-
-        public Task<List<Shift>> GetByProjectAsync(Guid projectId)
-        {
-            if (projectId == Guid.Empty)
-                return Task.FromResult<List<Shift>>(null);
-            return EntitySet
-                .AsNoTracking()
-                .Include(s => s.Project)
-                .Include(s => s.Task)
-                .ThenInclude(t => t.Instruction)
-                .Where(s => s.ProjectId == projectId)
-                .ToListAsync();
-        }
-
+        
         public async Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -112,15 +98,17 @@ namespace RoosterPlanner.Data.Repositories
 
                 shift.Project.Shifts = null;
 
-                if (shift.Task == null) continue;
-                foreach (Requirement requirement in shift.Task.Requirements)
+                if (shift.Task != null)
                 {
-                    requirement.Task.Requirements = null;
-                    requirement.CertificateType.Certificates = null;
-                    requirement.CertificateType.Requirements = null;
-                }
+                    foreach (Requirement requirement in shift.Task.Requirements)
+                    {
+                        requirement.Task.Requirements = null;
+                        requirement.CertificateType.Certificates = null;
+                        requirement.CertificateType.Requirements = null;
+                    }
 
-                shift.Task.Shifts = null;
+                    shift.Task.Shifts = null;
+                }
             }
 
             return shifts;
@@ -166,7 +154,8 @@ namespace RoosterPlanner.Data.Repositories
                     objAvailability.Shift = null;
                 }
 
-                s.Task.Shifts = null;
+                if (s.Task != null)
+                    s.Task.Shifts = null;
             });
             return shifts;
         }
@@ -181,7 +170,7 @@ namespace RoosterPlanner.Data.Repositories
                 .Where(s => s.ProjectId == filter.ProjectId);
             q = filter.SetFilter(q);
 
-            q = q.Where(x => filter.Tasks.Any(t => t == x.TaskId.ToString()));
+            q = q.Where(x => x.TaskId == null || filter.Tasks.Any(t => t == x.TaskId.ToString()));
             q = q.Where(x => x.Date >= filter.Date);
 
             q = q.Where(x => x.StartTime >= TimeSpan.Parse(filter.Start));
@@ -244,7 +233,8 @@ namespace RoosterPlanner.Data.Repositories
                 .Where(s => s.Id == shiftId)
                 .FirstOrDefaultAsync();
 
-            shift.Task.Shifts = null;
+            if (shift.Task != null)
+                shift.Task.Shifts = null;
             shift.Availabilities.ForEach(a =>
             {
                 if (a.Participation != null)
@@ -302,9 +292,6 @@ namespace RoosterPlanner.Data.Repositories
 
             Parallel.ForEach(listOfShifts, shift =>
             {
-                if (shift.Task != null)
-                    shift.Task.Shifts = null;
-
                 shift.Availabilities.ForEach(a =>
                 {
                     a.Participation.Availabilities = null;
