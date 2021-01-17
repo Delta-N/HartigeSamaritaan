@@ -8,7 +8,7 @@
 
 <mat-dialog-actions>
   <div class="align-right">
-  <button class="action-button override-button" mat-button (click)="addParticipations()">Opslaan</button>
+  <button class="action-button override-button" mat-button [disabled]="selectedProjects.length==0" (click)="addParticipations()">Opslaan</button>
   <button mat-button class="override-button" mat-dialog-close="false">Annuleren</button>
   </div>
 </mat-dialog-actions>

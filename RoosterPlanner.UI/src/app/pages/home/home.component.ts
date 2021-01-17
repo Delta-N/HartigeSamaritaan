@@ -61,8 +61,8 @@ export class HomeComponent implements OnInit {
     const dialogRef = this.dialog.open(ChangeProfileComponent, {
       width: '500px',
       data: {
-        user:this.user,
-        title:"Update je profiel voordat je je aanmeldt"
+        user: this.user,
+        title: "Update je profiel voordat je je aanmeldt"
       }
     });
     dialogRef.disableClose = true;
@@ -82,14 +82,18 @@ export class HomeComponent implements OnInit {
                 }
               })
             })
+            let dialogRef = null;
+            if (projects.length > 0) {
+              dialogRef = this.dialog.open(AddProjectComponent, {
+                data: projects,
+                width: '350px',
+              });
+            } else {
+              this.toastr.warning("Geen (nieuwe) projecten gevonden.")
+            }
 
-            let dialogRef = this.dialog.open(AddProjectComponent, {
-              data: projects,
-              width: '350px',
-            });
             dialogRef.disableClose = true;
             dialogRef.afterClosed().subscribe(async result => {
-
               if (result !== 'false') {
                 this.selectedProjects = result;
                 for (const project of this.selectedProjects) {
@@ -100,6 +104,7 @@ export class HomeComponent implements OnInit {
                   await this.participationService.postParticipation(participation).then(res => {
                     if (res) {
                       this.participations.push(res)
+                      this.toastr.success("Aangemeld voor project: " + res.project.name)
                     }
                   });
                 }
@@ -107,8 +112,6 @@ export class HomeComponent implements OnInit {
             })
           }
         )
-      } else {
-        this.toastr.warning("Controleer eerst je profiel")
       }
     })
   }

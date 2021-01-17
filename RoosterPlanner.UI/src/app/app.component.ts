@@ -121,7 +121,7 @@ export class AppComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(async result => {
       if (result && result === 'true') {
         this.user.termsOfUseConsented = moment().subtract(moment().utcOffset(), "minutes").toDate().toISOString()
-        await this.userService.updateUser(this.user).then(()=> window.location.reload())
+        await this.userService.updateUser(this.user).then(() => window.location.reload())
       }
     });
   }
@@ -134,10 +134,7 @@ export class AppComponent implements OnInit, OnDestroy {
     dialogRef.disableClose = false;
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        if (res === 'removed')
-          this.user.profilePicture = null
-        else
-          this.user = res
+        window.location.reload()
       }
 
     });

@@ -77,9 +77,8 @@ export class ProfileComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      if (result != null) {
-        this.user = result;
-        this.age = DateConverter.calculateAge(this.user.dateOfBirth)
+      if (result) {
+       this.loadUserProfile()
       }
     })
   }

@@ -42,7 +42,7 @@ export class RequirementComponent implements OnInit {
           this.requirement = res;
 
           let breadcrumb: Breadcrumb = new Breadcrumb('Requirement', null);
-          let takencrumb: Breadcrumb = new Breadcrumb(this.requirement.task.name, "task/" + this.requirement.id);
+          let takencrumb: Breadcrumb = new Breadcrumb(this.requirement.task.name, "task/" + this.requirement.task.id);
           let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
             takencrumb, breadcrumb];
 

@@ -70,7 +70,7 @@
                         <p>{{item.certificateType ? item.certificateType.name : "Onbekend"}}</p>
                      </a>
                   </span>
-        <span *ngIf="!user.certificates || user.certificates.length==0">N.B.</span>
+        <span *ngIf="!user.certificates || user.certificates.length==0">N.N.T.B.</span>
         <mat-card-actions class="action-anchor"></mat-card-actions>
       </mat-card-content>
       <mat-card-actions class="action-anchor" *ngIf="isAdmin">
@@ -97,7 +97,7 @@
                         <p>{{item.certificateType?item.certificateType.name:"Onbekend"}}</p>
                      </a>
                   </span>
-          <span *ngIf="!user.certificates || user.certificates.length==0">N.B.</span>
+          <span *ngIf="!user.certificates || user.certificates.length==0">N.N.T.B.</span>
           <mat-card-actions class="action-anchor"></mat-card-actions>
         </mat-card-content>
         <mat-card-actions class="action-anchor" *ngIf="isAdmin">
