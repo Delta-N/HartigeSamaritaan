@@ -23,7 +23,7 @@
     </span>
 
 
-      <mat-card [ngClass]="[projectCardStyle]" id="projectCard">
+      <mat-card [ngClass]="[projectCardStyle]" id="projectCard" [ngStyle]="projectCardStyle!=='card' && {'margin':'0'}">
         <div >
           <mat-card-title>Projecten <button [disabled]="projectExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandProjectCard()">
             <mat-icon id="projectIcon">zoom_out_map</mat-icon></button></mat-card-title>
@@ -41,7 +41,7 @@
 
 
 
-      <mat-card [ngClass]="[adminCardStyle]" id="adminCard">
+      <mat-card [ngClass]="[adminCardStyle]" id="adminCard" [ngStyle]="adminCardStyle!=='card' && {'margin':'0'}">
         <div>
           <mat-card-title>Administrators<button [disabled]="adminExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandAdminCard()">
             <mat-icon id="adminIcon">zoom_out_map</mat-icon></button></mat-card-title>

@@ -52,8 +52,8 @@
             <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
          </div>
          <div class="row" *ngIf="this.participation && this.participation.active">
-            <a (click)="editWorkingHours()" mat-button class="edit override-button">Max werkuren wijzigen</a>
-            <a (click)="collaborate(participation)" mat-button class="edit override-button">Voorkeur samenwerking</a>
+            <a (click)="editWorkingHours()" mat-button class="action-button override-button">Max werkuren wijzigen</a>
+            <a (click)="collaborate(participation)" mat-button class="action-button override-button">Voorkeur samenwerking</a>
          </div>
          <div class="admin" *ngIf="isAdmin">
            <div class="row" id="admin-control-title"><h6>Administrator opties</h6></div>
@@ -69,6 +69,7 @@
 
       </div>
       <div class="col-md-6">
+        <div id="card">
          <mat-card [ngClass]="[taskCardStyle]" id="taskCard">
             <div>
                <mat-card-title>
@@ -93,9 +94,12 @@
                <button mat-button (click)="modTask('remove')">Verwijderen</button>
             </mat-card-actions>
          </mat-card>
+          </div>
+        <div id="img">
          <img *ngIf="project.pictureUri && project.pictureUri.documentUri" id="pictureFrame"
               src="{{project.pictureUri.documentUri}}"
               alt="Project picture"/>
+          </div>
       </div>
    </div>
 </span>

@@ -101,7 +101,7 @@ export class CertificateComponent implements OnInit {
 
 
     let img = new Image()
-    img.src = "../../../assets/Logo.png"
+    img.src = "../../../assets/Logo.background.png"
 
     let text: string;
 

@@ -16,7 +16,7 @@
       <a mat-button class="toolbarbutton" *ngIf="isManager" routerLink="/manage" routerLinkActive="active">Beheer</a>
       <button mat-button class="toolbarbutton" *ngIf="!loggedIn" (click)="login()">Inloggen</button>
       <div class="dropdown">
-        <img id="profile" class="dropimg" [src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'"
+        <img class="dropimg profile" [src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'"
              alt="Profile picture">
         <div class="dropdown-content">
           <a routerLink="/profile">Profiel</a>
@@ -32,11 +32,17 @@
     <mat-sidenav-container class="sidenav-container">
       <mat-sidenav #sidenav mode="side" opened="false" fxShow="true" fxHide.gt-sm="true">
         <div fxLayout="column">
+          <div id="sidenavPicture">
+            <img class="dropimg profile"
+                 [src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'"
+                 alt="Profile picture">
+          </div>
           <a mat-button class="sidenav-button" routerLink="/home" routerLinkActive="active">Home</a>
           <a mat-button class="sidenav-button" routerLink="/profile" routerLinkActive="active">Profiel</a>
           <a mat-button class="sidenav-button" *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">Admin</a>
           <a mat-button class="sidenav-button" *ngIf="isManager" routerLink="/manage" routerLinkActive="active">Beheer</a>
-          <a mat-button class="sidenav-button" routerLink="/manage" (click)="logout()" >Uitloggen</a>
+          <a mat-button class="sidenav-button" (click)="logout()" >Uitloggen</a>
+
         </div>
       </mat-sidenav>
 

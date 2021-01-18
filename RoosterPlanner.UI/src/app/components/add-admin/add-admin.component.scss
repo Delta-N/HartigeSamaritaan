@@ -25,3 +25,26 @@ a {
     overflow: hidden;
   }
 }
+.pageButtons{
+  display: flex;
+  justify-content: center;
+}
+.action-row{
+  display: block;
+  margin: 0;
+}
+.actions{
+  margin-left: auto;
+  margin-top: 10px;
+}
+
+@media only screen and (max-width: 992px) {
+  .mat-button{
+    font-size: 12px!important;
+    padding: 0;
+  }
+  .closebutton{
+    margin-left: inherit;
+  }
+}
+

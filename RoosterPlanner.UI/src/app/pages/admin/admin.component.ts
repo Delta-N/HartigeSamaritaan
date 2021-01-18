@@ -55,8 +55,9 @@ export class AdminComponent implements OnInit {
   }
 
   async getAdministrators(offset: number, pageSize: number) {
-    await this.userService.getAdministrators(offset, pageSize).then(x => {
-      this.administrators = x;
+    await this.userService.getAdministrators(offset, pageSize).then(res => {
+      console.log(res)
+      this.administrators = res;
       if (this.administrators.length >= 5) {
         this.adminExpandbtnDisabled = false;
       }
@@ -94,7 +95,9 @@ export class AdminComponent implements OnInit {
 
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(_ => {
-      this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
+      setTimeout(()=>{
+        this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
+      },250)
     });
   }
 

@@ -1,3 +1,10 @@
+#push{
+  border: none;
+}
+.row-name{
+  padding-top: 15px;
+  min-width: 200px;
+}
 .user-data {
   font: normal normal normal 15px/45px Segoe UI !important;
 }
@@ -52,4 +59,32 @@
 
 #open-label {
   color: gray;
+}
+
+@media only screen and (max-width: 992px) {
+  .row-name{
+    font-size: 13px !important;
+    min-width: 115px;
+  }
+  #addshiftbutton{
+    font-size: 12px !important;
+    padding: 0 !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .row-name {
+    font-size: 20px!important;
+    min-width: 200px;
+  }
+  #addshiftbutton {
+    font-size: inherit;
+    padding: inherit;
+  }
+}
+@media only screen and (max-width: 550px) {
+  .row-name{
+    font-size: 13px !important;
+    min-width: 130px;
+  }
 }

@@ -1,6 +1,7 @@
 .mat-toolbar {
   height: 75px;
-  background-color: #E74B3B;
+  background: rgb(231, 75, 59);
+  background: linear-gradient(90deg, rgba(231, 75, 59, 1) 0%, rgba(167, 46, 33, 1) 100%);
   a{
     height: 100%;
   }
@@ -58,7 +59,7 @@ img {
 }
 
 .sidenav-button {
-  text-align: right;
+  text-align: center;
   letter-spacing: 0;
   color: black;
   opacity: 1;
@@ -97,7 +98,7 @@ img {
   font-size: 12px;
 }
 
-#profile {
+.profile {
   width: 60px;
   height: 60px;
   object-fit: cover;
@@ -106,6 +107,12 @@ img {
 
 #buttons {
   display: flex;
+}
+#sidenavPicture{
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+
 }
 
 

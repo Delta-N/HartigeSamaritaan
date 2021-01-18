@@ -18,11 +18,15 @@
            <a (click)="modManager(user.id, false)"> <p id="{{user.id}}">{{user.firstName}} {{user.lastName}}</p><mat-icon style="color: green" hidden id="check{{user.id}}"> check </mat-icon></a>
          </span>
         </div>
-        <div class="row">
-          <button mat-raised-button (click)="prevPage()"><</button>
-          <button mat-raised-button (click)="nextPage()">></button>
-          <button mat-button (click)="close()" class="override-button closebutton">Annuleren</button>
-          <button mat-button (click)="send()" class="override-button action-button">Versturen</button>
+        <div class="row action-row">
+          <div class="row pageButtons">
+            <button mat-raised-button (click)="prevPage()"><</button>
+            <button mat-raised-button (click)="nextPage()">></button>
+          </div>
+          <div class="row actions">
+            <button mat-button (click)="close()" class="override-button closebutton ">Annuleren</button>
+            <button mat-button (click)="send()" class="override-button action-button">Versturen</button>
+          </div>
         </div>
       </div>
     </mat-tab>
@@ -35,12 +39,15 @@
               hidden id="check{{manager.id}}" style="color: red">close</mat-icon> </a>
       </span>
         </div>
-        <div class="row">
-          <button mat-raised-button (click)="prevPage()"><</button>
-          <button mat-raised-button (click)="nextPage()">></button>
-          <button mat-button (click)="close()" class="override-button closebutton ">Annuleren</button>
-          <button mat-button (click)="send()" class="override-button action-button">Versturen</button>
-
+        <div class="row action-row">
+          <div class="row pageButtons">
+            <button mat-raised-button (click)="prevPage()"><</button>
+            <button mat-raised-button (click)="nextPage()">></button>
+          </div>
+          <div class="row actions">
+            <button mat-button (click)="close()" class="override-button closebutton ">Annuleren</button>
+            <button mat-button (click)="send()" class="override-button action-button">Versturen</button>
+          </div>
         </div>
       </div>
     </mat-tab>
