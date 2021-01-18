@@ -11,6 +11,7 @@ import {TextInjectorService} from "../../services/text-injector.service";
 import {ProjectService} from "../../services/project.service";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-schedule-manager',
@@ -45,12 +46,12 @@ export class ScheduleManagerComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute,
-              private router:Router,
+              private router: Router,
               private availabilityService: AvailabilityService,
-              private projectService:ProjectService,
-              private breadcrumbService:BreadcrumbService) {
-    let breadcrumb: Breadcrumb = new Breadcrumb();
-    breadcrumb.label = 'Rooster';
+              private projectService: ProjectService,
+              private breadcrumbService: BreadcrumbService) {
+    let breadcrumb: Breadcrumb = new Breadcrumb('Rooster', null);
+
     let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
       this.breadcrumbService.managecrumb, breadcrumb];
 
@@ -62,12 +63,11 @@ export class ScheduleManagerComponent implements OnInit {
 
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       this.projectId = params.get('id');
-      this.projectService.getProject(this.projectId).then(res=>{
-        this.minDate=res.participationStartDate
-        this.maxDate=res.participationEndDate
+      this.projectService.getProject(this.projectId).then(res => {
+        this.minDate = res.participationStartDate
+        this.maxDate = res.participationEndDate
       })
       await this.getAvailabilities(this.viewDate).then(() => {
-
         this.loaded = true;
       })
     })
@@ -114,7 +114,7 @@ export class ScheduleManagerComponent implements OnInit {
   }
 
   async getAvailabilities(viewDate: Date) {
-    await this.availabilityService.getScheduledAvailabilitiesOnDate(this.projectId, viewDate).then(res => {
+    await this.availabilityService.getScheduledAvailabilitiesOnDate(this.projectId, moment(viewDate).set("hour", 12).toDate()).then(res => {
       this.setDatasource(res)
     })
   }

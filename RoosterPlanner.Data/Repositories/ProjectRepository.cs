@@ -29,15 +29,6 @@ namespace RoosterPlanner.Data.Repositories
         }
 
         /// <summary>
-        /// Returns a list of open projects.
-        /// </summary>
-        /// <returns>List of projects that are not closed.</returns>
-        public Task<List<Project>> GetActiveProjectsAsync()
-        {
-            return EntitySet.Where(p => !p.Closed).OrderBy(p => p.ParticipationStartDate).ToListAsync();
-        }
-
-        /// <summary>
         /// Search for projects based on given filter.
         /// </summary>
         /// <param name="filter"></param>

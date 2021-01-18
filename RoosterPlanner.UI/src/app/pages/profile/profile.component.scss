@@ -16,7 +16,17 @@
 }
 .col-6{
   padding: 0;
+}
 
+img {
+  margin-top: 30px;
+  max-width: 250px;
+
+  align-self: center;
+  object-fit: cover;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
 }
 
 .mat-card {
@@ -24,6 +34,7 @@
   margin-top: 30px;
   margin-bottom: 10px;
   max-width: 325px;
+  min-width: 325px;
 }
 .text-box{
   border: 1px gray solid;
@@ -32,8 +43,81 @@
   font-size: 15px;
 
 }
+.right{
+  display: flex;
+}
+.card{
+  margin-right: 20px;
+}
 
-@media only screen and (max-width: 550px) {
+#pictureFrame{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+#expanded-card{
+  width: 100%;
+}
+
+@media only screen and (max-width: 1200px) {
+  img {
+    max-width: 182px;
+  }
+  .mat-card{
+    max-width: 250px;
+    min-width: 250px;
+  }
+  .user-data{
+    font-size: 16px !important;
+  }
+}
+
+
+  @media only screen and (max-width: 992px) {
+  img{
+    max-width: 125px;
+  }
+    .user-data {
+      font-size: 13px !important;
+    }
+    .row-name{
+      min-width: 180px;
+      font-size: 17px !important;
+    }
+    .mat-card{
+      min-width: 200px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+  .right{
+    padding-left: 15px;
+  }
+  img{
+    max-width: 182px;
+  }
+  .mat-card {
+    min-width: 275px;
+  }
+  .user-data {
+    font-size: 18px !important;
+  }
+  .row-name {
+    min-width: 225px;
+    font-size: 22px !important;
+    padding-top: 0;
+  }
+  #card{
+    display: flex;
+    justify-content: center;
+  }
+}
+
+  @media only screen and (max-width: 550px) {
+    #pictureFrame{
+      margin-left: 0 !important;
+    }
   .text-box{
     font-size: 12px;
   }
@@ -44,7 +128,8 @@
 
   .mat-card{
     min-width: initial;
-    width: 250px;
+    width: 375px;
+    max-width: inherit;
 
     .mat-card-title{
       font-size: 16px;
@@ -57,5 +142,19 @@
       font-size: 16px;
     }
   }
+    #pictureFrame {
+      margin-left: 25%;
+    }
 
+    .user-data {
+      font-size: 12px !important;
+    }
+
+    .row-name {
+      min-width: 150px ;
+      font-size: 14px !important;
+    }
+.right{
+  display: block;
+}
 }

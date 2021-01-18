@@ -17,17 +17,20 @@ namespace RoosterPlanner.Models
 
         public List<Certificate> Certificates { get; set; }
 
+        public List<Requirement> Requirements { get; set; }
 
 
         public CertificateType() : base(Guid.Empty)
         {
             Certificates = new List<Certificate>();
+            Requirements = new List<Requirement>();
 
         }
 
         public CertificateType(Guid id) : base(id)
         {
             Certificates = new List<Certificate>();
+            Requirements = new List<Requirement>();
 
         }
     }

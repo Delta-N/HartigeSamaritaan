@@ -12,6 +12,7 @@ import {ManageGuard} from "./guards/manage.guard";
 import {ScheduleComponent} from "./pages/schedule/schedule.component";
 import {PrivacyComponent} from "./pages/privacy/privacy.component";
 import {CertificateComponent} from "./pages/certificate/certificate.component";
+import {RequirementComponent} from "./pages/requirement/requirement.component";
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent, canActivate: [MsalGuard]},
   {path: 'project/:id', component: ProjectComponent, canActivate: [MsalGuard]},
   {path: 'task/:id', component: TaskComponent, canActivate: [MsalGuard]},
+  {path: 'requirement/:id', component: RequirementComponent, canActivate: [MsalGuard]},
   {path: 'schedule/:id', component: ScheduleComponent, canActivate: [MsalGuard]},
   {path: 'privacy', component: PrivacyComponent},
   {path: 'certificate/:id', component: CertificateComponent},

@@ -132,7 +132,7 @@ namespace RoosterPlanner.Service
             try
             {
                 result.Data = unitOfWork.CertificateTypeRepository.Remove(certificateType);
-                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+                result.Succeeded = await unitOfWork.SaveChangesAsync() > 0;
             }
             catch (Exception ex)
             {

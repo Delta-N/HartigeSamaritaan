@@ -29,15 +29,7 @@ export class ShiftComponent implements OnInit {
               private toastr: ToastrService,
               private userService: UserService,
               private breadcrumbService: BreadcrumbService) {
-    let previous: Breadcrumb = new Breadcrumb();
-    previous.label = "Shift overzicht";
-    previous.url = this.breadcrumbService.previousUrl;
 
-    let current: Breadcrumb = new Breadcrumb();
-    current.label = "Shift";
-
-    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
-    this.breadcrumbService.replace(breadcrumbs);
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
@@ -50,6 +42,12 @@ export class ShiftComponent implements OnInit {
     await this.shiftService.getShift(this.guid).then(shift => {
       if (shift) {
         this.shift = shift
+
+        let previous: Breadcrumb = new Breadcrumb('Shift overzicht', "/manage/shifts/"+this.shift.project.id);
+        let current: Breadcrumb = new Breadcrumb('Shift', null);
+
+        let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
+        this.breadcrumbService.replace(breadcrumbs);
         this.loaded = true;
       }
     })

@@ -55,8 +55,9 @@ export class AdminComponent implements OnInit {
   }
 
   async getAdministrators(offset: number, pageSize: number) {
-    await this.userService.getAdministrators(offset, pageSize).then(x => {
-      this.administrators = x;
+    await this.userService.getAdministrators(offset, pageSize).then(res => {
+      console.log(res)
+      this.administrators = res;
       if (this.administrators.length >= 5) {
         this.adminExpandbtnDisabled = false;
       }
@@ -87,42 +88,17 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  async modAdmin(modifier: string) {
-    let toastrString: string;
-    let dataModifier: boolean;
-    if (modifier === 'add') {
-      toastrString = 'toegevoegd';
-      dataModifier = true;
-    } else if (modifier === 'remove') {
-      await this.getAdministrators(0, this.reasonableMaxInteger)
-      toastrString = 'verwijderd';
-      dataModifier = false;
-    }
-
-    const dialogRef = this.dialog.open(AddAdminComponent, {
+  async modAdmin() {
+     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '500px',
-      data: {
-        addAdminType: dataModifier,
-        administrators: this.administrators
-      }
     });
+
     dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result) {
-        this.loaded = false;
-        this.getAdministrators(0, this.itemsPerCard).then()
-        setTimeout(() => {
-          this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
-          this.toastr.success(result + " is " + toastrString + " als administrator")
-        }, 500);
-      }
-      this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
-
+    dialogRef.afterClosed().subscribe(_ => {
+      setTimeout(()=>{
+        this.getAdministrators(0, this.itemsPerCard).then(() => this.loaded = true)
+      },250)
     });
-  }
-
-  todo() {
-    this.toastr.warning("Deze functie moet nog geschreven worden")
   }
 
   expandProjectCard() {

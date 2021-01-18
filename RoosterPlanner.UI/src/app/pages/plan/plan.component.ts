@@ -61,8 +61,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
   minDate: Date;
   maxDate: Date;
 
-  startHour: number = 0;
-  endHour: number = 23;
+  startHour: number = 12;
+  endHour: number = 17;
   prevBtnDisabled: boolean;
   nextBtnDisabled: boolean;
 
@@ -84,38 +84,37 @@ export class PlanComponent implements OnInit, AfterViewInit {
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       let projectId: string = params.get('id');
       let date: string = params.get('date')
-      if (date && date !== 'Invalid Date') {
-        this.viewDate = moment(date).toDate();
-      } else
-        this.viewDate = new Date();
-
 
       //get basic data
       await this.availabilityService.getAvailabilityDataOfProject(projectId).then(res => {
         if (res)
           this.availabilityData = res;
         this.displayedProjectTasks = this.availabilityData.projectTasks;
-
       })
 
       //getproject
       await this.projectService.getProject(projectId).then(res => {
         if (res) {
           this.project = res;
-          this.minDate = this.project.participationStartDate >= new Date() ? this.project.participationStartDate : moment().startOf("day").toDate();
+          this.minDate = moment(this.project.participationStartDate).toDate() >= new Date() ? moment(this.project.participationStartDate).toDate() : moment().startOf("day").toDate();
           this.maxDate = this.project.participationEndDate;
           this.calendar.minDate = moment(this.minDate);
           this.calendar.maxDate = moment(this.maxDate);
+          if (date && date !== 'Invalid Date') {
+            this.viewDate = moment(date).toDate();
+          } else
+            this.viewDate = this.minDate;
           this.calendar.activeDate = moment(this.viewDate);
           this.calendar.updateTodaysDate()
+          this.dateOrViewChanged()
 
         }
       })
 
 
       //create breadcrumbs
-      let current: Breadcrumb = new Breadcrumb();
-      current.label = 'Plannen';
+      let current: Breadcrumb = new Breadcrumb('Plannen',null);
+
       let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, current];
       this.breadcrumbService.replace(array);
     })
@@ -141,6 +140,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
   changeDate(date: Date): void {
     this.viewDate = date;
+    this.calendar.selected = moment(this.viewDate)
+    this.calendar.activeDate = moment(this.viewDate);
     this.dateOrViewChanged();
   }
 
@@ -165,9 +166,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
         this.changeDate(this.maxDate);
       }
     });
-
-    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate);
-    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate)
+    this.prevBtnDisabled = moment(this.viewDate).startOf("day").subtract(1, "day") < moment(this.minDate).startOf("day");
+    this.nextBtnDisabled = moment(this.viewDate).startOf("day").add(1, "day") > moment(this.maxDate).startOf("day")
   }
 
 
@@ -210,6 +210,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.fillSpacer()
       }, 100)
+    }else{
+      this.setDefaultHours()
     }
   }
 
@@ -255,6 +257,11 @@ export class PlanComponent implements OnInit, AfterViewInit {
     this.setHours()
   }
 
+  setDefaultHours(){
+    this.startHour=12;
+    this.endHour=17;
+    this.refresh.next();
+  }
   setHours() {
     let start: Date[] = []
     this.filteredEvents.forEach(fe => start.push(fe.start))
@@ -265,9 +272,10 @@ export class PlanComponent implements OnInit, AfterViewInit {
     end.sort()
 
     if (start && start.length > 0)
-      this.startHour = moment(start[0]).subtract(1, "hour").hour()
+      this.startHour = moment(start[0]).hour() > 0 ? moment(start[0]).subtract(1, "hour").hour() : 0
     else
       this.startHour = 12;
+
     if (end && end.length > 0)
       this.endHour = moment(end[end.length - 1]).hour()
     else

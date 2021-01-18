@@ -1,37 +1,88 @@
+<div class="spinner" *ngIf="!loaded">
+  <mat-spinner></mat-spinner>
+</div>
 <span *ngIf="loaded">
-
-  <div class="row bar">
-    <h1>Taak</h1>
-  </div>
-
-
-  <div class="row">
-    <div class="row-name">Naam:</div>
-    <div class="user-data">{{task.name}}</div>
-  </div>
-
-  <div class="row">
-    <div class="row-name">Categorie:</div>
-    <div class="user-data">{{task.category!=null?task.category.name:null}}</div>
-  </div>
-
-  <div class="row">
-    <div class="row-name">Shiftkleur:</div>
-    <div class="user-data">{{task.color}}</div>
-  </div>
-
-  <div class="row" *ngIf="task.instruction">
-    <div class="row-name">Instructiedocument:</div>
-    <div class="user-data"><a [href]="task.instruction.documentUri" target="_blank">Klik hier om te lezen</a></div>
-  </div>
-
-  <div class="row">
-    <div class="row-name">Omschrijving:</div>
-    <div class="user-data">{{task.description}}</div>
-  </div>
-
-  <div class="row">
-    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editTask">Taak wijzigen</a>
-    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="deleteTask">Taak verwijderen</a>
-  </div>
+   <div class="row bar">
+      <h1>Taak</h1>
+   </div>
+   <div class="row" id="holder">
+      <div class="col-6" id="left">
+         <div class="row">
+            <div class="row-name">Naam:</div>
+            <div class="user-data">{{task.name}}</div>
+         </div>
+         <div class="row">
+            <div class="row-name">Categorie:</div>
+            <div class="user-data">{{task.category != null ? task.category.name : null}}</div>
+         </div>
+         <div class="row" *ngIf="isAdmin">
+            <div class="row-name">Shiftkleur:</div>
+            <div class="user-data">{{task.color | colorPipe}}</div>
+         </div>
+         <div class="row" *ngIf="task.instruction">
+            <div class="row-name">Instructiedocument:</div>
+            <div class="user-data"><a [href]="task.instruction.documentUri"
+                                      target="_blank">Klik hier om te lezen</a></div>
+         </div>
+         <div class="row">
+            <div class="row-name">Omschrijving:</div>
+            <div class="user-data">{{task.description}}</div>
+         </div>
+         <div class="row">
+            <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editTask">Taak wijzigen</a>
+            <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button"
+               id="deleteTask">Taak verwijderen</a>
+         </div>
+      </div>
+      <div class="col-6" id="right">
+         <mat-card [ngClass]="[requirementCardStyle]">
+            <div>
+               <mat-card-title>
+                  Benodigde certificaten
+                  <button [disabled]="requirementExpandbtnDisabled" class="card-title-icon" mat-icon-button
+                          (click)="expandRequirementCard()">
+                  <mat-icon>zoom_out_map</mat-icon>
+                  </button>
+               </mat-card-title>
+            </div>
+            <mat-card-content>
+               <span *ngFor="let item of displayRequirements">
+                  <a [routerLink]="['/requirement', item.id]">
+                     <p>{{item.certificateType.name}}</p>
+                  </a>
+               </span>
+               <span *ngIf="!displayRequirements || displayRequirements.length==0">N.N.T.B.</span>
+               <mat-card-actions class="action-anchor"></mat-card-actions>
+            </mat-card-content>
+            <mat-card-actions class="action-anchor" *ngIf="isAdmin">
+               <button mat-button (click)="modRequirement('toevoegen')">Nieuwe toevoegen</button>
+            </mat-card-actions>
+         </mat-card>
+      </div>
+      <div hidden id="expanded-card">
+         <mat-card [ngClass]="[requirementCardStyle]">
+            <div>
+               <mat-card-title>
+                  Benodigde certificaten
+                  <button [disabled]="requirementExpandbtnDisabled" class="card-title-icon" mat-icon-button
+                          (click)="expandRequirementCard()">
+                  <mat-icon id="icon">fullscreen_exit</mat-icon>
+                  </button>
+               </mat-card-title>
+            </div>
+            <mat-card-content>
+               <span *ngFor="let item of displayRequirements">
+                  <a [routerLink]="['/requirement', item.id]">
+                     <p>{{item.certificateType.name}}</p>
+                  </a>
+               </span>
+               <span *ngIf="!task.requirements || task.requirements.length==0">N.N.T.B.</span>
+               <mat-card-actions class="action-anchor"></mat-card-actions>
+            </mat-card-content>
+            <mat-card-actions class="action-anchor" *ngIf="isAdmin">
+               <button mat-button (click)="modRequirement('toevoegen')">Nieuwe toevoegen</button>
+            </mat-card-actions>
+         </mat-card>
+      </div>
+   </div>
 </span>

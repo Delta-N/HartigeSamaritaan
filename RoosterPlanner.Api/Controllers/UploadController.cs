@@ -123,8 +123,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                if (documentViewModel.Name == "Privacy Policy" && !PersonsController.UserHasRole(oid,
-                    UserRole.Boardmember,
+                if (documentViewModel.Name == "Privacy Policy" && !PersonsController.UserHasRole(UserRole.Boardmember,
                     (ClaimsIdentity) HttpContext.User.Identity))
                     return Unauthorized();
 
@@ -160,7 +159,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
 
-                if (documentViewModel.Name == "TOS" && !PersonsController.UserHasRole(oid, UserRole.Boardmember,
+                if (documentViewModel.Name == "TOS" && !PersonsController.UserHasRole(UserRole.Boardmember,
                     (ClaimsIdentity) HttpContext.User.Identity))
                     return Unauthorized();
 
@@ -220,9 +219,8 @@ namespace RoosterPlanner.Api.Controllers
                 Document document = (await documentService.GetDocumentAsync(id)).Data;
                 if (document == null)
                     return NotFound("Document not found");
-
-                string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
-                if (document.Name != "profilepicture" && !PersonsController.UserHasRole(oid, UserRole.Boardmember,
+                
+                if (document.Name != "profilepicture" && !PersonsController.UserHasRole(UserRole.Boardmember,
                     (ClaimsIdentity) HttpContext.User.Identity))
                     return Unauthorized("User is cannot delete this file");
 

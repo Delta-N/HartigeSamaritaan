@@ -25,6 +25,7 @@ namespace RoosterPlanner.Data.Common
         IDocumentRepository DocumentRepository { get; }
         ICertificateTypeRepository CertificateTypeRepository { get; }
         ICertificateRepository CertificateRepository { get; }
+        IRequirementRepository RequirementRepository { get; }
 
         /// <summary>
         /// Saves the changes.
@@ -63,6 +64,7 @@ namespace RoosterPlanner.Data.Common
         private IDocumentRepository documentRepository;
         private ICertificateTypeRepository certificateTypeRepository;
         private ICertificateRepository certificateRepository;
+        private IRequirementRepository requirementRepository;
 
         #endregion
 
@@ -94,6 +96,9 @@ namespace RoosterPlanner.Data.Common
 
         public ICertificateRepository CertificateRepository =>
             certificateRepository ??= new CertificateRepository(DataContext);
+
+        public IRequirementRepository RequirementRepository =>
+            requirementRepository ??= new RequirementRepository(DataContext);
 
         #region Constructor
 

@@ -6,8 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using RoosterPlanner.Common.Config;
-using RoosterPlanner.Email;
+using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Service;
 
 namespace RoosterPlanner.Api
@@ -71,15 +70,13 @@ namespace RoosterPlanner.Api
                 options.JsonSerializerOptions.IgnoreNullValues = true;
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
+            services.Configure<WebUrlConfig>(
+                Configuration.GetSection(WebUrlConfig.ConfigSectionName));
+           
+            services.AddSingleton(
+                Configuration.GetValue<string>("AzureAuthentication:B2CExtentionApplicationId"));
 
-            services.Configure<AzureAuthenticationConfig>(
-                Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName));
-            services.Configure<AzureBlobConfig>(
-                Configuration.GetSection(AzureBlobConfig.ConfigSectionName));
-            services.Configure<EmailConfig>(
-                Configuration.GetSection(EmailConfig.ConfigSectionName));
             
-
             services.AddTransient<IAzureB2CService, AzureB2CService>();
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<IPersonService, PersonService>();
@@ -90,7 +87,7 @@ namespace RoosterPlanner.Api
             services.AddTransient<IAvailabilityService, AvailabilityService>();
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<ICertificateService, CertificateService>();
-            services.AddTransient<IEmailService, SMTPEmailService>();
+            services.AddTransient<IRequirementService, RequirementService>();
 
             services.AddLogging();
 

@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 
 namespace RoosterPlanner.Service
@@ -16,12 +18,14 @@ namespace RoosterPlanner.Service
         Task<TaskResult<Shift>> GetShiftWithAvailabilitiesAsync(Guid shiftId);
         Task<TaskResult<Shift>> UpdateShiftAsync(Shift shift);
         Task<TaskListResult<Shift>> CreateShiftsAsync(List<Shift> shifts);
-        Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId);
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, DateTime date);
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date);
         Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId);
         Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId, Guid userId);
-        
+
+        Task<TaskListResult<Shift>> GetShiftsAsync(ShiftFilter filter);
+        Task<TaskResult<ShiftData>> GetUniqueDataAsync(Guid projectId);
+        Task<TaskListResult<Shift>> ExportDataAsync(Guid projectId);
     }
 
     public class ShiftService : IShiftService
@@ -55,7 +59,7 @@ namespace RoosterPlanner.Service
             catch (Exception ex)
             {
                 result.Message = GetType().Name + " - Error removing shift " + shift.Id;
-                logger.LogError(ex,result.Message, shift);
+                logger.LogError(ex, result.Message, shift);
                 result.Error = ex;
             }
 
@@ -144,28 +148,7 @@ namespace RoosterPlanner.Service
 
             return result;
         }
-
-        public async Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId)
-        {
-            if (projectId == Guid.Empty)
-                throw new ArgumentNullException(nameof(projectId));
-            
-            TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
-            try
-            {
-                result.Data = await shiftRepository.GetByProjectAsync(projectId);
-                result.Succeeded = true;
-            }
-            catch (Exception ex)
-            {
-                result.Message = GetType().Name + " - Error getting shifts with projectid " + projectId;
-                logger.LogError(ex, result.Message);
-                result.Error = ex;
-            }
-
-            return result;
-        }
-
+        
         public async Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, DateTime date)
         {
             if (projectId == Guid.Empty)
@@ -214,7 +197,7 @@ namespace RoosterPlanner.Service
         {
             if (projectId == Guid.Empty)
                 throw new ArgumentNullException(nameof(projectId));
-            
+
             TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
             try
             {
@@ -241,7 +224,7 @@ namespace RoosterPlanner.Service
             TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
             try
             {
-                result.Data = await shiftRepository.GetByProjectWithAvailabilitiesAsync(projectId,userId);
+                result.Data = await shiftRepository.GetByProjectWithAvailabilitiesAsync(projectId, userId);
                 result.Succeeded = true;
             }
             catch (Exception ex)
@@ -254,6 +237,64 @@ namespace RoosterPlanner.Service
             return result;
         }
 
-       
+        public async Task<TaskListResult<Shift>> GetShiftsAsync(ShiftFilter filter)
+        {
+            if (filter == null)
+                throw new ArgumentNullException(nameof(filter));
+            TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
+            try
+            {
+                result.Data = await shiftRepository.SearchProjectsAsync(filter);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error finding shifts with filter: " + filter;
+                logger.LogError(ex, result.Message, filter);
+                result.Error = ex;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskResult<ShiftData>> GetUniqueDataAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+            TaskResult<ShiftData> result = new TaskResult<ShiftData>();
+            try
+            {
+                result.Data = await shiftRepository.GetUniqueDataAsync(projectId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error getting shiftdata of project: " + projectId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
+            return result;
+        }
+
+        public async Task<TaskListResult<Shift>> ExportDataAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                throw new ArgumentNullException(nameof(projectId));
+            TaskListResult<Shift> result = TaskListResult<Shift>.CreateDefault();
+            try
+            {
+                result.Data = await shiftRepository.ExportDataAsync(projectId);
+                result.Succeeded = true;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error getting data to export in project: " + projectId;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
+            }
+
+            return result;
+        }
     }
 }

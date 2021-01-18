@@ -11,22 +11,42 @@
       </div>
       <div class="row tasks-container">
         <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
-          <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
+          <ng-template #popContent>{{item.description}}<br> <a href="task/{{item.id}}"
+                                                               style="text-decoration: underline; color: blue">details</a>
+          </ng-template>
+          <mat-checkbox class="checkBox" [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
+                        [closeDelay]="1250" [openDelay]="500"
+                        id="{{item.id}}" (change)="OnCheckboxChange($event)"
                         checked="true" color="primary" [disabled]="activeProjectTasks|checkboxFilter: item.id"
-                        [matTooltip]=item.description>{{item.name}}</mat-checkbox>
+          >{{item.name}} </mat-checkbox>
         </div>
       </div>
       <div class="row legend">
-        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je kan nog wat beschikbaarheden opgeven."
-             style="background: red">1
-        </div>
-        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je hebt alle beschikbaarheden ingevuld."
-             style="background: green">2
-        </div>
-        <div class="mat-calendar-body-cell-content legend-button" matTooltip="Je bent ingeroosterd."
-             style="background: blue">3
+        <h5>Legenda</h5>
+        <div class="row legend-item">
+
+          <div class="mat-calendar-body-cell-content legend-button" style="background: gray">
+          </div>
+          Geef je beschikbaarheid door
         </div>
 
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: red">
+          </div>
+          Onbeschikbaar voor shift(s)
+        </div>
+
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: green">
+          </div>
+          Beschikbaar voor shift(s)
+        </div>
+
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: blue">
+          </div>
+          Ingeroosterd voor shift(s)
+        </div>
       </div>
     </div>
   </div>
@@ -34,7 +54,9 @@
 
   <div class="col-8">
     <div class="row datebox">
-      <button mat-button class="accept btnhidden schedule-button" matTooltip="Je bent de hele dag beschikbaar" (click)="acceptDay()">Beschikbaar</button>
+      <button mat-button class="accept btnhidden schedule-button" matTooltip="Je bent de hele dag beschikbaar"
+              (click)="acceptDay()">Beschikbaar
+      </button>
       <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
         <mat-icon>navigate_before</mat-icon>
       </button>
@@ -42,7 +64,9 @@
       <button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
         <mat-icon>navigate_next</mat-icon>
       </button>
-      <button mat-button class="refuse btnhidden schedule-button" matTooltip="Je bent de hele dag onbeschikbaar" (click)="refuseDay()">Onbeschikbaar</button>
+      <button mat-button class="refuse btnhidden schedule-button" matTooltip="Je bent de hele dag onbeschikbaar"
+              (click)="refuseDay()">Onbeschikbaar
+      </button>
     </div>
     <div class="row rowhidden">
       <button mat-button class="accept schedule-button" (click)="acceptDay()">Beschikbaar</button>
@@ -51,10 +75,15 @@
     <ng-template
       #customEventTemplate
       let-weekEvent="weekEvent">
+      <ng-template #eventTooltip>
+        {{availabilityData.projectTasks|calendarTooltip:weekEvent.event.title}}
+        <br> <a href="task/{{availabilityData.projectTasks|calendarTaskLink:weekEvent.event.title}}" style="text-decoration: underline; color: blue">details</a>
+      </ng-template>
       <div
         class="cal-event"
         [ngStyle]="{backgroundColor: weekEvent.event.color?.secondary,borderColor: weekEvent.event.color?.primary}"
-        [mwlCalendarTooltip]="availabilityData.projectTasks|calendarTooltip:weekEvent.event.title"
+        [ngbPopover]="eventTooltip" triggers="mouseenter:mouseleave" container="body"
+        [closeDelay]="1250" [openDelay]="500"
         [attr.aria-label]="{ event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
         <div class="flex-container">
 

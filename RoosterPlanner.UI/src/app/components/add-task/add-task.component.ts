@@ -9,6 +9,7 @@ import {TaskService} from "../../services/task.service";
 import {CategoryService} from "../../services/category.service";
 import {UploadService} from "../../services/upload.service";
 import {Document} from "../../models/document";
+import {TextInjectorService} from "../../services/text-injector.service";
 
 @Component({
   selector: 'app-add-task',
@@ -24,7 +25,7 @@ export class AddTaskComponent implements OnInit {
   checkoutForm;
   modifier: string = 'toevoegen';
   categories: Category[] = [];
-  colors: string[] = ["Red", "Blue", "Yellow", "Green", "Orange", "Pink"];
+  colors: string[] = TextInjectorService.colors;
   files: FileList;
 
 

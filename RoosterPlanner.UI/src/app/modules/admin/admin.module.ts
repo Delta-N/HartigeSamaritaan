@@ -6,7 +6,7 @@ import {MaterialModule} from "../material/material.module";
 import {AllTasksComponent} from "../../pages/all-tasks/all-tasks.component";
 import {AddCategoryComponent} from "../../components/add-category/add-category.component";
 import {AddAdminComponent} from "../../components/add-admin/add-admin.component";
-import {FilterPipe, ManagerFilterPipe} from "../../helpers/filter.pipe";
+import {ColorPipe, FilterPipe, ManagerFilterPipe, ProjectClosedPipe} from "../../helpers/filter.pipe";
 import {AddTaskComponent} from "../../components/add-task/add-task.component";
 import {AddManagerComponent} from "../../components/add-manager/add-manager.component";
 import {CreateProjectComponent} from "../../components/create-project/create-project.component";
@@ -17,6 +17,7 @@ import {ManageModule} from "../manage/manage.module";
 import {AddCertificatetypeComponent} from "../../components/add-certificatetype/add-certificatetype.component";
 import {CertificateTypeComponent} from "../../pages/certificate-type/certificate-type.component";
 import {AddCertificateComponent} from "../../components/add-certificate/add-certificate.component";
+import {AddRequirementComponent} from "../../components/add-requirement/add-requirement.component";
 
 
 @NgModule({
@@ -35,7 +36,10 @@ import {AddCertificateComponent} from "../../components/add-certificate/add-cert
     EmployeeComponent,
     AddCertificatetypeComponent,
     CertificateTypeComponent,
-    AddCertificateComponent
+    AddCertificateComponent,
+    ColorPipe,
+    ProjectClosedPipe,
+    AddRequirementComponent
   ],
     imports: [
         CommonModule,
@@ -43,6 +47,7 @@ import {AddCertificateComponent} from "../../components/add-certificate/add-cert
         MaterialModule,
         ManageModule,
     ],
+  exports:[ColorPipe],
   providers:[]
 })
 export class AdminModule { }

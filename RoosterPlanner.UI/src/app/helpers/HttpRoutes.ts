@@ -11,6 +11,7 @@ export class HttpRoutes {
   private static availabilityController = 'api/availability';
   private static certificateController = 'api/certificate';
   private static emailController = 'api/email';
+  private static requirementController = 'api/requirements';
 
   public static personApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.personController}`;
   public static projectApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.projectController}`;
@@ -21,4 +22,5 @@ export class HttpRoutes {
   public static availabilityApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.availabilityController}`
   public static certificateApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.certificateController}`
   public static emailApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.emailController}`
+  public static requirementApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.requirementController}`
 }

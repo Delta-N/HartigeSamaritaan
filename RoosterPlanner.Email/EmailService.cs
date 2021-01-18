@@ -1,36 +1,30 @@
 ﻿#nullable enable
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.Options;
-using RoosterPlanner.Common.Config;
 
 namespace RoosterPlanner.Email
 {
     public interface IEmailService
     {
-        void SendEmail(string recipient, string subject, string body, bool isBodyHtml,string? sender);
-        void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml, string? sender);
+        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,Attachment? attachment);
+        void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml, string? sender, Attachment? attachment);
     }
 
-    public class SMTPEmailService:IEmailService
+    public class SMTPEmailService : IEmailService
     {
-        private readonly EmailConfig emailConfig;
+        private readonly string sender;
         private readonly SmtpClient smtpClient;
-        public SMTPEmailService(IOptions<EmailConfig> emailConfig)
+
+        public SMTPEmailService(SmtpClient smtpClient, string sender)
         {
-            this.emailConfig = emailConfig.Value;
-            smtpClient = new SmtpClient(this.emailConfig.SMTPadres)
-            {
-                Port = this.emailConfig.Port,
-                Credentials = new NetworkCredential(this.emailConfig.Emailadres, this.emailConfig.Password),
-                EnableSsl = this.emailConfig.EnableSsl
-            };
+            this.sender = sender;
+            this.smtpClient = smtpClient;
         }
 
-        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender)
+        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
+            Attachment? attachment)
         {
-            sender ??= emailConfig.Emailadres;
+            sender ??= this.sender;
             var mailMessage = new MailMessage
             {
                 From = new MailAddress(sender),
@@ -38,14 +32,17 @@ namespace RoosterPlanner.Email
                 Body = body,
                 IsBodyHtml = isBodyHtml
             };
+            if(attachment!=null)
+                mailMessage.Attachments.Add(attachment);
+
             mailMessage.To.Add(recipient);
             smtpClient.Send(mailMessage);
-          
         }
 
-        public void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml, string? sender)
+        public void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml,
+            string? sender, Attachment? attachment)
         {
-            sender ??= emailConfig.Emailadres;
+            sender ??= this.sender;
             var mailMessage = new MailMessage
             {
                 From = new MailAddress(sender),
@@ -53,7 +50,9 @@ namespace RoosterPlanner.Email
                 Body = body,
                 IsBodyHtml = isBodyHtml
             };
-            
+            if(attachment!=null)
+                mailMessage.Attachments.Add(attachment);
+
             foreach (string recipient in recipients)
                 mailMessage.To.Add(recipient);
 

@@ -1,13 +1,17 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
+using RoosterPlanner.Email;
 using RoosterPlanner.Models;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
+using Attachment = System.Net.Mail.Attachment;
 using Person = RoosterPlanner.Models.Person;
+
 
 namespace RoosterPlanner.Service
 {
@@ -20,6 +24,8 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Participation>> GetParticipationsAsync(Guid projectId);
         Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId);
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
+        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
+            System.Net.Mail.Attachment? attachment);
     }
 
     public class ParticipationService : IParticipationService
@@ -30,18 +36,20 @@ namespace RoosterPlanner.Service
         private readonly IParticipationRepository participationRepository;
         private readonly IAzureB2CService azureB2CService;
         private readonly IPersonService personService;
+        private readonly IEmailService emailService;
         private readonly ILogger<ParticipationService> logger;
 
         #endregion
 
         //Constructor
         public ParticipationService(IUnitOfWork unitOfWork, ILogger<ParticipationService> logger,
-            IAzureB2CService azureB2CService, IPersonService personService)
+            IAzureB2CService azureB2CService, IPersonService personService, IEmailService emailService)
         {
             this.unitOfWork = unitOfWork;
             participationRepository = unitOfWork.ParticipationRepository;
             this.azureB2CService = azureB2CService;
             this.personService = personService;
+            this.emailService = emailService;
             this.logger = logger;
         }
 
@@ -66,8 +74,8 @@ namespace RoosterPlanner.Service
                 if (project == null)
                     throw new RecordNotFoundException("Project: " + participation.ProjectId);
 
-                participation.Person = person;
-                participation.Project = project; //todo test if add participation still works
+                participation.Person = null;
+                participation.Project = null; 
 
                 result.Data = participationRepository.Add(participation);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
@@ -173,6 +181,7 @@ namespace RoosterPlanner.Service
                 logger.LogError(ex, result.Message);
                 result.Error = ex;
             }
+
             return result;
         }
 
@@ -216,6 +225,14 @@ namespace RoosterPlanner.Service
             }
 
             return result;
+        }
+
+        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
+            Attachment? attachment)
+        {
+            if (recipient == null || subject == null || body == null)
+                throw new ArgumentNullException("Email parameters");
+            emailService.SendEmail(recipient, subject, body, isBodyHtml, sender,attachment);
         }
     }
 }

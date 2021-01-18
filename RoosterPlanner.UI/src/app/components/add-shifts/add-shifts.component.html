@@ -1,8 +1,12 @@
+<div class="spinner" *ngIf="!loaded">
+  <mat-spinner></mat-spinner>
+</div>
 <span *ngIf="loaded">
-      <div class="row bar" >
-         <div>
-            <h1>{{title}}</h1>
-         </div>
+      <div class="row bar">
+        <h1>{{title}}</h1>
+        <div id="push">
+          <a (click)="save(checkoutForm.value)" mat-button class="action-button override-button">Opslaan</a>
+        </div>
       </div>
       <div class="row">
          <div class="col-md-6 left">
@@ -88,15 +92,13 @@
                         </mat-option>
                      </mat-select>
                   </mat-form-field>
-                  <button mat-button class="override-button" (click)="addAllDays()">Voeg toe</button>
+                  <button mat-button class="override-button" id="addshiftbutton" (click)="addAllDays()">Voeg toe</button>
                </div>
-            </div>
-            <div class="row">
-               <a (click)="save(checkoutForm.value)" mat-button class="action-button override-button">Opslaan</a>
             </div>
          </div>
          <div class="col-md-6 right">
-            <h2 *ngIf="shiftDates.length">Gekozen dagen</h2>
+            <h2>Gekozen dagen:</h2>
+           <p *ngIf="shiftDates.length==0">N.N.T.B</p>
             <mat-chip-list>
                <mat-chip *ngFor="let day of shiftDates" [selectable]="selectable" [removable]="removable"
                          (removed)="remove(day)">

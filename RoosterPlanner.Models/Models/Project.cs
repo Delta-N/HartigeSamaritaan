@@ -48,6 +48,9 @@ namespace RoosterPlanner.Models
         [Column(Order = 11)]
         public bool Closed { get; set; }
 
+        [Column(Order = 12)]
+        public string ContactAdres { get; set; }
+        
         public List<ProjectTask> ProjectTasks { get; set; }
 
         public List<Participation> Participations { get; set; }

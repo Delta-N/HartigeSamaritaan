@@ -1,9 +1,9 @@
-  <div class="row bar">
-    <h1>Dashboard</h1>
-    <button mat-button id="push" (click)="addParticipation()">Aanmelden bij project</button>
-  </div>
+<div class="row bar">
+  <h1>Dashboard</h1>
+  <button mat-button id="push" (click)="addParticipation()">Aanmelden bij project</button>
+</div>
 
-  <span *ngIf="participations.length > 0">
+<span *ngIf="participations.length > 0">
        <div class="row cardholder">
        <span *ngFor="let item of participations" class="mobilecard">
         <app-project-card [participation]="item"></app-project-card>
@@ -11,11 +11,14 @@
         </div>
 </span>
 
-  <div *ngIf="participations.length === 0&& loaded===true">
+<div class="spinner" *ngIf="!loaded">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="participations.length === 0 && loaded">
 
-      <div>
-        <div class="row"><p id="flavortext">Nog niet aangemeld bij een project</p></div>
-        <div class="row"><a mat-button id="big-button" (click)="addParticipation()">Aanmelden</a></div>
-      </div>
-    </div>
+  <div>
+    <div class="row"><p id="flavortext">Nog niet aangemeld bij een project</p></div>
+    <div class="row"><a mat-button id="big-button" (click)="addParticipation()">Aanmelden</a></div>
+  </div>
+</div>
 

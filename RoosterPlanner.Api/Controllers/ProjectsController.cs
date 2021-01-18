@@ -167,6 +167,7 @@ namespace RoosterPlanner.Api.Controllers
                 oldProject.WebsiteUrl = updatedProject.WebsiteUrl;
                 oldProject.ProjectStartDate = updatedProject.ProjectStartDate;
                 oldProject.ProjectEndDate = updatedProject.ProjectEndDate;
+                oldProject.ContactAdres = updatedProject.ContactAdres;
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldProject.LastEditBy = oid;

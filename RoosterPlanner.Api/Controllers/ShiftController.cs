@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.Constants;
-using RoosterPlanner.Common.Config;
 using RoosterPlanner.Models;
+using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Models.Types;
 using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
@@ -27,13 +27,13 @@ namespace RoosterPlanner.Api.Controllers
     [ApiController]
     public class ShiftController : ControllerBase
     {
-        private readonly AzureAuthenticationConfig azureB2CConfig;
         private readonly ILogger<ShiftController> logger;
         private readonly IShiftService shiftService;
         private readonly IProjectService projectService;
         private readonly IPersonService personService;
         private readonly ITaskService taskService;
         private readonly IAvailabilityService availabilityService;
+        private readonly string b2CExtentionApplicationId;
 
         public ShiftController(
             ILogger<ShiftController> logger,
@@ -41,8 +41,8 @@ namespace RoosterPlanner.Api.Controllers
             IProjectService projectService,
             ITaskService taskService,
             IPersonService personService,
-            IOptions<AzureAuthenticationConfig> azureB2CConfig,
-            IAvailabilityService availabilityService)
+            IAvailabilityService availabilityService,
+            string b2CExtentionApplicationId)
 
         {
             this.logger = logger;
@@ -50,25 +50,50 @@ namespace RoosterPlanner.Api.Controllers
             this.projectService = projectService;
             this.personService = personService;
             this.taskService = taskService;
-            this.azureB2CConfig = azureB2CConfig.Value;
             this.availabilityService = availabilityService;
+            this.b2CExtentionApplicationId = b2CExtentionApplicationId;
         }
 
-        [HttpGet("project/{projectId}")]
-        public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId)
+        
+        [Authorize(Policy = "Boardmember&Committeemember")]
+        [HttpGet("unique/{projectId}")]
+        public async Task<ActionResult<ShiftData>> GetUniqueDataAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
                 return BadRequest("No valid id");
             try
             {
-                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(projectId);
+                TaskResult<ShiftData> result = await shiftService.GetUniqueDataAsync(projectId);
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+
+                return Ok(result.Data);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetUniqueDataAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+        [Authorize(Policy = "Boardmember&Committeemember")]
+        [HttpPost("search")]
+        public async Task<ActionResult<SearchResultViewModel<ShiftViewModel>>> GetShiftsAsync(ShiftFilter filter)
+        {
+            if (filter == null)
+                return BadRequest("No filter received");
+            try
+            {
+                TaskListResult<Shift> result = await shiftService.GetShiftsAsync(filter);
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
                 if (result.Data == null || result.Data.Count == 0)
-                    return Ok(new List<ShiftViewModel>());
+                    return Ok(new SearchResultViewModel<ShiftViewModel>(0, new List<ShiftViewModel>()));
+
                 List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm)
                     .ToList();
-                return Ok(shiftVmList);
+                return Ok(new SearchResultViewModel<ShiftViewModel>(filter.TotalItemCount, shiftVmList));
             }
             catch (Exception ex)
             {
@@ -89,8 +114,10 @@ namespace RoosterPlanner.Api.Controllers
             try
             {
                 TaskListResult<Shift> result = await shiftService.GetShiftsAsync(projectId, userId, date);
+
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+
                 if (result.Data == null || result.Data.Count == 0)
                     return Ok(new List<ShiftViewModel>());
                 List<ShiftViewModel> shiftVmList = result.Data.Select(ShiftViewModel.CreateVm)
@@ -186,26 +213,25 @@ namespace RoosterPlanner.Api.Controllers
                 ) //filter for people that are registerd to be able to work
                 {
                     //list all availabilities in this project of this person
-                    Task<TaskListResult<Availability>> availabilities =
-                        availabilityService.FindAvailabilitiesAsync(
+                    TaskListResult<Availability> availabilities =
+                        await availabilityService.FindAvailabilitiesAsync(
                             availability.Participation.ProjectId,
                             availability.Participation.PersonId);
 
                     //lookup person information in B2C
-                    Task<TaskResult<User>> person = personService.GetUserAsync(availability.Participation.PersonId);
-                    await System.Threading.Tasks.Task.WhenAll(availabilities, person);
+                    TaskResult<User> person = await personService.GetUserAsync(availability.Participation.PersonId);
 
                     //see if person is scheduled this day and this shift
-                    if (availabilities.Result?.Data == null || availabilities.Result.Data.Count <= 0) continue;
-                    int numberOfTimeScheduledThisDay = availabilities.Result.Data
+                    if (availabilities.Data == null || availabilities.Data.Count <= 0) continue;
+                    int numberOfTimeScheduledThisDay = availabilities.Data
                         .Where(a => a.Shift.Date == shiftResult.Data.Date)
                         .Count(a => a.Type == AvailibilityType.Scheduled);
 
-                    bool scheduledThisShift = availabilities.Result.Data.FirstOrDefault(a =>
+                    bool scheduledThisShift = availabilities.Data.FirstOrDefault(a =>
                         a.ShiftId == id && a.Type == AvailibilityType.Scheduled) != null;
 
                     //calculate the number of hours person is scheduled this week
-                    double numberOfHoursScheduleThisWeek = availabilities.Result.Data
+                    double numberOfHoursScheduleThisWeek = availabilities.Data
                         .Where(a => a.Type == AvailibilityType.Scheduled && allDaysThisWeek.Contains(a.Shift.Date))
                         .Sum(availability1 =>
                             availability1.Shift.EndTime.Subtract(availability1.Shift.StartTime).TotalHours);
@@ -213,14 +239,15 @@ namespace RoosterPlanner.Api.Controllers
                     //add scheduleViewmodel to list
                     schedules.Add(new ScheduleViewModel
                     {
-                        Person = PersonViewModel.CreateVmFromUser(person.Result.Data,
-                            Extensions.GetInstance(azureB2CConfig)),
-                        NumberOfTimesScheduledThisProject = availabilities.Result.Data.Count(a=>a.Type==AvailibilityType.Scheduled),
+                        Person = PersonViewModel.CreateVmFromUser(person.Data,
+                            Extensions.GetInstance(b2CExtentionApplicationId)),
+                        NumberOfTimesScheduledThisProject =
+                            availabilities.Data.Count(a => a.Type == AvailibilityType.Scheduled),
                         ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
                         ScheduledThisShift = scheduledThisShift,
                         AvailabilityId = availability.Id,
                         Preference = availability.Preference,
-                        Availabilities = (await availabilities).Data
+                        Availabilities = availabilities.Data
                             .Where(a => a.Shift.Date == shiftResult.Data.Date)
                             .Select(AvailabilityViewModel.CreateVm)
                             .ToList(),
@@ -255,6 +282,10 @@ namespace RoosterPlanner.Api.Controllers
 
             try
             {
+                //filter duplicate dates
+                shiftViewModels = shiftViewModels.GroupBy(s => s.Date.Date)
+                    .Select(g => g.OrderByDescending(x => x.Date.Date).First()).ToList();
+
                 List<Shift> shifts = shiftViewModels.Select(ShiftViewModel.CreateShift)
                     .ToList();
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
@@ -276,7 +307,7 @@ namespace RoosterPlanner.Api.Controllers
                             shifts.Remove(shift);
 
                         // check if projectId and taskId differs from above? getproject/task => add project and task to shift
-                        if (project.Id != shift.ProjectId)
+                        if (project != null && project.Id != shift.ProjectId)
                             project = (await projectService.GetProjectDetailsAsync(shift.ProjectId)).Data;
 
                         if (task != null && shift.TaskId != null && task.Id != shift.TaskId)
@@ -358,6 +389,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                result.Data.Task.Requirements = null;
                 return Ok(ShiftViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
@@ -392,6 +424,60 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string message = GetType()
                     .Name + "Error in " + nameof(RemoveShiftAsync);
+                logger.LogError(ex, message);
+                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+            }
+        }
+
+        [Authorize(Policy = "Boardmember")]
+        [HttpGet("export/{projectId}")]
+        public async Task<ActionResult<List<ShiftViewModel>>> ExportDataAsync(Guid projectId)
+        {
+            if (projectId == Guid.Empty)
+                return BadRequest("No valid id.");
+            try
+            {
+                TaskListResult<Shift> result = await shiftService.ExportDataAsync(projectId);
+
+                if (!result.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                if (result.Data == null || result.Data.Count == 0)
+                    return Ok(new List<ShiftViewModel>());
+
+                List<ShiftViewModel> shiftVmList = new List<ShiftViewModel>();
+                List<PersonViewModel> personViewModels = new List<PersonViewModel>();
+                foreach (Shift shift in result.Data)
+                {
+                    ShiftViewModel shiftVm = ShiftViewModel.CreateVm(shift);
+                    shiftVm.Availabilities = new List<AvailabilityViewModel>();
+                    foreach (Availability availability in shift.Availabilities)
+                    {
+                        PersonViewModel pvm;
+                        Guid id = availability.Participation.PersonId;
+                        if (personViewModels.FirstOrDefault(pvms => pvms.Id == id) == null)
+                        {
+                            TaskResult<User> person = await personService.GetUserAsync(id);
+                            pvm = PersonViewModel.CreateVmFromUser(person.Data,
+                                Extensions.GetInstance(b2CExtentionApplicationId));
+                            personViewModels.Add(pvm);
+                        }
+                        else
+                            pvm = personViewModels.FirstOrDefault(pvm => pvm.Id == id);
+
+                        AvailabilityViewModel avm = AvailabilityViewModel.CreateVm(availability);
+                        avm.Participation.Person = pvm;
+                        shiftVm.Availabilities.Add(avm);
+                    }
+
+                    shiftVmList.Add(shiftVm);
+                }
+
+                return Ok(shiftVmList);
+            }
+            catch (Exception ex)
+            {
+                string message = GetType()
+                    .Name + "Error in " + nameof(GetShiftAsync);
                 logger.LogError(ex, message);
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }

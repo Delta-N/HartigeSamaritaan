@@ -23,7 +23,6 @@ namespace RoosterPlanner.Models
         [NotMapped] public string StreetAddress { get; set; }
         [NotMapped] public string PostalCode { get; set; }
         [NotMapped] public string City { get; set; }
-        [NotMapped] public string Country { get; set; }
         [NotMapped] public string DateOfBirth { get; set; }
         [NotMapped] public string PhoneNumber { get; set; }
         [NotMapped] public string UserRole { get; set; }

@@ -29,9 +29,11 @@ namespace RoosterPlanner.Data.Repositories
                 .AsNoTracking()
                 .Include(p => p.Project)
                 .Include(p => p.Person)
-                .Where(p => p.PersonId == personId && !p.Project.Closed && p.Active && (
-                    p.Project.ParticipationEndDate >= DateTime.Now ||
-                    p.Project.ParticipationEndDate == null))
+                .Where(p => p.PersonId == personId && 
+                            !p.Project.Closed && p.Active && 
+                            (p.Project.ParticipationEndDate >= DateTime.Now ||
+                             p.Project.ParticipationEndDate == null)
+                            )
                 .ToListAsync();
         }
 
@@ -40,8 +42,10 @@ namespace RoosterPlanner.Data.Repositories
             return EntitySet
                 .AsNoTracking()
                 .Include(p => p.Project)
+                .ThenInclude(p=>p.PictureUri)
                 .Include(p => p.Person)
-                .Where(p => p.PersonId == personId && p.ProjectId == projectId)
+                .Where(p => p.PersonId == personId && 
+                            p.ProjectId == projectId)
                 .FirstOrDefaultAsync();
         }
 

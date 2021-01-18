@@ -10,6 +10,8 @@ import {TextInjectorService} from "../../services/text-injector.service";
 import {Breadcrumb} from "../../models/breadcrumb";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {DateConverter} from "../../helpers/date-converter";
+import {AgePipe} from "../../helpers/filter.pipe";
+import {CsvService} from "../../services/csv.service";
 
 @Component({
   selector: 'app-employee',
@@ -41,12 +43,9 @@ export class EmployeeComponent implements OnInit {
               private participationService: ParticipationService,
               private userService: UserService,
               private breadcrumbService: BreadcrumbService,
+              private csvService: CsvService
   ) {
-    let previous: Breadcrumb = new Breadcrumb();
-    previous.label = this.guid ? "Beheer" : "Admin"
-    previous.url = this.guid ? "/manage" : "/admin"
-    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous]
-    this.breadcrumbService.replace(breadcrumbs);
+
     this.displayedColumns = TextInjectorService.employeeTableColumnNames;
   }
 
@@ -54,6 +53,12 @@ export class EmployeeComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
+
+      let previous: Breadcrumb = new Breadcrumb(this.guid ? "Beheer" : "Admin", this.guid ? "/manage" : "/admin");
+      let current: Breadcrumb = new Breadcrumb("Medewerker overzicht", null);
+
+      let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current]
+      this.breadcrumbService.replace(breadcrumbs);
     });
 
     if (this.guid)
@@ -85,7 +90,7 @@ export class EmployeeComponent implements OnInit {
         case 'Leeftijd':
           return DateConverter.calculateAge(item.dateOfBirth);
         case 'Nationaliteit':
-          return item != null ? item.country : null;
+          return item != null ? item.nationality : null;
         default:
           return item[property];
       }
@@ -109,6 +114,48 @@ export class EmployeeComponent implements OnInit {
 
   details(id: string) {
 
-    this.guid?this.router.navigate(['manage/profile', id]).then(): this.router.navigate(['admin/profile', id]).then()
+    this.guid ? this.router.navigate(['manage/profile', id]).then() : this.router.navigate(['admin/profile', id]).then()
+  }
+
+  async exportUsers() {
+    let pipe: AgePipe = new AgePipe();
+    let headers = TextInjectorService.employeeExportHeaders;
+    let users: User[] = []
+    this.loaded = false;
+    if (this.guid) {
+      await this.userService.getAllParticipants(this.guid).then(res => {
+        users = res;
+      })
+    } else {
+      await this.userService.getAllUsers().then(res => {
+        if (res)
+          users = res;
+      })
+    }
+
+    let statistics: any[] = []
+    users.forEach(u => {
+      let statistic = {
+        NaamMedewerker: u.firstName && u.lastName ? u.firstName?.replace(",", ".") + " " + u.lastName?.replace(",", ".") : "Onbekend",
+        Leeftijd: u.dateOfBirth ? pipe.transform(u.dateOfBirth) : "Onbekend",
+        Email: u.email ? u.email.replace(",", ".") : "Onbekend",
+        Telefoonnummer: u.phoneNumber ? u.phoneNumber.replace(",", ".") : "Onbekend",
+
+        Adres: u.streetAddress ? u.streetAddress.replace(",", ".") : "Onbekend",
+        Postcode: u.postalCode ? u.postalCode.replace(",", ".") : "Onbekend",
+        Woonplaats: u.city ? u.city.replace(",", ".") : "Onbekend",
+        Nationaliteit: u.nationality ? u.nationality.replace(",", ".") : "Onbekend",
+        Moedertaal: u.nativeLanguage ? u.nativeLanguage.replace(",", ".") : "Onbekend",
+        NLtaalniveau: u.dutchProficiency ? u.dutchProficiency.replace(",", ".") : "Onbekend",
+
+        PushBerichten: u.pushDisabled ? "Uitgeschakeld" : "Ingeschakeld",
+        DatumAkkoordPrivacyPolicy: u.termsOfUseConsented ? DateConverter.toReadableStringFromString(u.termsOfUseConsented) : "Onbekend",
+      }
+      statistics.push(statistic)
+    })
+
+    this.csvService.downloadFile(statistics, headers, "Employee Export")
+    this.loaded = true;
   }
 }
+

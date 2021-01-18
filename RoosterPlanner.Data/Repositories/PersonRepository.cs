@@ -26,6 +26,7 @@ namespace RoosterPlanner.Data.Repositories
         public async Task<Person> GetPersonByOidAsync(Guid oid)
         {
             Person person = await EntitySet
+                .AsNoTracking()
                 .Include(p => p.ProfilePicture)
                 .Include(p => p.Certificates)
                 .ThenInclude(c => c.CertificateType)
@@ -33,7 +34,7 @@ namespace RoosterPlanner.Data.Repositories
                 .FirstOrDefaultAsync();
 
             if (person?.Certificates == null) return person;
-            foreach (var personCertificate in person.Certificates.Where(personCertificate => personCertificate.CertificateType != null))
+            foreach (Certificate personCertificate in person.Certificates.Where(personCertificate => personCertificate.CertificateType != null))
                 personCertificate.CertificateType.Certificates = null;
             
             return person;

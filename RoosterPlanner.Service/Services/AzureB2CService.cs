@@ -4,13 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
-using Newtonsoft.Json;
-using RoosterPlanner.Common.Config;
-using RoosterPlanner.Data.Common;
+using RoosterPlanner.Service.Config;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 
@@ -35,13 +32,12 @@ namespace RoosterPlanner.Service
         private DateTime graphServiceClientTimestamp;
 
         private const string GraphSelectList =
-            "id,identities,accountEnabled,creationType,createdDateTime,displayName,givenName,surname,mail,otherMails,mailNickname,userPrincipalName,mobilePhone,usageLocation,userType,streetAddress,postalCode,city,country,preferredLanguage,refreshTokensValidFromDateTime,extensions,JobTitle,BusinessPhones,Department,OfficeLocation, DeletedDateTime,AdditionalData";
+            "id,identities,displayName,givenName,surname,mail,otherMails,mailNickname,mobilePhone,streetAddress,postalCode,city,country,extensions,AdditionalData";
 
         #endregion
 
         //Constructor
-        public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig, IUnitOfWork unitOfWork,
-            ILogger<AzureB2CService> logger)
+        public AzureB2CService(IOptions<AzureAuthenticationConfig> azureB2CConfig)
         {
             this.azureB2CConfig = azureB2CConfig.Value;
         }
@@ -232,15 +228,6 @@ namespace RoosterPlanner.Service
                 }));
 
             return graphService;
-        }
-        
-        public class GraphUserData
-        {
-            [JsonProperty("odata.metadata")] public string OdataMetadata { get; set; }
-
-            [JsonProperty("odata.nextLink")] public string OdataNextLink { get; set; }
-
-            [JsonProperty("value")] public List<User> Value { get; set; }
         }
     }
 }

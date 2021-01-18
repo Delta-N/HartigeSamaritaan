@@ -17,3 +17,21 @@
   margin-bottom: 9px;
 }
 
+.mat-card {
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  max-width: 325px;
+}
+#expanded-card{
+  width: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+  .col-6{
+    max-width: initial;
+  }
+  #holder{
+    display: block;
+  }
+}

@@ -6,7 +6,6 @@ namespace RoosterPlanner.Api.Models
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public string UrlPdf { get; set; }
 
         public static CategoryViewModel CreateVm(Category category)
         {

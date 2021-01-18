@@ -16,6 +16,8 @@ namespace RoosterPlanner.Api.Models
             Availabilities = new List<Availability>();
         }
 
+        public bool Active { get; set; }
+
         public static ParticipationViewModel CreateVm(Participation participation)
         {
             if (participation == null) 
@@ -26,6 +28,7 @@ namespace RoosterPlanner.Api.Models
                 MaxWorkingHoursPerWeek = participation.MaxWorkingHoursPerWeek,
                 Availabilities = participation.Availabilities,
                 Remark = participation.Remark,
+                Active = participation.Active,
                 LastEditDate = participation.LastEditDate,
                 LastEditBy = participation.LastEditBy,
                 RowVersion = participation.RowVersion
@@ -48,6 +51,7 @@ namespace RoosterPlanner.Api.Models
                 MaxWorkingHoursPerWeek = participationViewModel.MaxWorkingHoursPerWeek,
                 Availabilities = participationViewModel.Availabilities,
                 Remark = participationViewModel.Remark,
+                Active = participationViewModel.Active,
                 LastEditDate = participationViewModel.LastEditDate,
                 LastEditBy = participationViewModel.LastEditBy,
                 RowVersion = participationViewModel.RowVersion

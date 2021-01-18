@@ -11,6 +11,7 @@ using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Person = RoosterPlanner.Models.Person;
+using Task = System.Threading.Tasks.Task;
 
 namespace RoosterPlanner.Service
 {
@@ -51,7 +52,7 @@ namespace RoosterPlanner.Service
             this.logger = logger;
         }
 
-        private async Task<TaskResult<Person>> AddPersonToLocalDbAsync(User user)
+        private async Task AddPersonToLocalDbAsync(User user)
         {
             if (user?.Id == null)
                 throw new ArgumentNullException(nameof(user));
@@ -63,7 +64,11 @@ namespace RoosterPlanner.Service
                 if (person == null)
                 {
                     person = new Person(Guid.Parse(user.Id))
-                        {FirstName = user.GivenName, Oid = Guid.Parse(user.Id), LastName = user.Surname};
+                    {
+                        FirstName = user.GivenName, 
+                        Oid = Guid.Parse(user.Id), 
+                        LastName = user.Surname
+                    };
                     
                     result.Data=personRepository.Add(person);
                     result.Succeeded = await unitOfWork.SaveChangesAsync()==1;
@@ -87,8 +92,6 @@ namespace RoosterPlanner.Service
                 logger.LogError(ex, result.Message, user);
                 result.Error = ex;
             }
-
-            return result;
         }
 
         public async Task<TaskResult<User>> GetUserAsync(Guid id)
@@ -189,10 +192,7 @@ namespace RoosterPlanner.Service
                 TaskResult<User> person = await azureB2CService.UpdateUserAsync(user);
                 result.Succeeded = person.Succeeded;
                 if (!result.Succeeded)
-                {
-                    result.Succeeded = false;
                     result.Message = person.Message;
-                }
                 else
                 {
                     result.StatusCode = HttpStatusCode.OK;
@@ -327,6 +327,8 @@ namespace RoosterPlanner.Service
             TaskResult<Manager> result = new TaskResult<Manager>();
             try
             {
+                manager.Person = null;
+                manager.Project = null;
                 result.Data = managerRepository.Add(manager);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }

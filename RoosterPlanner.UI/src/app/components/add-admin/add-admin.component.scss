@@ -1,18 +1,50 @@
+a {
+  display: flex;
+}
+
 .mat-form-field {
   width: 100%;
 }
 
-.container {
-  min-height: 400px;
-}
-
-#content {
-  min-height: 225px;
-}
-
-
-.align-right {
+.closebutton {
   margin-left: auto;
 }
 
+.names {
+  min-height: 225px;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+  margin-top: 10px;
+}
+
+::ng-deep .mat-tab-body {
+  min-height: 300px;
+
+  .mat-tab-body-content {
+    overflow: hidden;
+  }
+}
+.pageButtons{
+  display: flex;
+  justify-content: center;
+}
+.action-row{
+  display: block;
+  margin: 0;
+}
+.actions{
+  margin-left: auto;
+  margin-top: 10px;
+}
+
+@media only screen and (max-width: 992px) {
+  .mat-button{
+    font-size: 12px!important;
+    padding: 0;
+  }
+  .closebutton{
+    margin-left: inherit;
+  }
+}
 

@@ -1,41 +1,40 @@
-﻿using RoosterPlanner.Common.Config;
-
+﻿
 namespace RoosterPlanner.Api.Models.Constants
 {
     public class Extensions
     {
         private static Extensions _extensions;
-        private readonly AzureAuthenticationConfig azureB2CConfig;
+        private readonly string b2CExtentionApplicationId;
 
-        private Extensions(AzureAuthenticationConfig azureB2CConfig)
+        private Extensions(string b2CExtentionApplicationId)
         {
-            this.azureB2CConfig = azureB2CConfig;
+            this.b2CExtentionApplicationId = b2CExtentionApplicationId;
         }
 
-        public static Extensions GetInstance(AzureAuthenticationConfig azureB2CConfig)
+        public static Extensions GetInstance(string b2CExtentionApplicationId)
         {
-            return _extensions ??= new Extensions(azureB2CConfig);
+            return _extensions ??= new Extensions(b2CExtentionApplicationId);
         }
 
         public string UserRoleExtension =>
-            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_UserRole";
+            $"extension_{b2CExtentionApplicationId.Replace("-", "")}_UserRole";
 
         public string DateOfBirthExtension =>
-            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
+            $"extension_{b2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
 
         public string PhoneNumberExtension =>
-            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
+            $"extension_{b2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
 
         public string NationalityExtension =>
-            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
+            $"extension_{b2CExtentionApplicationId.Replace("-", "")}_Nationality";
 
         public string NativeLanguageExtention =>
-            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
+            $"extension_{b2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
 
         public string DutchProficiencyExtention =>
-            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
+            $"extension_{b2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
 
         public string TermsOfUseConsentedExtention =>
-            $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
+            $"extension_{b2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
     }
 }

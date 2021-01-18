@@ -1,14 +1,24 @@
 .legend-button {
   border: 1px black solid;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   color: white;
 }
 
 .legend {
-  display: flex;
-  justify-content: space-evenly;
+  display: block;
+  background: snow;
+  border: 1px solid #707070;
+  h5{
+    text-align: center;
+  }
+}
+
+.legend-item {
+  margin: 5px;
+  line-height: 35px;
+  font-size: 13px;
 }
 #spacer {
   display: flex;
@@ -17,10 +27,6 @@
   line-height: 20px;
   font-size: 18px;
   color: #707070;
-}
-
-.content-container {
-  height: 75vh;
 }
 
 #title {
@@ -93,7 +99,7 @@
 
 
 .calendarbox {
-  height: 100%;
+  max-height: 75vh;
   overflow: auto;
 }
 
@@ -156,6 +162,12 @@
   margin: 5px;
 }
 
+@media only screen and (max-width: 1200px) {
+  .legend-item {
+    font-size: 12px;
+  }
+}
+
 @media only screen and (max-width: 992px) {
 
   ::ng-deep .custom-button {
@@ -166,6 +178,10 @@
   }
   ::ng-deep .scheduled {
     width: initial;
+  }
+  .legend-item {
+    font-size: 9px;
+    display: flex !important;
   }
 
 }
@@ -185,7 +201,13 @@
     margin-top: 10px;
   }
   .row {
-    display: block;
+    display: initial;
+  }
+  .bar {
+    display: flex;
+  }
+  .content-container{
+    margin:0;
   }
   .buttonholder {
     display: none;
@@ -214,6 +236,13 @@
   }
   .legend {
     display: flex;
+    h5{
+      width: 100%;
+    }
+  }
+  .legend-item {
+    font-size: 10px;
+    min-width: 225px;
   }
 }
 
@@ -221,13 +250,13 @@
   .cal-event-title {
     font-size: 12px;
   }
+  .legend-item {
+    font-size: 10px;
+    min-width: 195px;
+  }
 }
 
 @media only screen and (max-width: 475px) {
-  .row {
-    display: block;
-  }
-
   .buttonholder {
     display: none;
   }

@@ -12,22 +12,32 @@
       </div>
       <div class="row tasks-container">
         <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
-          <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
-                        checked="true" color="primary" [matTooltip]=item.description>{{item.name}}</mat-checkbox>
+          <ng-template #popContent>{{item.description}}
+            <br> <a href="task/{{item.id}}" style="text-decoration: underline; color: blue">details</a>
+          </ng-template>
+
+          <mat-checkbox [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
+                        [closeDelay]="1250" [openDelay]="500"
+                        popoverTitle="{{item.name}}" class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
+                        checked="true" color="primary">{{item.name}}</mat-checkbox>
         </div>
       </div>
       <div class="row legend">
-        <div class="mat-calendar-body-cell-content legend-button"
-             matTooltip="Er zijn onvoldoende mensen beschikbaar op deze dag."
-             style="background: red">1
+        <h5>Legenda</h5>
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: red">
+          </div>
+          Onvoldoende mensen beschikbaar op deze dag.
         </div>
-        <div class="mat-calendar-body-cell-content legend-button"
-             matTooltip="Er zijn voldoende mensen beschikbaar op deze dag."
-             style="background: green">2
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: green">
+          </div>
+          Voldoende mensen beschikbaar op deze dag.
         </div>
-        <div class="mat-calendar-body-cell-content legend-button"
-             matTooltip="Alle diensten op deze dag zijn ingeroosterd."
-             style="background: blue">3
+        <div class="row legend-item">
+          <div class="mat-calendar-body-cell-content legend-button" style="background: blue">
+          </div>
+          Alle diensten op deze dag zijn ingeroosterd.
         </div>
       </div>
     </div>
@@ -46,10 +56,14 @@
     <ng-template
       #customEventTemplate
       let-weekEvent="weekEvent">
+      <ng-template #planTooltip>
+        {{shifts|planTooltip:weekEvent.event}}
+      </ng-template>
       <div
         class="cal-event"
         [ngStyle]="{backgroundColor: weekEvent.event.color?.secondary,borderColor: weekEvent.event.color?.primary}"
-        [mwlCalendarTooltip]="shifts|planTooltip:weekEvent.event"
+        [ngbPopover]="planTooltip" triggers="mouseenter:mouseleave" container="body"
+        [closeDelay]="1250" [openDelay]="250"
         [attr.aria-label]=" { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
         <div class="flex-container">
           <div class="row flex-container" id="title">

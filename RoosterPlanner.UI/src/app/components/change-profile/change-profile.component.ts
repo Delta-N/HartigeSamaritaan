@@ -22,13 +22,15 @@ export class ChangeProfileComponent implements OnInit {
   level:string[]=TextInjectorService.level;
   nationalityControl: FormControl;
   languagueControl: FormControl;
-  countryControl: FormControl;
+  title: string = "Profiel wijzigen";
+
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private userService: UserService, private toastr: ToastrService, public dialogRef: MatDialogRef<ChangeProfileComponent>) {
-    this.user = data;
+    this.user = data.user;
+    this.title=data.title
     this.nationalityControl = new FormControl('', Validators.required);
     this.languagueControl = new FormControl('', Validators.required);
-    this.countryControl = new FormControl('', Validators.required);
+
     this.checkoutForm = this.formBuilder.group({
       id: this.user.id,
       firstName: [this.user.firstName != null ? this.user.firstName : '', Validators.required],
@@ -39,7 +41,7 @@ export class ChangeProfileComponent implements OnInit {
       city: [this.user.city != null ? this.user.city : '', Validators.required],
       phoneNumber: [this.user.phoneNumber != null ? this.user.phoneNumber : '', Validator.phoneNumber],
       nationality: this.nationalityControl,
-      country: this.countryControl,
+
       nativeLanguage: [this.user.nativeLanguage != null ? this.user.nativeLanguage : '', Validators.required],
       dutchProficiency: this.languagueControl,
       termsOfUseConsented: this.user.termsOfUseConsented
@@ -51,9 +53,7 @@ export class ChangeProfileComponent implements OnInit {
       this.nationalityControl.setValue(this.nationalities.find(n => n == this.user.nationality))
     }
 
-    if (this.user.country != null) {
-      this.countryControl.setValue(this.countries.find(n => n == this.user.country))
-    }
+
 
     if (this.user.dutchProficiency != null) {
       this.languagueControl.setValue(this.level.find(n => n == this.user.dutchProficiency))

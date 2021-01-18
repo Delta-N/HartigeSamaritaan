@@ -9,7 +9,8 @@ import {TaskService} from "../../services/task.service";
 import {Task} from "../../models/task";
 import {UploadService} from "../../services/upload.service";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {Breadcrumb} from "../../models/breadcrumb";
+import {AddRequirementComponent} from "../../components/add-requirement/add-requirement.component";
+import {Requirement} from "../../models/requirement";
 
 @Component({
   selector: 'app-task',
@@ -22,6 +23,12 @@ export class TaskComponent implements OnInit {
   isAdmin: boolean = false;
   loaded: boolean = false;
 
+  displayRequirements: Requirement[];
+  requirementCardStyle = 'card';
+  requirementExpandbtnDisabled: boolean = true;
+  itemsPerCard = 5;
+  reasonableMaxInteger = 10000;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -33,21 +40,26 @@ export class TaskComponent implements OnInit {
     private uploadService: UploadService,
     private breadcrumbService: BreadcrumbService) {
 
-    let breadcrumb: Breadcrumb = new Breadcrumb();
-    breadcrumb.label = 'Taak';
-    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
-      this.breadcrumbService.admincrumb, this.breadcrumbService.takencrumb, breadcrumb];
-
-    this.breadcrumbService.replace(array);
+    this.breadcrumbService.backcrumb()
   }
 
   ngOnInit(): void {
     this.isAdmin = this.userService.userIsAdminFrontEnd();
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
+
+      this.getTask();
     });
+
+  }
+
+  getTask() {
     this.taskService.getTask(this.guid).then(response => {
       this.task = response;
+      this.displayRequirements = this.task.requirements.slice(0, this.itemsPerCard)
+      if (this.task.requirements.length >= 5) {
+        this.requirementExpandbtnDisabled = false;
+      }
       this.loaded = true;
     })
   }
@@ -63,7 +75,7 @@ export class TaskComponent implements OnInit {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
-      if (result && result!=='false') {
+      if (result && result !== 'false') {
         this.toastr.success(result.name + " is gewijzigd")
         this.task = result;
 
@@ -72,8 +84,8 @@ export class TaskComponent implements OnInit {
   }
 
   delete() {
-    const message = "Weet je zeker dat je deze taak wilt verwijderen?"
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput",null);
+    const message = "Weet je zeker dat je deze taak wilt verwijderen?  Dit heeft veel gevolgen voor shiften. Je zult zelf handmatig een taak moeten toewijzen aan elke(!) shift."
+    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput", null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData
@@ -85,6 +97,55 @@ export class TaskComponent implements OnInit {
             this.router.navigate(['admin/tasks']).then();
           }
         })
+      }
+    })
+  }
+
+  expandRequirementCard() {
+    let leftElement = document.getElementById("left")
+    let rightElement = document.getElementById("right")
+    let expandedCard = document.getElementById("expanded-card");
+
+    if (this.requirementCardStyle === 'expanded-card') {
+      if (leftElement)
+        leftElement.hidden = false;
+      if (rightElement)
+        rightElement.hidden = false;
+      if (expandedCard)
+        expandedCard.hidden = true;
+
+      this.requirementCardStyle = 'card';
+      this.itemsPerCard = 5;
+      this.displayRequirements = this.task.requirements.slice(0, this.itemsPerCard);
+    } else if (this.requirementCardStyle === 'card') {
+      if (leftElement)
+        leftElement.hidden = true;
+      if (rightElement)
+        rightElement.hidden = true;
+      if (expandedCard)
+        expandedCard.hidden = false;
+      this.requirementCardStyle = 'expanded-card';
+      this.itemsPerCard = this.reasonableMaxInteger;
+      this.displayRequirements = this.task.requirements;
+    }
+  }
+
+  modRequirement(modifier: string) {
+    let requirement: Requirement = new Requirement();
+    requirement.task = this.task
+    const dialogRef = this.dialog.open(AddRequirementComponent, {
+      width: '500px',
+      data: {
+        modifier: modifier,
+        requirement: requirement
+      }
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(res => {
+      if (res && res !== "false") {
+        setTimeout(() => {
+          this.getTask();
+        }, 500);
       }
     })
   }

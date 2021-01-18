@@ -7,6 +7,7 @@ import {Shift} from "../models/shift";
 import {Schedule} from "../models/schedule";
 import {CalendarEvent} from "angular-calendar";
 import {Availability} from "../models/availability";
+import {Project} from "../models/project";
 
 @Pipe({name: 'userFilter'})
 export class FilterPipe implements PipeTransform {
@@ -85,7 +86,7 @@ export class ScheduledPipe implements PipeTransform {
 
 @Pipe({name: 'agePipe'})
 export class AgePipe implements PipeTransform {
-  transform(value: number): number {
+  transform(value: string): number {
     if (value) {
       const today = new Date();
       const birthDate = DateConverter.toDate(value);
@@ -106,7 +107,7 @@ export class ScheduledCount implements PipeTransform {
     let result: number = 0;
     if (value) {
       value.forEach(v => {
-        if (v.scheduledThisDay)
+        if (v.scheduledThisShift)
           result++
       })
     }
@@ -130,6 +131,15 @@ export class CalendarTooltip implements PipeTransform {
   }
 }
 
+@Pipe({name: 'calendarTaskLink'})
+export class CalendarTaskLink implements PipeTransform {
+  transform(listOfTasks: Task[], title: string): string {
+    let result = listOfTasks.find(t => t.name === title)
+    return result.id;
+  }
+}
+
+
 @Pipe({name: 'planTooltip'})
 export class PlanTooltip implements PipeTransform {
   transform(listOfShifts: Shift[], event: CalendarEvent): string {
@@ -152,35 +162,77 @@ export class PlanTooltip implements PipeTransform {
 export class AvailabilityPipe implements PipeTransform {
   transform(listOfAvailabilities: Availability[]): string {
     let result: string = "Is vandaag beschikbaar voor: \n";
-    listOfAvailabilities.forEach(a=>{
-      if(a.preference===true && a.type===2)
-        result+="☆ "
-      if(a.type===2)
-        result+=a.shift.task.name + " " + a.shift.startTime +"-"+a.shift.endTime+"\n"
+    listOfAvailabilities.forEach(a => {
+      if (a.preference === true && a.type === 2)
+        result += "☆ "
+      if (a.type === 2)
+        result += a.shift.task.name + " " + a.shift.startTime + "-" + a.shift.endTime + "\n"
 
     })
-    let found:boolean=false
-    let append:string="Is vandaag ingeroosterd op: \n";
+    let found: boolean = false
+    let append: string = "Is vandaag ingeroosterd op: \n";
 
-    listOfAvailabilities.forEach(a=>{
+    listOfAvailabilities.forEach(a => {
 
-      if(a.type===3)
-      {
-        found=true
-        append+=a.shift.task.name + " " + a.shift.startTime +" - "+a.shift.endTime+"\n"
+      if (a.type === 3) {
+        found = true
+        append += a.shift.task.name + " " + a.shift.startTime + " - " + a.shift.endTime + "\n"
       }
 
 
     })
-    if(found){
-      result+="\n";
-      result+=append
+    if (found) {
+      result += "\n";
+      result += append
     }
 
-    if(listOfAvailabilities[0]&& listOfAvailabilities[0].participation&& listOfAvailabilities[0].participation.remark)
-      result+="\n Werkt graag samen met:\n" + listOfAvailabilities[0].participation.remark;
+    if (listOfAvailabilities[0] && listOfAvailabilities[0].participation && listOfAvailabilities[0].participation.remark)
+      result += "\n Werkt graag samen met:\n" + listOfAvailabilities[0].participation.remark;
 
     return result;
+
+  }
+
+}
+
+@Pipe({name: 'colorPipe'})
+export class ColorPipe implements PipeTransform {
+  transform(color: string): string {
+    switch (color) {
+      case "Red":
+        return "Rood";
+      case "Blue":
+        return "Blauw";
+      case "Yellow":
+        return "Geel";
+      case "Green":
+        return "Groen";
+      case "Orange":
+        return "Oranje";
+      case "Pink":
+        return "Roze";
+      case "Rood":
+        return "Red";
+      case "Blauw":
+        return "Blue";
+      case "Geel":
+        return "Yellow";
+      case "Groen":
+        return "Green";
+      case "Oranje":
+        return "Orange";
+      case "Roze":
+        return "Pink";
+      default:
+        return "Gray";
+    }
+  }
+}
+
+@Pipe({name: 'projectClosed'})
+export class ProjectClosedPipe implements PipeTransform {
+  transform(project: Project): boolean {
+    return project.closed || new Date(project.projectEndDate) < new Date();
 
   }
 }

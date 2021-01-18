@@ -7,6 +7,7 @@
   "description_4": "To learn more about this file see: https://angular.io/config/app-package-json.",
   "sideEffects": false,
   "dependencies": {
+    "ics-js": "^0.10.2",
     "jspdf": "^2.2.0",
     "ngx-material-timepicker": "^5.5.3",
     "ngx-multiple-dates": "^1.0.0"

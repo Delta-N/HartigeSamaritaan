@@ -7,15 +7,29 @@
   width: 40px;
   height: 40px;
   color: white;
+  margin-right: 5px;
 }
 .legend{
-  display: flex;
-  justify-content: space-evenly;
+  display: block;
+  background: snow;
+  border: 1px solid #707070;
+  h5 {
+    text-align: center;
+  }
+}
+.legend-item{
+  margin:5px;
+  line-height: 35px;
 }
 
 #spacer {
   margin-top: auto;
   margin-bottom: auto;
+}
+.pop{
+  a{
+    color: blue;
+  }
 }
 
 .option-button {
@@ -49,10 +63,6 @@
   background: #DDFCE0;
   margin-right: auto;
   margin-left: 15px;
-}
-
-.content-container {
-  height: 75vh;
 }
 
 #title {
@@ -141,7 +151,7 @@
 
 
 .calendarbox {
-  height: 100%;
+  max-height: 75vh;
   overflow: auto;
 }
 
@@ -224,6 +234,10 @@
   .date {
     font-size: 20px;
   }
+  .legend-item{
+    font-size: 14px;
+    display: flex !important;
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -241,7 +255,13 @@
     margin-top: 10px;
   }
   .row {
-    display: block;
+    display: initial;
+  }
+  .bar{
+    display: flex;
+  }
+  .content-container {
+    margin: 0;
   }
   .buttonholder {
     display: none;
@@ -275,6 +295,13 @@
   }
   .legend{
     display: flex;
+    justify-content: flex-start;
+    h5{
+      width: 100%;
+    }
+  }
+  .legend-item{
+    min-width: 225px;
   }
 
 }
@@ -283,13 +310,17 @@
   .cal-event-title {
     font-size: 18px;
   }
+  .legend-item{
+    font-size: 12px;
+    min-width: 195px;
+  }
 }
 
 @media only screen and (max-width: 475px) {
-  .row {
-    display: block;
+  .legend-button {
+    width: 25px;
+    height: 25px;
   }
-
 
   .buttonholder {
     display: none;

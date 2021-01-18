@@ -46,17 +46,17 @@
 
         #endregion
 
-        public PersonFilter() : base()
+        public PersonFilter()
         {
-            Sort = new string[] {"LastName", "ASC"};
+            Sort = new[] {"LastName", "ASC"};
             Offset = 0;
             PageSize = 0;
         }
         
         //Constructor - Overload
-        public PersonFilter(int offset, int pageSize) : base()
+        public PersonFilter(int offset, int pageSize)
         {
-            Sort = new string[] { "LastName", "ASC" };
+            Sort = new[] { "LastName", "ASC" };
             Offset = offset;
             PageSize = 20;
             if (pageSize > 0 && pageSize < 1000)

@@ -1,4 +1,4 @@
-﻿namespace RoosterPlanner.Common.Config
+﻿namespace RoosterPlanner.Service.Config
 {
     public class EmailConfig
     {

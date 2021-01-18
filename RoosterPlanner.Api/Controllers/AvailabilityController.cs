@@ -28,17 +28,20 @@ namespace RoosterPlanner.Api.Controllers
         private readonly IAvailabilityService availabilityService;
         private readonly IShiftService shiftService;
         private readonly ITaskService taskService;
+        private readonly IPersonService personService;
 
         public AvailabilityController(
             ILogger<AvailabilityController> logger,
             IAvailabilityService availabilityService,
             IShiftService shiftService,
-            ITaskService taskService)
+            ITaskService taskService,
+            IPersonService personService)
         {
             this.logger = logger;
             this.availabilityService = availabilityService;
             this.shiftService = shiftService;
             this.taskService = taskService;
+            this.personService = personService;
         }
 
         [HttpGet("scheduled/{participationId}")]
@@ -108,6 +111,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<ProjectTask> taskResult = await taskService.GetAllProjectTasksAsync(projectId);
                 TaskListResult<Shift> shiftResult =
                     await shiftService.GetShiftsWithAvailabilitiesAsync(projectId, userId);
+                TaskResult<Person> person = await personService.GetPersonAsync(userId);
 
                 if (!taskResult.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
@@ -115,6 +119,9 @@ namespace RoosterPlanner.Api.Controllers
                 if (!shiftResult.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
                         {Type = Type.Error, Message = shiftResult.Message});
+                if (!person.Succeeded)
+                    return UnprocessableEntity(new ErrorViewModel
+                        {Type = Type.Error, Message = person.Message});
 
                 List<Schedule> knownAvailabilities = new List<Schedule>();
 
@@ -123,6 +130,7 @@ namespace RoosterPlanner.Api.Controllers
                     int numberOfShifts = grouping.Count();
                     int numberOfAvailabilities = 0;
                     bool scheduled = false;
+                    bool anyAvailable = false;
                     foreach (Shift shift in grouping)
                     {
                         if (shift.Availabilities.Count <= 0) continue;
@@ -131,19 +139,30 @@ namespace RoosterPlanner.Api.Controllers
                         {
                             if (a.Type == AvailibilityType.Scheduled)
                                 scheduled = true;
+                            else if (a.Type == AvailibilityType.Ok)
+                                anyAvailable = true;
                         });
                     }
 
                     if (scheduled)
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Scheduled));
-                    else if (numberOfShifts == numberOfAvailabilities)
+                    else if (anyAvailable)
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Complete));
+                    else if (numberOfAvailabilities > 0 && !anyAvailable)
+                        knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Unavailable));
                     else
                         knownAvailabilities.Add(new Schedule(grouping.Key, AvailabilityStatus.Incomplete));
                 }
 
                 List<TaskViewModel> taskViewModels = taskResult.Data
-                    .Select(projectTask => TaskViewModel.CreateVm(projectTask.Task)).ToList();
+                    .Where(t => t.Task.Requirements
+                        .All(r => person.Data.Certificates
+                            .Where(c => c.DateExpired == null || c.DateExpired > DateTime.UtcNow)
+                            .Select(c => c.CertificateTypeId)
+                            .Contains(r.CertificateTypeId)))
+                    .Select(projectTask => TaskViewModel
+                        .CreateVm(projectTask.Task))
+                    .ToList();
 
                 AvailabilityDataViewModel vm = new AvailabilityDataViewModel
                 {
@@ -186,7 +205,8 @@ namespace RoosterPlanner.Api.Controllers
                     List<AvailabilityStatus> dateStatus = new List<AvailabilityStatus>();
                     foreach (Shift shift in grouping)
                     {
-                        int numberOfAvailabilities = shift.Availabilities.Count;
+                        int numberOfAvailabilities =
+                            shift.Availabilities.Where(a => a.Type == AvailibilityType.Ok).Count();
                         int numberOfSchedule = shift.Availabilities.Count(a => a.Type == AvailibilityType.Scheduled);
                         if (numberOfSchedule >= shift.ParticipantsRequired)
                             dateStatus.Add(AvailabilityStatus.Scheduled);
@@ -232,6 +252,8 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid shiftId received");
             if (availabilityViewModel.ParticipationId == Guid.Empty)
                 return BadRequest("No valid participationId received");
+            if (availabilityViewModel.Type == AvailibilityType.Scheduled)
+                return BadRequest("Nice try, You cannot schedule yourself");
 
             try
             {
@@ -283,6 +305,8 @@ namespace RoosterPlanner.Api.Controllers
                 return BadRequest("No valid shiftId received");
             if (availabilityViewModel.ParticipationId == Guid.Empty)
                 return BadRequest("No valid participationId received");
+            if (availabilityViewModel.Type == AvailibilityType.Scheduled)
+                return BadRequest("Nice try, You cannot schedule yourself");
             try
             {
                 Availability availability = (await availabilityService.GetAvailability(availabilityViewModel.Id)).Data;

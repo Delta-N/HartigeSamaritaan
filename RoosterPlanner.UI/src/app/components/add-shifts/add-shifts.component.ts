@@ -57,16 +57,6 @@ export class AddShiftsComponent implements OnInit {
     private _location: Location,
     private breadcrumbService: BreadcrumbService) {
 
-    let previous: Breadcrumb = new Breadcrumb();
-    previous.label = "Shift overzicht";
-    previous.url = this.breadcrumbService.previousUrl;
-
-    let current: Breadcrumb = new Breadcrumb();
-    current.label = "Shift toevoegen";
-
-    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
-    this.breadcrumbService.replace(breadcrumbs);
-
     this.selectionOptions = TextInjectorService.calenderSelectionOptions;
 
     this.taskControl = new FormControl('', Validators.required);
@@ -86,6 +76,12 @@ export class AddShiftsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
+
+      let previous: Breadcrumb = new Breadcrumb("Shift overzicht", "/manage/shifts/" + this.guid);
+      let current: Breadcrumb = new Breadcrumb("Shift toevoegen", null);
+
+      let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
+      this.breadcrumbService.replace(breadcrumbs);
     });
 
     this.taskService.getAllProjectTasks(this.guid).then(tasks => {
@@ -94,7 +90,7 @@ export class AddShiftsComponent implements OnInit {
 
     await this.projectService.getProject(this.guid).then(async project => {
       this.project = project;
-      this.min = this.project.participationStartDate;
+      this.min = new Date(this.project.participationStartDate) < new Date() ? new Date() : this.project.participationStartDate;
       this.max = this.project.participationEndDate;
 
       this.loaded = true;
@@ -112,7 +108,7 @@ export class AddShiftsComponent implements OnInit {
   }
 
   addAllDays() {
-    let currentDates: Date[] = this.shiftDates;
+    let currentDates: any[] = this.shiftDates;
     let allDates: Date[] = this.getDatesBetweenDates(new Date(this.min), new Date(this.max));
 
     //filter alldates depending on action
@@ -161,15 +157,15 @@ export class AddShiftsComponent implements OnInit {
 
     allDates.forEach(date => {
       let found: boolean = false;
-      let dateMoment: Moment = DateConverter.dateToMoment(date);
+      let dateMoment: Moment = moment([date.getFullYear(), date.getMonth(), date.getDate()])
 
       currentDates.forEach(storedDate => {
-        if (dateMoment.toJSON() == storedDate.toJSON()) {
+        if (dateMoment.toJSON() === storedDate.toJSON()) {
           found = true;
         }
       })
       if (!found) {
-        currentDates.push(date)
+        currentDates.push(dateMoment)
       }
     })
     this.datepicker.writeValue(currentDates)

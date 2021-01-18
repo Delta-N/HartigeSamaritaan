@@ -1,0 +1,15 @@
+.mobilecard{
+  a{
+    display: flex;
+  }
+  .mat-icon{
+    margin-top: 2px;
+  }
+}
+.cardholder{
+  width: 100%;
+  .mat-card{
+    min-height: 405px;
+  }
+}
+

@@ -4,7 +4,6 @@ import {Certificate} from "./Certificate";
 
 export class User extends Entity {
   public city: string;
-  public country: string;
   public dateOfBirth: string;
   public dutchProficiency:string;
   public email: string;
