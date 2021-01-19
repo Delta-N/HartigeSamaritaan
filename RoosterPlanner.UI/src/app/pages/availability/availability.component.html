@@ -55,6 +55,7 @@
   <div class="col-8">
     <div class="row datebox">
       <button mat-button class="accept btnhidden schedule-button" matTooltip="Je bent de hele dag beschikbaar"
+              [disabled]="apiCall"
               (click)="acceptDay()">Beschikbaar
       </button>
       <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
@@ -65,7 +66,7 @@
         <mat-icon>navigate_next</mat-icon>
       </button>
       <button mat-button class="refuse btnhidden schedule-button" matTooltip="Je bent de hele dag onbeschikbaar"
-              (click)="refuseDay()">Onbeschikbaar
+              [disabled]="apiCall" (click)="refuseDay()">Onbeschikbaar
       </button>
     </div>
     <div class="row rowhidden">
@@ -77,7 +78,8 @@
       let-weekEvent="weekEvent">
       <ng-template #eventTooltip>
         {{availabilityData.projectTasks|calendarTooltip:weekEvent.event.title}}
-        <br> <a href="task/{{availabilityData.projectTasks|calendarTaskLink:weekEvent.event.title}}" style="text-decoration: underline; color: blue">details</a>
+        <br> <a href="task/{{availabilityData.projectTasks|calendarTaskLink:weekEvent.event.title}}"
+                style="text-decoration: underline; color: blue">details</a>
       </ng-template>
       <div
         class="cal-event"

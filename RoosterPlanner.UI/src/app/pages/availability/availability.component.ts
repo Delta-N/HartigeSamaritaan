@@ -74,6 +74,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   allEvents: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
   activeProjectTasks: Task[] = [];
+  apiCall: boolean = false;
 
   constructor(private breadcrumbService: BreadcrumbService,
               private shiftService: ShiftService,
@@ -216,10 +217,13 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         availability.preference = !availability.preference
       if (availability.preference)
         availability.type = 2;
-
+      this.apiCall = true;
       await this.availabilityService.updateAvailability(availability).then(res => {
-        availability = res;
-        shift.availabilities[0] = res
+        if (res) {
+          availability = res;
+          shift.availabilities[0] = res
+        }
+        this.apiCall = false;
       })
       this.changeColor()
     }
@@ -238,7 +242,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
         availability.type = 2; // if preference is true then type = 'ok'
         action = "Yes"
       }
-
+      this.apiCall = true;
       await this.availabilityService.postAvailability(availability).then(res => {
         if (res) {
           //add to list of availabilities
@@ -247,6 +251,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
           //color in calender
           this.changeColor()
         }
+        this.apiCall = false;
       })
     }
     this.changeBorders(event, action)
@@ -453,6 +458,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.endHour = 17;
     this.refresh.next();
   }
+
   setHours() {
     let start: Date[] = []
     this.filteredEvents.forEach(fe => start.push(fe.start))
