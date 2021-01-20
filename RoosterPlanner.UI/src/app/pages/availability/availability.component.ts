@@ -32,6 +32,13 @@ import {Task} from 'src/app/models/task';
 import {Availability} from "../../models/availability";
 import {take} from "rxjs/operators";
 import {TextInjectorService} from "../../services/text-injector.service";
+import {
+  faQuestion,
+  faCalendarTimes,
+  faCalendarCheck,
+  faHandsHelping,
+  faCheckCircle, faTimesCircle, faInfoCircle
+} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -47,6 +54,14 @@ import {TextInjectorService} from "../../services/text-injector.service";
   ],
 })
 export class AvailabilityComponent implements OnInit, AfterViewInit {
+  questionIcon = faQuestion
+  unavailableIcon = faCalendarTimes
+  availableIcon = faCalendarCheck
+  scheduledIcon = faHandsHelping
+  checkIcon = faCheckCircle;
+  crossIcon = faTimesCircle;
+  questionCircleIcon = faInfoCircle;
+
   @ViewChild('calendar') calendar: MatCalendar<Moment>;
   @ViewChild('schedule') schedule: CalendarDayViewComponent;
 
@@ -56,6 +71,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   availabilityData: AvailabilityData;
   displayedProjectTasks: Task[] = [];
   shifts: Shift[] = [];
+  numberOfOverlappingShifts: number = 0;
 
   selectedDate: Moment;
 
@@ -162,6 +178,10 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
   dateChanged() {
     this.changeDate(this.selectedDate.toDate())
+    if (window.innerWidth <= 768) {
+      let element: HTMLCollectionOf<Element> = document.getElementsByClassName("calendarbox")
+      element[0].scrollIntoView({behavior: 'smooth', block: 'center'})
+    }
   }
 
   increment(): void {
@@ -387,10 +407,32 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       this.shifts = res;
     });
     if (this.shifts.length > 0) {
+      this.numberOfOverlappingShifts = AvailabilityComponent.calculateOverlap(this.shifts)
       this.addEvents();
     } else {
       this.setDefaultHours();
     }
+  }
+
+  static calculateOverlap(shifts: Shift[]): number {
+    let number = 0;
+    if (shifts) {
+      for (let hour = 0; hour < 24; hour++) {
+        let numberOfOverlappingShifts = 0;
+        if (hour == 17)
+          shifts.forEach(s => {
+            let start = moment(s.startTime, "hh:mm");
+            let end = moment(s.endTime, "hh:mm");
+            let current = moment().startOf("day").set("hour", hour);
+
+            if (current.isBetween(start, end, undefined, '[]'))
+              numberOfOverlappingShifts++;
+          })
+        if (numberOfOverlappingShifts > number)
+          number = numberOfOverlappingShifts;
+      }
+    }
+    return number;
   }
 
   addEvents() {

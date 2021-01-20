@@ -11,6 +11,8 @@ import {UploadService} from "../../services/upload.service";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {AddRequirementComponent} from "../../components/add-requirement/add-requirement.component";
 import {Requirement} from "../../models/requirement";
+import {faPlusCircle, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-task',
@@ -18,6 +20,9 @@ import {Requirement} from "../../models/requirement";
   styleUrls: ['./task.component.scss']
 })
 export class TaskComponent implements OnInit {
+  circleIcon = faPlusCircle
+  editIcon = faEdit
+  deleteIcon = faTrashAlt
   guid: string;
   task: Task;
   isAdmin: boolean = false;

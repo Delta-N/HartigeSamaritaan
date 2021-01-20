@@ -1,6 +1,10 @@
 <div class="row bar">
   <h1>Beschikbaarheid opgeven</h1>
 </div>
+<div class="instruction">
+  Goed dat je deelneemt aan dit project! Je kunt hier je beschikbaarheid voor elke shift op elke dag doorgeven. Zet een
+  sterretje bij shifts die je erg leuk lijken!
+</div>
 <div class="row content-container">
   <div class="col-4">
     <div class="calendar">
@@ -14,36 +18,40 @@
           <ng-template #popContent>{{item.description}}<br> <a href="task/{{item.id}}"
                                                                style="text-decoration: underline; color: blue">details</a>
           </ng-template>
-          <mat-checkbox class="checkBox" [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
-                        [closeDelay]="1250" [openDelay]="500"
-                        id="{{item.id}}" (change)="OnCheckboxChange($event)"
+          <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
                         checked="true" color="primary" [disabled]="activeProjectTasks|checkboxFilter: item.id"
           >{{item.name}} </mat-checkbox>
+          <span class="push" [ngbPopover]="popContent" [autoClose]="'inside'">
+            <fa-icon class="checkbox-icon" [icon]="questionCircleIcon"></fa-icon>
+          </span>
         </div>
       </div>
       <div class="row legend">
-        <h5>Legenda</h5>
         <div class="row legend-item">
 
           <div class="mat-calendar-body-cell-content legend-button" style="background: gray">
+            <fa-icon class="legend-icon" [icon]="questionIcon"></fa-icon>
           </div>
           Geef je beschikbaarheid door
         </div>
 
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: red">
+            <fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>
           </div>
           Onbeschikbaar voor shift(s)
         </div>
 
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: green">
+            <fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>
           </div>
           Beschikbaar voor shift(s)
         </div>
 
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: blue">
+            <fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>
           </div>
           Ingeroosterd voor shift(s)
         </div>
@@ -56,22 +64,34 @@
     <div class="row datebox">
       <button mat-button class="accept btnhidden schedule-button" matTooltip="Je bent de hele dag beschikbaar"
               [disabled]="apiCall"
-              (click)="acceptDay()">Beschikbaar
+              (click)="acceptDay()">
+        <fa-icon [icon]="checkIcon"></fa-icon>
+        Dag beschikbaar
       </button>
-      <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
-        <mat-icon>navigate_before</mat-icon>
-      </button>
-      <div class="date" id="date"> {{viewDate | datePipe}}</div>
-      <button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
-        <mat-icon>navigate_next</mat-icon>
-      </button>
+      <div class="date-title">
+        <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
+          <mat-icon>navigate_before</mat-icon>
+        </button>
+        <div class="date" id="date"> {{viewDate | datePipe}}</div>
+        <button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
+          <mat-icon>navigate_next</mat-icon>
+        </button>
+      </div>
       <button mat-button class="refuse btnhidden schedule-button" matTooltip="Je bent de hele dag onbeschikbaar"
-              [disabled]="apiCall" (click)="refuseDay()">Onbeschikbaar
+              [disabled]="apiCall" (click)="refuseDay()">
+        <fa-icon [icon]="crossIcon"></fa-icon>
+        Dag onbeschikbaar
       </button>
     </div>
     <div class="row rowhidden">
-      <button mat-button class="accept schedule-button" (click)="acceptDay()">Beschikbaar</button>
-      <button mat-button class="refuse schedule-button" (click)="refuseDay()">Onbeschikbaar</button>
+      <button mat-button class="accept schedule-button" (click)="acceptDay()">
+        <fa-icon [icon]="checkIcon"></fa-icon>
+        Dag beschikbaar
+      </button>
+      <button mat-button class="refuse schedule-button" (click)="refuseDay()">
+        <fa-icon [icon]="crossIcon"></fa-icon>
+        Dag onbeschikbaar
+      </button>
     </div>
     <ng-template
       #customEventTemplate
@@ -118,14 +138,16 @@
         </div>
       </div>
     </ng-template>
-    <div class="calendarbox">
+    <div class="calendarbox"
+         [ngStyle]="numberOfOverlappingShifts>2&&{'min-width':(numberOfOverlappingShifts-2)*75+300+'px'}">
       <mwl-calendar-day-view #schedule
                              [viewDate]="viewDate"
                              [dayStartHour]="startHour"
                              [dayEndHour]="endHour"
                              [events]="filteredEvents"
                              [refresh]="refresh"
-                             [eventTemplate]="customEventTemplate">
+                             [eventTemplate]="customEventTemplate"
+                             [hourSegmentHeight]="15">
       </mwl-calendar-day-view>
     </div>
   </div>

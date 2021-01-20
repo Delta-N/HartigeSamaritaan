@@ -48,13 +48,27 @@ h2 {
   color: #434343;
   opacity: 1;
 }
-tr:hover{
+
+tr:hover {
   cursor: pointer;
+}
+
+fa-icon {
+  margin-right: 5px;
+}
+
+button fa-icon {
+  margin-left: 5px;
 }
 
 .action-anchor {
   position: absolute !important;
   bottom: 15px;
+
+  button {
+    font-size: 18px;
+    padding: 0 !important;
+  }
 }
 
 .action-button {
@@ -98,11 +112,24 @@ tr:hover{
   display: inline-block;
   cursor: pointer;
   border-radius: 5px;
+  padding: 5px;
 }
 
 .expanded-card {
   min-width: 100% !important;
   max-height: none !important;
+}
+
+.instruction {
+  margin-top: 15px;
+  font-style: normal;
+  font-variant-ligatures: normal;
+  font-variant-caps: normal;
+  font-variant-numeric: normal;
+  font-variant-east-asian: normal;
+  font-weight: normal;
+  font-stretch: normal;
+  font-family: "Segoe UI", serif;
 }
 
 .mat-button {
@@ -121,12 +148,13 @@ tr:hover{
   border: 1px solid gray !important;
 }
 
-.mat-calendar-body-selected{
+.mat-calendar-body-selected {
   background: none;
   color: initial;
-  border:1px solid black;
+  border: 1px solid black;
 }
-.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical){
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   border: initial;
 }
 
@@ -179,12 +207,13 @@ tr:hover{
 .mobilecard {
   margin-bottom: 30px !important;
 }
-.multiline-tooltip{
-   white-space: pre-line;
+
+.multiline-tooltip {
+  white-space: pre-line;
   background: #E74B3B;
   font-size: 20px;
   min-width: 300px;
- }
+}
 
 
 #push {
@@ -197,14 +226,15 @@ tr:hover{
 
 .row-name {
   text-align: left;
-  min-width: 250px;
-  font: normal normal normal 20px Segoe UI !important;
+  padding-right: 10px;
+  font: normal normal normal 20px/35px Segoe UI !important;
   letter-spacing: 0;
   color: #707070 !important;
   opacity: 1;
 
 }
-.spinner{
+
+.spinner {
   display: flex;
   justify-content: center;
   position: absolute;
@@ -232,18 +262,20 @@ tr:hover{
 
 }
 
-@media only screen and (max-width: 992px) {
-  .row-name{
-    padding-top: 4px;
+@media only screen and (max-width: 576px) {
+
+  .container {
+    max-width: 540px;
+    margin-right: 18px;
+    margin-left: 18px;
+    width: inherit;
   }
 }
 
-  @media only screen and (max-width: 550px) {
+@media only screen and (max-width: 550px) {
 
   .row-name {
-    font: normal normal normal 15px Segoe UI !important;
-    min-width: 125px;
-
+    font: normal normal normal 15px/30px Segoe UI !important;
   }
   .user-data {
     font: normal normal normal 14px/30px Segoe UI !important;
@@ -270,6 +302,7 @@ tr:hover{
   }
 
 }
+
 
 @media only screen and (max-width: 350px) {
   h1 {

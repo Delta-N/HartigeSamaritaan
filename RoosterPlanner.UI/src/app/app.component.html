@@ -6,22 +6,35 @@
       </button>
     </div>
 
-    <a mat-button routerLink="/">
+    <a mat-button routerLink="/home">
       <img src="../assets/Logo.png" alt="Hartige Samaritaan" class="logo"/>
     </a>
     <span class="sidenav-spacer"></span>
     <div fxShow="true" fxHide.lt-md="true" id="buttons">
-      <a mat-button class="toolbarbutton" routerLink="/home" routerLinkActive="active">Home</a>
-      <a mat-button class="toolbarbutton" *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">Admin</a>
-      <a mat-button class="toolbarbutton" *ngIf="isManager" routerLink="/manage" routerLinkActive="active">Beheer</a>
+      <a mat-button class="toolbarbutton" routerLink="/home" routerLinkActive="active">
+        <fa-icon [icon]="homeIcon"></fa-icon>
+        Home</a>
+      <a mat-button class="toolbarbutton" *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">
+        <fa-icon [icon]="adminIcon"></fa-icon>
+        Admin</a>
+      <a mat-button class="toolbarbutton" *ngIf="isManager" routerLink="/manage" routerLinkActive="active">
+        <fa-icon [icon]="managerIcon"></fa-icon>
+        Beheer</a>
       <button mat-button class="toolbarbutton" *ngIf="!loggedIn" (click)="login()">Inloggen</button>
       <div class="dropdown">
-        <img class="dropimg profile" [src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'"
+        <img class="dropimg profile"
+             [src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'"
              alt="Profile picture">
         <div class="dropdown-content">
-          <a routerLink="/profile">Profiel</a>
-          <a (click)="changeProfilePicture()">Wijzig foto</a>
-          <a (click)="logout()">Uitloggen</a>
+          <a routerLink="/profile">
+            <fa-icon [icon]="profileIcon"></fa-icon>
+            Profiel</a>
+          <a (click)="changeProfilePicture()">
+            <fa-icon [icon]="editIcon"></fa-icon>
+            Wijzig foto</a>
+          <a (click)="logout()">
+            <fa-icon [icon]="signOutIcon"></fa-icon>
+            Uitloggen</a>
         </div>
       </div>
     </div>
@@ -33,40 +46,41 @@
       <mat-sidenav #sidenav mode="side" opened="false" fxShow="true" fxHide.gt-sm="true">
         <div fxLayout="column">
           <div id="sidenavPicture">
-            <img class="dropimg profile"
-                 [src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'"
-                 alt="Profile picture">
+            <a (click)="changeProfilePicture()">
+              <img class="dropimg profile"
+                   [src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'"
+                   alt="Profile picture">
+            </a>
           </div>
-          <a mat-button class="sidenav-button" routerLink="/home" routerLinkActive="active">Home</a>
-          <a mat-button class="sidenav-button" routerLink="/profile" routerLinkActive="active">Profiel</a>
-          <a mat-button class="sidenav-button" *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">Admin</a>
-          <a mat-button class="sidenav-button" *ngIf="isManager" routerLink="/manage" routerLinkActive="active">Beheer</a>
-          <a mat-button class="sidenav-button" (click)="logout()" >Uitloggen</a>
+          <a mat-button class="sidenav-button" routerLink="/home" routerLinkActive="active">
+            <fa-icon [icon]="homeIcon"></fa-icon>
+            Home</a>
+          <a mat-button class="sidenav-button" routerLink="/profile" routerLinkActive="active">
+            <fa-icon [icon]="profileIcon"></fa-icon>
+            Profiel</a>
+          <a mat-button class="sidenav-button" *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">
+            <fa-icon [icon]="adminIcon"></fa-icon>
+            Admin</a>
+          <a mat-button class="sidenav-button" *ngIf="isManager" routerLink="/manage" routerLinkActive="active">
+            <fa-icon [icon]="managerIcon"></fa-icon>
+            Beheer</a>
+          <a mat-button class="sidenav-button" (click)="logout()">
+            <fa-icon [icon]="signOutIcon"></fa-icon>
+            Uitloggen</a>
 
         </div>
       </mat-sidenav>
 
       <mat-sidenav-content class="sidenav-content">
         <main class="content">
-        <div class="container">
-          <div class="row">
-            <app-breadcrumb></app-breadcrumb>
+          <div class="container">
+            <div class="row">
+              <app-breadcrumb></app-breadcrumb>
+            </div>
+            <router-outlet></router-outlet>
+
           </div>
-          <router-outlet></router-outlet>
-
-        </div>
         </main>
-        <mat-toolbar color="primary" id="footer">
-          <a href="https://www.facebook.com/HartigeSamaritaan/"><i class="fab fa-facebook"></i></a>
-          <a href="https://twitter.com/HartigeSam"><i class="fab fa-twitter"></i></a>
-          <a mat-button class="toolbarbutton footerbutton" routerLink="/privacy" routerLinkActive="active">Privacy
-            policy</a>
-
-          <a mat-button class="toolbarbutton footerbutton" href="https://www.hartigesamaritaan.nl/contact-2/">Contact</a>
-
-          <a href="https://plus.google.com/+HartigesamaritaanNl"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.instagram.com/hartigesamaritaan/"><i class="fab fa-google"></i></a>
-        </mat-toolbar>
       </mat-sidenav-content>
 
     </mat-sidenav-container>

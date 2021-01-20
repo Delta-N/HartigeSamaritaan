@@ -1,6 +1,6 @@
 #push {
   margin-left: auto;
-  border:none;
+  border: none;
 }
 
 .mat-button {
@@ -9,12 +9,13 @@
   border-radius: 5px;
 }
 
-.row{
+.row {
   display: flex;
   margin-top: 9px;
   margin-bottom: 9px;
 }
-.col-6{
+
+.col-6 {
   padding: 0;
 }
 
@@ -36,27 +37,30 @@ img {
   max-width: 325px;
   min-width: 325px;
 }
-.text-box{
+
+.text-box {
   border: 1px gray solid;
   min-height: 20vh;
   width: 80%;
   font-size: 15px;
 
 }
-.right{
+
+.right {
   display: flex;
 }
-.card{
+
+.card {
   margin-right: 20px;
 }
 
-#pictureFrame{
+#pictureFrame {
   display: flex;
   width: 100%;
   justify-content: center;
 }
 
-#expanded-card{
+#expanded-card {
   width: 100%;
 }
 
@@ -64,37 +68,36 @@ img {
   img {
     max-width: 182px;
   }
-  .mat-card{
+  .mat-card {
     max-width: 250px;
     min-width: 250px;
   }
-  .user-data{
+  .user-data {
     font-size: 16px !important;
   }
 }
 
 
-  @media only screen and (max-width: 992px) {
-  img{
+@media only screen and (max-width: 992px) {
+  img {
     max-width: 125px;
   }
-    .user-data {
-      font-size: 13px !important;
-    }
-    .row-name{
-      min-width: 180px;
-      font-size: 17px !important;
-    }
-    .mat-card{
-      min-width: 200px;
-    }
+  .user-data {
+    font-size: 13px !important;
+  }
+  .row-name {
+    font-size: 17px !important;
+  }
+  .mat-card {
+    min-width: 200px;
+  }
 }
 
 @media only screen and (max-width: 768px) {
-  .right{
+  .right {
     padding-left: 15px;
   }
-  img{
+  img {
     max-width: 182px;
   }
   .mat-card {
@@ -104,57 +107,61 @@ img {
     font-size: 18px !important;
   }
   .row-name {
-    min-width: 225px;
     font-size: 22px !important;
     padding-top: 0;
   }
-  #card{
+  #card {
     display: flex;
     justify-content: center;
   }
 }
 
-  @media only screen and (max-width: 550px) {
-    #pictureFrame{
-      margin-left: 0 !important;
-    }
-  .text-box{
+@media only screen and (max-width: 560px) {
+  #pictureFrame {
+    margin-left: 0 !important;
+  }
+  .text-box {
     font-size: 12px;
   }
-  .override-button{
-    padding: 2px!important;
-    font-size: 12px!important;
+  .override-button {
+    padding: 2px !important;
+    font-size: 12px !important;
   }
 
-  .mat-card{
-    min-width: initial;
-    width: 375px;
-    max-width: inherit;
+  .mat-card {
 
-    .mat-card-title{
+    width: 375px;
+
+    .mat-card-title {
       font-size: 16px;
     }
-    .mat-card-content{
+
+    .mat-card-content {
       font-size: 14px;
     }
 
-    .mat-card-actions .mat-button{
+    .mat-card-actions .mat-button {
       font-size: 16px;
     }
   }
-    #pictureFrame {
-      margin-left: 25%;
-    }
+  #pictureFrame {
+    margin-left: 25%;
+  }
 
-    .user-data {
-      font-size: 12px !important;
-    }
+  .user-data {
+    font-size: 12px !important;
+  }
 
-    .row-name {
-      min-width: 150px ;
-      font-size: 14px !important;
-    }
-.right{
-  display: block;
+  .row-name {
+    font-size: 14px !important;
+  }
+  .right {
+    display: block;
+  }
 }
+
+@media only screen and (max-width: 410px) {
+  .override-button {
+    font-size: 9px !important;
+  }
 }

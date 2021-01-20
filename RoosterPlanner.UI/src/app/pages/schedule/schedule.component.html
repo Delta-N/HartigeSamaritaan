@@ -1,10 +1,16 @@
 <div class="row bar">
   <h1>Mijn shifts</h1>
   <div id="push">
-    <a (click)="ics()" mat-button class="override-button action-button">Download kalender</a>
+    <a (click)="ics()" mat-button class="override-button action-button">
+      <fa-icon [icon]="calendarIcon"></fa-icon>
+      Download afspraken als .ics</a>
   </div>
 </div>
+<div class="instruction">
+  Goed dat je deelneemt aan dit project! Je ziet hier een overzicht van al jouw shifts. Rechtsboven kun je ze
+  downloaden, om aan jouw agenda toe te voegen.
 
+</div>
 <div class="spinner" *ngIf="!loaded">
   <mat-spinner></mat-spinner>
 </div>
@@ -12,12 +18,12 @@
 <div class="row" *ngIf="loaded">
   <div class="col-md-12">
 
-    <div>
+    <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" matSort
              class="mat-elevation-z2">
         <ng-container matColumnDef="Datum">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>Datum</th>
-          <td mat-cell *matCellDef="let row">{{row.shift.date | datePipe}}</td>
+          <td mat-cell *matCellDef="let row">{{row.shift.date | tableDatePipe}}</td>
         </ng-container>
         <ng-container matColumnDef="Taak">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Taak</th>

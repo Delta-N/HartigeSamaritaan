@@ -10,6 +10,7 @@ import * as moment from "moment"
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
 import {Event} from "../../models/event";
+import {faCalendarPlus} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -18,6 +19,7 @@ import {Event} from "../../models/event";
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
+  calendarIcon = faCalendarPlus
   loaded: boolean = false;
   today: Date = new Date();
   displayedColumns: string[] = [];
@@ -80,12 +82,12 @@ export class ScheduleComponent implements OnInit {
             };
 
             let previous: Breadcrumb = new Breadcrumb(res[0].participation.project.name, "/project/" + res[0].participation.project.id);
-            let current: Breadcrumb = new Breadcrumb('Mijn shifts',null);
+            let current: Breadcrumb = new Breadcrumb('Mijn shifts', null);
 
             let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current];
             this.breadcrumbService.replace(array);
 
-          }else{
+          } else {
             let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb];
             this.breadcrumbService.replace(array);
           }

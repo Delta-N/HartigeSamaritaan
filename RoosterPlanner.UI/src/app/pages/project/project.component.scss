@@ -66,35 +66,31 @@ img {
   }
 
 
+  @media only screen and (max-width: 550px) {
 
-@media only screen and (max-width: 550px) {
-
-  #left {
-    min-width: inherit
-  }
-  .override-button {
-    font-size: 13px !important;
-  }
-  .row-name {
-    min-width: 150px;
-  }
-  img {
-    max-width: 400px;
-  }
+    #left {
+      min-width: inherit
+    }
+    .override-button {
+      font-size: 13px !important;
+    }
+    img {
+      max-width: 400px;
+    }
 
 
-  .mat-card-title {
-    font-size: 16px;
-  }
+    .mat-card-title {
+      font-size: 16px;
+    }
 
-  .mat-card-content {
-    font-size: 14px;
-  }
+    .mat-card-content {
+      font-size: 14px;
+    }
 
-  .mat-card-actions .mat-button {
-    font-size: 14px;
-  }
+    .mat-card-actions .mat-button {
+      font-size: 14px;
+    }
 
-}
+  }
 
 }

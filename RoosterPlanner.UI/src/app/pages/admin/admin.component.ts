@@ -9,14 +9,17 @@ import {UserService} from "../../services/user.service";
 import {AddAdminComponent} from "../../components/add-admin/add-admin.component";
 import {ToastrService} from "ngx-toastr";
 import {UploadPrivacyPolicyComponent} from "../../components/upload-privacy-policy/upload-privacy-policy.component";
+import {faPlusCircle, faEdit} from '@fortawesome/free-solid-svg-icons';
 
-//
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+  circleIcon=faPlusCircle
+  editIcon=faEdit;
+
   projects: Project[] = [];
   loaded: boolean = false;
   administrators: User[] = []

@@ -30,6 +30,8 @@ import {take} from "rxjs/operators";
 import {Project} from "../../models/project";
 import {ProjectService} from "../../services/project.service";
 import {TextInjectorService} from "../../services/text-injector.service";
+import {AvailabilityComponent} from "../availability/availability.component";
+import {faCalendarCheck, faCalendarTimes, faHandsHelping} from "@fortawesome/free-solid-svg-icons";
 
 
 @Component({
@@ -45,6 +47,9 @@ import {TextInjectorService} from "../../services/text-injector.service";
   ],
 })
 export class PlanComponent implements OnInit, AfterViewInit {
+  unavailableIcon = faCalendarTimes
+  availableIcon = faCalendarCheck
+  scheduledIcon = faHandsHelping
   @ViewChild('calendar') calendar: MatCalendar<Moment>;
   @ViewChild('schedule') schedule: CalendarDayViewComponent;
 
@@ -52,6 +57,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
   availabilityData: AvailabilityData;
   displayedProjectTasks: Task[] = [];
   shifts: Shift[] = [];
+  numberOfOverlappingShifts: number = 0;
+
 
   selectedDate: Moment;
 
@@ -113,7 +120,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
 
       //create breadcrumbs
-      let current: Breadcrumb = new Breadcrumb('Plannen',null);
+      let current: Breadcrumb = new Breadcrumb('Plannen', null);
 
       let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, current];
       this.breadcrumbService.replace(array);
@@ -206,11 +213,12 @@ export class PlanComponent implements OnInit, AfterViewInit {
       this.shifts = res;
     });
     if (this.shifts.length > 0) {
+      this.numberOfOverlappingShifts = AvailabilityComponent.calculateOverlap(this.shifts)
       this.addEvents();
       setTimeout(() => {
         this.fillSpacer()
       }, 100)
-    }else{
+    } else {
       this.setDefaultHours()
     }
   }
@@ -257,11 +265,12 @@ export class PlanComponent implements OnInit, AfterViewInit {
     this.setHours()
   }
 
-  setDefaultHours(){
-    this.startHour=12;
-    this.endHour=17;
+  setDefaultHours() {
+    this.startHour = 12;
+    this.endHour = 17;
     this.refresh.next();
   }
+
   setHours() {
     let start: Date[] = []
     this.filteredEvents.forEach(fe => start.push(fe.start))
@@ -288,7 +297,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
   fillSpacer() {
     this.filteredEvents.forEach(e => {
       let shift = this.shifts.find(s => s.id == e.id)
-      if ((e.end.getTime() - e.start.getTime()) / 3600000 > 2) {
+      if ((e.end.getTime() - e.start.getTime()) / 3600000 > 4) {
 
 
         let necessaryElement = document.getElementById('necessary-' + shift.id);

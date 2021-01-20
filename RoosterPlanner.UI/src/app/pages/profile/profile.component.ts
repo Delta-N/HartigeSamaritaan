@@ -10,6 +10,8 @@ import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Certificate} from "../../models/Certificate";
 import {AddCertificateComponent} from "../../components/add-certificate/add-certificate.component";
 import {ToastrService} from "ngx-toastr";
+import {faAward, faUserEdit, faBell, faBellSlash} from '@fortawesome/free-solid-svg-icons';
+import {ChangeProfilePictureComponent} from "../../components/change-profile-picture/change-profile-picture.component";
 
 
 @Component({
@@ -18,6 +20,10 @@ import {ToastrService} from "ngx-toastr";
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  award = faAward
+  faUserEdit = faUserEdit
+  bell = faBell
+  slash = faBellSlash
   user: User;
   age: string;
   loaded: boolean;
@@ -78,7 +84,7 @@ export class ProfileComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-       this.loadUserProfile()
+        this.loadUserProfile()
       }
     })
   }
@@ -119,8 +125,8 @@ export class ProfileComponent implements OnInit {
         rightElement.hidden = false;
       if (remarkElement)
         remarkElement.hidden = false;
-      if(expendedCardElement)
-        expendedCardElement.hidden=true;
+      if (expendedCardElement)
+        expendedCardElement.hidden = true;
 
 
       this.certificateStyle = 'card';
@@ -169,5 +175,18 @@ export class ProfileComponent implements OnInit {
         this.toastr.success(message)
       }
     })
+  }
+
+  changeProfilePicture() {
+    const dialogRef = this.dialog.open(ChangeProfilePictureComponent, {
+      width: '300px',
+      data: this.user
+    });
+    dialogRef.disableClose = false;
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        window.location.reload()
+      }
+    });
   }
 }

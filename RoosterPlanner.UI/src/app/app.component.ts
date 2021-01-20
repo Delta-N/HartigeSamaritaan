@@ -15,6 +15,7 @@ import {ChangeProfilePictureComponent} from "./components/change-profile-picture
 import {Document} from "./models/document";
 import {UploadService} from "./services/upload.service";
 import {AcceptPrivacyPolicyComponent} from "./components/accept-privacy-policy/accept-privacy-policy.component";
+import {faHome, faUserLock, faUserCog, faSignOutAlt, faUser, faUserEdit} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -23,9 +24,14 @@ import {AcceptPrivacyPolicyComponent} from "./components/accept-privacy-policy/a
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  homeIcon = faHome;
+  adminIcon = faUserLock;
+  managerIcon = faUserCog;
+  signOutIcon = faSignOutAlt;
+  profileIcon = faUser;
+  editIcon = faUserEdit
 
   public hasUser = false;
-
   title = 'Hartige Samaritaan';
   isIframe = false;
   loggedIn = false;
@@ -136,7 +142,6 @@ export class AppComponent implements OnInit, OnDestroy {
       if (res) {
         window.location.reload()
       }
-
     });
   }
 }

@@ -9,6 +9,7 @@ import {Category} from "../../models/category";
 import {AddCategoryComponent} from "../../components/add-category/add-category.component";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
+import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-category',
@@ -16,7 +17,8 @@ import {Breadcrumb} from "../../models/breadcrumb";
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit {
-
+  editIcon = faEdit;
+  deleteIcon = faTrashAlt;
   guid: string;
   category: Category;
   isAdmin: boolean = false;
@@ -30,9 +32,9 @@ export class CategoryComponent implements OnInit {
     private userService: UserService,
     private categoryService: CategoryService,
     private router: Router,
-    private breadcrumbService:BreadcrumbService) {
+    private breadcrumbService: BreadcrumbService) {
 
-    let breadcrumb: Breadcrumb = new Breadcrumb('Categorie',null);
+    let breadcrumb: Breadcrumb = new Breadcrumb('Categorie', null);
     let takencrumb: Breadcrumb = new Breadcrumb("Taken", "admin/tasks");
 
     let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
@@ -71,7 +73,7 @@ export class CategoryComponent implements OnInit {
 
   delete() {
     const message = "Weet je zeker dat je deze category wilt verwijderen?"
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput",null);
+    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput", null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData

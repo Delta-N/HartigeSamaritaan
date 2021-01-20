@@ -1,9 +1,13 @@
 <div class="row bar">
   <h1>Profiel</h1>
   <div id="push">
-    <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button action-button">Profiel wijzigen</a>
+    <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button action-button">
+      <fa-icon [icon]="faUserEdit"></fa-icon>
+      Profiel wijzigen</a>
     <a *ngIf="user!=null" (click)="push()" mat-button
-       class="override-button">{{user.pushDisabled ? "E-mailberichten inschakelen" : "E-mailberichten uitschakelen"}}</a>
+       class="override-button">
+      <fa-icon [icon]="user.pushDisabled?bell:slash"></fa-icon>
+      {{user.pushDisabled ? "E-mailberichten inschakelen" : "E-mailberichten uitschakelen"}}</a>
   </div>
 </div>
 
@@ -58,6 +62,7 @@
       <mat-card [ngClass]="[certificateStyle]">
         <div>
           <mat-card-title>
+            <fa-icon [icon]="award"></fa-icon>
             Certificaten
             <button [disabled]="CertificateExpandbtnDisabled" class="card-title-icon" mat-icon-button
                     (click)="expandCertificateCard()">
@@ -80,11 +85,12 @@
       </mat-card>
     </div>
 
-    <div class="right col-md-6" id="right" >
+    <div class="right col-md-6" id="right">
       <div id="card">
         <mat-card [ngClass]="[certificateStyle]" id="CertificateCard">
           <div>
             <mat-card-title>
+              <fa-icon [icon]="award"></fa-icon>
               Certificaten
               <button [disabled]="CertificateExpandbtnDisabled" class="card-title-icon" mat-icon-button
                       (click)="expandCertificateCard()">
@@ -107,18 +113,20 @@
         </mat-card>
       </div>
       <div *ngIf="user.profilePicture?.documentUri" id="pictureFrame">
-
-        <img *ngIf="user.profilePicture && user.profilePicture.documentUri"
-             src="{{user.profilePicture.documentUri}}"
-             alt="Profile picture"/>
+        <a (click)="changeProfilePicture()">
+          <img *ngIf="user.profilePicture && user.profilePicture.documentUri"
+               src="{{user.profilePicture.documentUri}}"
+               alt="Profile picture"/>
+        </a>
       </div>
     </div>
   </div>
 
-  <div class="row" id="remark" >
+  <div class="row" id="remark">
     <div class="col-6" [ngStyle]="!isStaff&& {'flex':'inherit','max-width':'inherit'}">
 
-      <div class="row-name" [ngStyle]="!isStaff&& {'display':'flex', 'justify-content':'center'}">Persoonlijke opmerking:
+      <div class="row-name" [ngStyle]="!isStaff&& {'display':'flex', 'justify-content':'center'}">Persoonlijke
+        opmerking:
         <button mat-button class="override-button" id="personalbutton"
                 (click)="editRemark('personalbutton')">Aanpassen
         </button>

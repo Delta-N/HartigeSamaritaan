@@ -5,6 +5,8 @@ import {Participation} from "../../models/participation";
 import {ToastrService} from "ngx-toastr";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {faCalendarAlt, faFileAlt, faList,} from "@fortawesome/free-solid-svg-icons";
+import {faTimesCircle} from "@fortawesome/free-regular-svg-icons";
 
 @Component({
   selector: 'app-project-card',
@@ -12,6 +14,10 @@ import {MatDialog} from "@angular/material/dialog";
   styleUrls: ['./project-card.component.scss']
 })
 export class ProjectCardComponent implements OnInit {
+  calendarIcon = faCalendarAlt;
+  listIcon = faList;
+  signOut = faTimesCircle;
+  detailsIcon = faFileAlt;
   isAdmin: boolean = false;
 
   constructor(private toastr: ToastrService,
@@ -28,7 +34,7 @@ export class ProjectCardComponent implements OnInit {
 
   removeParticipation(participation: Participation) {
     const message = "Weet je zeker dat je wilt uitschrijven voor dit project?"
-    const dialogData = new ConfirmDialogModel("Bevestig uitschrijving", message, "ConfirmationInput",null);
+    const dialogData = new ConfirmDialogModel("Bevestig uitschrijving", message, "ConfirmationInput", null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData

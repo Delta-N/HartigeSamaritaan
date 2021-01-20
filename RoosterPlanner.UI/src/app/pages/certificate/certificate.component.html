@@ -4,14 +4,15 @@
 <span *ngIf="loaded">
 <div id="pdfTable" #pdfTable>
   <div class="row bar">
-    <h1>Certificaat: {{certificate.certificateType?certificate.certificateType.name:"Onbekend"}}</h1>
-    <button mat-button id="push" class="override-button action-button" (click)="pdf()">Download PDF</button>
+    <h1>Certificaat: {{certificate.certificateType ? certificate.certificateType.name : "Onbekend"}}</h1>
+    <button mat-button id="push" class="override-button action-button" (click)="pdf()"><fa-icon
+      [icon]="awardIcon"></fa-icon>Download PDF</button>
   </div>
 
 
   <div class="row">
     <div class="row-name">Uitgereikt aan:</div>
-    <div class="user-data">{{certificate.person?.firstName + " "+ certificate.person?.lastName }}</div>
+    <div class="user-data">{{certificate.person?.firstName + " " + certificate.person?.lastName }}</div>
   </div>
 
   <div class="row">
@@ -31,8 +32,9 @@
 
 
   <div class="row">
-    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button">Wijzigen</a>
-    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button">Verwijderen</a>
+    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button"><fa-icon
+      [icon]="editIcon"></fa-icon>Wijzigen</a>
+    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button"><fa-icon [icon]="deleteIcon"></fa-icon>Verwijderen</a>
   </div>
   </div>
 </span>

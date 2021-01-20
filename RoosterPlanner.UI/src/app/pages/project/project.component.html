@@ -7,6 +7,9 @@
          <h1>{{title}}</h1>
       </div>
    </div>
+<div class="instruction">
+Hier zie je details over dit project. Je mag op deze pagina het maximaal aantal uur dat je per week wilt helpen invullen. Je mag ook een voorkeur doorgeven, als je met iemand wilt samenwerken.
+</div>
    <div class="row">
       <div class="col-md-6" id="left">
          <div class="row">
@@ -45,15 +48,17 @@
          </div>
          <div class="row" *ngIf="viewProject.websiteUrl">
             <div class="row-name">Website:</div>
-            <div class="user-data"><a href="{{viewProject.websiteUrl}}">Link</a></div>
+            <div class="user-data"><a href="{{viewProject.websiteUrl}}" target="_blank">Link</a></div>
          </div>
          <div *ngIf="this.participation!=null" class="row">
             <div class="row-name">Max uur per week:</div>
             <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
          </div>
          <div class="row" *ngIf="this.participation && this.participation.active">
-            <a (click)="editWorkingHours()" mat-button class="action-button override-button">Max werkuren wijzigen</a>
-            <a (click)="collaborate(participation)" mat-button class="action-button override-button">Voorkeur samenwerking</a>
+            <a (click)="editWorkingHours()" mat-button class="action-button override-button"><fa-icon
+              [icon]="historyIcon"></fa-icon>Max uur per week wijzigen</a>
+            <a (click)="collaborate(participation)" mat-button class="action-button override-button"><fa-icon
+              [icon]="friendsIcon"></fa-icon>Voorkeur samenwerking</a>
          </div>
          <div class="admin" *ngIf="isAdmin">
            <div class="row" id="admin-control-title"><h6>Administrator opties</h6></div>
@@ -73,7 +78,7 @@
          <mat-card [ngClass]="[taskCardStyle]" id="taskCard">
             <div>
                <mat-card-title>
-                  Projecttaken
+                  <fa-icon [icon]="clipboard"></fa-icon>Projecttaken
                   <button [disabled]="projectTasksExpandbtnDisabled" class="card-title-icon" mat-icon-button
                           (click)="expandTaskCard()">
                   <mat-icon id="icon">zoom_out_map</mat-icon>
@@ -83,15 +88,16 @@
             <mat-card-content>
                <span *ngFor="let item of projectTasks">
                   <a [routerLink]="['/task', item.id]">
-                     <p>{{item.name}}</p>
+                     <p><fa-icon [icon]="infoIcon"></fa-icon>
+                       {{item.name}}</p>
                   </a>
                </span>
                <span *ngIf="!projectTasks || projectTasks.length==0">N.N.T.B.</span>
                <mat-card-actions class="action-anchor"></mat-card-actions>
             </mat-card-content>
             <mat-card-actions class="action-anchor" *ngIf="isAdmin || isManager">
-               <button mat-button (click)="modTask('add')">Nieuwe toevoegen</button>
-               <button mat-button (click)="modTask('remove')">Verwijderen</button>
+               <button mat-button (click)="modTask('add')"><fa-icon [icon]="circle"></fa-icon>Nieuwe toevoegen</button>
+               <button mat-button (click)="modTask('remove')"><fa-icon [icon]="faTrash"></fa-icon>Verwijderen</button>
             </mat-card-actions>
          </mat-card>
           </div>

@@ -1,9 +1,21 @@
-<div class="row bar">
-  <h1>Dashboard</h1>
-  <button mat-button id="push" (click)="addParticipation()">Aanmelden bij project</button>
-</div>
+<div class="home">
+  <div class="row bar">
+    <h1>
+      <fa-icon [icon]="homeIcon"></fa-icon>
+      Dashboard
+    </h1>
+    <button mat-button id="push" (click)="addParticipation()">
+      <fa-icon [icon]="circleIcon"></fa-icon>
+      Aanmelden bij project
+    </button>
+  </div>
+  <div class="instruction">
+    Welkom op jouw dashboard! Vanaf deze pagina zie je een overzicht van jouw projecten. Je kunt je rechtsboven
+    aanmelden
+    voor een nieuw project.
 
-<span *ngIf="participations.length > 0">
+  </div>
+  <span *ngIf="participations.length > 0">
        <div class="row cardholder">
        <span *ngFor="let item of participations" class="mobilecard">
         <app-project-card [participation]="item"></app-project-card>
@@ -11,14 +23,25 @@
         </div>
 </span>
 
-<div class="spinner" *ngIf="!loaded">
-  <mat-spinner></mat-spinner>
-</div>
-<div *ngIf="participations.length === 0 && loaded">
+  <div class="spinner" *ngIf="!loaded">
+    <mat-spinner></mat-spinner>
+  </div>
 
-  <div>
-    <div class="row"><p id="flavortext">Nog niet aangemeld bij een project</p></div>
-    <div class="row"><a mat-button id="big-button" (click)="addParticipation()">Aanmelden</a></div>
+  <div *ngIf="participations.length === 0 && loaded">
+    <div>
+      <div class="row"><p id="flavortext">Nog niet aangemeld bij een project</p></div>
+      <div class="row"><a mat-button id="big-button" (click)="addParticipation()">Aanmelden</a></div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: auto">
+    <mat-toolbar color="primary" id="footer">
+      <a href="https://www.facebook.com/HartigeSamaritaan/"><i class="fab fa-facebook"></i></a>
+      <a href="https://twitter.com/HartigeSam"><i class="fab fa-twitter"></i></a>
+      <a href="https://plus.google.com/+HartigesamaritaanNl"><i class="fab fa-instagram"></i></a>
+      <a mat-button class="toolbarbutton footerbutton" routerLink="/privacy" routerLinkActive="active">Privacy
+        policy</a>
+      <a mat-button class="toolbarbutton footerbutton" href="https://www.hartigesamaritaan.nl/contact-2/">Contact</a>
+    </mat-toolbar>
   </div>
 </div>
-

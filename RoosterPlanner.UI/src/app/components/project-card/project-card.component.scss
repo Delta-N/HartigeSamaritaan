@@ -1,7 +1,15 @@
-.mat-button{
+.mat-button {
   margin-bottom: 5px;
   margin-left: 20px;
 }
-a:hover{
+
+a:hover {
   cursor: pointer;
+}
+
+@media only screen and (max-width: 400px) {
+  .mat-card {
+    min-width: 225px;
+    min-height: 325px;
+  }
 }

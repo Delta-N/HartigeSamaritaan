@@ -1,6 +1,15 @@
-.highlight{
+.checkbox-icon {
+  margin-left: 5px;
+}
+
+.instruction {
+  margin-bottom: 15px;
+}
+
+.highlight {
   color: red !important;
 }
+
 .legend-button {
   border: 1px black solid;
   border-radius: 50%;
@@ -9,16 +18,23 @@
   color: white;
   margin-right: 5px;
 }
-.legend{
+
+.legend {
   display: block;
   background: snow;
   border: 1px solid #707070;
+
   h5 {
     text-align: center;
   }
 }
-.legend-item{
-  margin:5px;
+
+.legend-icon {
+  margin-right: 0;
+}
+
+.legend-item {
+  margin: 5px;
   line-height: 35px;
 }
 
@@ -26,8 +42,9 @@
   margin-top: auto;
   margin-bottom: auto;
 }
-.pop{
-  a{
+
+.pop {
+  a {
     color: blue;
   }
 }
@@ -113,7 +130,7 @@
 }
 
 .tasks-container {
-  display: flex;
+  display: block;
 }
 
 .flex-container {
@@ -171,8 +188,18 @@
   justify-content: center;
 }
 
+.date-title {
+  display: flex;
+  align-items: center;
+}
+
 .datebox {
   justify-content: center;
+
+  button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
 
 .buttonholder {
@@ -214,6 +241,9 @@
   margin: 5px;
 }
 
+.push {
+  margin-left: auto;
+}
 
 @media only screen and (max-width: 992px) {
   .cal-event-title {
@@ -234,7 +264,7 @@
   .date {
     font-size: 20px;
   }
-  .legend-item{
+  .legend-item {
     font-size: 14px;
     display: flex !important;
   }
@@ -257,7 +287,7 @@
   .row {
     display: initial;
   }
-  .bar{
+  .bar {
     display: flex;
   }
   .content-container {
@@ -270,6 +300,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+
   }
 
   .calendarbox {
@@ -277,6 +308,12 @@
   }
   .datebox {
     display: flex;
+    margin-bottom: 10px;
+
+    button {
+      margin-top: inherit;
+      margin-bottom: inherit;
+    }
   }
   .col-8 {
     max-width: none;
@@ -286,21 +323,25 @@
   }
   .tasktoggle {
     display: flex;
-    justify-content: center;
+    min-width: 250px;
   }
 
-  .legend-button{
+  .legend-button {
     width: 34px;
     height: 34px;
   }
-  .legend{
+  .legend {
     display: flex;
     justify-content: flex-start;
-    h5{
+
+    h5 {
       width: 100%;
     }
+
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
-  .legend-item{
+  .legend-item {
     min-width: 225px;
   }
 
@@ -308,11 +349,38 @@
 
 @media only screen and (max-width: 525px) {
   .cal-event-title {
-    font-size: 18px;
+    font-size: 12px;
   }
-  .legend-item{
+  .legend-item {
     font-size: 12px;
     min-width: 195px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .date {
+    font-size: 20px;
+  }
+  .cdhidden {
+    margin-top: 5px;
+  }
+  .schedule-button {
+    font-size: 14px;
+  }
+  .btnhidden {
+    display: none;
+  }
+  .rowhidden {
+    display: flex !important;
+    padding-bottom: 15px;
+  }
+  .option-button {
+    width: 25px;
+    height: 25px;
+    font-size: 0;
+  }
+  .legend {
+    display: flex;
   }
 }
 
@@ -348,29 +416,5 @@
   }
 }
 
-@media only screen and (max-width: 410px) {
-  .date {
-    font-size: 20px;
-  }
-  .cdhidden {
-    margin-top: 5px;
-  }
-  .schedule-button {
-    font-size: 14px;
-  }
-  .btnhidden {
-    display: none;
-  }
-  .rowhidden {
-    display: flex !important;
-  }
-  .option-button {
-    width: 25px;
-    height: 25px;
-    font-size: 0;
-  }
-  .legend {
-    display: flex;
-  }
-}
+
 

@@ -2,7 +2,8 @@
   height: 75px;
   background: rgb(231, 75, 59);
   background: linear-gradient(90deg, rgba(231, 75, 59, 1) 0%, rgba(167, 46, 33, 1) 100%);
-  a{
+
+  a {
     height: 100%;
   }
 }
@@ -78,25 +79,6 @@ img {
   height: calc(100% - 27px);
 }
 
-#footer {
-  height: 27px;
-  align-items: center;
-  justify-content: center;
-  .toolbarbutton{
-    text-align: center;
-  }
-  a{
-    margin-right: 25px;
-    i{
-      color: white;
-    }
-  }
-}
-
-.footerbutton {
-  padding: 0 !important;
-  font-size: 12px;
-}
 
 .profile {
   width: 60px;
@@ -108,7 +90,8 @@ img {
 #buttons {
   display: flex;
 }
-#sidenavPicture{
+
+#sidenavPicture {
   margin-top: 10px;
   display: flex;
   justify-content: center;
