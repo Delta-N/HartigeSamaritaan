@@ -18,24 +18,27 @@
 
           <mat-checkbox [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
                         [closeDelay]="1250" [openDelay]="500"
-                        popoverTitle="{{item.name}}" class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)"
+                        popoverTitle="{{item.name}}" class="checkBox" id="{{item.id}}"
+                        (change)="OnCheckboxChange($event)"
                         checked="true" color="primary">{{item.name}}</mat-checkbox>
         </div>
       </div>
       <div class="row legend">
-        <h5>Legenda</h5>
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: red">
+            <fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>
           </div>
           Onvoldoende mensen beschikbaar op deze dag.
         </div>
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: green">
+            <fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>
           </div>
           Voldoende mensen beschikbaar op deze dag.
         </div>
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: blue">
+            <fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>
           </div>
           Alle diensten op deze dag zijn ingeroosterd.
         </div>
@@ -84,7 +87,8 @@
         </div>
       </div>
     </ng-template>
-    <div class="calendarbox">
+    <div class="calendarbox"
+         [ngStyle]="numberOfOverlappingShifts>2&&{'min-width':(numberOfOverlappingShifts-2)*75+300+'px'}">
       <mwl-calendar-day-view #schedule
                              [viewDate]="viewDate"
                              [dayStartHour]="startHour"
@@ -92,7 +96,7 @@
                              [events]="filteredEvents"
                              [refresh]="refresh"
                              [eventTemplate]="customEventTemplate"
-      >
+                             [hourSegmentHeight]="15">
       </mwl-calendar-day-view>
     </div>
   </div>

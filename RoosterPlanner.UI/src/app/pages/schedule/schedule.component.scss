@@ -1,12 +1,49 @@
 table {
   width: 100%;
+  margin-top: 15px;
 }
 
 td, th {
   width: 25%;
+  min-width: 120px;
 }
 
 #push {
   margin-left: auto;
   border: none;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 12px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, .5);
+  border-radius: 10px;
+  border: 2px solid #ffffff;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+@media only screen and (max-width: 550px) {
+  td {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .override-button {
+    font-size: 10px !important;
+  }
 }

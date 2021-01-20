@@ -20,6 +20,15 @@ import {ShiftService} from "../../services/shift.service";
 import {AgePipe} from "../../helpers/filter.pipe";
 import {TextInjectorService} from "../../services/text-injector.service";
 import {User} from "../../models/user";
+import {
+  faClipboardList,
+  faHistory,
+  faInfoCircle,
+  faPlusCircle,
+  faTrashAlt,
+  faUserFriends
+} from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-project',
@@ -27,6 +36,13 @@ import {User} from "../../models/user";
   styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit {
+  historyIcon = faHistory;
+  friendsIcon = faUserFriends;
+  infoIcon = faInfoCircle;
+  clipboard = faClipboardList;
+  circle = faPlusCircle
+  faTrash = faTrashAlt
+
   guid: string;
   project: Project;
   viewProject: Project;
@@ -283,14 +299,14 @@ export class ProjectComponent implements OnInit {
       guid = this.participation.project.id
     else
       guid = this.project.id
-    this.loaded=false;
+    this.loaded = false;
     await this.shiftService.GetExportableData(guid).then(res => {
       let statistics: any[] = []
       res.forEach(shift => {
         shift.availabilities.forEach(avail => {
           let statistic = {
-            Taaknaam: shift.task?shift.task.name.replace(",","."):"Onbekend",
-            Taakcategorie: shift.task&&shift.task.category?shift.task.category.name.replace(",", "."):"Onbekend",
+            Taaknaam: shift.task ? shift.task.name.replace(",", ".") : "Onbekend",
+            Taakcategorie: shift.task && shift.task.category ? shift.task.category.name.replace(",", ".") : "Onbekend",
             Datum: DateConverter.toReadableStringFromDate(shift.date).replace(",", "."),
             Begintijd: shift.startTime.replace(",", "."),
             Endtijd: shift.endTime.replace(",", "."),
@@ -349,4 +365,5 @@ export class ProjectComponent implements OnInit {
 
     this.csvService.downloadFile(statistics, headers, "Employee Export")
     this.loaded = true;
-  }}
+  }
+}

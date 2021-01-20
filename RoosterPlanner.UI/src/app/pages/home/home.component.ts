@@ -11,6 +11,8 @@ import {ToastrService} from "ngx-toastr";
 import {EntityHelper} from "../../helpers/entity-helper";
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
 import {JwtHelper} from "../../helpers/jwt-helper";
+import {faHome, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-home',
@@ -18,7 +20,8 @@ import {JwtHelper} from "../../helpers/jwt-helper";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
+  homeIcon = faHome
+  circleIcon = faPlusCircle
   loaded: boolean = false;
   participations: Participation[] = [];
   @Input() user: User;

@@ -6,11 +6,16 @@
   color: white;
 }
 
+.legend-icon {
+  margin-right: 0;
+}
+
 .legend {
   display: block;
   background: snow;
   border: 1px solid #707070;
-  h5{
+
+  h5 {
     text-align: center;
   }
 }
@@ -20,12 +25,13 @@
   line-height: 35px;
   font-size: 13px;
 }
+
 #spacer {
   display: flex;
   flex-direction: column;
   align-items: center;
   line-height: 20px;
-  font-size: 18px;
+  font-size: 15px;
   color: #707070;
 }
 
@@ -206,8 +212,8 @@
   .bar {
     display: flex;
   }
-  .content-container{
-    margin:0;
+  .content-container {
+    margin: 0;
   }
   .buttonholder {
     display: none;
@@ -236,7 +242,8 @@
   }
   .legend {
     display: flex;
-    h5{
+
+    h5 {
       width: 100%;
     }
   }
@@ -247,6 +254,7 @@
 }
 
 @media only screen and (max-width: 525px) {
+  #spacer,
   .cal-event-title {
     font-size: 12px;
   }

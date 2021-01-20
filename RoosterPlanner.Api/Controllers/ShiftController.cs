@@ -54,7 +54,6 @@ namespace RoosterPlanner.Api.Controllers
             this.b2CExtentionApplicationId = b2CExtentionApplicationId;
         }
 
-        
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpGet("unique/{projectId}")]
         public async Task<ActionResult<ShiftData>> GetUniqueDataAsync(Guid projectId)
@@ -77,6 +76,7 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
+
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost("search")]
         public async Task<ActionResult<SearchResultViewModel<ShiftViewModel>>> GetShiftsAsync(ShiftFilter filter)
@@ -418,7 +418,7 @@ namespace RoosterPlanner.Api.Controllers
                 return !result.Succeeded
                     ? UnprocessableEntity(new ErrorViewModel
                         {Type = Type.Error, Message = result.Message})
-                    : Ok(result);
+                    : Ok(ShiftViewModel.CreateVm(result.Data));
             }
             catch (Exception ex)
             {

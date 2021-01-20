@@ -20,7 +20,9 @@
 
 
   <div class="row">
-    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="edit">Wwijzigen</a>
-    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="delete">Verwijderen</a>
+    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="edit"> <fa-icon
+      [icon]="editIcon"></fa-icon> Wijzigen</a>
+    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="delete"> <fa-icon
+      [icon]="deleteIcon"></fa-icon> Verwijderen</a>
   </div>
 </span>

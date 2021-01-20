@@ -13,6 +13,7 @@ import {Breadcrumb} from "../../models/breadcrumb";
 import {AddCertificatetypeComponent} from "../../components/add-certificatetype/add-certificatetype.component";
 import {CertificateService} from "../../services/certificate.service";
 import {CertificateType} from "../../models/CertificateType";
+import {faPlusCircle,} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-all-tasks',
@@ -20,6 +21,7 @@ import {CertificateType} from "../../models/CertificateType";
   styleUrls: ['./all-tasks.component.scss']
 })
 export class AllTasksComponent implements OnInit {
+  circleIcon = faPlusCircle
   loaded: boolean = false;
   itemsPerCard: number = 5;
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CertificateType} from "../../models/CertificateType";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
@@ -9,6 +9,7 @@ import {Breadcrumb} from "../../models/breadcrumb";
 import {UserService} from "../../services/user.service";
 import {AddCertificatetypeComponent} from "../../components/add-certificatetype/add-certificatetype.component";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
+import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-certificate-type',
@@ -16,6 +17,8 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confi
   styleUrls: ['./certificate-type.component.scss']
 })
 export class CertificateTypeComponent implements OnInit {
+  editIcon = faEdit;
+  deleteIcon = faTrashAlt;
   loaded: boolean = false;
   certificateType: CertificateType;
   guid: string;
@@ -27,10 +30,10 @@ export class CertificateTypeComponent implements OnInit {
               private toastr: ToastrService,
               private router: Router,
               private breadcrumbService: BreadcrumbService,
-              private certificateService:CertificateService,
+              private certificateService: CertificateService,
               private userService: UserService,
   ) {
-    let breadcrumb: Breadcrumb = new Breadcrumb('Certificaattype',null);
+    let breadcrumb: Breadcrumb = new Breadcrumb('Certificaattype', null);
     let takencrumb: Breadcrumb = new Breadcrumb("Taken", "admin/tasks");
 
 

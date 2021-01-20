@@ -11,6 +11,7 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confi
 import jsPDF from "jspdf";
 import {DateConverter} from "../../helpers/date-converter";
 import {Breadcrumb} from "../../models/breadcrumb";
+import {faAward, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-certificate',
@@ -18,6 +19,10 @@ import {Breadcrumb} from "../../models/breadcrumb";
   styleUrls: ['./certificate.component.scss']
 })
 export class CertificateComponent implements OnInit {
+  editIcon = faEdit;
+  deleteIcon = faTrashAlt;
+  awardIcon = faAward
+
   guid: string;
   certificate: Certificate
   isAdmin: boolean = false;

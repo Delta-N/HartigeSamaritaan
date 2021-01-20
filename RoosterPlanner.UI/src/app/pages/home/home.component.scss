@@ -1,7 +1,14 @@
 .container {
   min-height: 65vh;
 }
-.mobilecard{
+
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mobilecard {
   margin-bottom: 0;
 }
 
@@ -28,3 +35,46 @@
   border-radius: 10px;
   padding: 30px;
 }
+
+#footer {
+  background: none;
+  height: 27px;
+  align-items: center;
+  justify-content: center;
+
+
+  .toolbarbutton {
+    text-align: center;
+  }
+
+  a {
+    margin-right: 25px;
+  }
+}
+
+.footerbutton {
+  padding: 0 !important;
+  font-size: 12px;
+}
+
+@media only screen and (max-width: 550px) {
+  #push {
+    font-size: 12px;
+    padding: 5px !important;
+
+  }
+  @media only screen and (max-width: 400px) {
+    h1 {
+      font-size: 20px;
+    }
+  }
+  @media only screen and (max-width: 350px) {
+    h1 {
+      font-size: 17px;
+    }
+    #push {
+      padding: 0 !important;
+    }
+  }
+}
+

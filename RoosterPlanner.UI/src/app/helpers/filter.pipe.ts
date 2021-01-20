@@ -70,6 +70,13 @@ export class DatePipe implements PipeTransform {
   }
 }
 
+@Pipe({name: 'tableDatePipe'})
+export class TableDatePipe implements PipeTransform {
+  transform(value: Date): string {
+    return DateConverter.toReadableStringFromDate(value);
+  }
+}
+
 @Pipe({name: 'scheduledPipe'})
 export class ScheduledPipe implements PipeTransform {
   transform(value: Shift): number {
@@ -145,16 +152,16 @@ export class PlanTooltip implements PipeTransform {
   transform(listOfShifts: Shift[], event: CalendarEvent): string {
     let shift = listOfShifts.find(s => s.id == event.id)
 
-    if ((event.end.getTime() - event.start.getTime()) / 3600000 <= 2) {
-      let result: string = shift.participantsRequired + " Nodig "
 
-      let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
-      result += availableNumber + " Beschikbaar ";
+    let result: string = shift.participantsRequired + " Nodig "
 
-      let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
-      result += scheduledNumber + " Ingeroosterd ";
-      return result;
-    }
+    let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
+    result += availableNumber + " Beschikbaar ";
+
+    let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
+    result += scheduledNumber + " Ingeroosterd ";
+    return result;
+
   }
 }
 

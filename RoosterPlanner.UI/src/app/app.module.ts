@@ -6,7 +6,13 @@ import {AvailabilityComponent} from "./pages/availability/availability.component
 import {BreadcrumbComponent} from './components/breadcrumb/breadcrumb.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from '@angular/platform-browser';
-import {CalendarModule,  DateAdapter as CalendarDateAdapter,  MOMENT,  CalendarMomentDateFormatter,  CalendarDateFormatter} from 'angular-calendar';
+import {
+  CalendarModule,
+  DateAdapter as CalendarDateAdapter,
+  MOMENT,
+  CalendarMomentDateFormatter,
+  CalendarDateFormatter
+} from 'angular-calendar';
 import {ChangeProfileComponent} from './components/change-profile/change-profile.component';
 import {CommonModule} from "@angular/common";
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
@@ -34,15 +40,15 @@ import {environment} from "../environments/environment";
 import {AuthorizationGuard} from "./guards/authorization.guard";
 import {ManageGuard} from "./guards/manage.guard";
 import {AdminModule} from "./modules/admin/admin.module";
-import { ScheduleComponent } from './pages/schedule/schedule.component';
-import { ScheduleManagerComponent } from './pages/schedule-manager/schedule-manager.component';
-import { AcceptPrivacyPolicyComponent } from './components/accept-privacy-policy/accept-privacy-policy.component';
+import {ScheduleComponent} from './pages/schedule/schedule.component';
+import {ScheduleManagerComponent} from './pages/schedule-manager/schedule-manager.component';
+import {AcceptPrivacyPolicyComponent} from './components/accept-privacy-policy/accept-privacy-policy.component';
 import {NgxDocViewerModule} from "ngx-doc-viewer";
-import { PrivacyComponent } from './pages/privacy/privacy.component';
+import {PrivacyComponent} from './pages/privacy/privacy.component';
 import {ChangeProfilePictureComponent} from "./components/change-profile-picture/change-profile-picture.component";
-import { CertificateComponent } from './pages/certificate/certificate.component';
-import {CalendarTaskLink} from "./helpers/filter.pipe";
-import { RequirementComponent } from './pages/requirement/requirement.component';
+import {CertificateComponent} from './pages/certificate/certificate.component';
+import {CalendarTaskLink, TableDatePipe} from "./helpers/filter.pipe";
+import {RequirementComponent} from './pages/requirement/requirement.component';
 
 
 export function momentAdapterFactory() {
@@ -108,6 +114,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     CertificateComponent,
     CalendarTaskLink,
     RequirementComponent,
+    TableDatePipe
 
   ],
   imports: [
@@ -135,7 +142,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
       }
     ),
     ManageModule,
-    AdminModule
+    AdminModule,
 
   ],
   providers: [

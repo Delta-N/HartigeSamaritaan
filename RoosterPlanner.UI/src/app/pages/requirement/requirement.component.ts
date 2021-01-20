@@ -9,6 +9,7 @@ import {Breadcrumb} from "../../models/breadcrumb";
 import {UserService} from "../../services/user.service";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
 import {AddRequirementComponent} from "../../components/add-requirement/add-requirement.component";
+import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-requirement',
@@ -16,6 +17,8 @@ import {AddRequirementComponent} from "../../components/add-requirement/add-requ
   styleUrls: ['./requirement.component.scss']
 })
 export class RequirementComponent implements OnInit {
+  deleteIcon = faTrashAlt;
+  editIcon = faEdit;
   guid: string;
   requirement: Requirement;
   isAdmin: boolean = false;
