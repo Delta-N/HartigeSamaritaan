@@ -10,8 +10,10 @@ Azure Storage
 Azure Keyvault  
 Azure B2C  
 Azure SQL
-Azure App Service (Plan)
+Azure App Service (Plan)  
 Azure Application Insights
+
+
 
 # CI / CD
 ![Build](https://github.com/Delta-N/HartigeSamaritaan/workflows/Build/badge.svg)
