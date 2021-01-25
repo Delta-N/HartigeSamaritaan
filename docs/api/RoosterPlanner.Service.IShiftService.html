@@ -1,0 +1,856 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IShiftService
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IShiftService
+   ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterPlanner.Service.IShiftService">
+  
+  
+  <h1 id="RoosterPlanner_Service_IShiftService" data-uid="RoosterPlanner.Service.IShiftService" class="text-break">Interface IShiftService
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterPlanner.Service.html">RoosterPlanner.Service</a></h6>
+  <h6><strong>Assembly</strong>: RoosterPlanner.Service.dll</h6>
+  <h5 id="RoosterPlanner_Service_IShiftService_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IShiftService</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_CreateShiftsAsync_System_Collections_Generic_List_RoosterPlanner_Models_Shift__.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.CreateShiftsAsync(System.Collections.Generic.List%7BRoosterPlanner.Models.Shift%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L58">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_CreateShiftsAsync_" data-uid="RoosterPlanner.Service.IShiftService.CreateShiftsAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_CreateShiftsAsync_System_Collections_Generic_List_RoosterPlanner_Models_Shift__" data-uid="RoosterPlanner.Service.IShiftService.CreateShiftsAsync(System.Collections.Generic.List{RoosterPlanner.Models.Shift})">CreateShiftsAsync(List&lt;Shift&gt;)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and adds a range of shifts.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Shift&gt;&gt; CreateShiftsAsync(List&lt;Shift&gt; shifts)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;</td>
+        <td><span class="parametername">shifts</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_ExportDataAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.ExportDataAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L122">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_ExportDataAsync_" data-uid="RoosterPlanner.Service.IShiftService.ExportDataAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_ExportDataAsync_System_Guid_" data-uid="RoosterPlanner.Service.IShiftService.ExportDataAsync(System.Guid)">ExportDataAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests shifts with related data based on a projectId.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Shift&gt;&gt; ExportDataAsync(Guid projectId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_GetShiftAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.GetShiftAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L32">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_GetShiftAsync_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_GetShiftAsync_System_Guid_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftAsync(System.Guid)">GetShiftAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests a shift based on a shiftId.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Shift&gt;&gt; GetShiftAsync(Guid shiftId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">shiftId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_GetShiftsAsync_RoosterPlanner_Models_FilterModels_ShiftFilter_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.GetShiftsAsync(RoosterPlanner.Models.FilterModels.ShiftFilter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L104">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_GetShiftsAsync_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_GetShiftsAsync_RoosterPlanner_Models_FilterModels_ShiftFilter_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsAsync(RoosterPlanner.Models.FilterModels.ShiftFilter)">GetShiftsAsync(ShiftFilter)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests shifts based on a filter.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Shift&gt;&gt; GetShiftsAsync(ShiftFilter filter)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.FilterModels.ShiftFilter.html">ShiftFilter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_GetShiftsAsync_System_Guid_System_DateTime_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.GetShiftsAsync(System.Guid%2CSystem.DateTime)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L67">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_GetShiftsAsync_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_GetShiftsAsync_System_Guid_System_DateTime_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsAsync(System.Guid,System.DateTime)">GetShiftsAsync(Guid, DateTime)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests shifts based on a projectId and a date.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Shift&gt;&gt; GetShiftsAsync(Guid projectId, DateTime date)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="parametername">date</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_GetShiftsAsync_System_Guid_System_Guid_System_DateTime_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.GetShiftsAsync(System.Guid%2CSystem.Guid%2CSystem.DateTime)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L77">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_GetShiftsAsync_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_GetShiftsAsync_System_Guid_System_Guid_System_DateTime_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsAsync(System.Guid,System.Guid,System.DateTime)">GetShiftsAsync(Guid, Guid, DateTime)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests shifts based on a projectId, userId and a date.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Shift&gt;&gt; GetShiftsAsync(Guid projectId, Guid userId, DateTime date)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="parametername">date</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_GetShiftsWithAvailabilitiesAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.GetShiftsWithAvailabilitiesAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L86">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_GetShiftsWithAvailabilitiesAsync_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsWithAvailabilitiesAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_GetShiftsWithAvailabilitiesAsync_System_Guid_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsWithAvailabilitiesAsync(System.Guid)">GetShiftsWithAvailabilitiesAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests shifts including availabilties based on a projectId.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Shift&gt;&gt; GetShiftsWithAvailabilitiesAsync(Guid projectId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_GetShiftsWithAvailabilitiesAsync_System_Guid_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.GetShiftsWithAvailabilitiesAsync(System.Guid%2CSystem.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L95">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_GetShiftsWithAvailabilitiesAsync_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsWithAvailabilitiesAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_GetShiftsWithAvailabilitiesAsync_System_Guid_System_Guid_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftsWithAvailabilitiesAsync(System.Guid,System.Guid)">GetShiftsWithAvailabilitiesAsync(Guid, Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests shifts with related data based on a projectId and a userId.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Shift&gt;&gt; GetShiftsWithAvailabilitiesAsync(Guid projectId, Guid userId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_GetShiftWithAvailabilitiesAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.GetShiftWithAvailabilitiesAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L41">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_GetShiftWithAvailabilitiesAsync_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftWithAvailabilitiesAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_GetShiftWithAvailabilitiesAsync_System_Guid_" data-uid="RoosterPlanner.Service.IShiftService.GetShiftWithAvailabilitiesAsync(System.Guid)">GetShiftWithAvailabilitiesAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests a shift based on a shiftId.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Shift&gt;&gt; GetShiftWithAvailabilitiesAsync(Guid shiftId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">shiftId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_GetUniqueDataAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.GetUniqueDataAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L113">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_GetUniqueDataAsync_" data-uid="RoosterPlanner.Service.IShiftService.GetUniqueDataAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_GetUniqueDataAsync_System_Guid_" data-uid="RoosterPlanner.Service.IShiftService.GetUniqueDataAsync(System.Guid)">GetUniqueDataAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests distinct data for use in a front-end filter.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;ShiftData&gt;&gt; GetUniqueDataAsync(Guid projectId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Models.ShiftData.html">ShiftData</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_RemoveShiftAsync_RoosterPlanner_Models_Shift_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.RemoveShiftAsync(RoosterPlanner.Models.Shift)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L23">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_RemoveShiftAsync_" data-uid="RoosterPlanner.Service.IShiftService.RemoveShiftAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_RemoveShiftAsync_RoosterPlanner_Models_Shift_" data-uid="RoosterPlanner.Service.IShiftService.RemoveShiftAsync(RoosterPlanner.Models.Shift)">RemoveShiftAsync(Shift)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests a deletion of a shift.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Shift&gt;&gt; RemoveShiftAsync(Shift shift)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a></td>
+        <td><span class="parametername">shift</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService_UpdateShiftAsync_RoosterPlanner_Models_Shift_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService.UpdateShiftAsync(RoosterPlanner.Models.Shift)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L49">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_IShiftService_UpdateShiftAsync_" data-uid="RoosterPlanner.Service.IShiftService.UpdateShiftAsync*"></a>
+  <h4 id="RoosterPlanner_Service_IShiftService_UpdateShiftAsync_RoosterPlanner_Models_Shift_" data-uid="RoosterPlanner.Service.IShiftService.UpdateShiftAsync(RoosterPlanner.Models.Shift)">UpdateShiftAsync(Shift)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and updates a shift.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Shift&gt;&gt; UpdateShiftAsync(Shift shift)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a></td>
+        <td><span class="parametername">shift</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Shift.html">Shift</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_IShiftService.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.IShiftService%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/ShiftService.cs/#L14" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

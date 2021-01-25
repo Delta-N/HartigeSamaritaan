@@ -1,0 +1,678 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class UnitOfWork
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class UnitOfWork
+   ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterPlanner.Data.Common.UnitOfWork">
+  
+  
+  <h1 id="RoosterPlanner_Data_Common_UnitOfWork" data-uid="RoosterPlanner.Data.Common.UnitOfWork" class="text-break">Class UnitOfWork
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">UnitOfWork</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="RoosterPlanner.Data.Common.IUnitOfWork.html">IUnitOfWork</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterPlanner.Data.Common.html">RoosterPlanner.Data.Common</a></h6>
+  <h6><strong>Assembly</strong>: RoosterPlanner.Data.dll</h6>
+  <h5 id="RoosterPlanner_Data_Common_UnitOfWork_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class UnitOfWork : IUnitOfWork, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork__ctor_RoosterPlanner_Data_Context_RoosterPlannerContext_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.%23ctor(RoosterPlanner.Data.Context.RoosterPlannerContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L109">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork__ctor_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.#ctor*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork__ctor_RoosterPlanner_Data_Context_RoosterPlannerContext_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.#ctor(RoosterPlanner.Data.Context.RoosterPlannerContext)">UnitOfWork(RoosterPlannerContext)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="RoosterPlanner.Data.Common.UnitOfWork.html">UnitOfWork</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UnitOfWork(RoosterPlannerContext dataContext)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Context.RoosterPlannerContext.html">RoosterPlannerContext</a></td>
+        <td><span class="parametername">dataContext</span></td>
+        <td><p>The data context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_AvailabilityRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.AvailabilityRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L89">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_AvailabilityRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.AvailabilityRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_AvailabilityRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.AvailabilityRepository">AvailabilityRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IAvailabilityRepository AvailabilityRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IAvailabilityRepository.html">IAvailabilityRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_CategoryRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.CategoryRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L77">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_CategoryRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.CategoryRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_CategoryRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.CategoryRepository">CategoryRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ICategoryRepository CategoryRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.ICategoryRepository.html">ICategoryRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_CertificateRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.CertificateRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L97">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_CertificateRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.CertificateRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_CertificateRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.CertificateRepository">CertificateRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ICertificateRepository CertificateRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.ICertificateRepository.html">ICertificateRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_CertificateTypeRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.CertificateTypeRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L94">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_CertificateTypeRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.CertificateTypeRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_CertificateTypeRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.CertificateTypeRepository">CertificateTypeRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ICertificateTypeRepository CertificateTypeRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.ICertificateTypeRepository.html">ICertificateTypeRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_DataContext.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.DataContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L53">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_DataContext_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.DataContext*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_DataContext" data-uid="RoosterPlanner.Data.Common.UnitOfWork.DataContext">DataContext</h4>
+  <div class="markdown level1 summary"><p>Gets the data context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected RoosterPlannerContext DataContext { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Context.RoosterPlannerContext.html">RoosterPlannerContext</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_DocumentRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.DocumentRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L92">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_DocumentRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.DocumentRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_DocumentRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.DocumentRepository">DocumentRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IDocumentRepository DocumentRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IDocumentRepository.html">IDocumentRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_ManagerRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.ManagerRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L87">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_ManagerRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ManagerRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_ManagerRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ManagerRepository">ManagerRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IManagerRepository ManagerRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IManagerRepository.html">IManagerRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_ParticipationRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.ParticipationRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L79">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_ParticipationRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ParticipationRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_ParticipationRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ParticipationRepository">ParticipationRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IParticipationRepository ParticipationRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IParticipationRepository.html">IParticipationRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_PersonRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.PersonRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L82">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_PersonRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.PersonRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_PersonRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.PersonRepository">PersonRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IPersonRepository PersonRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IPersonRepository.html">IPersonRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_ProjectRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.ProjectRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L71">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_ProjectRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ProjectRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_ProjectRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ProjectRepository">ProjectRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IProjectRepository ProjectRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IProjectRepository.html">IProjectRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_ProjectTaskRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.ProjectTaskRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L84">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_ProjectTaskRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ProjectTaskRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_ProjectTaskRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ProjectTaskRepository">ProjectTaskRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IProjectTaskRepository ProjectTaskRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IProjectTaskRepository.html">IProjectTaskRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_RequirementRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.RequirementRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L100">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_RequirementRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.RequirementRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_RequirementRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.RequirementRepository">RequirementRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IRequirementRepository RequirementRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IRequirementRepository.html">IRequirementRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_ShiftRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.ShiftRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L73">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_ShiftRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ShiftRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_ShiftRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.ShiftRepository">ShiftRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IShiftRepository ShiftRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.IShiftRepository.html">IShiftRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_TaskRepository.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.TaskRepository%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L75">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_TaskRepository_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.TaskRepository*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_TaskRepository" data-uid="RoosterPlanner.Data.Common.UnitOfWork.TaskRepository">TaskRepository</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITaskRepository TaskRepository { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Data.Repositories.ITaskRepository.html">ITaskRepository</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_Dispose.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L137">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_Dispose_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.Dispose*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_Dispose" data-uid="RoosterPlanner.Data.Common.UnitOfWork.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"><p>Dispose</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_SaveChanges.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.SaveChanges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L121">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_SaveChanges_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.SaveChanges*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_SaveChanges" data-uid="RoosterPlanner.Data.Common.UnitOfWork.SaveChanges">SaveChanges()</h4>
+  <div class="markdown level1 summary"><p>Saves the changes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int SaveChanges()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork_SaveChangesAsync.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork.SaveChangesAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L129">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_UnitOfWork_SaveChangesAsync_" data-uid="RoosterPlanner.Data.Common.UnitOfWork.SaveChangesAsync*"></a>
+  <h4 id="RoosterPlanner_Data_Common_UnitOfWork_SaveChangesAsync" data-uid="RoosterPlanner.Data.Common.UnitOfWork.SaveChangesAsync">SaveChangesAsync()</h4>
+  <div class="markdown level1 summary"><p>Saves the changes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;int&gt; SaveChangesAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="RoosterPlanner.Data.Common.IUnitOfWork.html">IUnitOfWork</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_UnitOfWork.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.UnitOfWork%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/UnitOfWork.cs/#L46" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,810 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Repository&lt;TEntity&gt;
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Repository&lt;TEntity&gt;
+   ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterPlanner.Data.Common.Repository`1">
+  
+  
+  <h1 id="RoosterPlanner_Data_Common_Repository_1" data-uid="RoosterPlanner.Data.Common.Repository`1" class="text-break">Class Repository&lt;TEntity&gt;
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Repository&lt;TEntity&gt;</span></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.AvailabilityRepository.html">AvailabilityRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.CategoryRepository.html">CategoryRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.CertificateRepository.html">CertificateRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.CertificateTypeRepository.html">CertificateTypeRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.DocumentRepository.html">DocumentRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.ManagerRepository.html">ManagerRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.ParticipationRepository.html">ParticipationRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.PersonRepository.html">PersonRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.ProjectRepository.html">ProjectRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.ProjectTaskRepository.html">ProjectTaskRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.RequirementRepository.html">RequirementRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.ShiftRepository.html">ShiftRepository</a></div>
+      <div class="level2"><a class="xref" href="RoosterPlanner.Data.Repositories.TaskRepository.html">TaskRepository</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="RoosterPlanner.Data.Common.IRepository-1.html">IRepository</a>&lt;TEntity&gt;</div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterPlanner.Data.Common.html">RoosterPlanner.Data.Common</a></h6>
+  <h6><strong>Assembly</strong>: RoosterPlanner.Data.dll</h6>
+  <h5 id="RoosterPlanner_Data_Common_Repository_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class Repository&lt;TEntity&gt; : IRepository&lt;TEntity&gt; where TEntity : class, IEntity, new()</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1__ctor_Microsoft_EntityFrameworkCore_DbContext_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.%23ctor(Microsoft.EntityFrameworkCore.DbContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L25">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1__ctor_" data-uid="RoosterPlanner.Data.Common.Repository`1.#ctor*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1__ctor_Microsoft_EntityFrameworkCore_DbContext_" data-uid="RoosterPlanner.Data.Common.Repository`1.#ctor(Microsoft.EntityFrameworkCore.DbContext)">Repository(DbContext)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="RoosterPlanner.Data.Common.Repository-1.html">Repository&lt;TEntity&gt;</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Repository(DbContext dataContext)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Microsoft.EntityFrameworkCore.DbContext</span></td>
+        <td><span class="parametername">dataContext</span></td>
+        <td><p>The data context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_DataContext.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.DataContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L15">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_DataContext_" data-uid="RoosterPlanner.Data.Common.Repository`1.DataContext*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_DataContext" data-uid="RoosterPlanner.Data.Common.Repository`1.DataContext">DataContext</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected DbContext DataContext { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Microsoft.EntityFrameworkCore.DbContext</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_EntitySet.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.EntitySet%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L16">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_EntitySet_" data-uid="RoosterPlanner.Data.Common.Repository`1.EntitySet*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_EntitySet" data-uid="RoosterPlanner.Data.Common.Repository`1.EntitySet">EntitySet</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual DbSet&lt;TEntity&gt; EntitySet { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Microsoft.EntityFrameworkCore.DbSet</span>&lt;TEntity&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_Add__0_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.Add(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L80">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_Add_" data-uid="RoosterPlanner.Data.Common.Repository`1.Add*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_Add__0_" data-uid="RoosterPlanner.Data.Common.Repository`1.Add(`0)">Add(TEntity)</h4>
+  <div class="markdown level1 summary"><p>Adds the specified entity. This will update the whole object graph.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TEntity Add(TEntity entity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><p>The added entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>entity</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_AddOrUpdate__0_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.AddOrUpdate(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L146">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_AddOrUpdate_" data-uid="RoosterPlanner.Data.Common.Repository`1.AddOrUpdate*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_AddOrUpdate__0_" data-uid="RoosterPlanner.Data.Common.Repository`1.AddOrUpdate(`0)">AddOrUpdate(TEntity)</h4>
+  <div class="markdown level1 summary"><p>Adds or update the specified entity. This will update the whole object graph.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TEntity AddOrUpdate(TEntity entity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><p>The added or modified entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>entity</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_Delete_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.Delete(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L231">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_Delete_" data-uid="RoosterPlanner.Data.Common.Repository`1.Delete*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_Delete_System_Guid_" data-uid="RoosterPlanner.Data.Common.Repository`1.Delete(System.Guid)">Delete(Guid)</h4>
+  <div class="markdown level1 summary"><p>Immediately deletes the entity from the database.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Delete(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td><p>The id of the entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The number of affected rows.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="RoosterPlanner_Data_Common_Repository_1_Delete_System_Guid__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The entity is not removed, but immediately deleted without the need to call SaveChanges.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_Find_System_Guid___.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.Find(System.Guid%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L59">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_Find_" data-uid="RoosterPlanner.Data.Common.Repository`1.Find*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_Find_System_Guid___" data-uid="RoosterPlanner.Data.Common.Repository`1.Find(System.Guid[])">Find(Guid[])</h4>
+  <div class="markdown level1 summary"><p>Lookup the entity with the provided id's from cache, if not found then retrieved from datastore.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TEntity Find(params Guid[] ids)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span>[]</td>
+        <td><span class="parametername">ids</span></td>
+        <td><p>The primary keys of the entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><p>The entity that matched the id's.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_FindAsync_System_Guid___.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.FindAsync(System.Guid%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L69">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_FindAsync_" data-uid="RoosterPlanner.Data.Common.Repository`1.FindAsync*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_FindAsync_System_Guid___" data-uid="RoosterPlanner.Data.Common.Repository`1.FindAsync(System.Guid[])">FindAsync(Guid[])</h4>
+  <div class="markdown level1 summary"><p>Lookup the entity with the provided id's from cache, if not found then retrieved from datastore.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Task&lt;TEntity&gt; FindAsync(params Guid[] ids)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span>[]</td>
+        <td><span class="parametername">ids</span></td>
+        <td><p>The ids.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;TEntity&gt;</td>
+        <td><p>The list of records that matched one of the id's.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_Get_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.Get(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L39">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_Get_" data-uid="RoosterPlanner.Data.Common.Repository`1.Get*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_Get_System_Guid_" data-uid="RoosterPlanner.Data.Common.Repository`1.Get(System.Guid)">Get(Guid)</h4>
+  <div class="markdown level1 summary"><p>Get the entity with the provided id.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TEntity Get(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td><p>The id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><p>The entity that matched the id or <code>null</code> if no match has been found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_GetAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.GetAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L49">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_GetAsync_" data-uid="RoosterPlanner.Data.Common.Repository`1.GetAsync*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_GetAsync_System_Guid_" data-uid="RoosterPlanner.Data.Common.Repository`1.GetAsync(System.Guid)">GetAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Get the entity with the provided id.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Task&lt;TEntity&gt; GetAsync(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td><p>The id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;TEntity&gt;</td>
+        <td><p>The entity that matched the id or <code>null</code> if no match has been found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_Remove__0_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.Remove(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L220">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_Remove_" data-uid="RoosterPlanner.Data.Common.Repository`1.Remove*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_Remove__0_" data-uid="RoosterPlanner.Data.Common.Repository`1.Remove(`0)">Remove(TEntity)</h4>
+  <div class="markdown level1 summary"><p>Begins tracking the given entity in the EntityState.Deleted state
+such that it will be removed from the database when SaveChanges is called.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TEntity Remove(TEntity entity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity to remove.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><p>The entity in deleted state.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_Remove_System_Guid_System_Byte___.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.Remove(System.Guid%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L209">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_Remove_" data-uid="RoosterPlanner.Data.Common.Repository`1.Remove*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_Remove_System_Guid_System_Byte___" data-uid="RoosterPlanner.Data.Common.Repository`1.Remove(System.Guid,System.Byte[])">Remove(Guid, Byte[])</h4>
+  <div class="markdown level1 summary"><p>Begins tracking the given entity in the EntityState.Deleted state
+such that it will be removed from the database when SaveChanges is called.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TEntity Remove(Guid id, byte[] rowversion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td><p>The id.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">rowversion</span></td>
+        <td><p>The rowversion of the entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><p>The entity in deleted state.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1_Update__0_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601.Update(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L114">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Data_Common_Repository_1_Update_" data-uid="RoosterPlanner.Data.Common.Repository`1.Update*"></a>
+  <h4 id="RoosterPlanner_Data_Common_Repository_1_Update__0_" data-uid="RoosterPlanner.Data.Common.Repository`1.Update(`0)">Update(TEntity)</h4>
+  <div class="markdown level1 summary"><p>Updates the specified entity. This will update the whole object graph.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TEntity Update(TEntity entity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><p>The modified entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="RoosterPlanner.Data.Common.IRepository-1.html">IRepository&lt;TEntity&gt;</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Data_Common_Repository_1.md&amp;value=---%0Auid%3A%20RoosterPlanner.Data.Common.Repository%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Data/Common/Repository.cs/#L13" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
