@@ -1,0 +1,9 @@
+- name: Introduction
+  href: intro.md
+- name: Dashboard
+  href: Dashboard.md
+- name: Beheer
+  href: Beheer.md
+- name: Admin
+  href: Admin.md
+  
