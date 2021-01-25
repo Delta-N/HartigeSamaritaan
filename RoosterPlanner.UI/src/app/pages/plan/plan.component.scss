@@ -35,9 +35,9 @@
   color: #707070;
 }
 
-#title {
-  flex-direction: row;
-  height: initial;
+.title {
+  flex-direction: row !important;
+  height: initial !important;
 }
 
 .star {

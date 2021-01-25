@@ -294,30 +294,50 @@ export class PlanComponent implements OnInit, AfterViewInit {
       this.endHour = this.startHour + 5;
   }
 
+  getTitleElement(event: CalendarEvent): HTMLElement {
+    return document.getElementById("title-" + event.id)
+  }
+
   fillSpacer() {
     this.filteredEvents.forEach(e => {
-      let shift = this.shifts.find(s => s.id == e.id)
-      if ((e.end.getTime() - e.start.getTime()) / 3600000 > 4) {
+        let shift = this.shifts.find(s => s.id == e.id)
+        if ((e.end.getTime() - e.start.getTime()) / 3600000 <= 1) {
+        //verberg title
+          let element = this.getTitleElement(e)
+          if (element)
+            element.style.display = "none"
+          for (let i = 0; i < element.children.length; i++) {
+            let child: HTMLElement = element.children[i] as HTMLElement
+            child.style.display = "none"
+
+          }
+        }
+        if ((e.end.getTime() - e.start.getTime()) / 3600000 > 4) {
 
 
-        let necessaryElement = document.getElementById('necessary-' + shift.id);
-        let scheduledElement = document.getElementById('scheduled-' + shift.id)
+          let necessaryElement = document.getElementById('necessary-' + shift.id);
+          let scheduledElement = document.getElementById('scheduled-' + shift.id)
 
-        let availableElement = document.getElementById('available-' + shift.id)
-        necessaryElement.innerText = shift.participantsRequired + " Nodig";
+          let availableElement = document.getElementById('available-' + shift.id)
+          necessaryElement.innerText = shift.participantsRequired + " Nodig";
 
-        let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
-        availableElement.innerText = availableNumber + " Beschikbaar";
+          let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
+          availableElement.innerText = availableNumber + " Beschikbaar";
 
-        let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
-        scheduledElement.innerText = scheduledNumber + " Ingeroosterd";
+          let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
+          scheduledElement.innerText = scheduledNumber + " Ingeroosterd";
 
-      } else {
-        let planElement = document.getElementById('plan-' + shift.id)
-        planElement.style.cssText = "padding: 3px !important";
+        } else {
+          let planElement = document.getElementById('plan-' + shift.id)
+          planElement.style.cssText = "padding: 3px !important";
+        }
+
+        if (this.numberOfOverlappingShifts > 7) {
+          let planElement = document.getElementById('plan-' + shift.id)
+          planElement.style.cssText = "padding: 3px !important";
+        }
       }
-    })
-
+    )
   }
 
   OnCheckboxChange($event: MatCheckboxChange) {
@@ -334,3 +354,4 @@ export class PlanComponent implements OnInit, AfterViewInit {
     }, 100)
   }
 }
+

@@ -11,10 +11,43 @@ namespace RoosterPlanner.Service
 {
     public interface IDocumentService
     {
+        /// <summary>
+        /// Makes a call to the repository layer and requests a document based on a personId and a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
         Task<TaskResult<Document>> GetDocumentAsync(Guid documentId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and adds a document to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         Task<TaskResult<Document>> CreateDocumentAsync(Document document);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a update of a document.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         Task<TaskResult<Document>> UpdateDocumentAsync(Document document);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a deletion of a document.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         Task<TaskResult<Document>> DeleteDocumentAsync(Document document);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests the privacy policy.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <returns></returns>
         Task<TaskResult<Document>> GetPPAsync();
     }
 
@@ -41,6 +74,12 @@ namespace RoosterPlanner.Service
             this.blobService = blobService;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a document based on a personId and a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Document>> GetDocumentAsync(Guid documentId)
         {
             if (documentId == Guid.Empty)
@@ -63,6 +102,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and adds a document to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Document>> CreateDocumentAsync(Document document)
         {
             if (document == null)
@@ -85,6 +130,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a update of a document.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Document>> UpdateDocumentAsync(Document document)
         {
             if (document == null)
@@ -107,6 +158,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a deletion of a document.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Document>> DeleteDocumentAsync(Document document)
         {
             if (document == null)
@@ -133,6 +190,11 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests the privacy policy.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <returns></returns>
         public async Task<TaskResult<Document>> GetPPAsync()
         {
             TaskResult<Document> result = new TaskResult<Document>();

@@ -9,7 +9,19 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IRequirementRepository : IRepository<Requirement>
     {
+        /// <summary>
+        /// Get a requirement based on an id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A task of a requirement</returns>
         Task<Requirement> GetRequirementAsync(Guid id);
+
+        /// <summary>
+        /// Get requirement based on taskId and certificateId
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <param name="certificateTypeId"></param>
+        /// <returns>A task of a requirement</returns>
         Task<Requirement> GetRequirementAsync(Guid taskId, Guid certificateTypeId);
     }
 
@@ -19,6 +31,12 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
+        /// <summary>
+        /// Get requirement based on taskId and certificateId
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <param name="certificateTypeId"></param>
+        /// <returns>A task of a requirement</returns>
         public Task<Requirement> GetRequirementAsync(Guid taskId, Guid certificateTypeId)
         {
             if (taskId == Guid.Empty || certificateTypeId == Guid.Empty)
@@ -29,6 +47,11 @@ namespace RoosterPlanner.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Get a requirement based on an id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A task of a requirement</returns>
         public async Task<Requirement> GetRequirementAsync(Guid id)
         {
             if (id == Guid.Empty)

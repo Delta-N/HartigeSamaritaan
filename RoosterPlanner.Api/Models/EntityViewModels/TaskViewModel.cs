@@ -5,17 +5,41 @@ namespace RoosterPlanner.Api.Models
 {
     public class TaskViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the Name 
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Category 
+        /// </summary>
         public CategoryViewModel Category { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Color 
+        /// </summary>
         public string Color { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Instruction 
+        /// </summary>
         public DocumentViewModel Instruction { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Description 
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Requirements
+        /// </summary>
         public List<RequirementViewModel> Requirements { get; set; }
 
+        /// <summary>
+        /// Create a ViewModel from a Task.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
         public static TaskViewModel CreateVm(Task task)
         {
             if (task == null) return null;
@@ -41,6 +65,11 @@ namespace RoosterPlanner.Api.Models
             return vm;
         }
 
+        /// <summary>
+        /// Create a Task from a ViewModel.
+        /// </summary>
+        /// <param name="taskViewModel"></param>
+        /// <returns></returns>
         public static Task CreateTask(TaskViewModel taskViewModel)
         {
             if (taskViewModel == null)

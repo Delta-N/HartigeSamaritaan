@@ -9,12 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="Moq" Version="4.15.2" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
+    <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,13 +25,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
+    <None Remove="Common\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.Test.json">
-      <Generator>SettingsSingleFileGenerator</Generator>
-    </None>
+    <Compile Remove="Common\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Common\**" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettingsTest_1json__JSONSchema="http://json.schemastore.org/appsettings" /></VisualStudio></ProjectExtensions>

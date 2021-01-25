@@ -10,10 +10,44 @@ namespace RoosterPlanner.Service
 {
     public interface IRequirementService
     {
+        /// <summary>
+        /// Makes a call to the repository layer and requests a requirement based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<Requirement>> GetRequirementAsync(Guid id);
+
+/// <summary>
+        /// Makes a call to the repository layer and requests a requirement based on a taskId and a certificateTypeId.
+/// Wraps the result of this request in a TaskResult wrapper.
+/// </summary>
+/// <param name="taskId"></param>
+/// <param name="certificateTypeId"></param>
+/// <returns></returns>
         Task<TaskResult<Requirement>> GetRequirementAsync(Guid taskId, Guid certificateTypeId);
+/// <summary>
+/// Makes a call to the repository layer and requests addition of a requirement.
+/// Wraps the result of this request in a TaskResult wrapper.
+/// </summary>
+/// <param name="requirement"></param>
+/// <returns></returns>
         Task<TaskResult<Requirement>> CreateRequirement(Requirement requirement);
+
+/// <summary>
+/// Makes a call to the repository layer and requests update of a requirement.
+/// Wraps the result of this request in a TaskResult wrapper.
+/// </summary>
+/// <param name="requirement"></param>
+/// <returns></returns>
         Task<TaskResult<Requirement>> UpdateRequirementAsync(Requirement requirement);
+
+/// <summary>
+/// Makes a call to the repository layer and requests removal of a requirement.
+/// Wraps the result of this request in a TaskResult wrapper.
+/// </summary>
+/// <param name="requirement"></param>
+/// <returns></returns>
         Task<TaskResult<Requirement>> RemoveCertificateAsync(Requirement requirement);
     }
 
@@ -34,6 +68,12 @@ namespace RoosterPlanner.Service
             this.requirementRepository = unitOfWork.RequirementRepository;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a requirement based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Requirement>> GetRequirementAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -55,6 +95,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a requirement based on a taskId and a certificateTypeId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <param name="certificateTypeId"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Requirement>> GetRequirementAsync(Guid taskId, Guid certificateTypeId)
         {
             if (taskId == Guid.Empty)
@@ -77,6 +124,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests addition of a requirement.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="requirement"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Requirement>> CreateRequirement(Requirement requirement)
         {
             if (requirement == null)
@@ -99,6 +152,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests update of a requirement.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="requirement"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Requirement>> UpdateRequirementAsync(Requirement requirement)
         {
             if (requirement == null)
@@ -121,6 +180,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests removal of a requirement.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="requirement"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Requirement>> RemoveCertificateAsync(Requirement requirement)
         {
             if (requirement == null)

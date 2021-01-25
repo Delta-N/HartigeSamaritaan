@@ -5,9 +5,21 @@ namespace RoosterPlanner.Api.Models
 {
     public class ProjectTaskViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the ProjectId
+        /// </summary>
         public Guid ProjectId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the TaskId 
+        /// </summary>
         public Guid TaskId { get; set; }
 
+        /// <summary>
+        /// Creates a ViewModel from a ProjectTask.
+        /// </summary>
+        /// <param name="projectTask"></param>
+        /// <returns></returns>
         public static ProjectTaskViewModel CreateVm(ProjectTask projectTask)
         {
             if (projectTask == null)
@@ -29,6 +41,11 @@ namespace RoosterPlanner.Api.Models
             return vm;
         }
 
+        /// <summary>
+        /// Creates a ProjectTask from a ViewModel.
+        /// </summary>
+        /// <param name="projectTaskViewModel"></param>
+        /// <returns></returns>
         public static ProjectTask CreateProjectTask(ProjectTaskViewModel projectTaskViewModel)
         {
             if (projectTaskViewModel != null)

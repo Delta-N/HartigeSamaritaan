@@ -36,6 +36,11 @@ namespace RoosterPlanner.Api.Controllers
             this.documentService = documentService;
         }
 
+        /// <summary>
+        /// Upload a instruction pdf to Blobstorage.
+        /// </summary>
+        /// <param name="containerName"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost, RequestSizeLimit(100_000_00)]
         public async Task<ActionResult<UploadResultViewModel>> UploadInstructionAsync(
@@ -69,6 +74,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete data from blobstorage
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<ActionResult<UploadResultViewModel>> DeleteAsync(string url)
         {
@@ -94,12 +104,21 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Upload a profilepicture to blobstorage
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("UploadProfilePicture"), RequestSizeLimit(500_000_0)]
         public async Task<ActionResult<UploadResultViewModel>> UploadProfilePictureAsync()
         {
             return await UploadInstructionAsync("profilepicture");
         }
 
+        /// <summary>
+        /// Upload a projectpicture
+        /// Only a Boardmember can upload a projectpicture 
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost("UploadProjectPicture"), RequestSizeLimit(500_000_0)]
         public async Task<ActionResult<UploadResultViewModel>> UploadProjectPictureAsync()
@@ -107,6 +126,11 @@ namespace RoosterPlanner.Api.Controllers
             return await UploadInstructionAsync("projectpicture");
         }
 
+        /// <summary>
+        /// Upload a privacy policy
+        /// Only a Boardmember can upload a privacy policy 
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost("UploadPP"), RequestSizeLimit(100_000_00)]
         public async Task<ActionResult<UploadResultViewModel>> UploadPP()
@@ -114,6 +138,11 @@ namespace RoosterPlanner.Api.Controllers
             return await UploadInstructionAsync("privacypolicy");
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to add a document in the database.
+        /// </summary>
+        /// <param name="documentViewModel"></param>
+        /// <returns></returns>
         [HttpPost("document")]
         public async Task<ActionResult<DocumentViewModel>> CreateDocument(DocumentViewModel documentViewModel)
         {
@@ -149,6 +178,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to update a document.
+        /// </summary>
+        /// <param name="documentViewModel"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<DocumentViewModel>> UpdateDocument(DocumentViewModel documentViewModel)
         {
@@ -191,6 +225,10 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for the privacy policy document entity.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("PrivacyPolicy")]
         public async Task<ActionResult<DocumentViewModel>> GetPP()
         {
@@ -209,6 +247,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to delete a document.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("document/{id}")]
         public async Task<ActionResult<DocumentViewModel>> DeleteDocumentAsync(Guid id)
         {
@@ -219,7 +262,7 @@ namespace RoosterPlanner.Api.Controllers
                 Document document = (await documentService.GetDocumentAsync(id)).Data;
                 if (document == null)
                     return NotFound("Document not found");
-                
+
                 if (document.Name != "profilepicture" && !PersonsController.UserHasRole(UserRole.Boardmember,
                     (ClaimsIdentity) HttpContext.User.Identity))
                     return Unauthorized("User is cannot delete this file");

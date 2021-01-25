@@ -12,20 +12,78 @@ using RoosterPlanner.Service.Helpers;
 using Attachment = System.Net.Mail.Attachment;
 using Person = RoosterPlanner.Models.Person;
 
-
 namespace RoosterPlanner.Service
 {
     public interface IParticipationService
     {
+        /// <summary>
+        /// Makes a call to the repository layer and adds a participation to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="participation"></param>
+        /// <returns></returns>
         Task<TaskResult<Participation>> AddParticipationAsync(Participation participation);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all participations based on a personId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns></returns>
         Task<TaskListResult<Participation>> GetUserParticipationsAsync(Guid personId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a participation based on a participationId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="participationId"></param>
+        /// <returns></returns>
         Task<TaskResult<Participation>> GetParticipationAsync(Guid participationId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a participation based on a personId and a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         Task<TaskResult<Participation>> GetParticipationAsync(Guid personId, Guid projectId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all participations based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         Task<TaskListResult<Participation>> GetParticipationsAsync(Guid projectId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all participations including availabilities based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests an update of a participation.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="participation"></param>
+        /// <returns></returns>
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
+
+        /// <summary>
+        /// Sends a email
+        /// </summary>
+        /// <param name="recipient"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        /// <param name="isBodyHtml"></param>
+        /// <param name="sender"></param>
+        /// <param name="attachment"></param>
         void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
-            System.Net.Mail.Attachment? attachment);
+            Attachment? attachment);
     }
 
     public class ParticipationService : IParticipationService
@@ -54,20 +112,22 @@ namespace RoosterPlanner.Service
         }
 
         /// <summary>
-        ///     Returns a list of open projects.
+        /// Makes a call to the repository layer and adds a participation to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
         /// </summary>
-        /// <returns>List of projects that are not closed.</returns>
+        /// <param name="participation"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Participation>> AddParticipationAsync(Participation participation)
         {
             if (participation == null)
                 throw new ArgumentNullException(nameof(participation));
 
-            TaskResult<Participation> result = new TaskResult<Participation>();
+            TaskResult<Participation> result = new();
             try
             {
                 User user = await azureB2CService.GetUserAsync(participation.PersonId);
                 Person person = (await personService.GetPersonAsync(participation.PersonId)).Data;
-                if (user == null)
+                if (user == null || person == null)
                     throw new RecordNotFoundException("Person: " + participation.PersonId);
 
                 Project project = await unitOfWork.ProjectRepository.GetAsync(participation.ProjectId);
@@ -75,7 +135,7 @@ namespace RoosterPlanner.Service
                     throw new RecordNotFoundException("Project: " + participation.ProjectId);
 
                 participation.Person = null;
-                participation.Project = null; 
+                participation.Project = null;
 
                 result.Data = participationRepository.Add(participation);
                 result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
@@ -91,9 +151,11 @@ namespace RoosterPlanner.Service
         }
 
         /// <summary>
-        ///     Returns a list of participations that the user is registerd for
+        /// Makes a call to the repository layer and requests all participations based on a personId.
+        /// Wraps the result of this request in a TaskResult wrapper.
         /// </summary>
-        /// <returns>Returns a list of participations.</returns>
+        /// <param name="personId"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Participation>> GetUserParticipationsAsync(Guid personId)
         {
             if (personId == Guid.Empty)
@@ -115,6 +177,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a participation based on a participationId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="participationId"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Participation>> GetParticipationAsync(Guid participationId)
         {
             if (participationId == Guid.Empty)
@@ -136,6 +204,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a participation based on a personId and a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Participation>> GetParticipationAsync(Guid personId, Guid projectId)
         {
             if (personId == Guid.Empty)
@@ -164,6 +239,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests all participations based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Participation>> GetParticipationsAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -185,6 +266,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests all participations including availabilities based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Participation>> GetParticipationsWithAvailabilitiesAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -206,6 +293,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests an update of a participation.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="participation"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation)
         {
             if (participation == null)
@@ -227,12 +320,21 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Sends a email
+        /// </summary>
+        /// <param name="recipient"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        /// <param name="isBodyHtml"></param>
+        /// <param name="sender"></param>
+        /// <param name="attachment"></param>
         public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
             Attachment? attachment)
         {
             if (recipient == null || subject == null || body == null)
                 throw new ArgumentNullException("Email parameters");
-            emailService.SendEmail(recipient, subject, body, isBodyHtml, sender,attachment);
+            emailService.SendEmail(recipient, subject, body, isBodyHtml, sender, attachment);
         }
     }
 }

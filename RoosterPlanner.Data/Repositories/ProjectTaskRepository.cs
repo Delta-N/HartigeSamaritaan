@@ -10,7 +10,18 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IProjectTaskRepository : IRepository<ProjectTask>
     {
+        /// <summary>
+        /// Get all projectTasks in database.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>A task of all projectTasks in database.</returns>
         Task<List<ProjectTask>> GetAllFromProjectAsync(Guid projectId);
+        /// <summary>
+        /// Get a projectTask based on projectId and taskId
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="taskId"></param>
+        /// <returns>A task of a projectTask</returns>
         Task<ProjectTask> GetProjectTaskAsync(Guid projectId, Guid taskId);
     }
 
@@ -20,8 +31,15 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
+        /// <summary>
+        /// Get all projectTasks in database.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>A task of all projectTasks in database.</returns>
         public async Task<List<ProjectTask>> GetAllFromProjectAsync(Guid projectId)
         {
+            if (projectId == Guid.Empty)
+                return null;
             List<ProjectTask> projectTasks= await EntitySet
                 .AsNoTracking()
                 .Include(pt => pt.Project)
@@ -38,8 +56,16 @@ namespace RoosterPlanner.Data.Repositories
             return projectTasks;
         }
 
+        /// <summary>
+        /// Get a projectTask based on projectId and taskId
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="taskId"></param>
+        /// <returns>A task of a projectTask</returns>
         public Task<ProjectTask> GetProjectTaskAsync(Guid projectId, Guid taskId)
         {
+            if (projectId == Guid.Empty || taskId == Guid.Empty)
+                return null;
             return  EntitySet
                 .AsNoTracking()
                 .Where(pt => pt.ProjectId == projectId && pt.TaskId == taskId)

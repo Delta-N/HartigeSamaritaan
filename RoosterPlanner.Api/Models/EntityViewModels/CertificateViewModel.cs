@@ -5,13 +5,31 @@ namespace RoosterPlanner.Api.Models
 {
     public class CertificateViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the DateIssued 
+        /// </summary>
         public DateTime DateIssued { get; set; }
 
+        /// <summary>
+        /// Gets or sets the DateExpired 
+        /// </summary>
         public DateTime? DateExpired { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Person 
+        /// </summary>
         public PersonViewModel Person { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CertificateType 
+        /// </summary>
         public CertificateTypeViewModel CertificateType { get; set; }
 
+        /// <summary>
+        /// Creates a ViewModel from a certifiacte.
+        /// </summary>
+        /// <param name="certificate"></param>
+        /// <returns></returns>
         public static CertificateViewModel CreateVm(Certificate certificate)
         {
             if (certificate == null)
@@ -34,6 +52,11 @@ namespace RoosterPlanner.Api.Models
             return vm;
         }
 
+        /// <summary>
+        /// Create a Certificate from a ViewModel.
+        /// </summary>
+        /// <param name="certificateViewModel"></param>
+        /// <returns></returns>
         public static Certificate CreateCertificate(CertificateViewModel certificateViewModel)
         {
             if (certificateViewModel == null)
@@ -53,7 +76,7 @@ namespace RoosterPlanner.Api.Models
             }
 
             if (certificateViewModel.CertificateType == null) return certificate;
-            
+
             certificate.CertificateType =
                 CertificateTypeViewModel.CreateCertificateType(certificateViewModel.CertificateType);
             certificate.CertificateTypeId = certificate.CertificateType.Id;

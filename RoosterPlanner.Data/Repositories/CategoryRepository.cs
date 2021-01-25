@@ -9,6 +9,10 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
+        /// <summary>
+        /// Get all categories in the database.
+        /// </summary>
+        /// <returns>A task of a list of categories.</returns>
         Task<List<Category>> GetAllCategoriesAsync();
     }
 
@@ -19,6 +23,10 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
+        /// <summary>
+        /// Get all categories in the database.
+        /// </summary>
+        /// <returns>A task of a list of categories.</returns>
         public Task<List<Category>> GetAllCategoriesAsync()
         {
             IQueryable<Category> queryable = EntitySet

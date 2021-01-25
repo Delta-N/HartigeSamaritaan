@@ -9,6 +9,11 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IPersonRepository : IRepository<Person>
     {
+        /// <summary>
+        /// Gets a person based on the OID including certificates and a profile picture
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns>Task of a Person</returns>
         Task<Person> GetPersonByOidAsync(Guid oid);
     }
 
@@ -18,13 +23,16 @@ namespace RoosterPlanner.Data.Repositories
         public PersonRepository(DbContext dataContext) : base(dataContext)
         {
         }
-
+        
         /// <summary>
-        /// Returns a list of open projects.
+        /// Gets a person based on the OID including certificates and a profile picture
         /// </summary>
-        /// <returns>List of projects that are not closed.</returns>
+        /// <param name="oid"></param>
+        /// <returns>Task of a Person</returns>
         public async Task<Person> GetPersonByOidAsync(Guid oid)
         {
+            if (oid == Guid.Empty)
+                return null;
             Person person = await EntitySet
                 .AsNoTracking()
                 .Include(p => p.ProfilePicture)

@@ -1,5 +1,9 @@
 ﻿namespace RoosterPlanner.Service.Config
 {
+    /// <summary>
+    /// Class is used to bind Email configurationdetails to an object.
+    /// (IOptionsPattern) 
+    /// </summary>
     public class EmailConfig
     {
         public static string ConfigSectionName => "Email";

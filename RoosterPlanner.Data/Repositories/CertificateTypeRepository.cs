@@ -9,6 +9,10 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface ICertificateTypeRepository : IRepository<CertificateType>
     {
+        /// <summary>
+        /// Get all certificateTypes in the database.
+        /// </summary>
+        /// <returns>A task of a list of certificateTypes.</returns>
         Task<List<CertificateType>> GetAllCategoriesAsync();
     }
 
@@ -18,12 +22,16 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
+        /// <summary>
+        /// Get all certificateTypes in the database.
+        /// </summary>
+        /// <returns>A task of a list of certificateTypes.</returns>
         public Task<List<CertificateType>> GetAllCategoriesAsync()
         {
             IQueryable<CertificateType> queryable = EntitySet
                 .AsNoTracking();
             Task<List<CertificateType>> certificateTypes = queryable
-                .OrderBy(c=>c.Name)
+                .OrderBy(c => c.Name)
                 .ToListAsync();
             return certificateTypes;
         }

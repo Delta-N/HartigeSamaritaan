@@ -10,14 +10,75 @@ namespace RoosterPlanner.Service
 {
     public interface ICertificateService
     {
+        /// <summary>
+        /// Makes a call to the repository layer and requests all certificateTypes.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <returns></returns>
         Task<TaskListResult<CertificateType>> GetAllCertificateTypesAsync();
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a certificateType based on an id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<CertificateType>> GetCertificateTypeAsync(Guid id);
+
+        /// <summary>
+        /// Makes a call to the repository layer and adds a certificateType to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificateType"></param>
+        /// <returns></returns>
         Task<TaskResult<CertificateType>> CreateCertificateTypeAsync(CertificateType certificateType);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests an update of a certificateType.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificateType"></param>
+        /// <returns></returns>
         Task<TaskResult<CertificateType>> UpdateCertificateTypeAsync(CertificateType certificateType);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests an removal of a certificateType.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificateType"></param>
+        /// <returns></returns>
         Task<TaskResult<CertificateType>> RemoveCertificateTypeAsync(CertificateType certificateType);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests an certificate based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<Certificate>> GetCertificateAsync(Guid id);
+
+        /// <summary>
+        /// Makes a call to the repository layer and adds a certificate to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificate"></param>
+        /// <returns></returns>
         Task<TaskResult<Certificate>> CreateCertificateAsync(Certificate certificate);
+
+        /// <summary>
+        /// Makes a call to the repository layer and request an update of a certificate.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificate"></param>
+        /// <returns></returns>
         Task<TaskResult<Certificate>> UpdateCertificateAsync(Certificate certificate);
+
+        /// <summary>
+        /// Makes a call to the repository layer and request an deletion of a certificate.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificate"></param>
+        /// <returns></returns>
         Task<TaskResult<Certificate>> RemoveCertificateAsync(Certificate certificate);
     }
 
@@ -40,6 +101,11 @@ namespace RoosterPlanner.Service
             certificateTypeRepository = unitOfWork.CertificateTypeRepository;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests all certificateTypes.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <returns></returns>
         public async Task<TaskListResult<CertificateType>> GetAllCertificateTypesAsync()
         {
             TaskListResult<CertificateType> result = TaskListResult<CertificateType>.CreateDefault();
@@ -58,6 +124,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a certificateType based on an id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<CertificateType>> GetCertificateTypeAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -79,6 +151,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and adds a certificateType to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificateType"></param>
+        /// <returns></returns>
         public async Task<TaskResult<CertificateType>> CreateCertificateTypeAsync(CertificateType certificateType)
         {
             if (certificateType == null)
@@ -101,6 +179,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests an update of a certificateType.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificateType"></param>
+        /// <returns></returns>
         public async Task<TaskResult<CertificateType>> UpdateCertificateTypeAsync(CertificateType certificateType)
         {
             if (certificateType == null)
@@ -123,6 +207,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests an removal of a certificateType.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificateType"></param>
+        /// <returns></returns>
         public async Task<TaskResult<CertificateType>> RemoveCertificateTypeAsync(CertificateType certificateType)
         {
             if (certificateType == null)
@@ -144,6 +234,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests an certificate based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Certificate>> GetCertificateAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -165,6 +261,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and adds a certificate to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificate"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Certificate>> CreateCertificateAsync(Certificate certificate)
         {
             if (certificate == null)
@@ -187,6 +289,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and request an update of a certificate.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificate"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Certificate>> UpdateCertificateAsync(Certificate certificate)
         {
             if (certificate == null)
@@ -209,6 +317,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and request an deletion of a certificate.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="certificate"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Certificate>> RemoveCertificateAsync(Certificate certificate)
         {
             if (certificate == null)

@@ -54,6 +54,14 @@ namespace RoosterPlanner.Api.Controllers
             this.b2CExtentionApplicationId = b2CExtentionApplicationId;
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to get distinct data from a project.
+        /// Only Boardmembers and Committemember can request distinct data.
+        /// Examples of distinct data are: Tasks, dates, startimes, endtimes and participantsrequired.
+        /// Used in the shiftfilter.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpGet("unique/{projectId}")]
         public async Task<ActionResult<ShiftData>> GetUniqueDataAsync(Guid projectId)
@@ -77,6 +85,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Search for shifts based on a filter.
+        /// Only Boardmembers and Committeemembers can search for shifts.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost("search")]
         public async Task<ActionResult<SearchResultViewModel<ShiftViewModel>>> GetShiftsAsync(ShiftFilter filter)
@@ -104,6 +118,14 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for all shifts based on a projectId, userId and a date.
+        /// Used on the 'beschikbaarheid opgeven' page.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         [HttpGet("{projectId}/{userId}/{date}")]
         public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date)
         {
@@ -133,6 +155,13 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for all shifts based on a projectId and date.
+        /// used on the 'plan-overzicht' page.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         [HttpGet("{projectId}/{date}")]
         public async Task<ActionResult<List<ShiftViewModel>>> GetShiftsAsync(Guid projectId, DateTime date)
         {
@@ -158,6 +187,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for a specific shift based on an id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<ShiftViewModel>> GetShiftAsync(Guid id)
         {
@@ -181,6 +215,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for a shift and all related data to schedule a shift.
+        /// Used on the 'plan-shift' page.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("schedule/{id}")]
         public async Task<ActionResult<ScheduleDataViewModel>> GetScheduleAsync(Guid id)
         {
@@ -273,6 +313,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to save many shifts at once.
+        /// Only a Boardmember or a Committeemember can make this request.
+        /// </summary>
+        /// <param name="shiftViewModels"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost]
         public async Task<ActionResult<List<ShiftViewModel>>> SaveShiftsAsync(List<ShiftViewModel> shiftViewModels)
@@ -343,6 +389,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to update a specific shift.
+        /// Only Boardmembers or Committeemembers can make this request.
+        /// </summary>
+        /// <param name="shiftViewModel"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPut]
         public async Task<ActionResult<ShiftViewModel>> UpdateShiftAsync(ShiftViewModel shiftViewModel)
@@ -401,6 +453,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to remove a shift.
+        /// Only Boardmember or Committeemember can make this request.
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpDelete]
         public async Task<ActionResult<ShiftViewModel>> RemoveShiftAsync(Guid shiftId)
@@ -429,6 +487,13 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for all scheduled shifts and related data.
+        /// Used to export data to CSV format.
+        /// Only Boardmembers can make this request.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpGet("export/{projectId}")]
         public async Task<ActionResult<List<ShiftViewModel>>> ExportDataAsync(Guid projectId)
