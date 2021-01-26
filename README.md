@@ -1,17 +1,18 @@
 # HartigeSamaritaan
-Roosterplannersysteem voor de stichting Hartige Samaritaan.
+Roosterplannersysteem voor de stichting Hartige Samaritaan.  
+Bezoek: https://delta-n.github.io/HartigeSamaritaan/ voor de documentatie.
 
-###Gebruikte technologieën:
+##Gebruikte technologieën:
 
-Angular 11.1  
-.NET 5  
-Entity Framework Core 5.0.2  
-Azure Storage
-Azure Keyvault  
-Azure B2C  
-Azure SQL
-Azure App Service (Plan)  
-Azure Application Insights
+- Angular 11.1  
+- .NET 5  
+- Entity Framework Core 5.0.2  
+- Azure Storage
+- Azure Keyvault  
+- Azure B2C  
+- Azure SQL
+- Azure App Service (Plan)  
+- Azure Application Insights
 
 
 
