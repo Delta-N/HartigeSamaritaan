@@ -2037,10 +2037,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/Admin.html",
-          "hash": "ZnG7JN8+IZiTtNq+H65/Cg=="
+          "hash": "mM2r2FNFe+oYZOxOfvk8Cg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -2056,18 +2056,15 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Conceptual",
       "source_relative_path": "articles/Dashboard.md",
       "output": {
         ".html": {
           "relative_path": "articles/Dashboard.html",
-          "hash": "Ef5+jHYXLsMLK6LpbxwvuA=="
+          "hash": "cX6idYhfspLL6vauDgKiVw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -2076,7 +2073,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "9cy5d53RxxmmLrbcIcYsEw=="
+          "hash": "QFB/jcit/6ufl3z26KwWTg=="
         }
       },
       "is_incremental": true,
@@ -2096,10 +2093,230 @@
     },
     {
       "type": "Resource",
-      "source_relative_path": "images/Dashboard.png",
+      "source_relative_path": "images/Administrator/Administrator.png",
       "output": {
         "resource": {
-          "relative_path": "images/Dashboard.png"
+          "relative_path": "images/Administrator/Administrator.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/addadministrator.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/addadministrator.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/addprojectmodal.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/addprojectmodal.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/alltasks.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/alltasks.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/detailscategory.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/detailscategory.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/detailscertificate.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/detailscertificate.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/detailstasks.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/detailstasks.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/employeeoverview.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/employeeoverview.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/requirement.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/requirement.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/updatePP.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/updatePP.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/Dashboard.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/Dashboard.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/Selectprojects.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/Selectprojects.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/confimprofile.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/confimprofile.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/dashboard2.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/dashboard2.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/footer.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/footer.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/projectcard.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/projectcard.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Login.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Login.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Mobile nav.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Mobile nav.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Nav.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Nav.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/PrivacyPolicy.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/PrivacyPolicy.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Register.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Register.png"
         }
       },
       "is_incremental": false,
@@ -2111,10 +2328,10 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "y17zwTNsiMjf7ElEK65NvQ=="
+          "hash": "/Q19KCPaQ+3Bo/gMLYXSyQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -2143,7 +2360,7 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 6,
-          "skipped_file_count": 4
+          "skipped_file_count": 5
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
