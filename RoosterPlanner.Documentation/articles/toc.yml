@@ -2,8 +2,13 @@
   href: intro.md
 - name: Dashboard
   href: Dashboard.md
-- name: Beheer
+- name: Project
+  href: Project.md 
+- name: Profile
+  href: Profile.md
+- name: Manage
   href: Beheer.md
 - name: Admin
   href: Admin.md
-  
+
+
