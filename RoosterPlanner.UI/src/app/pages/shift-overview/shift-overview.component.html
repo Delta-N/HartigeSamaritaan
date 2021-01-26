@@ -6,9 +6,10 @@
 </div>
 <span *ngIf="loaded">
    <div class="row bar">
-      <div>
          <h1>{{title}}</h1>
-      </div>
+        <div id="push">
+          <a mat-button class="override-button action-button" id="addshiftbutton" [routerLink]="['../addshifts', guid]">Shiften toevoegen</a>
+        </div>
    </div>
    <div class="row">
       <div class="col-md-2" id="filter">
@@ -22,7 +23,8 @@
             </mat-expansion-panel-header>
             <div class="tasktoggle" *ngFor="let item of shiftData.tasks">
 
-          <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)" checked="true" color="primary">{{item.name}} </mat-checkbox>
+          <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)" checked="true"
+                        color="primary">{{item.name}} </mat-checkbox>
         </div>
             </mat-expansion-panel>
 
@@ -33,10 +35,10 @@
                </mat-panel-title>
             </mat-expansion-panel-header>
              {{date | datePipe}}
-            <mat-slider color="primary"
-              (input)="setMinDate($event)" (change)="filter()"
-              min="0"
-              max="{{shiftData.dates.length-1}}"></mat-slider>
+             <mat-slider color="primary"
+                         (input)="setMinDate($event)" (change)="filter()"
+                         min="0"
+                         max="{{shiftData.dates.length-1}}"></mat-slider>
             </mat-expansion-panel>
 
            <mat-expansion-panel>
@@ -111,13 +113,8 @@
                </tr>
             </table>
          </div>
-         <mat-paginator [length]="searchResult.totalcount" (page)="changePage($event)" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-      </div>
-   </div>
-   <div class="row">
-     <div class="col-md-2"></div>
-      <div class="col-md-10" id="actions">
-         <a mat-button class="override-button action-button" id="addshiftbutton" [routerLink]="['../addshifts', guid]">Shiften toevoegen</a>
+         <mat-paginator [length]="searchResult.totalcount" (page)="changePage($event)"
+                        [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
       </div>
    </div>
 </span>
