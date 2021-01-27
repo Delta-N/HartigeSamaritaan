@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>Taak {{modifier}}</h2>
+
+
+<mat-dialog-content>
+  <form [formGroup]="checkoutForm" (ngSubmit)="saveTask(checkoutForm.value)">
+    <input formControlName="id" id="id" type="hidden">
+    <div>
+      <mat-form-field>
+        <mat-label for="name"> Naam</mat-label>
+        <input formControlName="name" id="name" matInput placeholder="Taak naam" type="text">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label for="category"> Categorie</mat-label>
+        <mat-select [formControl]="categoryControl" required>
+          <mat-option *ngFor="let category of categories" [value]="category">
+            {{category.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label for="color"> Shiftkleur</mat-label>
+        <mat-select [formControl]="colorControl" required>
+          <mat-option *ngFor="let color of colors" [value]="color">
+            {{color | colorPipe}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label for="description"> Omschrijving</mat-label>
+        <textarea matInput formControlName="description" id="description" placeholder="Omschrijving..."></textarea>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="task.instruction && task.instruction.documentUri">
+      <mat-label><a [href]=task.instruction.documentUri target="_blank">Huidige instructie :</a></mat-label>
+    </div>
+
+    <div>
+      <label for="file" class="custom-file-upload">{{this.task.instruction == null ? "Instructies toevoegen" : "Instructies vervangen"}}</label>
+      <span *ngIf="this.files!=null">{{this.files[0].name}}</span>
+      <input #fileInput type="file" id="file" accept="application/pdf" (change)="uploadInstructions(fileInput.files)"/>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions id="actions">
+
+  <div class="align-right">
+    <button class="action-button override-button" (click)="saveTask(checkoutForm.value)" mat-button>Opslaan</button>
+    <button mat-button class="override-button" (click)="close()">Annuleren</button>
+  </div>
+</mat-dialog-actions>

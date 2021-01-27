@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using RoosterPlanner.Common;
 using RoosterPlanner.Data.Context;
 using RoosterPlanner.Data.Repositories;
 
@@ -15,15 +13,19 @@ namespace RoosterPlanner.Data.Common
 
         IPersonRepository PersonRepository { get; }
 
-        IProjectPersonRepository ProjectPersonRepository { get; }
-
         ITaskRepository TaskRepository { get; }
 
         IShiftRepository ShiftRepository { get; }
 
         ICategoryRepository CategoryRepository { get; }
 
-        IMatchRepository MatchRepository { get; }
+        IProjectTaskRepository ProjectTaskRepository { get; }
+        IManagerRepository ManagerRepository { get; }
+        IAvailabilityRepository AvailabilityRepository { get; }
+        IDocumentRepository DocumentRepository { get; }
+        ICertificateTypeRepository CertificateTypeRepository { get; }
+        ICertificateRepository CertificateRepository { get; }
+        IRequirementRepository RequirementRepository { get; }
 
         /// <summary>
         /// Saves the changes.
@@ -44,119 +46,75 @@ namespace RoosterPlanner.Data.Common
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         #region Fields
+
         /// <summary>
         /// Gets the data context.
         /// </summary>
         protected RoosterPlannerContext DataContext { get; private set; }
-        protected ILogger Logger { get; private set; }
 
         private IProjectRepository projectRepository;
         private IParticipationRepository participationRepository;
-        private IProjectPersonRepository projectPersonRepository;
         private IPersonRepository personRepository;
         private ITaskRepository taskRepository;
         private ICategoryRepository categoryRepository;
-
-        private IMatchRepository matchRepository;
-
         private IShiftRepository shiftRepository;
+        private IProjectTaskRepository projectTaskRepository;
+        private IManagerRepository managerRepository;
+        private IAvailabilityRepository availabilityRepository;
+        private IDocumentRepository documentRepository;
+        private ICertificateTypeRepository certificateTypeRepository;
+        private ICertificateRepository certificateRepository;
+        private IRequirementRepository requirementRepository;
+
         #endregion
 
-        public IProjectRepository ProjectRepository
-        {
-            get
-            {
-                if (projectRepository == null)
-                    this.projectRepository = new ProjectRepository(this.DataContext, this.Logger);
-                return this.projectRepository;
-            }
-        }
+        public IProjectRepository ProjectRepository => projectRepository ??= new ProjectRepository(DataContext);
 
+        public IShiftRepository ShiftRepository => shiftRepository ??= new ShiftRepository(DataContext);
 
-        public IShiftRepository ShiftRepository
-        {
-            get
-            {
-                if (shiftRepository == null)
-                    this.shiftRepository = new ShiftRepository(this.DataContext, null);
-                return this.shiftRepository;
-            }
-        }
+        public ITaskRepository TaskRepository => taskRepository ??= new TaskRepository(DataContext);
 
-        public IMatchRepository MatchRepository
-        {
-            get
-            {
-                if (matchRepository == null)
-                    this.matchRepository = new MatchRepository(this.DataContext, null);
-                return this.matchRepository;
-            }
-        }
+        public ICategoryRepository CategoryRepository => categoryRepository ??= new CategoryRepository(DataContext);
 
+        public IParticipationRepository ParticipationRepository =>
+            participationRepository ??= new ParticipationRepository(DataContext);
 
-        public IProjectPersonRepository ProjectPersonRepository
-        {
-            get
-            {
-                if (projectPersonRepository == null)
-                    projectPersonRepository = new ProjectPersonRepository(this.DataContext, this.Logger);
-                return projectPersonRepository;
-            }
-        }
+        public IPersonRepository PersonRepository => personRepository ??= new PersonRepository(DataContext);
 
-        public ITaskRepository TaskRepository
-        {
-            get
-            {
-                if (taskRepository == null)
-                    this.taskRepository = new TaskRepository(this.DataContext, this.Logger);
-                return this.taskRepository;
-            }
-        }
+        public IProjectTaskRepository ProjectTaskRepository =>
+            projectTaskRepository ??= new ProjectTaskRepository(DataContext);
 
-        public ICategoryRepository CategoryRepository
-        {
-            get
-            {
-                if (categoryRepository == null)
-                    this.categoryRepository = new CategoryRepository(this.DataContext, this.Logger);
-                return this.categoryRepository;
-            }
-        }
+        public IManagerRepository ManagerRepository => managerRepository ??= new ManagerRepository(DataContext);
 
-        public IParticipationRepository ParticipationRepository
-        {
-            get
-            {
-                if (participationRepository == null)
-                    this.participationRepository = new ParticipationRepository(this.DataContext, this.Logger);
-                return this.participationRepository;
-            }
-        }
+        public IAvailabilityRepository AvailabilityRepository =>
+            availabilityRepository ??= new AvailabilityRepository(DataContext);
 
-        public IPersonRepository PersonRepository
-        {
-            get
-            {
-                if (personRepository == null)
-                    this.personRepository = new PersonRepository(this.DataContext, this.Logger);
-                return this.personRepository;
-            }
-        }
+        public IDocumentRepository DocumentRepository => documentRepository ??= new DocumentRepository(DataContext);
+
+        public ICertificateTypeRepository CertificateTypeRepository =>
+            certificateTypeRepository ??= new CertificateTypeRepository(DataContext);
+
+        public ICertificateRepository CertificateRepository =>
+            certificateRepository ??= new CertificateRepository(DataContext);
+
+        public IRequirementRepository RequirementRepository =>
+            requirementRepository ??= new RequirementRepository(DataContext);
 
         #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
-        public UnitOfWork(RoosterPlannerContext dataContext, ILogger logger)
+        public UnitOfWork(RoosterPlannerContext dataContext)
         {
-            this.DataContext = dataContext;
-            this.Logger = logger;
+            DataContext = dataContext;
         }
+
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Saves the changes.
         /// </summary>
@@ -178,8 +136,9 @@ namespace RoosterPlanner.Data.Common
         /// </summary>
         public void Dispose()
         {
-            this.DataContext.Dispose();
+            DataContext.Dispose();
         }
+
         #endregion
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RoosterPlanner.Models.FilterModels
 {
@@ -21,6 +19,11 @@ namespace RoosterPlanner.Models.FilterModels
         /// Gets or sets the StartDate.
         /// </summary>
         public DateTime? StartDate { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the StartDate.
+        /// </summary>
+        public DateTime? EndDate { get; set; }
 
         /// <summary>
         /// Gets or sets the locatie.
@@ -44,21 +47,21 @@ namespace RoosterPlanner.Models.FilterModels
         #endregion
 
         //Constructor
-        public ProjectFilter() : base()
+        public ProjectFilter()
         {
-            this.Sort = new string[] { "Name", "ASC" };
-            this.Offset = 0;
-            this.PageSize = 0;
+            Sort = new[] { "Name", "ASC" };
+            Offset = 0;
+            PageSize = 0;
         }
 
         //Constructor - Overload
-        public ProjectFilter(int offset, int pageSize) : base()
+        public ProjectFilter(int offset, int pageSize)
         {
-            this.Sort = new string[] { "Name", "ASC" };
-            this.Offset = offset;
-            this.PageSize = 20;
+            Sort = new[] { "Name", "ASC" };
+            Offset = offset;
+            PageSize = 20;
             if (pageSize > 0 && pageSize < 1000)
-                this.PageSize = pageSize;
+                PageSize = pageSize;
         }
     }
 }

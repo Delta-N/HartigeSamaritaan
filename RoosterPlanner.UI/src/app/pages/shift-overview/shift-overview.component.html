@@ -1,0 +1,120 @@
+<div class="spinner" *ngIf="!loaded">
+  <mat-spinner></mat-spinner>
+</div>
+<div class="spinner" *ngIf="!loaded">
+  <mat-spinner></mat-spinner>
+</div>
+<span *ngIf="loaded">
+   <div class="row bar">
+         <h1>{{title}}</h1>
+        <div id="push">
+          <a mat-button class="override-button action-button" id="addshiftbutton" [routerLink]="['../addshifts', guid]">Shiften toevoegen</a>
+        </div>
+   </div>
+   <div class="row">
+      <div class="col-md-2" id="filter">
+        <div class="spacer"><h2>Filter</h2></div>
+         <mat-accordion multi>
+            <mat-expansion-panel expanded="true">
+            <mat-expansion-panel-header>
+               <mat-panel-title>
+                 <b>Taak</b>
+               </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="tasktoggle" *ngFor="let item of shiftData.tasks">
+
+          <mat-checkbox class="checkBox" id="{{item.id}}" (change)="OnCheckboxChange($event)" checked="true"
+                        color="primary">{{item.name}} </mat-checkbox>
+        </div>
+            </mat-expansion-panel>
+
+           <mat-expansion-panel expanded="true">
+            <mat-expansion-panel-header>
+               <mat-panel-title>
+                 <b>Datum</b>
+               </mat-panel-title>
+            </mat-expansion-panel-header>
+             {{date | datePipe}}
+             <mat-slider color="primary"
+                         (input)="setMinDate($event)" (change)="filter()"
+                         min="0"
+                         max="{{shiftData.dates.length-1}}"></mat-slider>
+            </mat-expansion-panel>
+
+           <mat-expansion-panel>
+            <mat-expansion-panel-header>
+               <mat-panel-title>
+                 <b>Vanaf</b>
+               </mat-panel-title>
+            </mat-expansion-panel-header>
+             {{start}}
+             <mat-slider color="primary"
+                         (input)="setMinStartTime($event)" (change)="filter()"
+                         min="0"
+                         max="{{shiftData.startTimes.length-1}}"></mat-slider>
+            </mat-expansion-panel>
+
+           <mat-expansion-panel>
+            <mat-expansion-panel-header>
+               <mat-panel-title>
+                 <b>Tot</b>
+               </mat-panel-title>
+            </mat-expansion-panel-header>
+             {{end}}
+             <mat-slider color="primary"
+                         (input)="setMinEndTime($event)" (change)="filter()"
+                         min="0"
+                         max="{{shiftData.endTimes.length-1}}"></mat-slider>
+            </mat-expansion-panel>
+
+           <mat-expansion-panel>
+            <mat-expansion-panel-header>
+               <mat-panel-title>
+                 <b>Aantal vrijwilligers</b>
+               </mat-panel-title>
+            </mat-expansion-panel-header>
+             {{participantReq}}
+             <mat-slider color="primary"
+                         (input)="setMinPar($event)" (change)="filter()"
+                         min="0"
+                         max="{{shiftData.participantsRequired.length-1}}"></mat-slider>
+            </mat-expansion-panel>
+
+         </mat-accordion>
+      </div>
+      <div class="col-md-10">
+         <div>
+            <table mat-table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="asc"
+                   class="mat-elevation-z2">
+               <ng-container matColumnDef="Task">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Taak</th>
+                  <td mat-cell *matCellDef="let row">{{row.task != null ? row.task.name : "n.n.t.b"}}</td>
+               </ng-container>
+               <ng-container matColumnDef="Date">
+                  <th mat-header-cell mat-sort-header *matHeaderCellDef>Datum</th>
+                  <td mat-cell *matCellDef="let row">{{row.date.toLocaleDateString()}}</td>
+               </ng-container>
+               <ng-container matColumnDef="StartTime">
+                  <th mat-header-cell mat-sort-header *matHeaderCellDef>Vanaf</th>
+                  <td mat-cell *matCellDef="let row">{{row.startTime}}</td>
+               </ng-container>
+               <ng-container matColumnDef="EndTime">
+                  <th mat-header-cell mat-sort-header *matHeaderCellDef>Tot</th>
+                  <td mat-cell *matCellDef="let row">{{row.endTime}}</td>
+               </ng-container>
+               <ng-container matColumnDef="ParticipantsRequired">
+                  <th mat-header-cell mat-sort-header *matHeaderCellDef>#Benodigde vrijwilligers</th>
+                  <td mat-cell *matCellDef="let row">{{row.participantsRequired}}</td>
+               </ng-container>
+               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+               <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="details(row.id)"></tr>
+               <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="5">Geen resultaten gevonden</td>
+               </tr>
+            </table>
+         </div>
+         <mat-paginator [length]="searchResult.totalcount" (page)="changePage($event)"
+                        [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+      </div>
+   </div>
+</span>

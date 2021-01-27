@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using RoosterPlanner.Common;
+using Microsoft.Extensions.Logging;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Models;
@@ -11,181 +11,167 @@ namespace RoosterPlanner.Service
 {
     public interface IProjectService
     {
-        Task<TaskListResult<Project>> GetActiveProjectsAsync();
-
+        /// <summary>
+        /// Makes a call to the repository layer and requests projects based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         Task<TaskListResult<Project>> SearchProjectsAsync(ProjectFilter filter);
 
-        Task<TaskResult<Project>> GetProjectDetails(Guid id);
+        /// <summary>
+        /// Makes a call to the repository layer and requests a project based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<TaskResult<Project>> GetProjectDetailsAsync(Guid id);
 
-        TaskResult<Project> CreateProject(Project project);
+        /// <summary>
+        /// Makes a call to the repository layer and requests a addition of a project.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        Task<TaskResult<Project>> CreateProjectAsync(Project project);
 
-        TaskResult<Project> UpdateProject(Project project);
-
-        TaskResult<Project> CloseProject(Project project);
-
-        int AddPersonToProject(Guid projectId, Guid personId);
+        /// <summary>
+        /// Makes a call to the repository layer and requests a addition of a project.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        Task<TaskResult<Project>> UpdateProjectAsync(Project project);
     }
 
     public class ProjectService : IProjectService
     {
         #region Fields
-        private readonly IUnitOfWork unitOfWork = null;
-        private readonly IProjectRepository projectRepository = null;
-        private readonly IProjectPersonRepository projectPersonRepository = null;
-        private readonly ILogger logger = null;
+
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IProjectRepository projectRepository;
+        private readonly ILogger<ProjectService> logger;
+
         #endregion
 
         //Constructor
-        public ProjectService(IUnitOfWork unitOfWork, ILogger logger)
+        public ProjectService(IUnitOfWork unitOfWork, ILogger<ProjectService> logger)
         {
             this.unitOfWork = unitOfWork;
-            this.projectRepository = unitOfWork.ProjectRepository;
-            this.projectPersonRepository = unitOfWork.ProjectPersonRepository;
+            projectRepository = unitOfWork.ProjectRepository;
             this.logger = logger;
         }
 
         /// <summary>
-        /// Returns a list of open projects.
-        /// </summary>
-        /// <returns>List of projects that are not closed.</returns>
-        public async Task<TaskListResult<Project>> GetActiveProjectsAsync()
-        {
-            TaskListResult<Project> taskResult = TaskListResult<Project>.CreateDefault();
-
-            try
-            {
-                taskResult.Data = await this.projectRepository.GetActiveProjectsAsync();
-                taskResult.Succeeded = true;
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
-                taskResult.Error = ex;
-            }
-            return taskResult;
-        }
-
-        /// <summary>
-        /// Search for projects 
+        /// Makes a call to the repository layer and requests projects based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
         public async Task<TaskListResult<Project>> SearchProjectsAsync(ProjectFilter filter)
         {
             if (filter == null)
-                throw new ArgumentNullException("filter");
+                throw new ArgumentNullException(nameof(filter));
 
-            TaskListResult<Project> taskResult = TaskListResult<Project>.CreateDefault();
+            TaskListResult<Project> result = TaskListResult<Project>.CreateDefault();
 
             try
             {
-                taskResult.Data = await this.projectRepository.SearchProjectsAsync(filter);
-                taskResult.Succeeded = true;
+                result.Data = await projectRepository.SearchProjectsAsync(filter);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error finding projects with filter: " + filter;
+                logger.LogError(ex, result.Message, filter);
+                result.Error = ex;
             }
-            return taskResult;
+
+            return result;
         }
 
-        public async Task<TaskResult<Project>> GetProjectDetails(Guid id)
+        /// <summary>
+        /// Makes a call to the repository layer and requests a project based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<TaskResult<Project>> GetProjectDetailsAsync(Guid id)
         {
             if (id == Guid.Empty)
                 return null;
 
-            var taskResult = new TaskResult<Project>();
+            TaskResult<Project> result = new TaskResult<Project>();
 
             try
             {
-                taskResult.Data = await this.projectRepository.GetProjectDetails(id);
-                taskResult.Succeeded = true;
+                result.Data = await projectRepository.GetProjectDetailsAsync(id);
+                result.Succeeded = true;
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
-                taskResult.Error = ex;
-            }
-            return taskResult;
-        }
-
-        public TaskResult<Project> CreateProject(Project project)
-        {
-            if (project == null)
-                throw new ArgumentNullException("project");
-
-            var taskResult = new TaskResult<Project>();
-
-            try
-            {
-                taskResult.Data = this.projectRepository.Add(project);
-                taskResult.Succeeded = (this.unitOfWork.SaveChanges() == 1);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
-                taskResult.Error = ex;
-            }
-            return taskResult;
-        }
-
-        public TaskResult<Project> UpdateProject(Project project)
-        {
-            if (project == null)
-            {
-                throw new ArgumentNullException("project");
+                result.Message = GetType().Name + " - Error getting project details " + id;
+                logger.LogError(ex, result.Message);
+                result.Error = ex;
             }
 
-            var taskResult = new TaskResult<Project>();
-
-            try
-            {
-                taskResult.Data = projectRepository.Update(project);
-                taskResult.Succeeded = unitOfWork.SaveChanges() == 1;
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Fout bij het uitvoeren van een zoekopdracht op projecten.");
-                taskResult.Error = ex;
-            }
-            return taskResult;
+            return result;
         }
 
         /// <summary>
-        /// Closes the project.
+        /// Makes a call to the repository layer and requests a addition of a project.
+        /// Wraps the result of this request in a TaskResult wrapper.
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        public TaskResult<Project> CloseProject(Project project)
+        public async Task<TaskResult<Project>> CreateProjectAsync(Project project)
         {
-            TaskResult<Project> taskResult = new TaskResult<Project>();
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            TaskResult<Project> result = new TaskResult<Project>();
 
             try
             {
-                project.Closed = true;
-                taskResult.Data = projectRepository.AddOrUpdate(project);
-                taskResult.Succeeded = unitOfWork.SaveChanges() == 1;
+                result.Data = projectRepository.Add(project);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Fout bij het ophalen van actieve projecten.");
-                taskResult.Error = ex;
+                result.Message = GetType().Name + " - Error creating project " + project.Id;
+                logger.LogError(ex, result.Message, project);
+                result.Error = ex;
             }
-            return taskResult;
+
+            return result;
         }
 
-        public int AddPersonToProject(Guid projectId, Guid personId)
+        /// <summary>
+        /// Makes a call to the repository layer and requests a update of a project.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        public async Task<TaskResult<Project>> UpdateProjectAsync(Project project)
         {
-            if (projectId == Guid.Empty)
-                throw new ArgumentException("projectId");
-            if (personId == Guid.Empty)
-                throw new ArgumentException("personId");
+            if (project == null || project.Id == Guid.Empty)
+                throw new ArgumentNullException(nameof(project));
 
-            ProjectPerson projectPerson = new ProjectPerson { ProjectId = projectId, PersonId = personId };
-            projectPerson = projectPersonRepository.Add(projectPerson);
+            TaskResult<Project> result = new TaskResult<Project>();
 
-            return unitOfWork.SaveChanges();
+            try
+            {
+                result.Data = projectRepository.Update(project);
+                result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
+            }
+            catch (Exception ex)
+            {
+                result.Message = GetType().Name + " - Error updating project " + project.Id;
+                logger.LogError(ex, result.Message, project);
+                result.Error = ex;
+            }
+
+            return result;
         }
     }
 }

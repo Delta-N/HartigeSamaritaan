@@ -1,0 +1,420 @@
+.checkbox-icon {
+  margin-left: 5px;
+}
+
+.instruction {
+  margin-bottom: 15px;
+}
+
+.highlight {
+  color: red !important;
+}
+
+.legend-button {
+  border: 1px black solid;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: white;
+  margin-right: 5px;
+}
+
+.legend {
+  display: block;
+  background: snow;
+  border: 1px solid #707070;
+
+  h5 {
+    text-align: center;
+  }
+}
+
+.legend-icon {
+  margin-right: 0;
+}
+
+.legend-item {
+  margin: 5px;
+  line-height: 35px;
+}
+
+#spacer {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.pop {
+  a {
+    color: blue;
+  }
+}
+
+.option-button {
+  outline: none;
+  background: white;
+  font-size: 30px;
+  margin-left: 3px;
+  margin-right: 3px
+
+}
+
+.rowhidden {
+  display: none !important;
+}
+
+.schedule-button {
+  border: 1px solid gray;
+  padding: 0 !important;
+  height: 25%;
+  font-size: 14px;
+}
+
+.refuse {
+  background: #E74B3B;
+  margin-left: auto;
+  margin-right: 15px;
+  color: white;
+}
+
+.accept {
+  background: #DDFCE0;
+  margin-right: auto;
+  margin-left: 15px;
+}
+
+.title {
+  flex-direction: row !important;
+  height: initial !important;
+  display: flex !important;
+}
+
+.star {
+  color: #707070;
+  width: 25px;
+  height: 25px;
+
+}
+
+.scheduledBtnSmall {
+  width: 20px;
+  height: 20px;
+  line-height: 14px;
+  font-size: 14px;
+
+  &::ng-deep .mat-button-wrapper {
+    line-height: 14px;
+    padding: 0;
+
+    .mat-icon {
+      font-size: 14px;
+      padding-right: 4px;
+      padding-top: 4px;
+    }
+  }
+}
+
+.scheduledBtn:focus {
+  outline: none;
+}
+
+.star:focus {
+  outline: none;
+}
+
+.yellow {
+  color: #e3bc08;
+}
+
+.mat-icon {
+  vertical-align: inherit !important;
+}
+
+.tasks-container {
+  display: block;
+}
+
+.flex-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+::ng-deep .custom-button {
+  background: white;
+  font-size: 20px;
+  font-family: Lato, serif;
+  color: #707070;
+  margin-left: 5px;
+  margin-right: 5px;
+  min-width: 0;
+  line-height: 20px;
+  width: 40px;
+}
+
+::ng-deep .scheduled {
+  width: initial;
+}
+
+.calendar {
+  padding: 0;
+}
+
+::ng-deep .cal-event-action:focus {
+  outline: none;
+}
+
+
+.calendarbox {
+  max-height: 75vh;
+  overflow: auto;
+}
+
+.cdhidden {
+  width: 25px;
+  height: 25px;
+  line-height: 0;
+  margin-top: 10px
+}
+
+.date {
+  font-family: Lato, serif;
+  font-weight: bold;
+  font-size: 30px;
+  color: #707070;
+  display: flex;
+  justify-content: center;
+}
+
+.date-title {
+  display: flex;
+  align-items: center;
+}
+
+.datebox {
+  justify-content: center;
+
+  button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.buttonholder {
+  align-items: center;
+  display: flex;
+}
+
+.changeday {
+  border: #707070 solid 1px;
+  border-radius: 100%;
+}
+
+::ng-deep .cal-event {
+  position: relative;
+
+  .cal-event-title {
+    font-size: 20px;
+    justify-content: center;
+    color: #707070;
+  }
+}
+
+.event-title-row {
+  margin: 0;
+  justify-content: center;
+
+}
+
+.action-buttons-row {
+  margin: 0;
+  position: absolute;
+  bottom: 5px;
+  left: 39%
+}
+
+
+.tasktoggle {
+  display: flex !important;
+  margin: 5px;
+}
+
+.push {
+  margin-left: auto;
+}
+
+@media only screen and (max-width: 992px) {
+  .cal-event-title {
+    font-size: 18px;
+  }
+  ::ng-deep .custom-button {
+
+    font-size: 16px;
+    line-height: 12px;
+    width: 30px;
+  }
+  ::ng-deep .scheduled {
+    width: initial;
+  }
+  .schedule-button {
+    font-size: 12px;
+  }
+  .date {
+    font-size: 20px;
+  }
+  .legend-item {
+    font-size: 14px;
+    display: flex !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+  }
+  .calendar-wrapper {
+    max-width: 300px;
+    margin: auto;
+  }
+  .cdhidden {
+    display: initial;
+    margin-top: 10px;
+  }
+  .row {
+    display: initial;
+  }
+  .bar {
+    display: flex;
+  }
+  .content-container {
+    margin: 0;
+  }
+  .buttonholder {
+    display: none;
+  }
+  .tasks-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+  }
+
+  .calendarbox {
+    max-width: none;
+  }
+  .datebox {
+    display: flex;
+    margin-bottom: 10px;
+
+    button {
+      margin-top: inherit;
+      margin-bottom: inherit;
+    }
+  }
+  .col-8 {
+    max-width: none;
+  }
+  .col-4 {
+    max-width: none;
+  }
+  .tasktoggle {
+    display: flex;
+    min-width: 250px;
+  }
+
+  .legend-button {
+    width: 34px;
+    height: 34px;
+  }
+  .legend {
+    display: flex;
+    justify-content: flex-start;
+
+    h5 {
+      width: 100%;
+    }
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .legend-item {
+    min-width: 225px;
+  }
+
+}
+
+@media only screen and (max-width: 525px) {
+  .cal-event-title {
+    font-size: 12px;
+  }
+  .legend-item {
+    font-size: 12px;
+    min-width: 195px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .date {
+    font-size: 20px;
+  }
+  .cdhidden {
+    margin-top: 5px;
+  }
+  .schedule-button {
+    font-size: 14px;
+  }
+  .btnhidden {
+    display: none;
+  }
+  .rowhidden {
+    display: flex !important;
+    padding-bottom: 15px;
+  }
+  .option-button {
+    width: 25px;
+    height: 25px;
+    font-size: 0;
+  }
+  .legend {
+    display: flex;
+  }
+}
+
+@media only screen and (max-width: 475px) {
+  .legend-button {
+    width: 25px;
+    height: 25px;
+  }
+
+  .buttonholder {
+    display: none;
+  }
+  .calendar {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .calendarbox {
+    max-width: none;
+  }
+  .datebox {
+    display: flex;
+  }
+  .tasks-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  p {
+    min-width: 100px;
+  }
+  .legend {
+    display: flex;
+  }
+}
+
+
+

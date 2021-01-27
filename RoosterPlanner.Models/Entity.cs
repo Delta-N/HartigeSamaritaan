@@ -28,7 +28,7 @@ namespace RoosterPlanner.Models
         /// Gets or sets the LastEditDate.
         /// </summary>
         [Display(Name = "Laatst gewijzigd op")]
-        [Column(TypeName = "datetime2", Order = 98)]
+        [Column(TypeName = "datetime", Order = 98)]
         public DateTime LastEditDate { get; set; }
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace RoosterPlanner.Models
         }
 
         //Constructor - Overload
-        public Entity(Guid Id)
+        public Entity(Guid id)
         {
-            this.Id = Id;
+            Id = id;
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace RoosterPlanner.Models
         /// <param name="id">The Id to set.</param>
         public void SetKey(Guid id)
         {
-            if (this.Id == Guid.Empty)
-                this.Id = id;
+            if (Id == Guid.Empty)
+                Id = id;
         }
     }
 }

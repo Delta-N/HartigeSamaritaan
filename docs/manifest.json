@@ -1,0 +1,2607 @@
+{
+  "homepages": [],
+  "source_base_path": "C:/Users/admin/source/HartigeSamaritaan/HartigeSamaritaan/RoosterPlanner.Documentation",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.AvailabilityController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.AvailabilityController.html",
+          "hash": "tEQhjHQ4zeRk99aWTV+JoQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.CertificateController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.CertificateController.html",
+          "hash": "oZx0J+k03299oDqJ5SAuxw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.ParticipationsController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.ParticipationsController.html",
+          "hash": "0/DIsrQn+YBc+2uZboD0kA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.PersonsController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.PersonsController.html",
+          "hash": "SctgVglHgOOleXTiQRD/fg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.ProjectsController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.ProjectsController.html",
+          "hash": "EN7as10YxQNSGj/MTJ1jqA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.RequirementsController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.RequirementsController.html",
+          "hash": "o+zS+vvOq7xGB5quiR6KvQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.ShiftController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.ShiftController.html",
+          "hash": "Mjf6bxStsl9bLuj2KARXYg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.TasksController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.TasksController.html",
+          "hash": "HLPDNJsfDFyQdF3Cl9EbeA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.UploadController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.UploadController.html",
+          "hash": "2iZz9iIuYOAV7yOXX+YYvg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Controllers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Controllers.html",
+          "hash": "8+srr6n9XBuEaoo2Q9iZXA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.AvailabilityDataViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.AvailabilityDataViewModel.html",
+          "hash": "DDhdDF7t0rrFhuTJWEdsEQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.AvailabilityViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.AvailabilityViewModel.html",
+          "hash": "QI9Edd+V2qBA9AnnV6tufQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.CategoryViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.CategoryViewModel.html",
+          "hash": "RvnncPGnz4OO0iUjZpxSmA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.CertificateTypeViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.CertificateTypeViewModel.html",
+          "hash": "y3L0B1RvCLqBVRGP7MuU7w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.CertificateViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.CertificateViewModel.html",
+          "hash": "5pX/DJ3B+YJv7+7RM3nKtg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.Constants.Extensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.Constants.Extensions.html",
+          "hash": "qh1KhBhfto3MSEpo336RHA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.Constants.WebUrlConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.Constants.WebUrlConfig.html",
+          "hash": "q+6eQBs4/UmlAVSQyU9TQg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.Constants.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.Constants.html",
+          "hash": "F95/7US/mZkdKA1YEwGMIg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.DocumentViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.DocumentViewModel.html",
+          "hash": "DSxmvJBMORhxHQqehCfV+A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.EntityViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.EntityViewModel.html",
+          "hash": "qR2lvJabJ8jdnas09/Lw9g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ErrorViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ErrorViewModel.html",
+          "hash": "qBhDjB/HsC9++/kaAE20LA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ManagerViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ManagerViewModel.html",
+          "hash": "2Hexx0I/rbfzJpLvWOtHJQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.MessageViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.MessageViewModel.html",
+          "hash": "JOuOXIjPwT3h0YGOBlJD0w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ParticipationViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ParticipationViewModel.html",
+          "hash": "CbTopHz045bgSO7YLzj2zQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.PersonViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.PersonViewModel.html",
+          "hash": "wrzJfaw5e7SbU3RHTAVGxQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ProjectDetailsViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ProjectDetailsViewModel.html",
+          "hash": "911kB+jMYAM6KQONZaIOFQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ProjectTaskViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ProjectTaskViewModel.html",
+          "hash": "4Yp+IsvYKKppGw657+2/FQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ProjectViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ProjectViewModel.html",
+          "hash": "Fa0S1h3ve8ncwK+9+3XZJw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.RequirementViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.RequirementViewModel.html",
+          "hash": "Mz37ZT5wXWJ0/jvh6H1New=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.Schedule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.Schedule.html",
+          "hash": "V8CuZLmeLRTMJ7T6KprLgQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ScheduleDataViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ScheduleDataViewModel.html",
+          "hash": "PueLFLhk5+tOrmigRVZu5w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ScheduleViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ScheduleViewModel.html",
+          "hash": "uiSPQVFgw7Ywt94SSOcoJQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.SearchResultViewModel-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.SearchResultViewModel-1.html",
+          "hash": "Mu0ZzGXW5R4kJXwHftL0dQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.ShiftViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.ShiftViewModel.html",
+          "hash": "KzwSXbPsu1Fia4+xKIX72w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.TaskViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.TaskViewModel.html",
+          "hash": "JiRMIvHC1bqSBub071agwQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.Type.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.Type.html",
+          "hash": "imVe7/ck5Yh62/CwT37XIA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.UploadResultViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.UploadResultViewModel.html",
+          "hash": "gfv2CEN4bmPdrFM4GyKESg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Models.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Models.html",
+          "hash": "qf3E/4PM+RSTjmyBcIpUqA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Program.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Program.html",
+          "hash": "+SYXxwTsh7M3XlAWJnyJig=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.Startup.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.Startup.html",
+          "hash": "bjHUhoSC0HQhQoasJjjW1w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Api.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Api.html",
+          "hash": "rHgvSwb5sVck5tCIMkEvww=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Common.IRepository-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Common.IRepository-1.html",
+          "hash": "PxSjBQ0ACi5H9JPsOTFqsg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Common.IUnitOfWork.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Common.IUnitOfWork.html",
+          "hash": "QztfqLQNqUs/X5APHmMjSg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Common.Repository-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Common.Repository-1.html",
+          "hash": "pisMYl41au+++WhsN2kOPg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Common.UnitOfWork.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Common.UnitOfWork.html",
+          "hash": "ocACiqXd3E0QwEQ2cqlQjA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Common.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Common.html",
+          "hash": "VIwMW7bsXF2s0mFxmvgWeA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Context.RoosterPlannerContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Context.RoosterPlannerContext.html",
+          "hash": "n8yAlSobyYzqQ8zTtgUo1w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Context.Seed.Helper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Context.Seed.Helper.html",
+          "hash": "pKOaeNtmwxqpTSLTXrXIEw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Context.Seed.RequirementSeed.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Context.Seed.RequirementSeed.html",
+          "hash": "lyT4oaVw+24UxKzL/alO6A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Context.Seed.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Context.Seed.html",
+          "hash": "UW8m8cQTNLATr05Iy/QYMA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Context.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Context.html",
+          "hash": "vlr3Cgz3+IrAuJUmsqfIcw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Migrations.initial.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Migrations.initial.html",
+          "hash": "Ml4nDJhsASkMxlYDk83/Ow=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Migrations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Migrations.html",
+          "hash": "+VY698hcdiSsOcWQ9nMdeA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.AvailabilityRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.AvailabilityRepository.html",
+          "hash": "KC8heX8Y7kkUvqK5cYWXcw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.AvailabilityRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.AvailabilityRepositoryTest.html",
+          "hash": "CU2I2QtORqlhR69Z0RVH8w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.BaseUnitTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.BaseUnitTest.html",
+          "hash": "g+vOjwJ42jnCA41Fd5okiQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.CategoryRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.CategoryRepository.html",
+          "hash": "VT2WtZidK5FNHycmF9psJg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.CategoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.CategoryTest.html",
+          "hash": "UCevbVYmeUK7xDgbOsz5hw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.CertificateRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.CertificateRepository.html",
+          "hash": "MStUb4U+LlVZxmrQ6RrStg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.CertificateRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.CertificateRepositoryTest.html",
+          "hash": "D8Uyu0f7SH1wMYNWuP47tA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.CertificateTypeRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.CertificateTypeRepository.html",
+          "hash": "6fw9B8V46N09/l52OK8jIQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.CertificateTypeRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.CertificateTypeRepositoryTest.html",
+          "hash": "+Tkd6cO8f+QAV//+Pqiegw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.DocumentRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.DocumentRepository.html",
+          "hash": "UmurdrhfJ3srAWLXfEc8dQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.DocumentRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.DocumentRepositoryTest.html",
+          "hash": "QfZes6gqnPFhl+xq7bZRQQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IAvailabilityRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IAvailabilityRepository.html",
+          "hash": "GY0yvTMGV2DHQZyOjOI//g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ICategoryRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ICategoryRepository.html",
+          "hash": "yC5427pTLjVNPpGOR4bbdg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ICertificateRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ICertificateRepository.html",
+          "hash": "l+CUu4fVyDgLNJKwZwN7dw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ICertificateTypeRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ICertificateTypeRepository.html",
+          "hash": "L1AbFvRfRymKiY6tBAGc8g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IDocumentRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IDocumentRepository.html",
+          "hash": "vmLOFrO8MkyFTujsa81l+g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IManagerRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IManagerRepository.html",
+          "hash": "h5uPBK8AmDyemcWrf86vRA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IParticipationRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IParticipationRepository.html",
+          "hash": "SWc8kzvHj+NpET7+fphbuw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IPersonRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IPersonRepository.html",
+          "hash": "1RzyTCHAbGZe+mr/tEKyvw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IProjectRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IProjectRepository.html",
+          "hash": "7/E7Ytc2C8bJAr3/txBXmA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IProjectTaskRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IProjectTaskRepository.html",
+          "hash": "lio2NIv+1SljaYbHw0pHYQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IRequirementRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IRequirementRepository.html",
+          "hash": "zVt2XXNPqlRkknMAaJEdZQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.IShiftRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.IShiftRepository.html",
+          "hash": "BX+zs07k5AizieSCTOmChw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ITaskRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ITaskRepository.html",
+          "hash": "Qx3xtohGAuyQaVTFRHQM8w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ManagerRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ManagerRepository.html",
+          "hash": "h6Lq5S6tDLbO9SHvQmnipw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ManagerRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ManagerRepositoryTest.html",
+          "hash": "/P8KE/9J9pvcKst09UskYg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ParticipationRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ParticipationRepository.html",
+          "hash": "+79YBuHrBoG8LcFrzQj1Uw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ParticipationRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ParticipationRepositoryTest.html",
+          "hash": "tJNSsx68g6I+XybIEV2hKg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.PersonRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.PersonRepository.html",
+          "hash": "ynQt3Mvl1tSXSG/lHRcrSg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.PersonRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.PersonRepositoryTest.html",
+          "hash": "yl4bUplSiy1xLQKw2oh/RQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ProjectRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ProjectRepository.html",
+          "hash": "i4oaDd7bZ9UMdxMva/7NJA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ProjectRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ProjectRepositoryTest.html",
+          "hash": "RDzwTbQUH2S8NNXR9q+nhA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ProjectTaskRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ProjectTaskRepository.html",
+          "hash": "HVy5yp1oznXe02o5R2oeCQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ProjectTaskRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ProjectTaskRepositoryTest.html",
+          "hash": "133TqWGIj2FMcz6C2+ArJw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.RequirementRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.RequirementRepository.html",
+          "hash": "6mF9BTa4nuRGWVhjGBvKNQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.RequirementRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.RequirementRepositoryTest.html",
+          "hash": "G0yZpCAx4wcDQiYDv2wr9g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ShiftRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ShiftRepository.html",
+          "hash": "BLbQXxY59sKyc4Q0OdSCzw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.ShiftRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.ShiftRepositoryTest.html",
+          "hash": "yweDnajN2lLKssxh1yA/bw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.TaskRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.TaskRepository.html",
+          "hash": "mj848mDRFOfcmIEQZtJwwg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.TaskRepositoryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.TaskRepositoryTest.html",
+          "hash": "gKSZLrGtbu3D37ILxWCm1Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.Repositories.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.Repositories.html",
+          "hash": "kh2zanQvWPzu96kSqvIEBw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.RoosterPlannerContextTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.RoosterPlannerContextTest.html",
+          "hash": "pHi76isDe3jX/S8tH+1sCQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Data.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Data.html",
+          "hash": "m4jGgnOzK5cQLrhJieLyYA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Email.IEmailService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Email.IEmailService.html",
+          "hash": "OJm0LK+oDRvQnstNuMB6Ew=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Email.SMTPEmailService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Email.SMTPEmailService.html",
+          "hash": "7ItnJ1w+wnrJG3mv9wuLgw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Email.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Email.html",
+          "hash": "G6m7ed2AeshTUbLf30ACLg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Availability.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Availability.html",
+          "hash": "sGtIRJ8pvwb5S15uOgkkrw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Category.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Category.html",
+          "hash": "qPdooJuXd5RH1PxaFq72og=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Certificate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Certificate.html",
+          "hash": "FmQiOcISsqTrtbogjn144A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.CertificateType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.CertificateType.html",
+          "hash": "CXJvpHY8ev3AFwJs0rkx0g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Document.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Document.html",
+          "hash": "R7kF/pXOVOzobrjEKa7yTw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Entity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Entity.html",
+          "hash": "uUPVsdrZ9AvLyaIzlP7CGw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.FilterModels.EntityFilterBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.FilterModels.EntityFilterBase.html",
+          "hash": "X5epPyiv3b1daj/KUXhKnw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.FilterModels.PersonFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.FilterModels.PersonFilter.html",
+          "hash": "tti9bkqys77KzvP7s2CbpA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.FilterModels.ProjectFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.FilterModels.ProjectFilter.html",
+          "hash": "z5dhUC7blyXr4wiawbO7Qw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.FilterModels.ShiftFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.FilterModels.ShiftFilter.html",
+          "hash": "XkXsPer5WpLmnFvrOJnOEA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.FilterModels.TaskFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.FilterModels.TaskFilter.html",
+          "hash": "xIwVQkUohYlfJ/NatUWiGg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.FilterModels.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.FilterModels.html",
+          "hash": "nC24SL+l4oZfz42/fMQLaw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.IEntity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.IEntity.html",
+          "hash": "dYGgWI/8UV3CqTZG+T1dsw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Manager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Manager.html",
+          "hash": "lwmzP6lwN3Zar5ADyjusVA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Models.Enums.AvailabilityStatus.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Models.Enums.AvailabilityStatus.html",
+          "hash": "gm2D7deh4RXXOhZY7OD9OA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Models.Enums.UserRole.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Models.Enums.UserRole.html",
+          "hash": "kFC1BYBdUv8BTPnG8JROyA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Models.Enums.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Models.Enums.html",
+          "hash": "XA6i+HKxg0huc2BmKLv+GQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Models.ShiftData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Models.ShiftData.html",
+          "hash": "pYSBlI0zXgDKz4DUa0GYZQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Models.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Models.html",
+          "hash": "ztDdKNE+ARkn8MaGGKcxtQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Participation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Participation.html",
+          "hash": "qBtaVtGrD6dXnrMT65UhCg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Person.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Person.html",
+          "hash": "4G6CpCfzfn/HESWasB+MzQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Project.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Project.html",
+          "hash": "oALNQb/lmgHMd1ijEZ3Zug=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.ProjectTask.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.ProjectTask.html",
+          "hash": "l4oUCTknu47/8rUGWglNSg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Requirement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Requirement.html",
+          "hash": "zdVm92wQS/oMsb0G4vOhTw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Shift.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Shift.html",
+          "hash": "jl5wlagWTMsJMsZ2LcfKVg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Task.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Task.html",
+          "hash": "VBHJjQq/5SuNmUWcTZNIEg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Types.AvailibilityType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Types.AvailibilityType.html",
+          "hash": "ld5T/zj3y055JQ2/sGbzmw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.Types.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.Types.html",
+          "hash": "vFALnXgTvYe+VlcCjxKi/Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Models.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Models.html",
+          "hash": "q4UqJxzAtu3okvaFr4sXmw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.AvailabilityService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.AvailabilityService.html",
+          "hash": "PfY28TUlveLZzTa1ru1xxw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.AzureB2CService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.AzureB2CService.html",
+          "hash": "55hP8X2eQGyhIevxNBMnVw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.BlobService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.BlobService.html",
+          "hash": "5FOSGjpvomzWilKKZ9qB7Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.CertificateService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.CertificateService.html",
+          "hash": "LF3g3AKSjBcmXrpgm50GPg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.Config.AzureAuthenticationConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.Config.AzureAuthenticationConfig.html",
+          "hash": "QL9WDMGABqgWFE2uqOY7Gg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.Config.AzureBlobConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.Config.AzureBlobConfig.html",
+          "hash": "PAQvSrxzkFgptY+0VNtOkQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.Config.EmailConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.Config.EmailConfig.html",
+          "hash": "LZ6hDsaQMLew9vhGwk8Kcw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.Config.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.Config.html",
+          "hash": "KN49fhCW+KeLxmHWo9bYeg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.DataModels.ITaskResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.DataModels.ITaskResult.html",
+          "hash": "wjWDPxHYoHmt8xpqSuq04g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.DataModels.TaskListResult-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.DataModels.TaskListResult-1.html",
+          "hash": "cq/6oqtlXADFaBp8dzqYXg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.DataModels.TaskResult-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.DataModels.TaskResult-1.html",
+          "hash": "cW3VwMaGi8bisDbwFyFw7w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.DataModels.TaskResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.DataModels.TaskResult.html",
+          "hash": "JTNq5NoB5zFkir7hzd+82g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.DataModels.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.DataModels.html",
+          "hash": "dzrxrgVb0dEvwJ3B/fz8KQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.DocumentService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.DocumentService.html",
+          "hash": "Sj8eumTpdUBm6IqMEwSSKA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.Helpers.IdentityHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.Helpers.IdentityHelper.html",
+          "hash": "LjkOFLI9As8Lq866S1ACJw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.Helpers.RecordNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.Helpers.RecordNotFoundException.html",
+          "hash": "nDPcdYuj5iaxljk4v+S5wA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.Helpers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.Helpers.html",
+          "hash": "R8OuiFhvnYatdYe7Mozvuw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IAvailabilityService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IAvailabilityService.html",
+          "hash": "bqN0ducwPZL/RI9oGP1S9Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IAzureB2CService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IAzureB2CService.html",
+          "hash": "iPrElAmGaPNfIrm3H94u9Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IBlobService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IBlobService.html",
+          "hash": "JauuHu/qGRMOpbhtsjCKMQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.ICertificateService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.ICertificateService.html",
+          "hash": "nCvIJXEuSqPD3rVUv9yneA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IDocumentService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IDocumentService.html",
+          "hash": "JBAOLMgqjmlaIwPKUAXQVQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IParticipationService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IParticipationService.html",
+          "hash": "CJPzzY4oHbj+16MZJPs/KQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IPersonService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IPersonService.html",
+          "hash": "BnKgnXt4qS1PSbQ5x9VTAA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IProjectService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IProjectService.html",
+          "hash": "oNqV1UmzxZkqjQzvzUMKnA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IRequirementService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IRequirementService.html",
+          "hash": "hrSIq4RBwUqnFBLY0V128Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.IShiftService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.IShiftService.html",
+          "hash": "zhaGXkbSxLfdzzvIltSjLw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.ITaskService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.ITaskService.html",
+          "hash": "whzzSwM1VaTOihvBCDd/cA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.ParticipationService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.ParticipationService.html",
+          "hash": "fnY8Zor5UNDEh+F3KhBKzQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.PersonService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.PersonService.html",
+          "hash": "aPR9UYX727hgeE9Euh6/lg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.ProjectService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.ProjectService.html",
+          "hash": "bpQiH6vMgp6az5ZEXe0Xng=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.RequirementService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.RequirementService.html",
+          "hash": "qIhjsPQaceEWQ9xmyxkF5w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.ServiceContainer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.ServiceContainer.html",
+          "hash": "KRvAOSUrdoI0MbEcKl5PMQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.ShiftService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.ShiftService.html",
+          "hash": "FLZtDvJyU+vX8Qf7ONYwhA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.TaskService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.TaskService.html",
+          "hash": "ZRGfVrlEPxFrJORKnIRKDQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.Service.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.Service.html",
+          "hash": "0zexgc1KbsiYGYiVvYG+8w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.UI.Program.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.UI.Program.html",
+          "hash": "Nmtns1412GNjb17ZTQZClA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.UI.Startup.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.UI.Startup.html",
+          "hash": "pSnNihDjPyTJTTwM45ZSjA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterPlanner.UI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterPlanner.UI.html",
+          "hash": "TPiRmdnDuwHTpgoEOYgR3w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "JSky91d3IA4MBxvOFyZEPA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "1PvMqaS6UgaO930M5UUtoQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Admin.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Admin.html",
+          "hash": "VqdNXLaTmC/plXCSt7YICw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Beheer.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Beheer.html",
+          "hash": "JgD+rUaNui+KmVYEMAo9Cw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Dashboard.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Dashboard.html",
+          "hash": "nUulHhKshPMcH8QPd0YRnQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Profile.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Profile.html",
+          "hash": "X5H04Z6sbG7bo/EI2/z4Uw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Project.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Project.html",
+          "hash": "J2VQMkcJmKYPnPKyoLbV0w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "buuSxbOZOc9z10qBEStDfA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "2d3SqZCJUENGXIWtnWVfMA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/Administrator.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/Administrator.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/addadministrator.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/addadministrator.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/addprojectmodal.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/addprojectmodal.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/alltasks.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/alltasks.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/detailscategory.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/detailscategory.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/detailscertificate.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/detailscertificate.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/detailstasks.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/detailstasks.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/employeeoverview.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/employeeoverview.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/requirement.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/requirement.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Administrator/updatePP.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Administrator/updatePP.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/Dashboard.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/Dashboard.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/Selectprojects.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/Selectprojects.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/confimprofile.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/confimprofile.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/dashboard2.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/dashboard2.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/footer.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/footer.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Dashboard/projectcard.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Dashboard/projectcard.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Breadcrumb.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Breadcrumb.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Login.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Login.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Mobilenav.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Mobilenav.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Nav.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Nav.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/PrivacyPolicy.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/PrivacyPolicy.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Introduction/Register.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Introduction/Register.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/Generalemail.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/Generalemail.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/Managerprojectcard.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/Managerprojectcard.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/Scheduleday.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/Scheduleday.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/addshiftcalendar.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/addshiftcalendar.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/addshiftmain.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/addshiftmain.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/addshifttime.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/addshifttime.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/inroosteren.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/inroosteren.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/planshift.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/planshift.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Manage/shifts.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Manage/shifts.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Profile/Certificate.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Profile/Certificate.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Profile/Profile.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Profile/Profile.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Profile/addcertificate.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Profile/addcertificate.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/Project/Project.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Project/Project.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/favicon.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/favicon.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "YQGKLpePYDrmUSTZosajbg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "WzOZWGgLM0eFdRC3elrICw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 8,
+          "skipped_file_count": 8
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 167,
+          "skipped_file_count": 167
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

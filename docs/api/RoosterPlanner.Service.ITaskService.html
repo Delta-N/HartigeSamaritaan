@@ -1,0 +1,940 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface ITaskService
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface ITaskService
+   ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterPlanner.Service.ITaskService">
+  
+  
+  <h1 id="RoosterPlanner_Service_ITaskService" data-uid="RoosterPlanner.Service.ITaskService" class="text-break">Interface ITaskService
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterPlanner.Service.html">RoosterPlanner.Service</a></h6>
+  <h6><strong>Assembly</strong>: RoosterPlanner.Service.dll</h6>
+  <h5 id="RoosterPlanner_Service_ITaskService_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface ITaskService</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_AddTaskToProjectAsync_RoosterPlanner_Models_ProjectTask_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.AddTaskToProjectAsync(RoosterPlanner.Models.ProjectTask)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L130">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_AddTaskToProjectAsync_" data-uid="RoosterPlanner.Service.ITaskService.AddTaskToProjectAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_AddTaskToProjectAsync_RoosterPlanner_Models_ProjectTask_" data-uid="RoosterPlanner.Service.ITaskService.AddTaskToProjectAsync(RoosterPlanner.Models.ProjectTask)">AddTaskToProjectAsync(ProjectTask)</h4>
+  <div class="markdown level1 summary"><p>Adds a projectTask to the database.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;ProjectTask&gt;&gt; AddTaskToProjectAsync(ProjectTask projectTask)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.ProjectTask.html">ProjectTask</a></td>
+        <td><span class="parametername">projectTask</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.ProjectTask.html">ProjectTask</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_CreateCategoryAsync_RoosterPlanner_Models_Category_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.CreateCategoryAsync(RoosterPlanner.Models.Category)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L79">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_CreateCategoryAsync_" data-uid="RoosterPlanner.Service.ITaskService.CreateCategoryAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_CreateCategoryAsync_RoosterPlanner_Models_Category_" data-uid="RoosterPlanner.Service.ITaskService.CreateCategoryAsync(RoosterPlanner.Models.Category)">CreateCategoryAsync(Category)</h4>
+  <div class="markdown level1 summary"><p>Adds a category to the database.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Category&gt;&gt; CreateCategoryAsync(Category category)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Category.html">Category</a></td>
+        <td><span class="parametername">category</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Category.html">Category</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_CreateTaskAsync_RoosterPlanner_Models_Task_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.CreateTaskAsync(RoosterPlanner.Models.Task)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L38">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_CreateTaskAsync_" data-uid="RoosterPlanner.Service.ITaskService.CreateTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_CreateTaskAsync_RoosterPlanner_Models_Task_" data-uid="RoosterPlanner.Service.ITaskService.CreateTaskAsync(RoosterPlanner.Models.Task)">CreateTaskAsync(Task)</h4>
+  <div class="markdown level1 summary"><p>Adds a task to the database.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Task&gt;&gt; CreateTaskAsync(Task task)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Task.html">Task</a></td>
+        <td><span class="parametername">task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Task.html">Task</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_GetAllCategoriesAsync.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.GetAllCategoriesAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L62">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_GetAllCategoriesAsync_" data-uid="RoosterPlanner.Service.ITaskService.GetAllCategoriesAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_GetAllCategoriesAsync" data-uid="RoosterPlanner.Service.ITaskService.GetAllCategoriesAsync">GetAllCategoriesAsync()</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests all categories.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Category&gt;&gt; GetAllCategoriesAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Category.html">Category</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_GetAllProjectTasksAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.GetAllProjectTasksAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L138">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_GetAllProjectTasksAsync_" data-uid="RoosterPlanner.Service.ITaskService.GetAllProjectTasksAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_GetAllProjectTasksAsync_System_Guid_" data-uid="RoosterPlanner.Service.ITaskService.GetAllProjectTasksAsync(System.Guid)">GetAllProjectTasksAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests all projectTasks based on an projectId.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;ProjectTask&gt;&gt; GetAllProjectTasksAsync(Guid projectId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.ProjectTask.html">ProjectTask</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_GetCategoryAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.GetCategoryAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L70">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_GetCategoryAsync_" data-uid="RoosterPlanner.Service.ITaskService.GetCategoryAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_GetCategoryAsync_System_Guid_" data-uid="RoosterPlanner.Service.ITaskService.GetCategoryAsync(System.Guid)">GetCategoryAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests a category based on an id.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Category&gt;&gt; GetCategoryAsync(Guid categoryId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">categoryId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Category.html">Category</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_GetProjectTaskAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.GetProjectTaskAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L114">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_GetProjectTaskAsync_" data-uid="RoosterPlanner.Service.ITaskService.GetProjectTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_GetProjectTaskAsync_System_Guid_" data-uid="RoosterPlanner.Service.ITaskService.GetProjectTaskAsync(System.Guid)">GetProjectTaskAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests a projectTask based on an id.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;ProjectTask&gt;&gt; GetProjectTaskAsync(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.ProjectTask.html">ProjectTask</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_GetProjectTaskAsync_System_Guid_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.GetProjectTaskAsync(System.Guid%2CSystem.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L122">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_GetProjectTaskAsync_" data-uid="RoosterPlanner.Service.ITaskService.GetProjectTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_GetProjectTaskAsync_System_Guid_System_Guid_" data-uid="RoosterPlanner.Service.ITaskService.GetProjectTaskAsync(System.Guid,System.Guid)">GetProjectTaskAsync(Guid, Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests a projectTask based on an projectId and a taskId.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;ProjectTask&gt;&gt; GetProjectTaskAsync(Guid projectId, Guid taskId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">taskId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.ProjectTask.html">ProjectTask</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_GetTaskAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.GetTaskAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L21">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_GetTaskAsync_" data-uid="RoosterPlanner.Service.ITaskService.GetTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_GetTaskAsync_System_Guid_" data-uid="RoosterPlanner.Service.ITaskService.GetTaskAsync(System.Guid)">GetTaskAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests an task based on an id.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Task&gt;&gt; GetTaskAsync(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Task.html">Task</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_RemoveCategoryAsync_RoosterPlanner_Models_Category_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.RemoveCategoryAsync(RoosterPlanner.Models.Category)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L97">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_RemoveCategoryAsync_" data-uid="RoosterPlanner.Service.ITaskService.RemoveCategoryAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_RemoveCategoryAsync_RoosterPlanner_Models_Category_" data-uid="RoosterPlanner.Service.ITaskService.RemoveCategoryAsync(RoosterPlanner.Models.Category)">RemoveCategoryAsync(Category)</h4>
+  <div class="markdown level1 summary"><p>Removes a category from the database.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Category&gt;&gt; RemoveCategoryAsync(Category category)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Category.html">Category</a></td>
+        <td><span class="parametername">category</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Category.html">Category</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_RemoveProjectTaskAsync_RoosterPlanner_Models_ProjectTask_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.RemoveProjectTaskAsync(RoosterPlanner.Models.ProjectTask)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L106">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_RemoveProjectTaskAsync_" data-uid="RoosterPlanner.Service.ITaskService.RemoveProjectTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_RemoveProjectTaskAsync_RoosterPlanner_Models_ProjectTask_" data-uid="RoosterPlanner.Service.ITaskService.RemoveProjectTaskAsync(RoosterPlanner.Models.ProjectTask)">RemoveProjectTaskAsync(ProjectTask)</h4>
+  <div class="markdown level1 summary"><p>Removes a projectTask from the database.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;ProjectTask&gt;&gt; RemoveProjectTaskAsync(ProjectTask resultData)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.ProjectTask.html">ProjectTask</a></td>
+        <td><span class="parametername">resultData</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.ProjectTask.html">ProjectTask</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_RemoveTaskAsync_RoosterPlanner_Models_Task_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.RemoveTaskAsync(RoosterPlanner.Models.Task)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L54">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_RemoveTaskAsync_" data-uid="RoosterPlanner.Service.ITaskService.RemoveTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_RemoveTaskAsync_RoosterPlanner_Models_Task_" data-uid="RoosterPlanner.Service.ITaskService.RemoveTaskAsync(RoosterPlanner.Models.Task)">RemoveTaskAsync(Task)</h4>
+  <div class="markdown level1 summary"><p>Removes a task from the database.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Task&gt;&gt; RemoveTaskAsync(Task task)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Task.html">Task</a></td>
+        <td><span class="parametername">task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Task.html">Task</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_SearchTasksAsync_RoosterPlanner_Models_FilterModels_TaskFilter_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.SearchTasksAsync(RoosterPlanner.Models.FilterModels.TaskFilter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L29">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_SearchTasksAsync_" data-uid="RoosterPlanner.Service.ITaskService.SearchTasksAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_SearchTasksAsync_RoosterPlanner_Models_FilterModels_TaskFilter_" data-uid="RoosterPlanner.Service.ITaskService.SearchTasksAsync(RoosterPlanner.Models.FilterModels.TaskFilter)">SearchTasksAsync(TaskFilter)</h4>
+  <div class="markdown level1 summary"><p>Makes a call to the repository layer and requests all tasks based on a filter.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskListResult&lt;Task&gt;&gt; SearchTasksAsync(TaskFilter filter)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.FilterModels.TaskFilter.html">TaskFilter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskListResult-1.html">TaskListResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Task.html">Task</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_UpdateCategoryAsync_RoosterPlanner_Models_Category_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.UpdateCategoryAsync(RoosterPlanner.Models.Category)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L88">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_UpdateCategoryAsync_" data-uid="RoosterPlanner.Service.ITaskService.UpdateCategoryAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_UpdateCategoryAsync_RoosterPlanner_Models_Category_" data-uid="RoosterPlanner.Service.ITaskService.UpdateCategoryAsync(RoosterPlanner.Models.Category)">UpdateCategoryAsync(Category)</h4>
+  <div class="markdown level1 summary"><p>Updates a category to the database.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Category&gt;&gt; UpdateCategoryAsync(Category category)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Category.html">Category</a></td>
+        <td><span class="parametername">category</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Category.html">Category</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService_UpdateTaskAsync_RoosterPlanner_Models_Task_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService.UpdateTaskAsync(RoosterPlanner.Models.Task)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L47">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Service_ITaskService_UpdateTaskAsync_" data-uid="RoosterPlanner.Service.ITaskService.UpdateTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Service_ITaskService_UpdateTaskAsync_RoosterPlanner_Models_Task_" data-uid="RoosterPlanner.Service.ITaskService.UpdateTaskAsync(RoosterPlanner.Models.Task)">UpdateTaskAsync(Task)</h4>
+  <div class="markdown level1 summary"><p>Updates a task in the database.
+Wraps the result of this request in a TaskResult wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TaskResult&lt;Task&gt;&gt; UpdateTaskAsync(Task task)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Task.html">Task</a></td>
+        <td><span class="parametername">task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="RoosterPlanner.Service.DataModels.TaskResult-1.html">TaskResult</a>&lt;<a class="xref" href="RoosterPlanner.Models.Task.html">Task</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Service_ITaskService.md&amp;value=---%0Auid%3A%20RoosterPlanner.Service.ITaskService%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Service/Services/TaskService.cs/#L13" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

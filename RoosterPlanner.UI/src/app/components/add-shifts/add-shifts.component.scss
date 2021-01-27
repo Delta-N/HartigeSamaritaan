@@ -1,0 +1,90 @@
+#push{
+  border: none;
+}
+.row-name{
+  padding-top: 15px;
+  min-width: 200px;
+}
+.user-data {
+  font: normal normal normal 15px/45px Segoe UI !important;
+}
+
+.row {
+  display: flex;
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+
+::ng-deep ngx-material-timepicker-content {
+  --dial-background-color: #e03e2d !important;
+  --button-color: gray;
+  --clock-hand-color: #e03e2d !important;
+}
+
+::ng-deep ngx-material-timepicker-container .timepicker__actions {
+  flex-direction: row-reverse !important;
+  padding-left: 70px !important;
+}
+
+::ng-deep .mat-calendar-body-cell.selected {
+  background-color: #e03e2d !important;
+  border-radius: 50%;
+
+  :hover {
+    background-color: gray;
+  }
+
+  .mat-calendar-body-cell-content.mat-focus-indicator {
+    color: white;
+  }
+}
+
+.right {
+  display: flex;
+  margin-bottom: auto;
+  margin-top: 5px;
+  flex-direction: column;
+}
+
+.left {
+  display: flex;
+  margin-bottom: auto;
+  margin-top: 5px;
+  flex-direction: column;
+}
+
+.date-button {
+  margin: 5px;
+}
+
+#open-label {
+  color: gray;
+}
+
+@media only screen and (max-width: 992px) {
+  .row-name{
+    font-size: 13px !important;
+    min-width: 115px;
+  }
+  #addshiftbutton{
+    font-size: 12px !important;
+    padding: 0 !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .row-name {
+    font-size: 20px!important;
+    min-width: 200px;
+  }
+  #addshiftbutton {
+    font-size: inherit;
+    padding: inherit;
+  }
+}
+@media only screen and (max-width: 550px) {
+  .row-name{
+    font-size: 13px !important;
+    min-width: 130px;
+  }
+}

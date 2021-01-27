@@ -1,0 +1,60 @@
+
+.mat-button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  margin-left: 20px;
+  margin-top: 5px;
+
+
+  border-radius: 5px;
+
+}
+
+.row {
+  display: flex;
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+
+.mat-card {
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  max-width: 325px;
+}
+
+#expanded-card {
+  width: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+  .col-6 {
+    max-width: initial;
+  }
+  #holder {
+    display: block;
+  }
+  #right {
+    display: flex;
+    justify-content: center;
+  }
+
+  .mat-card {
+    margin-right: 0;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .mat-card {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 325px;
+  }
+  .mat-card-title {
+    font-size: 14px;
+  }
+  .override-button {
+    font-size: 12px !important;
+  }
+}

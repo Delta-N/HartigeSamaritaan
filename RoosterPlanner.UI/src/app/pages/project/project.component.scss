@@ -1,0 +1,96 @@
+.admin {
+  border: 1px solid #707070;
+  background: whitesmoke;
+  align-items: center;
+
+  .row {
+    margin: 0;
+  }
+}
+
+img {
+  max-width: 400px;
+  height: auto;
+}
+
+.override-button {
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.mat-card {
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  max-width: 325px;
+}
+
+#left {
+  min-height: 400px;
+  min-width: 450px;
+  margin-bottom: auto;
+}
+
+.row {
+  display: flex;
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+
+#admin-control-title {
+  justify-content: center;
+}
+
+#admin-control-actions {
+  justify-content: center;
+}
+
+@media only screen and (max-width: 992px) {
+  #img {
+    display: flex;
+    justify-content: center;
+  }
+  #card {
+    display: flex;
+    justify-content: center;
+  }
+  .mat-card {
+    min-width: initial;
+    width: 375px;
+    margin-left: initial;
+    margin-right: initial;
+  }
+  .col-md-6 {
+    flex: inherit;
+    max-width: inherit;
+  }
+
+
+  @media only screen and (max-width: 550px) {
+
+    #left {
+      min-width: inherit
+    }
+    .override-button {
+      font-size: 13px !important;
+    }
+    img {
+      max-width: 400px;
+    }
+
+
+    .mat-card-title {
+      font-size: 16px;
+    }
+
+    .mat-card-content {
+      font-size: 14px;
+    }
+
+    .mat-card-actions .mat-button {
+      font-size: 14px;
+    }
+
+  }
+
+}

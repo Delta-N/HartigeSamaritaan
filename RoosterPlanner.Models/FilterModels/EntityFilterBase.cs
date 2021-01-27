@@ -5,33 +5,23 @@ using System.Linq.Expressions;
 
 namespace RoosterPlanner.Models.FilterModels
 {
-    public static class EntityFilterExtensions
-    {
-        public static IQueryable<TEntity> ApplyFilter<TEntity>(this IQueryable<TEntity> query, EntityFilterBase filter)
-        {
-            if (filter == null) throw new ArgumentNullException("filter");
-
-            return filter.SetFilter(query);
-        }
-    }
-
     public abstract class EntityFilterBase
     {
         #region Fields
-        private static string[] defaultSort = new string[] { "Id", "ASC" };
-        private string[] sort = new string[] { };
-        internal List<SortType> sortingList = new List<SortType>();
+        private static readonly string[] DefaultSort = { "Id", "ASC" };
+        private string[] sort = Array.Empty<string>();
+        private readonly List<SortType> sortingList = new();
         #endregion
 
         #region Properties
         // Sorting
-        public virtual string[] Sort
+        public string[] Sort
         {
-            get { return sort; }
+            get => sort;
             set
             {
                 // Set the field
-                sort = value != null && value.Length > 0 ? value : defaultSort;
+                sort = value != null && value.Length > 0 ? value : DefaultSort;
 
                 //Always clear list.
                 sortingList.Clear();
@@ -40,7 +30,7 @@ namespace RoosterPlanner.Models.FilterModels
                 for (int i = 0; i < sort.Length; i++)
                 {
                     SortType sortType = new SortType(sort[i]);
-                    if (sort.Length >= (i + 2))
+                    if (sort.Length >= i + 2)
                     {
                         i++;
                         sortType.Direction = sort[i];
@@ -53,14 +43,14 @@ namespace RoosterPlanner.Models.FilterModels
 
         #region Constructor
         //Constructor
-        public EntityFilterBase() : this(defaultSort)
+        protected EntityFilterBase() : this(DefaultSort)
         {
         }
 
         //Constructor - Overload
-        public EntityFilterBase(string[] sort)
+        protected EntityFilterBase(string[] sort)
         {
-            this.Sort = sort;
+            Sort = sort;
         }
         #endregion
 
@@ -70,22 +60,19 @@ namespace RoosterPlanner.Models.FilterModels
         /// <typeparam name="T"></typeparam>
         /// <param name="queryable"></param>
         /// <returns></returns>
-        public virtual IQueryable<T> SetFilter<T>(IQueryable<T> queryable)
+        public IQueryable<T> SetFilter<T>(IQueryable<T> queryable)
         {
             if (queryable == null)
-                return queryable;
+                return null;
 
-            if (Sort != null && sortingList.Count > 0)
-            {
-                // New way: create an expression so 'ThenBy' ordering can be done
-                queryable = CreateOrderedQuery<T>(queryable, sortingList[0], sortingList[0].Direction.ToLower().Equals("asc") ? "OrderBy" : "OrderByDescending");
+            if (Sort == null || sortingList.Count <= 0) return queryable;
+            
+            // New way: create an expression so 'ThenBy' ordering can be done
+            queryable = CreateOrderedQuery(queryable, sortingList[0], sortingList[0].Direction.ToLower().Equals("asc") ? "OrderBy" : "OrderByDescending");
 
-                if (sortingList.Count > 1)
-                {
-                    for (int i = 1; i < sortingList.Count; i++)
-                        queryable = CreateOrderedQuery<T>(queryable, sortingList[i], sortingList[i].Direction.ToLower().Equals("asc") ? "ThenBy" : "ThenByDescending");
-                }
-            }
+            if (sortingList.Count <= 1) return queryable;
+            for (int i = 1; i < sortingList.Count; i++)
+                queryable = CreateOrderedQuery(queryable, sortingList[i], sortingList[i].Direction.ToLower().Equals("asc") ? "ThenBy" : "ThenByDescending");
 
             return queryable;
         }
@@ -102,9 +89,9 @@ namespace RoosterPlanner.Models.FilterModels
             var type = typeof(T);
             var property = type.GetProperty(sortType.FieldName);
             var parameter = Expression.Parameter(type, "t");
-            var propertyAccess = Expression.MakeMemberAccess(parameter, property);
+            var propertyAccess = Expression.MakeMemberAccess(parameter, property ?? throw new InvalidOperationException());
             var orderByExp = Expression.Lambda(propertyAccess, parameter);
-            MethodCallExpression resultExp = Expression.Call(typeof(Queryable), orderingMethod, new Type[] { type, property.PropertyType }, queryable.Expression, Expression.Quote(orderByExp));
+            MethodCallExpression resultExp = Expression.Call(typeof(Queryable), orderingMethod, new[] { type, property.PropertyType }, queryable.Expression, Expression.Quote(orderByExp));
             return queryable.Provider.CreateQuery<T>(resultExp);
         }
     }
@@ -120,24 +107,21 @@ namespace RoosterPlanner.Models.FilterModels
 
         public SortType(string fieldName, string direction)
         {
-            if (String.IsNullOrWhiteSpace(fieldName))
-                throw new ArgumentNullException("fieldName");
+            if (string.IsNullOrWhiteSpace(fieldName))
+                throw new ArgumentNullException(nameof(fieldName));
 
-            if (String.IsNullOrEmpty(direction))
-                throw new ArgumentNullException("direction");
+            if (string.IsNullOrEmpty(direction))
+                throw new ArgumentNullException(nameof(direction));
 
-            if (Char.IsLower(fieldName[0]))
+            if (char.IsLower(fieldName[0]))
             {
-                var firstChar = Char.ToUpperInvariant(fieldName[0]);
+                var firstChar = char.ToUpperInvariant(fieldName[0]);
 
-                if (fieldName.Length == 1)
-                    fieldName = firstChar.ToString();
-                else
-                    fieldName = string.Format("{0}{1}", firstChar, fieldName.Substring(1));
+                fieldName = fieldName.Length == 1 ? firstChar.ToString() : $"{firstChar}{fieldName.Substring(1)}";
             }
 
-            this.FieldName = fieldName;
-            this.Direction = direction.ToUpper();
+            FieldName = fieldName;
+            Direction = direction.ToUpper();
         }
     }
 }

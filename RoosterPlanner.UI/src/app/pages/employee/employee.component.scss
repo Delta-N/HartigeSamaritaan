@@ -1,0 +1,28 @@
+table {
+  width: 100%;
+}
+
+td, th {
+  width: 25%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+#push {
+  margin-left: auto;
+  border: none;
+}
+
+@media only screen and (max-width: 500px) {
+  .override-button{
+    font-size: 15px!important;
+
+  }
+  h1{
+    font-size: 20px;
+  }
+
+}

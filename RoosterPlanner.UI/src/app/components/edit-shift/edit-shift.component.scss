@@ -1,0 +1,21 @@
+.mat-form-field {
+  width: 75%;
+}
+
+.mat-dialog-content {
+  display: contents;
+}
+
+#actions {
+  margin-top: 35px;
+}
+::ng-deep ngx-material-timepicker-content {
+  --dial-background-color: #e03e2d !important;
+  --button-color: gray;
+  --clock-hand-color: #e03e2d !important;
+}
+
+::ng-deep ngx-material-timepicker-container .timepicker__actions {
+  flex-direction: row-reverse !important;
+  padding-left: 70px !important;
+}

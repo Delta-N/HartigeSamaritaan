@@ -1,0 +1,28 @@
+.mat-dialog-container{
+  overflow: hidden;
+}
+.action-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-left: 75%;
+  button{
+    max-width: 100px;
+  }
+}
+
+.policy {
+  max-height: 75vh;
+  overflow: hidden;
+}
+
+
+
+@media only screen and (max-width: 550px) {
+  .policy {
+    max-height: 65vh;
+  }
+  h2{
+    font-size: 20px;
+  }
+}

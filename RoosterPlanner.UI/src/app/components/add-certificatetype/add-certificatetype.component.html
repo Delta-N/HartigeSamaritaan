@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Certificaat {{modifier}}</h2>
+
+
+<mat-dialog-content>
+  <form [formGroup]="checkoutForm" (ngSubmit)="saveCertificate(checkoutForm.value)">
+    <input formControlName="id" id="id" type="hidden">
+
+    <div>
+      <mat-form-field>
+        <mat-label for="name"> Naam</mat-label>
+        <input formControlName="name" id="name" matInput placeholder="Certificaat naam" type="text">
+      </mat-form-field>
+    </div>
+
+    <div>
+
+      <mat-form-field>
+        <mat-label for="level"> Niveau</mat-label>
+        <input formControlName="level" id="level" matInput placeholder="Bijv. C2, Goed" type="text">
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions id="actions">
+
+  <div class="align-right">
+    <button class="action-button override-button" (click)="saveCertificate(checkoutForm.value)" mat-button>Opslaan</button>
+    <button mat-button class="override-button" (click)="close()">Annuleren</button>
+  </div>
+</mat-dialog-actions>
