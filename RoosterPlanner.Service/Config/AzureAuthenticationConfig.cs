@@ -1,5 +1,10 @@
 ﻿namespace RoosterPlanner.Service.Config
 {
+    
+    /// <summary>
+    /// Class is used to bind Azure B2C configurationdetails to an object.
+    /// (IOptionsPattern) 
+    /// </summary>
     public class AzureAuthenticationConfig
     {
         public static string ConfigSectionName => "AzureAuthentication";

@@ -5,11 +5,31 @@ namespace RoosterPlanner.Api.Models
 {
     public class ManagerViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the ProjectId
+        /// </summary>
         public Guid ProjectId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Project 
+        /// </summary>
         public ProjectDetailsViewModel Project { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PersonId 
+        /// </summary>
         public Guid PersonId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Person 
+        /// </summary>
         public PersonViewModel Person { get; set; }
 
+        /// <summary>
+        /// Create a ViewModel from a Manager.
+        /// </summary>
+        /// <param name="manager"></param>
+        /// <returns></returns>
         public static ManagerViewModel CreateVm(Manager manager)
         {
             if (manager == null)
@@ -31,6 +51,11 @@ namespace RoosterPlanner.Api.Models
             return vm;
         }
 
+        /// <summary>
+        /// Creates a Manager from a ViewModel.
+        /// </summary>
+        /// <param name="managerViewModel"></param>
+        /// <returns></returns>
         public static Manager CreateManager(ManagerViewModel managerViewModel)
         {
             if (managerViewModel == null)
@@ -42,7 +67,6 @@ namespace RoosterPlanner.Api.Models
                 LastEditDate = managerViewModel.LastEditDate,
                 LastEditBy = managerViewModel.LastEditBy,
                 RowVersion = managerViewModel.RowVersion
-                
             };
 
             if (managerViewModel.Project != null)

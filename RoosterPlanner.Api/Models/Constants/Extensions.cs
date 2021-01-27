@@ -1,11 +1,13 @@
-﻿
-namespace RoosterPlanner.Api.Models.Constants
+﻿namespace RoosterPlanner.Api.Models.Constants
 {
+    /// <summary>
+    /// This class is used for transforming AdditionalData attributes, from Microsoft Graph, to PersonViewModels.
+    /// </summary>
     public class Extensions
     {
         private static Extensions _extensions;
         private readonly string b2CExtentionApplicationId;
-
+        
         private Extensions(string b2CExtentionApplicationId)
         {
             this.b2CExtentionApplicationId = b2CExtentionApplicationId;

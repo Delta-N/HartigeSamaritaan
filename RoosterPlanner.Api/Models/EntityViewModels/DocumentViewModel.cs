@@ -4,10 +4,21 @@ namespace RoosterPlanner.Api.Models
 {
     public class DocumentViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the Name
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the DocumentUri 
+        /// </summary>
         public string DocumentUri { get; set; }
 
+        /// <summary>
+        /// Creates a ViewModel from a document.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         public static DocumentViewModel CreateVm(Document document)
         {
             if (document != null)
@@ -26,6 +37,11 @@ namespace RoosterPlanner.Api.Models
             return null;
         }
 
+        /// <summary>
+        /// Creates a Document from a ViewModel.
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public static Document CreateDocument(DocumentViewModel viewModel)
         {
             if (viewModel != null)
@@ -39,6 +55,7 @@ namespace RoosterPlanner.Api.Models
                     RowVersion = viewModel.RowVersion
                 };
             }
+
             return null;
         }
     }

@@ -10,7 +10,19 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface ITaskRepository : IRepository<Task>
     {
+        /// <summary>
+        /// Search for tasks based on a filter.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>A task of a list of tasks (datamodel)</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         System.Threading.Tasks.Task<List<Task>> SearchTasksAsync(TaskFilter filter);
+
+        /// <summary>
+        /// Get a Task (datamodel) based on Id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Task of a Task(datamodel)</returns>
         System.Threading.Tasks.Task<Task> GetTaskAsync(Guid id);
     }
 
@@ -20,7 +32,12 @@ namespace RoosterPlanner.Data.Repositories
         public TaskRepository(DbContext dataContext) : base(dataContext)
         {
         }
-
+        /// <summary>
+        /// Search for tasks based on a filter.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>A task of a list of tasks (datamodel)</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public System.Threading.Tasks.Task<List<Task>> SearchTasksAsync(TaskFilter filter)
         {
             if (filter == null)
@@ -47,22 +64,29 @@ namespace RoosterPlanner.Data.Repositories
             return tasks;
         }
 
+        /// <summary>
+        /// Get a Task (datamodel) based on Id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Task of a Task(datamodel)</returns>
         public async System.Threading.Tasks.Task<Task> GetTaskAsync(Guid id)
         {
+            if (id == Guid.Empty)
+                return null;
             Task task = await EntitySet
                 .AsNoTracking()
                 .Include(t => t.Category)
                 .Include(t => t.Instruction)
-                .Include(t=>t.Requirements)
-                .ThenInclude(r=>r.CertificateType)
-                .Where(t=>t.Id==id)
+                .Include(t => t.Requirements)
+                .ThenInclude(r => r.CertificateType)
+                .Where(t => t.Id == id)
                 .FirstOrDefaultAsync();
 
-            if(task.Category!=null)
+            if (task.Category != null)
                 task.Category.Tasks = null;
             foreach (Requirement taskRequirement in task.Requirements)
                 taskRequirement.Task = null;
-            
+
             return task;
         }
     }

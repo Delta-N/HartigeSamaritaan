@@ -97,6 +97,7 @@
       #customEventTemplate
       let-weekEvent="weekEvent">
       <ng-template #eventTooltip>
+        <h5>{{weekEvent.event.title}}</h5>
         {{availabilityData.projectTasks|calendarTooltip:weekEvent.event.title}}
         <br> <a href="task/{{availabilityData.projectTasks|calendarTaskLink:weekEvent.event.title}}"
                 style="text-decoration: underline; color: blue">details</a>
@@ -109,7 +110,7 @@
         [attr.aria-label]="{ event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
         <div class="flex-container">
 
-          <div class="row flex-container" id="title">
+          <div class="row flex-container title" [id]="'title-'+weekEvent.event.id">
             <button mat-icon-button class="star" [id]="weekEvent.event.id" (click)="changePreference(weekEvent.event)">
               <mat-icon>star_border</mat-icon>
             </button>

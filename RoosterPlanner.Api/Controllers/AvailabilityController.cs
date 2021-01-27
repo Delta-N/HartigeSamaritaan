@@ -44,6 +44,13 @@ namespace RoosterPlanner.Api.Controllers
             this.personService = personService;
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for availabilities based on a participations id.
+        /// Does validation checks.
+        /// Returns an empty list of availibilities when no availabilities are found
+        /// </summary>
+        /// <param name="participationId"></param>
+        /// <returns></returns>
         [HttpGet("scheduled/{participationId}")]
         public async Task<ActionResult<List<AvailabilityViewModel>>> GetScheduledAvailabilities(Guid participationId)
         {
@@ -71,6 +78,14 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for availabilities based on a projectId.
+        /// Does validation checks.
+        /// Returns an empty list of availibilities when no availabilities are found
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         [HttpGet("scheduled/{projectId}/{date}")]
         public async Task<ActionResult<List<AvailabilityViewModel>>> GetScheduledAvailabilities(Guid projectId,
             DateTime date)
@@ -99,6 +114,13 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for availaiblity data of a project.
+        /// Used on 'beschikbaarheid opgeven' page.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet("find/{projectId}/{userId}")]
         public async Task<ActionResult<AvailabilityDataViewModel>> GetAvailabilityData(Guid projectId, Guid userId)
         {
@@ -179,6 +201,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for availaiblity data of a project.
+        /// Used on 'planoverview' page.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpGet("find/{projectId}")]
         public async Task<ActionResult<AvailabilityDataViewModel>> GetAvailabilityData(Guid projectId)
@@ -243,6 +271,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to save a availaiblity.
+        /// Used by volunteers to add a specific availability for a shift.
+        /// </summary>
+        /// <param name="availabilityViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Availability>> SaveAvailabilityAsync(AvailabilityViewModel availabilityViewModel)
         {
@@ -295,6 +329,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to save a availaiblity.
+        /// Used by volunteers to change a specific availability for a shift.
+        /// </summary>
+        /// <param name="availabilityViewModel"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<AvailabilityViewModel>> UpdateAvailabilityAsync(
             AvailabilityViewModel availabilityViewModel)
@@ -338,6 +378,13 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
+
+        /// <summary>
+        /// Makes a request towards the services layer to save many availabilities at  once.
+        /// Used by Boardmembers and Committee members to schedule volunteers.
+        /// </summary>
+        /// <param name="availabilityViewModel"></param>
+        /// <returns></returns>
 
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPatch]

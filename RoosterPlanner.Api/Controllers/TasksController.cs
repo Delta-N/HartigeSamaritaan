@@ -37,6 +37,11 @@ namespace RoosterPlanner.Api.Controllers
             this.documentService = documentService;
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for a task based on a Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<TaskViewModel>> GetTaskAsync(Guid id)
         {
@@ -59,6 +64,13 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for tasks based on attributes.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="offset"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<List<TaskViewModel>>> SearchTasksAsync(string name, int offset = 0,
             int pageSize = 20)
@@ -86,7 +98,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        //alleen een bestuurslid kan taken aanmaken of wijzigen
+        /// <summary>
+        /// Makes a request towards the services layer to save a task.
+        /// Only Boardmembers can save tasks.
+        /// </summary>
+        /// <param name="taskViewModel"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost]
         public async Task<ActionResult<TaskViewModel>> SaveTaskAsync(TaskViewModel taskViewModel)
@@ -128,6 +145,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to update a task.
+        /// Only Boardmembers can update tasks.
+        /// </summary>
+        /// <param name="taskViewModel"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPut]
         public async Task<ActionResult<TaskViewModel>> UpdateTaskAsync(TaskViewModel taskViewModel)
@@ -166,7 +189,6 @@ namespace RoosterPlanner.Api.Controllers
                     oldTask.Category = (await taskService.GetCategoryAsync(updatedTask.CategoryId ?? Guid.Empty)).Data;
                     oldTask.CategoryId = oldTask.Category.Id;
                 }
-                
 
                 string oid = IdentityHelper.GetOid(HttpContext.User.Identity as ClaimsIdentity);
                 oldTask.LastEditBy = oid;
@@ -184,6 +206,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to remove a task.
+        /// Only Boardmembers can delete a task.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<TaskViewModel>> RemoveTaskAsync(Guid id)
@@ -209,6 +237,10 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for all categories.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetAllCategories")]
         public async Task<ActionResult<List<CategoryViewModel>>> GetAllCategoriesAsync()
         {
@@ -218,8 +250,8 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
-                
-                if(result.Data.Count==0)
+
+                if (result.Data.Count == 0)
                     return Ok(new List<CategoryViewModel>());
 
                 List<CategoryViewModel> categoryViewmodels = result.Data
@@ -236,6 +268,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for a specific category based on a id.
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         [HttpGet("GetCategory/{categoryId}")]
         public async Task<ActionResult<CategoryViewModel>> GetCategoryAsync(Guid categoryId)
         {
@@ -259,6 +296,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to save a category.
+        /// Only Boardmembers can save categories.
+        /// </summary>
+        /// <param name="categoryViewModel"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost("SaveCategory")]
         public async Task<ActionResult<CategoryViewModel>> SaveCategoryAsync(CategoryViewModel categoryViewModel)
@@ -295,6 +338,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to update a category.
+        /// Only Boardmembers can update categories.
+        /// </summary>
+        /// <param name="categoryViewModel"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPut("UpdateCategory")]
         public async Task<ActionResult<CategoryViewModel>> UpdateCategoryAsync(CategoryViewModel categoryViewModel)
@@ -308,7 +357,7 @@ namespace RoosterPlanner.Api.Controllers
                     return NotFound("Category not found");
                 if (!oldCategory.RowVersion.SequenceEqual(categoryViewModel.RowVersion))
                     return BadRequest("Outdated entity received");
-                
+
                 Category updatedCategory = CategoryViewModel.CreateCategory(categoryViewModel);
                 if (updatedCategory == null)
                     return BadRequest("Unable to convert CategoryViewModel to Category");
@@ -331,6 +380,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to delete a category.
+        /// Only Boardmembers can delete categories.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpDelete("DeleteCategory/{id}")]
         public async Task<ActionResult<CategoryViewModel>> RemoveCategoryAsync(Guid id)
@@ -356,6 +411,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to get a specific projectTask based on a id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("GetProjectTask/{id}")]
         public async Task<ActionResult<ProjectTaskViewModel>> GetProjectTaskAsync(Guid id)
         {
@@ -379,6 +439,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for all projectasks based on a projectId.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         [HttpGet("GetAllProjectTasks/{projectId}")]
         public async Task<ActionResult<List<TaskViewModel>>> GetAllProjectTasksAsync(Guid projectId)
         {
@@ -408,6 +473,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to add a task to a project (create projecttask).
+        /// Only Boardmembers or Committeemembers can create projecttask.
+        /// </summary>
+        /// <param name="projectTaskViewModel"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost("AddTaskToProject")]
         public async Task<ActionResult<TaskViewModel>> AddTaskToProjectAsync(ProjectTaskViewModel projectTaskViewModel)
@@ -448,6 +519,13 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to delete a project.
+        /// Only Boardmembers and Committeemembers can delete projecttasks.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpDelete("RemoveTaskFromProject/{projectId}/{taskId}")]
         public async Task<ActionResult<TaskViewModel>> RemoveTaskFromProjectAsync(Guid projectId, Guid taskId)

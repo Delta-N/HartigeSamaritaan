@@ -34,13 +34,13 @@ namespace RoosterPlanner.Api
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.Authority =
-                        $"{Configuration["AzureAD:Instance"]}/tfp/{Configuration["AzureAD:TenantId"]}/{Configuration["AzureAD:SignUpSignInPolicyId"]}/v2.0/";
+                        $"{Configuration["AzureAuthentication:Instance"]}/tfp/{Configuration["AzureAuthentication:AzureTenantId"]}/{Configuration["AzureAuthentication:SignUpSignInPolicyId"]}/v2.0/";
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateLifetime = true
                     };
-                    jwtOptions.Audience = Configuration["AzureAD:Audience"];
+                    jwtOptions.Audience = Configuration["AzureAuthentication:ClientId"];
                     jwtOptions.Events = new JwtBearerEvents();
                 });
 

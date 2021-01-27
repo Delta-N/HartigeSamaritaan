@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Beheer </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Beheer ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="beheer">Beheer</h1>
+
+<p>A manager has by far the most diverse range of options on the website.<br>
+These options are all located in a manager projectcard.
+<img src="../images/Manage/Managerprojectcard.png" alt="image"></p>
+<h2 id="schedule-overview">Schedule overview</h2>
+<p>Clicking <em>Inrooster</em> will redirect the manager to a page where he can schedule people.
+<img src="../images/Manage/inroosteren.png" alt="image"></p>
+<p>On this page the manager wil get an overview of all the shifts that are planned on a given day.<br>
+By default the first day that is selected is the current day.<br>
+If the current day does not fall between the participationStartDate and the ParticipationEndDate, the participationStartDate will be used as first day.</p>
+<h3 id="date-selection">Date selection</h3>
+<p>The manager is able to change the active dat by using the <em>&lt;</em> and <em>&gt;</em> buttons next to the date OR by using the mini-calendar on the left side.<br>
+In the manager is only able to select days in the mini-calendar that are within the participation-startdate and participation-enddate range AND are not in the past.</p>
+<h3 id="mini-calendar">Mini-calendar</h3>
+<p>The mini-calendar uses various colors to indicate the status of shifts on the given day.</p>
+<ul>
+<li>If the date is highlighted red it means there are not enough people available to plan <strong>all</strong> shifts that day.</li>
+<li>If the date is highlighted green it means there <strong>are</strong> enough people available to plan all shifts that day.</li>
+<li>If the date is highlighted blue it means that every shift on a given day has at least one person scheduled.*</li>
+</ul>
+<p>*Be careful: Blue does <strong>not</strong> indicate that <em>enough</em> people are scheduled on each shift that day.</p>
+<h3 id="checkboxes">Checkboxes</h3>
+<p>Below the mini-calendar are various checkboxes.<br>
+Each checkbox represent a projecttask.<br>
+Using these checkboxes, the manager is able to filter certain tasks from the overview container.<br>
+Task that are deselected will not be shown in the overview container.</p>
+<p>If a checkbox is grayed-out, it means that, that particular task does not have any shifts on the active day.<br>
+The user is unable to select or deselect grayed-out checkboxes.</p>
+<h3 id="legend">Legend</h3>
+<p>Below the mini-calendar and the checkboxes is a legend providing information about the meaning of the various colors in the mini-calendar.</p>
+<h3 id="overview-container">overview-container</h3>
+<p>The overview container displays all shifts that are planned that day.<br>
+The container wil try to place shifts as efficiently as possible.<br>
+Whenever a task is filtered, the container will automatically readjust its layout.</p>
+<p>Each shift can contain three pieces of information.</p>
+<ol>
+<li>The title of the shift task.</li>
+<li>The amount af people who are: necessary, scheduled and available.</li>
+<li>A button to plan the specific shift.</li>
+</ol>
+<p>Depending on the length of the shift and the available screensize, the overview-container can elect to remove certain information.</p>
+<ul>
+<li>Shifts shorter then 4 hours will not display information piece #2.</li>
+<li>Shifts shorter then 1 hour will not display information piece #1.</li>
+<li>Depending on the amount of overlapping shifts, the overview-container will change the fontsize of the title.</li>
+<li>Depending on the length of the shift and the number of overlapping shifts, the container will change the button size.</li>
+</ul>
+<p>Clicking a plan button will redirect the manager to a specific page where he can schedule people or remove people from the schedule.</p>
+<h4 id="schedule-shift">Schedule shift</h4>
+<p><img src="../images/Manage/inroosteren.png" alt="image">
+On this page, the manager will get a summary of the shift and a table containing all employees available to work that shift.<br>
+The summary is located on the leftside of the table and contains:</p>
+<ul>
+<li>The taskname;</li>
+<li>The shiftdate;</li>
+<li>The number of participants required for that shift;</li>
+<li>The number of participants already scheduled.</li>
+</ul>
+<p>The table contains basic information about the participants available to work that day.
+The following attributes are displayed from left to right:</p>
+<ol>
+<li>First + Lastname</li>
+<li>Age</li>
+<li>Nationality</li>
+<li>Number of times scheduled that project.</li>
+<li>Number of hours schedule that week.</li>
+<li>The maximum number of hours the participants is willing to participate per week.</li>
+</ol>
+<p>Using the checkboxes next to the name, the manager is able to select participants to be scheduled or removed* from the schedule.</p>
+<p>*whenever the manager wants to remove a user from the schedule, he will be asked to confirm his decision.<br>
+Be careful using this feature. Users might have already gotten an email confirming that they are indeed scheduled.<br>
+No email is send whenever the user is removed from a schedule.</p>
+<p>When the manager hovers over a specific participant, he is presented with more detailed information in a tooltip.<br>
+This information includes what other shifts the participants is available for that day, the shift(s) that the participants is scheduled for that day and a note from the user containing the preference to work with some people.</p>
+<p>using the <em>Opslaan</em> button the manager is asked to confirm his selecting after which the schedule wil be definitive.</p>
+<h2 id="shifts">Shifts</h2>
+<p>Clicking on <em>Shift overzicht</em> will redirect the manager to a page where he can get an overview of the shifts of a project.<br>
+<img src="../images/Manage/shifts.png" alt="image">
+The on this page the user is able to filter shifts based on:</p>
+<ul>
+<li>Task</li>
+<li>Date</li>
+<li>Starttime</li>
+<li>Endtime</li>
+<li>Number of participants required.</li>
+</ul>
+<p>Clicking on <em>shiften toevoegen</em> will again redirect the user to a page where he can add more shifts to the project.</p>
+<h3 id="adding-shifts">Adding shifts</h3>
+<p><img src="../images/Manage/addshiftmain.png" alt="image"></p>
+<p>On this page the user is able to create multiple shifts at once.
+At least the following information is required for a shift to be able to be save.</p>
+<ol>
+<li>Task: selectable through a dropdown menu*;</li>
+<li>Starttime: selectable through a timepicker;</li>
+<li>Endtime: selectable through a timepicker;</li>
+<li>The number of participants required;</li>
+<li>A day or multiple days.**</li>
+</ol>
+<p>*If there are no task in the dropdown menu, make sure that the project has projecttasks assigned to it (on the project page).</p>
+<p>** Days are selectable through a calendar (see below image) or through a shortcut menu.
+The shortcut menu offers the following options</p>
+<ul>
+<li>Every day: selects every day from the participation-startdate through the participation-enddate</li>
+<li>Every Monday</li>
+<li>Every Tuesday</li>
+<li>Every Wednesday</li>
+<li>Every Thursday</li>
+<li>Every Friday</li>
+<li>Every Saturday</li>
+<li>Every Sunday</li>
+<li>Remove all: removes all selected dates</li>
+</ul>
+<h4 id="timepicker">Timepicker</h4>
+<p><img src="../images/Manage/addshifttime.png" alt="image"></p>
+<h4 id="calendar">Calendar</h4>
+<p><img src="../images/Manage/addshiftcalendar.png" alt="image"></p>
+<p>Clicking save, when al required fields have been filled in will save the shifts and send the manager back to the shift-overview page.</p>
+<h2 id="see-the-schedule-per-day">See the schedule per day</h2>
+<p>Clicking <em>Rooster</em> will redirect the manager to a page where he can see the schedule per day.
+<img src="../images/Manage/Scheduleday.png" alt="image"></p>
+<p>On this page, all users scheduled on a given day will be displayed in table form.<br>
+The manager is able to change the day by using the mini-calendar.<br>
+Clicking a row in the table will redirect the manager to the profilepage of the selected participant.</p>
+<h2 id="send-a-general-message">Send a general message</h2>
+<p>It is very easy to send a message to all participants of a project using this option.</p>
+<p>When the manager clicks on <em>Verstuur algemeen bericht</em>, a modal will open where the user can enter a subject and a text.
+<img src="../images/Manage/Generalemail.png" alt="image">
+After clicking <em>Verstuur bericht</em> the manager is asked to confirm his decision to send the message after which the modal is closed and the message is send to all participants of the project.**</p>
+<p>** Users that have the option to receive e-mail messages turned off (in their profile) will <strong>NOT</strong> receive a general email message.</p>
+<h2 id="send-the-schedule">Send the schedule</h2>
+<p>Using this option, the manager is quickly able to send the current schedule to all participants who do not have the option to receive emails disabled.<br>
+Once the manager confirms his decision to send the schedule, each user will receive an email stating all the shifts the user has been scheduled for.<br>
+The email also includes an .ICS file as an attachment. The user is able to quickly add appointments to his calendar with this file.</p>
+<p>Schedule shifts will only be send <em>once</em> to the user.<br>
+If the manager clicks the option again, the user will only receive an email if he has been scheduled for additional shifts since the last time he got an email.</p>
+<h2 id="view-participant-details">View participant details</h2>
+<p>A manager is able to view all participants that are registered for a project by clicking <em>Medewerkers</em>.<br>
+The manager is then redirected to a page where all participants are displayed in table form.</p>
+<p>Clicking a specific person on this page, will redirect the manager to the profile page of the selected user.</p>
+<p>On this page it is possible to download the participants data as a .csv file.
+<img src="../images/Administrator/employeeoverview.png" alt="image"></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Documentation/articles/Beheer.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -9,7 +9,8 @@
         <mat-label for="firstName">
           Voornaam
         </mat-label>
-        <input formControlName="firstName" id="firstName" matInput placeholder="{{user.firstName}}" type="text">
+        <input formControlName="firstName" id="firstName" matInput placeholder="{{user.firstName}}" type="text"
+               required>
       </mat-form-field>
     </div>
     <div>
@@ -17,7 +18,7 @@
         <mat-label for="lastName">
           Achternaam
         </mat-label>
-        <input formControlName="lastName" id="lastName" matInput placeholder="{{user.lastName}}" type="text">
+        <input formControlName="lastName" id="lastName" matInput placeholder="{{user.lastName}}" type="text" required>
       </mat-form-field>
     </div>
     <div>
@@ -25,7 +26,7 @@
         <mat-label for="dateOfBirth">
           Geboortedatum
         </mat-label>
-        <input formControlName="dateOfBirth" id="dateOfBirth" matInput placeholder="dd-mm-yyyy" type="text">
+        <input formControlName="dateOfBirth" id="dateOfBirth" matInput placeholder="dd-mm-yyyy" type="text" required>
       </mat-form-field>
     </div>
     <div>
@@ -34,8 +35,7 @@
           Adres
         </mat-label>
         <input formControlName="streetAddress" id="streetAddress" matInput placeholder="{{user.streetAddress}}"
-               type="text"
-        >
+               type="text" required>
       </mat-form-field>
     </div>
     <div>
@@ -43,7 +43,7 @@
         <mat-label for="postalCode">
           Postcode
         </mat-label>
-        <input formControlName="postalCode" id="postalCode" matInput placeholder="1234AA" type="text">
+        <input formControlName="postalCode" id="postalCode" matInput placeholder="1234AA" type="text" required>
       </mat-form-field>
     </div>
 
@@ -52,7 +52,7 @@
         <mat-label for="city">
           Stad
         </mat-label>
-        <input formControlName="city" id="city" matInput placeholder="{{user.city}}" type="text">
+        <input formControlName="city" id="city" matInput placeholder="{{user.city}}" type="text" required>
 
       </mat-form-field>
     </div>
@@ -62,7 +62,7 @@
           Telefoonnummer
         </mat-label>
         <input formControlName="phoneNumber" id="phoneNumber" matInput placeholder="0612345678"
-               type="text">
+               type="text" required>
       </mat-form-field>
     </div>
 
@@ -85,7 +85,7 @@
           Moedertaal
         </mat-label>
         <input formControlName="nativeLanguage" id="nativeLanguage" matInput placeholder="Bijv. Nederlands of Spaans"
-               type="text">
+               type="text" required>
       </mat-form-field>
     </div>
 
@@ -109,7 +109,9 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="align-right">
-    <button class="action-button override-button" (click)="saveProfile(checkoutForm.value)" mat-button>Opslaan</button>
+    <button class="action-button override-button" (click)="saveProfile(checkoutForm.value)" mat-button
+            [disabled]="!checkoutForm.valid">Opslaan
+    </button>
     <button mat-button class="override-button" (click)="close()">Annuleren</button>
   </div>
 </mat-dialog-actions>

@@ -11,15 +11,29 @@ using RoosterPlanner.Service.Config;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Service.DataModels;
 
-
 namespace RoosterPlanner.Service
 {
     public interface IAzureB2CService
     {
+        /// <summary>
+        /// Gets a user from Microsoft Graph API based on a userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         Task<User> GetUserAsync(Guid userId);
 
+        /// <summary>
+        /// Gets users from Microsoft Graph API based on a filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         Task<TaskResult<IEnumerable<User>>> GetAllUsersAsync(PersonFilter filter);
 
+        /// <summary>
+        /// Updates a user in Microsoft Graph.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         Task<TaskResult<User>> UpdateUserAsync(User user);
     }
 
@@ -42,6 +56,11 @@ namespace RoosterPlanner.Service
             this.azureB2CConfig = azureB2CConfig.Value;
         }
 
+        /// <summary>
+        /// Gets a user from Microsoft Graph API based on a userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<User> GetUserAsync(Guid userId)
         {
             if (userId == Guid.Empty)
@@ -52,16 +71,26 @@ namespace RoosterPlanner.Service
             var dateOfBirth = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DateOfBirth";
             var phoneNumber = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_PhoneNumber";
             var nationality = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_Nationality";
-            var nativeLanguage = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
-            var dutchProficiency = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
-            var termsofuseconsented = $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
+            var nativeLanguage =
+                $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_NativeLanguage";
+            var dutchProficiency =
+                $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_DutchProficiency";
+            var termsofuseconsented =
+                $"extension_{azureB2CConfig.B2CExtentionApplicationId.Replace("-", "")}_TermsOfUseConsented";
 
             var user = await graphService.Users[userId.ToString()].Request()
-                .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented},{nativeLanguage},{dutchProficiency}").GetAsync();
-            
+                .Select(
+                    $"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented},{nativeLanguage},{dutchProficiency}")
+                .GetAsync();
+
             return user;
         }
 
+        /// <summary>
+        /// Gets users from Microsoft Graph API based on a filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public async Task<TaskResult<IEnumerable<User>>> GetAllUsersAsync(PersonFilter filter)
         {
             var result = new TaskResult<IEnumerable<User>>
@@ -116,7 +145,8 @@ namespace RoosterPlanner.Service
                 var currentUsers = await graphService.Users
                     .Request()
                     .Filter(filterString)
-                    .Select($"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented},{nativeLanguage},{dutchProficiency}")
+                    .Select(
+                        $"{GraphSelectList},{userRole},{dateOfBirth},{phoneNumber},{nationality},{termsofuseconsented},{nativeLanguage},{dutchProficiency}")
                     .GetAsync();
                 while (currentUsers.Count > 0)
                 {
@@ -131,7 +161,7 @@ namespace RoosterPlanner.Service
 
                 if (users.Count == 0)
                     throw new NullReferenceException("No users found");
-     
+
                 result.StatusCode = HttpStatusCode.OK;
                 result.Succeeded = true;
                 result.Data = users.OrderBy(u => u.DisplayName).ToList();
@@ -152,6 +182,11 @@ namespace RoosterPlanner.Service
             }
         }
 
+        /// <summary>
+        /// Updates a user in Microsoft Graph.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<TaskResult<User>> UpdateUserAsync(User user)
         {
             if (user?.Id == null || Guid.Parse(user.Id) == Guid.Empty)
@@ -181,7 +216,7 @@ namespace RoosterPlanner.Service
                 updatedUser.Message = "Error during patching of user";
                 throw;
             }
-            
+
             return updatedUser;
         }
 

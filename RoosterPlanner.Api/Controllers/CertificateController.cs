@@ -29,6 +29,10 @@ namespace RoosterPlanner.Api.Controllers
             this.certificateService = certificateService;
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for all CertificateTypes.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("types")]
         public async Task<ActionResult<List<CertificateTypeViewModel>>> GetAllCertificateTypesAsync()
         {
@@ -55,6 +59,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for a specific CertificateType based on an id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("types/{id}")]
         public async Task<ActionResult<CertificateTypeViewModel>> GetCertificateTypeAsync(Guid id)
         {
@@ -78,6 +87,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to save a CertificateType.
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost("types")]
         public async Task<ActionResult<CertificateTypeViewModel>> SaveCertificateTypeAsync(CertificateTypeViewModel vm)
@@ -112,6 +126,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to update a certificateType.
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPut("types")]
         public async Task<ActionResult<CertificateTypeViewModel>> UpdateCertificateType(
@@ -152,6 +171,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// /// Makes a request towards the services layer to delete a CertificateType.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpDelete("types/{id}")]
         public async Task<ActionResult<CertificateTypeViewModel>> RemoveCertificateTypeAsync(
@@ -181,6 +205,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// /// Makes a request towards the services layer get a specific certificate based on an id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("certificate/{id}")]
         public async Task<ActionResult<CertificateViewModel>> GetCertificateAsync(Guid id)
         {
@@ -204,6 +233,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to save a certificate.
+        /// Only Boardmembers are allowed to save certificates.
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost("certificate")]
         public async Task<ActionResult<CertificateViewModel>> SaveCertificateAsync(CertificateViewModel vm)
@@ -240,6 +275,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to update a certificate.
+        /// Only Boardmembers are allowd to update certificats. 
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPut("certificate")]
         public async Task<ActionResult<CertificateViewModel>> UpdateCertificateAsync(CertificateViewModel vm)
@@ -286,6 +327,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer delete a certificate.
+        /// Only Boardmembers are allowed to delete  certificates.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpDelete("certificate/{id}")]
         public async Task<ActionResult<CertificateViewModel>> RemoveCertificateAsync(Guid id)

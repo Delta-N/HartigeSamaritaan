@@ -366,6 +366,10 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getTitleElement(event: CalendarEvent): HTMLElement {
+    return document.getElementById("title-" + event.id)
+  }
+
   getActionElement(event: CalendarEvent): HTMLElement {
     return document.getElementById("actions-" + event.id)
   }
@@ -470,7 +474,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.refresh.next();
 
     setTimeout(() => {
-      this.changeButtonSize();
+      this.changeButtonLayout();
       if (scheduledId) {
         scheduledId.forEach(id => {
           this.showScheduledButton(id)
@@ -578,20 +582,47 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.increment()
   }
 
-  changeButtonSize() {
+  changeButtonLayout() {
     this.filteredEvents.forEach(e => {
-      if ((e.end.getTime() - e.start.getTime()) / 3600000 < 2) {
-        let element = this.getActionElement(e)
+      if ((e.end.getTime() - e.start.getTime()) / 3600000 <= 1) {
+        let element = this.getTitleElement(e)
+        if (element)
+          element.style.display = "none"
         for (let i = 0; i < element.children.length; i++) {
           let child: HTMLElement = element.children[i] as HTMLElement
-          child.style.width = "26px";
-          child.style.height = "26px";
-          child.style.fontSize = "0px";
+          child.style.display = "none"
+
         }
+      }
+
+      if ((e.end.getTime() - e.start.getTime()) / 3600000 < 4) {
+        this.changeActionButtonFontSize(e)
         let fabElement = document.getElementById("scheduledBtn" + e.id)
         if (fabElement)
           fabElement.classList.add("scheduledBtnSmall")
       }
+      if (this.numberOfOverlappingShifts > 4) {
+        let element = this.getTitleElement(e)
+        if (element) {
+          for (let i = 0; i < element.children.length; i++) {
+            let child: HTMLElement = element.children[i] as HTMLElement
+            child.style.fontSize = "16px";
+          }
+
+        }
+      }
+      if (this.numberOfOverlappingShifts > 6) {
+        this.changeActionButtonFontSize(e)
+      }
     })
+  }
+  changeActionButtonFontSize(event: CalendarEvent){
+    let element = this.getActionElement(event)
+    for (let i = 0; i < element.children.length; i++) {
+      let child: HTMLElement = element.children[i] as HTMLElement
+      child.style.width = "26px";
+      child.style.height = "26px";
+      child.style.fontSize = "0px";
+    }
   }
 }

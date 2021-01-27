@@ -5,7 +5,7 @@
       <div class="row bar">
         <h1>{{title}}</h1>
         <div id="push">
-          <a (click)="save(checkoutForm.value)" mat-button class="action-button override-button">Opslaan</a>
+          <a (click)="save(checkoutForm.value)" mat-button class="action-button override-button" [disabled]="!checkoutForm.valid" >Opslaan</a>
         </div>
       </div>
       <div class="row">

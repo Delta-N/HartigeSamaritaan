@@ -6,14 +6,46 @@ namespace RoosterPlanner.Api.Models
 {
     public class AvailabilityViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the ParticipationId 
+        /// </summary>
         public Guid? ParticipationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Participation 
+        /// </summary>
         public ParticipationViewModel Participation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ShiftId 
+        /// </summary>
         public Guid ShiftId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Shift 
+        /// </summary>
         public ShiftViewModel Shift { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Type 
+        /// </summary>
         public AvailibilityType Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Preference 
+        /// </summary>
         public bool Preference { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PushEmailSend 
+        /// </summary>
         public bool PushEmailSend { get; set; }
 
+        /// <summary>
+        /// Creates a ViewModel from a Availability
+        /// </summary>
+        /// <param name="availability"></param>
+        /// <returns></returns>
         public static AvailabilityViewModel CreateVm(Availability availability)
         {
             if (availability == null)
@@ -34,10 +66,15 @@ namespace RoosterPlanner.Api.Models
             if (availability.Participation != null)
                 vm.Participation = ParticipationViewModel.CreateVm(availability.Participation);
             if (availability.Shift != null)
-                vm.Shift=ShiftViewModel.CreateVm(availability.Shift);
+                vm.Shift = ShiftViewModel.CreateVm(availability.Shift);
             return vm;
         }
 
+        /// <summary>
+        /// Creates a Availability from a ViewModel
+        /// </summary>
+        /// <param name="availabilityViewModel"></param>
+        /// <returns></returns>
         public static Availability CreateAvailability(AvailabilityViewModel availabilityViewModel)
         {
             if (availabilityViewModel == null)

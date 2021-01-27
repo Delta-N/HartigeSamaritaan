@@ -60,6 +60,7 @@
       #customEventTemplate
       let-weekEvent="weekEvent">
       <ng-template #planTooltip>
+        <h5>{{weekEvent.event.title}}</h5>
         {{shifts|planTooltip:weekEvent.event}}
       </ng-template>
       <div
@@ -69,11 +70,11 @@
         [closeDelay]="1250" [openDelay]="250"
         [attr.aria-label]=" { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
         <div class="flex-container">
-          <div class="row flex-container" id="title">
-            <span class="cal-event-title">{{weekEvent.event.title}}</span>
+          <div class="row flex-container title" id="title-{{weekEvent.event.id}}">
+            <span class="cal-event-title" [ngStyle]="numberOfOverlappingShifts>4&&{'font-size':'16px'}">{{weekEvent.event.title}}</span>
 
           </div>
-          <div class="row" id="spacer">
+          <div class="row" id="spacer" [ngStyle]="numberOfOverlappingShifts>7&&{'font-size':'12px'}">
             <div class="row" id="necessary-{{weekEvent.event.id}}"></div>
             <div class="row" id="scheduled-{{weekEvent.event.id}}"></div>
             <div class="row" id="available-{{weekEvent.event.id}}"></div>

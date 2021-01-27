@@ -8,14 +8,46 @@ namespace RoosterPlanner.Api.Models
 {
     public class ShiftViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the Project
+        /// </summary>
         public ProjectDetailsViewModel Project { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Task 
+        /// </summary>
         public TaskViewModel Task { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Date 
+        /// </summary>
         public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Gets or sets the StartTime 
+        /// </summary>
         public string StartTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the EndTime 
+        /// </summary>
         public string EndTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of participantsRequired 
+        /// </summary>
         public int ParticipantsRequired { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Availabilites 
+        /// </summary>
         public List<AvailabilityViewModel> Availabilities { get; set; }
 
+        /// <summary>
+        /// Creates a ViewModel from a Shift.
+        /// </summary>
+        /// <param name="shift"></param>
+        /// <returns></returns>
         public static ShiftViewModel CreateVm(Shift shift)
         {
             if (shift == null)
@@ -45,6 +77,11 @@ namespace RoosterPlanner.Api.Models
             return vm;
         }
 
+        /// <summary>
+        /// Creates a Shift from a ViewModel.
+        /// </summary>
+        /// <param name="shiftViewModel"></param>
+        /// <returns></returns>
         public static Shift CreateShift(ShiftViewModel shiftViewModel)
         {
             if (shiftViewModel?.Project == null ||
@@ -54,7 +91,6 @@ namespace RoosterPlanner.Api.Models
             List<Availability> availabilities = new List<Availability>();
             if (shiftViewModel.Availabilities != null && shiftViewModel.Availabilities.Count > 0)
                 availabilities.AddRange(shiftViewModel.Availabilities.Select(AvailabilityViewModel.CreateAvailability));
-            
 
             return new Shift(shiftViewModel.Id)
             {

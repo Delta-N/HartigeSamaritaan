@@ -112,10 +112,14 @@
           </mat-card-actions>
         </mat-card>
       </div>
-      <div *ngIf="user.profilePicture?.documentUri" id="pictureFrame">
+
+      <div id="pictureFrame">
         <a (click)="changeProfilePicture()">
           <img *ngIf="user.profilePicture && user.profilePicture.documentUri"
                src="{{user.profilePicture.documentUri}}"
+               alt="Profile picture"/>
+          <img *ngIf="!user.profilePicture || !user.profilePicture.documentUri"
+               src="../../assets/avatar.png"
                alt="Profile picture"/>
         </a>
       </div>

@@ -15,9 +15,14 @@ namespace RoosterPlanner.Data.Repositories
         /// Search for projects based on given filter.
         /// </summary>
         /// <param name="filter"></param>
-        /// <returns></returns>
+        /// <returns>A task of a list of projects.</returns>
         Task<List<Project>> SearchProjectsAsync(ProjectFilter filter);
 
+        /// <summary>
+        /// Get ProjectDetails based on an id including projectTasks and a projectPicture.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A task of a project.</returns>
         Task<Project> GetProjectDetailsAsync(Guid id);
     }
 
@@ -32,7 +37,7 @@ namespace RoosterPlanner.Data.Repositories
         /// Search for projects based on given filter.
         /// </summary>
         /// <param name="filter"></param>
-        /// <returns></returns>
+        /// <returns>A task of a list of projects.</returns>
         public Task<List<Project>> SearchProjectsAsync(ProjectFilter filter)
         {
             if (filter == null)
@@ -74,6 +79,11 @@ namespace RoosterPlanner.Data.Repositories
             return projects;
         }
 
+        /// <summary>
+        /// Get ProjectDetails based on an id including projectTasks and a projectPicture.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A task of a project.</returns>
         public Task<Project> GetProjectDetailsAsync(Guid id)
         {
             return EntitySet

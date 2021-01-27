@@ -30,7 +30,11 @@ namespace RoosterPlanner.Api.Controllers
             this.projectService = projectService;
             this.logger = logger;
         }
-
+        /// <summary>
+        /// Makes a request towards the services layer to get a project based on a Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDetailsViewModel>> GetProjectAsync(Guid id)
         {
@@ -55,7 +59,17 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-
+        /// <summary>
+        /// /// Makes a request towards the services layer for a project based on attributes.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="city"></param>
+        /// <param name="startDateFrom"></param>
+        /// <param name="endDate"></param>
+        /// <param name="closed"></param>
+        /// <param name="offset"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<List<ProjectViewModel>>> SearchProjectsAsync(string name,
             string city,
@@ -95,7 +109,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
-        //alleen een bestuurslid kan projecten aanmaken of wijzigen
+        /// <summary>
+        /// Makes a request towards the services layer to add a project to the database.
+        /// Only Boardmembers can add projects.
+        /// </summary>
+        /// <param name="projectDetails"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost]
         public async Task<ActionResult<ProjectDetailsViewModel>> SaveProjectAsync(
@@ -134,7 +153,12 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-
+        /// <summary>
+        /// Makes a request towards the services layer to update a project.
+        /// Only Boardmembers can update a project.
+        /// </summary>
+        /// <param name="projectDetails"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPut]
         public async Task<ActionResult<ProjectDetailsViewModel>> UpdateProjectAsync(

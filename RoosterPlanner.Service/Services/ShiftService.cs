@@ -13,18 +13,112 @@ namespace RoosterPlanner.Service
 {
     public interface IShiftService
     {
+        /// <summary>
+        /// Makes a call to the repository layer and requests a deletion of a shift.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shift"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<Shift>> RemoveShiftAsync(Shift shift);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a shift based on a shiftId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<Shift>> GetShiftAsync(Guid shiftId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a shift based on a shiftId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<Shift>> GetShiftWithAvailabilitiesAsync(Guid shiftId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and updates a shift.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shift"></param>
+        /// <returns></returns>
         Task<TaskResult<Shift>> UpdateShiftAsync(Shift shift);
+
+        /// <summary>
+        /// Makes a call to the repository layer and adds a range of shifts.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shifts"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskListResult<Shift>> CreateShiftsAsync(List<Shift> shifts);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts based on a projectId and a date.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, DateTime date);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts based on a projectId, userId and a date.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts including availabilties based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts with related data based on a projectId and a userId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId, Guid userId);
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskListResult<Shift>> GetShiftsAsync(ShiftFilter filter);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests distinct data for use in a front-end filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<ShiftData>> GetUniqueDataAsync(Guid projectId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts with related data based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskListResult<Shift>> ExportDataAsync(Guid projectId);
     }
 
@@ -46,6 +140,13 @@ namespace RoosterPlanner.Service
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a deletion of a shift.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shift"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<Shift>> RemoveShiftAsync(Shift shift)
         {
             if (shift == null)
@@ -66,6 +167,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a shift based on a shiftId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<Shift>> GetShiftWithAvailabilitiesAsync(Guid shiftId)
         {
             if (shiftId == Guid.Empty)
@@ -87,6 +195,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and updates a shift.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shift"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Shift>> UpdateShiftAsync(Shift shift)
         {
             if (shift == null)
@@ -108,6 +222,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and adds a range of shifts.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shifts"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskListResult<Shift>> CreateShiftsAsync(List<Shift> shifts)
         {
             if (shifts == null || shifts.Count == 0)
@@ -128,6 +249,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a shift based on a shiftId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<Shift>> GetShiftAsync(Guid shiftId)
         {
             if (shiftId == Guid.Empty)
@@ -148,7 +276,14 @@ namespace RoosterPlanner.Service
 
             return result;
         }
-        
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts based on a projectId and a date.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, DateTime date)
         {
             if (projectId == Guid.Empty)
@@ -170,6 +305,14 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts based on a projectId, userId and a date.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Shift>> GetShiftsAsync(Guid projectId, Guid userId, DateTime date)
         {
             if (projectId == Guid.Empty)
@@ -193,6 +336,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts including availabilties based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -214,6 +364,14 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts with related data based on a projectId and a userId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskListResult<Shift>> GetShiftsWithAvailabilitiesAsync(Guid projectId, Guid userId)
         {
             if (projectId == Guid.Empty)
@@ -237,6 +395,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskListResult<Shift>> GetShiftsAsync(ShiftFilter filter)
         {
             if (filter == null)
@@ -257,6 +422,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests distinct data for use in a front-end filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<ShiftData>> GetUniqueDataAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -277,6 +449,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests shifts with related data based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskListResult<Shift>> ExportDataAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)

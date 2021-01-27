@@ -17,16 +17,94 @@ namespace RoosterPlanner.Service
 {
     public interface IPersonService
     {
+        /// <summary>
+        /// Makes a call to the AzureB2C service and requests a user.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<User>> GetUserAsync(Guid id);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a person based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<Person>> GetPersonAsync(Guid id);
+
+        /// <summary>
+        /// Makes a call to the AzureB2C service and requests users based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskListResult<User>> GetB2CMembersAsync(PersonFilter filter);
+
+        /// <summary>
+        /// Makes a call to the AzureB2C service and updates a user.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         Task<TaskResult<User>> UpdatePersonAsync(User user);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a update of a person.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         Task<TaskResult<Person>> UpdatePersonAsync(Person person);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a removal of a manager.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="manager"></param>
+        /// <returns></returns>
         Task<TaskResult<Manager>> RemoveManagerAsync(Manager manager);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a manager based on a projectId and a userId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         Task<TaskResult<Manager>> GetManagerAsync(Guid projectId, Guid userId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and adds a manager to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="manager"></param>
+        /// <returns></returns>
         Task<TaskResult<Manager>> MakeManagerAsync(Manager manager);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all managers DTOs based on a userId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         Task<TaskResult<List<Manager>>> UserManagesOtherProjectsAsync(Guid userId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all managers DTOs based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         Task<TaskListResult<Manager>> GetManagersAsync(Guid projectId);
+
+        /// <summary>
+        /// Makes a call to the repository layer and request a manager based on a userId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         Task<TaskListResult<Manager>> GetProjectsManagedByAsync(Guid userId);
     }
 
@@ -65,13 +143,13 @@ namespace RoosterPlanner.Service
                 {
                     person = new Person(Guid.Parse(user.Id))
                     {
-                        FirstName = user.GivenName, 
-                        Oid = Guid.Parse(user.Id), 
+                        FirstName = user.GivenName,
+                        Oid = Guid.Parse(user.Id),
                         LastName = user.Surname
                     };
-                    
-                    result.Data=personRepository.Add(person);
-                    result.Succeeded = await unitOfWork.SaveChangesAsync()==1;
+
+                    result.Data = personRepository.Add(person);
+                    result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
                 }
                 else if (person.FirstName != user.GivenName || person.LastName != user.Surname)
                 {
@@ -79,12 +157,10 @@ namespace RoosterPlanner.Service
                     person.LastName = user.Surname;
                     person.LastEditDate = DateTime.UtcNow;
                     person.LastEditBy = "SYSTEM";
-                    
-                    result.Data=personRepository.Update(person);
-                    result.Succeeded=await unitOfWork.SaveChangesAsync()==1;
+
+                    result.Data = personRepository.Update(person);
+                    result.Succeeded = await unitOfWork.SaveChangesAsync() == 1;
                 }
-               
-                
             }
             catch (Exception ex)
             {
@@ -94,6 +170,12 @@ namespace RoosterPlanner.Service
             }
         }
 
+        /// <summary>
+        /// Makes a call to the AzureB2C service and requests a user.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<User>> GetUserAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -107,7 +189,7 @@ namespace RoosterPlanner.Service
                 if (!result.Succeeded)
                 {
                     result.StatusCode = HttpStatusCode.NotFound;
-                    result.Message = ResponseMessage.UserNotFound;
+                    result.Message = "User not found in Azure B2C";
                 }
                 else
                 {
@@ -126,6 +208,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a person based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Person>> GetPersonAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -147,6 +235,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the AzureB2C service and requests users based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskListResult<User>> GetB2CMembersAsync(PersonFilter filter)
         {
             if (filter == null)
@@ -181,9 +276,11 @@ namespace RoosterPlanner.Service
         }
 
         /// <summary>
-        ///     Returns a list of open projects.
+        /// Makes a call to the AzureB2C service and updates a user.
+        /// Wraps the result of this request in a TaskResult wrapper.
         /// </summary>
-        /// <returns>List of projects that are not closed.</returns>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<TaskResult<User>> UpdatePersonAsync(User user)
         {
             TaskResult<User> result = new TaskResult<User>();
@@ -210,6 +307,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a update of a person.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Person>> UpdatePersonAsync(Person person)
         {
             if (person == null)
@@ -231,6 +334,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests all managers DTOs based on a projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Manager>> GetManagersAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -252,6 +361,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and request a manager based on a userId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Manager>> GetProjectsManagedByAsync(Guid userId)
         {
             if (userId == Guid.Empty)
@@ -273,6 +388,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a manager based on a projectId and a userId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Manager>> GetManagerAsync(Guid projectId, Guid userId)
         {
             if (projectId == Guid.Empty)
@@ -298,6 +420,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a removal of a manager.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="manager"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Manager>> RemoveManagerAsync(Manager manager)
         {
             if (manager == null)
@@ -319,6 +447,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and adds a manager to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="manager"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Manager>> MakeManagerAsync(Manager manager)
         {
             if (manager == null)
@@ -342,6 +476,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests all managers DTOs based on a userId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<TaskResult<List<Manager>>> UserManagesOtherProjectsAsync(Guid userId)
         {
             if (userId == Guid.Empty)
