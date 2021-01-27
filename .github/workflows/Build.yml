@@ -3,9 +3,7 @@ name: Build the project
 on:
   push:
     branches:
-      - develop
       - master
-      - Refactor
 
 env:
   BUILD_CONFIGURATION: Release
