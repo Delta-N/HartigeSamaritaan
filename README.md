@@ -2,7 +2,7 @@
 Roosterplannersysteem voor de stichting Hartige Samaritaan.  
 Bezoek: https://delta-n.github.io/HartigeSamaritaan/ voor de documentatie.
 
-##Gebruikte technologieën:
+## Gebruikte technologieën:
 
 - Angular 11.1  
 - .NET 5  

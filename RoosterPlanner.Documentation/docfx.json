@@ -54,7 +54,11 @@
       }
     ],
     "dest": "../docs/",
-    "globalMetadataFiles": [],
+    "globalMetadata": {
+      "_appLogoPath": "images/logo.png",
+      "_appFaviconPath": "images/favicon.png"
+      
+    },
     "fileMetadataFiles": [],
     "template": [
       "default",

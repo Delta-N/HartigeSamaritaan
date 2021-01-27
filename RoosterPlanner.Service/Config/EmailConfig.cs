@@ -13,6 +13,9 @@
         public int Port { get; set; }
         public string SMTPadres { get; set; }
 
-        public bool EnableSsl { get; set; }
+        public bool EnableSsl
+        {
+            get => true;
+        }
     }
 }
