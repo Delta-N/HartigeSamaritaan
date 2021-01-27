@@ -91,7 +91,6 @@
     <Content Include="ClientApp\.editorconfig" />
     <Content Include="ClientApp\.gitignore" />
     <Content Include="ClientApp\angular.json" />
-    <Content Include="ClientApp\package.json" />
     <Content Include="ClientApp\tsconfig.json" />
     <Content Include="ClientApp\tslint.json" />
   </ItemGroup>
