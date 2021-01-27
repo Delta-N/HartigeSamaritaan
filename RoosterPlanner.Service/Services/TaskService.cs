@@ -12,20 +12,129 @@ namespace RoosterPlanner.Service
 {
     public interface ITaskService
     {
+        /// <summary>
+        /// Makes a call to the repository layer and requests an task based on an id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<Task>> GetTaskAsync(Guid id);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all tasks based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskListResult<Task>> SearchTasksAsync(TaskFilter filter);
+
+        /// <summary>
+        /// Adds a task to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<Task>> CreateTaskAsync(Task task);
+
+        /// <summary>
+        /// Updates a task in the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<Task>> UpdateTaskAsync(Task task);
+        /// <summary>
+        /// Removes a task from the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
         Task<TaskResult<Task>> RemoveTaskAsync(Task task);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all categories.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskListResult<Category>> GetAllCategoriesAsync();
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a category based on an id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<Category>> GetCategoryAsync(Guid categoryId);
+
+        /// <summary>
+        /// Adds a category to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<Category>> CreateCategoryAsync(Category category);
+
+        /// <summary>
+        /// Updates a category to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<Category>> UpdateCategoryAsync(Category category);
+
+        /// <summary>
+        /// Removes a category from the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<Category>> RemoveCategoryAsync(Category category);
+
+        /// <summary>
+        /// Removes a projectTask from the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         Task<TaskResult<ProjectTask>> RemoveProjectTaskAsync(ProjectTask resultData);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a projectTask based on an id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<ProjectTask>> GetProjectTaskAsync(Guid id);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests a projectTask based on an projectId and a taskId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<ProjectTask>> GetProjectTaskAsync(Guid projectId, Guid taskId);
+
+        /// <summary>
+        /// Adds a projectTask to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<ProjectTask>> AddTaskToProjectAsync(ProjectTask projectTask);
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all projectTasks based on an projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskListResult<ProjectTask>> GetAllProjectTasksAsync(Guid projectId);
     }
 
@@ -56,6 +165,12 @@ namespace RoosterPlanner.Service
             this.documentService = documentService;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests an task based on an id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Task>> GetTaskAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -76,6 +191,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests all tasks based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Task>> SearchTasksAsync(TaskFilter filter)
         {
             if (filter == null)
@@ -95,7 +216,13 @@ namespace RoosterPlanner.Service
 
             return result;
         }
-
+        /// <summary>
+        /// Adds a task to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<Task>> CreateTaskAsync(Task task)
         {
             if (task == null)
@@ -116,7 +243,13 @@ namespace RoosterPlanner.Service
 
             return result;
         }
-
+        /// <summary>
+        /// Updates a task in the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<Task>> UpdateTaskAsync(Task task)
         {
             if (task == null)
@@ -147,6 +280,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Removes a task from the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Task>> RemoveTaskAsync(Task task)
         {
             if (task == null)
@@ -171,6 +310,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+
+        /// <summary>
+        /// Makes a call to the repository layer and requests all categories.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<Category>> GetAllCategoriesAsync()
         {
             TaskListResult<Category> result = TaskListResult<Category>.CreateDefault();
@@ -188,7 +334,12 @@ namespace RoosterPlanner.Service
 
             return result;
         }
-
+        /// <summary>
+        /// Makes a call to the repository layer and requests a category based on an id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Category>> GetCategoryAsync(Guid categoryId)
         {
             if (categoryId == Guid.Empty)
@@ -210,6 +361,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Adds a category to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<Category>> CreateCategoryAsync(Category category)
         {
             if (category == null)
@@ -232,6 +390,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Updates a category to the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<Category>> UpdateCategoryAsync(Category category)
         {
             if (category == null)
@@ -254,6 +419,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Removes a category from the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<Category>> RemoveCategoryAsync(Category category)
         {
             if (category == null)
@@ -275,6 +447,13 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Removes a projectTask from the database.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<TaskResult<ProjectTask>> RemoveProjectTaskAsync(ProjectTask projectTask)
         {
             if (projectTask == null)
@@ -296,6 +475,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a projectTask based on an id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<ProjectTask>> GetProjectTaskAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -317,6 +502,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a projectTask based on an projectId and a taskId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<ProjectTask>> GetProjectTaskAsync(Guid projectId, Guid taskId)
         {
             if (projectId == Guid.Empty)
@@ -339,6 +530,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Adds a projectTask to the database
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<ProjectTask>> AddTaskToProjectAsync(ProjectTask projectTask)
         {
             if (projectTask == null)
@@ -361,6 +558,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests all projectTasks based on an projectId.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskListResult<ProjectTask>> GetAllProjectTasksAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)

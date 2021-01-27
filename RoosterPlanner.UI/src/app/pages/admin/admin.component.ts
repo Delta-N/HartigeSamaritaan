@@ -59,7 +59,6 @@ export class AdminComponent implements OnInit {
 
   async getAdministrators(offset: number, pageSize: number) {
     await this.userService.getAdministrators(offset, pageSize).then(res => {
-      console.log(res)
       this.administrators = res;
       if (this.administrators.length >= 5) {
         this.adminExpandbtnDisabled = false;

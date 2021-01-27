@@ -1,33 +1,29 @@
-﻿using System.IO;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoosterPlanner.Data.Context;
 
 namespace RoosterPlanner.Data
 {
-    [TestClass]
-    public abstract class DatabaseContext
+    public abstract class RoosterPlannerContextTest : RoosterPlannerContext
     {
-        #region Fields
-        protected static ConnectionStringsConfig connectionStringsConfig;
-        #endregion
-
-        public static void Init(TestContext context)
+        protected RoosterPlannerContextTest(DbContextOptions<RoosterPlannerContext> options) : base(options)
         {
-            DirectoryInfo dir = new DirectoryInfo(context.DeploymentDirectory);
-            while (!dir.Name.EndsWith(".Test") && dir.Parent != null)
-            {
-                dir = dir.Parent;
-            }
-            connectionStringsConfig = TestHelper.GetConnectionStringConfiguration(dir.FullName);
+            
         }
 
-        public RoosterPlannerContext GetRoosterPlannerContext(ConnectionStringsConfig connectionStringsConfig)
+        public override int SaveChanges()
         {
-            DbContextOptionsBuilder<RoosterPlannerContext> dbContextOptions = new DbContextOptionsBuilder<RoosterPlannerContext>()
-                .UseSqlServer(connectionStringsConfig.RoosterPlannerDatabase)
-                .EnableDetailedErrors();
-            return new RoosterPlannerContext(dbContextOptions.Options);
+            var affectedRows = base.SaveChanges();
+            if (Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                ChangeTracker.Entries()
+                    .Where(e => e.Entity != null)
+                    .ToList()
+                    .ForEach(e => e.State = EntityState.Detached);
+            }
+
+            return affectedRows;
+            
         }
     }
 }

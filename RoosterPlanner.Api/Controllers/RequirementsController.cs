@@ -28,6 +28,11 @@ namespace RoosterPlanner.Api.Controllers
             this.requirementService = requirementService;
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for a requirement based on a Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<RequirementViewModel>> GetRequirementAsync(Guid id)
         {
@@ -51,6 +56,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to add a requirement to the database.
+        /// Only Boardmembers can add requirements.
+        /// </summary>
+        /// <param name="requirementViewModel"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPost]
         public async Task<ActionResult<RequirementViewModel>> SaveRequirementAsync(
@@ -65,8 +76,8 @@ namespace RoosterPlanner.Api.Controllers
             {
                 Requirement requirement = (await requirementService.GetRequirementAsync(requirementViewModel.Task.Id,
                     requirementViewModel.CertificateType.Id)).Data;
-                
-                if(requirement!=null)
+
+                if (requirement != null)
                     return BadRequest("Requirement already exists.");
 
                 requirement = RequirementViewModel.CreateRequirement(requirementViewModel);
@@ -95,6 +106,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to update a requirement.
+        /// only Boardmembers can update a requirement
+        /// </summary>
+        /// <param name="requirementViewModel"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpPut]
         public async Task<ActionResult<RequirementViewModel>> UpdateRequirementAsync(
@@ -113,7 +130,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (requirement != null)
                     return BadRequest("Requirement already exists.");
-                
+
                 Requirement oldRequirement =
                     (await requirementService.GetRequirementAsync(requirementViewModel.Id)).Data;
                 if (oldRequirement == null)
@@ -148,6 +165,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to delete a requirement.
+        /// Only a Boardmember can delete a requirement.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<RequirementViewModel>> DeleteRequirementAsync(Guid id)

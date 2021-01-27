@@ -8,6 +8,10 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface IDocumentRepository : IRepository<Document>
     {
+        /// <summary>
+        /// Get the privacy policy document.
+        /// </summary>
+        /// <returns>A task of the privacy policy document.</returns>
         Task<Document> GetPPAsync();
     }
 
@@ -18,6 +22,10 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
+        /// <summary>
+        /// Get the privacy policy document.
+        /// </summary>
+        /// <returns>A task of the privacy policy document.</returns>
         public Task<Document> GetPPAsync()
         {
             return EntitySet.AsNoTracking()

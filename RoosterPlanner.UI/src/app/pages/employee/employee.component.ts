@@ -45,7 +45,7 @@ export class EmployeeComponent implements OnInit {
               private breadcrumbService: BreadcrumbService,
               private csvService: CsvService
   ) {
-
+    this.breadcrumbService.backcrumb()
     this.displayedColumns = TextInjectorService.employeeTableColumnNames;
   }
 
@@ -53,12 +53,6 @@ export class EmployeeComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
-
-      let previous: Breadcrumb = new Breadcrumb(this.guid ? "Beheer" : "Admin", this.guid ? "/manage" : "/admin");
-      let current: Breadcrumb = new Breadcrumb("Medewerker overzicht", null);
-
-      let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current]
-      this.breadcrumbService.replace(breadcrumbs);
     });
 
     if (this.guid)

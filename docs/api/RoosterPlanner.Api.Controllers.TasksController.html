@@ -1,0 +1,885 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TasksController
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TasksController
+   ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterPlanner.Api.Controllers.TasksController">
+  
+  
+  <h1 id="RoosterPlanner_Api_Controllers_TasksController" data-uid="RoosterPlanner.Api.Controllers.TasksController" class="text-break">Class TasksController
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Microsoft.AspNetCore.Mvc.ControllerBase</span></div>
+    <div class="level2"><span class="xref">TasksController</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterPlanner.Api.Controllers.html">RoosterPlanner.Api.Controllers</a></h6>
+  <h6><strong>Assembly</strong>: RoosterPlanner.Api.dll</h6>
+  <h5 id="RoosterPlanner_Api_Controllers_TasksController_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize]
+[Route(&quot;api/[controller]&quot;)]
+[ApiController]
+public class TasksController : ControllerBase</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController__ctor_RoosterPlanner_Service_ITaskService_RoosterPlanner_Service_IProjectService_Microsoft_Extensions_Logging_ILogger_RoosterPlanner_Api_Controllers_TasksController__RoosterPlanner_Service_IDocumentService_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.%23ctor(RoosterPlanner.Service.ITaskService%2CRoosterPlanner.Service.IProjectService%2CMicrosoft.Extensions.Logging.ILogger%7BRoosterPlanner.Api.Controllers.TasksController%7D%2CRoosterPlanner.Service.IDocumentService)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L31">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController__ctor_" data-uid="RoosterPlanner.Api.Controllers.TasksController.#ctor*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController__ctor_RoosterPlanner_Service_ITaskService_RoosterPlanner_Service_IProjectService_Microsoft_Extensions_Logging_ILogger_RoosterPlanner_Api_Controllers_TasksController__RoosterPlanner_Service_IDocumentService_" data-uid="RoosterPlanner.Api.Controllers.TasksController.#ctor(RoosterPlanner.Service.ITaskService,RoosterPlanner.Service.IProjectService,Microsoft.Extensions.Logging.ILogger{RoosterPlanner.Api.Controllers.TasksController},RoosterPlanner.Service.IDocumentService)">TasksController(ITaskService, IProjectService, ILogger&lt;TasksController&gt;, IDocumentService)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TasksController(ITaskService taskService, IProjectService projectService, ILogger&lt;TasksController&gt; logger, IDocumentService documentService)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Service.ITaskService.html">ITaskService</a></td>
+        <td><span class="parametername">taskService</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Service.IProjectService.html">IProjectService</a></td>
+        <td><span class="parametername">projectService</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Logging.ILogger</span>&lt;<a class="xref" href="RoosterPlanner.Api.Controllers.TasksController.html">TasksController</a>&gt;</td>
+        <td><span class="parametername">logger</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Service.IDocumentService.html">IDocumentService</a></td>
+        <td><span class="parametername">documentService</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_AddTaskToProjectAsync_RoosterPlanner_Api_Models_ProjectTaskViewModel_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.AddTaskToProjectAsync(RoosterPlanner.Api.Models.ProjectTaskViewModel)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L482">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_AddTaskToProjectAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.AddTaskToProjectAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_AddTaskToProjectAsync_RoosterPlanner_Api_Models_ProjectTaskViewModel_" data-uid="RoosterPlanner.Api.Controllers.TasksController.AddTaskToProjectAsync(RoosterPlanner.Api.Models.ProjectTaskViewModel)">AddTaskToProjectAsync(ProjectTaskViewModel)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to add a task to a project (create projecttask).
+Only Boardmembers or Committeemembers can create projecttask.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&amp;Committeemember&quot;)]
+[HttpPost(&quot;AddTaskToProject&quot;)]
+public Task&lt;ActionResult&lt;TaskViewModel&gt;&gt; AddTaskToProjectAsync(ProjectTaskViewModel projectTaskViewModel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Api.Models.ProjectTaskViewModel.html">ProjectTaskViewModel</a></td>
+        <td><span class="parametername">projectTaskViewModel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_GetAllCategoriesAsync.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.GetAllCategoriesAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L244">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_GetAllCategoriesAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetAllCategoriesAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_GetAllCategoriesAsync" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetAllCategoriesAsync">GetAllCategoriesAsync()</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer for all categories.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpGet(&quot;GetAllCategories&quot;)]
+public Task&lt;ActionResult&lt;List&lt;CategoryViewModel&gt;&gt;&gt; GetAllCategoriesAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.CategoryViewModel.html">CategoryViewModel</a>&gt;&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_GetAllProjectTasksAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.GetAllProjectTasksAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L447">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_GetAllProjectTasksAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetAllProjectTasksAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_GetAllProjectTasksAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetAllProjectTasksAsync(System.Guid)">GetAllProjectTasksAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer for all projectasks based on a projectId.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpGet(&quot;GetAllProjectTasks/{projectId}&quot;)]
+public Task&lt;ActionResult&lt;List&lt;TaskViewModel&gt;&gt;&gt; GetAllProjectTasksAsync(Guid projectId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a>&gt;&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_GetCategoryAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.GetCategoryAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L276">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_GetCategoryAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetCategoryAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_GetCategoryAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetCategoryAsync(System.Guid)">GetCategoryAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer for a specific category based on a id.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpGet(&quot;GetCategory/{categoryId}&quot;)]
+public Task&lt;ActionResult&lt;CategoryViewModel&gt;&gt; GetCategoryAsync(Guid categoryId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">categoryId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.CategoryViewModel.html">CategoryViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_GetProjectTaskAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.GetProjectTaskAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L419">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_GetProjectTaskAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetProjectTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_GetProjectTaskAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetProjectTaskAsync(System.Guid)">GetProjectTaskAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to get a specific projectTask based on a id.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpGet(&quot;GetProjectTask/{id}&quot;)]
+public Task&lt;ActionResult&lt;ProjectTaskViewModel&gt;&gt; GetProjectTaskAsync(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.ProjectTaskViewModel.html">ProjectTaskViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_GetTaskAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.GetTaskAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L45">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_GetTaskAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_GetTaskAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.TasksController.GetTaskAsync(System.Guid)">GetTaskAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer for a task based on a Id.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpGet(&quot;{id}&quot;)]
+public Task&lt;ActionResult&lt;TaskViewModel&gt;&gt; GetTaskAsync(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_RemoveCategoryAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.RemoveCategoryAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L389">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_RemoveCategoryAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.RemoveCategoryAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_RemoveCategoryAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.TasksController.RemoveCategoryAsync(System.Guid)">RemoveCategoryAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to delete a category.
+Only Boardmembers can delete categories.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpDelete(&quot;DeleteCategory/{id}&quot;)]
+public Task&lt;ActionResult&lt;CategoryViewModel&gt;&gt; RemoveCategoryAsync(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.CategoryViewModel.html">CategoryViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_RemoveTaskAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.RemoveTaskAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L215">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_RemoveTaskAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.RemoveTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_RemoveTaskAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.TasksController.RemoveTaskAsync(System.Guid)">RemoveTaskAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to remove a task.
+Only Boardmembers can delete a task.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpDelete(&quot;{id}&quot;)]
+public Task&lt;ActionResult&lt;TaskViewModel&gt;&gt; RemoveTaskAsync(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_RemoveTaskFromProjectAsync_System_Guid_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.RemoveTaskFromProjectAsync(System.Guid%2CSystem.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L529">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_RemoveTaskFromProjectAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.RemoveTaskFromProjectAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_RemoveTaskFromProjectAsync_System_Guid_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.TasksController.RemoveTaskFromProjectAsync(System.Guid,System.Guid)">RemoveTaskFromProjectAsync(Guid, Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to delete a project.
+Only Boardmembers and Committeemembers can delete projecttasks.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&amp;Committeemember&quot;)]
+[HttpDelete(&quot;RemoveTaskFromProject/{projectId}/{taskId}&quot;)]
+public Task&lt;ActionResult&lt;TaskViewModel&gt;&gt; RemoveTaskFromProjectAsync(Guid projectId, Guid taskId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">taskId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_SaveCategoryAsync_RoosterPlanner_Api_Models_CategoryViewModel_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.SaveCategoryAsync(RoosterPlanner.Api.Models.CategoryViewModel)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L305">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_SaveCategoryAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.SaveCategoryAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_SaveCategoryAsync_RoosterPlanner_Api_Models_CategoryViewModel_" data-uid="RoosterPlanner.Api.Controllers.TasksController.SaveCategoryAsync(RoosterPlanner.Api.Models.CategoryViewModel)">SaveCategoryAsync(CategoryViewModel)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to save a category.
+Only Boardmembers can save categories.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpPost(&quot;SaveCategory&quot;)]
+public Task&lt;ActionResult&lt;CategoryViewModel&gt;&gt; SaveCategoryAsync(CategoryViewModel categoryViewModel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Api.Models.CategoryViewModel.html">CategoryViewModel</a></td>
+        <td><span class="parametername">categoryViewModel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.CategoryViewModel.html">CategoryViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_SaveTaskAsync_RoosterPlanner_Api_Models_TaskViewModel_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.SaveTaskAsync(RoosterPlanner.Api.Models.TaskViewModel)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L107">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_SaveTaskAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.SaveTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_SaveTaskAsync_RoosterPlanner_Api_Models_TaskViewModel_" data-uid="RoosterPlanner.Api.Controllers.TasksController.SaveTaskAsync(RoosterPlanner.Api.Models.TaskViewModel)">SaveTaskAsync(TaskViewModel)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to save a task.
+Only Boardmembers can save tasks.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpPost]
+public Task&lt;ActionResult&lt;TaskViewModel&gt;&gt; SaveTaskAsync(TaskViewModel taskViewModel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a></td>
+        <td><span class="parametername">taskViewModel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_SearchTasksAsync_System_String_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.SearchTasksAsync(System.String%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L74">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_SearchTasksAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.SearchTasksAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_SearchTasksAsync_System_String_System_Int32_System_Int32_" data-uid="RoosterPlanner.Api.Controllers.TasksController.SearchTasksAsync(System.String,System.Int32,System.Int32)">SearchTasksAsync(String, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer for tasks based on attributes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpGet]
+public Task&lt;ActionResult&lt;List&lt;TaskViewModel&gt;&gt;&gt; SearchTasksAsync(string name, int offset = 0, int pageSize = 20)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">pageSize</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a>&gt;&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_UpdateCategoryAsync_RoosterPlanner_Api_Models_CategoryViewModel_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.UpdateCategoryAsync(RoosterPlanner.Api.Models.CategoryViewModel)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L347">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_UpdateCategoryAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.UpdateCategoryAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_UpdateCategoryAsync_RoosterPlanner_Api_Models_CategoryViewModel_" data-uid="RoosterPlanner.Api.Controllers.TasksController.UpdateCategoryAsync(RoosterPlanner.Api.Models.CategoryViewModel)">UpdateCategoryAsync(CategoryViewModel)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to update a category.
+Only Boardmembers can update categories.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpPut(&quot;UpdateCategory&quot;)]
+public Task&lt;ActionResult&lt;CategoryViewModel&gt;&gt; UpdateCategoryAsync(CategoryViewModel categoryViewModel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Api.Models.CategoryViewModel.html">CategoryViewModel</a></td>
+        <td><span class="parametername">categoryViewModel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.CategoryViewModel.html">CategoryViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController_UpdateTaskAsync_RoosterPlanner_Api_Models_TaskViewModel_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController.UpdateTaskAsync(RoosterPlanner.Api.Models.TaskViewModel)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L154">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_TasksController_UpdateTaskAsync_" data-uid="RoosterPlanner.Api.Controllers.TasksController.UpdateTaskAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_TasksController_UpdateTaskAsync_RoosterPlanner_Api_Models_TaskViewModel_" data-uid="RoosterPlanner.Api.Controllers.TasksController.UpdateTaskAsync(RoosterPlanner.Api.Models.TaskViewModel)">UpdateTaskAsync(TaskViewModel)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to update a task.
+Only Boardmembers can update tasks.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpPut]
+public Task&lt;ActionResult&lt;TaskViewModel&gt;&gt; UpdateTaskAsync(TaskViewModel taskViewModel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a></td>
+        <td><span class="parametername">taskViewModel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.TaskViewModel.html">TaskViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_TasksController.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.TasksController%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/TasksController.cs/#L20" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

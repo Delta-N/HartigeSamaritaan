@@ -82,10 +82,10 @@
   margin-left: 15px;
 }
 
-#title {
-  flex-direction: row;
-  height: initial;
-  display: flex;
+.title {
+  flex-direction: row !important;
+  height: initial !important;
+  display: flex !important;
 }
 
 .star {

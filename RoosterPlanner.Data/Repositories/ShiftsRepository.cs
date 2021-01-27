@@ -13,16 +13,72 @@ using Task = System.Threading.Tasks.Task;
 namespace RoosterPlanner.Data.Repositories
 {
     public interface IShiftRepository : IRepository<Shift>
-    {
+    {   /// <summary>
+        /// Add multiple shifts to the database
+        /// </summary>
+        /// <param name="shifts"></param>
+        /// <returns>A task of a list of shifts added to the database</returns>
         Task<List<Shift>> AddShiftsAsync(List<Shift> shifts);
+        /// <summary>
+        /// Get a shift based on shiftId
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns>A task of a shift </returns>
         Task<Shift> GetShiftAsync(Guid shiftId);
+        /// <summary>
+        /// Get a shift based on a shiftId including Availabilities
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns>A task of a shift including availabilities</returns>
         Task<Shift> GetShiftWithAvailabilitiesAsync(Guid shiftId);
+        /// <summary>
+        /// Get shifts based on a projectId and a Date including Availabilities
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="date"></param>
+        /// <returns>A task of a list of shifts including availabilities</returns>
         Task<List<Shift>> GetByProjectAndDateWithAvailabilitiesAsync(Guid projectId, DateTime date);
+        /// <summary>
+        /// Get shifts based on a projectId, userId and a Date including Availabilities
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <param name="date"></param>
+        /// <returns>A task of a list of shifts including availabilities</returns>
         Task<List<Shift>> GetByProjectUserAndDateAsync(Guid projectId, Guid userId, DateTime date);
+
+        /// <summary>
+        /// Get shifts based on a projectId including Availabilities
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>A task of a list of shifts including availabilities</returns>
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId);
+
+        /// <summary>
+        /// Get shifts based on a projectId and a userId including Availabilities
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <returns>A task of a list of shifts including availabilities</returns>
         Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId, Guid userId);
+
+        /// <summary>
+        /// Search for shifts based on a filter.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>A task of a list of shifts</returns>
         Task<List<Shift>> SearchProjectsAsync(ShiftFilter filter);
+        /// <summary>
+        /// Get a DTO with distinct Tasks, Dates, Starttimes, Endtimes and number of participantsrequired, based on a projectId
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>DTO with distinct attributes</returns>
         Task<ShiftData> GetUniqueDataAsync(Guid projectId);
+        /// <summary>
+        /// Exports data nessesary for statistical analysis
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>a task of a list of shifts with relating data</returns>
         Task<List<Shift>> ExportDataAsync(Guid projectId);
     }
 
@@ -32,7 +88,12 @@ namespace RoosterPlanner.Data.Repositories
         public ShiftRepository(DbContext dataContext) : base(dataContext)
         {
         }
-        
+
+        /// <summary>
+        /// Get shifts based on a projectId including Availabilities
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>A task of a list of shifts including availabilities</returns>
         public async Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -61,9 +122,15 @@ namespace RoosterPlanner.Data.Repositories
             return shifts;
         }
 
+        /// <summary>
+        /// Get shifts based on a projectId and a userId including Availabilities
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <returns>A task of a list of shifts including availabilities</returns>
         public async Task<List<Shift>> GetByProjectWithAvailabilitiesAsync(Guid projectId, Guid userId)
         {
-            if (projectId == Guid.Empty)
+            if (projectId == Guid.Empty || userId==Guid.Empty)
                 return await Task.FromResult<List<Shift>>(null);
             List<Shift> shifts = await EntitySet
                 .AsNoTracking()
@@ -114,6 +181,11 @@ namespace RoosterPlanner.Data.Repositories
             return shifts;
         }
 
+        /// <summary>
+        /// Get a DTO with distinct Tasks, Dates, Starttimes, Endtimes and number of participantsrequired, based on a projectId
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>DTO with distinct attributes</returns>
         public async Task<ShiftData> GetUniqueDataAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -132,6 +204,11 @@ namespace RoosterPlanner.Data.Repositories
             return data;
         }
 
+        /// <summary>
+        /// Exports data nessesary for statistical analysis
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>a task of a list of shifts with relating data</returns>
         public async Task<List<Shift>> ExportDataAsync(Guid projectId)
         {
             if (projectId == Guid.Empty)
@@ -160,6 +237,11 @@ namespace RoosterPlanner.Data.Repositories
             return shifts;
         }
 
+        /// <summary>
+        /// Search for shifts based on a filter.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>A task of a list of shifts</returns>
         public Task<List<Shift>> SearchProjectsAsync(ShiftFilter filter)
         {
             if (filter == null)
@@ -187,6 +269,11 @@ namespace RoosterPlanner.Data.Repositories
             return shifts;
         }
 
+        /// <summary>
+        /// Add multiple shifts to the database
+        /// </summary>
+        /// <param name="shifts"></param>
+        /// <returns>A task of a list of shifts added to the database</returns>
         public Task<List<Shift>> AddShiftsAsync(List<Shift> shifts)
         {
             if (shifts == null || shifts.Count == 0)
@@ -204,7 +291,11 @@ namespace RoosterPlanner.Data.Repositories
 
             return Task.FromResult(shifts);
         }
-
+        /// <summary>
+        /// Get a shift based on shiftId
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns>A task of a shift </returns>
         public Task<Shift> GetShiftAsync(Guid shiftId)
         {
             if (shiftId == Guid.Empty)
@@ -218,6 +309,11 @@ namespace RoosterPlanner.Data.Repositories
                 .Where(s => s.Id == shiftId).FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Get a shift based on a shiftId including Availabilities
+        /// </summary>
+        /// <param name="shiftId"></param>
+        /// <returns>A task of a shift including availabilities</returns>
         public async Task<Shift> GetShiftWithAvailabilitiesAsync(Guid shiftId)
         {
             if (shiftId == Guid.Empty)
@@ -245,6 +341,12 @@ namespace RoosterPlanner.Data.Repositories
             return shift;
         }
 
+        /// <summary>
+        /// Get shifts based on a projectId and a Date including Availabilities
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="date"></param>
+        /// <returns>A task of a list of shifts including availabilities</returns>
         public async Task<List<Shift>> GetByProjectAndDateWithAvailabilitiesAsync(Guid projectId, DateTime date)
         {
             if (projectId == Guid.Empty)
@@ -265,6 +367,13 @@ namespace RoosterPlanner.Data.Repositories
             return listOfShifts;
         }
 
+        /// <summary>
+        /// Get shifts based on a projectId, userId and a Date including Availabilities
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userId"></param>
+        /// <param name="date"></param>
+        /// <returns>A task of a list of shifts including availabilities</returns>
         public async Task<List<Shift>> GetByProjectUserAndDateAsync(Guid projectId, Guid userId, DateTime date)
         {
             if (projectId == Guid.Empty || userId == Guid.Empty)

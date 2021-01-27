@@ -11,6 +11,10 @@ namespace RoosterPlanner.Data.Context.Seed
         {
         }
 
+        /// <summary>
+        /// If the modelbuilder doesn't have any data of this enity, seed the data.
+        /// </summary>
+        /// <returns>A list with seeddata of this entity.</returns>
         public override List<Document> Seed()
         {
             List<Document> documents = new List<Document>

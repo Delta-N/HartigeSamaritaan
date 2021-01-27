@@ -10,29 +10,103 @@ namespace RoosterPlanner.Api.Models
 {
     public class PersonViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the FirstName
+        /// </summary>
         public string FirstName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LastName 
+        /// </summary>
         public string LastName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Email 
+        /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets the StreetAddress 
+        /// </summary>
         public string StreetAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PostalCode 
+        /// </summary>
         public string PostalCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the City 
+        /// </summary>
         public string City { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DateOfBirth 
+        /// </summary>
         public string DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PhoneNumber 
+        /// </summary>
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UserRole 
+        /// </summary>
         public string UserRole { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Nationality 
+        /// </summary>
         public string Nationality { get; set; }
 
+        /// <summary>
+        /// Gets or sets the NativeLanguage
+        /// </summary>
+
         public string NativeLanguage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DutchProficiency
+        /// </summary>
         public string DutchProficiency { get; set; }
 
+        /// <summary>
+        /// Gets or sets the PersonalRemark 
+        /// </summary>
         public string PersonalRemark { get; set; }
 
+        /// <summary>
+        /// Gets or sets the ProfilePicture 
+        /// </summary>
         public DocumentViewModel ProfilePicture { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PushDisabled
+        /// </summary>
         public bool PushDisabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the StaffRemark 
+        /// </summary>
         public string StaffRemark { get; set; }
+
+        /// <summary>
+        /// Gets or sets the TermsofUserConsented
+        /// </summary>
         public string TermsOfUseConsented { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Certificates 
+        /// </summary>
         public List<CertificateViewModel> Certificates { get; set; } = new();
 
+        /// <summary>
+        /// Creates a ViewModel from a User
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="extension"></param>
+        /// <returns></returns>
         public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
         {
             PersonViewModel personViewModel = new PersonViewModel
@@ -83,21 +157,26 @@ namespace RoosterPlanner.Api.Models
                 personViewModel.DutchProficiency = user
                     .AdditionalData[extension.DutchProficiencyExtention]
                     .ToString();
-            
+
             if (user.AdditionalData.ContainsKey(extension.TermsOfUseConsentedExtention))
                 personViewModel.TermsOfUseConsented = user
                     .AdditionalData[extension.TermsOfUseConsentedExtention]
                     .ToString();
-            
-            
+
             return personViewModel;
         }
 
+        /// <summary>
+        /// Creates a Microsoft.Graph.User from a ViewModel.
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <param name="extension"></param>
+        /// <returns></returns>
         public static User CreateUser(PersonViewModel vm, Extensions extension)
         {
-            if (vm == null || extension == null) 
+            if (vm == null || extension == null)
                 return null;
-            
+
             User user = new User
             {
                 Id = vm.Id.ToString(),
@@ -116,12 +195,15 @@ namespace RoosterPlanner.Api.Models
                     {extension.DutchProficiencyExtention, vm.DutchProficiency},
                     {extension.TermsOfUseConsentedExtention, vm.TermsOfUseConsented}
                 }
-                
             };
             return user;
-
         }
 
+        /// <summary>
+        /// Creates a Person from a PersonViewModel.
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         public static Person CreatePerson(PersonViewModel vm)
         {
             if (vm == null) return null;
@@ -153,6 +235,11 @@ namespace RoosterPlanner.Api.Models
             return person;
         }
 
+        /// <summary>
+        /// Creates a ViewModel from a Person.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         public static PersonViewModel CreateVmFromPerson(Person person)
         {
             if (person == null) return null;
@@ -183,6 +270,13 @@ namespace RoosterPlanner.Api.Models
             return vm;
         }
 
+        /// <summary>
+        /// Creates a ViewModel from a User and a Person.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="person"></param>
+        /// <param name="extension"></param>
+        /// <returns></returns>
         public static PersonViewModel CreateVmFromUserAndPerson(User user, Person person, Extensions extension)
         {
             if (user == null || person == null)
@@ -203,7 +297,6 @@ namespace RoosterPlanner.Api.Models
             if (person.Certificates == null) return vmFromUser;
             foreach (Certificate certificate in person.Certificates)
                 vmFromUser.Certificates.Add(CertificateViewModel.CreateVm(certificate));
-
 
             return vmFromUser;
         }

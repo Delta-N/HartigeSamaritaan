@@ -2,11 +2,23 @@
 
 namespace RoosterPlanner.Api.Models
 {
-    public class CategoryViewModel :EntityViewModel
+    public class CategoryViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the Code
+        /// </summary>
         public string Code { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Name
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Creates a ViewModel from a Category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         public static CategoryViewModel CreateVm(Category category)
         {
             if (category != null)
@@ -19,13 +31,17 @@ namespace RoosterPlanner.Api.Models
                     LastEditDate = category.LastEditDate,
                     LastEditBy = category.LastEditBy,
                     RowVersion = category.RowVersion
-                    
                 };
             }
 
             return null;
         }
 
+        /// <summary>
+        /// Creates a Category from a ViewModel
+        /// </summary>
+        /// <param name="categoryViewModel"></param>
+        /// <returns></returns>
         public static Category CreateCategory(CategoryViewModel categoryViewModel)
         {
             if (categoryViewModel != null)

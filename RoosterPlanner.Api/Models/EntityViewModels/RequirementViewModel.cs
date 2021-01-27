@@ -4,9 +4,21 @@ namespace RoosterPlanner.Api.Models
 {
     public class RequirementViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the CertificateType
+        /// </summary>
         public CertificateTypeViewModel CertificateType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Task. 
+        /// </summary>
         public TaskViewModel Task { get; set; }
 
+        /// <summary>
+        /// Creates a ViewModel from a Requirement.
+        /// </summary>
+        /// <param name="requirement"></param>
+        /// <returns></returns>
         public static RequirementViewModel CreateVm(Requirement requirement)
         {
             if (requirement == null)
@@ -27,6 +39,11 @@ namespace RoosterPlanner.Api.Models
             return vm;
         }
 
+        /// <summary>
+        /// Creates a requirement from a ViewModel.
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         public static Requirement CreateRequirement(RequirementViewModel vm)
         {
             if (vm == null)
@@ -42,7 +59,6 @@ namespace RoosterPlanner.Api.Models
             {
                 requirement.CertificateType = CertificateTypeViewModel.CreateCertificateType(vm.CertificateType);
                 requirement.CertificateTypeId = requirement.CertificateType.Id;
-                
             }
 
             if (vm.Task != null)

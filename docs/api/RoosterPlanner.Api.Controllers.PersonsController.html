@@ -1,0 +1,792 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PersonsController
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PersonsController
+   ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterPlanner.Api.Controllers.PersonsController">
+  
+  
+  <h1 id="RoosterPlanner_Api_Controllers_PersonsController" data-uid="RoosterPlanner.Api.Controllers.PersonsController" class="text-break">Class PersonsController
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Microsoft.AspNetCore.Mvc.ControllerBase</span></div>
+    <div class="level2"><span class="xref">PersonsController</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterPlanner.Api.Controllers.html">RoosterPlanner.Api.Controllers</a></h6>
+  <h6><strong>Assembly</strong>: RoosterPlanner.Api.dll</h6>
+  <h5 id="RoosterPlanner_Api_Controllers_PersonsController_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize]
+[Route(&quot;api/[controller]&quot;)]
+[ApiController]
+public class PersonsController : ControllerBase</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController__ctor_RoosterPlanner_Service_IPersonService_Microsoft_Extensions_Logging_ILogger_RoosterPlanner_Api_Controllers_PersonsController__RoosterPlanner_Service_IProjectService_RoosterPlanner_Service_IParticipationService_System_String_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.%23ctor(RoosterPlanner.Service.IPersonService%2CMicrosoft.Extensions.Logging.ILogger%7BRoosterPlanner.Api.Controllers.PersonsController%7D%2CRoosterPlanner.Service.IProjectService%2CRoosterPlanner.Service.IParticipationService%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L35">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController__ctor_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.#ctor*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController__ctor_RoosterPlanner_Service_IPersonService_Microsoft_Extensions_Logging_ILogger_RoosterPlanner_Api_Controllers_PersonsController__RoosterPlanner_Service_IProjectService_RoosterPlanner_Service_IParticipationService_System_String_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.#ctor(RoosterPlanner.Service.IPersonService,Microsoft.Extensions.Logging.ILogger{RoosterPlanner.Api.Controllers.PersonsController},RoosterPlanner.Service.IProjectService,RoosterPlanner.Service.IParticipationService,System.String)">PersonsController(IPersonService, ILogger&lt;PersonsController&gt;, IProjectService, IParticipationService, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PersonsController(IPersonService personService, ILogger&lt;PersonsController&gt; logger, IProjectService projectService, IParticipationService participationService, string b2CExtentionApplicationId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Service.IPersonService.html">IPersonService</a></td>
+        <td><span class="parametername">personService</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Logging.ILogger</span>&lt;<a class="xref" href="RoosterPlanner.Api.Controllers.PersonsController.html">PersonsController</a>&gt;</td>
+        <td><span class="parametername">logger</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Service.IProjectService.html">IProjectService</a></td>
+        <td><span class="parametername">projectService</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Service.IParticipationService.html">IParticipationService</a></td>
+        <td><span class="parametername">participationService</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">b2CExtentionApplicationId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_GetParticipants_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.GetParticipants(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L170">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_GetParticipants_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetParticipants*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_GetParticipants_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetParticipants(System.Guid)">GetParticipants(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer for all people involved in a project.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&amp;Committeemember&quot;)]
+[HttpGet(&quot;participants/{projectId}&quot;)]
+public Task&lt;ActionResult&lt;List&lt;PersonViewModel&gt;&gt;&gt; GetParticipants(Guid projectId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a>&gt;&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_GetPersonAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.GetPersonAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L56">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_GetPersonAsync_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetPersonAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_GetPersonAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetPersonAsync(System.Guid)">GetPersonAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer for a person based on a Id.
+Also makes a request toward the B2C service for a user.
+If the requesting party is not the person being requested, checks proper credentials (Boardmember or Committeemember)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpGet(&quot;{id}&quot;)]
+public Task&lt;ActionResult&lt;PersonViewModel&gt;&gt; GetPersonAsync(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_GetPersonAsync_System_String_System_String_System_String_System_String_System_String_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.GetPersonAsync(System.String%2CSystem.String%2CSystem.String%2CSystem.String%2CSystem.String%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L118">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_GetPersonAsync_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetPersonAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_GetPersonAsync_System_String_System_String_System_String_System_String_System_String_System_Int32_System_Int32_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetPersonAsync(System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32)">GetPersonAsync(String, String, String, String, String, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Get persons based on properties.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpGet]
+public Task&lt;ActionResult&lt;PersonViewModel&gt;&gt; GetPersonAsync(string email, string firstName, string lastName, string userRole, string city, int offset = 0, int pageSize = 20)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">email</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">firstName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">lastName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">userRole</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">city</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">pageSize</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_GetProjectManagersAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.GetProjectManagersAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L353">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_GetProjectManagersAsync_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetProjectManagersAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_GetProjectManagersAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetProjectManagersAsync(System.Guid)">GetProjectManagersAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to get a all managers based on a projectId.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpGet(&quot;managers/{projectId}&quot;)]
+public Task&lt;ActionResult&lt;List&lt;ManagerViewModel&gt;&gt;&gt; GetProjectManagersAsync(Guid projectId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.ManagerViewModel.html">ManagerViewModel</a>&gt;&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_GetProjectsManagedByAsync_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.GetProjectsManagedByAsync(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L398">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_GetProjectsManagedByAsync_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetProjectsManagedByAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_GetProjectsManagedByAsync_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.GetProjectsManagedByAsync(System.Guid)">GetProjectsManagedByAsync(Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer for all manager-entities (DTO for person and project).
+Only a Boardmember or Committeemember can make this request.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&amp;Committeemember&quot;)]
+[HttpGet(&quot;projectsmanagedby/{userId}&quot;)]
+public Task&lt;ActionResult&lt;List&lt;ManagerViewModel&gt;&gt;&gt; GetProjectsManagedByAsync(Guid userId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.ManagerViewModel.html">ManagerViewModel</a>&gt;&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_MakeManagerAsync_System_Guid_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.MakeManagerAsync(System.Guid%2CSystem.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L429">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_MakeManagerAsync_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.MakeManagerAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_MakeManagerAsync_System_Guid_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.MakeManagerAsync(System.Guid,System.Guid)">MakeManagerAsync(Guid, Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to add a manager entity in the database.
+Only Boardmembers can add manager entities.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpPost(&quot;makemanager/{projectId}/{userId}&quot;)]
+public Task&lt;ActionResult&lt;PersonViewModel&gt;&gt; MakeManagerAsync(Guid projectId, Guid userId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_ModAdminAsync_System_Guid_System_Int32_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.ModAdminAsync(System.Guid%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L302">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_ModAdminAsync_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.ModAdminAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_ModAdminAsync_System_Guid_System_Int32_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.ModAdminAsync(System.Guid,System.Int32)">ModAdminAsync(Guid, Int32)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to modify the persons role.
+Only administrators are allow to modify a persons role.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpPut(&quot;modifyadmin/{oid}/{modifier}&quot;)]
+public Task&lt;ActionResult&lt;PersonViewModel&gt;&gt; ModAdminAsync(Guid oid, int modifier)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">oid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">modifier</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_RemoveManagerAsync_System_Guid_System_Guid_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.RemoveManagerAsync(System.Guid%2CSystem.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L488">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_RemoveManagerAsync_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.RemoveManagerAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_RemoveManagerAsync_System_Guid_System_Guid_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.RemoveManagerAsync(System.Guid,System.Guid)">RemoveManagerAsync(Guid, Guid)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to remove a manager entity from the database.
+Only Boardmembers can make this request.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Authorize(Policy = &quot;Boardmember&quot;)]
+[HttpDelete(&quot;removemanager/{projectId}/{userId}&quot;)]
+public Task&lt;ActionResult&lt;PersonViewModel&gt;&gt; RemoveManagerAsync(Guid projectId, Guid userId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">projectId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_UpdatePerson_RoosterPlanner_Api_Models_PersonViewModel_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.UpdatePerson(RoosterPlanner.Api.Models.PersonViewModel)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L247">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_UpdatePerson_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.UpdatePerson*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_UpdatePerson_RoosterPlanner_Api_Models_PersonViewModel_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.UpdatePerson(RoosterPlanner.Api.Models.PersonViewModel)">UpdatePerson(PersonViewModel)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to update a personsprofile in the (local) database.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpPut(&quot;UpdatePerson&quot;)]
+public Task&lt;ActionResult&lt;PersonViewModel&gt;&gt; UpdatePerson(PersonViewModel personViewModel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a></td>
+        <td><span class="parametername">personViewModel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_UpdateUserAsync_RoosterPlanner_Api_Models_PersonViewModel_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.UpdateUserAsync(RoosterPlanner.Api.Models.PersonViewModel)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L209">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_UpdateUserAsync_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.UpdateUserAsync*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_UpdateUserAsync_RoosterPlanner_Api_Models_PersonViewModel_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.UpdateUserAsync(RoosterPlanner.Api.Models.PersonViewModel)">UpdateUserAsync(PersonViewModel)</h4>
+  <div class="markdown level1 summary"><p>Makes a request towards the services layer to update a person in Azure B2C.
+Only the owner of a profile, Boardmember or Committeemember can update a profile.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[HttpPut]
+public Task&lt;ActionResult&lt;PersonViewModel&gt;&gt; UpdateUserAsync([FromBody] PersonViewModel personViewModel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a></td>
+        <td><span class="parametername">personViewModel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Mvc.ActionResult</span>&lt;<a class="xref" href="RoosterPlanner.Api.Models.PersonViewModel.html">PersonViewModel</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController_UserHasRole_RoosterPlanner_Models_Models_Enums_UserRole_System_Security_Claims_ClaimsIdentity_.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController.UserHasRole(RoosterPlanner.Models.Models.Enums.UserRole%2CSystem.Security.Claims.ClaimsIdentity)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L540">View Source</a>
+  </span>
+  <a id="RoosterPlanner_Api_Controllers_PersonsController_UserHasRole_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.UserHasRole*"></a>
+  <h4 id="RoosterPlanner_Api_Controllers_PersonsController_UserHasRole_RoosterPlanner_Models_Models_Enums_UserRole_System_Security_Claims_ClaimsIdentity_" data-uid="RoosterPlanner.Api.Controllers.PersonsController.UserHasRole(RoosterPlanner.Models.Models.Enums.UserRole,System.Security.Claims.ClaimsIdentity)">UserHasRole(UserRole, ClaimsIdentity)</h4>
+  <div class="markdown level1 summary"><p>Check role a user has based on a the claimsidentity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool UserHasRole(UserRole userRole, ClaimsIdentity identity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterPlanner.Models.Models.Enums.UserRole.html">UserRole</a></td>
+        <td><span class="parametername">userRole</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Security.Claims.ClaimsIdentity</span></td>
+        <td><span class="parametername">identity</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/new/Refactor/apiSpec/new?filename=RoosterPlanner_Api_Controllers_PersonsController.md&amp;value=---%0Auid%3A%20RoosterPlanner.Api.Controllers.PersonsController%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Delta-N/HartigeSamaritaan/blob/Refactor/RoosterPlanner.Api/Controllers/PersonsController.cs/#L23" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

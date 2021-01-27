@@ -11,12 +11,36 @@ namespace RoosterPlanner.Service
 {
     public interface IProjectService
     {
+        /// <summary>
+        /// Makes a call to the repository layer and requests projects based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         Task<TaskListResult<Project>> SearchProjectsAsync(ProjectFilter filter);
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a project based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TaskResult<Project>> GetProjectDetailsAsync(Guid id);
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a addition of a project.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         Task<TaskResult<Project>> CreateProjectAsync(Project project);
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a addition of a project.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         Task<TaskResult<Project>> UpdateProjectAsync(Project project);
     }
 
@@ -39,7 +63,8 @@ namespace RoosterPlanner.Service
         }
 
         /// <summary>
-        /// Search for projects 
+        /// Makes a call to the repository layer and requests projects based on a filter.
+        /// Wraps the result of this request in a TaskResult wrapper.
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
@@ -65,6 +90,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a project based on a id.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Project>> GetProjectDetailsAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -87,6 +118,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a addition of a project.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Project>> CreateProjectAsync(Project project)
         {
             if (project == null)
@@ -109,6 +146,12 @@ namespace RoosterPlanner.Service
             return result;
         }
 
+        /// <summary>
+        /// Makes a call to the repository layer and requests a update of a project.
+        /// Wraps the result of this request in a TaskResult wrapper.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         public async Task<TaskResult<Project>> UpdateProjectAsync(Project project)
         {
             if (project == null || project.Id == Guid.Empty)

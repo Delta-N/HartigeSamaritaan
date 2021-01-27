@@ -9,6 +9,11 @@ namespace RoosterPlanner.Data.Repositories
 {
     public interface ICertificateRepository : IRepository<Certificate>
     {
+        /// <summary>
+        /// Get a certificated based on a Id including certificateType and person.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A task of a certificate.</returns>
         Task<Certificate> GetCertificateAsync(Guid id);
     }
 
@@ -18,6 +23,11 @@ namespace RoosterPlanner.Data.Repositories
         {
         }
 
+        /// <summary>
+        /// Get a certificated based on a Id including certificateType and person.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A task of a certificate.</returns>
         public Task<Certificate> GetCertificateAsync(Guid id)
         {
             if (id == Guid.Empty)

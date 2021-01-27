@@ -6,18 +6,69 @@ namespace RoosterPlanner.Api.Models
 {
     public class ProjectDetailsViewModel : EntityViewModel
     {
+        /// <summary>
+        /// Gets or sets the Name
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Address 
+        /// </summary>
         public string Address { get; set; }
+
+        /// <summary>
+        /// Gets or sets the City
+        /// </summary>
         public string City { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description 
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ParticipationStartDate 
+        /// </summary>
         public DateTime ParticipationStartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ParticipationEndDate 
+        /// </summary>
         public DateTime? ParticipationEndDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ProjectStartDate 
+        /// </summary>
         public DateTime ProjectStartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ProjectEndDate 
+        /// </summary>
         public DateTime ProjectEndDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PictureUri 
+        /// </summary>
         public DocumentViewModel PictureUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets the WebsiteUrl 
+        /// </summary>
         public string WebsiteUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets Closed 
+        /// </summary>
         public bool Closed { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Tasks 
+        /// </summary>
         public List<Task> Tasks { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ContactAdres 
+        /// </summary>
         public string ContactAdres { get; set; }
 
         //Constructor
@@ -25,6 +76,12 @@ namespace RoosterPlanner.Api.Models
         {
             Tasks = new List<Task>();
         }
+
+        /// <summary>
+        /// Create a ViewModel from a Project.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         public static ProjectDetailsViewModel CreateVm(Project project)
         {
             if (project == null)
@@ -52,6 +109,11 @@ namespace RoosterPlanner.Api.Models
             return vm;
         }
 
+        /// <summary>
+        /// Creates a Project from a ViewModel.
+        /// </summary>
+        /// <param name="projectDetailsViewModel"></param>
+        /// <returns></returns>
         public static Project CreateProject(ProjectDetailsViewModel projectDetailsViewModel)
         {
             if (projectDetailsViewModel == null)

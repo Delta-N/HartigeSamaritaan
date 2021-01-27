@@ -49,6 +49,11 @@ namespace RoosterPlanner.Api.Controllers
             webUrlConfig = options.Value;
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for all participations a user is involved in.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns></returns>
         [HttpGet("{personId}")]
         public async Task<ActionResult<List<ParticipationViewModel>>> GetUserParticipationAsync(Guid personId)
         {
@@ -77,6 +82,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for a specific Participation based on a personId and a projectId.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         [HttpGet("GetParticipation/{personid}/{projectid}")]
         public async Task<ActionResult<ParticipationViewModel>> GetParticipationAsync(Guid personId, Guid projectId)
         {
@@ -102,6 +113,12 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer for all participations of a project based on a projectId.
+        /// Only Boardmembers and Committeemembers are allowd to request all participations.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpGet("project/{projectId}")]
         public async Task<ActionResult<List<ParticipationViewModel>>> GetParticipationsAsync(Guid projectId)
@@ -131,6 +148,11 @@ namespace RoosterPlanner.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a request towards the services layer to save a participation.
+        /// </summary>
+        /// <param name="participationViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<ParticipationViewModel>> SaveParticipationAsync(
             [FromBody] ParticipationViewModel participationViewModel)
@@ -174,7 +196,11 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-
+        /// <summary>
+        /// Makes a request towards the services layer to update a participation.
+        /// </summary>
+        /// <param name="participationViewModel"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<ParticipationViewModel>> UpdateParticipationAsync(
             [FromBody] ParticipationViewModel participationViewModel)
@@ -232,7 +258,12 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-
+        /// <summary>
+        /// Makes a request towards the services layer to update a specific participation based on an id.
+        /// This method updates the attribute 'active' instead of deleting the whole entity.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<ParticipationViewModel>> RemoveParticipationAsync(Guid id)
         {
@@ -273,7 +304,13 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-
+        /// <summary>
+        /// Makes a request towards the services layer to send emails to all participants of a project who are scheduled for a shift.
+        /// Previously send shifts are not send again.
+        /// Includes an .ics file for to add shifts to a calendar
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost("Schedule/{projectId}")]
         public async Task<ActionResult<bool>> SendSchedule(Guid projectId)
@@ -380,7 +417,12 @@ namespace RoosterPlanner.Api.Controllers
                 return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
             }
         }
-
+        /// <summary>
+        /// Makes a request towards the services layer to send a general email to all persons of a specific project.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="emailMessage"></param>
+        /// <returns></returns>
         [Authorize(Policy = "Boardmember&Committeemember")]
         [HttpPost("availability/{projectId}")]
         public async Task<ActionResult<bool>> SendEmailAsync(Guid projectId, MessageViewModel emailMessage)
