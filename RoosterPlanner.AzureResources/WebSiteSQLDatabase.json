@@ -1,6 +1,7 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
+  
   "parameters": {
     "hostingPlanName": {
       "type": "string",
@@ -9,7 +10,7 @@
     "environment": {
       "type": "string",
       "minLength": 3,
-      "defaultValue": "dev",
+      "defaultValue": "prd",
       "allowedValues": [
         "dev",
         "tst",
@@ -87,12 +88,23 @@
       ]
     }
   },
+  
   "variables": {
-    "webSiteName": "[concat('roosterplanner-api-', parameters('environment'))]",
+    "apiName": "[concat('roosterplanner-api-', parameters('environment'))]",
+    "webSiteName": "[concat('roosterplanner-web-', parameters('environment'))]",
     "sqlserverName": "[concat('roosterplanner-sqlserver-', parameters('environment'))]",
-    "hackatonstoragedevName": "[concat('hackatonstorage', parameters('environment'))]"
+    "keyvaultName": "[concat('roosterplanner1-kv-', parameters('environment'))]", //naam aanpassen als soft delete klaar is
+    "storageName": "[concat('roosterstorage', parameters('environment'))]",
+    "appInsight": "[concat('roosterplanner-insights-', parameters('environment'))]",
+   
+    // KeyVault
+    "keyVaultSettings": {
+      "name": "[variables('keyvaultName')]"
+    }
   },
+  
   "resources": [
+    //sqlserver
     {
       "name": "[variables('sqlserverName')]",
       "type": "Microsoft.Sql/servers",
@@ -139,6 +151,7 @@
         }
       ]
     },
+    //hosting plan
     {
       "apiVersion": "2015-08-01",
       "name": "[parameters('hostingPlanName')]",
@@ -155,6 +168,27 @@
         "name": "[parameters('hostingPlanName')]"
       }
     },
+    //api
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('apiName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty",
+        "displayName": "Api"
+      },
+      "properties": {
+        "name": "[variables('apiName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+      },
+      "resources": [
+      ]
+    },
+    //website
     {
       "apiVersion": "2015-08-01",
       "name": "[variables('webSiteName')]",
@@ -172,22 +206,9 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
       },
       "resources": [
-        {
-          "apiVersion": "2015-08-01",
-          "type": "config",
-          "name": "connectionstrings",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites/', variables('webSiteName'))]"
-          ],
-          "properties": {
-            "DefaultConnection": {
-              "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('databaseName'), ';User Id=', parameters('administratorLogin'), '@', variables('sqlserverName'), ';Password=', parameters('administratorLoginPassword'), ';')]",
-              "type": "SQLServer"
-            }
-          }
-        }
       ]
     },
+    //hosting plan settings
     {
       "apiVersion": "2014-04-01",
       "name": "[concat(parameters('hostingPlanName'), '-', resourceGroup().name)]",
@@ -254,26 +275,28 @@
         "targetResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
       }
     },
+    //Application insights
     {
       "apiVersion": "2015-05-01",
-      "name": "[variables('webSiteName')]",
+      "name": "[variables('appInsight')]",
       "type": "Microsoft.Insights/components",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]"
+        "[resourceId('Microsoft.Web/sites/', variables('apiName'))]"
       ],
       "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource",
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('apiName'))]": "Resource",
         "displayName": "AppInsightsComponent"
       },
       "properties": {
-        "ApplicationId": "[variables('webSiteName')]"
+        "ApplicationId": "[variables('apiName')]"
       }
     },
+    //storage
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-04-01",
-      "name": "[variables('hackatonstoragedevName')]",
+      "name": "[variables('storageName')]",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "Standard_LRS",
@@ -302,12 +325,13 @@
         "accessTier": "Hot"
       }
     },
+    //storage settings
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices",
       "apiVersion": "2019-04-01",
-      "name": "[concat(variables('hackatonstoragedevName'), '/default')]",
+      "name": "[concat(variables('storageName'), '/default')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('hackatonstoragedevName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
       ],
       "properties": {
         "cors": {
@@ -335,28 +359,57 @@
         }
       }
     },
+    //storage settings
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2019-04-01",
-      "name": "[concat(variables('hackatonstoragedevName'), '/default/$web')]",
+      "name": "[concat(variables('storageName'), '/default/$web')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('hackatonstoragedevName'), 'default')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('hackatonstoragedevName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
       ],
       "properties": {
         "publicAccess": "None"
       }
     },
+    //storage settings
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2019-04-01",
-      "name": "[concat(variables('hackatonstoragedevName'), '/default/azureb2c')]",
+      "name": "[concat(variables('storageName'), '/default/azureb2c')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('hackatonstoragedevName'), 'default')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('hackatonstoragedevName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
       ],
       "properties": {
         "publicAccess": "Blob"
+      }
+    },
+
+    // KeyVault
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "[variables('keyVaultSettings').name]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "tenantId": "[subscription().tenantId]",
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "accessPolicies": [
+          //manually add api,
+        ],
+        "enabledForDeployment": false,
+        "enabledForDiskEncryption": false,
+        "​​​enabledForTemplateDeployment": true,
+        "enableSoftDelete": true,
+        "createMode": "default",
+        "networkAcls": {
+          "defaultAction": "Allow",
+          "bypass": "AzureServices"
+        }
       }
     }
   ]
