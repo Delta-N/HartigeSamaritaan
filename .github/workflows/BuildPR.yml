@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  pull_request:
+
+env:
+  BUILD_CONFIGURATION: Release
+  DOTNET_VERSION: 3.1.x
+  NODE_VERSION: 12.18.3
+  AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
+  AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
+
+jobs:
+  build-front-end:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/cache
+            !~/cache/exclude
+            **/node_modules
+            ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}/.node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: build front-end
+        run: |
+          npm install
+          npm install --global @angular/cli > /dev/null
+          ng build --prod
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
+
+  build-back-end:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{env.DOTNET_VERSION}}
+
+      - name: build API
+        run: |
+          dotnet build --configuration ${{ env.BUILD_CONFIGURATION  }}
+        working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
