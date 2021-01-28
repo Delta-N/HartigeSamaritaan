@@ -77,15 +77,13 @@ jobs:
       #Download artifacts
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
-          workflow: Build.yml
+          workflow: BuildForDeploy.yml
           name: "Web"
-          path: ./staging/web
 
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
-          workflow: Build.yml
+          workflow: BuildForDeploy.yml
           name: "Api"
-          path: ./staging/api
 
       #Deploy
       - name: Deploy Web
