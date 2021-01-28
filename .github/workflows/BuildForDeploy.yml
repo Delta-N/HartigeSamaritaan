@@ -47,7 +47,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: "Web Artifact"
+          name: "Web"
           path: ./staging/web
   
   build-back-end:
@@ -78,5 +78,5 @@ jobs:
         
       - uses: actions/upload-artifact@v2
         with:
-          name: "Api Artifact"
+          name: "Api"
           path: ./staging/api  

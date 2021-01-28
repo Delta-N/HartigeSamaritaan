@@ -5,14 +5,10 @@ on:
     workflows: ["Build the project"]
     types:
       - completed
-
-env:
-  AZURE_WEBAPP_NAME: roosterplanner-web-dev
-  AZURE_API_NAME: roosterplanner-api-dev
-
+    
 jobs:
-  deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  deployProd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
@@ -23,76 +19,79 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Deploy ARM template to PROD
-      - name: Run ARM deploy to Prod
-        if: github.ref == 'refs/heads/master'
+      # Deploy ARM template
+      - name: Run ARM deploy to Prd 
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          resourceGroupName: ${{ secrets.AZURE_RG_PROD }}
+          resourceGroupName: ${{ secrets.AZURE_RG_PROD }} 
           template: ./RoosterPlanner.AzureResources/template.json
           parameters:
-            hostingPlan=roosterplanner-plan-
-            administratorLogin={{ secrets.AZURE_PARAMETERS_PROD_DBLOGIN }}
-            administratorLoginPassword={{ secrets.AZURE_PARAMETERS_PROD_DBPASS }}
-            database=roosterplanner-sqldb-
-            environment=prd
-      # Deploy ARM template to DEV
-      - name: Run ARM deploy to Dev
-        if: github.ref == 'refs/heads/develop'
-        uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          resourceGroupName: ${{ secrets.AZURE_RG_DEV }}
-          template: ./RoosterPlanner.AzureResources/template.json
-          parameters:
-            hostingPlan=roosterplanner-plan-
-            administratorLogin={{ secrets.AZURE_PARAMETERS_DEV_DBLOGIN }}
-            administratorLoginPassword={{ secrets.AZURE_PARAMETERS_DEV_DBPASS }}
-            database=roosterplanner-sqldb-
-            environment=dev
-
+            environment=prd 
+      
+      #Download artifacts
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
           workflow: Build.yml
-          name: "Web Artifact"
+          name: "Web"
           path: ./staging/web
 
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
           workflow: Build.yml
-          name: "Api Artifact"
+          name: "Api"
           path: ./staging/api
       
-      # PUBLISH TO PROD
-      - name: publish front-end prod
-        if: github.ref == 'refs/heads/master'
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD  }}
-          package: ./staging/web/
+      #Deploy
+      - name: Deploy Web
+        run: az webapp deployment source config-zip --src api.zip --resource-group ${{ secrets.AZURE_RG_PROD }} --name roosterplanner-web-prd 
+        shell: pwsh    
+        
+      - name: Deploy Api
+        run: az webapp deployment source config-zip --src web.zip --resource-group ${{ secrets.AZURE_RG_PROD }} --name roosterplanner-api-prd 
+        shell: pwsh    
 
-      - name: publish api prod
-        if: github.ref == 'refs/heads/master'
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_API_NAME }}
-          publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE_PROD  }}
-          package: ./staging/api
-      # PUBLISH TO DEV    
-      - name: publish front-end DEV
-        if: github.ref == 'refs/heads/develop'
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV  }}
-          package: ./staging/web/
 
-      - name: publish api DEV
-        if: github.ref == 'refs/heads/develop'
-        uses: azure/webapps-deploy@v2
+  deployDev:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Log into Azure
+      - uses: azure/login@v1
         with:
-          app-name: ${{ env.AZURE_API_NAME }}
-          publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE_DEV  }}
-          package: ./staging/api
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Deploy ARM template
+      - name: Run ARM deploy to dev
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG_DEV }} 
+          template: ./RoosterPlanner.AzureResources/template.json
+          parameters:
+            environment=dev
+
+      #Download artifacts
+      - uses: dawidd6/action-download-artifact@v2.8.0
+        with:
+          workflow: Build.yml
+          name: "Web"
+          path: ./staging/web
+
+      - uses: dawidd6/action-download-artifact@v2.8.0
+        with:
+          workflow: Build.yml
+          name: "Api"
+          path: ./staging/api
+
+      #Deploy
+      - name: Deploy Web
+        run: az webapp deployment source config-zip --src api.zip --resource-group ${{ secrets.AZURE_RG_DEV }} --name roosterplanner-web-dev
+        shell: pwsh
+
+      - name: Deploy Api
+        run: az webapp deployment source config-zip --src web.zip --resource-group ${{ secrets.AZURE_RG_DEV }} --name roosterplanner-api-dev
+        shell: pwsh
