@@ -1,35 +1,40 @@
 export const environment = {
   production: true,
   auth: {
-    clientId: "71002406-7b5a-4f76-bcd7-101bcc156941",
-    authority: "https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/b2c_1_susi",
-    redirectUri: "https://roosterplanner-web-dev.azurewebsites.net",
-    postLogoutRedirectUri: "https://roosterplanner-web-dev.azurewebsites.net",
+    clientId: "23cbcba3-683e-4fea-bf57-f25d3dc4f0fc",
+    authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi",
+    redirectUri: "https://roosterplanner-web-prd.azurewebsites.net", //aanpassen zodra DNS gereed is
+    postLogoutRedirectUri: "https://roosterplanner-web-prd.azurewebsites.net", //aanpassen zodra DNS gereed is
     navigateToLoginRequestUrl: true,
     validateAuthority: false,
-    knownAuthorities: ["https://DeltanHackaton.b2clogin.com"],
+    knownAuthorities: ["https://roosterplanneridp.b2clogin.com"],
   },
   protectedResourceMap: [
-    ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read']]
+    ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+    ['https://rooster-api.hartigesamaritaan.nl/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+    ['https://roosterplanner-api-prd.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+    ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+    ['https://roosterplanner-api-tst.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']
+    ]
   ],
   scopes: [
-    'https://DeltanHackaton.onmicrosoft.com/0f68eccd-b4a7-4747-b90e-ff88685173a3/Read'
+    'https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read'
   ],
   authorities: {
     signUpSignIn: {
-      authority: "https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/b2c_1_susi"
+      authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi"
     },
     resetPassword: {
-      authority: "https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/b2c_1_reset_pwd"
+      authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_reset_pwd"
     },
     editProfile: {
-      authority: "https://DeltanHackaton.b2clogin.com/DeltanHackaton.onmicrosoft.com/b2c_1_edit"
+      authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_edit"
     }
   },
   backendUrl: "https://roosterplanner-api-dev.azurewebsites.net/",
 
   appInsights: {
-    instrumentationKey: 'a1c408ad-5c7c-4485-b037-f78fea63e71b'
+    instrumentationKey: '54c0fc49-0057-453d-bae6-e384d5f00ce4' //Dit is afhankelijk van de deploy omgeving
   },
 
 };
