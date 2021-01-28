@@ -1,23 +1,26 @@
-﻿name: Build
+name: Build the project
 
 on:
-  pull_request:
+  push:
+    branches:
+      - master
+      - develop
 
 env:
   BUILD_CONFIGURATION: Release
   DOTNET_VERSION: 5.0.x
-  NODE_VERSION: 14.15.x
+  NODE_VERSION: 14.15.1
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
 
 jobs:
-  build-front-end:
-    runs-on: ubuntu-latest
+  build-front-end: 
+    runs-on: windows-2019
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: cache
+          
+      - name: cache 
         uses: actions/cache@v2
         with:
           path: |
@@ -29,7 +32,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
+            
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -38,18 +41,21 @@ jobs:
       - name: build front-end
         run: |
           npm install
-          npm install --global @angular/cli > /dev/null
-          ng build --prod
+          npm install --global @angular/cli
+          ng build --prod --outputPath=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
 
-      
-
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "Web Artifact"
+          path: ./staging/web
+  
   build-back-end:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-
+        
       - name: Setup .NET core
         uses: actions/setup-dotnet@v1
         with:
@@ -59,3 +65,18 @@ jobs:
         run: |
           dotnet build --configuration ${{ env.BUILD_CONFIGURATION  }}
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
+        
+      - name: test API
+        run: |
+          dotnet test --configuration ${{ env.BUILD_CONFIGURATION  }} --collect "Code coverage" --logger trx
+        working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
+        
+      - name: publish API
+        run: |
+          dotnet publish --configuration ${{ env.BUILD_CONFIGURATION  }} --no-build --no-restore --output ../staging/api
+        working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
+        
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "Api Artifact"
+          path: ./staging/api  

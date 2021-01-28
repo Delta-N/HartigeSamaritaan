@@ -2,16 +2,13 @@ name: Deploy
 
 on:
   workflow_run:
-    workflows: ["Build"]
+    workflows: ["Build the project"]
     types:
       - completed
 
 env:
   AZURE_WEBAPP_NAME: roosterplanner-web-dev
   AZURE_API_NAME: roosterplanner-api-dev
-
-  #Todo: Create resource groups and resources
-
 
 jobs:
   deploy:
@@ -20,6 +17,40 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+          
+      # Log into Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Deploy ARM template to PROD
+      - name: Run ARM deploy to Prod
+        if: github.ref == 'refs/heads/master'
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG_PROD }}
+          template: ./RoosterPlanner.AzureResources/template.json
+          parameters:
+            hostingPlan=roosterplanner-plan-
+            administratorLogin={{ secrets.AZURE_PARAMETERS_PROD_DBLOGIN }}
+            administratorLoginPassword={{ secrets.AZURE_PARAMETERS_PROD_DBPASS }}
+            database=roosterplanner-sqldb-
+            environment=prd
+      # Deploy ARM template to DEV
+      - name: Run ARM deploy to Dev
+        if: github.ref == 'refs/heads/develop'
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG_DEV }}
+          template: ./RoosterPlanner.AzureResources/template.json
+          parameters:
+            hostingPlan=roosterplanner-plan-
+            administratorLogin={{ secrets.AZURE_PARAMETERS_DEV_DBLOGIN }}
+            administratorLoginPassword={{ secrets.AZURE_PARAMETERS_DEV_DBPASS }}
+            database=roosterplanner-sqldb-
+            environment=dev
 
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
@@ -32,17 +63,36 @@ jobs:
           workflow: Build.yml
           name: "Api Artifact"
           path: ./staging/api
-
-      - name: publish front-end
+      
+      # PUBLISH TO PROD
+      - name: publish front-end prod
+        if: github.ref == 'refs/heads/master'
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD  }}
           package: ./staging/web/
 
-      - name: publish api
+      - name: publish api prod
+        if: github.ref == 'refs/heads/master'
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_API_NAME }}
-          publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE  }}
+          publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE_PROD  }}
+          package: ./staging/api
+      # PUBLISH TO DEV    
+      - name: publish front-end DEV
+        if: github.ref == 'refs/heads/develop'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV  }}
+          package: ./staging/web/
+
+      - name: publish api DEV
+        if: github.ref == 'refs/heads/develop'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_API_NAME }}
+          publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE_DEV  }}
           package: ./staging/api
