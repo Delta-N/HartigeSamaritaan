@@ -7,7 +7,7 @@ namespace RoosterPlanner.Api.Models
     public class AvailabilityViewModel : EntityViewModel
     {
         /// <summary>
-        /// Gets or sets the ParticipationId 
+        /// Gets or sets the ParticipationId  
         /// </summary>
         public Guid? ParticipationId { get; set; }
 
