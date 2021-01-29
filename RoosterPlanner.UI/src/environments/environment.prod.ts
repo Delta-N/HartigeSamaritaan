@@ -3,8 +3,8 @@ export const environment = {
   auth: {
     clientId: "23cbcba3-683e-4fea-bf57-f25d3dc4f0fc",
     authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi",
-    redirectUri: "https://roosterplanner-web-prd.azurewebsites.net", //aanpassen zodra DNS gereed is
-    postLogoutRedirectUri: "https://roosterplanner-web-prd.azurewebsites.net", //aanpassen zodra DNS gereed is
+    redirectUri: "https://rooster.hartigesamaritaan.nl", //aanpassen zodra DNS gereed is
+    postLogoutRedirectUri: "https://rooster.hartigesamaritaan.nl", //aanpassen zodra DNS gereed is
     navigateToLoginRequestUrl: true,
     validateAuthority: false,
     knownAuthorities: ["https://roosterplanneridp.b2clogin.com"],
@@ -31,7 +31,7 @@ export const environment = {
       authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_edit"
     }
   },
-  backendUrl: "https://roosterplanner-api-prd.azurewebsites.net/", //Dit is afhankelijk van de deploy omgeving
+  backendUrl: "https://rooster-api.hartigesamaritaan.nl/", //Dit is afhankelijk van de deploy omgeving
 
   appInsights: {
     instrumentationKey: '54c0fc49-0057-453d-bae6-e384d5f00ce4' //Dit is afhankelijk van de deploy omgeving
