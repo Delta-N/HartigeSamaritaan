@@ -31,7 +31,7 @@ export const environment = {
       authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_edit"
     }
   },
-  backendUrl: "https://roosterplanner-api-dev.azurewebsites.net/",
+  backendUrl: "https://roosterplanner-api-prd.azurewebsites.net/", //Dit is afhankelijk van de deploy omgeving
 
   appInsights: {
     instrumentationKey: '54c0fc49-0057-453d-bae6-e384d5f00ce4' //Dit is afhankelijk van de deploy omgeving
