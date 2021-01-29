@@ -20,7 +20,8 @@ namespace RoosterPlanner.Data.Context.Seed
         {
             List<Project> projects = new List<Project>
             {
-                new(Guid.Parse("e86bb765-27ab-404f-b140-211505d869fe"))
+                //SEED uitgeschakeld voor deploy naar PRD
+                /*new(Guid.Parse("e86bb765-27ab-404f-b140-211505d869fe"))
                 {
                     Name = "Voorburg 2020", Address = "Stationsplein 2", City = "Voorburg",
                     Description = "Leuk project in Voorburg", 
@@ -42,7 +43,7 @@ namespace RoosterPlanner.Data.Context.Seed
                     ProjectEndDate = DateTime.Now.AddDays(30),
                     LastEditBy = "SYSTEM",
                     LastEditDate = DateTime.Now
-                }
+                }*/
             };
 
             modelBuilder.Entity<Project>().HasData(projects.ToArray());

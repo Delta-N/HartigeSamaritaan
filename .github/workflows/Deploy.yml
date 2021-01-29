@@ -8,7 +8,7 @@ on:
     
 jobs:
   deployProd:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/master'
+    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
@@ -32,28 +32,26 @@ jobs:
       #Download artifacts
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
-          workflow: Build.yml
+          workflow: BuildForDeploy.yml
           name: "Web"
-          path: ./staging/web
 
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
-          workflow: Build.yml
+          workflow: BuildForDeploy.yml
           name: "Api"
-          path: ./staging/api
       
       #Deploy
       - name: Deploy Web
-        run: az webapp deployment source config-zip --src api.zip --resource-group ${{ secrets.AZURE_RG_PROD }} --name roosterplanner-web-prd 
+        run: az webapp deployment source config-zip --src web.zip --resource-group ${{ secrets.AZURE_RG_PROD }} --name roosterplanner-web-prd 
         shell: pwsh    
         
       - name: Deploy Api
-        run: az webapp deployment source config-zip --src web.zip --resource-group ${{ secrets.AZURE_RG_PROD }} --name roosterplanner-api-prd 
+        run: az webapp deployment source config-zip --src api.zip --resource-group ${{ secrets.AZURE_RG_PROD }} --name roosterplanner-api-prd 
         shell: pwsh    
 
 
   deployDev:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/develop'
+    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
 
     steps:
@@ -77,21 +75,19 @@ jobs:
       #Download artifacts
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
-          workflow: Build.yml
+          workflow: BuildForDeploy.yml
           name: "Web"
-          path: ./staging/web
 
       - uses: dawidd6/action-download-artifact@v2.8.0
         with:
-          workflow: Build.yml
+          workflow: BuildForDeploy.yml
           name: "Api"
-          path: ./staging/api
 
       #Deploy
       - name: Deploy Web
-        run: az webapp deployment source config-zip --src api.zip --resource-group ${{ secrets.AZURE_RG_DEV }} --name roosterplanner-web-dev
+        run: az webapp deployment source config-zip --src web.zip --resource-group ${{ secrets.AZURE_RG_DEV }} --name roosterplanner-web-dev
         shell: pwsh
 
       - name: Deploy Api
-        run: az webapp deployment source config-zip --src web.zip --resource-group ${{ secrets.AZURE_RG_DEV }} --name roosterplanner-api-dev
+        run: az webapp deployment source config-zip --src api.zip --resource-group ${{ secrets.AZURE_RG_DEV }} --name roosterplanner-api-dev
         shell: pwsh

@@ -44,11 +44,16 @@ jobs:
           npm install --global @angular/cli
           ng build --prod --outputPath=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}
+        
+      - name: zip the output
+        run: |
+          Compress-Archive -Path .\staging\web\* -DestinationPath .\staging\web.zip
+        shell: pwsh
 
       - uses: actions/upload-artifact@v2
         with:
           name: "Web"
-          path: ./staging/web
+          path: ./staging/web.zip
   
   build-back-end:
     runs-on: ubuntu-latest
@@ -76,7 +81,12 @@ jobs:
           dotnet publish --configuration ${{ env.BUILD_CONFIGURATION  }} --no-build --no-restore --output ../staging/api
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH  }}
         
+      - name: zip the output
+        run: |
+          Compress-Archive -Path .\staging\api\* -DestinationPath .\staging\api.zip
+        shell: pwsh
+        
       - uses: actions/upload-artifact@v2
         with:
           name: "Api"
-          path: ./staging/api  
+          path: ./staging/api.zip  

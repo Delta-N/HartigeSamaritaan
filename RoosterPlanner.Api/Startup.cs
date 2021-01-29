@@ -34,7 +34,7 @@ namespace RoosterPlanner.Api
                 .AddJwtBearer(jwtOptions =>
                 {
                     jwtOptions.Authority =
-                        $"{Configuration["AzureAuthentication:Instance"]}/tfp/{Configuration["AzureAuthentication:AzureTenantId"]}/{Configuration["AzureAuthentication:SignUpSignInPolicyId"]}/v2.0/";
+                        $"{Configuration["AzureAuthentication:Instance"]}/tfp/{Configuration["AzureAuthentication:TenantId"]}/{Configuration["AzureAuthentication:SignUpSignInPolicyId"]}/v2.0/";
                     jwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,

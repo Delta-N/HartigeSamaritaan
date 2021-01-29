@@ -117,6 +117,8 @@
       "aspNetCoreEnvironment": "Production"
     },
     
+    "domain":"https://rooster.hartigesamaritaan.nl",
+    
     //manually add custom domain in the portal
     "cors": {
       "dev": "[concat('https://', variables('webSiteName'), '.', 'azurewebsites.net')]",
@@ -188,6 +190,19 @@
             "startIpAddress": "185.127.110.82",
             "endIpAddress": "185.127.110.82"
           }
+        },
+        {
+          "name": "Jaap huis",
+          "type": "firewallRules",
+          "apiVersion": "2015-05-01-preview",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers/', variables('databaseSettings').sqlserverName)]"
+          ],
+          "properties": {
+            "startIpAddress": "94.210.15.37",
+            "endIpAddress": "94.210.15.37"
+          }
         }
       ]
     },
@@ -247,7 +262,9 @@
           "localMySqlEnabled": false,
           "cors": {
             "allowedOrigins": [
-              "[variables('cors')[parameters('environment')]]"
+              "[variables('cors')[parameters('environment')]]",
+              "[variables('domain')]"
+              
             ],
             "supportCredentials": true
           },
@@ -279,7 +296,7 @@
           "properties": {
             "WEBSITE_TIME_ZONE": "[concat('W. Europe Standard Time')]",
             "ASPNETCORE_ENVIRONMENT": "[parameters('environment')]",
-            "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('appInsight')), '2015-05-01').InstrumentationKey]"
+            "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('appInsight')), '2020-02-02-preview').InstrumentationKey]"
           }
         }
       ]
@@ -339,7 +356,7 @@
           "properties": {
             "WEBSITE_TIME_ZONE": "[concat('W. Europe Standard Time')]",
             "ASPNETCORE_ENVIRONMENT": "[parameters('environment')]",
-            "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('appInsight')), '2015-05-01').InstrumentationKey]"
+            "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('appInsight')), '2020-02-02-preview').InstrumentationKey]"
           }
         }
       ]
@@ -517,7 +534,7 @@
           },
           {
             "tenantId": "[subscription().tenantId]",
-            "objectId": "478ed763-46f3-44a9-a637-958652febd57",
+            "objectId": "6ddb70b2-98e4-40dc-8a04-ace432a794a9",
             "permissions": {
               "keys": [
                 "Get",
@@ -675,6 +692,36 @@
           "enabled": true
         },
         "value": "[variables('keyVaultSettings').name]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2018-02-14",
+      "name": "[concat(variables('keyVaultSettings').name, '/ApplicationInsight--InstrumentationKey')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultSettings').name)]"
+      ],
+      "properties": {
+        "attributes": {
+          "enabled": true
+        },
+        "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsight')), '2020-02-02-preview').InstrumentationKey]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2018-02-14",
+      "name": "[concat(variables('keyVaultSettings').name, '/ApplicationInsight--ConnectionString')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultSettings').name)]"
+      ],
+      "properties": {
+        "attributes": {
+          "enabled": true
+        },
+        "value": "[concat('InstrumentationKey=',reference(resourceId('Microsoft.Insights/components', variables('appInsight')), '2020-02-02-preview').InstrumentationKey,';IngestionEndpoint=https://westeurope-0.in.applicationinsights.azure.com/')]"
       }
     }
     
