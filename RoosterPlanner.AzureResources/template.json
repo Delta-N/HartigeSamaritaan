@@ -117,6 +117,8 @@
       "aspNetCoreEnvironment": "Production"
     },
     
+    "domain":"https://rooster.hartigesamaritaan.nl",
+    
     //manually add custom domain in the portal
     "cors": {
       "dev": "[concat('https://', variables('webSiteName'), '.', 'azurewebsites.net')]",
@@ -260,7 +262,9 @@
           "localMySqlEnabled": false,
           "cors": {
             "allowedOrigins": [
-              "[variables('cors')[parameters('environment')]]"
+              "[variables('cors')[parameters('environment')]]",
+              "[variables('domain')]"
+              
             ],
             "supportCredentials": true
           },
@@ -530,7 +534,7 @@
           },
           {
             "tenantId": "[subscription().tenantId]",
-            "objectId": "478ed763-46f3-44a9-a637-958652febd57",
+            "objectId": "6ddb70b2-98e4-40dc-8a04-ace432a794a9",
             "permissions": {
               "keys": [
                 "Get",
