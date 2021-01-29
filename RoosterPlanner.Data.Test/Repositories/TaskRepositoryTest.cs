@@ -91,7 +91,7 @@ namespace RoosterPlanner.Data.Repositories
         }
 
         [Fact]
-        public async Task SearchTasksAsync_Should_Include_Related_Data()
+        public void  SearchTasksAsync_Should_Include_Related_Data()
         {
             //Arrange
 
