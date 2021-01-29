@@ -464,7 +464,7 @@ namespace RoosterPlanner.Api.Controllers
                 };
 
                 TaskResult<Manager> result = await personService.MakeManagerAsync(manager);
-                if (viewModel.UserRole != null && viewModel.UserRole != "Boardmember")
+                if (viewModel.UserRole != "Boardmember")
                     await ModAdminAsync(userId, 2); //make user a manager in B2C
 
                 if (!result.Succeeded)
@@ -517,7 +517,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (userManagesOtherProjects?.Data != null &&
                     userManagesOtherProjects.Data.Count == 0)
-                    if (viewModel.UserRole != null && viewModel.UserRole != "Boardmember")
+                    if (viewModel.UserRole != "Boardmember")
                         await ModAdminAsync(userId, 4); //remove user as a manager in B2C}
 
                 if (!result.Succeeded)
