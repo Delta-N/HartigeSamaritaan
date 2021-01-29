@@ -7,7 +7,7 @@ namespace RoosterPlanner.Email
     public interface IEmailService
     {
         /// <summary>
-        /// Send a email to one receipient
+        /// Send a  email to one receipient
         /// </summary>
         /// <param name="recipient"></param>
         /// <param name="subject"></param>
