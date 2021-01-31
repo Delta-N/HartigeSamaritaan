@@ -4625,51 +4625,51 @@ references:
   commentId: N:RoosterPlanner.Data.Migrations
   fullName: RoosterPlanner.Data.Migrations
   nameWithType: RoosterPlanner.Data.Migrations
-- uid: RoosterPlanner.Data.Migrations.initial
-  name: initial
-  href: api/RoosterPlanner.Data.Migrations.initial.html
-  commentId: T:RoosterPlanner.Data.Migrations.initial
-  fullName: RoosterPlanner.Data.Migrations.initial
-  nameWithType: initial
-- uid: RoosterPlanner.Data.Migrations.initial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)
+- uid: RoosterPlanner.Data.Migrations.deploy2prd
+  name: deploy2prd
+  href: api/RoosterPlanner.Data.Migrations.deploy2prd.html
+  commentId: T:RoosterPlanner.Data.Migrations.deploy2prd
+  fullName: RoosterPlanner.Data.Migrations.deploy2prd
+  nameWithType: deploy2prd
+- uid: RoosterPlanner.Data.Migrations.deploy2prd.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)
   name: BuildTargetModel(ModelBuilder)
-  href: api/RoosterPlanner.Data.Migrations.initial.html#RoosterPlanner_Data_Migrations_initial_BuildTargetModel_Microsoft_EntityFrameworkCore_ModelBuilder_
-  commentId: M:RoosterPlanner.Data.Migrations.initial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)
-  fullName: RoosterPlanner.Data.Migrations.initial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)
-  nameWithType: initial.BuildTargetModel(ModelBuilder)
-- uid: RoosterPlanner.Data.Migrations.initial.BuildTargetModel*
+  href: api/RoosterPlanner.Data.Migrations.deploy2prd.html#RoosterPlanner_Data_Migrations_deploy2prd_BuildTargetModel_Microsoft_EntityFrameworkCore_ModelBuilder_
+  commentId: M:RoosterPlanner.Data.Migrations.deploy2prd.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)
+  fullName: RoosterPlanner.Data.Migrations.deploy2prd.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)
+  nameWithType: deploy2prd.BuildTargetModel(ModelBuilder)
+- uid: RoosterPlanner.Data.Migrations.deploy2prd.BuildTargetModel*
   name: BuildTargetModel
-  href: api/RoosterPlanner.Data.Migrations.initial.html#RoosterPlanner_Data_Migrations_initial_BuildTargetModel_
-  commentId: Overload:RoosterPlanner.Data.Migrations.initial.BuildTargetModel
+  href: api/RoosterPlanner.Data.Migrations.deploy2prd.html#RoosterPlanner_Data_Migrations_deploy2prd_BuildTargetModel_
+  commentId: Overload:RoosterPlanner.Data.Migrations.deploy2prd.BuildTargetModel
   isSpec: "True"
-  fullName: RoosterPlanner.Data.Migrations.initial.BuildTargetModel
-  nameWithType: initial.BuildTargetModel
-- uid: RoosterPlanner.Data.Migrations.initial.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
+  fullName: RoosterPlanner.Data.Migrations.deploy2prd.BuildTargetModel
+  nameWithType: deploy2prd.BuildTargetModel
+- uid: RoosterPlanner.Data.Migrations.deploy2prd.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
   name: Down(MigrationBuilder)
-  href: api/RoosterPlanner.Data.Migrations.initial.html#RoosterPlanner_Data_Migrations_initial_Down_Microsoft_EntityFrameworkCore_Migrations_MigrationBuilder_
-  commentId: M:RoosterPlanner.Data.Migrations.initial.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
-  fullName: RoosterPlanner.Data.Migrations.initial.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
-  nameWithType: initial.Down(MigrationBuilder)
-- uid: RoosterPlanner.Data.Migrations.initial.Down*
+  href: api/RoosterPlanner.Data.Migrations.deploy2prd.html#RoosterPlanner_Data_Migrations_deploy2prd_Down_Microsoft_EntityFrameworkCore_Migrations_MigrationBuilder_
+  commentId: M:RoosterPlanner.Data.Migrations.deploy2prd.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
+  fullName: RoosterPlanner.Data.Migrations.deploy2prd.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
+  nameWithType: deploy2prd.Down(MigrationBuilder)
+- uid: RoosterPlanner.Data.Migrations.deploy2prd.Down*
   name: Down
-  href: api/RoosterPlanner.Data.Migrations.initial.html#RoosterPlanner_Data_Migrations_initial_Down_
-  commentId: Overload:RoosterPlanner.Data.Migrations.initial.Down
+  href: api/RoosterPlanner.Data.Migrations.deploy2prd.html#RoosterPlanner_Data_Migrations_deploy2prd_Down_
+  commentId: Overload:RoosterPlanner.Data.Migrations.deploy2prd.Down
   isSpec: "True"
-  fullName: RoosterPlanner.Data.Migrations.initial.Down
-  nameWithType: initial.Down
-- uid: RoosterPlanner.Data.Migrations.initial.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
+  fullName: RoosterPlanner.Data.Migrations.deploy2prd.Down
+  nameWithType: deploy2prd.Down
+- uid: RoosterPlanner.Data.Migrations.deploy2prd.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
   name: Up(MigrationBuilder)
-  href: api/RoosterPlanner.Data.Migrations.initial.html#RoosterPlanner_Data_Migrations_initial_Up_Microsoft_EntityFrameworkCore_Migrations_MigrationBuilder_
-  commentId: M:RoosterPlanner.Data.Migrations.initial.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
-  fullName: RoosterPlanner.Data.Migrations.initial.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
-  nameWithType: initial.Up(MigrationBuilder)
-- uid: RoosterPlanner.Data.Migrations.initial.Up*
+  href: api/RoosterPlanner.Data.Migrations.deploy2prd.html#RoosterPlanner_Data_Migrations_deploy2prd_Up_Microsoft_EntityFrameworkCore_Migrations_MigrationBuilder_
+  commentId: M:RoosterPlanner.Data.Migrations.deploy2prd.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
+  fullName: RoosterPlanner.Data.Migrations.deploy2prd.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)
+  nameWithType: deploy2prd.Up(MigrationBuilder)
+- uid: RoosterPlanner.Data.Migrations.deploy2prd.Up*
   name: Up
-  href: api/RoosterPlanner.Data.Migrations.initial.html#RoosterPlanner_Data_Migrations_initial_Up_
-  commentId: Overload:RoosterPlanner.Data.Migrations.initial.Up
+  href: api/RoosterPlanner.Data.Migrations.deploy2prd.html#RoosterPlanner_Data_Migrations_deploy2prd_Up_
+  commentId: Overload:RoosterPlanner.Data.Migrations.deploy2prd.Up
   isSpec: "True"
-  fullName: RoosterPlanner.Data.Migrations.initial.Up
-  nameWithType: initial.Up
+  fullName: RoosterPlanner.Data.Migrations.deploy2prd.Up
+  nameWithType: deploy2prd.Up
 - uid: RoosterPlanner.Data.Repositories
   name: RoosterPlanner.Data.Repositories
   href: api/RoosterPlanner.Data.Repositories.html
