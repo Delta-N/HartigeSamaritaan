@@ -28,6 +28,12 @@
       },
       {
         "files": [
+          "developers/**.yml",
+          "developers/index.md"
+        ]
+      },
+      {
+        "files": [
           "articles/**.md",
           "articles/**/toc.yml",
           "toc.yml",
