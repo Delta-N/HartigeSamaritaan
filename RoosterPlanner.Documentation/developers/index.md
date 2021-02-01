@@ -8,7 +8,7 @@ Add a custom domain name in Azure web-appservice.
 
 ## SSL-certificate
 
-Connect the Azure Extension 'Azure Let's Encrypt' to the Azure web-appservice.
+[Connect](https://www.linkedin.com/pulse/create-auto-renew-lets-encrypt-ssls-azure-webapps-matthew-bradley?trk=related_artice_Create%20and%20auto-renew%20Let%26amp%3Bamp%3B%2339%3Bs%20Encrypt%20SSLs%20on%20Azure%20WebApps_article-card_title) the Azure Extension **Azure Let's Encrypt** to the Azure web-appservice.
 
 ## Create a B2C environment, register this to the resourcegroup and extract necessary data into Key Vault.
 
