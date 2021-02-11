@@ -30,6 +30,8 @@ jobs:
           template: ./RoosterPlanner.AzureResources/template.json
           parameters:
             environment=dev
+            firewallRuleDN=${{ secrets.ARM_FIREWALL_DN_IP }}
+            firewallRuleOther=${{ secrets.ARM_FIREWALL_OTHER_IP }}
 
       #Download artifacts
       - uses: dawidd6/action-download-artifact@v2.8.0
