@@ -28,6 +28,12 @@
       },
       {
         "files": [
+          "developers/**.yml",
+          "developers/index.md"
+        ]
+      },
+      {
+        "files": [
           "articles/**.md",
           "articles/**/toc.yml",
           "toc.yml",
@@ -56,7 +62,8 @@
     "dest": "../docs/",
     "globalMetadata": {
       "_appLogoPath": "images/logo.png",
-      "_appFaviconPath": "images/favicon.png"
+      "_appFaviconPath": "images/favicon.png",
+      "_disableContribution":true
       
     },
     "fileMetadataFiles": [],

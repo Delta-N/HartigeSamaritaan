@@ -4,6 +4,12 @@
   "parameters": {
     "environment": {
       "value": null
+    },
+    "firewallRuleDN":{
+      "value": null
+    },
+    "firewallRuleOther":{
+      "value": null
     }
   }
 }

@@ -3,8 +3,8 @@ export const environment = {
   auth: {
     clientId: "23cbcba3-683e-4fea-bf57-f25d3dc4f0fc",
     authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi",
-    redirectUri: "https://roosterplanner-web-prd.azurewebsites.net", //aanpassen zodra DNS gereed is
-    postLogoutRedirectUri: "https://roosterplanner-web-prd.azurewebsites.net", //aanpassen zodra DNS gereed is
+    redirectUri: "https://rooster.hartigesamaritaan.nl", //aanpassen zodra DNS gereed is
+    postLogoutRedirectUri: "https://rooster.hartigesamaritaan.nl", //aanpassen zodra DNS gereed is
     navigateToLoginRequestUrl: true,
     validateAuthority: false,
     knownAuthorities: ["https://roosterplanneridp.b2clogin.com"],

@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>New deployment enviroment </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="New deployment enviroment ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="new-deployment-enviroment">New deployment enviroment</h1>
+
+<p>The following steps currently need to be be done manually when setting up a new deployment environment:</p>
+<h2 id="domain">Domain</h2>
+<p>Add a custom domain name in Azure web-appservice.</p>
+<h2 id="ssl-certificate">SSL-certificate</h2>
+<p><a href="https://www.linkedin.com/pulse/create-auto-renew-lets-encrypt-ssls-azure-webapps-matthew-bradley?trk=related_artice_Create%20and%20auto-renew%20Let%26amp%3Bamp%3B%2339%3Bs%20Encrypt%20SSLs%20on%20Azure%20WebApps_article-card_title">Connect</a> the Azure Extension <strong>Azure Let's Encrypt</strong> to the Azure web-appservice.</p>
+<h2 id="create-a-b2c-environment-register-this-to-the-resourcegroup-and-extract-necessary-data-into-key-vault">Create a B2C environment, register this to the resourcegroup and extract necessary data into Key Vault.</h2>
+<p>The B2C environment contains:</p>
+<ul>
+<li>Two app-registrations (WEB &amp; API),</li>
+<li>Custom user attributes:
+<ul>
+<li>DateOfBirth : string,</li>
+<li>DutchProficiency : string,</li>
+<li>Nationality : string,</li>
+<li>NativeLanguage : string,</li>
+<li>PhoneNumber : string,</li>
+<li>TermsOfUseConsented : string,</li>
+<li>UserRole : int</li>
+</ul>
+</li>
+<li>3 user flows:
+<ul>
+<li>b2c_1_susi</li>
+<li>b2c_1_reset</li>
+<li>b2c_1_edit</li>
+</ul>
+</li>
+<li>Custom company branding (logo and banner)</li>
+</ul>
+<p>The WEB-appregistration is dedicated to an SPA, contains the necessary redirect URI's (custom domain + localhost:4200),
+provides <strong>Access tokens</strong>  (used for implicit flows) and does allow <em>public client flows</em>.</p>
+<p>The API-appregistration does not have any redirect URI's, provides <strong>ID tokens</strong> (used for implicit and hybrid flows) but
+does NOT allow <em>public client flows</em>.<br>
+This registration also has a secret registered which need be added to the key
+vault (AzureAuthentication--ClientSecret).</p>
+<h2 id="add-secrets-to-key-vault">Add secrets to key vault</h2>
+<p>The following secrets need to be added manually to the key vault:</p>
+<table>
+<thead>
+<tr>
+<th>Secret name</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AzureAuthentication--AzureTenantName</td>
+<td><em>Name of b2c + onmicrosoft.com</em></td>
+</tr>
+<tr>
+<td>AzureAuthentication--B2CExtentionApplicationId</td>
+<td><em>B2C=&gt;app registrations=&gt; all =&gt; b2c-extentions-app: client id</em></td>
+</tr>
+<tr>
+<td>AzureAuthentication--ClientId</td>
+<td><em>B2C=&gt;app registrations=&gt;all =&gt; API app: client id</em></td>
+</tr>
+<tr>
+<td>AzureAuthentication--ClientSecret</td>
+<td><em>B2C=&gt;app registrations=&gt; all =&gt; API app: client secret: GraphAPISecret</em></td>
+</tr>
+<tr>
+<td>AzureAuthentication--GraphApiScopes</td>
+<td><em><a href="https://graph.microsoft.com/.default">https://graph.microsoft.com/.default</a></em></td>
+</tr>
+<tr>
+<td>AzureAuthentication--Instance</td>
+<td><em>https://(nameofb2c).b2clogin.com</em></td>
+</tr>
+<tr>
+<td>AzureAuthentication--SignUpSignInPolicyId</td>
+<td><em>b2c_1_susi</em></td>
+</tr>
+<tr>
+<td>AzureAuthentication--TenantId</td>
+<td><em>B2C=&gt;app registrations =&gt; any app=&gt; overview=&gt; tenentID</em></td>
+</tr>
+<tr>
+<td>Email--Emailadres</td>
+<td><em>Email address that is used to send emails</em></td>
+</tr>
+<tr>
+<td>Email--Password</td>
+<td><em>The password for the email address</em></td>
+</tr>
+<tr>
+<td>Email--Port</td>
+<td><em>The port that is used to send emails</em> (587)</td>
+</tr>
+<tr>
+<td>Email--SMTPadres</td>
+<td><em>The SMTP-server address</em></td>
+</tr>
+<tr>
+<td>WebUrl--Url</td>
+<td><em>custom domain URI</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="overwriting-values-in-the-front-end-environmentprod-file">Overwriting values in the front-end environment.prod file</h2>
+<p>Currently, the values environment.prod file are added and changed manually depending in which environment the application is deployed.<br>
+It would be ideal to overwrite these values during the deployment process.</p>
+<p>The following values need to be customized:</p>
+<table>
+<thead>
+<tr>
+<th>Value name</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clientId</td>
+<td><em>B2C=&gt;app registrations=&gt; all =&gt; WEB app: client id</em></td>
+</tr>
+<tr>
+<td>authority</td>
+<td><em>https://(nameofb2c).b2clogin.com/(nameofb2c).onmicrosoft.com/b2c_1_susi</em></td>
+</tr>
+<tr>
+<td>redirectUri</td>
+<td><em>custom domain URI</em></td>
+</tr>
+<tr>
+<td>postLogoutRedirectUri</td>
+<td><em>custom domain URI</em></td>
+</tr>
+<tr>
+<td>knownAuthorities</td>
+<td><em>[&quot;https://(nameofb2c).b2clogin.com&quot;]</em></td>
+</tr>
+<tr>
+<td>protectedResourceMap</td>
+<td><em>[  ['CUSTOM DOMAIN URI', ['URL TO API EXPOSE PERMISSION']],]</em></td>
+</tr>
+<tr>
+<td>scopes</td>
+<td><em>URL TO API-appregistration =&gt;EXPOSE PERMISSION</em></td>
+</tr>
+<tr>
+<td>signUpSignIn:</td>
+<td>{ authority:=&gt; https://(nameofb2c).b2clogin.com/(nameofb2c).onmicrosoft.com/b2c_1_susi }</td>
+</tr>
+<tr>
+<td>resetPassword:</td>
+<td>{ authority: =&gt; https://(nameofb2c).b2clogin.com/(nameofb2c).onmicrosoft.com/b2c_1_reset_pwd }</td>
+</tr>
+<tr>
+<td>editProfile:</td>
+<td>{ authority: =&gt; https://(nameofb2c).b2clogin.com/(nameofb2c).onmicrosoft.com/b2c_1_edit }</td>
+</tr>
+</tbody>
+</table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

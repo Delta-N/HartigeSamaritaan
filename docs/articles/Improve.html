@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Improving this documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Improving this documentation ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="improving-this-documentation">Improving this documentation</h1>
+
+<p>Documentation for the application is written in Markdown and build using DocFX.<br>
+To improve the documentation follow the steps below:</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Basic knowlege of Git, Github and <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a></li>
+<li><a href="https://dotnet.github.io/docfx/">DocFX</a></li>
+</ul>
+<h3 id="1-pull-the-latest-version-of-the-master-branch-to-your-machine">1. Pull the latest version of the master branch to your machine.</h3>
+<p>You can use git bash or any other tool to do this.</p>
+<p>You cannot directly edit the master or develop branches.<br>
+In order to update the documentation you need to create a branch of the master.<br>
+Once created you can move on to the next step.</p>
+<h3 id="2-createupdate-documentation">2. Create/update documentation.</h3>
+<p>All documentation is located in the <em>Roosterplanner.Documentation</em> folder.<br>
+The API-documentation is generated automatically by docFX and should not be changed manually.<br>
+All other forms of documentation are editable.</p>
+<p>You can add categories to the header in the upper level toc.yml file.<br>
+(<em>Roosterplanner.Documentation/toc.yml</em>)<br>
+Simply specify the name of the header you want to add and specify the href.<br>
+The href should direct to a folder with a toc.yml file in it.</p>
+<p>For example:<br>
+<em>- name: Articles<br>
+href: articles/</em><br>
+Leads to: <em>Roosterplanner.Documentation/articles/toc.yml</em></p>
+<p>You can specify all subheaders in this second layer toc.yml file.<br>
+Don't forget to fill in the href here as well. It each href should lead to a markdown file. (<em>example.md</em>).</p>
+<p>Finally: create your documentation in the file using the markdown syntax.</p>
+<h3 id="3-build-the-project">3. Build the project.</h3>
+<p>Once you're finished with editing the documentation, it is time to build the project.<br>
+The correct output paths are already specified, you just need to run the following commands in any terminal:</p>
+<ul>
+<li>cd c:\'pathToSourceFiles'\HartigeSamaritaan\Roosterplanner.Documentation</li>
+<li>c:\'pathToDocFX'\docfx.ex --serve</li>
+</ul>
+<p>The documentation will now be build and the website, where you can view the documentation, will be <a href="http://localhost:8080">served</a>.</p>
+<h3 id="4-create-a-pullrequest">4. Create a pullrequest.</h3>
+<p>Finally it is time to push your branch to Github and create a pull request to master.<br>
+Again: Use the tools that you are most comfortable with to do this.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

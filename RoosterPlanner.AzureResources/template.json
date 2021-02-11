@@ -22,6 +22,16 @@
       "type": "securestring", 
       "minLength": 2,
       "defaultValue": "[concat('P', uniqueString(resourceGroup().id, '224F5A8B-51DB-46A3-A7C8-59B0DD584A41'), 'x', '!')]"
+    },
+    "firewallRuleDN":{
+      "type": "string",
+      "minLength": 7,
+      "defaultValue": "0.0.0.0"
+    },
+    "firewallRuleOther":{
+      "type": "string",
+      "minLength": 7,
+      "defaultValue": "0.0.0.0"
     }
   },
   
@@ -42,17 +52,17 @@
 
     "databaseSkuName": {
       "dev": "Basic",
-      "acc": "Basic",
+      "tst": "Basic",
       "prd": "S0"
     },
     "databaseTierEdition": {
       "dev": "Basic",
-      "acc": "Basic",
+      "tst": "Basic",
       "prd": "Standard"
     },
     "databaseCapacity": {
       "dev": 5,
-      "acc": 5,
+      "tst": 5,
       "prd": 10
     },
     
@@ -97,12 +107,12 @@
     },
     "storageTypeEnvironment": {
       "dev": "Standard_LRS",
-      "acc": "Standard_LRS",
+      "tst": "Standard_LRS",
       "prd": "Standard_ZRS"
     },
     "storageTierEnvironment": {
       "dev": "Standard",
-      "acc": "Standard",
+      "tst": "Standard",
       "prd": "Standard"
     },
     "storageSettings": {
@@ -187,8 +197,8 @@
             "[resourceId('Microsoft.Sql/servers/', variables('databaseSettings').sqlserverName)]"
           ],
           "properties": {
-            "startIpAddress": "185.127.110.82",
-            "endIpAddress": "185.127.110.82"
+            "startIpAddress": "[parameters('firewallRuleDN')]",
+            "endIpAddress": "[parameters('firewallRuleDN')]"
           }
         },
         {
@@ -200,8 +210,8 @@
             "[resourceId('Microsoft.Sql/servers/', variables('databaseSettings').sqlserverName)]"
           ],
           "properties": {
-            "startIpAddress": "94.210.15.37",
-            "endIpAddress": "94.210.15.37"
+            "startIpAddress": "[parameters('firewallRuleOther')]",
+            "endIpAddress": "[parameters('firewallRuleOther')]"
           }
         }
       ]
@@ -425,7 +435,7 @@
           "corsRules": [
             {
               "allowedOrigins": [
-                "*" //todo dit specifieker maken
+                "[concat('https://',variables('apiName'),'.azurewebsites.net')]"
               ],
               "allowedMethods": [
                 "GET",
