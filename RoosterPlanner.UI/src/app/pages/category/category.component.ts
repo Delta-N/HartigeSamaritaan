@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {ToastrService} from "ngx-toastr";
-import {UserService} from "../../services/user.service";
-import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
-import {CategoryService} from "../../services/category.service";
-import {Category} from "../../models/category";
-import {AddCategoryComponent} from "../../components/add-category/add-category.component";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {Breadcrumb} from "../../models/breadcrumb";
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {UserService} from '../../services/user.service';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '../../components/confirm-dialog/confirm-dialog.component';
+import {CategoryService} from '../../services/category.service';
+import {Category} from '../../models/category';
+import {AddCategoryComponent} from '../../components/add-category/add-category.component';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {Breadcrumb} from '../../models/breadcrumb';
 import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -21,8 +21,8 @@ export class CategoryComponent implements OnInit {
   deleteIcon = faTrashAlt;
   guid: string;
   category: Category;
-  isAdmin: boolean = false;
-  loaded: boolean = false;
+  isAdmin = false;
+  loaded = false;
 
 
   constructor(
@@ -34,10 +34,10 @@ export class CategoryComponent implements OnInit {
     private router: Router,
     private breadcrumbService: BreadcrumbService) {
 
-    let breadcrumb: Breadcrumb = new Breadcrumb('Categorie', null);
-    let takencrumb: Breadcrumb = new Breadcrumb("Taken", "admin/tasks");
+    const breadcrumb: Breadcrumb = new Breadcrumb('Categorie', null);
+    const takencrumb: Breadcrumb = new Breadcrumb('Taken', 'admin/tasks');
 
-    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
+    const array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
       this.breadcrumbService.admincrumb, takencrumb, breadcrumb];
 
     this.breadcrumbService.replace(array);
@@ -51,7 +51,7 @@ export class CategoryComponent implements OnInit {
     this.categoryService.getCategory(this.guid).then(response => {
       this.category = response;
       this.loaded = true;
-    })
+    });
   }
 
   edit() {
@@ -66,16 +66,16 @@ export class CategoryComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if (result && result !== 'false') {
         this.category = result;
-        this.toastr.success(result.name + " is gewijzigd")
+        this.toastr.success(result.name + ' is gewijzigd');
       }
     });
   }
 
   delete() {
-    const message = "Weet je zeker dat je deze category wilt verwijderen?"
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput", null);
+    const message = 'Weet je zeker dat je deze category wilt verwijderen?';
+    const dialogData = new ConfirmDialogModel('Bevestig verwijderen', message, 'ConfirmationInput', null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(async dialogResult => {
@@ -84,8 +84,8 @@ export class CategoryComponent implements OnInit {
           if (response) {
             this.router.navigate(['admin/tasks']).then();
           }
-        })
+        });
       }
-    })
+    });
   }
 }

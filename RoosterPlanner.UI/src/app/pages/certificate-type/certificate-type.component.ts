@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {CertificateType} from "../../models/CertificateType";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {ToastrService} from "ngx-toastr";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {CertificateService} from "../../services/certificate.service";
-import {Breadcrumb} from "../../models/breadcrumb";
-import {UserService} from "../../services/user.service";
-import {AddCertificatetypeComponent} from "../../components/add-certificatetype/add-certificatetype.component";
-import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
+import {CertificateType} from '../../models/CertificateType';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {CertificateService} from '../../services/certificate.service';
+import {Breadcrumb} from '../../models/breadcrumb';
+import {UserService} from '../../services/user.service';
+import {AddCertificatetypeComponent} from '../../components/add-certificatetype/add-certificatetype.component';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '../../components/confirm-dialog/confirm-dialog.component';
 import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -19,10 +19,10 @@ import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 export class CertificateTypeComponent implements OnInit {
   editIcon = faEdit;
   deleteIcon = faTrashAlt;
-  loaded: boolean = false;
+  loaded = false;
   certificateType: CertificateType;
   guid: string;
-  isAdmin: boolean = false;
+  isAdmin = false;
 
 
   constructor(private route: ActivatedRoute,
@@ -33,11 +33,11 @@ export class CertificateTypeComponent implements OnInit {
               private certificateService: CertificateService,
               private userService: UserService,
   ) {
-    let breadcrumb: Breadcrumb = new Breadcrumb('Certificaattype', null);
-    let takencrumb: Breadcrumb = new Breadcrumb("Taken", "admin/tasks");
+    const breadcrumb: Breadcrumb = new Breadcrumb('Certificaattype', null);
+    const takencrumb: Breadcrumb = new Breadcrumb('Taken', 'admin/tasks');
 
 
-    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
+    const array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
       this.breadcrumbService.admincrumb, takencrumb, breadcrumb];
 
     this.breadcrumbService.replace(array);
@@ -51,7 +51,7 @@ export class CertificateTypeComponent implements OnInit {
     this.certificateService.getCertificateType(this.guid).then(response => {
       this.certificateType = response;
       this.loaded = true;
-    })
+    });
   }
 
   edit() {
@@ -66,16 +66,16 @@ export class CertificateTypeComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if (result && result !== 'false') {
         this.certificateType = result;
-        this.toastr.success(result.name + " is gewijzigd")
+        this.toastr.success(result.name + ' is gewijzigd');
       }
     });
   }
 
   delete() {
-    const message = "Weet je zeker dat je dit certificaattype wilt verwijderen?"
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput", null);
+    const message = 'Weet je zeker dat je dit certificaattype wilt verwijderen?';
+    const dialogData = new ConfirmDialogModel('Bevestig verwijderen', message, 'ConfirmationInput', null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(async dialogResult => {
@@ -84,8 +84,8 @@ export class CertificateTypeComponent implements OnInit {
           if (response) {
             this.router.navigate(['admin/tasks']).then();
           }
-        })
+        });
       }
-    })
+    });
   }
 }

@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {AdminComponent} from "../../pages/admin/admin.component";
-import {ProfileComponent} from "../../pages/profile/profile.component";
-import {AllTasksComponent} from "../../pages/all-tasks/all-tasks.component";
-import {CategoryComponent} from "../../pages/category/category.component";
-import {EmployeeComponent} from "../../pages/employee/employee.component";
-import {CertificateTypeComponent} from "../../pages/certificate-type/certificate-type.component";
+import {AdminComponent} from '../../pages/admin/admin.component';
+import {ProfileComponent} from '../../pages/profile/profile.component';
+import {AllTasksComponent} from '../../pages/all-tasks/all-tasks.component';
+import {CategoryComponent} from '../../pages/category/category.component';
+import {EmployeeComponent} from '../../pages/employee/employee.component';
+import {CertificateTypeComponent} from '../../pages/certificate-type/certificate-type.component';
 
 const routes: Routes = [
   {path: '', component: AdminComponent},

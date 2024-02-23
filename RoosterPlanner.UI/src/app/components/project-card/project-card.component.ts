@@ -1,12 +1,12 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {UserService} from "../../services/user.service";
-import {ParticipationService} from "../../services/participation.service";
-import {Participation} from "../../models/participation";
-import {ToastrService} from "ngx-toastr";
-import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/confirm-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
-import {faCalendarAlt, faFileAlt, faList,} from "@fortawesome/free-solid-svg-icons";
-import {faTimesCircle} from "@fortawesome/free-regular-svg-icons";
+import {UserService} from '../../services/user.service';
+import {ParticipationService} from '../../services/participation.service';
+import {Participation} from '../../models/participation';
+import {ToastrService} from 'ngx-toastr';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '../confirm-dialog/confirm-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {faCalendarAlt, faFileAlt, faList, } from '@fortawesome/free-solid-svg-icons';
+import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-project-card',
@@ -18,7 +18,7 @@ export class ProjectCardComponent implements OnInit {
   listIcon = faList;
   signOut = faTimesCircle;
   detailsIcon = faFileAlt;
-  isAdmin: boolean = false;
+  isAdmin = false;
 
   constructor(private toastr: ToastrService,
               private userService: UserService,
@@ -33,10 +33,10 @@ export class ProjectCardComponent implements OnInit {
   }
 
   removeParticipation(participation: Participation) {
-    const message = "Weet je zeker dat je wilt uitschrijven voor dit project?"
-    const dialogData = new ConfirmDialogModel("Bevestig uitschrijving", message, "ConfirmationInput", null);
+    const message = 'Weet je zeker dat je wilt uitschrijven voor dit project?';
+    const dialogData = new ConfirmDialogModel('Bevestig uitschrijving', message, 'ConfirmationInput', null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogData
     });
 

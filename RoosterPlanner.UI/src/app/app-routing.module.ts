@@ -1,18 +1,18 @@
-import {AvailabilityComponent} from "./pages/availability/availability.component";
-import {HomeComponent} from "./pages/home/home.component";
-import {MsalGuard} from "./msal";
+import {AvailabilityComponent} from './pages/availability/availability.component';
+import {HomeComponent} from './pages/home/home.component';
+import {MsalGuard} from './msal';
 import {NgModule} from '@angular/core';
-import {NotFoundComponent} from "./pages/not-found/not-found.component";
-import {ProfileComponent} from "./pages/profile/profile.component";
-import {ProjectComponent} from "./pages/project/project.component";
+import {NotFoundComponent} from './pages/not-found/not-found.component';
+import {ProfileComponent} from './pages/profile/profile.component';
+import {ProjectComponent} from './pages/project/project.component';
 import {RouterModule, Routes} from '@angular/router';
-import {TaskComponent} from "./pages/task/task.component";
-import {AuthorizationGuard} from "./guards/authorization.guard";
-import {ManageGuard} from "./guards/manage.guard";
-import {ScheduleComponent} from "./pages/schedule/schedule.component";
-import {PrivacyComponent} from "./pages/privacy/privacy.component";
-import {CertificateComponent} from "./pages/certificate/certificate.component";
-import {RequirementComponent} from "./pages/requirement/requirement.component";
+import {TaskComponent} from './pages/task/task.component';
+import {AuthorizationGuard} from './guards/authorization.guard';
+import {ManageGuard} from './guards/manage.guard';
+import {ScheduleComponent} from './pages/schedule/schedule.component';
+import {PrivacyComponent} from './pages/privacy/privacy.component';
+import {CertificateComponent} from './pages/certificate/certificate.component';
+import {RequirementComponent} from './pages/requirement/requirement.component';
 
 
 const routes: Routes = [
@@ -25,11 +25,11 @@ const routes: Routes = [
   {path: 'schedule/:id', component: ScheduleComponent, canActivate: [MsalGuard]},
   {path: 'privacy', component: PrivacyComponent},
   {path: 'certificate/:id', component: CertificateComponent},
-  {path: 'manage',loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule),canLoad: [ManageGuard]  },
-  {path: 'admin',loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),canLoad: [AuthorizationGuard]},
+  {path: 'manage', loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule), canLoad: [ManageGuard]  },
+  {path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule), canLoad: [AuthorizationGuard]},
   {path: '', component: HomeComponent, canActivate: [MsalGuard]},
-  {path: '**', component: NotFoundComponent,}
-]
+  {path: '**', component: NotFoundComponent, }
+];
 
 
 const isIframe = window !== window.parent && !window.opener;
