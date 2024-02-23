@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {Requirement} from "../../models/requirement";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {ToastrService} from "ngx-toastr";
-import {RequirementService} from "../../services/requirement.service";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {Breadcrumb} from "../../models/breadcrumb";
-import {UserService} from "../../services/user.service";
-import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
-import {AddRequirementComponent} from "../../components/add-requirement/add-requirement.component";
+import {Requirement} from '../../models/requirement';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {RequirementService} from '../../services/requirement.service';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {Breadcrumb} from '../../models/breadcrumb';
+import {UserService} from '../../services/user.service';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '../../components/confirm-dialog/confirm-dialog.component';
+import {AddRequirementComponent} from '../../components/add-requirement/add-requirement.component';
 import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -21,8 +21,8 @@ export class RequirementComponent implements OnInit {
   editIcon = faEdit;
   guid: string;
   requirement: Requirement;
-  isAdmin: boolean = false;
-  loaded: boolean = false;
+  isAdmin = false;
+  loaded = false;
 
   constructor(private route: ActivatedRoute,
               public dialog: MatDialog,
@@ -44,15 +44,15 @@ export class RequirementComponent implements OnInit {
         if (res) {
           this.requirement = res;
 
-          let breadcrumb: Breadcrumb = new Breadcrumb('Requirement', null);
-          let takencrumb: Breadcrumb = new Breadcrumb(this.requirement.task.name, "task/" + this.requirement.task.id);
-          let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
+          const breadcrumb: Breadcrumb = new Breadcrumb('Requirement', null);
+          const takencrumb: Breadcrumb = new Breadcrumb(this.requirement.task.name, 'task/' + this.requirement.task.id);
+          const array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
             takencrumb, breadcrumb];
 
           this.breadcrumbService.replace(array);
           this.loaded = true;
         }
-      })
+      });
     });
   }
 
@@ -67,32 +67,33 @@ export class RequirementComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result && result !== 'false') {
-        this.toastr.success("De requirement is gewijzigd")
+        this.toastr.success('De requirement is gewijzigd');
         this.loaded = false;
         this.requirementService.getRequirement(this.guid).then(res => {
-          if (res)
+          if (res) {
             this.requirement = res;
-        })
+          }
+        });
         this.loaded = true;
       }
     });
   }
 
   delete() {
-    const message = "Weet je zeker dat je deze requirement wilt verwijderen?"
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput", null);
+    const message = 'Weet je zeker dat je deze requirement wilt verwijderen?';
+    const dialogData = new ConfirmDialogModel('Bevestig verwijderen', message, 'ConfirmationInput', null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult === true) {
         this.requirementService.deleteRequirement(this.guid).then(response => {
           if (response === true) {
-            window.history.back()
+            window.history.back();
           }
-        })
+        });
       }
-    })
+    });
   }
 }

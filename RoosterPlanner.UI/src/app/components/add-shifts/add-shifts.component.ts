@@ -111,7 +111,7 @@ export class AddShiftsComponent implements OnInit {
     let currentDates: any[] = this.shiftDates;
     let allDates: Date[] = this.getDatesBetweenDates(new Date(this.min), new Date(this.max));
 
-    //filter alldates depending on action
+    // filter alldates depending on action
     switch (this.daySelectionControl.value) {
       case this.selectionOptions[0]: {
         break;
