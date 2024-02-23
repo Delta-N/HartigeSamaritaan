@@ -1,22 +1,22 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Location} from '@angular/common';
-import {Project} from "../../models/project";
-import {Task} from "../../models/task";
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
-import {MultipleDatesComponent} from "ngx-multiple-dates";
-import {TaskService} from "../../services/task.service";
-import {ProjectService} from "../../services/project.service";
-import {ActivatedRoute, ParamMap} from "@angular/router";
-import {ToastrService} from "ngx-toastr";
-import {ShiftService} from "../../services/shift.service";
-import {Moment} from "moment";
-import {DateConverter} from "../../helpers/date-converter";
-import {Shift} from "../../models/shift";
-import {EntityHelper} from "../../helpers/entity-helper";
-import * as moment from "moment";
-import {TextInjectorService} from "../../services/text-injector.service";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {Breadcrumb} from "../../models/breadcrumb";
+import {Project} from '../../models/project';
+import {Task} from '../../models/task';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {MultipleDatesComponent} from 'ngx-multiple-dates';
+import {TaskService} from '../../services/task.service';
+import {ProjectService} from '../../services/project.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {ShiftService} from '../../services/shift.service';
+import {Moment} from 'moment';
+import {DateConverter} from '../../helpers/date-converter';
+import {Shift} from '../../models/shift';
+import {EntityHelper} from '../../helpers/entity-helper';
+import * as moment from 'moment';
+import {TextInjectorService} from '../../services/text-injector.service';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {Breadcrumb} from '../../models/breadcrumb';
 
 @Component({
   selector: 'app-add-shifts',
@@ -25,8 +25,8 @@ import {Breadcrumb} from "../../models/breadcrumb";
 })
 export class AddShiftsComponent implements OnInit {
   guid: string;
-  loaded: boolean = false;
-  title: string = "Shift toevoegen";
+  loaded = false;
+  title = 'Shift toevoegen';
 
   project: Project;
   tasks: Task[];
@@ -70,17 +70,17 @@ export class AddShiftsComponent implements OnInit {
       start: this.startTimeControl,
       end: this.endTimeControl,
       participantsRequired: this.participantsRequiredControl,
-    })
+    });
   }
 
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.guid = params.get('id');
 
-      let previous: Breadcrumb = new Breadcrumb("Shift overzicht", "/manage/shifts/" + this.guid);
-      let current: Breadcrumb = new Breadcrumb("Shift toevoegen", null);
+      const previous: Breadcrumb = new Breadcrumb('Shift overzicht', '/manage/shifts/' + this.guid);
+      const current: Breadcrumb = new Breadcrumb('Shift toevoegen', null);
 
-      let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current]
+      const breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, previous, current];
       this.breadcrumbService.replace(breadcrumbs);
     });
 
@@ -94,17 +94,17 @@ export class AddShiftsComponent implements OnInit {
       this.max = this.project.participationEndDate;
 
       this.loaded = true;
-    })
+    });
   }
 
   getDatesBetweenDates = (startDate, endDate) => {
-    let dates = []
-    const theDate = new Date(startDate)
+    let dates = [];
+    const theDate = new Date(startDate);
     while (theDate <= endDate) {
-      dates = [...dates, new Date(theDate)]
-      theDate.setDate(theDate.getDate() + 1)
+      dates = [...dates, new Date(theDate)];
+      theDate.setDate(theDate.getDate() + 1);
     }
-    return dates
+    return dates;
   }
 
   addAllDays() {
@@ -117,31 +117,31 @@ export class AddShiftsComponent implements OnInit {
         break;
       }
       case this.selectionOptions[1]: {
-        allDates = allDates.filter(d => d.getDay() === 1)
+        allDates = allDates.filter(d => d.getDay() === 1);
         break;
       }
       case this.selectionOptions[2]: {
-        allDates = allDates.filter(d => d.getDay() === 2)
+        allDates = allDates.filter(d => d.getDay() === 2);
         break;
       }
       case this.selectionOptions[3]: {
-        allDates = allDates.filter(d => d.getDay() === 3)
+        allDates = allDates.filter(d => d.getDay() === 3);
         break;
       }
       case this.selectionOptions[4]: {
-        allDates = allDates.filter(d => d.getDay() === 4)
+        allDates = allDates.filter(d => d.getDay() === 4);
         break;
       }
       case this.selectionOptions[5]: {
-        allDates = allDates.filter(d => d.getDay() === 5)
+        allDates = allDates.filter(d => d.getDay() === 5);
         break;
       }
       case this.selectionOptions[6]: {
-        allDates = allDates.filter(d => d.getDay() === 6)
+        allDates = allDates.filter(d => d.getDay() === 6);
         break;
       }
       case this.selectionOptions[7]: {
-        allDates = allDates.filter(d => d.getDay() === 0)
+        allDates = allDates.filter(d => d.getDay() === 0);
         break;
       }
       case this.selectionOptions[8]: {
@@ -156,54 +156,54 @@ export class AddShiftsComponent implements OnInit {
     }
 
     allDates.forEach(date => {
-      let found: boolean = false;
-      let dateMoment: Moment = moment([date.getFullYear(), date.getMonth(), date.getDate()])
+      let found = false;
+      const dateMoment: Moment = moment([date.getFullYear(), date.getMonth(), date.getDate()]);
 
       currentDates.forEach(storedDate => {
         if (dateMoment.toJSON() === storedDate.toJSON()) {
           found = true;
         }
-      })
+      });
       if (!found) {
-        currentDates.push(dateMoment)
+        currentDates.push(dateMoment);
       }
-    })
-    this.datepicker.writeValue(currentDates)
+    });
+    this.datepicker.writeValue(currentDates);
     this.shiftDates.sort((a, b) => a.valueOf() - b.valueOf());
   }
 
 
   remove(day: Date) {
-    const index = this.shiftDates.indexOf(day)
+    const index = this.shiftDates.indexOf(day);
     if (index >= 0) {
       this.datepicker.remove(day);
     }
   }
 
   timeBefore(startTime: string, endTime: string): boolean {
-    let start: Date = new Date(null, null, null, parseInt(startTime.substring(0, 2)), parseInt(startTime.substring(3, 5)));
-    let end: Date = new Date(null, null, null, parseInt(endTime.substring(0, 2)), parseInt(endTime.substring(3, 5)));
-    return end.valueOf() - start.valueOf() >= 0
+    const start: Date = new Date(null, null, null, parseInt(startTime.substring(0, 2)), parseInt(startTime.substring(3, 5)));
+    const end: Date = new Date(null, null, null, parseInt(endTime.substring(0, 2)), parseInt(endTime.substring(3, 5)));
+    return end.valueOf() - start.valueOf() >= 0;
   }
 
   async save(value: any) {
     if (this.checkoutForm.status === 'INVALID' || !this.shiftDates.length) {
-      this.toastr.error("Niet alle velden zijn correct ingevuld")
+      this.toastr.error('Niet alle velden zijn correct ingevuld');
     } else {
       if (!this.timeBefore(value.start, value.end)) {
-        this.toastr.error("Starttijd moet voor eindtijd komen")
+        this.toastr.error('Starttijd moet voor eindtijd komen');
         return;
       }
       if (value.par <= 0) {
-        this.toastr.error("Een shift heeft minimaal 1 vrijwilliger nodig")
+        this.toastr.error('Een shift heeft minimaal 1 vrijwilliger nodig');
         return;
       }
 
-      let shifts: Shift[] = []
+      const shifts: Shift[] = [];
       this.shiftDates.forEach(shiftdate => {
-        let currentShift: Shift = new Shift();
+        const currentShift: Shift = new Shift();
         currentShift.id = EntityHelper.returnEmptyGuid();
-        currentShift.project = this.project
+        currentShift.project = this.project;
         currentShift.task = value.task;
         currentShift.participantsRequired = value.participantsRequired;
         currentShift.startTime = value.start;
@@ -215,7 +215,7 @@ export class AddShiftsComponent implements OnInit {
           currentShift.date = DateConverter.addOffset(shiftdate);
         }
         shifts.push(currentShift);
-      })
+      });
       if (shifts && shifts.length) {
         await this.shiftService.postShifts(shifts).then(res => {
           if (res && res.length) {

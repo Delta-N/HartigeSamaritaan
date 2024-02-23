@@ -1,17 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Moment} from "moment";
-import {MatCalendar} from "@angular/material/datepicker";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {MatTableDataSource} from "@angular/material/table";
-import {Availability} from "../../models/availability";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {AvailabilityService} from "../../services/availability.service";
-import {TextInjectorService} from "../../services/text-injector.service";
-import {ProjectService} from "../../services/project.service";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {Breadcrumb} from "../../models/breadcrumb";
-import * as moment from "moment";
+import {Moment} from 'moment';
+import {MatCalendar} from '@angular/material/datepicker';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {MatTableDataSource} from '@angular/material/table';
+import {Availability} from '../../models/availability';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {AvailabilityService} from '../../services/availability.service';
+import {TextInjectorService} from '../../services/text-injector.service';
+import {ProjectService} from '../../services/project.service';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {Breadcrumb} from '../../models/breadcrumb';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-schedule-manager',
@@ -30,16 +30,16 @@ export class ScheduleManagerComponent implements OnInit {
   dataSource: MatTableDataSource<Availability> = new MatTableDataSource<Availability>();
   paginator: MatPaginator;
   sort: MatSort;
-  loaded: boolean = false;
+  loaded = false;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
-    this.setDataSourceAttributes()
+    this.setDataSourceAttributes();
   }
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
-    this.setDataSourceAttributes()
+    this.setDataSourceAttributes();
   }
 
   projectId: string;
@@ -50,9 +50,9 @@ export class ScheduleManagerComponent implements OnInit {
               private availabilityService: AvailabilityService,
               private projectService: ProjectService,
               private breadcrumbService: BreadcrumbService) {
-    let breadcrumb: Breadcrumb = new Breadcrumb('Rooster', null);
+    const breadcrumb: Breadcrumb = new Breadcrumb('Rooster', null);
 
-    let array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
+    const array: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb,
       this.breadcrumbService.managecrumb, breadcrumb];
 
     this.breadcrumbService.replace(array);
@@ -64,17 +64,17 @@ export class ScheduleManagerComponent implements OnInit {
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       this.projectId = params.get('id');
       this.projectService.getProject(this.projectId).then(res => {
-        this.minDate = res.participationStartDate
-        this.maxDate = res.participationEndDate
-      })
+        this.minDate = res.participationStartDate;
+        this.maxDate = res.participationEndDate;
+      });
       await this.getAvailabilities(this.viewDate).then(() => {
         this.loaded = true;
-      })
-    })
+      });
+    });
   }
 
   setDatasource(availabilaties: Availability[]) {
-    this.dataSource = new MatTableDataSource<Availability>(availabilaties)
+    this.dataSource = new MatTableDataSource<Availability>(availabilaties);
     this.setDataSourceAttributes();
 
 
@@ -94,7 +94,7 @@ export class ScheduleManagerComponent implements OnInit {
 
   dateChanged() {
     this.calendar.activeDate = this.selectedDate;
-    this.changeDate(this.selectedDate.toDate())
+    this.changeDate(this.selectedDate.toDate());
   }
 
   changeDate(date: Date): void {
@@ -114,9 +114,9 @@ export class ScheduleManagerComponent implements OnInit {
   }
 
   async getAvailabilities(viewDate: Date) {
-    await this.availabilityService.getScheduledAvailabilitiesOnDate(this.projectId, moment(viewDate).set("hour", 12).toDate()).then(res => {
-      this.setDatasource(res)
-    })
+    await this.availabilityService.getScheduledAvailabilitiesOnDate(this.projectId, moment(viewDate).set('hour', 12).toDate()).then(res => {
+      this.setDatasource(res);
+    });
   }
 
   setDataSourceAttributes() {
@@ -125,7 +125,7 @@ export class ScheduleManagerComponent implements OnInit {
   }
 
   details(personId: string) {
-    this.router.navigate(['manage/profile', personId])
+    this.router.navigate(['manage/profile', personId]);
   }
 }
 

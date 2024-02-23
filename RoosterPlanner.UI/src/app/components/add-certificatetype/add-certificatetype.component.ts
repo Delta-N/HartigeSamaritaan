@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {FormBuilder, Validators} from "@angular/forms";
-import {ToastrService} from "ngx-toastr";
-import {CertificateService} from "../../services/certificate.service";
-import {CertificateType} from "../../models/CertificateType";
-import {EntityHelper} from "../../helpers/entity-helper";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormBuilder, Validators} from '@angular/forms';
+import {ToastrService} from 'ngx-toastr';
+import {CertificateService} from '../../services/certificate.service';
+import {CertificateType} from '../../models/CertificateType';
+import {EntityHelper} from '../../helpers/entity-helper';
 
 @Component({
   selector: 'app-add-certificatetype',
@@ -12,10 +12,10 @@ import {EntityHelper} from "../../helpers/entity-helper";
   styleUrls: ['./add-certificatetype.component.scss']
 })
 export class AddCertificatetypeComponent implements OnInit {
-  modifier: string = 'toevoegen';
+  modifier = 'toevoegen';
   checkoutForm;
-  certificateType:CertificateType
-  updatedCertificateType:CertificateType
+  certificateType: CertificateType;
+  updatedCertificateType: CertificateType;
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -30,32 +30,32 @@ export class AddCertificatetypeComponent implements OnInit {
     this.checkoutForm = this.formBuilder.group({
       id: [this.certificateType.id != null ? this.certificateType.id : EntityHelper.returnEmptyGuid()],
       name: [this.certificateType.name != null ? this.certificateType.name : '', Validators.required],
-      level: [this.certificateType.level != null ? this.certificateType.level : '',],
-    })
+      level: [this.certificateType.level != null ? this.certificateType.level : '', ],
+    });
   }
 
   ngOnInit(): void {
   }
 
   close() {
-    this.dialogRef.close('false')
+    this.dialogRef.close('false');
   }
 
   async saveCertificate(value: CertificateType) {
     this.updatedCertificateType = value;
     if (this.checkoutForm.status === 'INVALID') {
-      this.toastr.error("Niet alle velden zijn correct ingevuld")
+      this.toastr.error('Niet alle velden zijn correct ingevuld');
     } else {
       if (this.modifier === 'toevoegen') {
         await this.certificateService.postCertificateType(this.updatedCertificateType).then(async response => {
-          this.dialogRef.close(response)
+          this.dialogRef.close(response);
         });
       } else if (this.modifier === 'wijzigen') {
         this.updatedCertificateType.lastEditBy = this.certificateType.lastEditBy;
         this.updatedCertificateType.lastEditDate = this.certificateType.lastEditDate;
         this.updatedCertificateType.rowVersion = this.certificateType.rowVersion;
         await this.certificateService.updateCertificateType(this.updatedCertificateType).then(async response => {
-          this.dialogRef.close(response)
+          this.dialogRef.close(response);
         });
 
       }

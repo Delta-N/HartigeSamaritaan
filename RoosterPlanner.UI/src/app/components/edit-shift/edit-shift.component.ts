@@ -1,11 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Task} from "../../models/task";
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {ToastrService} from "ngx-toastr";
-import {TaskService} from "../../services/task.service";
-import {Shift} from "../../models/shift";
-import {ShiftService} from "../../services/shift.service";
+import {Task} from '../../models/task';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {TaskService} from '../../services/task.service';
+import {Shift} from '../../models/shift';
+import {ShiftService} from '../../services/shift.service';
 
 @Component({
   selector: 'app-edit-shift',
@@ -45,7 +45,7 @@ export class EditShiftComponent implements OnInit {
       start: this.startTimeControl,
       end: this.endTimeControl,
       par: this.participantsRequiredControl,
-    })
+    });
   }
 
 
@@ -53,27 +53,27 @@ export class EditShiftComponent implements OnInit {
     this.taskService.getAllProjectTasks(this.projectGuid).then(res => {
       this.tasks = res.filter(t => t != null);
       if (this.shift.task) {
-        this.taskControl.setValue(this.tasks.find(t => t.name == this.shift.task.name))
+        this.taskControl.setValue(this.tasks.find(t => t.name == this.shift.task.name));
       }
-    })
+    });
   }
 
   timeBefore(startTime: string, endTime: string): boolean {
-    let start: Date = new Date(null, null, null, parseInt(startTime.substring(0, 2)), parseInt(startTime.substring(3, 5)));
-    let end: Date = new Date(null, null, null, parseInt(endTime.substring(0, 2)), parseInt(endTime.substring(3, 5)));
-    return end.valueOf() - start.valueOf() >= 0
+    const start: Date = new Date(null, null, null, parseInt(startTime.substring(0, 2)), parseInt(startTime.substring(3, 5)));
+    const end: Date = new Date(null, null, null, parseInt(endTime.substring(0, 2)), parseInt(endTime.substring(3, 5)));
+    return end.valueOf() - start.valueOf() >= 0;
   }
 
   save(value: any) {
     if (this.checkoutForm.status === 'INVALID') {
-      this.toastr.error("Niet allevelden zijn correct ingevuld")
+      this.toastr.error('Niet allevelden zijn correct ingevuld');
     } else {
       if (!this.timeBefore(value.start, value.end)) {
-        this.toastr.error("Starttijd moet voor eindtijd komen")
+        this.toastr.error('Starttijd moet voor eindtijd komen');
         return;
       }
       if (value.par <= 0) {
-        this.toastr.error("Een shift heeft minimaal 1 vrijwilliger nodig")
+        this.toastr.error('Een shift heeft minimaal 1 vrijwilliger nodig');
         return;
       }
       this.shift.participantsRequired = value.par;
@@ -82,27 +82,27 @@ export class EditShiftComponent implements OnInit {
       this.shift.task = value.task;
       this.shiftService.updateShift(this.shift).then(res => {
         if (res) {
-          this.dialogRef.close(res)
+          this.dialogRef.close(res);
         } else {
-          this.toastr.error("Fout tijdens het updaten van de shift")
+          this.toastr.error('Fout tijdens het updaten van de shift');
         }
-      })
+      });
     }
   }
 
   close() {
-    this.dialogRef.close('false')
+    this.dialogRef.close('false');
   }
 
   adjustZindex(input: number) {
-    const element = document.getElementsByClassName("cdk-overlay-container") as HTMLCollectionOf<HTMLElement>;
-    const overlay = element[0]
+    const element = document.getElementsByClassName('cdk-overlay-container') as HTMLCollectionOf<HTMLElement>;
+    const overlay = element[0];
     if (element) {
       if (input === 0) {
-        overlay.style.zIndex = "0";
+        overlay.style.zIndex = '0';
       }
       if (input === 1) {
-        overlay.style.zIndex = "1";
+        overlay.style.zIndex = '1';
       }
     }
   }

@@ -1,22 +1,22 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Project} from "../../models/project";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {ProjectService} from "../../services/project.service";
-import {Shift} from "../../models/shift";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {Project} from '../../models/project';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {ProjectService} from '../../services/project.service';
+import {Shift} from '../../models/shift';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from "@angular/material/table";
-import {ShiftService} from "../../services/shift.service";
-import {TextInjectorService} from "../../services/text-injector.service";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {Breadcrumb} from "../../models/breadcrumb";
+import {MatTableDataSource} from '@angular/material/table';
+import {ShiftService} from '../../services/shift.service';
+import {TextInjectorService} from '../../services/text-injector.service';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {Breadcrumb} from '../../models/breadcrumb';
 import {Task} from 'src/app/models/task';
-import {MatSliderChange} from "@angular/material/slider";
-import {MatCheckboxChange} from "@angular/material/checkbox";
-import {ShiftFilter} from "../../models/filters/shift-filter";
-import {DateConverter} from "../../helpers/date-converter";
-import {Searchresult} from "../../models/searchresult";
-import {Shiftdata} from "../../models/helper-models/shiftdata";
+import {MatSliderChange} from '@angular/material/slider';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {ShiftFilter} from '../../models/filters/shift-filter';
+import {DateConverter} from '../../helpers/date-converter';
+import {Searchresult} from '../../models/searchresult';
+import {Shiftdata} from '../../models/helper-models/shiftdata';
 
 @Component({
   selector: 'app-shift-overview',
@@ -25,14 +25,14 @@ import {Shiftdata} from "../../models/helper-models/shiftdata";
 })
 export class ShiftOverviewComponent implements OnInit {
   guid: string;
-  loaded: boolean = false;
-  title: string = "Shift overzicht";
+  loaded = false;
+  title = 'Shift overzicht';
 
   project: Project;
   shiftData: Shiftdata;
-  searchResult: Searchresult<Shift> = new Searchresult<Shift>()
+  searchResult: Searchresult<Shift> = new Searchresult<Shift>();
 
-  //filterobjects
+  // filterobjects
   projectTasks: Task[] = [];
   dates: Date[] = [];
   starts: string[] = [];
@@ -45,10 +45,10 @@ export class ShiftOverviewComponent implements OnInit {
   end: string;
   participantReq: number;
 
-  pageSort: string[] = ["date", "asc"];
-  offset: number = 0;
-  pageSize: number = 10;
-  index: number = 0;
+  pageSort: string[] = ['date', 'asc'];
+  offset = 0;
+  pageSize = 10;
+  index = 0;
 
   displayedColumns: string[] = [];
   dataSource: MatTableDataSource<Shift> = new MatTableDataSource<Shift>();
@@ -58,16 +58,16 @@ export class ShiftOverviewComponent implements OnInit {
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
     this.sort.sortChange.subscribe(() => {
-      this.paginator.pageIndex = 0
-      this.pageSort = [this.sort.active, this.sort.direction]
-      this.filter()
+      this.paginator.pageIndex = 0;
+      this.pageSort = [this.sort.active, this.sort.direction];
+      this.filter();
     });
-    this.setDataSourceAttributes()
+    this.setDataSourceAttributes();
   }
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
-    this.setDataSourceAttributes()
+    this.setDataSourceAttributes();
   }
 
   constructor(private route: ActivatedRoute,
@@ -75,9 +75,9 @@ export class ShiftOverviewComponent implements OnInit {
               private router: Router,
               private shiftService: ShiftService,
               private breadcrumbService: BreadcrumbService) {
-    let current: Breadcrumb = new Breadcrumb("Shift overzicht", null);
+    const current: Breadcrumb = new Breadcrumb('Shift overzicht', null);
 
-    let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, current]
+    const breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, this.breadcrumbService.managecrumb, current];
     this.breadcrumbService.replace(breadcrumbs);
     this.displayedColumns = TextInjectorService.shiftTableColumnNames;
   }
@@ -89,29 +89,29 @@ export class ShiftOverviewComponent implements OnInit {
     });
     await this.projectService.getProject(this.guid).then(async project => {
       this.project = project;
-      this.title += ": " + this.project.name
-    })
+      this.title += ': ' + this.project.name;
+    });
 
     await this.shiftService.getShiftData(this.guid).then(res => {
       if (res) {
         this.shiftData = res;
-        this.shiftData.tasks=this.shiftData.tasks.filter(t=>t)
+        this.shiftData.tasks = this.shiftData.tasks.filter(t => t);
 
-        this.shiftData.tasks.sort((a, b) => a.name > b.name ? 1 : -1)
-        this.shiftData.dates.sort((a, b) => a > b ? 1 : -1)
-        this.shiftData.startTimes.sort((a, b) => a > b ? 1 : -1)
-        this.shiftData.endTimes.sort((a, b) => a > b ? 1 : -1)
-        this.shiftData.participantsRequired.sort((a, b) => a > b ? 1 : -1)
+        this.shiftData.tasks.sort((a, b) => a.name > b.name ? 1 : -1);
+        this.shiftData.dates.sort((a, b) => a > b ? 1 : -1);
+        this.shiftData.startTimes.sort((a, b) => a > b ? 1 : -1);
+        this.shiftData.endTimes.sort((a, b) => a > b ? 1 : -1);
+        this.shiftData.participantsRequired.sort((a, b) => a > b ? 1 : -1);
 
         this.selectedTasks = this.shiftData.tasks;
         this.date = this.shiftData.dates[0];
-        this.start = this.shiftData.startTimes[0]
-        this.end = this.shiftData.endTimes[0]
-        this.participantReq = this.shiftData.participantsRequired[0]
-        this.filter()
+        this.start = this.shiftData.startTimes[0];
+        this.end = this.shiftData.endTimes[0];
+        this.participantReq = this.shiftData.participantsRequired[0];
+        this.filter();
         this.loaded = true;
       }
-    })
+    });
 
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
@@ -166,29 +166,31 @@ export class ShiftOverviewComponent implements OnInit {
   }
 
   OnCheckboxChange($event: MatCheckboxChange) {
-    let task = this.shiftData.tasks.find(pt => pt.id == $event.source.id)
-    if ($event.checked && task)
-      this.selectedTasks.push(task)
+    const task = this.shiftData.tasks.find(pt => pt.id == $event.source.id);
+    if ($event.checked && task) {
+      this.selectedTasks.push(task);
+    }
     else {
-      let st = this.selectedTasks.find(st => st.id === $event.source.id)
-      if (st)
-        this.selectedTasks = this.selectedTasks.filter(t => t !== task)
+      const st = this.selectedTasks.find(st => st.id === $event.source.id);
+      if (st) {
+        this.selectedTasks = this.selectedTasks.filter(t => t !== task);
+      }
     }
     this.offset = 0;
     this.index = 0;
-    this.filter()
+    this.filter();
   }
 
   async filter() {
-    let filter: ShiftFilter = new ShiftFilter();
+    const filter: ShiftFilter = new ShiftFilter();
     filter.projectId = this.project.id;
-    filter.offset = this.offset
-    filter.pageSize = this.pageSize
+    filter.offset = this.offset;
+    filter.pageSize = this.pageSize;
     filter.sort = this.pageSort;
 
-    let tasks: string[] = [];
-    this.selectedTasks.forEach(st => tasks.push(st.id))
-    filter.tasks = tasks
+    const tasks: string[] = [];
+    this.selectedTasks.forEach(st => tasks.push(st.id));
+    filter.tasks = tasks;
 
     filter.date = DateConverter.addOffset(this.date);
     filter.start = this.start;
@@ -199,19 +201,19 @@ export class ShiftOverviewComponent implements OnInit {
     if (filter.start && filter.end) {
       await this.shiftService.getShifts(filter).then(res => {
         if (res) {
-          this.searchResult = res
-          this.dataSource.data = res.resultList
+          this.searchResult = res;
+          this.dataSource.data = res.resultList;
         }
-      })
-      this.paginator.length = this.searchResult.totalcount
-      this.paginator.pageIndex = this.index
+      });
+      this.paginator.length = this.searchResult.totalcount;
+      this.paginator.pageIndex = this.index;
     }
   }
 
   changePage($event: PageEvent) {
-    this.pageSize = $event.pageSize
+    this.pageSize = $event.pageSize;
     this.offset = $event.pageIndex * $event.pageSize;
-    this.index = $event.pageIndex
+    this.index = $event.pageIndex;
     this.filter();
   }
 

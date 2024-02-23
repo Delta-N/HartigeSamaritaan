@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from "@angular/material/dialog";
-import {User} from "../../models/user";
-import {UserService} from "../../services/user.service";
-import {MatTabChangeEvent} from "@angular/material/tabs";
-import {ToastrService} from "ngx-toastr";
+import {MatDialogRef} from '@angular/material/dialog';
+import {User} from '../../models/user';
+import {UserService} from '../../services/user.service';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-admin',
@@ -12,12 +12,12 @@ import {ToastrService} from "ngx-toastr";
 })
 export class AddAdminComponent implements OnInit {
   loaded: boolean;
-  searchText: string = '';
+  searchText = '';
   users: User[] = [];
   admins: User[] = [];
-  pageSize: number = 5;
-  currentPage: number = 1;
-  currentTabIndex: number = 0;
+  pageSize = 5;
+  currentPage = 1;
+  currentTabIndex = 0;
 
   addedAdmins: string[] = [];
   removedAdmins: string[] = [];
@@ -31,12 +31,14 @@ export class AddAdminComponent implements OnInit {
     await this.userService.getAllUsers().then(users => {
       users.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
       users.forEach(user => {
-        if (user.userRole !== "Boardmember")
+        if (user.userRole !== 'Boardmember') {
           this.users.push(user);
-        else
-          this.admins.push(user)
-      })
-    })
+        }
+        else {
+          this.admins.push(user);
+        }
+      });
+    });
     this.loaded = true;
   }
 
@@ -51,8 +53,8 @@ export class AddAdminComponent implements OnInit {
       }
     }
     setTimeout(() => {
-      this.changeBackground()
-    }, 100)
+      this.changeBackground();
+    }, 100);
   }
 
   prevPage() {
@@ -60,8 +62,8 @@ export class AddAdminComponent implements OnInit {
       this.currentPage--;
     }
     setTimeout(() => {
-      this.changeBackground()
-    }, 100)
+      this.changeBackground();
+    }, 100);
   }
 
   resetPage() {
@@ -69,7 +71,7 @@ export class AddAdminComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 
   changeTab($event: MatTabChangeEvent) {
@@ -80,68 +82,74 @@ export class AddAdminComponent implements OnInit {
 
   async modAdmin(id: string, alreadyManager: boolean) {
     if (!alreadyManager) {
-      let index = this.addedAdmins.indexOf(id)
-      if (index > -1)
-        this.addedAdmins.splice(index, 1)
-      else
-        this.addedAdmins.push(id)
+      const index = this.addedAdmins.indexOf(id);
+      if (index > -1) {
+        this.addedAdmins.splice(index, 1);
+      }
+      else {
+        this.addedAdmins.push(id);
+      }
     } else {
-      let index = this.removedAdmins.indexOf(id)
-      if (index > -1)
-        this.removedAdmins.splice(index, 1)
-      else
-        this.removedAdmins.push(id)
+      const index = this.removedAdmins.indexOf(id);
+      if (index > -1) {
+        this.removedAdmins.splice(index, 1);
+      }
+      else {
+        this.removedAdmins.push(id);
+      }
 
     }
-    this.changeBackground()
+    this.changeBackground();
   }
 
   changeBackground() {
     this.users.forEach(u => {
-      let element = document.getElementById(u.id)
-      let checkElement = document.getElementById("check" + u.id)
+      const element = document.getElementById(u.id);
+      const checkElement = document.getElementById('check' + u.id);
       if (element) {
-        let index = this.addedAdmins.find(m => m === u.id)
+        const index = this.addedAdmins.find(m => m === u.id);
         if (index) {
-          element.style.background = "whitesmoke"
+          element.style.background = 'whitesmoke';
           checkElement.hidden = false;
         } else {
-          element.style.background = "white";
+          element.style.background = 'white';
           checkElement.hidden = true;
         }
       }
-    })
+    });
 
     this.admins.forEach(u => {
-      let element = document.getElementById(u.id)
-      let closeElement = document.getElementById("check" + u.id)
+      const element = document.getElementById(u.id);
+      const closeElement = document.getElementById('check' + u.id);
       if (element) {
-        let index = this.removedAdmins.find(m => m === u.id)
+        const index = this.removedAdmins.find(m => m === u.id);
         if (index) {
-          element.style.background = "whitesmoke"
+          element.style.background = 'whitesmoke';
           closeElement.hidden = false;
         } else {
-          element.style.background = "white";
+          element.style.background = 'white';
           closeElement.hidden = true;
         }
       }
-    })
+    });
   }
 
   async send() {
     for (const addedAdmin of this.addedAdmins) {
       this.userService.makeAdmin(addedAdmin).then(res => {
-        if (res)
-          this.toastr.success(this.users.find(u => u.id === addedAdmin).firstName + " is succesvol toegevoegd")
-      })
+        if (res) {
+          this.toastr.success(this.users.find(u => u.id === addedAdmin).firstName + ' is succesvol toegevoegd');
+        }
+      });
 
     }
     for (const removedAdmin of this.removedAdmins) {
       this.userService.removeAdmin(removedAdmin).then(res => {
-        if (res)
-          this.toastr.success(this.admins.find(u => u.id === removedAdmin).firstName + " is succesvol verwijderd")
-      })
+        if (res) {
+          this.toastr.success(this.admins.find(u => u.id === removedAdmin).firstName + ' is succesvol verwijderd');
+        }
+      });
     }
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 }

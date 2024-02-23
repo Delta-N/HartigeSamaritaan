@@ -1,17 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {User} from "../../models/user";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {ParticipationService} from "../../services/participation.service";
-import {UserService} from "../../services/user.service";
-import {TextInjectorService} from "../../services/text-injector.service";
-import {Breadcrumb} from "../../models/breadcrumb";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {DateConverter} from "../../helpers/date-converter";
-import {AgePipe} from "../../helpers/filter.pipe";
-import {CsvService} from "../../services/csv.service";
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {User} from '../../models/user';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {ParticipationService} from '../../services/participation.service';
+import {UserService} from '../../services/user.service';
+import {TextInjectorService} from '../../services/text-injector.service';
+import {Breadcrumb} from '../../models/breadcrumb';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {DateConverter} from '../../helpers/date-converter';
+import {AgePipe} from '../../helpers/filter.pipe';
+import {CsvService} from '../../services/csv.service';
 
 @Component({
   selector: 'app-employee',
@@ -20,8 +20,8 @@ import {CsvService} from "../../services/csv.service";
 })
 export class EmployeeComponent implements OnInit {
   guid: string;
-  loaded: boolean = false;
-  title: string = "Medewerker overzicht";
+  loaded = false;
+  title = 'Medewerker overzicht';
 
   displayedColumns: string[] = [];
   dataSource: MatTableDataSource<User> = new MatTableDataSource<User>();
@@ -30,12 +30,12 @@ export class EmployeeComponent implements OnInit {
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
-    this.setDataSourceAttributes()
+    this.setDataSourceAttributes();
   }
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
-    this.setDataSourceAttributes()
+    this.setDataSourceAttributes();
   }
 
   constructor(private route: ActivatedRoute,
@@ -45,7 +45,7 @@ export class EmployeeComponent implements OnInit {
               private breadcrumbService: BreadcrumbService,
               private csvService: CsvService
   ) {
-    this.breadcrumbService.backcrumb()
+    this.breadcrumbService.backcrumb();
     this.displayedColumns = TextInjectorService.employeeTableColumnNames;
   }
 
@@ -55,32 +55,35 @@ export class EmployeeComponent implements OnInit {
       this.guid = params.get('id');
     });
 
-    if (this.guid)
+    if (this.guid) {
       await this.userService.getAllParticipants(this.guid).then(res => {
         if (res) {
-          this.dataSource = new MatTableDataSource<User>(res)
+          this.dataSource = new MatTableDataSource<User>(res);
           this.loaded = true;
         }
-      })
-    else
+      });
+    }
+    else {
       await this.userService.getAllUsers().then(res => {
-        if (res)
-          this.dataSource = new MatTableDataSource<User>(res)
+        if (res) {
+          this.dataSource = new MatTableDataSource<User>(res);
+        }
         this.loaded = true;
-      })
+      });
+    }
 
     this.dataSource.filterPredicate = (data, filter) => {
-      return (data != null && (data.firstName + " " + data.lastName).toLocaleLowerCase().includes(filter) ||
+      return (data != null && (data.firstName + ' ' + data.lastName).toLocaleLowerCase().includes(filter) ||
         (!data.nationality && 'Onbekend'.toLocaleLowerCase().includes(filter)) ||
         (data.nationality && data.nationality.toLocaleLowerCase().includes(filter)) ||
         DateConverter.calculateAge(data.dateOfBirth).toLocaleLowerCase().includes(filter)
-      )
-    }
+      );
+    };
 
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
         case 'Naam':
-          return item != null ? (item.firstName + " " + item.lastName) : null;
+          return item != null ? (item.firstName + ' ' + item.lastName) : null;
         case 'Leeftijd':
           return DateConverter.calculateAge(item.dateOfBirth);
         case 'Nationaliteit':
@@ -108,47 +111,48 @@ export class EmployeeComponent implements OnInit {
 
   details(id: string) {
 
-    this.guid ? this.router.navigate(['manage/profile', id]).then() : this.router.navigate(['admin/profile', id]).then()
+    this.guid ? this.router.navigate(['manage/profile', id]).then() : this.router.navigate(['admin/profile', id]).then();
   }
 
   async exportUsers() {
-    let pipe: AgePipe = new AgePipe();
-    let headers = TextInjectorService.employeeExportHeaders;
-    let users: User[] = []
+    const pipe: AgePipe = new AgePipe();
+    const headers = TextInjectorService.employeeExportHeaders;
+    let users: User[] = [];
     this.loaded = false;
     if (this.guid) {
       await this.userService.getAllParticipants(this.guid).then(res => {
         users = res;
-      })
+      });
     } else {
       await this.userService.getAllUsers().then(res => {
-        if (res)
+        if (res) {
           users = res;
-      })
+        }
+      });
     }
 
-    let statistics: any[] = []
+    const statistics: any[] = [];
     users.forEach(u => {
-      let statistic = {
-        NaamMedewerker: u.firstName && u.lastName ? u.firstName?.replace(",", ".") + " " + u.lastName?.replace(",", ".") : "Onbekend",
-        Leeftijd: u.dateOfBirth ? pipe.transform(u.dateOfBirth) : "Onbekend",
-        Email: u.email ? u.email.replace(",", ".") : "Onbekend",
-        Telefoonnummer: u.phoneNumber ? u.phoneNumber.replace(",", ".") : "Onbekend",
+      const statistic = {
+        NaamMedewerker: u.firstName && u.lastName ? u.firstName?.replace(',', '.') + ' ' + u.lastName?.replace(',', '.') : 'Onbekend',
+        Leeftijd: u.dateOfBirth ? pipe.transform(u.dateOfBirth) : 'Onbekend',
+        Email: u.email ? u.email.replace(',', '.') : 'Onbekend',
+        Telefoonnummer: u.phoneNumber ? u.phoneNumber.replace(',', '.') : 'Onbekend',
 
-        Adres: u.streetAddress ? u.streetAddress.replace(",", ".") : "Onbekend",
-        Postcode: u.postalCode ? u.postalCode.replace(",", ".") : "Onbekend",
-        Woonplaats: u.city ? u.city.replace(",", ".") : "Onbekend",
-        Nationaliteit: u.nationality ? u.nationality.replace(",", ".") : "Onbekend",
-        Moedertaal: u.nativeLanguage ? u.nativeLanguage.replace(",", ".") : "Onbekend",
-        NLtaalniveau: u.dutchProficiency ? u.dutchProficiency.replace(",", ".") : "Onbekend",
+        Adres: u.streetAddress ? u.streetAddress.replace(',', '.') : 'Onbekend',
+        Postcode: u.postalCode ? u.postalCode.replace(',', '.') : 'Onbekend',
+        Woonplaats: u.city ? u.city.replace(',', '.') : 'Onbekend',
+        Nationaliteit: u.nationality ? u.nationality.replace(',', '.') : 'Onbekend',
+        Moedertaal: u.nativeLanguage ? u.nativeLanguage.replace(',', '.') : 'Onbekend',
+        NLtaalniveau: u.dutchProficiency ? u.dutchProficiency.replace(',', '.') : 'Onbekend',
 
-        PushBerichten: u.pushDisabled ? "Uitgeschakeld" : "Ingeschakeld",
-        DatumAkkoordPrivacyPolicy: u.termsOfUseConsented ? DateConverter.toReadableStringFromString(u.termsOfUseConsented) : "Onbekend",
-      }
-      statistics.push(statistic)
-    })
+        PushBerichten: u.pushDisabled ? 'Uitgeschakeld' : 'Ingeschakeld',
+        DatumAkkoordPrivacyPolicy: u.termsOfUseConsented ? DateConverter.toReadableStringFromString(u.termsOfUseConsented) : 'Onbekend',
+      };
+      statistics.push(statistic);
+    });
 
-    this.csvService.downloadFile(statistics, headers, "Employee Export")
+    this.csvService.downloadFile(statistics, headers, 'Employee Export');
     this.loaded = true;
   }
 }
