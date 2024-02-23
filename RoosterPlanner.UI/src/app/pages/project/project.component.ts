@@ -1,25 +1,25 @@
 import {Component, OnInit} from '@angular/core';
-import {ProjectService} from "../../services/project.service";
-import {ActivatedRoute, ParamMap} from "@angular/router";
-import {Project} from "../../models/project";
-import {DateConverter} from "../../helpers/date-converter";
-import {CreateProjectComponent} from "../../components/create-project/create-project.component";
-import {ToastrService} from "ngx-toastr";
-import {MatDialog} from "@angular/material/dialog";
-import {UserService} from "../../services/user.service";
-import {Participation} from "../../models/participation";
-import {ParticipationService} from "../../services/participation.service";
-import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
-import {TaskService} from "../../services/task.service";
-import {AddProjectTaskComponent} from "../../components/add-project-task/add-project-task.component";
+import {ProjectService} from '../../services/project.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {Project} from '../../models/project';
+import {DateConverter} from '../../helpers/date-converter';
+import {CreateProjectComponent} from '../../components/create-project/create-project.component';
+import {ToastrService} from 'ngx-toastr';
+import {MatDialog} from '@angular/material/dialog';
+import {UserService} from '../../services/user.service';
+import {Participation} from '../../models/participation';
+import {ParticipationService} from '../../services/participation.service';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '../../components/confirm-dialog/confirm-dialog.component';
+import {TaskService} from '../../services/task.service';
+import {AddProjectTaskComponent} from '../../components/add-project-task/add-project-task.component';
 import {Task} from 'src/app/models/task';
-import {AddManagerComponent} from "../../components/add-manager/add-manager.component";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {CsvService} from "../../services/csv.service";
-import {ShiftService} from "../../services/shift.service";
-import {AgePipe} from "../../helpers/filter.pipe";
-import {TextInjectorService} from "../../services/text-injector.service";
-import {User} from "../../models/user";
+import {AddManagerComponent} from '../../components/add-manager/add-manager.component';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {CsvService} from '../../services/csv.service';
+import {ShiftService} from '../../services/shift.service';
+import {AgePipe} from '../../helpers/filter.pipe';
+import {TextInjectorService} from '../../services/text-injector.service';
+import {User} from '../../models/user';
 import {
   faClipboardList,
   faHistory,
@@ -40,23 +40,23 @@ export class ProjectComponent implements OnInit {
   friendsIcon = faUserFriends;
   infoIcon = faInfoCircle;
   clipboard = faClipboardList;
-  circle = faPlusCircle
-  faTrash = faTrashAlt
+  circle = faPlusCircle;
+  faTrash = faTrashAlt;
 
   guid: string;
   project: Project;
   viewProject: Project;
-  loaded: boolean = false;
+  loaded = false;
   title: string;
   closeButtonText: string;
-  isAdmin: boolean = false;
+  isAdmin = false;
   participation: Participation;
   projectTasks: Task[];
   taskCardStyle = 'card';
   itemsPerCard = 5;
   reasonableMaxInteger = 10000;
-  projectTasksExpandbtnDisabled: boolean = true;
-  isManager: boolean = false;
+  projectTasksExpandbtnDisabled = true;
+  isManager = false;
 
 
   constructor(private userService: UserService,
@@ -89,7 +89,7 @@ export class ProjectComponent implements OnInit {
         this.project = res;
         this.displayProject(res);
       }
-    })
+    });
   }
 
   async getProjectTasks() {
@@ -101,27 +101,27 @@ export class ProjectComponent implements OnInit {
       }
       this.projectTasks.sort((a, b) => a.name > b.name ? 1 : -1);
 
-    })
+    });
   }
 
   async getParticipation() {
     await this.participationService.getParticipation(this.userService.getCurrentUserId(), this.guid).then(async res => {
       if (res) {
         this.participation = res;
-        this.displayProject(this.participation.project)
+        this.displayProject(this.participation.project);
       } else {
         await this.getProject().then();
       }
-    })
+    });
   }
 
   displayProject(project: Project) {
-    this.project = project
-    this.viewProject = DateConverter.formatProjectDateReadable(this.project)
+    this.project = project;
+    this.viewProject = DateConverter.formatProjectDateReadable(this.project);
     this.title = this.viewProject.name;
-    this.viewProject.closed ? this.closeButtonText = "Project openen" : this.closeButtonText = "Project afsluiten";
+    this.viewProject.closed ? this.closeButtonText = 'Project openen' : this.closeButtonText = 'Project afsluiten';
     if (this.viewProject.closed) {
-      this.title += " DIT PROJECT IS GESLOTEN"
+      this.title += ' DIT PROJECT IS GESLOTEN';
     }
     this.loaded = true;
   }
@@ -133,14 +133,14 @@ export class ProjectComponent implements OnInit {
       data: {
         createProject: false,
         project: this.project,
-        title: "Project wijzigen",
+        title: 'Project wijzigen',
       }
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result && result !== 'false') {
         setTimeout(() => {
-          this.toastr.success(result.name + " is gewijzigd")
+          this.toastr.success(result.name + ' is gewijzigd');
 
         }, 500);
       }
@@ -150,11 +150,11 @@ export class ProjectComponent implements OnInit {
 
   async closeProject() {
     let messageVariable: string;
-    this.project.closed ? messageVariable = "openen" : messageVariable = "sluiten";
-    const message = "Weet je zeker dat je dit project wilt " + messageVariable + " ?"
-    const dialogData = new ConfirmDialogModel("Bevestig wijziging", message, "ConfirmationInput", null);
+    this.project.closed ? messageVariable = 'openen' : messageVariable = 'sluiten';
+    const message = 'Weet je zeker dat je dit project wilt ' + messageVariable + ' ?';
+    const dialogData = new ConfirmDialogModel('Bevestig wijziging', message, 'ConfirmationInput', null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogData
     });
 
@@ -163,13 +163,13 @@ export class ProjectComponent implements OnInit {
         this.project.closed = !this.project.closed;
         this.loaded = false;
         await this.projectService.updateProject(this.project).then(response => {
-          this.displayProject(response)
+          this.displayProject(response);
           if (this.project.closed) {
-            this.toastr.success("Het project is gesloten");
+            this.toastr.success('Het project is gesloten');
           } else {
-            this.toastr.success("Het project is geopend");
+            this.toastr.success('Het project is geopend');
           }
-        }, () => this.toastr.error("Fout tijdens het sluiten van het project"));
+        }, () => this.toastr.error('Fout tijdens het sluiten van het project'));
       }
     });
 
@@ -177,10 +177,10 @@ export class ProjectComponent implements OnInit {
   }
 
   editWorkingHours() {
-    const message = "Hoeveel uur per week wil je maximaal meewerken aan dit project?"
-    const dialogData = new ConfirmDialogModel("Maximale inzet ", message, "NumberInput", this.participation.maxWorkingHoursPerWeek);
+    const message = 'Hoeveel uur per week wil je maximaal meewerken aan dit project?';
+    const dialogData = new ConfirmDialogModel('Maximale inzet ', message, 'NumberInput', this.participation.maxWorkingHoursPerWeek);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogData
     });
 
@@ -193,10 +193,11 @@ export class ProjectComponent implements OnInit {
         this.participation.maxWorkingHoursPerWeek = dialogResult;
         await this.participationService.updateParticipation(this.participation).then(async response => {
           if (response) {
-            this.participation = response
+            this.participation = response;
             this.displayProject(response.project);
-          } else
-            window.location.reload()
+          } else {
+            window.location.reload();
+          }
         });
       } else {
         this.loaded = true;
@@ -205,35 +206,41 @@ export class ProjectComponent implements OnInit {
   }
 
   expandTaskCard() {
-    let element = document.getElementById("icon")
+    const element = document.getElementById('icon');
     if (element) {
-      if (this.taskCardStyle === 'expanded-card')
-        element.innerText = "zoom_out_map"
-      else
-        element.innerText = "fullscreen_exit"
+      if (this.taskCardStyle === 'expanded-card') {
+        element.innerText = 'zoom_out_map';
+      }
+      else {
+        element.innerText = 'fullscreen_exit';
+      }
     }
 
-    let pictureElement = document.getElementById("pictureFrame")
-    let leftElement = document.getElementById("left")
+    const pictureElement = document.getElementById('pictureFrame');
+    const leftElement = document.getElementById('left');
     if (this.taskCardStyle === 'expanded-card') {
-      if (leftElement)
+      if (leftElement) {
         leftElement.hidden = false;
+      }
 
-      if (pictureElement)
+      if (pictureElement) {
         pictureElement.hidden = false;
+      }
       this.taskCardStyle = 'card';
       this.itemsPerCard = 5;
       this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
     } else if (this.taskCardStyle === 'card') {
-      if (leftElement)
+      if (leftElement) {
         leftElement.hidden = true;
+      }
 
-      if (pictureElement)
+      if (pictureElement) {
         pictureElement.hidden = true;
+      }
 
       this.taskCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
-      this.getProjectTasks()
+      this.getProjectTasks();
     }
   }
 
@@ -241,7 +248,7 @@ export class ProjectComponent implements OnInit {
     const dialogRef = this.dialog.open(AddProjectTaskComponent, {
       width: '500px',
       data: {
-        modifier: modifier,
+        modifier,
         project: this.project,
         currentProjectTasks: this.projectTasks
       }
@@ -251,7 +258,7 @@ export class ProjectComponent implements OnInit {
       setTimeout(() => {
         this.getProjectTasks();
       }, 500);
-    })
+    });
   }
 
   modManager() {
@@ -265,24 +272,25 @@ export class ProjectComponent implements OnInit {
   }
 
   collaborate(participation: Participation) {
-    const message = "Met wie wil je samenwerken?"
-    const dialogData = new ConfirmDialogModel("Samenwerking", message, "TextInput", participation.remark);
+    const message = 'Met wie wil je samenwerken?';
+    const dialogData = new ConfirmDialogModel('Samenwerking', message, 'TextInput', participation.remark);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: "400px",
+      width: '400px',
       data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(async dialogResult => {
       this.loaded = false;
       if (dialogResult) {
-        participation.remark = dialogResult.toString()
+        participation.remark = dialogResult.toString();
         await this.participationService.updateParticipation(participation).then(async response => {
             if (response) {
-              this.toastr.success("Samenwerkingsvoorkeur is gewijzigd")
+              this.toastr.success('Samenwerkingsvoorkeur is gewijzigd');
               this.participation = response;
               this.displayProject(response.project);
-            } else
-              window.location.reload()
+            } else {
+              window.location.reload();
+            }
           }
         );
       }
@@ -291,79 +299,82 @@ export class ProjectComponent implements OnInit {
   }
 
   async exportShifts() {
-    let pipe: AgePipe = new AgePipe();
-    let headers = TextInjectorService.shiftExportHeaders;
+    const pipe: AgePipe = new AgePipe();
+    const headers = TextInjectorService.shiftExportHeaders;
 
     let guid: string;
-    if (this.participation)
-      guid = this.participation.project.id
-    else
-      guid = this.project.id
+    if (this.participation) {
+      guid = this.participation.project.id;
+    }
+    else {
+      guid = this.project.id;
+    }
     this.loaded = false;
     await this.shiftService.GetExportableData(guid).then(res => {
-      let statistics: any[] = []
+      const statistics: any[] = [];
       res.forEach(shift => {
         shift.availabilities.forEach(avail => {
-          let statistic = {
-            Taaknaam: shift.task ? shift.task.name.replace(",", ".") : "Onbekend",
-            Taakcategorie: shift.task && shift.task.category ? shift.task.category.name.replace(",", ".") : "Onbekend",
-            Datum: DateConverter.toReadableStringFromDate(shift.date).replace(",", "."),
-            Begintijd: shift.startTime.replace(",", "."),
-            Endtijd: shift.endTime.replace(",", "."),
-            NaamMedewerker: avail.participation.person.firstName.replace(",", ".") + " " + avail.participation.person.lastName.replace(",", "."),
+          const statistic = {
+            Taaknaam: shift.task ? shift.task.name.replace(',', '.') : 'Onbekend',
+            Taakcategorie: shift.task && shift.task.category ? shift.task.category.name.replace(',', '.') : 'Onbekend',
+            Datum: DateConverter.toReadableStringFromDate(shift.date).replace(',', '.'),
+            Begintijd: shift.startTime.replace(',', '.'),
+            Endtijd: shift.endTime.replace(',', '.'),
+            NaamMedewerker: avail.participation.person.firstName.replace(',', '.') + ' ' + avail.participation.person.lastName.replace(',', '.'),
             Leeftijd: pipe.transform(avail.participation.person.dateOfBirth),
-            Woonplaats: avail.participation.person.city.replace(",", "."),
-            Nationaliteit: avail.participation.person.nationality.replace(",", "."),
-            Moedertaal: avail.participation.person.nativeLanguage.replace(",", "."),
-            NLtaalniveau: avail.participation.person.dutchProficiency.replace(",", ".")
-          }
+            Woonplaats: avail.participation.person.city.replace(',', '.'),
+            Nationaliteit: avail.participation.person.nationality.replace(',', '.'),
+            Moedertaal: avail.participation.person.nativeLanguage.replace(',', '.'),
+            NLtaalniveau: avail.participation.person.dutchProficiency.replace(',', '.')
+          };
 
           statistics.push(statistic);
-        })
-      })
-      this.csvService.downloadFile(statistics, headers, "Shift export - " + this.project.name)
-    })
+        });
+      });
+      this.csvService.downloadFile(statistics, headers, 'Shift export - ' + this.project.name);
+    });
     this.loaded = true;
   }
 
   async exportUsers() {
-    let pipe: AgePipe = new AgePipe();
-    let headers = TextInjectorService.employeeExportHeaders;
-    let users: User[] = []
+    const pipe: AgePipe = new AgePipe();
+    const headers = TextInjectorService.employeeExportHeaders;
+    let users: User[] = [];
     this.loaded = false;
     if (this.guid) {
       await this.userService.getAllParticipants(this.guid).then(res => {
         users = res;
-      })
+      });
     } else {
       await this.userService.getAllUsers().then(res => {
-        if (res)
+        if (res) {
           users = res;
-      })
+        }
+      });
     }
 
-    let statistics: any[] = []
+    const statistics: any[] = [];
     users.forEach(u => {
-      let statistic = {
-        NaamMedewerker: u.firstName && u.lastName ? u.firstName?.replace(",", ".") + " " + u.lastName?.replace(",", ".") : "Onbekend",
-        Leeftijd: u.dateOfBirth ? pipe.transform(u.dateOfBirth) : "Onbekend",
-        Email: u.email ? u.email.replace(",", ".") : "Onbekend",
-        Telefoonnummer: u.phoneNumber ? u.phoneNumber.replace(",", ".") : "Onbekend",
+      const statistic = {
+        NaamMedewerker: u.firstName && u.lastName ? u.firstName?.replace(',', '.') + ' ' + u.lastName?.replace(',', '.') : 'Onbekend',
+        Leeftijd: u.dateOfBirth ? pipe.transform(u.dateOfBirth) : 'Onbekend',
+        Email: u.email ? u.email.replace(',', '.') : 'Onbekend',
+        Telefoonnummer: u.phoneNumber ? u.phoneNumber.replace(',', '.') : 'Onbekend',
 
-        Adres: u.streetAddress ? u.streetAddress.replace(",", ".") : "Onbekend",
-        Postcode: u.postalCode ? u.postalCode.replace(",", ".") : "Onbekend",
-        Woonplaats: u.city ? u.city.replace(",", ".") : "Onbekend",
-        Nationaliteit: u.nationality ? u.nationality.replace(",", ".") : "Onbekend",
-        Moedertaal: u.nativeLanguage ? u.nativeLanguage.replace(",", ".") : "Onbekend",
-        NLtaalniveau: u.dutchProficiency ? u.dutchProficiency.replace(",", ".") : "Onbekend",
+        Adres: u.streetAddress ? u.streetAddress.replace(',', '.') : 'Onbekend',
+        Postcode: u.postalCode ? u.postalCode.replace(',', '.') : 'Onbekend',
+        Woonplaats: u.city ? u.city.replace(',', '.') : 'Onbekend',
+        Nationaliteit: u.nationality ? u.nationality.replace(',', '.') : 'Onbekend',
+        Moedertaal: u.nativeLanguage ? u.nativeLanguage.replace(',', '.') : 'Onbekend',
+        NLtaalniveau: u.dutchProficiency ? u.dutchProficiency.replace(',', '.') : 'Onbekend',
 
-        PushBerichten: u.pushDisabled ? "Uitgeschakeld" : "Ingeschakeld",
-        DatumAkkoordPrivacyPolicy: u.termsOfUseConsented ? DateConverter.toReadableStringFromString(u.termsOfUseConsented) : "Onbekend",
-      }
-      statistics.push(statistic)
-    })
+        PushBerichten: u.pushDisabled ? 'Uitgeschakeld' : 'Ingeschakeld',
+        DatumAkkoordPrivacyPolicy: u.termsOfUseConsented ? DateConverter.toReadableStringFromString(u.termsOfUseConsented) : 'Onbekend',
+      };
+      statistics.push(statistic);
+    });
 
-    this.csvService.downloadFile(statistics, headers, "Employee Export")
+    this.csvService.downloadFile(statistics, headers, 'Employee Export');
     this.loaded = true;
   }
 }

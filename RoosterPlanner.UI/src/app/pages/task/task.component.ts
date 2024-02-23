@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {AddTaskComponent} from "../../components/add-task/add-task.component";
-import {MatDialog} from "@angular/material/dialog";
-import {ToastrService} from "ngx-toastr";
-import {UserService} from "../../services/user.service";
-import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
-import {TaskService} from "../../services/task.service";
-import {Task} from "../../models/task";
-import {UploadService} from "../../services/upload.service";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {AddRequirementComponent} from "../../components/add-requirement/add-requirement.component";
-import {Requirement} from "../../models/requirement";
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {AddTaskComponent} from '../../components/add-task/add-task.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {UserService} from '../../services/user.service';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '../../components/confirm-dialog/confirm-dialog.component';
+import {TaskService} from '../../services/task.service';
+import {Task} from '../../models/task';
+import {UploadService} from '../../services/upload.service';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {AddRequirementComponent} from '../../components/add-requirement/add-requirement.component';
+import {Requirement} from '../../models/requirement';
 import {faPlusCircle, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 
@@ -20,17 +20,17 @@ import {faPlusCircle, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icon
   styleUrls: ['./task.component.scss']
 })
 export class TaskComponent implements OnInit {
-  circleIcon = faPlusCircle
-  editIcon = faEdit
-  deleteIcon = faTrashAlt
+  circleIcon = faPlusCircle;
+  editIcon = faEdit;
+  deleteIcon = faTrashAlt;
   guid: string;
   task: Task;
-  isAdmin: boolean = false;
-  loaded: boolean = false;
+  isAdmin = false;
+  loaded = false;
 
   displayRequirements: Requirement[];
   requirementCardStyle = 'card';
-  requirementExpandbtnDisabled: boolean = true;
+  requirementExpandbtnDisabled = true;
   itemsPerCard = 5;
   reasonableMaxInteger = 10000;
 
@@ -45,7 +45,7 @@ export class TaskComponent implements OnInit {
     private uploadService: UploadService,
     private breadcrumbService: BreadcrumbService) {
 
-    this.breadcrumbService.backcrumb()
+    this.breadcrumbService.backcrumb();
   }
 
   ngOnInit(): void {
@@ -61,12 +61,12 @@ export class TaskComponent implements OnInit {
   getTask() {
     this.taskService.getTask(this.guid).then(response => {
       this.task = response;
-      this.displayRequirements = this.task.requirements.slice(0, this.itemsPerCard)
+      this.displayRequirements = this.task.requirements.slice(0, this.itemsPerCard);
       if (this.task.requirements.length >= 5) {
         this.requirementExpandbtnDisabled = false;
       }
       this.loaded = true;
-    })
+    });
   }
 
   edit() {
@@ -81,7 +81,7 @@ export class TaskComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result && result !== 'false') {
-        this.toastr.success(result.name + " is gewijzigd")
+        this.toastr.success(result.name + ' is gewijzigd');
         this.task = result;
 
       }
@@ -89,10 +89,10 @@ export class TaskComponent implements OnInit {
   }
 
   delete() {
-    const message = "Weet je zeker dat je deze taak wilt verwijderen?  Dit heeft veel gevolgen voor shiften. Je zult zelf handmatig een taak moeten toewijzen aan elke(!) shift."
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput", null);
+    const message = 'Weet je zeker dat je deze taak wilt verwijderen?  Dit heeft veel gevolgen voor shiften. Je zult zelf handmatig een taak moeten toewijzen aan elke(!) shift.';
+    const dialogData = new ConfirmDialogModel('Bevestig verwijderen', message, 'ConfirmationInput', null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
@@ -101,34 +101,40 @@ export class TaskComponent implements OnInit {
           if (response === true) {
             this.router.navigate(['admin/tasks']).then();
           }
-        })
+        });
       }
-    })
+    });
   }
 
   expandRequirementCard() {
-    let leftElement = document.getElementById("left")
-    let rightElement = document.getElementById("right")
-    let expandedCard = document.getElementById("expanded-card");
+    const leftElement = document.getElementById('left');
+    const rightElement = document.getElementById('right');
+    const expandedCard = document.getElementById('expanded-card');
 
     if (this.requirementCardStyle === 'expanded-card') {
-      if (leftElement)
+      if (leftElement) {
         leftElement.hidden = false;
-      if (rightElement)
+      }
+      if (rightElement) {
         rightElement.hidden = false;
-      if (expandedCard)
+      }
+      if (expandedCard) {
         expandedCard.hidden = true;
+      }
 
       this.requirementCardStyle = 'card';
       this.itemsPerCard = 5;
       this.displayRequirements = this.task.requirements.slice(0, this.itemsPerCard);
     } else if (this.requirementCardStyle === 'card') {
-      if (leftElement)
+      if (leftElement) {
         leftElement.hidden = true;
-      if (rightElement)
+      }
+      if (rightElement) {
         rightElement.hidden = true;
-      if (expandedCard)
+      }
+      if (expandedCard) {
         expandedCard.hidden = false;
+      }
       this.requirementCardStyle = 'expanded-card';
       this.itemsPerCard = this.reasonableMaxInteger;
       this.displayRequirements = this.task.requirements;
@@ -136,22 +142,22 @@ export class TaskComponent implements OnInit {
   }
 
   modRequirement(modifier: string) {
-    let requirement: Requirement = new Requirement();
-    requirement.task = this.task
+    const requirement: Requirement = new Requirement();
+    requirement.task = this.task;
     const dialogRef = this.dialog.open(AddRequirementComponent, {
       width: '500px',
       data: {
-        modifier: modifier,
-        requirement: requirement
+        modifier,
+        requirement
       }
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(res => {
-      if (res && res !== "false") {
+      if (res && res !== 'false') {
         setTimeout(() => {
           this.getTask();
         }, 500);
       }
-    })
+    });
   }
 }

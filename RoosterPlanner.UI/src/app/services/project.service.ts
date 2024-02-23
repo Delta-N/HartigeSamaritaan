@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {ApiService} from "./api.service";
-import {Project} from "../models/project";
-import {HttpResponse} from "@angular/common/http";
-import {HttpRoutes} from "../helpers/HttpRoutes";
-import {DateConverter} from "../helpers/date-converter";
-import {EntityHelper} from "../helpers/entity-helper";
-import {Searchresult} from "../models/searchresult";
-import {ErrorService} from "./error.service";
+import {ApiService} from './api.service';
+import {Project} from '../models/project';
+import {HttpResponse} from '@angular/common/http';
+import {HttpRoutes} from '../helpers/HttpRoutes';
+import {DateConverter} from '../helpers/date-converter';
+import {EntityHelper} from '../helpers/entity-helper';
+import {Searchresult} from '../models/searchresult';
+import {ErrorService} from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,58 +19,61 @@ export class ProjectService {
 
   async getProject(guid: string): Promise<Project> {
     if (!guid) {
-      this.errorService.error("ProjectId mag niet leeg zijn")
+      this.errorService.error('ProjectId mag niet leeg zijn');
       return null;
     }
     let project: Project = null;
     await this.apiService.get<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          project = res.body
+        if (res.ok) {
+          project = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
     return project;
   }
 
-  //todo aanpassen
+  // todo aanpassen
   async getAllProjects(offset: number, pageSize: number): Promise<Project[]> {
     let projects: Project[] = [];
     await this.apiService.get<HttpResponse<Searchresult<Project>>>(`${HttpRoutes.projectApiUrl}?offset=${offset}&pageSize=${pageSize}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
-            projects = res.body.resultList
+          if (res.ok) {
+            projects = res.body.resultList;
+          }
         }, Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
       );
-    return projects
+    return projects;
   }
 
-  //todo deze aanpassen
+  // todo deze aanpassen
   async getActiveProjects(): Promise<Project[]> {
     let projects: Project[] = [];
     await this.apiService.get<HttpResponse<Searchresult<Project>>>(`${HttpRoutes.projectApiUrl}?closed=false&endDate=${new Date().toISOString()}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
-            projects = res.body.resultList
+          if (res.ok) {
+            projects = res.body.resultList;
+          }
         }, Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
       );
-    return projects
+    return projects;
   }
 
   async postProject(project: Project): Promise<Project> {
     if (!project) {
-      this.errorService.error("Leeg project in project service")
+      this.errorService.error('Leeg project in project service');
       return null;
     }
     if (!project.id) {
-      project.id = EntityHelper.returnEmptyGuid()
+      project.id = EntityHelper.returnEmptyGuid();
     }
     try {
       if (project.participationEndDate) {
@@ -80,28 +83,28 @@ export class ProjectService {
       project.projectEndDate = DateConverter.toDate(project.projectEndDate);
       project.projectStartDate = DateConverter.toDate(project.projectStartDate);
     } catch (e) {
-      this.errorService.error(e)
+      this.errorService.error(e);
     }
     let postedProject = null;
     await this.apiService.post<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project)
       .toPromise()
       .then(res => {
         if (res.ok) {
-          postedProject = res.body
+          postedProject = res.body;
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return postedProject;
   }
 
   async updateProject(project: Project): Promise<Project> {
     if (!project) {
-      this.errorService.error("Leeg project in project service")
+      this.errorService.error('Leeg project in project service');
       return null;
     }
     if (!project.id) {
-      this.errorService.error("ProjectId is leeg")
+      this.errorService.error('ProjectId is leeg');
       return null;
     }
     try {
@@ -112,7 +115,7 @@ export class ProjectService {
       project.projectEndDate = DateConverter.toDate(project.projectEndDate);
       project.projectStartDate = DateConverter.toDate(project.projectStartDate);
     } catch (e) {
-      this.errorService.error(e)
+      this.errorService.error(e);
     }
     let updatedProject: Project = null;
     await this.apiService.put<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project)
@@ -122,8 +125,8 @@ export class ProjectService {
           updatedProject = res.body;
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return updatedProject;
   }
 }

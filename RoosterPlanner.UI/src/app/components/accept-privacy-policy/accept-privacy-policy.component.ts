@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 
 @Component({
@@ -9,7 +9,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class AcceptPrivacyPolicyComponent implements OnInit {
 
-  checked:any
+  checked: any;
 
   constructor(public dialogRef: MatDialogRef<AcceptPrivacyPolicyComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -19,6 +19,6 @@ export class AcceptPrivacyPolicyComponent implements OnInit {
   }
 
   save() {
-    this.dialogRef.close('true')
+    this.dialogRef.close('true');
   }
 }

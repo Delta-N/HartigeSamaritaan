@@ -2,8 +2,8 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/com
 import {EMPTY, Observable} from 'rxjs';
 import {catchError, switchMap} from 'rxjs/operators';
 import {MsalService} from './msal.service';
-import {Minimatch} from "minimatch";
-import {AuthenticationResult, InteractionType} from "@azure/msal-browser";
+import {Minimatch} from 'minimatch';
+import {AuthenticationResult, InteractionType} from '@azure/msal-browser';
 import {Inject, Injectable} from '@angular/core';
 import {MSAL_INTERCEPTOR_CONFIG} from './constants';
 import {MsalInterceptorConfig} from './msal.interceptor.config';

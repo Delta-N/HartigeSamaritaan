@@ -1,4 +1,4 @@
-﻿import {environment} from "../../environments/environment";
+import {environment} from '../../environments/environment';
 
 export class HttpRoutes {
   private static backendUrl = environment.backendUrl;
@@ -18,9 +18,9 @@ export class HttpRoutes {
   public static participationApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.participationController}`;
   public static taskApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.taskController}`;
   public static uploadApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.uploadController}`;
-  public static shiftApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.shiftController}`
-  public static availabilityApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.availabilityController}`
-  public static certificateApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.certificateController}`
-  public static emailApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.emailController}`
-  public static requirementApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.requirementController}`
+  public static shiftApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.shiftController}`;
+  public static availabilityApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.availabilityController}`;
+  public static certificateApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.certificateController}`;
+  public static emailApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.emailController}`;
+  public static requirementApiUrl = `${HttpRoutes.backendUrl}${HttpRoutes.requirementController}`;
 }

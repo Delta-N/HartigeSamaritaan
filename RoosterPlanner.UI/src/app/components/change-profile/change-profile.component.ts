@@ -1,12 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
-import {Validator} from "../../helpers/validators"
-import {User} from "../../models/user";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {UserService} from "../../services/user.service";
-import {ToastrService} from "ngx-toastr";
-import {DateConverter} from "../../helpers/date-converter";
-import {TextInjectorService} from "../../services/text-injector.service";
+import {Validator} from '../../helpers/validators';
+import {User} from '../../models/user';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {UserService} from '../../services/user.service';
+import {ToastrService} from 'ngx-toastr';
+import {DateConverter} from '../../helpers/date-converter';
+import {TextInjectorService} from '../../services/text-injector.service';
 
 @Component({
   selector: 'app-change-profile',
@@ -17,17 +17,17 @@ export class ChangeProfileComponent implements OnInit {
   user: User;
   updateUser: User;
   checkoutForm;
-  nationalities:string[] = TextInjectorService.nationalitiesDutch;
-  countries:string[]=TextInjectorService.countries;
-  level:string[]=TextInjectorService.level;
+  nationalities: string[] = TextInjectorService.nationalitiesDutch;
+  countries: string[] = TextInjectorService.countries;
+  level: string[] = TextInjectorService.level;
   nationalityControl: FormControl;
   languagueControl: FormControl;
-  title: string = "Profiel wijzigen";
+  title = 'Profiel wijzigen';
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private userService: UserService, private toastr: ToastrService, public dialogRef: MatDialogRef<ChangeProfileComponent>) {
     this.user = data.user;
-    this.title=data.title
+    this.title = data.title;
     this.nationalityControl = new FormControl('', Validators.required);
     this.languagueControl = new FormControl('', Validators.required);
 
@@ -45,42 +45,42 @@ export class ChangeProfileComponent implements OnInit {
       nativeLanguage: [this.user.nativeLanguage != null ? this.user.nativeLanguage : '', Validators.required],
       dutchProficiency: this.languagueControl,
       termsOfUseConsented: this.user.termsOfUseConsented
-    })
+    });
   }
 
   ngOnInit(): void {
     if (this.user.nationality != null) {
-      this.nationalityControl.setValue(this.nationalities.find(n => n == this.user.nationality))
+      this.nationalityControl.setValue(this.nationalities.find(n => n == this.user.nationality));
     }
 
 
 
     if (this.user.dutchProficiency != null) {
-      this.languagueControl.setValue(this.level.find(n => n == this.user.dutchProficiency))
+      this.languagueControl.setValue(this.level.find(n => n == this.user.dutchProficiency));
     }
   }
 
   saveProfile(value: User) {
-    this.updateUser = value
+    this.updateUser = value;
     if (this.checkoutForm.status === 'INVALID') {
-      this.toastr.error("Niet alle velden zijn correct ingevuld")
+      this.toastr.error('Niet alle velden zijn correct ingevuld');
     } else {
-      let bd: Date = DateConverter.toDate(this.updateUser.dateOfBirth);
-      let today: Date = new Date();
+      const bd: Date = DateConverter.toDate(this.updateUser.dateOfBirth);
+      const today: Date = new Date();
 
       if ((bd > today)) {
-        this.toastr.error("Geboortedatum mag niet in de toekomst liggen")
+        this.toastr.error('Geboortedatum mag niet in de toekomst liggen');
       } else if (bd.getFullYear() - today.getFullYear() < -100) {
-        this.toastr.error("Kom op zo oud ben je echt niet!")
+        this.toastr.error('Kom op zo oud ben je echt niet!');
       } else {
         this.userService.updateUser(this.updateUser).then(response => {
-          this.dialogRef.close(response)
+          this.dialogRef.close(response);
         });
       }
     }
   }
 
   close() {
-    this.dialogRef.close(null)
+    this.dialogRef.close(null);
   }
 }

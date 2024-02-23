@@ -33,12 +33,12 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   sendInput(input: any) {
-    this.dialogRef.close(input)
+    this.dialogRef.close(input);
   }
 }
 
 export class ConfirmDialogModel {
 
-  constructor(public title: string, public message: string, public type: string,public inputvalue:any) {
+  constructor(public title: string, public message: string, public type: string, public inputvalue: any) {
   }
 }

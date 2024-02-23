@@ -1,11 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Task} from 'src/app/models/task';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {TaskService} from "../../services/task.service";
-import {Project} from "../../models/project";
-import {Projecttask} from "../../models/projecttask";
-import {EntityHelper} from "../../helpers/entity-helper";
-import {ToastrService} from "ngx-toastr";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {TaskService} from '../../services/task.service';
+import {Project} from '../../models/project';
+import {Projecttask} from '../../models/projecttask';
+import {EntityHelper} from '../../helpers/entity-helper';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-project-task',
@@ -19,9 +19,9 @@ export class AddProjectTaskComponent implements OnInit {
   currentProjectTasks: Task[];
   title: string;
   reasonableMaxInteger = 10000;
-  currentPage: number = 1;
-  pageSize: number = 5;
-  searchText: string = '';
+  currentPage = 1;
+  pageSize = 5;
+  searchText = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               public dialogRef: MatDialogRef<AddProjectTaskComponent>,
@@ -32,7 +32,7 @@ export class AddProjectTaskComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.project = this.data.project;
     if (this.data.currentProjectTasks.length >= this.pageSize) {
-      await this.getCurrentProjectTasks()
+      await this.getCurrentProjectTasks();
     } else {
       this.currentProjectTasks = this.data.currentProjectTasks;
     }
@@ -42,11 +42,11 @@ export class AddProjectTaskComponent implements OnInit {
       await this.taskService.getAllTasks(0, this.reasonableMaxInteger).then(tasks => {
           tasks.forEach(t => {
             if (!this.currentProjectTasks.find(cpt => cpt.id === t.id)) {
-              this.allTasks.push(t)
+              this.allTasks.push(t);
             }
-          })
+          });
         }
-      )
+      );
       this.loaded = true;
     }
 
@@ -55,11 +55,11 @@ export class AddProjectTaskComponent implements OnInit {
       this.allTasks = this.currentProjectTasks;
       this.loaded = true;
     }
-    this.allTasks.sort((a, b) => a.name > b.name ? 1 : -1)
+    this.allTasks.sort((a, b) => a.name > b.name ? 1 : -1);
   }
 
   async getCurrentProjectTasks() {
-    await this.taskService.getAllProjectTasks(this.project.id).then(cpt => this.currentProjectTasks = cpt)
+    await this.taskService.getAllProjectTasks(this.project.id).then(cpt => this.currentProjectTasks = cpt);
   }
 
   prevPage() {
@@ -83,29 +83,29 @@ export class AddProjectTaskComponent implements OnInit {
   }
 
   async modProjectTask(id: string) {
-    let task: Task = this.allTasks.find(t => t.id === id)
+    const task: Task = this.allTasks.find(t => t.id === id);
     if (this.data.modifier === 'add') {
-      let projectTask: Projecttask = new Projecttask();
+      const projectTask: Projecttask = new Projecttask();
       projectTask.projectId = this.project.id;
-      projectTask.taskId = task.id
+      projectTask.taskId = task.id;
       projectTask.id = EntityHelper.returnEmptyGuid();
       await this.taskService.addTaskToProject(projectTask).then(res => {
           if (res) {
-            this.currentProjectTasks.push(res)
-            this.toastr.success("Taak toegevoegd")
+            this.currentProjectTasks.push(res);
+            this.toastr.success('Taak toegevoegd');
             this.dialogRef.close();
           }
         }
-      )
+      );
     }
     if (this.data.modifier === 'remove') {
       await this.taskService.removeTaskFromProject(this.project.id, id).then(res => {
         if (res) {
-          this.currentProjectTasks = this.currentProjectTasks.filter(cpt => cpt.id !== id)
-          this.toastr.success("Taak verwijderd")
+          this.currentProjectTasks = this.currentProjectTasks.filter(cpt => cpt.id !== id);
+          this.toastr.success('Taak verwijderd');
           this.dialogRef.close(this.currentProjectTasks);
         }
-      })
+      });
     }
 
 

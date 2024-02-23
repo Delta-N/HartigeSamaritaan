@@ -1,16 +1,16 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from "@angular/material/dialog";
-import {AddProjectComponent} from "../../components/add-project/add-project.component";
-import {Project} from "../../models/project";
-import {ProjectService} from "../../services/project.service";
-import {Participation} from "../../models/participation";
-import {UserService} from "../../services/user.service";
-import {User} from "../../models/user";
-import {ParticipationService} from "../../services/participation.service";
-import {ToastrService} from "ngx-toastr";
-import {EntityHelper} from "../../helpers/entity-helper";
-import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
-import {JwtHelper} from "../../helpers/jwt-helper";
+import {MatDialog} from '@angular/material/dialog';
+import {AddProjectComponent} from '../../components/add-project/add-project.component';
+import {Project} from '../../models/project';
+import {ProjectService} from '../../services/project.service';
+import {Participation} from '../../models/participation';
+import {UserService} from '../../services/user.service';
+import {User} from '../../models/user';
+import {ParticipationService} from '../../services/participation.service';
+import {ToastrService} from 'ngx-toastr';
+import {EntityHelper} from '../../helpers/entity-helper';
+import {ChangeProfileComponent} from '../../components/change-profile/change-profile.component';
+import {JwtHelper} from '../../helpers/jwt-helper';
 import {faHome, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 
 
@@ -20,9 +20,9 @@ import {faHome, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  homeIcon = faHome
-  circleIcon = faPlusCircle
-  loaded: boolean = false;
+  homeIcon = faHome;
+  circleIcon = faPlusCircle;
+  loaded = false;
   participations: Participation[] = [];
   @Input() user: User;
   selectedProjects: Project[];
@@ -41,8 +41,8 @@ export class HomeComponent implements OnInit {
     const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
     await this.userService.getUser(idToken.oid).then(async res => {
       if (res) {
-        this.user = res
-        this.getParticipations().then(() => this.loaded = true)
+        this.user = res;
+        this.getParticipations().then(() => this.loaded = true);
       }
     });
 
@@ -53,19 +53,19 @@ export class HomeComponent implements OnInit {
     await this.participationService.getParticipations(this.user.id).then(response => {
       this.participations = response;
       this.participations.sort((a, b) => a.project.name.toLowerCase() > b.project.name.toLowerCase() ? 1 : -1);
-    })
+    });
   }
 
   async addParticipation() {
     let projects: Project[] = [];
-    let userCheckedProfile: boolean = false;
-    this.toastr.warning("Controleer je profiel en vul deze eventueel aan.")
+    let userCheckedProfile = false;
+    this.toastr.warning('Controleer je profiel en vul deze eventueel aan.');
 
     const dialogRef = this.dialog.open(ChangeProfileComponent, {
       width: '500px',
       data: {
         user: this.user,
-        title: "Update je profiel voordat je je aanmeldt"
+        title: 'Update je profiel voordat je je aanmeldt'
       }
     });
     dialogRef.disableClose = true;
@@ -83,8 +83,8 @@ export class HomeComponent implements OnInit {
                 if (pro.id == par.project.id) {
                   projects = projects.filter(obj => obj !== pro);
                 }
-              })
-            })
+              });
+            });
             let dialogRef = null;
             if (projects.length > 0) {
               dialogRef = this.dialog.open(AddProjectComponent, {
@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit {
                 width: '350px',
               });
             } else {
-              this.toastr.warning("Geen (nieuwe) projecten gevonden.")
+              this.toastr.warning('Geen (nieuwe) projecten gevonden.');
             }
 
             dialogRef.disableClose = true;
@@ -100,22 +100,22 @@ export class HomeComponent implements OnInit {
               if (result !== 'false') {
                 this.selectedProjects = result;
                 for (const project of this.selectedProjects) {
-                  let participation: Participation = new Participation();
+                  const participation: Participation = new Participation();
                   participation.id = EntityHelper.returnEmptyGuid();
                   participation.person = this.user;
-                  participation.project = project
+                  participation.project = project;
                   await this.participationService.postParticipation(participation).then(res => {
                     if (res) {
-                      this.participations.push(res)
-                      this.toastr.success("Aangemeld voor project: " + res.project.name)
+                      this.participations.push(res);
+                      this.toastr.success('Aangemeld voor project: ' + res.project.name);
                     }
                   });
                 }
               }
-            })
+            });
           }
-        )
+        );
       }
-    })
+    });
   }
 }

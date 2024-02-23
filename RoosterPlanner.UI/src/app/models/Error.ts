@@ -1,4 +1,4 @@
-﻿export class ErrorMessage{
+export class ErrorMessage{
   public type: number;
-  public message:string;
+  public message: string;
 }

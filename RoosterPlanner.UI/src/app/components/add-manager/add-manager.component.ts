@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {User} from "../../models/user";
-import {UserService} from "../../services/user.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {Manager} from "../../models/manager";
-import {MatTabChangeEvent} from "@angular/material/tabs";
-import {ToastrService} from "ngx-toastr";
+import {User} from '../../models/user';
+import {UserService} from '../../services/user.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Manager} from '../../models/manager';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-manager',
@@ -12,14 +12,14 @@ import {ToastrService} from "ngx-toastr";
   styleUrls: ['./add-manager.component.scss']
 })
 export class AddManagerComponent implements OnInit {
-  loaded: boolean = false;
-  searchText: string = '';
+  loaded = false;
+  searchText = '';
   users: User[] = [];
   managers: Manager[] = [];
-  currentPage: number = 1;
-  pageSize: number = 5;
+  currentPage = 1;
+  pageSize = 5;
   projectId: string;
-  currentTabIndex: number = 0;
+  currentTabIndex = 0;
 
   addedManagers: string[] = [];
   removedManagers: string[] = [];
@@ -33,25 +33,25 @@ export class AddManagerComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.data.projectId != null ? this.projectId = this.data.projectId : this.projectId = null;
 
-    //get all current project managers
+    // get all current project managers
     await this.userService.getAllProjectManagers(this.projectId).then(res => {
       if (res) {
         this.managers = res;
       }
 
-    })
-    //get all users
+    });
+    // get all users
     await this.userService.getAllUsers().then(users => {
       users.forEach(user => {
         if (!this.managers.find(m => m.personId == user.id)) {
           this.users.push(user);
         }
-      })
+      });
 
       this.users.sort((a, b) => a.firstName > b.firstName ? 1 : -1);
       this.managers.sort((a, b) => a.person.firstName > b.person.firstName ? 1 : -1);
       this.loaded = true;
-    })
+    });
 
   }
 
@@ -61,53 +61,57 @@ export class AddManagerComponent implements OnInit {
 
   async modManager(id: string, alreadyManager: boolean) {
     if (!alreadyManager) {
-      let index = this.addedManagers.indexOf(id)
-      if (index > -1)
-        this.addedManagers.splice(index, 1)
-      else
-        this.addedManagers.push(id)
+      const index = this.addedManagers.indexOf(id);
+      if (index > -1) {
+        this.addedManagers.splice(index, 1);
+      }
+      else {
+        this.addedManagers.push(id);
+      }
     } else {
-      let index = this.removedManagers.indexOf(id)
-      if (index > -1)
-        this.removedManagers.splice(index, 1)
-      else
-        this.removedManagers.push(id)
+      const index = this.removedManagers.indexOf(id);
+      if (index > -1) {
+        this.removedManagers.splice(index, 1);
+      }
+      else {
+        this.removedManagers.push(id);
+      }
 
     }
-    this.changeBackground()
+    this.changeBackground();
   }
 
   changeBackground() {
     this.users.forEach(u => {
-      let element = document.getElementById(u.id)
-      let checkElement = document.getElementById("check" + u.id)
+      const element = document.getElementById(u.id);
+      const checkElement = document.getElementById('check' + u.id);
       if (element) {
-        let index = this.addedManagers.find(m => m === u.id)
+        const index = this.addedManagers.find(m => m === u.id);
         if (index) {
-          element.style.background = "whitesmoke"
+          element.style.background = 'whitesmoke';
           checkElement.hidden = false;
         } else {
-          element.style.background = "white";
+          element.style.background = 'white';
           checkElement.hidden = true;
         }
       }
-    })
+    });
 
     this.managers.forEach(u => {
-      let element = document.getElementById(u.personId)
-      let closeElement = document.getElementById("check" + u.id)
+      const element = document.getElementById(u.personId);
+      const closeElement = document.getElementById('check' + u.id);
       if (element) {
-        let index = this.removedManagers.find(m => m === u.personId)
+        const index = this.removedManagers.find(m => m === u.personId);
         if (index) {
-          element.style.background = "whitesmoke"
+          element.style.background = 'whitesmoke';
           closeElement.hidden = false;
         } else {
-          element.style.background = "white";
+          element.style.background = 'white';
           closeElement.hidden = true;
         }
 
       }
-    })
+    });
   }
 
   prevPage() {
@@ -115,8 +119,8 @@ export class AddManagerComponent implements OnInit {
       this.currentPage--;
     }
     setTimeout(() => {
-      this.changeBackground()
-    }, 100)
+      this.changeBackground();
+    }, 100);
   }
 
   nextPage() {
@@ -130,12 +134,12 @@ export class AddManagerComponent implements OnInit {
       }
     }
     setTimeout(() => {
-      this.changeBackground()
-    }, 100)
+      this.changeBackground();
+    }, 100);
   }
 
   close() {
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 
   changeTab($event: MatTabChangeEvent) {
@@ -147,17 +151,19 @@ export class AddManagerComponent implements OnInit {
   async send() {
     for (const am of this.addedManagers) {
       this.userService.makeManager(this.projectId, am).then(res => {
-        if (res)
-          this.toastr.success(this.users.find(u => u.id === am).firstName + " is succesvol toegevoegd")
-      })
+        if (res) {
+          this.toastr.success(this.users.find(u => u.id === am).firstName + ' is succesvol toegevoegd');
+        }
+      });
 
     }
     for (const rm of this.removedManagers) {
       this.userService.removeManager(this.projectId, rm).then(res => {
-        if (res)
-          this.toastr.success(this.managers.find(u => u.personId === rm).person.firstName + " is succesvol verwijderd")
-      })
+        if (res) {
+          this.toastr.success(this.managers.find(u => u.personId === rm).person.firstName + ' is succesvol verwijderd');
+        }
+      });
     }
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 }

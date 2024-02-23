@@ -1,13 +1,13 @@
 import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
 import {MsalService} from './msal.service';
 import {Inject, Injectable} from '@angular/core';
-import {Location} from "@angular/common";
-import {InteractionType} from "@azure/msal-browser";
+import {Location} from '@angular/common';
+import {InteractionType} from '@azure/msal-browser';
 import {MsalGuardConfiguration} from './msal.guard.config';
 import {MSAL_GUARD_CONFIG} from './constants';
 import {catchError, concatMap, map} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
-import {environment} from "../../environments/environment";
+import {environment} from '../../environments/environment';
 
 
 @Injectable()
@@ -26,14 +26,14 @@ export class MsalGuard implements CanActivate {
    */
   getDestinationUrl(path: string): string {
     // Absolute base url for the application (default to origin if base element not present)
-    const baseElements = document.getElementsByTagName("base");
+    const baseElements = document.getElementsByTagName('base');
     const baseUrl = this.location.normalize(baseElements.length ? baseElements[0].href : window.location.origin);
 
     // Path of page (including hash, if using hash routing)
     const pathUrl = this.location.prepareExternalUrl(path);
 
     // Hash location strategy
-    if (pathUrl.startsWith("#")) {
+    if (pathUrl.startsWith('#')) {
       return `${baseUrl}/${pathUrl}`;
     }
 
@@ -47,27 +47,27 @@ export class MsalGuard implements CanActivate {
       .pipe(
         concatMap(() => {
           if (!this.authService.getAllAccounts().length) {
-            let x = this.loginInteractively(state.url);
-            this.checkTokenInCache()
+            const x = this.loginInteractively(state.url);
+            this.checkTokenInCache();
             return x;
           } else {
-            this.checkTokenInCache()
+            this.checkTokenInCache();
             return of(true);
           }
 
         }),
         catchError((err) => {
           if (err.errorMessage.indexOf('AADB2C90118') > -1) {
-            window.location.href='https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_reset&client_id=23cbcba3-683e-4fea-bf57-f25d3dc4f0fc&nonce=defaultNonce&redirect_uri=https%3A%2F%2Frooster.hartigesamaritaan.nl&scope=openid&response_type=id_token&prompt=login'
+            window.location.href = 'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_reset&client_id=23cbcba3-683e-4fea-bf57-f25d3dc4f0fc&nonce=defaultNonce&redirect_uri=https%3A%2F%2Frooster.hartigesamaritaan.nl&scope=openid&response_type=id_token&prompt=login';
             this.authService.loginRedirect({
               authority: environment.authorities.resetPassword.authority,
               scopes: environment.scopes
-            })
-            this.authService.logout()
+            });
+            this.authService.logout();
             return of(false);
           }
           return of(false);
-        }))
+        }));
 
   }
 
@@ -76,13 +76,13 @@ export class MsalGuard implements CanActivate {
       account: this.authService.getAllAccounts()[0],
       scopes: environment.scopes
     };
-    if (sessionStorage.getItem("msal.idtoken") == null) {
+    if (sessionStorage.getItem('msal.idtoken') == null) {
       this.authService.acquireTokenSilent(request).toPromise().then(token => {
-        sessionStorage.setItem("msal.idtoken", token.idToken)
+        sessionStorage.setItem('msal.idtoken', token.idToken);
       }, Error => {
         this.authService.acquireTokenRedirect(request).toPromise().then(token => {
-        })
-      })
+        });
+      });
     }
   }
 

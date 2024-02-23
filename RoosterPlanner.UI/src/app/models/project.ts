@@ -1,5 +1,5 @@
-import {Entity} from "./entity.model";
-import {Document} from "./document";
+import {Entity} from './entity.model';
+import {Document} from './document';
 
 
 export class Project extends Entity {
@@ -14,5 +14,5 @@ export class Project extends Entity {
   public pictureUri?: Document;
   public websiteUrl?: string;
   public closed?: boolean;
-  public contactAdres:string;
+  public contactAdres: string;
 }

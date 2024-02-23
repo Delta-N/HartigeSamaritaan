@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HttpResponse} from "@angular/common/http";
-import {User} from "../models/user";
-import {ApiService} from "./api.service";
-import {HttpRoutes} from "../helpers/HttpRoutes";
-import {JwtHelper} from "../helpers/jwt-helper";
-import {Manager} from "../models/manager";
-import {Searchresult} from "../models/searchresult";
-import {ErrorService} from "./error.service";
+import {HttpResponse} from '@angular/common/http';
+import {User} from '../models/user';
+import {ApiService} from './api.service';
+import {HttpRoutes} from '../helpers/HttpRoutes';
+import {JwtHelper} from '../helpers/jwt-helper';
+import {Manager} from '../models/manager';
+import {Searchresult} from '../models/searchresult';
+import {ErrorService} from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,100 +22,106 @@ export class UserService {
 
   async getUser(guid: string): Promise<User> {
     if (!guid) {
-      this.errorService.error("UserId is leeg")
+      this.errorService.error('UserId is leeg');
     }
     let user: User = null;
     await this.apiService.get<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          user = res.body
+        if (res.ok) {
+          user = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
-    return user
+    return user;
   }
 
-//todo aanpassen optimaal gebruikt te maken van searchresult list
+// todo aanpassen optimaal gebruikt te maken van searchresult list
   async getAdministrators(offset: number, pageSize: number): Promise<User[]> {
     let users: User[] = [];
     await this.apiService.get<HttpResponse<Searchresult<User>>>(`${HttpRoutes.personApiUrl}?Userrole=1&offset=${offset}&pageSize=${pageSize}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          users = res.body.resultList
+        if (res.ok) {
+          users = res.body.resultList;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
     return users;
   }
 
   async makeAdmin(GUID: string): Promise<User> {
     if (!GUID) {
-      this.errorService.error("Ongeldige UserId")
+      this.errorService.error('Ongeldige UserId');
       return null;
     }
     let user: User = null;
     await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/1`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          user = res.body
+        if (res.ok) {
+          user = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
     return user;
   }
 
   async removeAdmin(GUID: string): Promise<User> {
     if (!GUID) {
-      this.errorService.error("Ongeldige UserId")
+      this.errorService.error('Ongeldige UserId');
       return null;
     }
     let user: User = null;
     await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/modifyadmin/${GUID}/4`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          user = res.body
+        if (res.ok) {
+          user = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
     return user;
   }
 
-//todo om optimaal gebruikt te maken van searchresult list
+// todo om optimaal gebruikt te maken van searchresult list
   async getAllUsers(): Promise<User[]> {
     const resonableLargeNumber = 10000;
     let users: User[] = [];
     await this.apiService.get<HttpResponse<Searchresult<User>>>(`${HttpRoutes.personApiUrl}?pageSize=${resonableLargeNumber}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          users = res.body.resultList
+        if (res.ok) {
+          users = res.body.resultList;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
     return users;
   }
 
 
-  async getAllParticipants(projectId: string):Promise<User[]> {
+  async getAllParticipants(projectId: string): Promise<User[]> {
     let users: User[] = [];
     await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}/participants/${projectId}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          users = res.body
+        if (res.ok) {
+          users = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
     return users;
   }
 
   async getAllProjectManagers(projectId: string): Promise<Manager[]> {
     if (!projectId) {
-      this.errorService.error("ProjectId mag niet leeg zijn")
+      this.errorService.error('ProjectId mag niet leeg zijn');
       return null;
     }
     let managers: Manager[] = [];
@@ -123,17 +129,17 @@ export class UserService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          managers = res.body
+          managers = res.body;
         }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
-    return managers
+    return managers;
   }
 
   async getProjectsManagedBy(userId: string): Promise<Manager[]> {
     if (!userId) {
-      this.errorService.error("UserId mag niet leeg zijn")
+      this.errorService.error('UserId mag niet leeg zijn');
       return null;
     }
     let managers: Manager[] = [];
@@ -141,17 +147,17 @@ export class UserService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          managers = res.body
+          managers = res.body;
         }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
-    return managers
+    return managers;
   }
 
   async makeManager(projectId: string, userId: String): Promise<boolean> {
     if (!projectId || !userId) {
-      this.errorService.error("UserId of ProjectId mag niet leeg zijn")
+      this.errorService.error('UserId of ProjectId mag niet leeg zijn');
       return false;
     }
     let result = false;
@@ -162,7 +168,7 @@ export class UserService {
           result = true;
         }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
     return result;
   }
@@ -180,73 +186,77 @@ export class UserService {
           result = true;
         }
       }, Error => {
-        this.errorService.httpError(Error)
+        this.errorService.httpError(Error);
       });
     return result;
   }
 
-//todo
+// todo
   async getRangeOfUsers(offset: number, pageSize: number): Promise<User[]> {
-    let rangeOfUsers: User[] = []
+    let rangeOfUsers: User[] = [];
     await this.apiService.get<HttpResponse<Searchresult<User>>>(`${HttpRoutes.personApiUrl}?offset=${offset}&pageSize=${pageSize}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          rangeOfUsers = res.body.resultList
+        if (res.ok) {
+          rangeOfUsers = res.body.resultList;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
-    return rangeOfUsers
+        this.errorService.httpError(Error);
+      });
+    return rangeOfUsers;
   }
 
   async updateUser(updateUser: User): Promise<User> {
     if (!updateUser) {
-      this.errorService.error("UpdateUser mag niet leeg zijn");
+      this.errorService.error('UpdateUser mag niet leeg zijn');
       return null;
     }
     let user: User = null;
     await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/`, updateUser)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          user = res.body
+        if (res.ok) {
+          user = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
-    return user
+        this.errorService.httpError(Error);
+      });
+    return user;
   }
 
   async updatePerson(updateUser: User): Promise<User> {
     if (!updateUser) {
-      this.errorService.error("UpdateUser mag niet leeg zijn");
+      this.errorService.error('UpdateUser mag niet leeg zijn');
       return null;
     }
     let user: User = null;
     await this.apiService.put<HttpResponse<User>>(`${HttpRoutes.personApiUrl}/UpdatePerson`, updateUser)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          user = res.body
+        if (res.ok) {
+          user = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
-    return user
+        this.errorService.httpError(Error);
+      });
+    return user;
   }
 
   async getCurrentUser(): Promise<User> {
-    let id = this.getCurrentUserId();
+    const id = this.getCurrentUserId();
     let user: User = null;
     if (id) {
       await this.getUser(id).then(res => {
-        if (res)
+        if (res) {
           user = res;
-      })
+        }
+      });
     }
     return user;
   }
 
   getIdToken(): any {
-    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
+    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
     if (idToken === null) {
       return false;
     }
@@ -258,11 +268,11 @@ export class UserService {
   }
 
   userIsAdminFrontEnd(): boolean {
-    return ((this.getIdToken().extension_UserRole === 1))
+    return ((this.getIdToken().extension_UserRole === 1));
   }
 
   userIsProjectAdminFrontEnd(): boolean {
-    const idToken = this.getIdToken()
-    return ((idToken.extension_UserRole === 1) || (idToken.extension_UserRole === 2))
+    const idToken = this.getIdToken();
+    return ((idToken.extension_UserRole === 1) || (idToken.extension_UserRole === 2));
   }
 }

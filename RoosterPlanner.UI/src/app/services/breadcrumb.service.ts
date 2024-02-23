@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Breadcrumb} from "../models/breadcrumb";
-import {BehaviorSubject} from "rxjs";
-import {filter} from "rxjs/operators";
-import {NavigationStart, Router} from "@angular/router";
+import {Breadcrumb} from '../models/breadcrumb';
+import {BehaviorSubject} from 'rxjs';
+import {filter} from 'rxjs/operators';
+import {NavigationStart, Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +12,9 @@ export class BreadcrumbService {
   breadcrumbs: Breadcrumb[] = [];
   behaviourSubject: BehaviorSubject<Breadcrumb[]> = new BehaviorSubject<Breadcrumb[]>(this.breadcrumbs);
 
-  dashboardcrumb: Breadcrumb = new Breadcrumb("Dashboard", "/home");
-  admincrumb: Breadcrumb = new Breadcrumb("Admin", "/admin");
-  managecrumb: Breadcrumb = new Breadcrumb("Beheer", "/manage");
+  dashboardcrumb: Breadcrumb = new Breadcrumb('Dashboard', '/home');
+  admincrumb: Breadcrumb = new Breadcrumb('Admin', '/admin');
+  managecrumb: Breadcrumb = new Breadcrumb('Beheer', '/manage');
 
   constructor(private router: Router) {
 
@@ -36,7 +36,7 @@ export class BreadcrumbService {
   }
 
   backcrumb() {
-    let backcrumb: Breadcrumb = new Breadcrumb("Terug", null);
+    const backcrumb: Breadcrumb = new Breadcrumb('Terug', null);
     this.breadcrumbs = [backcrumb];
     this.behaviourSubject.next(this.breadcrumbs);
   }

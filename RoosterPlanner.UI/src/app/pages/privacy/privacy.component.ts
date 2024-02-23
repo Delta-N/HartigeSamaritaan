@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {UploadService} from "../../services/upload.service";
-import {Document} from "../../models/document";
+import {UploadService} from '../../services/upload.service';
+import {Document} from '../../models/document';
 
 @Component({
   selector: 'app-privacy',
@@ -16,8 +16,9 @@ export class PrivacyComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.uploadService.getPP().then(res => {
-      if (res)
+      if (res) {
         this.PP = res;
-    })
+      }
+    });
   }
 }

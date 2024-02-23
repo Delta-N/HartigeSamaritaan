@@ -1,4 +1,4 @@
-import {Inject, Injectable} from "@angular/core";
+import {Inject, Injectable} from '@angular/core';
 import {
   AccountInfo,
   AuthenticationResult,
@@ -8,8 +8,8 @@ import {
   PopupRequest,
   RedirectRequest,
   SilentRequest
-} from "@azure/msal-browser";
-import {MSAL_INSTANCE} from "./constants";
+} from '@azure/msal-browser';
+import {MSAL_INSTANCE} from './constants';
 import {from, Observable} from 'rxjs';
 import {Location} from '@angular/common';
 

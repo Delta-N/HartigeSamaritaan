@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {ApiService} from "./api.service";
-import {Category} from "../models/category";
-import {HttpResponse} from "@angular/common/http";
-import {HttpRoutes} from "../helpers/HttpRoutes";
-import {EntityHelper} from "../helpers/entity-helper";
-import {ErrorService} from "./error.service";
+import {ApiService} from './api.service';
+import {Category} from '../models/category';
+import {HttpResponse} from '@angular/common/http';
+import {HttpRoutes} from '../helpers/HttpRoutes';
+import {EntityHelper} from '../helpers/entity-helper';
+import {ErrorService} from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,18 +17,19 @@ export class CategoryService {
 
   async getCategory(guid: string): Promise<Category> {
     if (!guid) {
-      this.errorService.error("categoryID mag niet leeg zijn")
+      this.errorService.error('categoryID mag niet leeg zijn');
       return null;
     }
     let category: Category = null;
     await this.apiService.get<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/GetCategory/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res.ok) {
           category = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return category;
   }
 
@@ -37,72 +38,76 @@ export class CategoryService {
     await this.apiService.get<HttpResponse<Category[]>>(`${HttpRoutes.taskApiUrl}/GetAllCategories`)
       .toPromise()
       .then(res => {
-          if (res.ok)
-            categories = res.body
+          if (res.ok) {
+            categories = res.body;
+          }
         }, Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
       );
-    return categories
+    return categories;
   }
 
   async postCategory(category: Category): Promise<Category> {
     if (!category || !category.name) {
-      this.errorService.error("Ongeldige category")
+      this.errorService.error('Ongeldige category');
       return null;
     }
 
     if (!category.id) {
-      category.id = EntityHelper.returnEmptyGuid()
+      category.id = EntityHelper.returnEmptyGuid();
     }
     let resCategory: Category = null;
     await this.apiService.post<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/SaveCategory`, category)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          resCategory = res.body
+        if (res.ok) {
+          resCategory = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
-    return resCategory
+        this.errorService.httpError(Error);
+      });
+    return resCategory;
   }
 
   async updateCategory(category: Category): Promise<Category> {
     if (!category || !category.name) {
-      this.errorService.error("Ongeldige category")
+      this.errorService.error('Ongeldige category');
       return null;
     }
     let updatedCategory: Category = null;
     if (!category.id) {
-      this.errorService.error("CategoryID is leeg")
+      this.errorService.error('CategoryID is leeg');
       return null;
     }
     await this.apiService.put<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/UpdateCategory`, category)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res.ok) {
             updatedCategory = res.body;
+          }
         }, Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
-      )
-    return updatedCategory
+      );
+    return updatedCategory;
   }
 
   async deleteCategory(guid: string): Promise<boolean> {
     if (!guid) {
-      this.errorService.error("CategoryID is leeg")
+      this.errorService.error('CategoryID is leeg');
       return null;
     }
-    let deleted: boolean = false;
+    let deleted = false;
     await this.apiService.delete<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/DeleteCategory/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res.ok) {
           deleted = true;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return deleted;
   }
 }

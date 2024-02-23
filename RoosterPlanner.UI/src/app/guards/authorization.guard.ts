@@ -1,4 +1,4 @@
-﻿import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -8,9 +8,9 @@ import {
   RouterStateSnapshot,
   UrlSegment,
   UrlTree,
-} from "@angular/router";
-import {UserService} from "../services/user.service";
-import {Observable, of} from "rxjs";
+} from '@angular/router';
+import {UserService} from '../services/user.service';
+import {Observable, of} from 'rxjs';
 
 
 @Injectable()
@@ -21,19 +21,21 @@ export class AuthorizationGuard implements CanActivate, CanLoad {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> {
-    if (this.userService.userIsAdminFrontEnd())
-      return true
+    if (this.userService.userIsAdminFrontEnd()) {
+      return true;
+    }
     else {
-      this.router.navigate(['home'])
+      this.router.navigate(['home']);
       return false;
     }
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.userService.userIsAdminFrontEnd())
-      return true
+    if (this.userService.userIsAdminFrontEnd()) {
+      return true;
+    }
     else {
-      this.router.navigate(['home'])
+      this.router.navigate(['home']);
       return false;
     }
   }

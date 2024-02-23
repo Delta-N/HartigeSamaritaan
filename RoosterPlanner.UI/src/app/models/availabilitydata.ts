@@ -1,4 +1,4 @@
-﻿import {Task} from "./task";
+import {Task} from './task';
 
 export class AvailabilityData {
 
@@ -7,7 +7,7 @@ export class AvailabilityData {
 }
 
 export class ScheduleStatus{
-  public date:string;
+  public date: string;
   public status: number;
   // 0= incomplete
   // 1= At least one day availabilbe

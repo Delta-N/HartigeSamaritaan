@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {MatCheckboxChange} from "@angular/material/checkbox";
-import {Project} from "../../models/project";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {Project} from '../../models/project';
 
 @Component({
   selector: 'app-add-project',
@@ -11,19 +11,19 @@ import {Project} from "../../models/project";
 export class AddProjectComponent implements OnInit {
   selectedProjects: Project[] = [];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<AddProjectComponent>,) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<AddProjectComponent>, ) {
   }
 
   ngOnInit(): void {
   }
 
   OnChange(event: MatCheckboxChange) {
-    let project: Project = this.data.find(p => p.id === event.source.id)
+    const project: Project = this.data.find(p => p.id === event.source.id);
     if (event.checked) {
-      this.addToArray(project)
+      this.addToArray(project);
     }
     if (!event.checked) {
-      this.removeFromArray(project)
+      this.removeFromArray(project);
     }
   }
 
@@ -35,13 +35,13 @@ export class AddProjectComponent implements OnInit {
       }
     }
     if (!present) {
-      this.selectedProjects.push(project)
+      this.selectedProjects.push(project);
     }
   }
 
   removeFromArray(project: Project) {
-    const index = this.selectedProjects.indexOf(project)
-    this.selectedProjects.splice(index, 1)
+    const index = this.selectedProjects.indexOf(project);
+    this.selectedProjects.splice(index, 1);
   }
 
   addParticipations() {

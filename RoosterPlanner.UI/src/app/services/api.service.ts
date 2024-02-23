@@ -4,9 +4,9 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 import {JwtHelper} from '../helpers/jwt-helper';
-import {MsalService} from "../msal";
-import {environment} from "../../environments/environment";
-import {SilentRequest} from "@azure/msal-browser";
+import {MsalService} from '../msal';
+import {environment} from '../../environments/environment';
+import {SilentRequest} from '@azure/msal-browser';
 
 export interface Options {
   headers?: {

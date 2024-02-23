@@ -1,16 +1,16 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Certificate} from "../../models/Certificate";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {CertificateService} from "../../services/certificate.service";
-import {UserService} from "../../services/user.service";
-import {AddCertificateComponent} from "../../components/add-certificate/add-certificate.component";
-import {MatDialog} from "@angular/material/dialog";
-import {ToastrService} from "ngx-toastr";
-import {BreadcrumbService} from "../../services/breadcrumb.service";
-import {ConfirmDialogComponent, ConfirmDialogModel} from "../../components/confirm-dialog/confirm-dialog.component";
-import jsPDF from "jspdf";
-import {DateConverter} from "../../helpers/date-converter";
-import {Breadcrumb} from "../../models/breadcrumb";
+import {Certificate} from '../../models/Certificate';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {CertificateService} from '../../services/certificate.service';
+import {UserService} from '../../services/user.service';
+import {AddCertificateComponent} from '../../components/add-certificate/add-certificate.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {BreadcrumbService} from '../../services/breadcrumb.service';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '../../components/confirm-dialog/confirm-dialog.component';
+import jsPDF from 'jspdf';
+import {DateConverter} from '../../helpers/date-converter';
+import {Breadcrumb} from '../../models/breadcrumb';
 import {faAward, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -21,12 +21,12 @@ import {faAward, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 export class CertificateComponent implements OnInit {
   editIcon = faEdit;
   deleteIcon = faTrashAlt;
-  awardIcon = faAward
+  awardIcon = faAward;
 
   guid: string;
-  certificate: Certificate
-  isAdmin: boolean = false;
-  loaded: boolean = false;
+  certificate: Certificate;
+  isAdmin = false;
+  loaded = false;
 
   @ViewChild('pdfTable', {static: false}) pdfTable: ElementRef;
 
@@ -37,21 +37,21 @@ export class CertificateComponent implements OnInit {
               public dialog: MatDialog,
               private toastr: ToastrService,
               private router: Router,
-              private breadcrumbService: BreadcrumbService,) {
+              private breadcrumbService: BreadcrumbService, ) {
 
   }
 
   ngOnInit(): void {
-    this.isAdmin = this.userService.userIsAdminFrontEnd()
+    this.isAdmin = this.userService.userIsAdminFrontEnd();
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       this.guid = params.get('id');
-      await this.getCertificate()
+      await this.getCertificate();
 
-      let previousUrl = this.isAdmin ? 'admin/profile/' + this.certificate.person.id : "/profile";
-      let previous: Breadcrumb = new Breadcrumb('Profiel', previousUrl);
-      let current: Breadcrumb = new Breadcrumb('Certificaat', null);
+      const previousUrl = this.isAdmin ? 'admin/profile/' + this.certificate.person.id : '/profile';
+      const previous: Breadcrumb = new Breadcrumb('Profiel', previousUrl);
+      const current: Breadcrumb = new Breadcrumb('Certificaat', null);
 
-      let breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current]
+      const breadcrumbs: Breadcrumb[] = [this.breadcrumbService.dashboardcrumb, previous, current];
       this.breadcrumbService.replace(breadcrumbs);
 
     });
@@ -59,8 +59,9 @@ export class CertificateComponent implements OnInit {
 
   async getCertificate() {
     await this.certificateService.getCertificate(this.guid).then(res => {
-      if (res)
+      if (res) {
         this.certificate = res;
+      }
       this.loaded = true;
     });
   }
@@ -77,79 +78,79 @@ export class CertificateComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(async result => {
       if (result && result !== 'false') {
-        this.getCertificate()
-        this.toastr.success("Certificaat is gewijzigd")
+        this.getCertificate();
+        this.toastr.success('Certificaat is gewijzigd');
       }
     });
   }
 
   delete() {
-    const message = "Weet je zeker dat je dit certificaat wilt verwijderen?"
-    const dialogData = new ConfirmDialogModel("Bevestig verwijderen", message, "ConfirmationInput", null);
+    const message = 'Weet je zeker dat je dit certificaat wilt verwijderen?';
+    const dialogData = new ConfirmDialogModel('Bevestig verwijderen', message, 'ConfirmationInput', null);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(async dialogResult => {
       if (dialogResult === true) {
         await this.certificateService.deleteCertificate(this.guid).then(async response => {
           if (response) {
-            window.history.back()
+            window.history.back();
           }
-        })
+        });
       }
-    })
+    });
   }
 
   pdf() {
-    const doc = new jsPDF({orientation: "l", unit: "mm", format: [210, 297]});
+    const doc = new jsPDF({orientation: 'l', unit: 'mm', format: [210, 297]});
 
 
-    let img = new Image()
-    img.src = "../../../assets/Logo.background.png"
+    const img = new Image();
+    img.src = '../../../assets/Logo.background.png';
 
     let text: string;
 
     doc.rect(10, 10, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 20, 'S');
 
-    let imgWidth: number = 100
-    doc.addImage(img, 'png', this.getOffSet(doc, imgWidth), 20, imgWidth, 35)
+    const imgWidth = 100;
+    doc.addImage(img, 'png', this.getOffSet(doc, imgWidth), 20, imgWidth, 35);
 
-    doc.setFont("Century Schoolbook")
+    doc.setFont('Century Schoolbook');
 
-    doc.setFontSize(40)
-    text = "CERTIFICAAT"
-    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 80)
+    doc.setFontSize(40);
+    text = 'CERTIFICAAT';
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 80);
 
-    doc.setFontSize(16)
-    text = "Hiermee bevestigen wij dat:"
-    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 90)
+    doc.setFontSize(16);
+    text = 'Hiermee bevestigen wij dat:';
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 90);
 
-    doc.setFontSize(24)
-    text = this.certificate.person.firstName + " " + this.certificate.person.lastName
-    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 100)
+    doc.setFontSize(24);
+    text = this.certificate.person.firstName + ' ' + this.certificate.person.lastName;
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 100);
 
-    doc.setFontSize(16)
-    text = "Met goed resultaat kunde heeft laten zien op het gebied van"
-    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 110)
+    doc.setFontSize(16);
+    text = 'Met goed resultaat kunde heeft laten zien op het gebied van';
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 110);
 
-    doc.setFontSize(24)
-    text = this.certificate.certificateType ? this.certificate.certificateType.name : "Onbekend"
-    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 120)
+    doc.setFontSize(24);
+    text = this.certificate.certificateType ? this.certificate.certificateType.name : 'Onbekend';
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 120);
 
-    doc.setFontSize(16)
+    doc.setFontSize(16);
     if (this.certificate.certificateType?.level) {
-      text = "Niveau behaald: " + this.certificate.certificateType.level
-      doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 130)
+      text = 'Niveau behaald: ' + this.certificate.certificateType.level;
+      doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 130);
     }
 
-    text = "Afgiftedatum: " + DateConverter.toReadableStringFromDate(this.certificate.dateIssued)
-    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 150)
+    text = 'Afgiftedatum: ' + DateConverter.toReadableStringFromDate(this.certificate.dateIssued);
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 150);
 
 
     if (this.certificate.dateExpired) {
-      text = "Verloopdatum: " + DateConverter.toReadableStringFromDate(this.certificate.dateExpired)
-      doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 160)
+      text = 'Verloopdatum: ' + DateConverter.toReadableStringFromDate(this.certificate.dateExpired);
+      doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 160);
     }
 
     doc.save('Certificaat.pdf');

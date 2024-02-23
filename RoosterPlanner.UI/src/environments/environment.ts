@@ -7,13 +7,13 @@ export const environment = {
   production: false,
 
   auth: {
-    clientId: "23cbcba3-683e-4fea-bf57-f25d3dc4f0fc",
-    authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi",
-    redirectUri: "http://localhost:4200/",
-    postLogoutRedirectUri: "http://localhost:4200/",
+    clientId: '23cbcba3-683e-4fea-bf57-f25d3dc4f0fc',
+    authority: 'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi',
+    redirectUri: 'http://localhost:4200/',
+    postLogoutRedirectUri: 'http://localhost:4200/',
     navigateToLoginRequestUrl: true,
     validateAuthority: false,
-    knownAuthorities: ["https://roosterplanneridp.b2clogin.com"],
+    knownAuthorities: ['https://roosterplanneridp.b2clogin.com'],
   },
   protectedResourceMap: [
     ['https://localhost:5001/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
@@ -28,19 +28,19 @@ export const environment = {
   ],
   authorities: {
     signUpSignIn: {
-      authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi"
+      authority: 'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi'
     },
     resetPassword: {
-      authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_reset_pwd"
+      authority: 'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_reset_pwd'
     },
     editProfile: {
-      authority: "https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_edit"
+      authority: 'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_edit'
     }
   },
-  backendUrl: "https://localhost:5001/",
+  backendUrl: 'https://localhost:5001/',
 
-  appInsights:{
-    instrumentationKey: '54c0fc49-0057-453d-bae6-e384d5f00ce4' //Dit is afhankelijk van de deploy omgeving
+  appInsights: {
+    instrumentationKey: '54c0fc49-0057-453d-bae6-e384d5f00ce4' // Dit is afhankelijk van de deploy omgeving
   },
 
 };

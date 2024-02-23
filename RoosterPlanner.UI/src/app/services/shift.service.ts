@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
-import {ApiService} from "./api.service";
-import {Shift} from "../models/shift";
-import {EntityHelper} from "../helpers/entity-helper";
-import {HttpResponse} from "@angular/common/http";
-import {HttpRoutes} from "../helpers/HttpRoutes";
-import {ErrorService} from "./error.service";
-import {Scheduledata} from "../models/scheduledata";
-import {ShiftFilter} from "../models/filters/shift-filter";
-import {F} from "@angular/cdk/keycodes";
-import {Searchresult} from "../models/searchresult";
-import {Shiftdata} from "../models/helper-models/shiftdata";
+import {ApiService} from './api.service';
+import {Shift} from '../models/shift';
+import {EntityHelper} from '../helpers/entity-helper';
+import {HttpResponse} from '@angular/common/http';
+import {HttpRoutes} from '../helpers/HttpRoutes';
+import {ErrorService} from './error.service';
+import {Scheduledata} from '../models/scheduledata';
+import {ShiftFilter} from '../models/filters/shift-filter';
+import {F} from '@angular/cdk/keycodes';
+import {Searchresult} from '../models/searchresult';
+import {Shiftdata} from '../models/helper-models/shiftdata';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class ShiftService {
 
   async getShifts(filter: ShiftFilter): Promise<Searchresult<Shift>> {
     if (!filter || !filter.projectId) {
-      this.errorService.error("Ongeldige filter")
+      this.errorService.error('Ongeldige filter');
       return null;
     }
     let searchResult: Searchresult<Shift> = null;
@@ -30,21 +30,21 @@ export class ShiftService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          searchResult = res.body
+          searchResult = res.body;
           if (searchResult != null) {
-            searchResult.resultList.forEach(s => s.date = new Date(s.date))
+            searchResult.resultList.forEach(s => s.date = new Date(s.date));
           }
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
 
     return searchResult;
   }
 
   async getShiftData(projectId: string): Promise<Shiftdata> {
     if (!projectId || projectId === EntityHelper.returnEmptyGuid()) {
-      this.errorService.error("Ongeldige Id")
+      this.errorService.error('Ongeldige Id');
       return null;
     }
     let data: Shiftdata = null;
@@ -52,23 +52,23 @@ export class ShiftService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          data = res.body
+          data = res.body;
           if (data.dates && data.dates.length > 0) {
-            let dates: Date[] = []
-            data.dates.forEach(d => dates.push(new Date(d)))
-            data.dates = dates
+            const dates: Date[] = [];
+            data.dates.forEach(d => dates.push(new Date(d)));
+            data.dates = dates;
           }
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
 
     return data;
   }
 
   async getAllShiftsWithAvailabilities(projectId: string): Promise<Shift[]> {
     if (!projectId) {
-      this.errorService.error("ProjectId mag niet leeg zijn")
+      this.errorService.error('ProjectId mag niet leeg zijn');
       return null;
     }
     let shifts: Shift[] = [];
@@ -76,29 +76,29 @@ export class ShiftService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          shifts = res.body
+          shifts = res.body;
           if (shifts != null) {
-            shifts.forEach(s => s.date = new Date(s.date))
+            shifts.forEach(s => s.date = new Date(s.date));
           }
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
 
     return shifts;
   }
 
   async getAllShiftsOnDateWithUserAvailability(projectId: string, userId: string, date: Date): Promise<Shift[]> {
     if (!projectId) {
-      this.errorService.error("ProjectId mag niet leeg zijn")
+      this.errorService.error('ProjectId mag niet leeg zijn');
       return null;
     }
     if (!userId) {
-      this.errorService.error("userId mag niet leeg zijn")
+      this.errorService.error('userId mag niet leeg zijn');
       return null;
     }
     if (!date) {
-      this.errorService.error("Datum mag niet leeg zijn")
+      this.errorService.error('Datum mag niet leeg zijn');
       return null;
     }
     let shifts: Shift[] = [];
@@ -106,25 +106,25 @@ export class ShiftService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          shifts = res.body
+          shifts = res.body;
           if (shifts != null) {
-            shifts.forEach(s => s.date = new Date(s.date))
+            shifts.forEach(s => s.date = new Date(s.date));
           }
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
 
     return shifts;
   }
 
   async getAllShiftsOnDate(projectId: string, date: Date): Promise<Shift[]> {
     if (!projectId) {
-      this.errorService.error("ProjectId mag niet leeg zijn")
+      this.errorService.error('ProjectId mag niet leeg zijn');
       return null;
     }
     if (!date) {
-      this.errorService.error("Datum mag niet leeg zijn")
+      this.errorService.error('Datum mag niet leeg zijn');
       return null;
     }
     let shifts: Shift[] = [];
@@ -132,21 +132,21 @@ export class ShiftService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          shifts = res.body
+          shifts = res.body;
           if (shifts != null) {
-            shifts.forEach(s => s.date = new Date(s.date))
+            shifts.forEach(s => s.date = new Date(s.date));
           }
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
 
     return shifts;
   }
 
   async getShift(shiftId: string): Promise<Shift> {
     if (!shiftId) {
-      this.errorService.error("ShiftId mag niet leeg zijn")
+      this.errorService.error('ShiftId mag niet leeg zijn');
       return null;
     }
     let shift: Shift = null;
@@ -154,18 +154,18 @@ export class ShiftService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          shift = res.body
+          shift = res.body;
           shift.date != null ? shift.date = new Date(shift.date) : null;
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return shift;
   }
 
   async getScheduleData(shiftId: string): Promise<Scheduledata> {
     if (!shiftId) {
-      this.errorService.error("ShiftId mag niet leeg zijn")
+      this.errorService.error('ShiftId mag niet leeg zijn');
       return null;
     }
     let scheduledata: Scheduledata = null;
@@ -173,44 +173,44 @@ export class ShiftService {
       .toPromise()
       .then(res => {
         if (res.ok) {
-          scheduledata = res.body
+          scheduledata = res.body;
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return scheduledata;
   }
 
   async postShifts(shifts: Shift[]): Promise<Shift[]> {
     if (!shifts || !shifts.length) {
-      this.errorService.error("Geen shiften om te posten")
+      this.errorService.error('Geen shiften om te posten');
       return null;
     }
     shifts.forEach(shift => {
       if (!shift.id) {
-        shift.id = EntityHelper.returnEmptyGuid()
+        shift.id = EntityHelper.returnEmptyGuid();
       }
       if (!shift.project || !shift.task || !shift.date || !shift.startTime || !shift.endTime || !shift.participantsRequired) {
-        this.errorService.error("Niet alle shiften zijn geldig");
+        this.errorService.error('Niet alle shiften zijn geldig');
         return null;
       }
-    })
+    });
     let postedShifts: Shift[] = null;
     await this.apiService.post<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}`, shifts)
       .toPromise()
       .then(res => {
         if (res.ok) {
-          postedShifts = res.body
+          postedShifts = res.body;
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return postedShifts;
   }
 
   async updateShift(shift: Shift): Promise<Shift> {
     if (!shift || !shift.project || !shift.task || !shift.date || !shift.startTime || !shift.endTime || !shift.participantsRequired) {
-      this.errorService.error("Kan shift niet updaten: Ongeldig formaat");
+      this.errorService.error('Kan shift niet updaten: Ongeldig formaat');
       return null;
     }
     let updatedShift: Shift = null;
@@ -222,17 +222,17 @@ export class ShiftService {
           updatedShift.date != null ? updatedShift.date = new Date(updatedShift.date) : null;
         }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return updatedShift;
   }
 
   async deleteShift(shiftId: string): Promise<boolean> {
     if (!shiftId) {
-      this.errorService.error("ShiftId mag niet leeg zijn")
+      this.errorService.error('ShiftId mag niet leeg zijn');
       return null;
     }
-    let deleted: boolean = false;
+    let deleted = false;
     await this.apiService.delete<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}?shiftId=${shiftId}`)
       .toPromise()
       .then(res => {
@@ -241,7 +241,7 @@ export class ShiftService {
           }
         }
         , Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
       );
     return deleted;
@@ -249,7 +249,7 @@ export class ShiftService {
 
   async GetExportableData(projectId: string): Promise<Shift[]> {
     if (!projectId) {
-      this.errorService.error("ShiftId mag niet leeg zijn")
+      this.errorService.error('ShiftId mag niet leeg zijn');
       return null;
     }
     let data: Shift[] = null;
@@ -261,7 +261,7 @@ export class ShiftService {
           }
         }
         , Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
       );
     return data;

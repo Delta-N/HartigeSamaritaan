@@ -1,7 +1,7 @@
-﻿import {Entity} from "./entity.model";
-import {Category} from "./category";
-import {Document} from "./document";
-import {Requirement} from "./requirement";
+import {Entity} from './entity.model';
+import {Category} from './category';
+import {Document} from './document';
+import {Requirement} from './requirement';
 
 export class Task extends Entity {
 

@@ -1,10 +1,10 @@
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ApiService} from "./api.service";
-import {HttpRoutes} from "../helpers/HttpRoutes";
-import {Uploadresult} from "../models/uploadresult";
-import {ErrorService} from "./error.service";
-import {Document} from "../models/document";
+import {ApiService} from './api.service';
+import {HttpRoutes} from '../helpers/HttpRoutes';
+import {Uploadresult} from '../models/uploadresult';
+import {ErrorService} from './error.service';
+import {Document} from '../models/document';
 
 @Injectable({providedIn: 'root'})
 export class UploadService {
@@ -16,67 +16,71 @@ export class UploadService {
 
   async uploadInstruction(formData: FormData): Promise<Uploadresult> {
     if (!formData) {
-      this.errorService.error("Instuctie-bestand is leeg")
+      this.errorService.error('Instuctie-bestand is leeg');
       return null;
     }
     let uploadResult: Uploadresult = null;
     await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}`, formData)
       .toPromise()
       .then(res => {
-        if (res.succeeded)
+        if (res.succeeded) {
           uploadResult = res;
+        }
       });
-    return uploadResult
+    return uploadResult;
   }
 
   async uploadProjectPicture(formData: FormData): Promise<Uploadresult> {
     if (!formData) {
-      this.errorService.error("Projectfoto-bestand is leeg")
+      this.errorService.error('Projectfoto-bestand is leeg');
       return null;
     }
     let uploadResult: Uploadresult = null;
     await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadProjectPicture`, formData)
       .toPromise()
       .then(res => {
-        if (res.succeeded)
+        if (res.succeeded) {
           uploadResult = res;
+        }
       });
-    return uploadResult
+    return uploadResult;
   }
 
   async uploadProfilePicture(formData: FormData): Promise<Uploadresult> {
     if (!formData) {
-      this.errorService.error("Profielfoto-bestand is leeg")
+      this.errorService.error('Profielfoto-bestand is leeg');
       return null;
     }
     let uploadResult: Uploadresult = null;
     await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadProfilePicture`, formData)
       .toPromise()
       .then(res => {
-        if (res.succeeded)
+        if (res.succeeded) {
           uploadResult = res;
+        }
       });
-    return uploadResult
+    return uploadResult;
   }
 
   async uploadPP(formData: FormData): Promise<Uploadresult> {
     if (!formData) {
-      this.errorService.error("TOS-bestand is leeg")
+      this.errorService.error('TOS-bestand is leeg');
       return null;
     }
     let uploadResult: Uploadresult = null;
     await this.apiService.postMultiPartFormData<Uploadresult>(`${HttpRoutes.uploadApiUrl}/UploadPP`, formData)
       .toPromise()
       .then(res => {
-        if (res.succeeded)
+        if (res.succeeded) {
           uploadResult = res;
+        }
       });
-    return uploadResult
+    return uploadResult;
   }
 
   async deleteIfExists(url: string): Promise<Uploadresult> {
     if (!url) {
-      this.errorService.error("url is leeg")
+      this.errorService.error('url is leeg');
     }
     let uploadResult: Uploadresult = null;
 
@@ -93,65 +97,69 @@ export class UploadService {
     await this.apiService.get<HttpResponse<Document>>(`${HttpRoutes.uploadApiUrl}/PrivacyPolicy`)
       .toPromise()
       .then(res => {
-        if (res.ok)
-          TOS = res.body
+        if (res.ok) {
+          TOS = res.body;
+        }
       }, Error => {
-        this.errorService.httpError(Error)
-      })
+        this.errorService.httpError(Error);
+      });
     return TOS;
   }
 
   async postDocument(document: Document): Promise<Document> {
     if (!document) {
-      this.errorService.error("Document is ongeldig")
+      this.errorService.error('Document is ongeldig');
       return null;
     }
     let postedDocument: Document = null;
     await this.apiService.post<HttpResponse<Document>>(`${HttpRoutes.uploadApiUrl}/document`, document)
       .toPromise()
       .then(res => {
-          if (res.ok)
-            postedDocument = res.body
+          if (res.ok) {
+            postedDocument = res.body;
+          }
         }, Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
       );
-    return postedDocument
+    return postedDocument;
   }
 
   async updateDocument(document: Document): Promise<Document> {
     if (!document) {
-      this.errorService.error("Document is ongeldig")
+      this.errorService.error('Document is ongeldig');
       return null;
     }
     let updatedDocument: Document = null;
     await this.apiService.put<HttpResponse<Document>>(`${HttpRoutes.uploadApiUrl}`, document)
       .toPromise()
       .then(res => {
-          if (res.ok)
-            updatedDocument = res.body
+          if (res.ok) {
+            updatedDocument = res.body;
+          }
         }, Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
       );
-    return updatedDocument
+    return updatedDocument;
   }
 
   async removeDocument(document: Document): Promise<boolean> {
     if (!document) {
-      this.errorService.error("Document is ongeldig")
+      this.errorService.error('Document is ongeldig');
       return null;
     }
-    let deleted: boolean = false;
+    let deleted = false;
     await this.apiService.delete<HttpResponse<Document>>(`${HttpRoutes.uploadApiUrl}/document/${document.id}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res.ok) {
             deleted = true;
+          }
           }, Error => {
-          this.errorService.httpError(Error)
+          this.errorService.httpError(Error);
         }
       );
-    return deleted
+    return deleted;
   }
 }

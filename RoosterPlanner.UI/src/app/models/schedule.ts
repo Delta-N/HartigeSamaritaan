@@ -1,5 +1,5 @@
-﻿import {User} from "./user";
-import {Availability} from "./availability";
+import {User} from './user';
+import {Availability} from './availability';
 
 export class Schedule {
 
