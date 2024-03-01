@@ -1,4 +1,5 @@
 ﻿using System;
+using RoosterPlanner.Api.Models.EntityViewModels;
 using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models

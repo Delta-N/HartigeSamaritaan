@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RoosterPlanner.Api.Models.EntityViewModels;
 using RoosterPlanner.Models;
 
 namespace RoosterPlanner.Api.Models

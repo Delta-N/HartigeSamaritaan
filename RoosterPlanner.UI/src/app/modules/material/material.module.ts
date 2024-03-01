@@ -1,5 +1,4 @@
 import {CommonModule} from '@angular/common';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
@@ -34,7 +33,6 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
   declarations: [],
   imports: [
     CommonModule,
-    FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
 
@@ -70,7 +68,6 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
   ],
   exports: [
     CommonModule,
-    FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
 

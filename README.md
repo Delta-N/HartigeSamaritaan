@@ -14,6 +14,11 @@ Bezoek: https://delta-n.github.io/HartigeSamaritaan/ voor de documentatie.
 - Azure App Service (Plan)  
 - Azure Application Insights
 
+# Local development
+
+Install database:  
+dotnet ef database update --project RoosterPlanner.Data --startup-project RoosterPlanner.Api
+
 
 
 # CI / CD

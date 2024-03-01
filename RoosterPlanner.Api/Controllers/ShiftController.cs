@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using RoosterPlanner.Api.Models;
-using RoosterPlanner.Api.Models.Constants;
+using RoosterPlanner.Api.Models.EntityViewModels;
 using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Models.Models;
@@ -280,7 +280,7 @@ namespace RoosterPlanner.Api.Controllers
                     schedules.Add(new ScheduleViewModel
                     {
                         Person = PersonViewModel.CreateVmFromUser(person.Data,
-                            Extensions.GetInstance(b2CExtentionApplicationId)),
+                            RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId)),
                         NumberOfTimesScheduledThisProject =
                             availabilities.Data.Count(a => a.Type == AvailibilityType.Scheduled),
                         ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
@@ -523,7 +523,7 @@ namespace RoosterPlanner.Api.Controllers
                         {
                             TaskResult<User> person = await personService.GetUserAsync(id);
                             pvm = PersonViewModel.CreateVmFromUser(person.Data,
-                                Extensions.GetInstance(b2CExtentionApplicationId));
+                                RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId));
                             personViewModels.Add(pvm);
                         }
                         else
