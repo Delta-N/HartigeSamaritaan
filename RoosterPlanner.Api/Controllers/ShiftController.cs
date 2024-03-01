@@ -7,18 +7,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
-using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.EntityViewModels;
-using RoosterPlanner.Models;
+using RoosterPlanner.Api.Models.HelperViewModels;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Models.Models;
-using RoosterPlanner.Models.Types;
-using RoosterPlanner.Service;
+using RoosterPlanner.Models.Models.Types;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Shift = RoosterPlanner.Models.Shift;
-using Task = RoosterPlanner.Models.Task;
-using Type = RoosterPlanner.Api.Models.Type;
+using RoosterPlanner.Service.Services;
+using Shift = RoosterPlanner.Models.Models.Shift;
+using Task = RoosterPlanner.Models.Models.Task;
+using Type = RoosterPlanner.Api.Models.HelperViewModels.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     [Index(nameof(CertificateTypeId), nameof(TaskId), IsUnique = true)]
     public class Requirement : Entity

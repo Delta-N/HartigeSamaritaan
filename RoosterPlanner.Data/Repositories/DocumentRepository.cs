@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {

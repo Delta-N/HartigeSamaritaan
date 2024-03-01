@@ -17,7 +17,7 @@ namespace RoosterPlanner.Api.Extensions
         /// <param name="value">Generic value</param>
         /// <param name="contentType">string contentType</param>
         /// <returns></returns>
-        public static async Task WriteJsonAsync<T>(this HttpResponse response, T value, string? contentType = null)
+        public static async Task WriteJsonAsync<T>(this HttpResponse response, T value, string contentType = null)
         {
             response.ContentType = contentType ?? "application/json";
 

@@ -2,35 +2,30 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Task : Entity
     {
         /// <summary>
         /// Gets or sets the name
         /// </summary>
-        [Column(Order = 1)]
         [Required, MaxLength(64)]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the CategoryId
         /// </summary>
-        [Column(Order = 2)]
         public Guid? CategoryId { get; set; }
 
         /// <summary>
         /// Gets or sets the Color
         /// </summary>
-        [Column(Order = 3)]
         [MaxLength(12)]
         public string Color { get; set; }
 
         /// <summary>
         /// Gets or sets the InstructionId
         /// </summary>
-        [Column(Order = 4)]
         public Guid? InstructionId { get; set; }
 
         /// <summary>
@@ -42,7 +37,6 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the Description
         /// </summary>
-        [Column(Order = 5)]
         [MaxLength(256)]
         public string Description { get; set; }
 

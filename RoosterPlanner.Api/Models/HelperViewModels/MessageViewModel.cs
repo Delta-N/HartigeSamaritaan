@@ -1,4 +1,4 @@
-﻿namespace RoosterPlanner.Api.Models
+﻿namespace RoosterPlanner.Api.Models.HelperViewModels
 {
     /// <summary>
     /// Used when sending emails

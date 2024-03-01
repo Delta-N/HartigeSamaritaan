@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
-using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.EntityViewModels;
-using RoosterPlanner.Models;
+using RoosterPlanner.Api.Models.HelperViewModels;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Models.Models.Enums;
-using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Person = RoosterPlanner.Models.Person;
-using Type = RoosterPlanner.Api.Models.Type;
+using RoosterPlanner.Service.Services;
+using Person = RoosterPlanner.Models.Models.Person;
+using Type = RoosterPlanner.Api.Models.HelperViewModels.Type;
 
 
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using CorrelationId;
 using CorrelationId.DependencyInjection;
@@ -10,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RoosterPlanner.Api.Middleware;
 using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Service;
+using RoosterPlanner.Service.Services;
 using Serilog;
 
 namespace RoosterPlanner.Api {
@@ -101,7 +100,7 @@ namespace RoosterPlanner.Api {
                 Array.Empty<string>()
                 }
                 });
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "NBRE", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "RoosterPlanner", Version = "v1" });
 
 
             });

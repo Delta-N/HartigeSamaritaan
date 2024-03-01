@@ -11,15 +11,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
-using RoosterPlanner.Api.Models;
 using RoosterPlanner.Api.Models.Constants;
-using RoosterPlanner.Models;
-using RoosterPlanner.Models.Types;
-using RoosterPlanner.Service;
+using RoosterPlanner.Api.Models.EntityViewModels;
+using RoosterPlanner.Api.Models.HelperViewModels;
+using RoosterPlanner.Models.Models;
+using RoosterPlanner.Models.Models.Types;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Person = RoosterPlanner.Models.Person;
-using Type = RoosterPlanner.Api.Models.Type;
+using RoosterPlanner.Service.Services;
+using Person = RoosterPlanner.Models.Models.Person;
+using Type = RoosterPlanner.Api.Models.HelperViewModels.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -88,7 +89,7 @@ namespace RoosterPlanner.Api.Controllers
         /// <param name="personId"></param>
         /// <param name="projectId"></param>
         /// <returns></returns>
-        [HttpGet("GetParticipation/{personid}/{projectid}")]
+        [HttpGet("GetParticipation/{personId}/{projectId}")]
         public async Task<ActionResult<ParticipationViewModel>> GetParticipationAsync(Guid personId, Guid projectId)
         {
             if (personId == Guid.Empty || projectId == Guid.Empty)

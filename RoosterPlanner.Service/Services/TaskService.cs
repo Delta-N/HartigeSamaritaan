@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
-using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
-using Task = RoosterPlanner.Models.Task;
+using Task = RoosterPlanner.Models.Models.Task;
 
-namespace RoosterPlanner.Service
+namespace RoosterPlanner.Service.Services
 {
     public interface ITaskService
     {

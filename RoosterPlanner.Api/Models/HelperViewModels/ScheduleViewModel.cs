@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RoosterPlanner.Api.Models.EntityViewModels;
-
-namespace RoosterPlanner.Api.Models
+namespace RoosterPlanner.Api.Models.HelperViewModels
 {
     public class ScheduleViewModel
     {

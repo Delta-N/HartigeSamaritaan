@@ -1,6 +1,6 @@
 ﻿using System;
 using Moq;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 

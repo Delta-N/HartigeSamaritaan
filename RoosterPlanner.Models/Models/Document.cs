@@ -2,23 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Document : Entity
     {
         /// <summary>
         /// Gets or sets the Name
         /// </summary>
-        [Column(Order = 1)]
         [Required, MaxLength(64)]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the DocumentUri
         /// </summary>
-        [Column(Order = 2)] 
-        [Required,MaxLength(256)] 
+        [Required,MaxLength(256)]
         public string DocumentUri { get; set; }
 
         /// <summary>

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Models.Models;
-using RoosterPlanner.Models.Types;
+using RoosterPlanner.Models.Models.Types;
 using Task = System.Threading.Tasks.Task;
 
 namespace RoosterPlanner.Data.Repositories

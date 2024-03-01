@@ -2,27 +2,25 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Person : Entity
     {
         /// <summary>
         /// Gets or sets the Oid
         /// </summary>
-        [Column(Order = 0)] public Guid Oid { get; set; }
+        public Guid Oid { get; set; }
 
         /// <summary>
         /// Gets or sets the FirstName 
         /// </summary>
-        [Column(Order = 1)]
+
         [Required, MaxLength(256)]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets the LastName 
         /// </summary>
-        [Column(Order = 2)] 
         public string LastName { get; set; }
 
         /// <summary>
@@ -78,7 +76,6 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the ProfilePictureId
         /// </summary>
-        [Column(Order = 4)] 
         public Guid? ProfilePictureId { get; set; }
 
         /// <summary>
@@ -91,21 +88,18 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the PersonalRemark
         /// </summary>
-        [Column(Order = 5)] 
         [MaxLength(256)]
         public string PersonalRemark { get; set; }
 
         /// <summary>
         /// Gets or sets the StaffRemark
         /// </summary>
-        [Column(Order = 6)] 
         [MaxLength(256)]
         public string StaffRemark { get; set; }
 
         /// <summary>
         /// Gets or sets the PushDisabled
         /// </summary>
-        [Column(Order = 7)]
         public bool PushDisabled { get; set; }
 
         //Constructor

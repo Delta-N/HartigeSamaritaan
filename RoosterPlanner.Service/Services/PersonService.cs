@@ -6,14 +6,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
-using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
-using RoosterPlanner.Service.Helpers;
-using Person = RoosterPlanner.Models.Person;
+using Person = RoosterPlanner.Models.Models.Person;
 using Task = System.Threading.Tasks.Task;
 
-namespace RoosterPlanner.Service
+namespace RoosterPlanner.Service.Services
 {
     public interface IPersonService
     {

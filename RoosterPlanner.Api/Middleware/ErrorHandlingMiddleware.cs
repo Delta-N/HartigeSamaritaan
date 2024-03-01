@@ -23,7 +23,7 @@ namespace RoosterPlanner.Api.Middleware
         /// <summary>
         /// Logging context
         /// </summary>
-        public object? LogContext { get; private set; }
+        public object LogContext { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorHandlingMiddleware"/> class.

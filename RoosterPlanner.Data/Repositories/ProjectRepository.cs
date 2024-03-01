@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoosterPlanner.Data.Common;
-using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {

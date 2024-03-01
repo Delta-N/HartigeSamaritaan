@@ -6,13 +6,13 @@ using Microsoft.Graph;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Email;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Attachment = System.Net.Mail.Attachment;
-using Person = RoosterPlanner.Models.Person;
+using Person = RoosterPlanner.Models.Models.Person;
 
-namespace RoosterPlanner.Service
+namespace RoosterPlanner.Service.Services
 {
     public interface IParticipationService
     {

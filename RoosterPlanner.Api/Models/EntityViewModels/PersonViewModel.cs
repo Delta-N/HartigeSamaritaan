@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Graph;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Models.Models.Enums;
-using Person = RoosterPlanner.Models.Person;
+using Person = RoosterPlanner.Models.Models.Person;
 
 namespace RoosterPlanner.Api.Models.EntityViewModels
 {

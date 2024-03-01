@@ -5,8 +5,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
 using RoosterPlanner.Service.Config;
-
-namespace RoosterPlanner.Service
+namespace RoosterPlanner.Service.Services
 {
     public interface IBlobService
     {

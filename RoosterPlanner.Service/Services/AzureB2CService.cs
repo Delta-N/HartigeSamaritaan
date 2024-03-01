@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
-using RoosterPlanner.Service.Config;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Service.Config;
 using RoosterPlanner.Service.DataModels;
-
-namespace RoosterPlanner.Service
+namespace RoosterPlanner.Service.Services
 {
     public interface IAzureB2CService
     {
@@ -196,6 +195,7 @@ namespace RoosterPlanner.Service
             try
             {
                 var graphService = GetGraphServiceClient();
+
                 updatedUser.Data = await graphService.Users[user.Id].Request().UpdateAsync(user);
                 if (updatedUser.Data == null)
                 {
