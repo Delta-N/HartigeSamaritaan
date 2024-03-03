@@ -7,10 +7,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {AddProjectComponent} from "./components/add-project/add-project.component";
 import {MaterialModule} from "./modules/material/material.module";
 import moment from "moment";
-import {UploadService} from "./services/upload.service";
-import {Document} from "./models/document";
-import {JwtHelper} from "./helpers/jwt-helper";
-import {UserService} from "./services/user.service";
+import {UploadService, DocumentViewModel, PersonsService, PersonViewModel} from "@RoosterPlanner/openapi";
+
 import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalGuardConfiguration, MsalService} from "@azure/msal-angular";
 import {ChangeProfilePictureComponent} from "./components/change-profile-picture/change-profile-picture.component";
 import {AcceptPrivacyPolicyComponent} from "./components/accept-privacy-policy/accept-privacy-policy.component";
@@ -24,27 +22,23 @@ import {
 import {BreadcrumbComponent} from "./components/breadcrumb/breadcrumb.component";
 import {filter} from "rxjs/operators";
 import {environment} from "../environments/environment";
+import {tapResponse} from '@ngrx/component-store';
+import {ErrorService} from "./services/error.service";
+import {HttpErrorResponse} from "@angular/common/http";
+import {UserService} from "./services/user.service";
 
-
-type IdTokenClaimsWithPolicyId = IdTokenClaims & {
-  acr?: string,
-  tfp?: string,
-};
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MaterialModule, BreadcrumbComponent
-  ],
-  providers: [
-
-
+  imports: [RouterOutlet, MaterialModule, BreadcrumbComponent,
 
   ],
+  providers: [],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, OnDestroy{
+export class AppComponent implements OnInit, OnDestroy {
   homeIcon = faHome;
   adminIcon = faUserLock;
   managerIcon = faUserCog;
@@ -59,17 +53,21 @@ export class AppComponent implements OnInit, OnDestroy{
   isAdmin = false;
   isManager: boolean;
 
-  user: User = new User();
-  PP: Document;
+  user: PersonViewModel;
+  PP: DocumentViewModel;
 
   private readonly _destroying$ = new Subject<void>();
 
   constructor(public dialog: MatDialog,
-              private userService: UserService,
+
+              private personService: PersonsService,
+              private userService:UserService,
               @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
               private authService: MsalService,
               private msalBroadcastService: MsalBroadcastService,
-              private uploadService: UploadService) {
+              private uploadService: UploadService,
+              private errorService: ErrorService
+  ) {
   }
 
   async ngOnInit() {
@@ -79,6 +77,8 @@ export class AppComponent implements OnInit, OnDestroy{
     await this.checkAccount();
 
     this.authService.instance.enableAccountStorageEvents();
+
+
     this.msalBroadcastService.msalSubject$
       .pipe(
         filter((msg: EventMessage) => msg.eventType === EventType.ACCOUNT_ADDED || msg.eventType === EventType.ACCOUNT_REMOVED),
@@ -94,6 +94,7 @@ export class AppComponent implements OnInit, OnDestroy{
             break;
         }
       });
+
     this.msalBroadcastService.inProgress$
       .pipe(
         takeUntil(this._destroying$),
@@ -105,21 +106,38 @@ export class AppComponent implements OnInit, OnDestroy{
       });
 
 
+    this.uploadService.apiUploadPrivacyPolicyGet().pipe(
+      tapResponse(
+        res => {
+          this.PP = res;
+        },
+        (error: HttpErrorResponse) => {
+          this.errorService.httpError(error);
+        }
+      )
+    ).subscribe();
 
-    await this.uploadService.getPP().then(res => {
-      if (res)
-        this.PP = res;
-    })
+    // await this.uploadService.getPP().then(res => {
+    //   if (res)
+    //     this.PP = res;
+    // })
 
-    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
-    await this.userService.getUser(idToken.oid).then(async user => {
-      if (user) {
-        this.user = user
+    const idToken = this.authService.instance.getActiveAccount()?.localAccountId;
+    console.log(this.authService.instance.getActiveAccount())
+    this.personService.apiPersonsIdGet(idToken!).pipe(
+      tapResponse(
+        (res) => {
+          this.user = res;
+          if (this.PP && (!this.user.termsOfUseConsented || moment(this.PP.lastEditDate) > moment(this.user.termsOfUseConsented)))
+            this.promptPPAccept();
+        },
+        (error: HttpErrorResponse) => {
+          this.errorService.httpError(error);
+        }
 
-        if (this.PP && (!this.user.termsOfUseConsented || moment(this.PP.lastEditDate) > moment(this.user.termsOfUseConsented)))
-          this.promptPPAccept();
-      }
-    });
+      )
+    ).subscribe();
+
   }
 
   private onAccountAddedOrRemoved(): void {
@@ -132,6 +150,7 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   private onLoginSuccess(payload: AuthenticationResult): void {
+
     if (!payload?.account) {
       return;
     }
@@ -202,8 +221,9 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   private isAuthenticated(): void {
-    this.hasUser =this.authService.instance.getAllAccounts().length > 0;
+    this.hasUser = this.authService.instance.getAllAccounts().length > 0;
   }
+
   promptPPAccept() {
     const dialogRef = this.dialog.open(AcceptPrivacyPolicyComponent, {
       width: '95vw',
@@ -214,11 +234,19 @@ export class AppComponent implements OnInit, OnDestroy{
     dialogRef.afterClosed().subscribe(async result => {
       if (result && result === 'true') {
         this.user.termsOfUseConsented = moment().subtract(moment().utcOffset(), "minutes").toDate().toISOString()
-        await this.userService.updateUser(this.user).then(() => window.location.reload())
+        this.personService.apiPersonsUpdatePersonPut(this.user)
+          .pipe(tapResponse(
+            res => {
+              this.user = res;
+            },
+            (error: HttpErrorResponse) => {
+              this.errorService.httpError(error);
+            }
+          )).subscribe()
+
       }
     });
   }
-
 
 
   changeProfilePicture() {

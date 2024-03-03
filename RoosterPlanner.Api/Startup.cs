@@ -40,24 +40,10 @@ namespace RoosterPlanner.Api {
             .AddMicrosoftIdentityWebApi(options => {
                 Configuration.Bind("AzureAuthentication", options);
 
-                // options.TokenValidationParameters.NameClaimType = "name";
-                // options.TokenValidationParameters.RoleClaimType = "groups";
             },
             options => { Configuration.Bind("AzureAuthentication", options); });
 
-            // services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
-            //     .AddJwtBearer(jwtOptions =>
-            //     {
-            //         jwtOptions.Authority =
-            //             $"{Configuration["AzureAuthentication:Instance"]}/tfp/{Configuration["AzureAuthentication:TenantId"]}/{Configuration["AzureAuthentication:SignUpSignInPolicyId"]}/v2.0/";
-            //         jwtOptions.TokenValidationParameters = new TokenValidationParameters
-            //         {
-            //             ValidateIssuer = true,
-            //             ValidateLifetime = true
-            //         };
-            //         jwtOptions.Audience = Configuration["AzureAuthentication:ClientId"];
-            //         jwtOptions.Events = new JwtBearerEvents();
-            //     });
+
 
             services.AddCors(options => {
                 options.AddPolicy("AllowSpecificOrigins", p => {
@@ -67,6 +53,7 @@ namespace RoosterPlanner.Api {
                 }
                 );
             });
+
 
             services.AddAuthorization(options => {
                 options.AddPolicy("Boardmember", policy =>
@@ -79,6 +66,9 @@ namespace RoosterPlanner.Api {
                 policy.RequireClaim("extension_UserRole", "1", "2"));
             });
 
+            services.AddHealthChecks()
+            .AddSqlServer(Configuration.GetConnectionString("RoosterPlannerDatabase")!, tags: new[] { "database" });
+            AddCustomServices(services);
 
             services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
@@ -104,14 +94,6 @@ namespace RoosterPlanner.Api {
 
 
             });
-
-            services.AddHealthChecks()
-            .AddSqlServer(Configuration.GetConnectionString("RoosterPlannerDatabase")!, tags: new[] { "database" });
-
-
-            services.AddLogging();
-
-            ServiceContainer.Register(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -163,6 +145,7 @@ namespace RoosterPlanner.Api {
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<ICertificateService, CertificateService>();
             services.AddTransient<IRequirementService, RequirementService>();
+            ServiceContainer.Register(services, Configuration);
 
         }
 

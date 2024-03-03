@@ -30,13 +30,13 @@ export function msalInstanceFactory(): IPublicClientApplication {
 		},
 		cache: {
 			cacheLocation: environment.msalConfig.cache
-				.cacheLocation as BrowserCacheLocation,
+				.cacheLocation,
 			storeAuthStateInCookie: isIE,
 		},
 		system: {
 			loggerOptions: {
 				loggerCallback,
-				logLevel: LogLevel.Warning,
+				logLevel: LogLevel.Verbose,
 				piiLoggingEnabled: false,
 			},
 		},
@@ -45,10 +45,12 @@ export function msalInstanceFactory(): IPublicClientApplication {
 
 export function msalInterceptorConfigFactory(): MsalInterceptorConfiguration {
 	const protectedResourceMap = new Map<string, Array<string>>();
-	protectedResourceMap.set(
-		environment.apiUrl,
-		environment.msalConfig.consentScopes
-	);
+  environment.protectedResourceMap.forEach(input => {
+    let string1 = input[0] as string
+    let string2 = input[1] as string[]
+    protectedResourceMap.set(string1, string2)
+
+  });
 
 	return {
 		interactionType: InteractionType.Redirect,

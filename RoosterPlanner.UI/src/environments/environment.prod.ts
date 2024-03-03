@@ -1,14 +1,14 @@
 export const environment = {
   production: true,
 
-  // protectedResourceMap: [
-  //   ['https://localhost:5001/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
-  //   ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
-  //   ['https://roosterplanner-api-prd.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
-  //   ['https://roosterplanner-api-tst.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
-  //   ['https://rooster-api.hartigesamaritaan.nl/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
-  //
-  // ],
+  protectedResourceMap: [
+    ['https://localhost:5001/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+    ['https://roosterplanner-api-dev.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+    ['https://roosterplanner-api-prd.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+    ['https://roosterplanner-api-tst.azurewebsites.net/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+    ['https://rooster-api.hartigesamaritaan.nl/api/', ['https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read']],
+
+  ],
 
   b2cPolicies: {
     names: {

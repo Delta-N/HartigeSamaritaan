@@ -1,13 +1,18 @@
-import {ApplicationConfig, ErrorHandler} from '@angular/core';
+import {ApplicationConfig, ErrorHandler, importProvidersFrom} from '@angular/core';
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
-import {HTTP_INTERCEPTORS, provideHttpClient, withFetch} from "@angular/common/http";
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi
+} from "@angular/common/http";
 import {
   MSAL_GUARD_CONFIG,
   MSAL_INSTANCE,
   MSAL_INTERCEPTOR_CONFIG, MsalBroadcastService, MsalGuard,
-  MsalInterceptor,
+  MsalInterceptor, MsalModule,
   MsalService
 } from "@azure/msal-angular";
 import {msalGuardConfigFactory, msalInstanceFactory, msalInterceptorConfigFactory} from "./authentication/msal";
@@ -19,16 +24,29 @@ import {ErrorHandlerService} from "./services/logging.service";
 import {AuthorizationGuard} from "./guards/authorization.guard";
 import {ManageGuard} from "./guards/manage.guard";
 import {FormBuilder} from "@angular/forms";
+import {API_URL} from "./modules/shared/utilities/injection-tokens";
+import {environment} from "../environments/environment";
+import {ApiModule, Configuration} from '@RoosterPlanner/openapi';
+
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes),
-    provideHttpClient(withFetch()),
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideToastr(),
-    provideAnimations(),
+    importProvidersFrom(MsalModule,
+      ApiModule.forRoot(
+        () => new Configuration({basePath: environment.apiUrl})
+      )),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
       multi: true,
+    },
+    {
+      provide: API_URL,
+      useValue: environment.apiUrl
+
     },
     {
       provide: MSAL_INSTANCE,
@@ -56,7 +74,6 @@ export const appConfig: ApplicationConfig = {
     MsalService,
     MsalGuard,
     MsalBroadcastService,
-
-
+    provideAnimations(),
   ]
 };
