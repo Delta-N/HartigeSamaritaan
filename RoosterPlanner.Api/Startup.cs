@@ -43,7 +43,7 @@ namespace RoosterPlanner.Api {
                 // options.TokenValidationParameters.NameClaimType = "name";
                 // options.TokenValidationParameters.RoleClaimType = "groups";
             },
-            options => { Configuration.Bind("AzureAd", options); });
+            options => { Configuration.Bind("AzureAuthentication", options); });
 
             // services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
             //     .AddJwtBearer(jwtOptions =>
