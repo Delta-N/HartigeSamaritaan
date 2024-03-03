@@ -19,7 +19,7 @@ import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 export class CategoryComponent implements OnInit {
   editIcon = faEdit;
   deleteIcon = faTrashAlt;
-  guid: string;
+  guid: string | null;
   category: Category;
   isAdmin: boolean = false;
   loaded: boolean = false;
@@ -49,7 +49,8 @@ export class CategoryComponent implements OnInit {
       this.guid = params.get('id');
     });
     this.categoryService.getCategory(this.guid).then(response => {
-      this.category = response;
+      if(response)
+        this.category = response;
       this.loaded = true;
     })
   }

@@ -26,7 +26,6 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSliderModule} from "@angular/material/slider";
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -98,7 +97,6 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     MatTooltipModule,
     MatExpansionModule,
     MatSliderModule,
-    FontAwesomeModule,
 
 
   ]

@@ -71,14 +71,14 @@ export class AddTaskComponent implements OnInit {
         formData.append(this.files[0].name, this.files[0]);
 
 
-        let uri: string = null;
+        let uri: string | null = null;
         await this.uploadService.uploadInstruction(formData).then(url => {
           if (url && url.path && url.path.trim().length > 0)
             uri = url.path.trim();
         });
 
         if (this.task.instruction) {
-          await this.uploadService.deleteIfExists(this.task.instruction.documentUri).then(); //delete blob if exists
+          await this.uploadService.deleteIfExists(this.task.instruction.documentUri??"").then(); //delete blob if exists
           this.task.instruction.documentUri = uri;
           await this.uploadService.updateDocument(this.task.instruction).then(res => {
             if (res)

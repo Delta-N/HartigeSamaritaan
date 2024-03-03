@@ -1,7 +1,7 @@
-﻿import {Injectable} from "@angular/core";
+﻿import {inject, Injectable} from "@angular/core";
 import {
   ActivatedRouteSnapshot,
-  CanActivate,
+  CanActivate, CanActivateFn,
   CanLoad,
   Route,
   Router,
@@ -13,7 +13,7 @@ import {UserService} from "../services/user.service";
 import {Observable, of} from "rxjs";
 
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthorizationGuard implements CanActivate, CanLoad {
 
   constructor(private router: Router,
@@ -38,3 +38,13 @@ export class AuthorizationGuard implements CanActivate, CanLoad {
     }
   }
 }
+
+export const authCanActivateGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+  if (inject(UserService).userIsAdminFrontEnd())
+    return true
+  else {
+    inject(Router).navigate(['home'])
+    return false;
+  }
+}
+

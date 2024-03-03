@@ -100,7 +100,7 @@ export class AddAdminComponent implements OnInit {
     this.users.forEach(u => {
       let element = document.getElementById(u.id)
       let checkElement = document.getElementById("check" + u.id)
-      if (element) {
+      if (element && checkElement) {
         let index = this.addedAdmins.find(m => m === u.id)
         if (index) {
           element.style.background = "whitesmoke"
@@ -115,7 +115,7 @@ export class AddAdminComponent implements OnInit {
     this.admins.forEach(u => {
       let element = document.getElementById(u.id)
       let closeElement = document.getElementById("check" + u.id)
-      if (element) {
+      if (element && closeElement) {
         let index = this.removedAdmins.find(m => m === u.id)
         if (index) {
           element.style.background = "whitesmoke"
@@ -132,14 +132,14 @@ export class AddAdminComponent implements OnInit {
     for (const addedAdmin of this.addedAdmins) {
       this.userService.makeAdmin(addedAdmin).then(res => {
         if (res)
-          this.toastr.success(this.users.find(u => u.id === addedAdmin).firstName + " is succesvol toegevoegd")
+          this.toastr.success(this.users.find(u => u.id === addedAdmin)?.firstName + " is succesvol toegevoegd")
       })
 
     }
     for (const removedAdmin of this.removedAdmins) {
       this.userService.removeAdmin(removedAdmin).then(res => {
         if (res)
-          this.toastr.success(this.admins.find(u => u.id === removedAdmin).firstName + " is succesvol verwijderd")
+          this.toastr.success(this.admins.find(u => u.id === removedAdmin)?.firstName + " is succesvol verwijderd")
       })
     }
     this.dialogRef.close()

@@ -1,7 +1,7 @@
 ﻿import {environment} from "../../environments/environment";
 
 export class HttpRoutes {
-  private static backendUrl = environment.backendUrl;
+  private static backendUrl = environment.apiUrl;
   private static personController = 'api/persons';
   private static projectController = 'api/projects';
   private static participationController = 'api/participations';

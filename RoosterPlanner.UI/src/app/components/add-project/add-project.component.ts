@@ -1,11 +1,17 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA,  MatDialogRef} from "@angular/material/dialog";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {Project} from "../../models/project";
+import {MaterialModule} from "../../modules/material/material.module";
 
 @Component({
   selector: 'app-add-project',
   templateUrl: './add-project.component.html',
+  standalone: true,
+  imports: [
+    MaterialModule
+  ],
+
   styleUrls: ['./add-project.component.scss']
 })
 export class AddProjectComponent implements OnInit {

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProjectService} from "../../services/project.service";
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {ActivatedRoute, ParamMap, RouterLink} from "@angular/router";
 import {Project} from "../../models/project";
 import {DateConverter} from "../../helpers/date-converter";
 import {CreateProjectComponent} from "../../components/create-project/create-project.component";
@@ -28,11 +28,19 @@ import {
   faTrashAlt,
   faUserFriends
 } from '@fortawesome/free-solid-svg-icons';
+import {MatCardTitle} from "@angular/material/card";
+import {MaterialModule} from "../../modules/material/material.module";
 
 
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
+
+  standalone: true,
+  imports: [
+    MaterialModule,
+    RouterLink
+  ],
   styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit {
@@ -43,7 +51,7 @@ export class ProjectComponent implements OnInit {
   circle = faPlusCircle
   faTrash = faTrashAlt
 
-  guid: string;
+  guid: string | null;
   project: Project;
   viewProject: Project;
   loaded: boolean = false;
@@ -51,7 +59,7 @@ export class ProjectComponent implements OnInit {
   closeButtonText: string;
   isAdmin: boolean = false;
   participation: Participation;
-  projectTasks: Task[];
+  projectTasks: Task[] | undefined;
   taskCardStyle = 'card';
   itemsPerCard = 5;
   reasonableMaxInteger = 10000;
@@ -94,12 +102,12 @@ export class ProjectComponent implements OnInit {
 
   async getProjectTasks() {
     this.taskService.getAllProjectTasks(this.guid).then(res => {
-      this.projectTasks = res.filter(t => t != null);
-      this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
-      if (this.projectTasks.length >= 5) {
+      this.projectTasks = res?.filter(t => t != null);
+      this.projectTasks = this.projectTasks?.slice(0, this.itemsPerCard);
+      if (this.projectTasks && this.projectTasks.length >= 5) {
         this.projectTasksExpandbtnDisabled = false;
       }
-      this.projectTasks.sort((a, b) => a.name > b.name ? 1 : -1);
+      this.projectTasks?.sort((a, b) => a.name > b.name ? 1 : -1);
 
     })
   }
@@ -115,8 +123,10 @@ export class ProjectComponent implements OnInit {
     })
   }
 
-  displayProject(project: Project) {
-    this.project = project
+  displayProject(project: Project | null) {
+    if(project) {
+      this.project = project
+    }
     this.viewProject = DateConverter.formatProjectDateReadable(this.project)
     this.title = this.viewProject.name;
     this.viewProject.closed ? this.closeButtonText = "Project openen" : this.closeButtonText = "Project afsluiten";
@@ -223,7 +233,7 @@ export class ProjectComponent implements OnInit {
         pictureElement.hidden = false;
       this.taskCardStyle = 'card';
       this.itemsPerCard = 5;
-      this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
+      this.projectTasks = this.projectTasks?.slice(0, this.itemsPerCard);
     } else if (this.taskCardStyle === 'card') {
       if (leftElement)
         leftElement.hidden = true;
@@ -302,7 +312,7 @@ export class ProjectComponent implements OnInit {
     this.loaded = false;
     await this.shiftService.GetExportableData(guid).then(res => {
       let statistics: any[] = []
-      res.forEach(shift => {
+      res?.forEach(shift => {
         shift.availabilities.forEach(avail => {
           let statistic = {
             Taaknaam: shift.task ? shift.task.name.replace(",", ".") : "Onbekend",

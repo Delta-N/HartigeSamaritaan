@@ -29,10 +29,13 @@
             <div class="user-data">{{task.description}}</div>
          </div>
          <div class="row">
-            <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editTask"><fa-icon
-              [icon]="editIcon"></fa-icon>Taak wijzigen</a>
+            <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editTask">
+<!--              <fa-icon              [icon]="editIcon"></fa-icon>-->
+              Taak wijzigen</a>
             <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button"
-               id="deleteTask"><fa-icon [icon]="deleteIcon"></fa-icon>Taak verwijderen</a>
+               id="deleteTask">
+<!--              <fa-icon [icon]="deleteIcon"></fa-icon>-->
+              Taak verwijderen</a>
          </div>
       </div>
       <div class="col-6" id="right">
@@ -56,7 +59,9 @@
                <mat-card-actions class="action-anchor"></mat-card-actions>
             </mat-card-content>
             <mat-card-actions class="action-anchor" *ngIf="isAdmin">
-               <button mat-button (click)="modRequirement('toevoegen')"><fa-icon [icon]="circleIcon"></fa-icon>Nieuwe toevoegen</button>
+               <button mat-button (click)="modRequirement('toevoegen')">
+<!--                 <fa-icon [icon]="circleIcon"></fa-icon>-->
+                 Nieuwe toevoegen</button>
             </mat-card-actions>
          </mat-card>
       </div>

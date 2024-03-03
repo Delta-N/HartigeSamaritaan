@@ -17,16 +17,16 @@ export class ProjectService {
               private errorService: ErrorService) {
   }
 
-  async getProject(guid: string): Promise<Project> {
+  async getProject(guid: string | null): Promise<Project | null> {
     if (!guid) {
       this.errorService.error("ProjectId mag niet leeg zijn")
       return null;
     }
-    let project: Project = null;
+    let project: Project | null = null;
     await this.apiService.get<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           project = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -36,12 +36,12 @@ export class ProjectService {
 
   //todo aanpassen
   async getAllProjects(offset: number, pageSize: number): Promise<Project[]> {
-    let projects: Project[] = [];
+    let projects: Project[] | undefined= [];
     await this.apiService.get<HttpResponse<Searchresult<Project>>>(`${HttpRoutes.projectApiUrl}?offset=${offset}&pageSize=${pageSize}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
-            projects = res.body.resultList
+          if (res?.ok)
+            projects = res.body?.resultList
         }, Error => {
           this.errorService.httpError(Error)
         }
@@ -51,12 +51,12 @@ export class ProjectService {
 
   //todo deze aanpassen
   async getActiveProjects(): Promise<Project[]> {
-    let projects: Project[] = [];
+    let projects: Project[] | undefined = [];
     await this.apiService.get<HttpResponse<Searchresult<Project>>>(`${HttpRoutes.projectApiUrl}?closed=false&endDate=${new Date().toISOString()}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
-            projects = res.body.resultList
+          if (res?.ok)
+            projects = res.body?.resultList
         }, Error => {
           this.errorService.httpError(Error)
         }
@@ -64,7 +64,7 @@ export class ProjectService {
     return projects
   }
 
-  async postProject(project: Project): Promise<Project> {
+  async postProject(project: Project): Promise<Project | null> {
     if (!project) {
       this.errorService.error("Leeg project in project service")
       return null;
@@ -79,14 +79,14 @@ export class ProjectService {
       project.participationStartDate = DateConverter.toDate(project.participationStartDate);
       project.projectEndDate = DateConverter.toDate(project.projectEndDate);
       project.projectStartDate = DateConverter.toDate(project.projectStartDate);
-    } catch (e) {
+    } catch (e:any) {
       this.errorService.error(e)
     }
-    let postedProject = null;
+    let postedProject : Project | null  = null;
     await this.apiService.post<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project)
       .toPromise()
       .then(res => {
-        if (res.ok) {
+        if (res?.ok) {
           postedProject = res.body
         }
       }, Error => {
@@ -95,7 +95,7 @@ export class ProjectService {
     return postedProject;
   }
 
-  async updateProject(project: Project): Promise<Project> {
+  async updateProject(project: Project): Promise<Project | null> {
     if (!project) {
       this.errorService.error("Leeg project in project service")
       return null;
@@ -111,14 +111,14 @@ export class ProjectService {
       project.participationStartDate = DateConverter.toDate(project.participationStartDate);
       project.projectEndDate = DateConverter.toDate(project.projectEndDate);
       project.projectStartDate = DateConverter.toDate(project.projectStartDate);
-    } catch (e) {
+    } catch (e: any) {
       this.errorService.error(e)
     }
-    let updatedProject: Project = null;
+    let updatedProject: Project | null = null;
     await this.apiService.put<HttpResponse<Project>>(`${HttpRoutes.projectApiUrl}`, project)
       .toPromise()
       .then(res => {
-        if (res.ok) {
+        if (res?.ok) {
           updatedProject = res.body;
         }
       }, Error => {

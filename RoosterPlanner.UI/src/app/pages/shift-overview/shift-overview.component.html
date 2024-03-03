@@ -35,8 +35,9 @@
                </mat-panel-title>
             </mat-expansion-panel-header>
              {{date | datePipe}}
+             <!--todo (input)="setMinDate($event)" -->
              <mat-slider color="primary"
-                         (input)="setMinDate($event)" (change)="filter()"
+                         (change)="filter()"
                          min="0"
                          max="{{shiftData.dates.length-1}}"></mat-slider>
             </mat-expansion-panel>
@@ -48,8 +49,9 @@
                </mat-panel-title>
             </mat-expansion-panel-header>
              {{start}}
+             <!--todo  (input)="setMinStartTime($event)"-->
              <mat-slider color="primary"
-                         (input)="setMinStartTime($event)" (change)="filter()"
+                         (change)="filter()"
                          min="0"
                          max="{{shiftData.startTimes.length-1}}"></mat-slider>
             </mat-expansion-panel>
@@ -61,8 +63,9 @@
                </mat-panel-title>
             </mat-expansion-panel-header>
              {{end}}
+             <!--todo (input)="setMinEndTime($event)"-->
              <mat-slider color="primary"
-                         (input)="setMinEndTime($event)" (change)="filter()"
+                          (change)="filter()"
                          min="0"
                          max="{{shiftData.endTimes.length-1}}"></mat-slider>
             </mat-expansion-panel>
@@ -74,10 +77,14 @@
                </mat-panel-title>
             </mat-expansion-panel-header>
              {{participantReq}}
+             <!--todo (input)="setMinPar($event)"-->
              <mat-slider color="primary"
-                         (input)="setMinPar($event)" (change)="filter()"
+
+                         (change)="filter()"
                          min="0"
-                         max="{{shiftData.participantsRequired.length-1}}"></mat-slider>
+                         max="{{shiftData.participantsRequired.length-1}}">
+
+             </mat-slider>
             </mat-expansion-panel>
 
          </mat-accordion>

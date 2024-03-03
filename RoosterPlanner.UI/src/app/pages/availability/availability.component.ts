@@ -1,26 +1,20 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ViewChild,
-  Renderer2,
-} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnInit, Renderer2, ViewChild,} from '@angular/core';
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Shift} from "../../models/shift";
 import {ShiftService} from "../../services/shift.service";
 import {
-  CalendarView,
+  CalendarCommonModule,
+  CalendarDateFormatter, CalendarDayModule,
+  CalendarDayViewComponent,
   CalendarEvent,
-  CalendarDateFormatter,
-  CalendarDayViewComponent
+  CalendarView
 } from 'angular-calendar';
-import * as moment from "moment"
+import moment from "moment"
+import {Moment} from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
 import {MatCalendar} from "@angular/material/datepicker";
-import {Moment} from "moment";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {UserService} from "../../services/user.service";
 import {Subject} from "rxjs";
@@ -33,12 +27,19 @@ import {Availability} from "../../models/availability";
 import {take} from "rxjs/operators";
 import {TextInjectorService} from "../../services/text-injector.service";
 import {
-  faQuestion,
-  faCalendarTimes,
   faCalendarCheck,
+  faCalendarTimes,
+  faCheckCircle,
   faHandsHelping,
-  faCheckCircle, faTimesCircle, faInfoCircle
+  faInfoCircle,
+  faQuestion,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
+import {MatIcon} from "@angular/material/icon";
+import {MaterialModule} from "../../modules/material/material.module";
+import {ManageModule} from "../../modules/manage/manage.module";
+import {CalendarTaskLink} from "../../helpers/filter.pipe";
+import {NgbPopover} from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -52,6 +53,15 @@ import {
       useClass: CustomDateFormatter,
     },
   ],
+  imports: [
+    MaterialModule,
+    ManageModule,
+    CalendarTaskLink,
+    CalendarCommonModule,
+    NgbPopover,
+    CalendarDayModule
+  ],
+  standalone: true
 })
 export class AvailabilityComponent implements OnInit, AfterViewInit {
   questionIcon = faQuestion
@@ -65,12 +75,12 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   @ViewChild('calendar') calendar: MatCalendar<Moment>;
   @ViewChild('schedule') schedule: CalendarDayViewComponent;
 
-  projectId: string;
+  projectId: string | null;
   userId: string;
   participation: Participation;
   availabilityData: AvailabilityData;
   displayedProjectTasks: Task[] = [];
-  shifts: Shift[] = [];
+  shifts: Shift[] | null = [];
   numberOfOverlappingShifts: number = 0;
 
   selectedDate: Moment;
@@ -109,7 +119,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       //get basic data
       await this.availabilityService.getAvailabilityData(this.projectId, this.userId)
         .then(res => {
-          this.availabilityData = res;
+          if (res)
+            this.availabilityData = res;
           this.displayedProjectTasks = this.availabilityData.projectTasks;
         })
 
@@ -121,7 +132,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
             this.participation = res
 
             this.minDate = moment(this.participation.project.participationStartDate).toDate() >= new Date() ? moment(this.participation.project.participationStartDate).toDate() : moment().startOf("day").toDate();
-            this.maxDate = this.participation.project.participationEndDate;
+            this.maxDate = this.participation.project.participationEndDate!;
 
             this.viewDate = this.minDate
             this.calendar.activeDate = moment(this.viewDate);
@@ -196,9 +207,9 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
   highlight(): void {
     let dateElement = document.getElementById("date")
-    dateElement.classList.add('highlight')
+    dateElement?.classList.add('highlight')
     setTimeout(() => {
-      dateElement.classList.remove('highlight')
+      dateElement?.classList.remove('highlight')
     }, 500)
   }
 
@@ -222,11 +233,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     //check if availibility existes
     //find shift
     let shift = this.findShift(event)
-    let availability: Availability = null;
+    let availability: Availability | null = null;
 
-    if (shift.availabilities)
+    if (shift?.availabilities)
       availability = shift.availabilities[0];
-    else
+    else if (shift)
       shift.availabilities = [];
 
     //yes? mod
@@ -241,7 +252,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       await this.availabilityService.updateAvailability(availability).then(res => {
         if (res) {
           availability = res;
-          shift.availabilities[0] = res
+          if (shift)
+            shift.availabilities[0] = res
         }
         this.apiCall = false;
       })
@@ -252,8 +264,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       availability = new Availability();
       availability.participation = this.participation;
       availability.participationId = this.participation.id;
-      availability.shift = shift;
-      availability.shiftId = shift.id;
+      availability.shift = shift!;
+      availability.shiftId = shift!.id;
 
       if (action !== "Preference")
         availability.type = this.getAvailabilityTypeNumber(action)
@@ -266,7 +278,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       await this.availabilityService.postAvailability(availability).then(res => {
         if (res) {
           //add to list of availabilities
-          shift.availabilities.push(res)
+          shift?.availabilities.push(res)
 
           //color in calender
           this.changeColor()
@@ -281,7 +293,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     //color in calender
     let counter: number = 0;
     let color: string = "Gray"
-    this.shifts.forEach(s => {
+    this.shifts?.forEach(s => {
       if (s.availabilities && s.availabilities.length > 0 && s.availabilities[0].type === 3)
         color = "Blue"
       else if (s.availabilities && s.availabilities.length > 0)
@@ -290,7 +302,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     if (counter > 0 && color !== "Blue") {
       let available: boolean = false;
       let unavailable: boolean = false;
-      this.shifts.forEach(s => {
+      this.shifts?.forEach(s => {
         if (s && s.availabilities && s.availabilities.length > 0)
           if (s.availabilities[0].type === 2)
             available = true;
@@ -309,7 +321,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   openInstructions(id: string | number) {
-    let url: string = this.shifts.find(s => s.id === id).task?.instruction?.documentUri;
+    let url: string | null | undefined = this.shifts?.find(s => s.id === id)?.task?.instruction?.documentUri;
     if (url)
       window.open(url, "_blank")
   }
@@ -319,6 +331,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       return 0;
     if (action === "Yes")
       return 2;
+    return -1;
   }
 
   getAvailabilityTypeActionName(actionNumber: number): string {
@@ -328,19 +341,20 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       return "Yes"
     if (actionNumber === 3)
       return "Preference"
+    return '';
   }
 
-  findShift(event: CalendarEvent): Shift {
-    return this.shifts.find(s => s.task.name == event.title && s.endTime == moment(event.end).format("HH:mm") && s.startTime == moment(event.start).format("HH:mm"))
+  findShift(event: CalendarEvent): Shift | undefined {
+    return this.shifts?.find(s => s.task.name == event.title && s.endTime == moment(event.end).format("HH:mm") && s.startTime == moment(event.start).format("HH:mm"))
   }
 
   changeLoadedShiftBordersAndStar() {
-    this.shifts.forEach(s => {
+    this.shifts?.forEach(s => {
       if (s.availabilities && s.availabilities.length > 0) {
         let availability = s.availabilities[0];
 
         let action: string = this.getAvailabilityTypeActionName(availability.type)
-        let event: CalendarEvent = this.allEvents.find(e => e.id == s.id)
+        let event: CalendarEvent | undefined = this.allEvents.find(e => e.id == s.id)
         if (event && action) {
           this.changeBorders(event, action)
         }
@@ -356,6 +370,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     if (label === "Preference")
       label = "Yes";
     let actionElement = this.getActionElement(event)
+    if (!actionElement)
+      return;
     for (let k = 0; k < actionElement.children.length; k++) {
       let child: any = actionElement.children[k];
       if (child.ariaLabel == label) {
@@ -366,12 +382,12 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getTitleElement(event: CalendarEvent): HTMLElement {
+  getTitleElement(event: CalendarEvent): HTMLElement | null {
     return document.getElementById("title-" + event.id)
   }
 
-  getActionElement(event: CalendarEvent): HTMLElement {
-    return document.getElementById("actions-" + event.id)
+  getActionElement(event: CalendarEvent | undefined): HTMLElement | null {
+    return document.getElementById("actions-" + event?.id)
   }
 
   colorInMonth() {
@@ -399,10 +415,9 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getDayElement(date: Date): HTMLElement {
+  getDayElement(date: Date): HTMLElement |null {
     let label = moment(date).local().format("D MMMM YYYY").toLowerCase()
-    let element: HTMLElement = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
-    return element
+    return document.querySelector("[aria-label=" + CSS.escape(label) + "]")
   }
 
   async getShifts(date: Date) {
@@ -410,7 +425,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     await this.shiftService.getAllShiftsOnDateWithUserAvailability(this.projectId, this.userId, moment(date).set("hour", 12).toDate()).then(async res => {
       this.shifts = res;
     });
-    if (this.shifts.length > 0) {
+    if (this.shifts && this.shifts.length > 0) {
       this.numberOfOverlappingShifts = AvailabilityComponent.calculateOverlap(this.shifts)
       this.addEvents();
     } else {
@@ -444,7 +459,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
     this.allEvents = [];
     this.activeProjectTasks = []
-    this.shifts.forEach(s => {
+    this.shifts?.forEach(s => {
       let scheduled = false;
       if (s.availabilities && s.availabilities[0] && s.availabilities[0].type === 3)
         scheduled = true;
@@ -464,14 +479,15 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       };
       if (scheduled) {
         scheduledId.push(s.id)
-        event.color.primary = "#5b5bdc";
+        if(event.color)
+          event.color.primary = "#5b5bdc";
       }
 
       this.activeProjectTasks.push(s.task)
       this.allEvents.push(event)
     })
     this.filterEvents();
-    this.refresh.next();
+    this.refresh.next(null);
 
     setTimeout(() => {
       this.changeButtonLayout();
@@ -502,7 +518,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   setDefaultHours() {
     this.startHour = 12;
     this.endHour = 17;
-    this.refresh.next();
+    this.refresh.next(null);
   }
 
   setHours() {
@@ -511,7 +527,10 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     start.sort()
 
     let end: Date[] = []
-    this.filteredEvents.forEach(fe => end.push(fe.end))
+    this.filteredEvents.forEach(fe =>{
+      if(fe.end)
+        end.push(fe.end)
+    })
     end.sort()
 
     if (start && start.length > 0)
@@ -529,7 +548,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
   OnCheckboxChange($event: MatCheckboxChange) {
     let task = this.availabilityData.projectTasks.find(pt => pt.id == $event.source.id)
-    if ($event.checked) {
+
+    if (task && $event.checked) {
       if (!this.displayedProjectTasks.includes(task))
         this.displayedProjectTasks.push(task)
     } else {
@@ -545,11 +565,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
   colorStar(id) {
     let element = document.getElementById(id)
-    let icon = element.children[0].children[0];
-    if (icon.innerHTML == "star_border") {
+    let icon = element?.children[0].children[0];
+    if (icon?.innerHTML == "star_border") {
       icon.innerHTML = "star"
       icon.classList.add("yellow")
-    } else {
+    } else if(icon) {
       icon.innerHTML = "star_border"
       icon.classList.remove("yellow")
     }
@@ -584,18 +604,20 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
   changeButtonLayout() {
     this.filteredEvents.forEach(e => {
-      if ((e.end.getTime() - e.start.getTime()) / 3600000 <= 1) {
+      if (e.end &&(e.end.getTime() - e.start.getTime()) / 3600000 <= 1) {
         let element = this.getTitleElement(e)
-        if (element)
+        if (element) {
           element.style.display = "none"
-        for (let i = 0; i < element.children.length; i++) {
-          let child: HTMLElement = element.children[i] as HTMLElement
-          child.style.display = "none"
+
+          for (let i = 0; i < element.children.length; i++) {
+            let child: HTMLElement = element.children[i] as HTMLElement
+            child.style.display = "none"
+          }
 
         }
       }
 
-      if ((e.end.getTime() - e.start.getTime()) / 3600000 < 4) {
+      if (e.end &&(e.end.getTime() - e.start.getTime()) / 3600000 < 4) {
         this.changeActionButtonFontSize(e)
         let fabElement = document.getElementById("scheduledBtn" + e.id)
         if (fabElement)
@@ -616,8 +638,11 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       }
     })
   }
-  changeActionButtonFontSize(event: CalendarEvent){
+
+  changeActionButtonFontSize(event: CalendarEvent) {
     let element = this.getActionElement(event)
+    if(!element)
+      return;
     for (let i = 0; i < element.children.length; i++) {
       let child: HTMLElement = element.children[i] as HTMLElement
       child.style.width = "26px";

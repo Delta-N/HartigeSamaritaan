@@ -22,7 +22,7 @@ export class EditShiftComponent implements OnInit {
 
   shift: Shift;
   tasks: Task[];
-  projectGuid: string;
+  projectGuid: string | null;
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -51,7 +51,7 @@ export class EditShiftComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskService.getAllProjectTasks(this.projectGuid).then(res => {
-      this.tasks = res.filter(t => t != null);
+      this.tasks = res?.filter(t => t != null) ??[];
       if (this.shift.task) {
         this.taskControl.setValue(this.tasks.find(t => t.name == this.shift.task.name))
       }
@@ -59,8 +59,8 @@ export class EditShiftComponent implements OnInit {
   }
 
   timeBefore(startTime: string, endTime: string): boolean {
-    let start: Date = new Date(null, null, null, parseInt(startTime.substring(0, 2)), parseInt(startTime.substring(3, 5)));
-    let end: Date = new Date(null, null, null, parseInt(endTime.substring(0, 2)), parseInt(endTime.substring(3, 5)));
+    let start: Date = new Date(0, 0, 0, parseInt(startTime.substring(0, 2)), parseInt(startTime.substring(3, 5)));
+    let end: Date = new Date(0, 0, 0, parseInt(endTime.substring(0, 2)), parseInt(endTime.substring(3, 5)));
     return end.valueOf() - start.valueOf() >= 0
   }
 

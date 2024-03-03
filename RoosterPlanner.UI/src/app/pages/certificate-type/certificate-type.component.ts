@@ -21,7 +21,7 @@ export class CertificateTypeComponent implements OnInit {
   deleteIcon = faTrashAlt;
   loaded: boolean = false;
   certificateType: CertificateType;
-  guid: string;
+  guid: string | null;
   isAdmin: boolean = false;
 
 
@@ -49,7 +49,8 @@ export class CertificateTypeComponent implements OnInit {
       this.guid = params.get('id');
     });
     this.certificateService.getCertificateType(this.guid).then(response => {
-      this.certificateType = response;
+      if(response)
+        this.certificateType = response;
       this.loaded = true;
     })
   }

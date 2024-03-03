@@ -2,7 +2,7 @@
   <h1>Mijn shifts</h1>
   <div id="push">
     <a (click)="ics()" mat-button class="override-button action-button">
-      <fa-icon [icon]="calendarIcon"></fa-icon>
+<!--      <fa-icon [icon]="calendarIcon"></fa-icon>-->
       Download afspraken als .ics</a>
   </div>
 </div>
@@ -46,7 +46,10 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr (click)="details(row.shift.task.id)" mat-row *matRowDef="let row; columns: displayedColumns;"
-            [ngStyle]="row.shift.date<today.toISOString() && {'background-color': 'whitesmoke'} || row.shift.date>=today.toISOString() && {'background-color': 'white'}"></tr>
+            >
+          <!--todo [ngStyle]="row.shift.date<today.toISOString() && {'background-color': 'whitesmoke'} || row.shift.date>=today.toISOString() && {'background-color': 'white'}"-->
+
+        </tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" colspan="5">Geen resultaten gevonden</td>
         </tr>

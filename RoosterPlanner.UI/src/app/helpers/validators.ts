@@ -3,7 +3,7 @@
 
 export class Validator {
 
-  static date(control: FormControl): { [key: string]: any } {
+  static date(control: FormControl): { [p: string]: any } | null {
     if(control==null||control.value===null||control.value.match===null){
       return {"date":true};
     }
@@ -15,14 +15,14 @@ export class Validator {
     return null;
   }
 
-  static dateOrNull(control: FormControl): { [key: string]: any } {
+  static dateOrNull(control: FormControl): { [p: string]: any } | null {
     if (!(control && control.value)) {
       return null;
     }
     return Validator.date(control);
   }
 
-  static phoneNumber(control: FormControl): { [key: string]: any } {
+  static phoneNumber(control: FormControl): { [p: string]: any } | null {
     if(control==null||control.value===null||control.value.match===null){
       return {"phoneNumber":true};
     }
@@ -34,7 +34,7 @@ export class Validator {
     return null;
   }
 
-  static postalCode(control: FormControl): { [key: string]: any } {
+  static postalCode(control: FormControl): { [p: string]: any } | null {
     if(control==null||control.value===null||control.value.match===null){
       return {"postalCode":true};
     }
@@ -46,7 +46,7 @@ export class Validator {
     return null;
   }
 
-  static email(control: FormControl): { [key: string]: any } {
+  static email(control: FormControl): { [p: string]: any } | null {
     if (!(control && control.value)) {
       return null;
     }

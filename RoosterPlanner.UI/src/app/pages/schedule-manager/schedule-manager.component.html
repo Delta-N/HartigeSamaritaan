@@ -6,8 +6,10 @@
   <div class="col-4">
     <div class="calendar">
       <div class="calendar-wrapper">
-        <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged()" [minDate]="minDate"
-                      [maxDate]="maxDate">
+        <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged()"
+                      >
+          <!--todo [minDate]="minDate"
+                      [maxDate]="maxDate"-->
         </mat-calendar>
       </div>
     </div>

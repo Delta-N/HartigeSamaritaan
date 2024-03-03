@@ -17,10 +17,8 @@ export class BreadcrumbService {
   managecrumb: Breadcrumb = new Breadcrumb("Beheer", "/manage");
 
   constructor(private router: Router) {
-
-
     router.events.pipe(filter(event => event instanceof NavigationStart))
-      .subscribe((event: NavigationStart) => {
+      .subscribe(() => {
         this.clear();
       });
   }

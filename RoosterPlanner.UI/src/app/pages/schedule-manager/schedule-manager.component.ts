@@ -11,11 +11,18 @@ import {TextInjectorService} from "../../services/text-injector.service";
 import {ProjectService} from "../../services/project.service";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
-import * as moment from "moment";
+import moment from "moment";
+import {MaterialModule} from "../../modules/material/material.module";
+import {ManageModule} from "../../modules/manage/manage.module";
 
 @Component({
   selector: 'app-schedule-manager',
   templateUrl: './schedule-manager.component.html',
+  standalone: true,
+  imports: [
+    MaterialModule,
+    ManageModule
+  ],
   styleUrls: ['./schedule-manager.component.scss']
 })
 export class ScheduleManagerComponent implements OnInit {
@@ -23,8 +30,8 @@ export class ScheduleManagerComponent implements OnInit {
 
   selectedDate: Moment;
   viewDate: Date = new Date();
-  minDate: Date;
-  maxDate: Date;
+  minDate: Date | undefined;
+  maxDate: Date | undefined;
 
   displayedColumns: string[] = [];
   dataSource: MatTableDataSource<Availability> = new MatTableDataSource<Availability>();
@@ -42,7 +49,7 @@ export class ScheduleManagerComponent implements OnInit {
     this.setDataSourceAttributes()
   }
 
-  projectId: string;
+  projectId: string | null;
 
 
   constructor(private route: ActivatedRoute,
@@ -64,8 +71,8 @@ export class ScheduleManagerComponent implements OnInit {
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       this.projectId = params.get('id');
       this.projectService.getProject(this.projectId).then(res => {
-        this.minDate = res.participationStartDate
-        this.maxDate = res.participationEndDate
+        this.minDate = res?.participationStartDate
+        this.maxDate = res?.participationEndDate
       })
       await this.getAvailabilities(this.viewDate).then(() => {
         this.loaded = true;
@@ -104,9 +111,9 @@ export class ScheduleManagerComponent implements OnInit {
 
   async dateOrViewChanged(): Promise<void> {
     await this.getAvailabilities(this.viewDate).then(() => {
-      if (this.viewDate < this.minDate) {
+      if (this.minDate && this.viewDate < this.minDate) {
         this.changeDate(this.minDate);
-      } else if (this.viewDate > this.maxDate) {
+      } else if (this.maxDate && this.viewDate > this.maxDate) {
         this.changeDate(this.maxDate);
       }
     });
@@ -114,9 +121,12 @@ export class ScheduleManagerComponent implements OnInit {
   }
 
   async getAvailabilities(viewDate: Date) {
-    await this.availabilityService.getScheduledAvailabilitiesOnDate(this.projectId, moment(viewDate).set("hour", 12).toDate()).then(res => {
-      this.setDatasource(res)
-    })
+    await this.availabilityService
+      .getScheduledAvailabilitiesOnDate(this.projectId, moment(viewDate).set("hour", 12).toDate()).then(res => {
+        if (res) {
+          this.setDatasource(res)
+        }
+      })
   }
 
   setDataSourceAttributes() {

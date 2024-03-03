@@ -7,10 +7,16 @@ import {UserService} from "../../services/user.service";
 import {ToastrService} from "ngx-toastr";
 import {DateConverter} from "../../helpers/date-converter";
 import {TextInjectorService} from "../../services/text-injector.service";
+import {MatFormField} from "@angular/material/form-field";
+import {MaterialModule} from "../../modules/material/material.module";
 
 @Component({
   selector: 'app-change-profile',
   templateUrl: './change-profile.component.html',
+  standalone: true,
+  imports: [
+    MaterialModule
+  ],
   styleUrls: ['./change-profile.component.scss']
 })
 export class ChangeProfileComponent implements OnInit {

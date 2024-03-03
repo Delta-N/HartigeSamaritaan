@@ -15,16 +15,16 @@ export class RequirementService {
               private apiService: ApiService) {
   }
 
-  async getRequirement(guid: string): Promise<Requirement> {
+  async getRequirement(guid: string | null): Promise<Requirement | null> {
     if (!guid) {
       this.errorService.error("requirementId mag niet leeg zijn");
       return null;
     }
-    let requirement: Requirement = null;
+    let requirement: Requirement | null = null;
     await this.apiService.get<HttpResponse<Requirement>>(`${HttpRoutes.requirementApiUrl}/${guid}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res?.ok)
             requirement = res.body
         }
         , Error => {
@@ -33,7 +33,7 @@ export class RequirementService {
     return requirement
   }
 
-  async postRequirement(requirement: Requirement): Promise<Requirement> {
+  async postRequirement(requirement: Requirement): Promise<Requirement | null> {
     if (!requirement || !requirement.task || !requirement.certificateType) {
       this.errorService.error("Ongeldig requirement")
       return null;
@@ -42,11 +42,11 @@ export class RequirementService {
     if (!requirement.id)
       requirement.id = EntityHelper.returnEmptyGuid()
 
-    let resRequirement: Requirement = null;
+    let resRequirement: Requirement | null = null;
     await this.apiService.post<HttpResponse<Requirement>>(`${HttpRoutes.requirementApiUrl}`, requirement)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           resRequirement = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -54,16 +54,16 @@ export class RequirementService {
     return resRequirement;
   }
 
-  async updateRequirement(requirement: Requirement): Promise<Requirement> {
+  async updateRequirement(requirement: Requirement): Promise<Requirement | null> {
     if (!requirement || !requirement.task || !requirement.certificateType || requirement.id == EntityHelper.returnEmptyGuid()) {
       this.errorService.error("Ongeldig requirement")
       return null;
     }
-    let resRequirement: Requirement = null;
+    let resRequirement: Requirement | null= null;
     await this.apiService.put<HttpResponse<Requirement>>(`${HttpRoutes.requirementApiUrl}`, requirement)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           resRequirement = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -71,7 +71,7 @@ export class RequirementService {
     return resRequirement;
   }
 
-  async deleteRequirement(guid: string): Promise<boolean> {
+  async deleteRequirement(guid: string | null): Promise<boolean | null> {
     if (!guid) {
       this.errorService.error("RequirementId is leeg")
       return null;
@@ -80,7 +80,7 @@ export class RequirementService {
     await this.apiService.delete<HttpResponse<Requirement>>(`${HttpRoutes.requirementApiUrl}/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           result = true;
       }, Error => {
         this.errorService.httpError(Error)

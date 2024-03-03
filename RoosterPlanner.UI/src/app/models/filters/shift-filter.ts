@@ -2,7 +2,7 @@
 
 export class ShiftFilter extends BaseFilter {
 
-  public projectId: string
+  public projectId: string | undefined
   public tasks: string[]
   public date: Date
   public start: string;

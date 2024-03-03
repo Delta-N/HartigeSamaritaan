@@ -5,8 +5,9 @@
 <div id="pdfTable" #pdfTable>
   <div class="row bar">
     <h1>Certificaat: {{certificate.certificateType ? certificate.certificateType.name : "Onbekend"}}</h1>
-    <button mat-button id="push" class="override-button action-button" (click)="pdf()"><fa-icon
-      [icon]="awardIcon"></fa-icon>Download PDF</button>
+    <button mat-button id="push" class="override-button action-button" (click)="pdf()">
+<!--      <fa-icon      [icon]="awardIcon"></fa-icon>-->
+      Download PDF</button>
   </div>
 
 
@@ -32,9 +33,12 @@
 
 
   <div class="row">
-    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button"><fa-icon
-      [icon]="editIcon"></fa-icon>Wijzigen</a>
-    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button"><fa-icon [icon]="deleteIcon"></fa-icon>Verwijderen</a>
+    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button">
+<!--      <fa-icon      [icon]="editIcon"></fa-icon>-->
+      Wijzigen</a>
+    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button">
+<!--      <fa-icon [icon]="deleteIcon"></fa-icon>-->
+      Verwijderen</a>
   </div>
   </div>
 </span>

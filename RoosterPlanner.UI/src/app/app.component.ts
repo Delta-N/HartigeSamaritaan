@@ -1,29 +1,50 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {faHome, faUserLock, faUserCog, faSignOutAlt, faUser, faUserEdit} from '@fortawesome/free-solid-svg-icons';
+import {User} from "./models/user";
+import {Subject, takeUntil} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {AddProjectComponent} from "./components/add-project/add-project.component";
-import {UserService} from "./services/user.service";
-import {User} from "./models/user";
-import {MSAL_GUARD_CONFIG} from "./msal/constants";
-import {MsalGuardConfiguration} from "./msal/msal.guard.config";
-import {MsalBroadcastService, MsalService} from "./msal";
-import {EventMessage, EventType, InteractionType} from "@azure/msal-browser";
-import {filter, takeUntil} from "rxjs/operators";
-import {Subject} from "rxjs";
-import * as moment from "moment"
-import {JwtHelper} from "./helpers/jwt-helper";
-import {ChangeProfilePictureComponent} from "./components/change-profile-picture/change-profile-picture.component";
-import {Document} from "./models/document";
+import {MaterialModule} from "./modules/material/material.module";
+import moment from "moment";
 import {UploadService} from "./services/upload.service";
+import {Document} from "./models/document";
+import {JwtHelper} from "./helpers/jwt-helper";
+import {UserService} from "./services/user.service";
+import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalGuardConfiguration, MsalService} from "@azure/msal-angular";
+import {ChangeProfilePictureComponent} from "./components/change-profile-picture/change-profile-picture.component";
 import {AcceptPrivacyPolicyComponent} from "./components/accept-privacy-policy/accept-privacy-policy.component";
-import {faHome, faUserLock, faUserCog, faSignOutAlt, faUser, faUserEdit} from '@fortawesome/free-solid-svg-icons';
+import {
+  AuthenticationResult,
+  EventMessage,
+  EventType, IdTokenClaims, InteractionStatus,
+  InteractionType,
+  PopupRequest, RedirectRequest
+} from "@azure/msal-browser";
+import {BreadcrumbComponent} from "./components/breadcrumb/breadcrumb.component";
+import {filter} from "rxjs/operators";
+import {environment} from "../environments/environment";
 
+
+type IdTokenClaimsWithPolicyId = IdTokenClaims & {
+  acr?: string,
+  tfp?: string,
+};
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, MaterialModule, BreadcrumbComponent
+  ],
+  providers: [
+
+
+
+  ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy{
   homeIcon = faHome;
   adminIcon = faUserLock;
   managerIcon = faUserCog;
@@ -43,7 +64,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private readonly _destroying$ = new Subject<void>();
 
-
   constructor(public dialog: MatDialog,
               private userService: UserService,
               @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
@@ -53,11 +73,36 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+
     moment.locale('nl')
     this.isIframe = window !== window.parent && !window.opener;
-    this.isAuthenticated();
-    this.checkAccount();
+    await this.checkAccount();
 
+    this.authService.instance.enableAccountStorageEvents();
+    this.msalBroadcastService.msalSubject$
+      .pipe(
+        filter((msg: EventMessage) => msg.eventType === EventType.ACCOUNT_ADDED || msg.eventType === EventType.ACCOUNT_REMOVED),
+      )
+      .subscribe(({eventType, payload}: EventMessage) => {
+        switch (eventType) {
+          case EventType.ACCOUNT_ADDED:
+          case EventType.ACCOUNT_REMOVED:
+            this.onAccountAddedOrRemoved();
+            break;
+          case EventType.LOGIN_SUCCESS:
+            this.onLoginSuccess(payload as AuthenticationResult);
+            break;
+        }
+      });
+    this.msalBroadcastService.inProgress$
+      .pipe(
+        takeUntil(this._destroying$),
+        filter((status: InteractionStatus) => status === InteractionStatus.None)
+      )
+      .subscribe(() => {
+        this.checkAccount();
+
+      });
 
 
 
@@ -77,8 +122,30 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  private onAccountAddedOrRemoved(): void {
+    const countAllAccounts = this.authService.instance.getAllAccounts().length;
+    if (!countAllAccounts) {
+      window.location.pathname = '/';
+    } else {
+      this.checkAccount();
+    }
+  }
+
+  private onLoginSuccess(payload: AuthenticationResult): void {
+    if (!payload?.account) {
+      return;
+    }
+    this.authService.instance.setActiveAccount(payload?.account);
+  }
+
   async checkAccount() {
-    this.loggedIn = this.authService.getAllAccounts().length > 0;
+    let activeAccount = this.authService.instance.getActiveAccount();
+
+    if (!activeAccount && this.authService.instance.getAllAccounts().length > 0) {
+      let accounts = this.authService.instance.getAllAccounts();
+      this.authService.instance.setActiveAccount(accounts[0]);
+    }
+    this.loggedIn = this.authService.instance.getAllAccounts().length > 0;
     this.isAdmin = this.userService.userIsAdminFrontEnd();
     this.isManager = this.userService.userIsProjectAdminFrontEnd();
   }
@@ -87,29 +154,56 @@ export class AppComponent implements OnInit, OnDestroy {
     this.dialog.open(AddProjectComponent);
   }
 
-  logout() {
-    this.authService.logout();
-  }
-
-  login() {
+  login(userFlowRequest?: RedirectRequest | PopupRequest) {
     if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
-      this.authService.loginPopup({...this.msalGuardConfig.authRequest})
-        .subscribe(() => this.checkAccount());
+      if (this.msalGuardConfig.authRequest) {
+        this.authService.loginPopup({...this.msalGuardConfig.authRequest, ...userFlowRequest} as PopupRequest)
+          .subscribe((response: AuthenticationResult) => {
+            this.authService.instance.setActiveAccount(response.account);
+          });
+      } else {
+        this.authService.loginPopup(userFlowRequest)
+          .subscribe((response: AuthenticationResult) => {
+            this.authService.instance.setActiveAccount(response.account);
+          });
+      }
     } else {
-      this.authService.loginRedirect({...this.msalGuardConfig.authRequest});
+      if (this.msalGuardConfig.authRequest) {
+        this.authService.loginRedirect({...this.msalGuardConfig.authRequest, ...userFlowRequest} as RedirectRequest);
+      } else {
+        this.authService.loginRedirect(userFlowRequest);
+      }
     }
   }
 
+  logout() {
+    if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
+      this.authService.logoutPopup({
+        mainWindowRedirectUri: "/"
+      });
+    } else {
+      this.authService.logoutRedirect();
+    }
+  }
+
+  editProfile() {
+    let editProfileFlowRequest: RedirectRequest | PopupRequest = {
+      authority: environment.b2cPolicies.authorities.editProfile.authority,
+      scopes: [],
+    };
+
+    this.login(editProfileFlowRequest);
+  }
+
   ngOnDestroy(): void {
-    this._destroying$.next(null);
+    this._destroying$.next(undefined);
     this._destroying$.complete();
   }
 
-  private isAuthenticated(): void {
-    const account = this.authService.getAllAccounts()[0];
-    this.hasUser = !!account;
-  }
 
+  private isAuthenticated(): void {
+    this.hasUser =this.authService.instance.getAllAccounts().length > 0;
+  }
   promptPPAccept() {
     const dialogRef = this.dialog.open(AcceptPrivacyPolicyComponent, {
       width: '95vw',
@@ -125,6 +219,8 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+
+
   changeProfilePicture() {
     const dialogRef = this.dialog.open(ChangeProfilePictureComponent, {
       width: '300px',
@@ -138,4 +234,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 }
+
+
 

@@ -15,16 +15,16 @@ export class CategoryService {
               private errorService: ErrorService) {
   }
 
-  async getCategory(guid: string): Promise<Category> {
+  async getCategory(guid: string | null): Promise<Category | null> {
     if (!guid) {
       this.errorService.error("categoryID mag niet leeg zijn")
       return null;
     }
-    let category: Category = null;
+    let category: Category | null = null;
     await this.apiService.get<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/GetCategory/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           category = res.body;
       }, Error => {
         this.errorService.httpError(Error)
@@ -33,11 +33,11 @@ export class CategoryService {
   }
 
   async getAllCategory(): Promise<Category[]> {
-    let categories: Category[] = [];
+    let categories: Category[] | null = [];
     await this.apiService.get<HttpResponse<Category[]>>(`${HttpRoutes.taskApiUrl}/GetAllCategories`)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res?.ok)
             categories = res.body
         }, Error => {
           this.errorService.httpError(Error)
@@ -46,7 +46,7 @@ export class CategoryService {
     return categories
   }
 
-  async postCategory(category: Category): Promise<Category> {
+  async postCategory(category: Category): Promise<Category |null> {
     if (!category || !category.name) {
       this.errorService.error("Ongeldige category")
       return null;
@@ -55,11 +55,11 @@ export class CategoryService {
     if (!category.id) {
       category.id = EntityHelper.returnEmptyGuid()
     }
-    let resCategory: Category = null;
+    let resCategory: Category | null= null;
     await this.apiService.post<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/SaveCategory`, category)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           resCategory = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -67,12 +67,12 @@ export class CategoryService {
     return resCategory
   }
 
-  async updateCategory(category: Category): Promise<Category> {
+  async updateCategory(category: Category): Promise<Category | null> {
     if (!category || !category.name) {
       this.errorService.error("Ongeldige category")
       return null;
     }
-    let updatedCategory: Category = null;
+    let updatedCategory: Category | null = null;
     if (!category.id) {
       this.errorService.error("CategoryID is leeg")
       return null;
@@ -80,7 +80,7 @@ export class CategoryService {
     await this.apiService.put<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/UpdateCategory`, category)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res?.ok)
             updatedCategory = res.body;
         }, Error => {
           this.errorService.httpError(Error)
@@ -89,7 +89,7 @@ export class CategoryService {
     return updatedCategory
   }
 
-  async deleteCategory(guid: string): Promise<boolean> {
+  async deleteCategory(guid: string| null): Promise<boolean | null> {
     if (!guid) {
       this.errorService.error("CategoryID is leeg")
       return null;
@@ -98,7 +98,7 @@ export class CategoryService {
     await this.apiService.delete<HttpResponse<Category>>(`${HttpRoutes.taskApiUrl}/DeleteCategory/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           deleted = true;
       }, Error => {
         this.errorService.httpError(Error)

@@ -1,21 +1,24 @@
-import {AvailabilityComponent} from "./pages/availability/availability.component";
-import {HomeComponent} from "./pages/home/home.component";
-import {MsalGuard} from "./msal";
-import {NgModule} from '@angular/core';
+import { Routes } from '@angular/router';
+import {MsalGuard} from "@azure/msal-angular";
 import {NotFoundComponent} from "./pages/not-found/not-found.component";
+import {HomeComponent} from "./pages/home/home.component";
+import {AvailabilityComponent} from "./pages/availability/availability.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {ProjectComponent} from "./pages/project/project.component";
-import {RouterModule, Routes} from '@angular/router';
 import {TaskComponent} from "./pages/task/task.component";
-import {AuthorizationGuard} from "./guards/authorization.guard";
-import {ManageGuard} from "./guards/manage.guard";
+import {RequirementComponent} from "./pages/requirement/requirement.component";
 import {ScheduleComponent} from "./pages/schedule/schedule.component";
 import {PrivacyComponent} from "./pages/privacy/privacy.component";
 import {CertificateComponent} from "./pages/certificate/certificate.component";
-import {RequirementComponent} from "./pages/requirement/requirement.component";
+import {manageCanActivateGuard, ManageGuard} from "./guards/manage.guard";
+import {authCanActivateGuard, AuthorizationGuard} from "./guards/authorization.guard";
 
-
-const routes: Routes = [
+export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
   {path: 'home', component: HomeComponent, canActivate: [MsalGuard]},
   {path: 'availability/:id', component: AvailabilityComponent, canActivate: [MsalGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [MsalGuard]},
@@ -25,22 +28,17 @@ const routes: Routes = [
   {path: 'schedule/:id', component: ScheduleComponent, canActivate: [MsalGuard]},
   {path: 'privacy', component: PrivacyComponent},
   {path: 'certificate/:id', component: CertificateComponent},
-  {path: 'manage',loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule),canLoad: [ManageGuard]  },
-  {path: 'admin',loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),canLoad: [AuthorizationGuard]},
+  {
+    path: 'manage',
+    loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule),
+    canLoad: [manageCanActivateGuard]
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),
+    canLoad: [authCanActivateGuard]
+  },
   {path: '', component: HomeComponent, canActivate: [MsalGuard]},
   {path: '**', component: NotFoundComponent,}
-]
 
-
-const isIframe = window !== window.parent && !window.opener;
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes, {
-    useHash: false,
-    // Don't perform initial navigation in iframes
-    initialNavigation: !isIframe ? 'enabled' : 'disabled',
-  })],
-  exports: [RouterModule]
-})
-export class AppRoutingModule {
-}
+];

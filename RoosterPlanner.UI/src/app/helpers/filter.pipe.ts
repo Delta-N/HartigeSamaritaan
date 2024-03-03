@@ -65,12 +65,12 @@ export class TaskFilterPipe implements PipeTransform {
 
 @Pipe({name: 'datePipe'})
 export class DatePipe implements PipeTransform {
-  transform(value: Date): string {
+  transform(value: Date): string | null {
     return DateConverter.dateToString(value);
   }
 }
 
-@Pipe({name: 'tableDatePipe'})
+@Pipe({standalone: true, name: 'tableDatePipe'})
 export class TableDatePipe implements PipeTransform {
   transform(value: Date): string {
     return DateConverter.toReadableStringFromDate(value);
@@ -105,6 +105,7 @@ export class AgePipe implements PipeTransform {
       }
       return age;
     }
+    return -1;
   }
 }
 
@@ -132,35 +133,38 @@ export class CheckboxFilter implements PipeTransform {
 
 @Pipe({name: 'calendarTooltip'})
 export class CalendarTooltip implements PipeTransform {
-  transform(listOfTasks: Task[], title: string): string {
+  transform(listOfTasks: Task[], title: string): string | undefined {
     let result = listOfTasks.find(t => t.name === title)
-    return result.description;
+    return result?.description;
   }
 }
 
-@Pipe({name: 'calendarTaskLink'})
+@Pipe({standalone: true, name: 'calendarTaskLink'})
 export class CalendarTaskLink implements PipeTransform {
-  transform(listOfTasks: Task[], title: string): string {
+  transform(listOfTasks: Task[], title: string): string | undefined {
     let result = listOfTasks.find(t => t.name === title)
-    return result.id;
+    return result?.id;
   }
 }
 
 
 @Pipe({name: 'planTooltip'})
 export class PlanTooltip implements PipeTransform {
-  transform(listOfShifts: Shift[], event: CalendarEvent): string {
-    let shift = listOfShifts.find(s => s.id == event.id)
+  transform(listOfShifts: Shift[] | null, event: CalendarEvent): string {
+    if (listOfShifts) {
+      let shift = listOfShifts.find(s => s.id == event.id)
 
 
-    let result: string = shift.participantsRequired + " Nodig "
+      let result: string = shift?.participantsRequired + " Nodig "
 
-    let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
-    result += availableNumber + " Beschikbaar ";
+      let availableNumber = shift?.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
+      result += availableNumber + " Beschikbaar ";
 
-    let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
-    result += scheduledNumber + " Ingeroosterd ";
-    return result;
+      let scheduledNumber = shift?.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
+      result += scheduledNumber + " Ingeroosterd ";
+      return result;
+    }
+    return '';
 
   }
 }

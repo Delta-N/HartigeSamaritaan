@@ -55,10 +55,12 @@ Hier zie je details over dit project. Je mag op deze pagina het maximaal aantal 
             <div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
          </div>
          <div class="row" *ngIf="this.participation && this.participation.active">
-            <a (click)="editWorkingHours()" mat-button class="action-button override-button"><fa-icon
-              [icon]="historyIcon"></fa-icon>Max uur per week wijzigen</a>
-            <a (click)="collaborate(participation)" mat-button class="action-button override-button"><fa-icon
-              [icon]="friendsIcon"></fa-icon>Voorkeur samenwerking</a>
+            <a (click)="editWorkingHours()" mat-button class="action-button override-button">
+<!--              <fa-icon              [icon]="historyIcon"></fa-icon>-->
+              Max uur per week wijzigen</a>
+            <a (click)="collaborate(participation)" mat-button class="action-button override-button">
+<!--              <fa-icon              [icon]="friendsIcon"></fa-icon>-->
+              Voorkeur samenwerking</a>
          </div>
          <div class="admin" *ngIf="isAdmin">
            <div class="row" id="admin-control-title"><h6>Administrator opties</h6></div>
@@ -78,7 +80,8 @@ Hier zie je details over dit project. Je mag op deze pagina het maximaal aantal 
          <mat-card [ngClass]="[taskCardStyle]" id="taskCard">
             <div>
                <mat-card-title>
-                  <fa-icon [icon]="clipboard"></fa-icon>Projecttaken
+<!--                  <fa-icon [icon]="clipboard"></fa-icon>-->
+                 Projecttaken
                   <button [disabled]="projectTasksExpandbtnDisabled" class="card-title-icon" mat-icon-button
                           (click)="expandTaskCard()">
                   <mat-icon id="icon">zoom_out_map</mat-icon>
@@ -88,7 +91,8 @@ Hier zie je details over dit project. Je mag op deze pagina het maximaal aantal 
             <mat-card-content>
                <span *ngFor="let item of projectTasks">
                   <a [routerLink]="['/task', item.id]">
-                     <p><fa-icon [icon]="infoIcon"></fa-icon>
+                     <p>
+<!--                       <fa-icon [icon]="infoIcon"></fa-icon>-->
                        {{item.name}}</p>
                   </a>
                </span>
@@ -96,8 +100,12 @@ Hier zie je details over dit project. Je mag op deze pagina het maximaal aantal 
                <mat-card-actions class="action-anchor"></mat-card-actions>
             </mat-card-content>
             <mat-card-actions class="action-anchor" *ngIf="isAdmin || isManager">
-               <button mat-button (click)="modTask('add')"><fa-icon [icon]="circle"></fa-icon>Nieuwe toevoegen</button>
-               <button mat-button (click)="modTask('remove')"><fa-icon [icon]="faTrash"></fa-icon>Verwijderen</button>
+               <button mat-button (click)="modTask('add')">
+<!--                 <fa-icon [icon]="circle"></fa-icon>-->
+                 toevoegen</button>
+               <button mat-button (click)="modTask('remove')">
+<!--                 <fa-icon [icon]="faTrash"></fa-icon>-->
+                 Verwijderen</button>
             </mat-card-actions>
          </mat-card>
           </div>

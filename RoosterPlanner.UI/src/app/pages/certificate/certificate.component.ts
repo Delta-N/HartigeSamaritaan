@@ -12,10 +12,19 @@ import jsPDF from "jspdf";
 import {DateConverter} from "../../helpers/date-converter";
 import {Breadcrumb} from "../../models/breadcrumb";
 import {faAward, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
-
+import {ManageModule} from "../../modules/manage/manage.module";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {NgIf} from "@angular/common";
+/*todo might need to change jsPDF package*/
 @Component({
   selector: 'app-certificate',
   templateUrl: './certificate.component.html',
+  standalone: true,
+  imports: [
+    ManageModule,
+    MatProgressSpinner,
+    NgIf
+  ],
   styleUrls: ['./certificate.component.scss']
 })
 export class CertificateComponent implements OnInit {
@@ -23,7 +32,7 @@ export class CertificateComponent implements OnInit {
   deleteIcon = faTrashAlt;
   awardIcon = faAward
 
-  guid: string;
+  guid: string | null;
   certificate: Certificate
   isAdmin: boolean = false;
   loaded: boolean = false;

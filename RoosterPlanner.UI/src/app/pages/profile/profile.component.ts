@@ -2,21 +2,29 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 import {JwtHelper} from "../../helpers/jwt-helper";
-import {MsalService} from "../../msal";
 import {DateConverter} from "../../helpers/date-converter";
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeProfileComponent} from "../../components/change-profile/change-profile.component";
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {ActivatedRoute, ParamMap, RouterLink} from "@angular/router";
 import {Certificate} from "../../models/Certificate";
 import {AddCertificateComponent} from "../../components/add-certificate/add-certificate.component";
 import {ToastrService} from "ngx-toastr";
 import {faAward, faUserEdit, faBell, faBellSlash} from '@fortawesome/free-solid-svg-icons';
 import {ChangeProfilePictureComponent} from "../../components/change-profile-picture/change-profile-picture.component";
+import {NgStyle} from "@angular/common";
+import {MatCardActions} from "@angular/material/card";
+import {MaterialModule} from "../../modules/material/material.module";
 
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
+  standalone: true,
+  imports: [
+    NgStyle,
+    MaterialModule,
+    RouterLink
+  ],
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
@@ -27,7 +35,7 @@ export class ProfileComponent implements OnInit {
   user: User;
   age: string;
   loaded: boolean;
-  guid: string;
+  guid: string | null;
   isStaff: boolean;
   isAdmin: boolean;
 
@@ -40,7 +48,6 @@ export class ProfileComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
-              private authenticationService: MsalService,
               private dialog: MatDialog,
               private toastr: ToastrService) {
   }
@@ -95,11 +102,13 @@ export class ProfileComponent implements OnInit {
     let originalText = id === 'personalbutton' ? this.user.personalRemark : this.user.staffRemark
     let textareaElement = document.getElementById(textAreaId) as HTMLInputElement
 
-    if (element.innerText === 'Aanpassen') {
+    if (element?.innerText === 'Aanpassen') {
       element.innerText = 'Opslaan'
       textareaElement.disabled = false;
     } else {
-      element.innerText = 'Aanpassen'
+      if(element) {
+        element.innerText = 'Aanpassen'
+      }
       textareaElement.disabled = true;
       if (textareaElement.value !== originalText) {
         id === 'personalbutton' ? this.user.personalRemark = textareaElement.value : this.user.staffRemark = textareaElement.value

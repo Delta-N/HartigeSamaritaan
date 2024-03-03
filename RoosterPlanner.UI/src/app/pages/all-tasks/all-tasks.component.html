@@ -16,12 +16,12 @@
     </div>
     <mat-card-content>
         <span *ngFor="let item of tasks">
-            <a [routerLink]="['/task', item.id]"><p>{{item.name}}</p></a>
+            <a [routerLink]="['/task', item.id]"><p>{{ item.name }}</p></a>
           </span>
     </mat-card-content>
     <mat-card-actions class="action-anchor">
       <button mat-button (click)="modTask('add')">
-        <fa-icon [icon]="circleIcon"></fa-icon>
+        <!--        <fa-icon [icon]="circleIcon"></fa-icon>-->
         nieuwe toevoegen
       </button>
     </mat-card-actions>
@@ -38,12 +38,12 @@
     </div>
     <mat-card-content>
         <span *ngFor="let item of categories">
-            <a [routerLink]="['category', item.id]"><p>{{item.name}}</p></a>
+            <a [routerLink]="['category', item.id]"><p>{{ item.name }}</p></a>
           </span>
     </mat-card-content>
     <mat-card-actions class="action-anchor">
       <button mat-button (click)="modCategory('add')">
-        <fa-icon [icon]="circleIcon"></fa-icon>
+        <!--        <fa-icon [icon]="circleIcon"></fa-icon>-->
         nieuwe toevoegen
       </button>
     </mat-card-actions>
@@ -62,14 +62,14 @@
     <mat-card-content>
 
       <span *ngFor="let item of certificatesTypes">
-            <a [routerLink]="['certificatetype', item.id]"><p>{{item.name}}</p></a>
+            <a [routerLink]="['certificatetype', item.id]"><p>{{ item.name }}</p></a>
           </span>
 
       <mat-card-actions class="action-anchor"></mat-card-actions>
     </mat-card-content>
     <mat-card-actions class="action-anchor">
       <button mat-button (click)="modCertificate('add')">
-        <fa-icon [icon]="circleIcon"></fa-icon>
+        <!--        <fa-icon [icon]="circleIcon"></fa-icon>-->
         nieuwe toevoegen
       </button>
     </mat-card-actions>

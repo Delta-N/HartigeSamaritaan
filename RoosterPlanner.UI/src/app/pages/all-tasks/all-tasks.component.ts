@@ -26,7 +26,7 @@ export class AllTasksComponent implements OnInit {
   itemsPerCard: number = 5;
 
   reasonableMaxInteger: number = 10000; //aanpassen na 10k projecten/admins ;)
-  tasks: Task[] = [];
+  tasks: Task[] | null = [];
   taskCardStyle = 'card';
   tasksExpandbtnDisabled: boolean = true;
 
@@ -62,8 +62,9 @@ export class AllTasksComponent implements OnInit {
   async getTasks(offset: number, pageSize: number) {
     await this.taskService.getAllTasks(offset, pageSize).then(tasks => {
       this.tasks = tasks;
-      this.tasks.sort((a, b) => a.name > b.name ? 1 : -1);
-      if (this.tasks.length >= 5) {
+      this.tasks?.sort((a, b) => a.name > b.name ? 1 : -1);
+      let length = this.tasks?.length ?? 0;
+      if (length >= 5) {
         this.tasksExpandbtnDisabled = false;
       }
     })
@@ -167,7 +168,7 @@ export class AllTasksComponent implements OnInit {
         certificateCardElement.hidden = false;
       this.taskCardStyle = 'card';
       this.itemsPerCard = 5;
-      this.tasks = this.tasks.slice(0, this.itemsPerCard);
+      this.tasks = this.tasks?.slice(0, this.itemsPerCard) ??[];
     } else {
       if (categoryCardElement)
         categoryCardElement.hidden = true;

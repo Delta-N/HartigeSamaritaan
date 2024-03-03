@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {ActivatedRoute, ParamMap, Router, RouterLink} from "@angular/router";
 import {AddTaskComponent} from "../../components/add-task/add-task.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ToastrService} from "ngx-toastr";
@@ -12,18 +12,27 @@ import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {AddRequirementComponent} from "../../components/add-requirement/add-requirement.component";
 import {Requirement} from "../../models/requirement";
 import {faPlusCircle, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
+import {MatCard} from "@angular/material/card";
+import {MaterialModule} from "../../modules/material/material.module";
+import {AdminModule} from "../../modules/admin/admin.module";
 
 
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
+  standalone: true,
+  imports: [
+    MaterialModule,
+    RouterLink,
+    AdminModule
+  ],
   styleUrls: ['./task.component.scss']
 })
 export class TaskComponent implements OnInit {
   circleIcon = faPlusCircle
   editIcon = faEdit
   deleteIcon = faTrashAlt
-  guid: string;
+  guid: string | null;
   task: Task;
   isAdmin: boolean = false;
   loaded: boolean = false;
@@ -60,10 +69,12 @@ export class TaskComponent implements OnInit {
 
   getTask() {
     this.taskService.getTask(this.guid).then(response => {
-      this.task = response;
-      this.displayRequirements = this.task.requirements.slice(0, this.itemsPerCard)
-      if (this.task.requirements.length >= 5) {
-        this.requirementExpandbtnDisabled = false;
+      if(response) {
+        this.task = response;
+        this.displayRequirements = this.task.requirements.slice(0, this.itemsPerCard)
+        if (this.task.requirements.length >= 5) {
+          this.requirementExpandbtnDisabled = false;
+        }
       }
       this.loaded = true;
     })

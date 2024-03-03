@@ -6,16 +6,23 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {TextInjectorService} from "../../services/text-injector.service";
-import * as moment from "moment"
+import moment from "moment"
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
 import {Event} from "../../models/event";
 import {faCalendarPlus} from '@fortawesome/free-solid-svg-icons';
+import {MaterialModule} from "../../modules/material/material.module";
+import {TableDatePipe} from "../../helpers/filter.pipe";
 
 
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
+  standalone: true,
+  imports: [
+    MaterialModule,
+    TableDatePipe
+  ],
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {

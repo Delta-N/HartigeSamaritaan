@@ -8,7 +8,7 @@
     <div>
       <mat-form-field>
         <mat-label for="task"> Taak</mat-label>
-        <input formControlName="taskName" id="taskName" matInput placeholder="Taak naam" value="{{requirement?.task?.name}}" type="text" disabled>
+        <input formControlName="taskName" id="taskName" matInput placeholder="Taak naam" value="{{requirement?.task?.name}}" type="text" [disabled]="true">
       </mat-form-field>
     </div>
 

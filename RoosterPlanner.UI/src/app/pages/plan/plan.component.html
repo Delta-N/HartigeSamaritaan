@@ -6,8 +6,10 @@
   <div class="col-4">
     <div class="calendar">
       <div class="calendar-wrapper">
-        <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged()" [minDate]="minDate"
-                      [maxDate]="maxDate">
+        <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged()"
+                      >
+          <!--todo [minDate]="minDate"
+                      [maxDate]="maxDate"-->
         </mat-calendar>
       </div>
       <div class="row tasks-container">
@@ -26,19 +28,19 @@
       <div class="row legend">
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: red">
-            <fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>
+<!--            <fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>-->
           </div>
           Onvoldoende mensen beschikbaar op deze dag.
         </div>
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: green">
-            <fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>
+<!--            <fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>-->
           </div>
           Voldoende mensen beschikbaar op deze dag.
         </div>
         <div class="row legend-item">
           <div class="mat-calendar-body-cell-content legend-button" style="background: blue">
-            <fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>
+<!--            <fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>-->
           </div>
           Alle diensten op deze dag zijn ingeroosterd.
         </div>
@@ -71,10 +73,10 @@
         [attr.aria-label]=" { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
         <div class="flex-container">
           <div class="row flex-container title" id="title-{{weekEvent.event.id}}">
-            <span class="cal-event-title" [ngStyle]="numberOfOverlappingShifts>4&&{'font-size':'16px'}">{{weekEvent.event.title}}</span>
+            <span class="cal-event-title" >{{weekEvent.event.title}}</span> <!--todo [ngStyle]="numberOfOverlappingShifts>4&&{'font-size':'16px'}"-->
 
           </div>
-          <div class="row" id="spacer" [ngStyle]="numberOfOverlappingShifts>7&&{'font-size':'12px'}">
+          <div class="row" id="spacer" ><!--todo [ngStyle]="numberOfOverlappingShifts>7&&{'font-size':'12px'}"-->
             <div class="row" id="necessary-{{weekEvent.event.id}}"></div>
             <div class="row" id="scheduled-{{weekEvent.event.id}}"></div>
             <div class="row" id="available-{{weekEvent.event.id}}"></div>
@@ -89,7 +91,8 @@
       </div>
     </ng-template>
     <div class="calendarbox"
-         [ngStyle]="numberOfOverlappingShifts>2&&{'min-width':(numberOfOverlappingShifts-2)*75+300+'px'}">
+         >
+      <!--todo [ngStyle]="numberOfOverlappingShifts>2&&{'min-width':(numberOfOverlappingShifts-2)*75+300+'px'}"-->
       <mwl-calendar-day-view #schedule
                              [viewDate]="viewDate"
                              [dayStartHour]="startHour"

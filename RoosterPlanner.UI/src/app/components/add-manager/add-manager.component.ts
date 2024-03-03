@@ -81,7 +81,7 @@ export class AddManagerComponent implements OnInit {
     this.users.forEach(u => {
       let element = document.getElementById(u.id)
       let checkElement = document.getElementById("check" + u.id)
-      if (element) {
+      if (element && checkElement) {
         let index = this.addedManagers.find(m => m === u.id)
         if (index) {
           element.style.background = "whitesmoke"
@@ -96,7 +96,7 @@ export class AddManagerComponent implements OnInit {
     this.managers.forEach(u => {
       let element = document.getElementById(u.personId)
       let closeElement = document.getElementById("check" + u.id)
-      if (element) {
+      if (element && closeElement) {
         let index = this.removedManagers.find(m => m === u.personId)
         if (index) {
           element.style.background = "whitesmoke"
@@ -148,14 +148,14 @@ export class AddManagerComponent implements OnInit {
     for (const am of this.addedManagers) {
       this.userService.makeManager(this.projectId, am).then(res => {
         if (res)
-          this.toastr.success(this.users.find(u => u.id === am).firstName + " is succesvol toegevoegd")
+          this.toastr.success(this.users.find(u => u.id === am)?.firstName + " is succesvol toegevoegd")
       })
 
     }
     for (const rm of this.removedManagers) {
       this.userService.removeManager(this.projectId, rm).then(res => {
         if (res)
-          this.toastr.success(this.managers.find(u => u.personId === rm).person.firstName + " is succesvol verwijderd")
+          this.toastr.success(this.managers.find(u => u.personId === rm)?.person.firstName + " is succesvol verwijderd")
       })
     }
     this.dialogRef.close()

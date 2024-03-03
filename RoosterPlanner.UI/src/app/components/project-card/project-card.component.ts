@@ -7,10 +7,18 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/conf
 import {MatDialog} from "@angular/material/dialog";
 import {faCalendarAlt, faFileAlt, faList,} from "@fortawesome/free-solid-svg-icons";
 import {faTimesCircle} from "@fortawesome/free-regular-svg-icons";
+import {RouterLink} from "@angular/router";
+import {MatCardContent} from "@angular/material/card";
+import {MaterialModule} from "../../modules/material/material.module";
 
 @Component({
   selector: 'app-project-card',
   templateUrl: './project-card.component.html',
+  standalone: true,
+  imports: [
+    RouterLink,
+    MaterialModule
+  ],
   styleUrls: ['./project-card.component.scss']
 })
 export class ProjectCardComponent implements OnInit {

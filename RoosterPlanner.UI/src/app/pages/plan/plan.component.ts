@@ -17,7 +17,7 @@ import {
   CalendarDateFormatter,
   CalendarDayViewComponent
 } from 'angular-calendar';
-import * as moment from "moment"
+import moment from "moment"
 import {CustomDateFormatter} from "../../helpers/custom-date-formatter.provider";
 import {MatCalendar} from "@angular/material/datepicker";
 import {Moment} from "moment";
@@ -56,7 +56,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
   project: Project;
   availabilityData: AvailabilityData;
   displayedProjectTasks: Task[] = [];
-  shifts: Shift[] = [];
+  shifts: Shift[] | null = [];
   numberOfOverlappingShifts: number = 0;
 
 
@@ -66,7 +66,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
   viewDate: Date;
 
   minDate: Date;
-  maxDate: Date;
+  maxDate: Date | undefined;
 
   startHour: number = 12;
   endHour: number = 17;
@@ -89,8 +89,8 @@ export class PlanComponent implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> {
 
     this.route.paramMap.subscribe(async (params: ParamMap) => {
-      let projectId: string = params.get('id');
-      let date: string = params.get('date')
+      let projectId: string | null = params.get('id');
+      let date: string | null = params.get('date')
 
       //get basic data
       await this.availabilityService.getAvailabilityDataOfProject(projectId).then(res => {
@@ -169,7 +169,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
     await this.getShifts(this.viewDate).then(() => {
       if (this.viewDate < this.minDate) {
         this.changeDate(this.minDate);
-      } else if (this.viewDate > this.maxDate) {
+      } else if (this.maxDate && this.viewDate > this.maxDate) {
         this.changeDate(this.maxDate);
       }
     });
@@ -199,7 +199,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
   colorInDay(date: Date, color: string) {
     let label = moment(date).local().format("D MMMM YYYY").toLowerCase()
-    let element: HTMLElement = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
+    let element: HTMLElement | null = document.querySelector("[aria-label=" + CSS.escape(label) + "]");
 
     if (element) {
       let child: any = element.children[0]
@@ -212,7 +212,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
     await this.shiftService.getAllShiftsOnDate(this.project.id, moment(date).set("hour", 12).toDate()).then(async res => {
       this.shifts = res;
     });
-    if (this.shifts.length > 0) {
+    if (this.shifts && this.shifts.length > 0) {
       this.numberOfOverlappingShifts = AvailabilityComponent.calculateOverlap(this.shifts)
       this.addEvents();
       setTimeout(() => {
@@ -226,7 +226,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
   addEvents() {
 
     this.allEvents = [];
-    this.shifts.forEach(s => {
+    this.shifts?.forEach(s => {
 
       let event: CalendarEvent = {
         start: moment(s.date)
@@ -245,7 +245,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
       this.allEvents.push(event)
     })
     this.filterEvents();
-    this.refresh.next();
+    this.refresh.next(null);
   }
 
   filterEvents() {
@@ -268,7 +268,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
   setDefaultHours() {
     this.startHour = 12;
     this.endHour = 17;
-    this.refresh.next();
+    this.refresh.next(null);
   }
 
   setHours() {
@@ -277,7 +277,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
     start.sort()
 
     let end: Date[] = []
-    this.filteredEvents.forEach(fe => end.push(fe.end))
+    this.filteredEvents.forEach(fe => end.push(<Date>fe.end))
     end.sort()
 
     if (start && start.length > 0)
@@ -294,47 +294,54 @@ export class PlanComponent implements OnInit, AfterViewInit {
       this.endHour = this.startHour + 5;
   }
 
-  getTitleElement(event: CalendarEvent): HTMLElement {
+  getTitleElement(event: CalendarEvent): HTMLElement | null{
     return document.getElementById("title-" + event.id)
   }
 
   fillSpacer() {
     this.filteredEvents.forEach(e => {
-        let shift = this.shifts.find(s => s.id == e.id)
-        if ((e.end.getTime() - e.start.getTime()) / 3600000 <= 1) {
-        //verberg title
+        let shift = this.shifts?.find(s => s.id == e.id)
+        if (e.end && (e.end?.getTime() - e.start.getTime()) / 3600000 <= 1) {
+          //verberg title
           let element = this.getTitleElement(e)
-          if (element)
+          if (element) {
             element.style.display = "none"
-          for (let i = 0; i < element.children.length; i++) {
-            let child: HTMLElement = element.children[i] as HTMLElement
-            child.style.display = "none"
+            for (let i = 0; i < element.children.length; i++) {
+              let child: HTMLElement = element.children[i] as HTMLElement
+              child.style.display = "none"
+            }
 
           }
         }
-        if ((e.end.getTime() - e.start.getTime()) / 3600000 > 4) {
+        if (e.end && (e.end.getTime() - e.start.getTime()) / 3600000 > 4) {
 
 
-          let necessaryElement = document.getElementById('necessary-' + shift.id);
-          let scheduledElement = document.getElementById('scheduled-' + shift.id)
+          let necessaryElement = document.getElementById('necessary-' + shift?.id);
+          let scheduledElement = document.getElementById('scheduled-' + shift?.id)
+          let availableElement = document.getElementById('available-' + shift?.id)
 
-          let availableElement = document.getElementById('available-' + shift.id)
-          necessaryElement.innerText = shift.participantsRequired + " Nodig";
+          if(!necessaryElement || !scheduledElement || !availableElement) {
+            return; /*todo check if this can fail*/
+          }
 
-          let availableNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
+          necessaryElement.innerText = shift?.participantsRequired + " Nodig";
+
+          let availableNumber = shift?.availabilities ? shift.availabilities.filter(a => a.type === 2).length : 0;
           availableElement.innerText = availableNumber + " Beschikbaar";
 
-          let scheduledNumber = shift.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
+          let scheduledNumber = shift?.availabilities ? shift.availabilities.filter(a => a.type === 3).length : 0
           scheduledElement.innerText = scheduledNumber + " Ingeroosterd";
 
         } else {
-          let planElement = document.getElementById('plan-' + shift.id)
-          planElement.style.cssText = "padding: 3px !important";
+          let planElement = document.getElementById('plan-' + shift?.id)
+          if(planElement)
+            planElement.style.cssText = "padding: 3px !important";
         }
 
         if (this.numberOfOverlappingShifts > 7) {
-          let planElement = document.getElementById('plan-' + shift.id)
-          planElement.style.cssText = "padding: 3px !important";
+          let planElement = document.getElementById('plan-' + shift?.id)
+          if (planElement)
+            planElement.style.cssText = "padding: 3px !important";
         }
       }
     )
@@ -342,7 +349,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
   OnCheckboxChange($event: MatCheckboxChange) {
     let task = this.availabilityData.projectTasks.find(pt => pt.id == $event.source.id)
-    if ($event.checked) {
+    if ($event.checked && task) {
       if (!this.displayedProjectTasks.includes(task))
         this.displayedProjectTasks.push(task)
     } else {

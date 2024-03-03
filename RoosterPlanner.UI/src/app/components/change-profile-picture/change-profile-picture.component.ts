@@ -10,6 +10,7 @@ import {Document} from "../../models/document";
 @Component({
   selector: 'app-change-profile-picture',
   templateUrl: './change-profile-picture.component.html',
+  standalone: true,
   styleUrls: ['./change-profile-picture.component.scss']
 })
 export class ChangeProfilePictureComponent implements OnInit {
@@ -32,14 +33,14 @@ export class ChangeProfilePictureComponent implements OnInit {
       const formData = new FormData();
       formData.append(this.files[0].name, this.files[0]);
 
-      let uri: string = null;
+      let uri: string | null = null;
       await this.uploadService.uploadProfilePicture(formData).then(url => {
         if (url && url.path && url.path.trim().length > 0)
           uri = url.path.trim();
       });
 
       if (this.user.profilePicture != null) {
-        await this.uploadService.deleteIfExists(this.user.profilePicture.documentUri).then();
+        await this.uploadService.deleteIfExists(this.user.profilePicture.documentUri??"").then();
         this.user.profilePicture.documentUri = uri;
         await this.uploadService.updateDocument(this.user.profilePicture).then(res => {
           if (res)

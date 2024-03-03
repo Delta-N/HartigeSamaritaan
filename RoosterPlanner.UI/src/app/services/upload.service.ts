@@ -9,7 +9,7 @@ import {Document} from "../models/document";
 @Injectable({providedIn: 'root'})
 export class UploadService {
 
-  constructor(private http: HttpClient,
+  constructor(
               private apiService: ApiService,
               private errorService: ErrorService) {
   }

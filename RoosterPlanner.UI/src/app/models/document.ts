@@ -2,5 +2,5 @@
 
 export class Document extends Entity {
   public name: string;
-  public documentUri: string;
+  public documentUri: string | null;
 }

@@ -16,16 +16,16 @@ export class ParticipationService {
               private errorService: ErrorService) {
   }
 
-  async getParticipations(userId: string): Promise<Participation[]> {
+  async getParticipations(userId: string): Promise<Participation[] |null> {
     if (!userId) {
       this.errorService.error("UserId mag niet leeg zijn")
       return null;
     }
-    let participations: Participation[] = [];
+    let participations: Participation[] | null = [];
     await this.apiService.get<HttpResponse<Participation[]>>(`${HttpRoutes.participationApiUrl}/${userId}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           participations = res.body;
       }, Error => {
         this.errorService.httpError(Error)
@@ -33,16 +33,16 @@ export class ParticipationService {
     return participations;
   }
 
-  async getParticipation(userId: string, projectId: string): Promise<Participation> {
+  async getParticipation(userId: string, projectId: string | null): Promise<Participation | null> {
     if (!userId || !projectId) {
       this.errorService.error("UserId en/of ProjectId mag niet leeg zijn");
       return null;
     }
-    let participation: Participation = null;
+    let participation: Participation | null = null;
     await this.apiService.get<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}/GetParticipation/${userId}/${projectId}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           participation = res.body;
       }, Error => {
         this.errorService.httpError(Error)
@@ -50,16 +50,16 @@ export class ParticipationService {
     return participation;
   }
 
-  async getAllParticipations(projectId:string):Promise<Participation[]>{
+  async getAllParticipations(projectId:string):Promise<Participation[] | null>{
     if (!projectId) {
       this.errorService.error("projectId mag niet leeg zijn")
       return null;
     }
-    let participations: Participation[] = [];
+    let participations: Participation[] | null = [];
     await this.apiService.get<HttpResponse<Participation[]>>(`${HttpRoutes.participationApiUrl}/project/${projectId}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           participations = res.body;
       }, Error => {
         this.errorService.httpError(Error)
@@ -67,7 +67,7 @@ export class ParticipationService {
     return participations;
   }
 
-  async postParticipation(participation: Participation): Promise<Participation> {
+  async postParticipation(participation: Participation): Promise<Participation | null> {
     if (!participation) {
       this.errorService.error("Lege participation in participationservice")
       return null;
@@ -83,11 +83,11 @@ export class ParticipationService {
     if (participation.maxWorkingHoursPerWeek > 40) {
       participation.maxWorkingHoursPerWeek = 40;
     }
-    let postedParticipation: Participation = null;
+    let postedParticipation: Participation | null = null;
     await this.apiService.post<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           postedParticipation = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -95,7 +95,7 @@ export class ParticipationService {
     return postedParticipation;
   }
 
-  async updateParticipation(participation: Participation): Promise<Participation> {
+  async updateParticipation(participation: Participation): Promise<Participation | null> {
     if (!participation) {
       this.errorService.error("Lege participation in participation service")
       return null;
@@ -115,14 +115,14 @@ export class ParticipationService {
       participation.project.participationStartDate = DateConverter.toDate(participation.project.participationStartDate);
       participation.project.projectEndDate = DateConverter.toDate(participation.project.projectEndDate);
       participation.project.projectStartDate = DateConverter.toDate(participation.project.projectStartDate);
-    } catch (e) {
+    } catch (e: any) {
       this.errorService.error(e)
     }
-    let updatedParticipation = null;
+    let updatedParticipation : Participation|null = null;
     await this.apiService.put<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}`, participation)
       .toPromise()
       .then(res => {
-        if (res.ok) {
+        if (res?.ok) {
           updatedParticipation = res.body;
         }
       }, Error => {
@@ -131,7 +131,7 @@ export class ParticipationService {
     return updatedParticipation;
   }
 
-  async deleteParticipation(participation: Participation): Promise<boolean> {
+  async deleteParticipation(participation: Participation): Promise<boolean | null> {
     if (participation === null) {
       this.errorService.error("Fout tijdens het uitschrijven bij een project")
       return null;
@@ -140,7 +140,7 @@ export class ParticipationService {
     await this.apiService.delete<HttpResponse<Participation>>(`${HttpRoutes.participationApiUrl}/${participation.id}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           deleted = true;
       }, Error => {
         this.errorService.httpError(Error)

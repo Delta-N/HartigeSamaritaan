@@ -99,13 +99,13 @@
          <div class="col-md-6 right">
             <h2>Gekozen dagen:</h2>
            <p *ngIf="shiftDates.length==0">N.N.T.B</p>
-            <mat-chip-list>
-               <mat-chip *ngFor="let day of shiftDates" [selectable]="selectable" [removable]="removable"
+            <mat-chip-listbox><!--todo check if this still works-->
+               <mat-chip *ngFor="let day of shiftDates" [removable]="removable"
                          (removed)="remove(day)">
                <span>{{day | datePipe}}</span>
                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                </mat-chip>
-            </mat-chip-list>
+            </mat-chip-listbox>
          </div>
       </div>
 </span>

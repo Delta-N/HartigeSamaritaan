@@ -17,7 +17,7 @@ export class AvailabilityService {
               private apiService: ApiService) {
   }
 
-  async getAvailabilityData(projectId: string, userId: string): Promise<AvailabilityData> {
+  async getAvailabilityData(projectId: string | null, userId: string): Promise<AvailabilityData | null> {
     if (!projectId) {
       this.errorService.error("projectId mag niet leeg zijn")
       return null;
@@ -26,11 +26,11 @@ export class AvailabilityService {
       this.errorService.error("userId mag niet leeg zijn")
       return null;
     }
-    let availabilityDate: AvailabilityData = null;
+    let availabilityDate: AvailabilityData | null= null;
     await this.apiService.get<HttpResponse<AvailabilityData>>(`${HttpRoutes.availabilityApiUrl}/find/${projectId}/${userId}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           availabilityDate = res.body;
       }, Error => {
         this.errorService.httpError(Error)
@@ -38,16 +38,16 @@ export class AvailabilityService {
     return availabilityDate;
   }
 
-  async getScheduledAvailabilities(participationId: string): Promise<Availability[]> {
+  async getScheduledAvailabilities(participationId: string | null): Promise<Availability[] | null> {
     if (!participationId) {
       this.errorService.error("participationId mag niet leeg zijn")
       return null;
     }
-    let availabilities: Availability[] = null;
+    let availabilities: Availability[] | null = null;
     await this.apiService.get<HttpResponse<Availability[]>>(`${HttpRoutes.availabilityApiUrl}/scheduled/${participationId}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           availabilities = res.body;
       }, Error => {
         this.errorService.httpError(Error)
@@ -55,7 +55,7 @@ export class AvailabilityService {
     return availabilities;
   }
 
-  async getScheduledAvailabilitiesOnDate(projectId: string, date: Date): Promise<Availability[]> {
+  async getScheduledAvailabilitiesOnDate(projectId: string | null, date: Date): Promise<Availability[] | null> {
     if (!projectId) {
       this.errorService.error("participationId mag niet leeg zijn")
       return null;
@@ -64,11 +64,11 @@ export class AvailabilityService {
       this.errorService.error("datum mag niet leeg zijn")
       return null;
     }
-    let availabilities: Availability[] = null;
+    let availabilities: Availability[] | null = null;
     await this.apiService.get<HttpResponse<Availability[]>>(`${HttpRoutes.availabilityApiUrl}/scheduled/${projectId}/${date.toISOString()}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           availabilities = res.body;
       }, Error => {
         this.errorService.httpError(Error)
@@ -76,16 +76,16 @@ export class AvailabilityService {
     return availabilities;
   }
 
-  async getAvailabilityDataOfProject(projectId: string): Promise<AvailabilityData> {
+  async getAvailabilityDataOfProject(projectId: string | null): Promise<AvailabilityData | null> {
     if (!projectId) {
       this.errorService.error("projectId mag niet leeg zijn")
       return null;
     }
-    let availabilityDate: AvailabilityData = null;
+    let availabilityDate: AvailabilityData | null = null;
     await this.apiService.get<HttpResponse<AvailabilityData>>(`${HttpRoutes.availabilityApiUrl}/find/${projectId}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           availabilityDate = res.body;
       }, Error => {
         this.errorService.httpError(Error)
@@ -93,7 +93,7 @@ export class AvailabilityService {
     return availabilityDate;
   }
 
-  async postAvailability(availability: Availability): Promise<Availability> {
+  async postAvailability(availability: Availability): Promise<Availability | null> {
     if (!availability || !availability.participation || !availability.shift || availability.type == undefined) {
       this.errorService.error("Ongeldige availability")
       return null;
@@ -102,11 +102,11 @@ export class AvailabilityService {
     if (!availability.id) {
       availability.id = EntityHelper.returnEmptyGuid()
     }
-    let resAvailability: Availability = null;
+    let resAvailability: Availability | null = null;
     await this.apiService.post<HttpResponse<Availability>>(`${HttpRoutes.availabilityApiUrl}`, availability)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           resAvailability = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -114,12 +114,12 @@ export class AvailabilityService {
     return resAvailability
   }
 
-  async updateAvailability(availability: Availability): Promise<Availability> {
+  async updateAvailability(availability: Availability): Promise<Availability | null> {
     if (!availability || !availability.participationId || !availability.shiftId || availability.type == undefined) {
       this.errorService.error("Ongeldige availability")
       return null;
     }
-    let updatedAvailability: Availability = null;
+    let updatedAvailability: Availability |null= null;
     if (!availability.id) {
       this.errorService.error("availabilityId is leeg")
       return null;
@@ -127,7 +127,7 @@ export class AvailabilityService {
     await this.apiService.put<HttpResponse<Availability>>(`${HttpRoutes.availabilityApiUrl}`, availability)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res?.ok)
             updatedAvailability = res.body;
         }, Error => {
           this.errorService.httpError(Error)
@@ -146,7 +146,7 @@ export class AvailabilityService {
     await this.apiService.patch<HttpResponse<boolean>>(`${HttpRoutes.availabilityApiUrl}`, scheduled)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res?.ok)
             success = true;
         }, Error => {
           this.errorService.httpError(Error)

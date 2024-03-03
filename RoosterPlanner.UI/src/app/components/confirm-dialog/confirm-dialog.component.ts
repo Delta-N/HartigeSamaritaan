@@ -1,9 +1,15 @@
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Component, OnInit, Inject} from '@angular/core';
+import {MatFormField} from "@angular/material/form-field";
+import {MaterialModule} from "../../modules/material/material.module";
 
 @Component({
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
+  standalone: true,
+  imports: [
+    MaterialModule
+  ],
   styleUrls: ['./confirm-dialog.component.scss']
 })
 export class ConfirmDialogComponent implements OnInit {

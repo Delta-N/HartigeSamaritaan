@@ -17,8 +17,8 @@ import {TextInjectorService} from "../../services/text-injector.service";
 })
 export class CreateProjectComponent implements OnInit {
   project: Project = new Project();
-  updatedProject: Project;
-  checkoutForm;
+  updatedProject: Project | null;
+  checkoutForm:any;
   title: string = "Project toevoegen";
   files: FileList;
 
@@ -47,7 +47,7 @@ export class CreateProjectComponent implements OnInit {
       projectEndDate: [this.project.projectEndDate != null ? this.project.projectEndDate : '', Validator.date],
       pictureUri: this.project.pictureUri != null ? this.project.pictureUri : null,
       websiteUrl: this.project.websiteUrl != null ? this.project.websiteUrl : '',
-      contactAdres: [this.project.contactAdres != null ? this.project.contactAdres : '',Validator.email]
+      contactAdres: [this.project.contactAdres != null ? this.project.contactAdres : '', Validator.email]
     })
 
   }
@@ -65,7 +65,7 @@ export class CreateProjectComponent implements OnInit {
       let prEdate = DateConverter.toDate(this.updatedProject.projectEndDate)
       let parSdate = DateConverter.toDate(this.updatedProject.participationStartDate)
       //alleen participation end date is optioneel
-      let parEdate = null;
+      let parEdate:Date|null = null;
       this.updatedProject.participationEndDate != null ? parEdate = DateConverter.toDate(this.updatedProject.participationEndDate) : null;
 
       if (prEdate < prSdate) {
@@ -89,17 +89,17 @@ export class CreateProjectComponent implements OnInit {
         const formData = new FormData();
         formData.append(this.files[0].name, this.files[0]);
 
-        let uri: string = null;
+        let uri: string | null = null;
         await this.uploadService.uploadProjectPicture(formData).then(url => {
           if (url && url.path && url.path.trim().length > 0)
             uri = url.path.trim();
         });
 
         if (this.project.pictureUri != null) {
-          await this.uploadService.deleteIfExists(this.project.pictureUri.documentUri).then();
+          await this.uploadService.deleteIfExists(this.project.pictureUri.documentUri ?? "").then();
           this.project.pictureUri.documentUri = uri;
           await this.uploadService.updateDocument(this.project.pictureUri).then(res => {
-            if (res)
+            if (res && this.updatedProject)
               this.updatedProject.pictureUri = res;
           })
         } else {
@@ -107,7 +107,7 @@ export class CreateProjectComponent implements OnInit {
           document.name = "projectpicture"
           document.documentUri = uri;
           await this.uploadService.postDocument(document).then(res => {
-            if (res)
+            if (res && this.updatedProject)
               this.updatedProject.pictureUri = res;
           })
         }
@@ -115,7 +115,8 @@ export class CreateProjectComponent implements OnInit {
 
       //create new project
       if (this.data.createProject) {
-        await this.projectService.postProject(this.updatedProject).then(async response => this.updatedProject = response);
+        await this.projectService.postProject(this.updatedProject)
+          .then(async response => this.updatedProject = response);
         this.dialogRef.close(this.updatedProject);
       }
       //edit project
@@ -124,10 +125,10 @@ export class CreateProjectComponent implements OnInit {
         this.updatedProject.lastEditDate = this.project.lastEditDate;
         this.updatedProject.rowVersion = this.project.rowVersion;
         await this.projectService.updateProject(this.updatedProject).then(async response => {
-          if(response){
+          if (response) {
             this.project = response;
             this.dialogRef.close(this.updatedProject);
-          }else
+          } else
             this.dialogRef.close('false');
         });
       }

@@ -24,11 +24,11 @@ import {Shiftdata} from "../../models/helper-models/shiftdata";
   styleUrls: ['./shift-overview.component.scss']
 })
 export class ShiftOverviewComponent implements OnInit {
-  guid: string;
+  guid: string | null;
   loaded: boolean = false;
   title: string = "Shift overzicht";
 
-  project: Project;
+  project: Project | null;
   shiftData: Shiftdata;
   searchResult: Searchresult<Shift> = new Searchresult<Shift>()
 
@@ -89,7 +89,7 @@ export class ShiftOverviewComponent implements OnInit {
     });
     await this.projectService.getProject(this.guid).then(async project => {
       this.project = project;
-      this.title += ": " + this.project.name
+      this.title += ": " + this.project?.name
     })
 
     await this.shiftService.getShiftData(this.guid).then(res => {
@@ -181,7 +181,7 @@ export class ShiftOverviewComponent implements OnInit {
 
   async filter() {
     let filter: ShiftFilter = new ShiftFilter();
-    filter.projectId = this.project.id;
+    filter.projectId = this.project?.id;
     filter.offset = this.offset
     filter.pageSize = this.pageSize
     filter.sort = this.pageSort;

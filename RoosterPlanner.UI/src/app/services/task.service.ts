@@ -17,16 +17,16 @@ export class TaskService {
               private errorService: ErrorService) {
   }
 
-  async getTask(guid: string): Promise<Task> {
+  async getTask(guid: string | null): Promise<Task | null> {
     if (!guid) {
       this.errorService.error("taskId mag niet leeg zijn");
       return null;
     }
-    let task: Task = null;
+    let task: Task | null = null;
     await this.apiService.get<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/${guid}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res?.ok)
             task = res.body
         }
         , Error => {
@@ -36,13 +36,13 @@ export class TaskService {
   }
 
   //todo aanpassen
-  async getAllTasks(offset: number, pageSize: number): Promise<Task[]> {
-    let tasks: Task[] = [];
+  async getAllTasks(offset: number, pageSize: number): Promise<Task[] | null> {
+    let tasks: Task[] | undefined = [];
     await this.apiService.get<HttpResponse<Searchresult<Task>>>(`${HttpRoutes.taskApiUrl}?offset=${offset}&pageSize=${pageSize}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
-            tasks = res.body.resultList
+          if (res?.ok)
+            tasks = res.body?.resultList
         }, Error => {
           this.errorService.httpError(Error)
         }
@@ -50,7 +50,7 @@ export class TaskService {
     return tasks
   }
 
-  async postTask(task: Task): Promise<Task> {
+  async postTask(task: Task): Promise<Task | null> {
     if (task == null || task.name == null || task.category == null || task.category.id == null) {
       this.errorService.error("Ongeldige taak")
       return null;
@@ -59,11 +59,11 @@ export class TaskService {
     if (!task.id)
       task.id = EntityHelper.returnEmptyGuid()
 
-    let resTask: Task = null;
+    let resTask: Task | null= null;
     await this.apiService.post<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}`, task)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           resTask = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -71,7 +71,7 @@ export class TaskService {
     return resTask;
   }
 
-  async updateTask(updatedTask: Task): Promise<Task> {
+  async updateTask(updatedTask: Task): Promise<Task | null> {
     if (updatedTask == null || updatedTask.name == null || updatedTask.category == null || updatedTask.category.id == null) {
       this.errorService.error("Ongeldige taak")
       return null;
@@ -81,11 +81,11 @@ export class TaskService {
       return null;
     }
 
-    let resTask: Task = null
+    let resTask: Task | null= null
     await this.apiService.put<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}`, updatedTask)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           resTask = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -93,7 +93,7 @@ export class TaskService {
     return resTask;
   }
 
-  async deleteTask(guid: string): Promise<boolean> {
+  async deleteTask(guid: string |null): Promise<boolean | null> {
     if (!guid) {
       this.errorService.error("TaskId is leeg")
       return null;
@@ -102,7 +102,7 @@ export class TaskService {
     await this.apiService.delete<HttpResponse<Number>>(`${HttpRoutes.taskApiUrl}/${guid}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           result = true;
       }, Error => {
         this.errorService.httpError(Error)
@@ -110,16 +110,16 @@ export class TaskService {
     return result;
   }
 
-  async getAllProjectTasks(guid: string): Promise<Task[]> {
+  async getAllProjectTasks(guid: string |null): Promise<Task[] | null> {
     if (!guid) {
       this.errorService.error("ProjectTaskId is leeg")
       return null;
     }
-    let projecttasks: Task[] = [];
+    let projecttasks: Task[]  |null= [];
     await this.apiService.get<HttpResponse<Task[]>>(`${HttpRoutes.taskApiUrl}/GetAllProjectTasks/${guid}`)
       .toPromise()
       .then(res => {
-          if (res.ok)
+          if (res?.ok)
             projecttasks = res.body
         }, Error => {
           this.errorService.httpError(Error)
@@ -128,16 +128,16 @@ export class TaskService {
     return projecttasks;
   }
 
-  async addTaskToProject(projectTask: Projecttask): Promise<Task> {
+  async addTaskToProject(projectTask: Projecttask): Promise<Task |null> {
     if (!projectTask) {
       this.errorService.error("ProjectTask is leeg")
       return null;
     }
-    let task: Task = null;
+    let task: Task |null= null;
     await this.apiService.post<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/AddTaskToProject`, projectTask)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           task = res.body
       }, Error => {
         this.errorService.httpError(Error)
@@ -145,7 +145,7 @@ export class TaskService {
     return task;
   }
 
-  async removeTaskFromProject(projectId: string, taskId: string): Promise<boolean> {
+  async removeTaskFromProject(projectId: string, taskId: string): Promise<boolean |null> {
     if (!projectId || !taskId) {
       this.errorService.error("Ongeldige projectId en/of taskId")
       return null;
@@ -154,7 +154,7 @@ export class TaskService {
     await this.apiService.delete<HttpResponse<Task>>(`${HttpRoutes.taskApiUrl}/RemoveTaskFromProject/${projectId}/${taskId}`)
       .toPromise()
       .then(res => {
-        if (res.ok)
+        if (res?.ok)
           deleted = true;
       }, Error => {
         this.errorService.httpError(Error)

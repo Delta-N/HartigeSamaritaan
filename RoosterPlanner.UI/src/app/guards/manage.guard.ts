@@ -1,7 +1,7 @@
-﻿import {Injectable} from "@angular/core";
+﻿import {inject, Injectable} from "@angular/core";
 import {
   ActivatedRouteSnapshot,
-  CanActivate,
+  CanActivate, CanActivateFn,
   CanLoad,
   Route,
   Router,
@@ -35,5 +35,14 @@ export class ManageGuard implements CanActivate, CanLoad {
       this.router.navigate(['home'])
       return false;
     }
+  }
+}
+
+export const manageCanActivateGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+  if (inject(UserService).userIsProjectAdminFrontEnd())
+    return true
+  else {
+    inject(Router).navigate(['home'])
+    return false;
   }
 }

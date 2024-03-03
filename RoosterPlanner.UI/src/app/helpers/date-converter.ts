@@ -1,5 +1,5 @@
 ﻿import {Project} from "../models/project";
-import * as moment from "moment"
+import moment from "moment"
 
 export class DateConverter {
   static date: Date
@@ -44,6 +44,7 @@ export class DateConverter {
     if (date != null) {
       return moment(date).format('LL')
     }
+    return null;
   }
 
   static dateToMoment(date: Date) {

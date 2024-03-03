@@ -13,7 +13,7 @@ import {Moment} from "moment";
 import {DateConverter} from "../../helpers/date-converter";
 import {Shift} from "../../models/shift";
 import {EntityHelper} from "../../helpers/entity-helper";
-import * as moment from "moment";
+import moment from "moment";
 import {TextInjectorService} from "../../services/text-injector.service";
 import {BreadcrumbService} from "../../services/breadcrumb.service";
 import {Breadcrumb} from "../../models/breadcrumb";
@@ -24,12 +24,12 @@ import {Breadcrumb} from "../../models/breadcrumb";
   styleUrls: ['./add-shifts.component.scss']
 })
 export class AddShiftsComponent implements OnInit {
-  guid: string;
+  guid: string | null;
   loaded: boolean = false;
   title: string = "Shift toevoegen";
 
-  project: Project;
-  tasks: Task[];
+  project: Project |null;
+  tasks: Task[] | undefined = [];
   requiredParticipants: number;
 
   checkoutForm;
@@ -44,7 +44,6 @@ export class AddShiftsComponent implements OnInit {
   min: Date;
   max: Date;
   removable = true;
-  selectable = true;
   @ViewChild('days') datepicker: MultipleDatesComponent;
 
   constructor(
@@ -85,20 +84,20 @@ export class AddShiftsComponent implements OnInit {
     });
 
     this.taskService.getAllProjectTasks(this.guid).then(tasks => {
-      this.tasks = tasks.filter(t => t != null);
+      this.tasks = tasks?.filter(t => t != null) ;
     });
 
     await this.projectService.getProject(this.guid).then(async project => {
       this.project = project;
-      this.min = new Date(this.project.participationStartDate) < new Date() ? new Date() : this.project.participationStartDate;
-      this.max = this.project.participationEndDate;
+      this.min = new Date(this.project?.participationStartDate!) < new Date() ? new Date() : this.project?.participationStartDate ?? new Date()
+      this.max = this.project?.participationEndDate!;
 
       this.loaded = true;
     })
   }
 
   getDatesBetweenDates = (startDate, endDate) => {
-    let dates = []
+    let dates:Date[] = []
     const theDate = new Date(startDate)
     while (theDate <= endDate) {
       dates = [...dates, new Date(theDate)]
@@ -176,13 +175,13 @@ export class AddShiftsComponent implements OnInit {
   remove(day: Date) {
     const index = this.shiftDates.indexOf(day)
     if (index >= 0) {
-      this.datepicker.remove(day);
+      this.datepicker.removeChip(day);
     }
   }
 
   timeBefore(startTime: string, endTime: string): boolean {
-    let start: Date = new Date(null, null, null, parseInt(startTime.substring(0, 2)), parseInt(startTime.substring(3, 5)));
-    let end: Date = new Date(null, null, null, parseInt(endTime.substring(0, 2)), parseInt(endTime.substring(3, 5)));
+    let start: Date = new Date(0, 0, 0, parseInt(startTime.substring(0, 2)), parseInt(startTime.substring(3, 5)));
+    let end: Date = new Date(0, 0, 0, parseInt(endTime.substring(0, 2)), parseInt(endTime.substring(3, 5)));
     return end.valueOf() - start.valueOf() >= 0
   }
 
@@ -203,7 +202,7 @@ export class AddShiftsComponent implements OnInit {
       this.shiftDates.forEach(shiftdate => {
         let currentShift: Shift = new Shift();
         currentShift.id = EntityHelper.returnEmptyGuid();
-        currentShift.project = this.project
+        currentShift.project = this.project!
         currentShift.task = value.task;
         currentShift.participantsRequired = value.participantsRequired;
         currentShift.startTime = value.start;
