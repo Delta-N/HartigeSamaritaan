@@ -1,41 +1,27 @@
-import {Injectable} from '@angular/core';
+﻿import { inject, Injectable } from '@angular/core';
 import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  CanLoad,
-  Route,
-  Router,
-  RouterStateSnapshot,
-  UrlSegment, UrlTree
+	ActivatedRouteSnapshot,
+	CanActivateFn,
+	Router,
+	RouterStateSnapshot,
 } from '@angular/router';
-import {UserService} from '../services/user.service';
-import {Observable} from 'rxjs';
-
+import { UserService } from '../services/user.service';
 
 @Injectable()
-export class ManageGuard implements CanActivate, CanLoad {
-
-  constructor(private router: Router,
-              private userService: UserService) {
-  }
-
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> {
-    if (this.userService.userIsProjectAdminFrontEnd()) {
-      return true;
-    }
-    else {
-      this.router.navigate(['home']);
-      return false;
-    }
-  }
-
-  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.userService.userIsProjectAdminFrontEnd()) {
-      return true;
-    }
-    else {
-      this.router.navigate(['home']);
-      return false;
-    }
-  }
+export class ManageGuard {
+	constructor(
+		private router: Router,
+		private userService: UserService
+	) {}
 }
+
+export const manageCanActivateGuard: CanActivateFn = (
+	route: ActivatedRouteSnapshot,
+	state: RouterStateSnapshot
+) => {
+	if (inject(UserService).userIsProjectAdminFrontEnd()) return true;
+	else {
+		inject(Router).navigate(['home']);
+		return false;
+	}
+};

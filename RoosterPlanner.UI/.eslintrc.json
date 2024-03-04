@@ -1,0 +1,162 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "root": true,
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:eqeqeq-fix/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "prettier"
+      ],
+      "rules": {
+        "eqeqeq": [
+          "error",
+          "always"
+        ],
+        "prettier/prettier": [
+          "error",
+          {
+            "printWidth": 80,
+            "tabWidth": 2,
+            "useTabs": true,
+            "semi": true,
+            "singleQuote": true,
+            "quoteProps": "consistent",
+            "trailingComma": "es5",
+            "bracketSpacing": true,
+            "arrowParens": "always",
+            "endOfLine": "crlf"
+          },
+          {
+            "usePrettierrc": false
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "eol-last": [
+          "error",
+          "windows"
+        ],
+        "@angular-eslint/no-host-metadata-property": [
+          "off"
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          "error"
+        ],
+        "@typescript-eslint/explicit-member-accessibility": [
+          "error",
+          {
+            "accessibility": "no-public"
+          }
+        ],
+        "no-console": [
+          "warn",
+          {
+            "allow": [
+              "warn",
+              "error"
+            ]
+          }
+        ],
+        "no-alert": [
+          "error"
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.spec.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": [
+          "off"
+        ],
+        "@typescript-eslint/no-explicit-any": [
+          "off"
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:eqeqeq-fix/recommended",
+        "prettier"
+      ],
+      "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "printWidth": 120,
+            "tabWidth": 2,
+            "useTabs": true,
+            "endOfLine": "crlf",
+            "parser": "angular",
+            "embeddedLanguageFormatting": "off",
+            "bracketSameLine": true,
+            "htmlWhitespaceSensitivity": "strict"
+          },
+          {
+            "usePrettierrc": false
+          }
+        ],
+        "@angular-eslint/template/i18n": [
+          "error",
+          {
+            "checkId": false,
+            "checkText": false,
+            "checkAttributes": false
+          }
+        ],
+        "eol-last": [
+          "error",
+          "windows"
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.ts"
+      ],
+      "extends": [
+        "plugin:eqeqeq-fix/recommended",
+        "plugin:@ngrx/recommended"
+      ]
+    }
+  ]
+}

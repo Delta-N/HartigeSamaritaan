@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-namespace RoosterPlanner.Api.Models
+namespace RoosterPlanner.Api.Models.HelperViewModels
 {
     /// <summary>
     /// DTO for searchresults from searchmethods using a filter.

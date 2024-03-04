@@ -1,6 +1,6 @@
-export class BaseFilter {
-  public sort: string[];
-  public offset: number;
-  public pageSize: number;
-  public totalItemCount: number;
+﻿export class BaseFilter {
+	sort: string[];
+	offset: number;
+	pageSize: number;
+	totalItemCount: number;
 }

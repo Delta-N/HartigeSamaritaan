@@ -1,82 +1,105 @@
 <div class="spinner" *ngIf="!loaded">
-  <mat-spinner></mat-spinner>
+	<mat-spinner></mat-spinner>
 </div>
 <span *ngIf="loaded">
-      <div class="row bar">
-            <h1>{{title}}</h1>
-           <button mat-button id="push" class="action-button"
-                   [disabled]="addedPersons.length==0&&removedPersons.length==0" (click)="save()">Opslaan</button>
-      </div>
-      <div class="row SA">
-        <div class="col-md-2 shift">
-          <h2>{{scheduledata.shift.task?scheduledata.shift.task.name:"Onbekend"}}</h2>
-          <h6>{{(scheduledata.shift.date | datePipe)}}</h6>
-          <h6>{{(scheduledata.shift.startTime + " - " + scheduledata.shift.endTime)}}</h6>
-          <p>{{("Aantal nodig: " + scheduledata.shift.participantsRequired)}}</p>
-          <p [ngStyle]="((scheduledata.schedules | scheduledCount)>=scheduledata.shift.participantsRequired && {'color':'Green'}) ||
+	<div class="row bar">
+		<h1>{{title}}</h1>
+		<button
+			mat-button
+			id="push"
+			class="action-button"
+			[disabled]="addedPersons.length===0&&removedPersons.length===0"
+			(click)="save()"
+			>Opslaan</button
+		>
+	</div>
+	<div class="row SA">
+		<div class="col-md-2 shift">
+			<h2>{{scheduledata.shift.task?scheduledata.shift.task.name:"Onbekend"}}</h2>
+			<h6>{{(scheduledata.shift.date | datePipe)}}</h6>
+			<h6>{{(scheduledata.shift.startTime + " - " + scheduledata.shift.endTime)}}</h6>
+			<p>{{("Aantal nodig: " + scheduledata.shift.participantsRequired)}}</p>
+			<p
+				[ngStyle]="((scheduledata.schedules | scheduledCount)>=scheduledata.shift.participantsRequired && {'color':'Green'}) ||
                 ((scheduledata.schedules | scheduledCount)>0&&(scheduledata.schedules | scheduledCount)<scheduledata.shift.participantsRequired && {'color':'Red'})">
-            {{"Aantal ingeroosterd: " + (scheduledata.schedules | scheduledCount)}}
-          </p>
-        </div>
-         <div class="col-md-10 availabilities">
-            <mat-form-field>
-               <mat-label>Filter</mat-label>
-               <input matInput (keyup)="applyFilter($event)" placeholder="Bijv. Corné">
-            </mat-form-field>
-            <div>
-               <table mat-table [dataSource]="dataSource" matSort matSortActive="#Ingeroosterd" matSortDirection="asc"
-                      class="mat-elevation-z2">
-                 <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef>
-                     </th>
-                    <td mat-cell *matCellDef="let row">
-                      <mat-checkbox (click)="$event.stopPropagation()"
-                                    (change)="$event ? select(row) : null"
-                                    [checked]="selection.isSelected(row)"
-                                    [aria-label]="checkboxLabel(row)"
-                                    color="primary">
-                      </mat-checkbox>
-                    </td>
-                  </ng-container>
-                  <ng-container matColumnDef="Naam">
-                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Naam</th>
-                     <td mat-cell *matCellDef="let row">{{row.person.firstName + " " + row.person.lastName}}
-                       <mat-icon *ngIf="row.preference" class="star">star</mat-icon></td>
-                  </ng-container>
-                  <ng-container matColumnDef="Leeftijd">
-                     <th mat-header-cell mat-sort-header *matHeaderCellDef>Leeftijd</th>
-                     <td mat-cell *matCellDef="let row">{{row.person.dateOfBirth | agePipe}}</td>
-                  </ng-container>
-                  <ng-container matColumnDef="Nationaliteit">
-                     <th mat-header-cell mat-sort-header *matHeaderCellDef>Nationaliteit</th>
-                     <td mat-cell
-                         *matCellDef="let row">{{row.person.nationality != null ? row.person.nationality : "Onbekend"}}</td>
-                  </ng-container>
-                  <ng-container matColumnDef="#Ingeroosterd">
-                     <th mat-header-cell mat-sort-header *matHeaderCellDef>#Ingeroosterd</th>
-                     <td mat-cell *matCellDef="let row">{{row.numberOfTimesScheduledThisProject}} keer</td>
-                  </ng-container>
-                 <ng-container matColumnDef="Ingeroosterd">
-                     <th mat-header-cell mat-sort-header *matHeaderCellDef>Ingeroosterd</th>
-                     <td mat-cell [ngStyle]="row.hoursScheduledThisWeek>row.employability &&{'color':'Red'}"
-                         *matCellDef="let row">{{row.hoursScheduledThisWeek}} uur</td>
-                  </ng-container>
-                 <ng-container matColumnDef="Inzetbaarheid">
-                     <th mat-header-cell mat-sort-header *matHeaderCellDef>Inzetbaarheid</th>
-                     <td mat-cell *matCellDef="let row">{{row.employability}} uur</td>
-                  </ng-container>
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row [matTooltip]="row.availabilities | availabilityPipe"
-                      [matTooltipClass]="'multiline-tooltip'" *matRowDef="let row; columns: displayedColumns;"
-                      (click)="(select(row))"
-                      [ngStyle]="(row.scheduledThisDay && !row.scheduledThisShift) && {'background-color': 'whitesmoke'}"></tr>
-                  <tr class="mat-row" *matNoDataRow>
-                     <td class="mat-cell" colspan="5">Geen resultaten gevonden</td>
-                  </tr>
-               </table>
-            </div>
-            <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-         </div>
-      </div>
+				{{"Aantal ingeroosterd: " + (scheduledata.schedules | scheduledCount)}}
+			</p>
+		</div>
+		<div class="col-md-10 availabilities">
+			<mat-form-field>
+				<mat-label>Filter</mat-label>
+				<input matInput (keyup)="applyFilter($event)" placeholder="Bijv. Corné" />
+			</mat-form-field>
+			<div>
+				<table
+					mat-table
+					[dataSource]="dataSource"
+					matSort
+					matSortActive="#Ingeroosterd"
+					matSortDirection="asc"
+					class="mat-elevation-z2">
+					<ng-container matColumnDef="select">
+						<th mat-header-cell *matHeaderCellDef> </th>
+						<td mat-cell *matCellDef="let row">
+							<mat-checkbox
+								(click)="$event.stopPropagation()"
+								(change)="$event ? select(row) : null"
+								[checked]="selection.isSelected(row)"
+								[aria-label]="checkboxLabel(row)"
+								color="primary">
+							</mat-checkbox>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="Naam">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Naam</th>
+						<td mat-cell *matCellDef="let row"
+							>{{row.person.firstName + " " + row.person.lastName}}
+							<mat-icon *ngIf="row.preference" class="star">star</mat-icon></td
+						>
+					</ng-container>
+					<ng-container matColumnDef="Leeftijd">
+						<th mat-header-cell mat-sort-header *matHeaderCellDef>Leeftijd</th>
+						<td mat-cell *matCellDef="let row">{{row.person.dateOfBirth | agePipe}}</td>
+					</ng-container>
+					<ng-container matColumnDef="Nationaliteit">
+						<th mat-header-cell mat-sort-header *matHeaderCellDef>Nationaliteit</th>
+						<td
+							mat-cell
+							*matCellDef="let row"
+							>{{row.person.nationality !== null ? row.person.nationality : "Onbekend"}}</td
+						>
+					</ng-container>
+					<ng-container matColumnDef="#Ingeroosterd">
+						<th mat-header-cell mat-sort-header *matHeaderCellDef>#Ingeroosterd</th>
+						<td mat-cell *matCellDef="let row">{{row.numberOfTimesScheduledThisProject}} keer</td>
+					</ng-container>
+					<ng-container matColumnDef="Ingeroosterd">
+						<th mat-header-cell mat-sort-header *matHeaderCellDef>Ingeroosterd</th>
+						<td
+							mat-cell
+							[ngStyle]="row.hoursScheduledThisWeek>row.employability &&{'color':'Red'}"
+							*matCellDef="let row"
+							>{{row.hoursScheduledThisWeek}} uur</td
+						>
+					</ng-container>
+					<ng-container matColumnDef="Inzetbaarheid">
+						<th mat-header-cell mat-sort-header *matHeaderCellDef>Inzetbaarheid</th>
+						<td mat-cell *matCellDef="let row">{{row.employability}} uur</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+					<tr
+						mat-row
+						[matTooltip]="row.availabilities | availabilityPipe"
+						[matTooltipClass]="'multiline-tooltip'"
+						*matRowDef="let row; columns: displayedColumns;"
+						(click)="(select(row))"
+						[ngStyle]="(row.scheduledThisDay && !row.scheduledThisShift) && {'background-color': 'whitesmoke'}"></tr>
+					<tr class="mat-row" *matNoDataRow>
+						<td class="mat-cell" colspan="5">Geen resultaten gevonden</td>
+					</tr>
+				</table>
+			</div>
+			<mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+		</div>
+	</div>
 </span>
-

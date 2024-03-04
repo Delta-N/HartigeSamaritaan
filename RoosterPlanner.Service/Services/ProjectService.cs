@@ -3,11 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
-using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
-
-namespace RoosterPlanner.Service
+namespace RoosterPlanner.Service.Services
 {
     public interface IProjectService
     {

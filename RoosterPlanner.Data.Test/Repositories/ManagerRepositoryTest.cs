@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using RoosterPlanner.Data.Context.Seed;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 

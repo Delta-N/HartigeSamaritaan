@@ -1,111 +1,129 @@
 <div class="spinner" *ngIf="!loaded">
-  <mat-spinner></mat-spinner>
+	<mat-spinner></mat-spinner>
 </div>
 <span *ngIf="loaded">
-      <div class="row bar">
-        <h1>{{title}}</h1>
-        <div id="push">
-          <a (click)="save(checkoutForm.value)" mat-button class="action-button override-button" [disabled]="!checkoutForm.valid" >Opslaan</a>
-        </div>
-      </div>
-      <div class="row">
-         <div class="col-md-6 left">
-            <form [formGroup]="checkoutForm" (ngSubmit)="save(checkoutForm.value)">
-            <div class="row">
-               <div class="row-name">Taak:</div>
-               <div class="user-data">
-                  <div>
-                     <mat-form-field>
-                        <mat-label for="Tasks"> Taak:</mat-label>
-                        <mat-select [formControl]="taskControl" required>
-                           <mat-option *ngFor="let task of tasks" [value]="task">
-                           {{task.name}}
-                           </mat-option>
-                        </mat-select>
-                     </mat-form-field>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="row-name">Vanaf:</div>
-               <div class="user-data">
-                  <mat-form-field>
-                     <mat-label> Starttijd:</mat-label>
-                     <input matInput [formControl]="startTimeControl" [ngxTimepicker]="Starttime" [format]="24"
-                            readonly>
-                     <ngx-material-timepicker [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"
-                                              #Starttime></ngx-material-timepicker>
-                     <ng-template #cancelBtn>
-                        <button mat-button class="override-button">Annuleren</button>
-                     </ng-template>
-                     <ng-template #confirmBtn>
-                        <button mat-button class="action-button override-button">Opslaan</button>
-                     </ng-template>
-                  </mat-form-field>
-               </div>
-            </div>
-            <div class="row">
-               <div class="row-name">Tot:</div>
-               <div class="user-data">
-                  <mat-form-field>
-                     <mat-label> Eindtijd:</mat-label>
-                     <input matInput [formControl]="endTimeControl" [ngxTimepicker]="EndTime" [format]="24" readonly>
-                     <ngx-material-timepicker [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"
-                                              #EndTime></ngx-material-timepicker>
-                  </mat-form-field>
-               </div>
-            </div>
-            <div class="row">
-               <div class="row-name">Aantal vrijwilligers:</div>
-               <div class="user-data">
-                  <mat-form-field>
-                     <mat-label for="requiredParticipants">
-                        Aantal vrijwilligers
-                     </mat-label>
-                     <input matInput [formControl]="participantsRequiredControl" id="requiredParticipants" type="number"
-                            min="1">
-                  </mat-form-field>
-               </div>
-            </div>
-            </form>
-            <div class="row">
-               <div class="row-name">Dagen:</div>
-               <div class="user-data">
-                  <mat-form-field>
-                     <label id="open-label">Open Kalender</label>
-                     <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
-                     <mat-datepicker #picker></mat-datepicker>
-                     <ngx-multiple-dates [matDatepicker]="picker" [(ngModel)]="shiftDates" [min]="min" [max]="max"
-                                         [value]="shiftDates" name="modelColor" #days hidden>
-                     </ngx-multiple-dates>
-                  </mat-form-field>
-               </div>
-            </div>
-            <div class="row">
-               <div class="row-name">Dagen:</div>
-               <div class="user-data">
-                  <mat-form-field>
-                     <mat-label for="options">Selectie:</mat-label>
-                     <mat-select [formControl]="daySelectionControl" id="options">
-                        <mat-option *ngFor="let option of selectionOptions" [value]="option">
-                        {{option}}
-                        </mat-option>
-                     </mat-select>
-                  </mat-form-field>
-                  <button mat-button class="override-button" id="addshiftbutton" (click)="addAllDays()">Voeg toe</button>
-               </div>
-            </div>
-         </div>
-         <div class="col-md-6 right">
-            <h2>Gekozen dagen:</h2>
-           <p *ngIf="shiftDates.length==0">N.N.T.B</p>
-            <mat-chip-list>
-               <mat-chip *ngFor="let day of shiftDates" [selectable]="selectable" [removable]="removable"
-                         (removed)="remove(day)">
-               <span>{{day | datePipe}}</span>
-               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-               </mat-chip>
-            </mat-chip-list>
-         </div>
-      </div>
+	<div class="row bar">
+		<h1>{{title}}</h1>
+		<div id="push">
+			<a
+				(click)="save(checkoutForm.value)"
+				mat-button
+				class="action-button override-button"
+				[disabled]="!checkoutForm.valid"
+				>Opslaan</a
+			>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 left">
+			<form [formGroup]="checkoutForm" (ngSubmit)="save(checkoutForm.value)">
+				<div class="row">
+					<div class="row-name">Taak:</div>
+					<div class="user-data">
+						<div>
+							<mat-form-field>
+								<mat-label for="Tasks"> Taak:</mat-label>
+								<mat-select [formControl]="taskControl" required>
+									<mat-option *ngFor="let task of tasks" [value]="task">
+										{{task.name}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="row-name">Vanaf:</div>
+					<div class="user-data">
+						<mat-form-field>
+							<mat-label> Starttijd:</mat-label>
+							<input matInput [formControl]="startTimeControl" [ngxTimepicker]="Starttime" [format]="24" readonly />
+							<ngx-material-timepicker
+								[cancelBtnTmpl]="cancelBtn"
+								[confirmBtnTmpl]="confirmBtn"
+								#Starttime></ngx-material-timepicker>
+							<ng-template #cancelBtn>
+								<button mat-button class="override-button">Annuleren</button>
+							</ng-template>
+							<ng-template #confirmBtn>
+								<button mat-button class="action-button override-button">Opslaan</button>
+							</ng-template>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="row">
+					<div class="row-name">Tot:</div>
+					<div class="user-data">
+						<mat-form-field>
+							<mat-label> Eindtijd:</mat-label>
+							<input matInput [formControl]="endTimeControl" [ngxTimepicker]="EndTime" [format]="24" readonly />
+							<ngx-material-timepicker
+								[cancelBtnTmpl]="cancelBtn"
+								[confirmBtnTmpl]="confirmBtn"
+								#EndTime></ngx-material-timepicker>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="row">
+					<div class="row-name">Aantal vrijwilligers:</div>
+					<div class="user-data">
+						<mat-form-field>
+							<mat-label for="requiredParticipants"> Aantal vrijwilligers </mat-label>
+							<input
+								matInput
+								[formControl]="participantsRequiredControl"
+								id="requiredParticipants"
+								type="number"
+								min="1" />
+						</mat-form-field>
+					</div>
+				</div>
+			</form>
+			<div class="row">
+				<div class="row-name">Dagen:</div>
+				<div class="user-data">
+					<mat-form-field>
+						<label id="open-label">Open Kalender</label>
+						<mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+						<mat-datepicker #picker></mat-datepicker>
+						<ngx-multiple-dates
+							[matDatepicker]="picker"
+							[(ngModel)]="shiftDates"
+							[min]="min"
+							[max]="max"
+							[value]="shiftDates"
+							name="modelColor"
+							#days
+							hidden>
+						</ngx-multiple-dates>
+					</mat-form-field>
+				</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Dagen:</div>
+				<div class="user-data">
+					<mat-form-field>
+						<mat-label for="options">Selectie:</mat-label>
+						<mat-select [formControl]="daySelectionControl" id="options">
+							<mat-option *ngFor="let option of selectionOptions" [value]="option">
+								{{option}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<button mat-button class="override-button" id="addshiftbutton" (click)="addAllDays()">Voeg toe</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 right">
+			<h2>Gekozen dagen:</h2>
+			<p *ngIf="shiftDates.length===0">N.N.T.B</p>
+			<mat-chip-listbox
+				><!--todo check if this still works-->
+				<mat-chip *ngFor="let day of shiftDates" [removable]="removable" (removed)="remove(day)">
+					<span>{{day | datePipe}}</span>
+					<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+				</mat-chip>
+			</mat-chip-listbox>
+		</div>
+	</div>
 </span>

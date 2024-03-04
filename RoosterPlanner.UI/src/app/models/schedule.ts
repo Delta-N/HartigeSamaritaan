@@ -1,15 +1,14 @@
-import {User} from './user';
-import {Availability} from './availability';
+﻿import { User } from './user';
+import { Availability } from './availability';
 
 export class Schedule {
-
-  public person: User;
-  public numberOfTimesScheduledThisProject: number;
-  public availabilityId: string;
-  public scheduledThisDay: boolean;
-  public scheduledThisShift: boolean;
-  public preference: boolean;
-  public availabilities: Availability[];
-  public hoursScheduledThisWeek: number;
-  public employability: number;
+	person: User;
+	numberOfTimesScheduledThisProject: number;
+	availabilityId: string;
+	scheduledThisDay: boolean;
+	scheduledThisShift: boolean;
+	preference: boolean;
+	availabilities: Availability[];
+	hoursScheduledThisWeek: number;
+	employability: number;
 }

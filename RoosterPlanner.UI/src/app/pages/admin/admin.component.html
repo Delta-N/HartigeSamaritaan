@@ -1,83 +1,89 @@
 <div class="row bar">
-  <h1>Administrator portaal</h1>
+	<h1>Administrator portaal</h1>
 </div>
-
 
 <div class="spinner" *ngIf="!loaded">
-  <mat-spinner></mat-spinner>
+	<mat-spinner></mat-spinner>
 </div>
 <div class="row cardholder" *ngIf="loaded">
+	<span *ngIf="projects.length===0">
+		<mat-card class="card">
+			<div>
+				<mat-card-title>Projecten</mat-card-title>
+			</div>
+			<mat-card-content>
+				<mat-card-actions>
+					<button mat-button (click)="addProject()">
+						<!--            <fa-icon [icon]="circleIcon"></fa-icon> -->
+						nieuw project toevoegen</button
+					>
+				</mat-card-actions>
+			</mat-card-content>
+		</mat-card>
+	</span>
 
-    <span *ngIf="projects.length===0">
-      <mat-card class="card">
-        <div>
-          <mat-card-title>Projecten</mat-card-title>
-        </div>
-        <mat-card-content>
-          <mat-card-actions>
-          <button mat-button (click)="addProject()"><fa-icon [icon]="circleIcon"></fa-icon> nieuw project toevoegen</button>
-          </mat-card-actions>
-        </mat-card-content>
-      </mat-card>
-    </span>
+	<mat-card [ngClass]="[projectCardStyle]" id="projectCard" [ngStyle]="projectCardStyle!=='card' && {'margin':'0'}">
+		<div>
+			<mat-card-title
+				>Projecten
+				<button
+					[disabled]="projectExpandbtnDisabled"
+					class="card-title-icon"
+					mat-icon-button
+					(click)="expandProjectCard()">
+					<mat-icon id="projectIcon">zoom_out_map</mat-icon>
+				</button>
+			</mat-card-title>
+		</div>
+		<mat-card-content [style.height.px]="projectsElementHeight">
+			<span *ngFor="let item of projects" class="mobilecard">
+				<a [routerLink]="['/project', item.id]"
+					><p [ngStyle]="{'text-decoration':(item|projectClosed)?'line-through':'initial'}">{{item.name}} </p>
+					<mat-icon style="color: red" *ngIf="item|projectClosed">close</mat-icon></a
+				>
+			</span>
+		</mat-card-content>
+		<mat-card-actions class="action-anchor">
+			<button mat-button (click)="addProject()">
+				<!--        <fa-icon [icon]="circleIcon"></fa-icon>-->
+				nieuw project toevoegen
+			</button>
+		</mat-card-actions>
+	</mat-card>
 
+	<mat-card [ngClass]="[adminCardStyle]" id="adminCard" [ngStyle]="adminCardStyle!=='card' && {'margin':'0'}">
+		<div>
+			<mat-card-title
+				>Administrators
+				<button [disabled]="adminExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandAdminCard()">
+					<mat-icon id="adminIcon">zoom_out_map</mat-icon>
+				</button>
+			</mat-card-title>
+		</div>
+		<mat-card-content>
+			<span *ngFor="let item of administrators">
+				<a [routerLink]="['profile', item.id]"
+					><p>{{item.firstName}} {{item.lastName}}</p></a
+				>
+			</span>
+		</mat-card-content>
+		<mat-card-actions class="action-anchor">
+			<button mat-button (click)="modAdmin()">
+				<!--        <fa-icon [icon]="editIcon"></fa-icon>-->
+				aanpassen
+			</button>
+		</mat-card-actions>
+	</mat-card>
 
-  <mat-card [ngClass]="[projectCardStyle]" id="projectCard" [ngStyle]="projectCardStyle!=='card' && {'margin':'0'}">
-    <div>
-      <mat-card-title>Projecten
-        <button [disabled]="projectExpandbtnDisabled" class="card-title-icon" mat-icon-button
-                (click)="expandProjectCard()">
-          <mat-icon id="projectIcon">zoom_out_map</mat-icon>
-        </button>
-      </mat-card-title>
-    </div>
-    <mat-card-content [style.height.px]="projectsElementHeight">
-          <span *ngFor="let item of projects" class="mobilecard">
-            <a [routerLink]="['/project', item.id]"><p
-              [ngStyle]="{'text-decoration':(item|projectClosed)?'line-through':'initial'}">{{item.name}}
-             </p> <mat-icon style="color: red" *ngIf="item|projectClosed">close</mat-icon></a>
-          </span>
-    </mat-card-content>
-    <mat-card-actions class="action-anchor">
-      <button mat-button (click)="addProject()">
-        <fa-icon [icon]="circleIcon"></fa-icon>
-        nieuw project toevoegen
-      </button>
-    </mat-card-actions>
-  </mat-card>
-
-
-  <mat-card [ngClass]="[adminCardStyle]" id="adminCard" [ngStyle]="adminCardStyle!=='card' && {'margin':'0'}">
-    <div>
-      <mat-card-title>Administrators
-        <button [disabled]="adminExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandAdminCard()">
-          <mat-icon id="adminIcon">zoom_out_map</mat-icon>
-        </button>
-      </mat-card-title>
-    </div>
-    <mat-card-content>
-          <span *ngFor="let item of administrators">
-            <a [routerLink]="['profile', item.id]"><p>{{item.firstName}} {{item.lastName}}</p></a>
-          </span>
-    </mat-card-content>
-    <mat-card-actions class="action-anchor">
-      <button mat-button (click)="modAdmin()">
-        <fa-icon [icon]="editIcon"></fa-icon>
-        aanpassen
-      </button>
-    </mat-card-actions>
-  </mat-card>
-
-  <mat-card class="card" id="dataCard">
-    <div>
-      <mat-card-title>Gegevens</mat-card-title>
-    </div>
-    <mat-card-content>
-      <a routerLink="tasks"><p>Taken, Categorieën, Certificaten</p></a>
-      <a (click)="uploadPP()"><p>Upload privacy policy</p></a>
-      <a [routerLink]="['employee']"><p>Lijst medewerkers</p></a>
-      <mat-card-actions class="action-anchor"></mat-card-actions>
-    </mat-card-content>
-  </mat-card>
+	<mat-card class="card" id="dataCard">
+		<div>
+			<mat-card-title>Gegevens</mat-card-title>
+		</div>
+		<mat-card-content>
+			<a routerLink="tasks"><p>Taken, Categorieën, Certificaten</p></a>
+			<a (click)="uploadPP()"><p>Upload privacy policy</p></a>
+			<a [routerLink]="['employee']"><p>Lijst medewerkers</p></a>
+			<mat-card-actions class="action-anchor"></mat-card-actions>
+		</mat-card-content>
+	</mat-card>
 </div>
-

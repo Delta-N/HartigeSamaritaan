@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Graph;
-using RoosterPlanner.Api.Models.Constants;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Models.Models.Enums;
-using Person = RoosterPlanner.Models.Person;
+using Person = RoosterPlanner.Models.Models.Person;
 
-namespace RoosterPlanner.Api.Models
+namespace RoosterPlanner.Api.Models.EntityViewModels
 {
     public class PersonViewModel : EntityViewModel
     {
@@ -107,7 +106,7 @@ namespace RoosterPlanner.Api.Models
         /// <param name="user"></param>
         /// <param name="extension"></param>
         /// <returns></returns>
-        public static PersonViewModel CreateVmFromUser(User user, Extensions extension)
+        public static PersonViewModel CreateVmFromUser(User user, Constants.Extensions extension)
         {
             PersonViewModel personViewModel = new PersonViewModel
             {
@@ -172,7 +171,7 @@ namespace RoosterPlanner.Api.Models
         /// <param name="vm"></param>
         /// <param name="extension"></param>
         /// <returns></returns>
-        public static User CreateUser(PersonViewModel vm, Extensions extension)
+        public static User CreateUser(PersonViewModel vm, Constants.Extensions extension)
         {
             if (vm == null || extension == null)
                 return null;
@@ -277,7 +276,7 @@ namespace RoosterPlanner.Api.Models
         /// <param name="person"></param>
         /// <param name="extension"></param>
         /// <returns></returns>
-        public static PersonViewModel CreateVmFromUserAndPerson(User user, Person person, Extensions extension)
+        public static PersonViewModel CreateVmFromUserAndPerson(User user, Person person, Constants.Extensions extension)
         {
             if (user == null || person == null)
                 return null;

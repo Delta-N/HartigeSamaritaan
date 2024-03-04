@@ -1,150 +1,303 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {AddProjectComponent} from './components/add-project/add-project.component';
-import {UserService} from './services/user.service';
-import {User} from './models/user';
-import {MSAL_GUARD_CONFIG} from './msal/constants';
-import {MsalGuardConfiguration} from './msal/msal.guard.config';
-import {MsalBroadcastService, MsalService} from './msal';
-import {EventMessage, EventType, InteractionType} from '@azure/msal-browser';
-import {filter, takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
-import * as moment from 'moment';
-import {JwtHelper} from './helpers/jwt-helper';
-import {ChangeProfilePictureComponent} from './components/change-profile-picture/change-profile-picture.component';
-import {Document} from './models/document';
-import {UploadService} from './services/upload.service';
-import {AcceptPrivacyPolicyComponent} from './components/accept-privacy-policy/accept-privacy-policy.component';
-import {faHome, faUserLock, faUserCog, faSignOutAlt, faUser, faUserEdit} from '@fortawesome/free-solid-svg-icons';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+	faHome,
+	faUserLock,
+	faUserCog,
+	faSignOutAlt,
+	faUser,
+	faUserEdit,
+} from '@fortawesome/free-solid-svg-icons';
+import { Subject, takeUntil } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { AddProjectComponent } from './components/add-project/add-project.component';
+import { MaterialModule } from './modules/material/material.module';
+import moment from 'moment';
+import {
+	UploadService,
+	DocumentViewModel,
+	PersonsService,
+	PersonViewModel,
+} from '@RoosterPlanner/openapi';
 
+import {
+	MSAL_GUARD_CONFIG,
+	MsalBroadcastService,
+	MsalGuardConfiguration,
+	MsalService,
+} from '@azure/msal-angular';
+import { ChangeProfilePictureComponent } from './components/change-profile-picture/change-profile-picture.component';
+import { AcceptPrivacyPolicyComponent } from './components/accept-privacy-policy/accept-privacy-policy.component';
+import {
+	AuthenticationResult,
+	EventMessage,
+	EventType,
+	InteractionStatus,
+	InteractionType,
+	PopupRequest,
+	RedirectRequest,
+} from '@azure/msal-browser';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { filter } from 'rxjs/operators';
+import { environment } from '../environments/environment';
+import { tapResponse } from '@ngrx/component-store';
+import { ErrorService } from './services/error.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from './services/user.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+	selector: 'app-root',
+	standalone: true,
+	imports: [
+		RouterOutlet,
+		MaterialModule,
+		BreadcrumbComponent,
+		RouterLink,
+		RouterLinkActive,
+	],
+	providers: [],
+	templateUrl: './app.component.html',
+	styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit, OnDestroy {
-  homeIcon = faHome;
-  adminIcon = faUserLock;
-  managerIcon = faUserCog;
-  signOutIcon = faSignOutAlt;
-  profileIcon = faUser;
-  editIcon = faUserEdit;
+	homeIcon = faHome;
+	adminIcon = faUserLock;
+	managerIcon = faUserCog;
+	signOutIcon = faSignOutAlt;
+	profileIcon = faUser;
+	editIcon = faUserEdit;
 
-  public hasUser = false;
-  title = 'Hartige Samaritaan';
-  isIframe = false;
-  loggedIn = false;
-  isAdmin = false;
-  isManager: boolean;
+	hasUser = false;
+	title = 'Hartige Samaritaan';
+	isIframe = false;
+	loggedIn = false;
+	isAdmin = false;
+	isManager: boolean;
 
-  user: User = new User();
-  PP: Document;
+	user: PersonViewModel;
+	PP: DocumentViewModel;
 
-  private readonly _destroying$ = new Subject<void>();
+	private readonly _destroying$ = new Subject<void>();
 
+	constructor(
+		public dialog: MatDialog,
 
-  constructor(public dialog: MatDialog,
-              private userService: UserService,
-              @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
-              private authService: MsalService,
-              private msalBroadcastService: MsalBroadcastService,
-              private uploadService: UploadService) {
-  }
+		private personService: PersonsService,
+		private userService: UserService,
+		@Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
+		private authService: MsalService,
+		private msalBroadcastService: MsalBroadcastService,
+		private uploadService: UploadService,
+		private errorService: ErrorService
+	) {}
 
-  async ngOnInit() {
-    moment.locale('nl');
-    this.isIframe = window !== window.parent && !window.opener;
-    this.isAuthenticated();
-    this.checkAccount();
+	async ngOnInit() {
+		moment.locale('nl');
+		this.isIframe = window !== window.parent && !window.opener;
+		await this.checkAccount();
 
+		this.authService.instance.enableAccountStorageEvents();
 
-    this.msalBroadcastService.msalSubject$
-      .pipe(
-        filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS || msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS),
-        takeUntil(this._destroying$)
-      )
-      .subscribe((result) => {
-        this.checkAccount();
-      });
+		this.msalBroadcastService.msalSubject$
+			.pipe(
+				filter(
+					(msg: EventMessage) =>
+						msg.eventType === EventType.ACCOUNT_ADDED ||
+						msg.eventType === EventType.ACCOUNT_REMOVED
+				)
+			)
+			.subscribe(({ eventType, payload }: EventMessage) => {
+				switch (eventType) {
+					case EventType.ACCOUNT_ADDED:
+					case EventType.ACCOUNT_REMOVED:
+						this.onAccountAddedOrRemoved();
+						break;
+					case EventType.LOGIN_SUCCESS:
+						this.onLoginSuccess(payload as AuthenticationResult);
+						break;
+				}
+			});
 
-    await this.uploadService.getPP().then(res => {
-      if (res) {
-        this.PP = res;
-      }
-    });
+		this.msalBroadcastService.inProgress$
+			.pipe(
+				takeUntil(this._destroying$),
+				filter((status: InteractionStatus) => status === InteractionStatus.None)
+			)
+			.subscribe(() => {
+				this.checkAccount();
+			});
 
-    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'));
-    await this.userService.getUser(idToken.oid).then(async user => {
-      if (user) {
-        this.user = user;
+		this.uploadService
+			.apiUploadPrivacyPolicyGet()
+			.pipe(
+				tapResponse(
+					(res) => {
+						this.PP = res;
+					},
+					(error: HttpErrorResponse) => {
+						this.errorService.httpError(error);
+					}
+				)
+			)
+			.subscribe();
 
-        if (this.PP && (!this.user.termsOfUseConsented || moment(this.PP.lastEditDate) > moment(this.user.termsOfUseConsented))) {
-          this.promptPPAccept();
-        }
-      }
-    });
-  }
+		const idToken =
+			this.authService.instance.getActiveAccount()?.localAccountId;
+		this.personService
+			.apiPersonsIdGet(idToken!)
+			.pipe(
+				tapResponse(
+					(res) => {
+						this.user = res;
+						if (
+							this.PP &&
+							(!this.user.termsOfUseConsented ||
+								moment(this.PP.lastEditDate) >
+									moment(this.user.termsOfUseConsented))
+						)
+							this.promptPPAccept();
+					},
+					(error: HttpErrorResponse) => {
+						this.errorService.httpError(error);
+					}
+				)
+			)
+			.subscribe();
+	}
 
-  async checkAccount() {
-    this.loggedIn = this.authService.getAllAccounts().length > 0;
-    this.isAdmin = this.userService.userIsAdminFrontEnd();
-    this.isManager = this.userService.userIsProjectAdminFrontEnd();
-  }
+	private onAccountAddedOrRemoved(): void {
+		const countAllAccounts = this.authService.instance.getAllAccounts().length;
+		if (!countAllAccounts) {
+			window.location.pathname = '/';
+		} else {
+			this.checkAccount();
+		}
+	}
 
-  openDialog() {
-    this.dialog.open(AddProjectComponent);
-  }
+	private onLoginSuccess(payload: AuthenticationResult): void {
+		if (!payload?.account) {
+			return;
+		}
+		this.authService.instance.setActiveAccount(payload?.account);
+	}
 
-  logout() {
-    this.authService.logout();
-  }
+	async checkAccount() {
+		const activeAccount = this.authService.instance.getActiveAccount();
 
-  login() {
-    if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
-      this.authService.loginPopup({...this.msalGuardConfig.authRequest})
-        .subscribe(() => this.checkAccount());
-    } else {
-      this.authService.loginRedirect({...this.msalGuardConfig.authRequest});
-    }
-  }
+		if (
+			!activeAccount &&
+			this.authService.instance.getAllAccounts().length > 0
+		) {
+			const accounts = this.authService.instance.getAllAccounts();
+			this.authService.instance.setActiveAccount(accounts[0]);
+		}
+		this.loggedIn = this.authService.instance.getAllAccounts().length > 0;
+		this.isAdmin = this.userService.userIsAdminFrontEnd();
+		this.isManager = this.userService.userIsProjectAdminFrontEnd();
+	}
 
-  ngOnDestroy(): void {
-    this._destroying$.next(null);
-    this._destroying$.complete();
-  }
+	openDialog() {
+		this.dialog.open(AddProjectComponent);
+	}
 
-  private isAuthenticated(): void {
-    const account = this.authService.getAllAccounts()[0];
-    this.hasUser = !!account;
-  }
+	login(userFlowRequest?: RedirectRequest | PopupRequest) {
+		if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
+			if (this.msalGuardConfig.authRequest) {
+				this.authService
+					.loginPopup({
+						...this.msalGuardConfig.authRequest,
+						...userFlowRequest,
+					} as PopupRequest)
+					.subscribe((response: AuthenticationResult) => {
+						this.authService.instance.setActiveAccount(response.account);
+					});
+			} else {
+				this.authService
+					.loginPopup(userFlowRequest)
+					.subscribe((response: AuthenticationResult) => {
+						this.authService.instance.setActiveAccount(response.account);
+					});
+			}
+		} else {
+			if (this.msalGuardConfig.authRequest) {
+				this.authService.loginRedirect({
+					...this.msalGuardConfig.authRequest,
+					...userFlowRequest,
+				} as RedirectRequest);
+			} else {
+				this.authService.loginRedirect(userFlowRequest);
+			}
+		}
+	}
 
-  promptPPAccept() {
-    const dialogRef = this.dialog.open(AcceptPrivacyPolicyComponent, {
-      width: '95vw',
-      height: '95vh',
-      data: this.PP
-    });
-    dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result && result === 'true') {
-        this.user.termsOfUseConsented = moment().subtract(moment().utcOffset(), 'minutes').toDate().toISOString();
-        await this.userService.updateUser(this.user).then(() => window.location.reload());
-      }
-    });
-  }
+	logout() {
+		if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
+			this.authService.logoutPopup({
+				mainWindowRedirectUri: '/',
+			});
+		} else {
+			this.authService.logoutRedirect();
+		}
+	}
 
-  changeProfilePicture() {
-    const dialogRef = this.dialog.open(ChangeProfilePictureComponent, {
-      width: '300px',
-      data: this.user
-    });
-    dialogRef.disableClose = false;
-    dialogRef.afterClosed().subscribe(res => {
-      if (res) {
-        window.location.reload();
-      }
-    });
-  }
+	editProfile() {
+		const editProfileFlowRequest: RedirectRequest | PopupRequest = {
+			authority: environment.b2cPolicies.authorities.editProfile.authority,
+			scopes: [],
+		};
+
+		this.login(editProfileFlowRequest);
+	}
+
+	ngOnDestroy(): void {
+		this._destroying$.next(undefined);
+		this._destroying$.complete();
+	}
+
+	private isAuthenticated(): void {
+		this.hasUser = this.authService.instance.getAllAccounts().length > 0;
+	}
+
+	promptPPAccept() {
+		const dialogRef = this.dialog.open(AcceptPrivacyPolicyComponent, {
+			width: '95vw',
+			height: '95vh',
+			data: this.PP,
+		});
+		dialogRef.disableClose = true;
+		dialogRef.afterClosed().subscribe(async (result) => {
+			if (result && result === 'true') {
+				this.user.termsOfUseConsented = moment()
+					.subtract(moment().utcOffset(), 'minutes')
+					.toDate()
+					.toISOString();
+				this.personService
+					.apiPersonsUpdatePersonPut(this.user)
+					.pipe(
+						tapResponse(
+							(res) => {
+								this.user = res;
+							},
+							(error: HttpErrorResponse) => {
+								this.errorService.httpError(error);
+							}
+						)
+					)
+					.subscribe();
+			}
+		});
+	}
+
+	changeProfilePicture() {
+		const dialogRef = this.dialog.open(ChangeProfilePictureComponent, {
+			width: '300px',
+			data: this.user,
+		});
+		dialogRef.disableClose = false;
+		dialogRef.afterClosed().subscribe((res) => {
+			if (res) {
+				window.location.reload();
+			}
+		});
+	}
 }
-

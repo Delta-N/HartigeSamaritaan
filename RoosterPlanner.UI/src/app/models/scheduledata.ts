@@ -1,7 +1,7 @@
-import {Schedule} from './schedule';
-import {Shift} from './shift';
+﻿import { Schedule } from './schedule';
+import { Shift } from './shift';
 
 export class Scheduledata {
-  public schedules: Schedule[];
-  public shift: Shift;
+	schedules: Schedule[];
+	shift: Shift;
 }

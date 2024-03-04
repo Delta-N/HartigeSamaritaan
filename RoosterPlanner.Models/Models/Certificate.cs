@@ -1,8 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Certificate : Entity
     {
@@ -23,13 +22,11 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the PersonId
         /// </summary>
-        [Column(Order = 3)]
         public Guid PersonId { get; set; }
 
         /// <summary>
         /// Gets or sets the CertificateTypeId
         /// </summary>
-        [Column(Order = 4)]
         public Guid? CertificateTypeId { get; set; }
 
         /// <summary>

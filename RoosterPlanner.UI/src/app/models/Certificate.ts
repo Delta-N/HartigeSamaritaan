@@ -1,10 +1,10 @@
-import {Entity} from './entity.model';
-import {User} from './user';
-import {CertificateType} from './CertificateType';
+﻿import { Entity } from './entity.model';
+import { User } from './user';
+import { CertificateType } from './CertificateType';
 
 export class Certificate extends Entity {
-  public dateIssued: Date;
-  public dateExpired: Date;
-  public person: User;
-  public certificateType: CertificateType;
+	dateIssued: Date;
+	dateExpired: Date | null;
+	person: User;
+	certificateType: CertificateType;
 }

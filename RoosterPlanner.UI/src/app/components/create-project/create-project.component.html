@@ -1,104 +1,100 @@
 <h2 mat-dialog-title>{{title}}</h2>
 
 <div mat-dialog-content>
-  <form [formGroup]="checkoutForm" (ngSubmit)="saveProject(checkoutForm.value)">
-    <div>
-      <mat-form-field>
-        <mat-label for="name">
-          Naam
-        </mat-label>
-        <input matInput id="name" type="text" formControlName="name" placeholder="Project naam">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label for="address">
-          Adres
-        </mat-label>
-        <input matInput id="address" type="text" formControlName="address" placeholder="Address">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label for="city">
-          Stad
-        </mat-label>
-        <input matInput id="city" type="text" formControlName="city" placeholder="Stad">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label for="description">
-          Omschrijving
-        </mat-label>
-        <input matInput id="description" type="text" formControlName="description" placeholder="Omschrijving">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label for="projectStartDate">
-          Project Startdatum
-        </mat-label>
-        <input matInput id="projectStartDate" type="text" formControlName="projectStartDate" placeholder="dd-mm-yyyy">
-      </mat-form-field>
-    </div>
+	<form [formGroup]="checkoutForm" (ngSubmit)="saveProject(checkoutForm.value)">
+		<div>
+			<mat-form-field>
+				<mat-label for="name"> Naam </mat-label>
+				<input matInput id="name" type="text" formControlName="name" placeholder="Project naam" />
+			</mat-form-field>
+		</div>
+		<div>
+			<mat-form-field>
+				<mat-label for="address"> Adres </mat-label>
+				<input matInput id="address" type="text" formControlName="address" placeholder="Address" />
+			</mat-form-field>
+		</div>
+		<div>
+			<mat-form-field>
+				<mat-label for="city"> Stad </mat-label>
+				<input matInput id="city" type="text" formControlName="city" placeholder="Stad" />
+			</mat-form-field>
+		</div>
+		<div>
+			<mat-form-field>
+				<mat-label for="description"> Omschrijving </mat-label>
+				<input matInput id="description" type="text" formControlName="description" placeholder="Omschrijving" />
+			</mat-form-field>
+		</div>
+		<div>
+			<mat-form-field>
+				<mat-label for="projectStartDate"> Project Startdatum </mat-label>
+				<input matInput id="projectStartDate" type="text" formControlName="projectStartDate" placeholder="dd-mm-yyyy" />
+			</mat-form-field>
+		</div>
 
-    <div>
-      <mat-form-field>
-        <mat-label for="projectEndDate">
-          Project Einddatum
-        </mat-label>
-        <input matInput id="projectEndDate" type="text" formControlName="projectEndDate" placeholder="dd-mm-yyyy">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label for="participationStartDate">
-          Deelname Startdatum
-        </mat-label>
-        <input matInput id="participationStartDate" type="text" formControlName="participationStartDate" placeholder="dd-mm-yyyy">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label for="participationEndDate">
-          Deelname Einddatum
-        </mat-label>
-        <input matInput id="participationEndDate" type="text" formControlName="participationEndDate" placeholder="dd-mm-yyyy">
-      </mat-form-field>
-    </div>
-    <mat-form-field>
-      <mat-label for="contactAdres">
-        Contact E-mailadres
-      </mat-label>
-      <input matInput id="contactAdres" type="text" formControlName="contactAdres" placeholder="E-mailadres">
-    </mat-form-field>
+		<div>
+			<mat-form-field>
+				<mat-label for="projectEndDate"> Project Einddatum </mat-label>
+				<input matInput id="projectEndDate" type="text" formControlName="projectEndDate" placeholder="dd-mm-yyyy" />
+			</mat-form-field>
+		</div>
+		<div>
+			<mat-form-field>
+				<mat-label for="participationStartDate"> Deelname Startdatum </mat-label>
+				<input
+					matInput
+					id="participationStartDate"
+					type="text"
+					formControlName="participationStartDate"
+					placeholder="dd-mm-yyyy" />
+			</mat-form-field>
+		</div>
+		<div>
+			<mat-form-field>
+				<mat-label for="participationEndDate"> Deelname Einddatum </mat-label>
+				<input
+					matInput
+					id="participationEndDate"
+					type="text"
+					formControlName="participationEndDate"
+					placeholder="dd-mm-yyyy" />
+			</mat-form-field>
+		</div>
+		<mat-form-field>
+			<mat-label for="contactAdres"> Contact E-mailadres </mat-label>
+			<input matInput id="contactAdres" type="text" formControlName="contactAdres" placeholder="E-mailadres" />
+		</mat-form-field>
 
-    <mat-form-field>
-      <mat-label for="websiteUrl">
-        Website URL
-      </mat-label>
-      <input matInput id="websiteUrl" type="text" formControlName="websiteUrl" placeholder="Hyperlink van de website">
-    </mat-form-field>
+		<mat-form-field>
+			<mat-label for="websiteUrl"> Website URL </mat-label>
+			<input matInput id="websiteUrl" type="text" formControlName="websiteUrl" placeholder="Hyperlink van de website" />
+		</mat-form-field>
 
-    <div>
-      <label for="file"
-             class="custom-file-upload">{{this.project.pictureUri == null ? "Afbeelding toevoegen" : "Afbeelding vervangen"}}</label>
-      <span *ngIf="this.files!=null">{{this.files[0].name}}</span>
-      <input #fileInput type="file" id="file" accept="image/x-png,image/gif,image/jpeg" (change)="uploadPicture(fileInput.files)"/>
-      <img *ngIf="project.pictureUri!=null" id="pictureFrame" src="{{project.pictureUri.documentUri}}"
-           alt="Project picture"/>
-    </div>
-
-
-  </form>
-
+		<div>
+			<label
+				for="file"
+				class="custom-file-upload"
+				>{{this.project.pictureUri === null ? "Afbeelding toevoegen" : "Afbeelding vervangen"}}</label
+			>
+			<span *ngIf="this.files!==null">{{this.files[0].name}}</span>
+			<input
+				#fileInput
+				type="file"
+				id="file"
+				accept="image/x-png,image/gif,image/jpeg"
+				(change)="uploadPicture(fileInput.files)" />
+			<img
+				*ngIf="project.pictureUri!==null"
+				id="pictureFrame"
+				src="{{project.pictureUri.documentUri}}"
+				alt="Project picture" />
+		</div>
+	</form>
 </div>
 <mat-dialog-actions>
-  <div class="align-right">
-    <button class="action-button override-button" mat-button  (click)="saveProject(checkoutForm.value)">Opslaan</button>
-    <button mat-button class="override-button" mat-dialog-close="false">Annuleren</button>
-  </div>
+	<div class="align-right">
+		<button class="action-button override-button" mat-button (click)="saveProject(checkoutForm.value)">Opslaan</button>
+		<button mat-button class="override-button" mat-dialog-close="false">Annuleren</button>
+	</div>
 </mat-dialog-actions>
-
-
