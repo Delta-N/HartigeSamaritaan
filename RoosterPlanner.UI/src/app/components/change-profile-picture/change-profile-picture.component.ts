@@ -40,7 +40,7 @@ export class ChangeProfilePictureComponent implements OnInit {
 					uri = url.path.trim();
 			});
 
-			if (this.user.profilePicture != null) {
+			if (this.user.profilePicture !== null) {
 				await this.uploadService
 					.deleteIfExists(this.user.profilePicture.documentUri ?? '')
 					.then();

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Project } from '../../models/project';
@@ -12,15 +12,13 @@ import { MaterialModule } from '../../modules/material/material.module';
 
 	styleUrls: ['./add-project.component.scss'],
 })
-export class AddProjectComponent implements OnInit {
+export class AddProjectComponent {
 	selectedProjects: Project[] = [];
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
 		public dialogRef: MatDialogRef<AddProjectComponent>
 	) {}
-
-	ngOnInit(): void {}
 
 	OnChange(event: MatCheckboxChange) {
 		const project: Project = this.data.find((p) => p.id === event.source.id);

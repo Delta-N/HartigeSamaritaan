@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { HttpRoutes } from '../helpers/HttpRoutes';

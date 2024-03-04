@@ -29,7 +29,7 @@ export class ManageComponent implements OnInit {
 	async ngOnInit(): Promise<void> {
 		const userId: string = this.userService.getCurrentUserId();
 		await this.userService.getProjectsManagedBy(userId).then((res) => {
-			if (res != null) {
+			if (res !== null) {
 				res.forEach((m) => this.projects.push(m.project));
 			}
 			this.loaded = true;

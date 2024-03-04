@@ -7,7 +7,6 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ParticipationService } from '../../services/participation.service';
 import { UserService } from '../../services/user.service';
 import { TextInjectorService } from '../../services/text-injector.service';
-import { Breadcrumb } from '../../models/breadcrumb';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { DateConverter } from '../../helpers/date-converter';
 import { AgePipe } from '../../helpers/filter.pipe';
@@ -70,7 +69,7 @@ export class EmployeeComponent implements OnInit {
 
 		this.dataSource.filterPredicate = (data, filter) => {
 			return (
-				(data != null &&
+				(data !== null &&
 					(data.firstName + ' ' + data.lastName)
 						.toLocaleLowerCase()
 						.includes(filter)) ||
@@ -87,11 +86,11 @@ export class EmployeeComponent implements OnInit {
 		this.dataSource.sortingDataAccessor = (item, property) => {
 			switch (property) {
 				case 'Naam':
-					return item != null ? item.firstName + ' ' + item.lastName : null;
+					return item !== null ? item.firstName + ' ' + item.lastName : null;
 				case 'Leeftijd':
 					return DateConverter.calculateAge(item.dateOfBirth);
 				case 'Nationaliteit':
-					return item != null ? item.nationality : null;
+					return item !== null ? item.nationality : null;
 				default:
 					return item[property];
 			}

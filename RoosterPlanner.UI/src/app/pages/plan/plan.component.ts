@@ -269,7 +269,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 		this.allEvents.forEach((e) => {
 			let contains: boolean = false;
 			this.displayedProjectTasks.forEach((d) => {
-				if (d.name == e.title) {
+				if (d.name === e.title) {
 					contains = true;
 				}
 			});
@@ -314,7 +314,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
 	fillSpacer() {
 		this.filteredEvents.forEach((e) => {
-			const shift = this.shifts?.find((s) => s.id == e.id);
+			const shift = this.shifts?.find((s) => s.id === e.id);
 			if (e.end && (e.end?.getTime() - e.start.getTime()) / 3600000 <= 1) {
 				//verberg title
 				const element = this.getTitleElement(e);
@@ -366,7 +366,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
 	OnCheckboxChange($event: MatCheckboxChange) {
 		const task = this.availabilityData.projectTasks.find(
-			(pt) => pt.id == $event.source.id
+			(pt) => pt.id === $event.source.id
 		);
 		if ($event.checked && task) {
 			if (!this.displayedProjectTasks.includes(task))

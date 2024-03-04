@@ -37,32 +37,37 @@ export class AddTaskComponent implements OnInit {
 		private categoryService: CategoryService,
 		private uploadService: UploadService
 	) {
-		data.task != null ? (this.task = data.task) : (this.task = new Task());
+		data.task !== null ? (this.task = data.task) : (this.task = new Task());
 
 		this.modifier = data.modifier;
 		this.categoryControl = new FormControl('', Validators.required);
 		this.colorControl = new FormControl(
-			this.task.color != null ? this.task.color : '',
+			this.task.color !== null ? this.task.color : '',
 			Validators.required
 		);
 
 		this.checkoutForm = this.formBuilder.group({
 			id: [
-				this.task.id != null ? this.task.id : EntityHelper.returnEmptyGuid(),
+				this.task.id !== null ? this.task.id : EntityHelper.returnEmptyGuid(),
 			],
-			name: [this.task.name != null ? this.task.name : '', Validators.required],
+			name: [
+				this.task.name !== null ? this.task.name : '',
+				Validators.required,
+			],
 			category: this.categoryControl,
 			color: this.colorControl,
-			description: [this.task.description != null ? this.task.description : ''],
+			description: [
+				this.task.description !== null ? this.task.description : '',
+			],
 		});
 	}
 
 	ngOnInit(): void {
 		this.categoryService.getAllCategory().then((response) => {
 			this.categories = response;
-			if (this.task.category != null) {
+			if (this.task.category !== null) {
 				this.categoryControl.setValue(
-					this.categories.find((c) => c.name == this.task.category.name)
+					this.categories.find((c) => c.name === this.task.category.name)
 				);
 			}
 		});

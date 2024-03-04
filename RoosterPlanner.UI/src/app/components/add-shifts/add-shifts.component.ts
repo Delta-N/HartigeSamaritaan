@@ -92,7 +92,7 @@ export class AddShiftsComponent implements OnInit {
 		});
 
 		this.taskService.getAllProjectTasks(this.guid).then((tasks) => {
-			this.tasks = tasks?.filter((t) => t != null);
+			this.tasks = tasks?.filter((t) => t !== null);
 		});
 
 		await this.projectService.getProject(this.guid).then(async (project) => {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +11,7 @@ import { EntityHelper } from '../../helpers/entity-helper';
 	templateUrl: './add-certificatetype.component.html',
 	styleUrls: ['./add-certificatetype.component.scss'],
 })
-export class AddCertificatetypeComponent implements OnInit {
+export class AddCertificatetypeComponent {
 	modifier: string = 'toevoegen';
 	checkoutForm;
 	certificateType: CertificateType;
@@ -24,28 +24,26 @@ export class AddCertificatetypeComponent implements OnInit {
 		public dialogRef: MatDialogRef<AddCertificatetypeComponent>,
 		private certificateService: CertificateService
 	) {
-		data.certificateType != null
+		data.certificateType !== null
 			? (this.certificateType = data.certificateType)
 			: (this.certificateType = new CertificateType());
 		this.modifier = data.modifier;
 
 		this.checkoutForm = this.formBuilder.group({
 			id: [
-				this.certificateType.id != null
+				this.certificateType.id !== null
 					? this.certificateType.id
 					: EntityHelper.returnEmptyGuid(),
 			],
 			name: [
-				this.certificateType.name != null ? this.certificateType.name : '',
+				this.certificateType.name !== null ? this.certificateType.name : '',
 				Validators.required,
 			],
 			level: [
-				this.certificateType.level != null ? this.certificateType.level : '',
+				this.certificateType.level !== null ? this.certificateType.level : '',
 			],
 		});
 	}
-
-	ngOnInit(): void {}
 
 	close() {
 		this.dialogRef.close('false');

@@ -1,6 +1,5 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatFormField } from '@angular/material/form-field';
+import { Component, Inject } from '@angular/core';
 import { MaterialModule } from '../../modules/material/material.module';
 
 @Component({
@@ -10,7 +9,7 @@ import { MaterialModule } from '../../modules/material/material.module';
 	imports: [MaterialModule],
 	styleUrls: ['./confirm-dialog.component.scss'],
 })
-export class ConfirmDialogComponent implements OnInit {
+export class ConfirmDialogComponent {
 	title: string;
 	message: string;
 	type: string;
@@ -25,8 +24,6 @@ export class ConfirmDialogComponent implements OnInit {
 		this.type = data.type;
 		this.value = data.inputvalue;
 	}
-
-	ngOnInit() {}
 
 	onConfirm(): void {
 		this.dialogRef.close(true);

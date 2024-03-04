@@ -72,11 +72,10 @@ export class ScheduleComponent implements OnInit {
 
 						this.dataSource = new MatTableDataSource<Availability>(all);
 
-						// @ts-ignore
 						this.dataSource.sortingDataAccessor = (item, property) => {
 							switch (property) {
 								case 'Taak':
-									return item.shift.task != null ? item.shift.task.name : null;
+									return item.shift.task !== null ? item.shift.task.name : null;
 								case 'Datum':
 									return item.shift.date;
 								case 'Vanaf':

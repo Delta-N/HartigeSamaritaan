@@ -41,11 +41,11 @@ export class AddAdminComponent implements OnInit {
 
 	nextPage() {
 		if (this.currentTabIndex === 0) {
-			if (this.currentPage != Math.ceil(this.users.length / this.pageSize)) {
+			if (this.currentPage !== Math.ceil(this.users.length / this.pageSize)) {
 				this.currentPage++;
 			}
 		} else {
-			if (this.currentPage != Math.ceil(this.admins.length / this.pageSize)) {
+			if (this.currentPage !== Math.ceil(this.admins.length / this.pageSize)) {
 				this.currentPage++;
 			}
 		}
@@ -55,7 +55,7 @@ export class AddAdminComponent implements OnInit {
 	}
 
 	prevPage() {
-		if (this.currentPage != 1) {
+		if (this.currentPage !== 1) {
 			this.currentPage--;
 		}
 		setTimeout(() => {

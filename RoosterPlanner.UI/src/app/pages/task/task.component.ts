@@ -19,7 +19,6 @@ import {
 	faEdit,
 	faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatCard } from '@angular/material/card';
 import { MaterialModule } from '../../modules/material/material.module';
 import { AdminModule } from '../../modules/admin/admin.module';
 

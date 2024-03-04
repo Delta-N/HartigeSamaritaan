@@ -58,10 +58,10 @@ export class TaskService {
 
 	async postTask(task: Task): Promise<Task | null> {
 		if (
-			task == null ||
-			task.name == null ||
-			task.category == null ||
-			task.category.id == null
+			task === null ||
+			task.name === null ||
+			task.category === null ||
+			task.category.id === null
 		) {
 			this.errorService.error('Ongeldige taak');
 			return null;
@@ -86,10 +86,10 @@ export class TaskService {
 
 	async updateTask(updatedTask: Task): Promise<Task | null> {
 		if (
-			updatedTask == null ||
-			updatedTask.name == null ||
-			updatedTask.category == null ||
-			updatedTask.category.id == null
+			updatedTask === null ||
+			updatedTask.name === null ||
+			updatedTask.category === null ||
+			updatedTask.category.id === null
 		) {
 			this.errorService.error('Ongeldige taak');
 			return null;

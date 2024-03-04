@@ -10,11 +10,8 @@ import { RequirementComponent } from './pages/requirement/requirement.component'
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { CertificateComponent } from './pages/certificate/certificate.component';
-import { manageCanActivateGuard, ManageGuard } from './guards/manage.guard';
-import {
-	authCanActivateGuard,
-	AuthorizationGuard,
-} from './guards/authorization.guard';
+import { manageCanActivateGuard } from './guards/manage.guard';
+import { authCanActivateGuard } from './guards/authorization.guard';
 
 export const routes: Routes = [
 	{

@@ -121,7 +121,7 @@ export class ShiftOverviewComponent implements OnInit {
 		this.dataSource.sortingDataAccessor = (item, property) => {
 			switch (property) {
 				case 'Taak':
-					return item.task != null ? item.task.name : null;
+					return item.task !== null ? item.task.name : null;
 				case 'Datum':
 					return item.date;
 				case 'Vanaf':
@@ -170,7 +170,7 @@ export class ShiftOverviewComponent implements OnInit {
 	}
 
 	OnCheckboxChange($event: MatCheckboxChange) {
-		const task = this.shiftData.tasks.find((pt) => pt.id == $event.source.id);
+		const task = this.shiftData.tasks.find((pt) => pt.id === $event.source.id);
 		if ($event.checked && task) this.selectedTasks.push(task);
 		else {
 			const st = this.selectedTasks.find((st) => st.id === $event.source.id);

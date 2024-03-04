@@ -13,7 +13,7 @@
 			</div>
 			<div class="row">
 				<div class="row-name">Categorie:</div>
-				<div class="user-data">{{task.category != null ? task.category.name : null}}</div>
+				<div class="user-data">{{task.category !== null ? task.category.name : null}}</div>
 			</div>
 			<div class="row" *ngIf="isAdmin">
 				<div class="row-name">Shiftkleur:</div>
@@ -58,7 +58,7 @@
 							<p>{{item.certificateType.name}}</p>
 						</a>
 					</span>
-					<span *ngIf="!displayRequirements || displayRequirements.length==0">N.N.T.B.</span>
+					<span *ngIf="!displayRequirements || displayRequirements.length===0">N.N.T.B.</span>
 					<mat-card-actions class="action-anchor"></mat-card-actions>
 				</mat-card-content>
 				<mat-card-actions class="action-anchor" *ngIf="isAdmin">
@@ -89,7 +89,7 @@
 							<p>{{item.certificateType.name}}</p>
 						</a>
 					</span>
-					<span *ngIf="!task.requirements || task.requirements.length==0">N.N.T.B.</span>
+					<span *ngIf="!task.requirements || task.requirements.length===0">N.N.T.B.</span>
 					<mat-card-actions class="action-anchor"></mat-card-actions>
 				</mat-card-content>
 				<mat-card-actions class="action-anchor" *ngIf="isAdmin">

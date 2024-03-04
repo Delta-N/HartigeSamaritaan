@@ -21,12 +21,17 @@
       },
       "extends": [
         "eslint:recommended",
+        "plugin:eqeqeq-fix/recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates",
         "prettier"
       ],
       "rules": {
+        "eqeqeq": [
+          "error",
+          "always"
+        ],
         "prettier/prettier": [
           "error",
           {
@@ -96,6 +101,9 @@
         "*.spec.ts"
       ],
       "rules": {
+        "@typescript-eslint/no-unused-vars": [
+          "off"
+        ],
         "@typescript-eslint/no-explicit-any": [
           "off"
         ]
@@ -107,6 +115,7 @@
       ],
       "extends": [
         "plugin:@angular-eslint/template/recommended",
+        "plugin:eqeqeq-fix/recommended",
         "prettier"
       ],
       "rules": {
@@ -145,6 +154,7 @@
         "*.ts"
       ],
       "extends": [
+        "plugin:eqeqeq-fix/recommended",
         "plugin:@ngrx/recommended"
       ]
     }

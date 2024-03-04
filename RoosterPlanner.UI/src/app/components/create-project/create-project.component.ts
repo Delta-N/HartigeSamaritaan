@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Project } from '../../models/project';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
@@ -15,7 +15,7 @@ import { TextInjectorService } from '../../services/text-injector.service';
 	templateUrl: './create-project.component.html',
 	styleUrls: ['./create-project.component.scss'],
 })
-export class CreateProjectComponent implements OnInit {
+export class CreateProjectComponent {
 	project: Project = new Project();
 	updatedProject: Project | null;
 	checkoutForm: any;
@@ -36,57 +36,55 @@ export class CreateProjectComponent implements OnInit {
 		}
 		this.title = this.data.title;
 		this.checkoutForm = this.formBuilder.group({
-			id: this.project.id != null ? this.project.id : '',
+			id: this.project.id !== null ? this.project.id : '',
 			name: [
-				this.project.name != null ? this.project.name : '',
+				this.project.name !== null ? this.project.name : '',
 				Validators.required,
 			],
 			address: [
-				this.project.address != null ? this.project.address : '',
+				this.project.address !== null ? this.project.address : '',
 				Validators.required,
 			],
 			city: [
-				this.project.city != null ? this.project.city : '',
+				this.project.city !== null ? this.project.city : '',
 				Validators.required,
 			],
 			description: [
-				this.project.description != null ? this.project.description : '',
+				this.project.description !== null ? this.project.description : '',
 				Validators.required,
 			],
 			participationStartDate: [
-				this.project.participationStartDate != null
+				this.project.participationStartDate !== null
 					? this.project.participationStartDate
 					: '',
 				Validator.date,
 			],
 			participationEndDate: [
-				this.project.participationEndDate != null
+				this.project.participationEndDate !== null
 					? this.project.participationEndDate
 					: '',
 				[Validator.dateOrNull],
 			],
 			projectStartDate: [
-				this.project.projectStartDate != null
+				this.project.projectStartDate !== null
 					? this.project.projectStartDate
 					: today,
 				Validator.date,
 			],
 			projectEndDate: [
-				this.project.projectEndDate != null ? this.project.projectEndDate : '',
+				this.project.projectEndDate !== null ? this.project.projectEndDate : '',
 				Validator.date,
 			],
 			pictureUri:
-				this.project.pictureUri != null ? this.project.pictureUri : null,
+				this.project.pictureUri !== null ? this.project.pictureUri : null,
 			websiteUrl:
-				this.project.websiteUrl != null ? this.project.websiteUrl : '',
+				this.project.websiteUrl !== null ? this.project.websiteUrl : '',
 			contactAdres: [
-				this.project.contactAdres != null ? this.project.contactAdres : '',
+				this.project.contactAdres !== null ? this.project.contactAdres : '',
 				Validator.email,
 			],
 		});
 	}
-
-	ngOnInit(): void {}
 
 	async saveProject(value: Project) {
 		this.updatedProject = value;
@@ -102,7 +100,7 @@ export class CreateProjectComponent implements OnInit {
 			);
 			//alleen participation end date is optioneel
 			let parEdate: Date | null = null;
-			this.updatedProject.participationEndDate != null
+			this.updatedProject.participationEndDate !== null
 				? (parEdate = DateConverter.toDate(
 						this.updatedProject.participationEndDate
 					))
@@ -120,13 +118,13 @@ export class CreateProjectComponent implements OnInit {
 				);
 				return;
 			}
-			if (parEdate != null && parEdate < parSdate) {
+			if (parEdate !== null && parEdate < parSdate) {
 				this.toastr.error(
 					'Participatie eindatum mag niet voor de participatie startdatum liggen'
 				);
 				return;
 			}
-			if (parEdate != null && parEdate > (prEdate || parEdate < prSdate)) {
+			if (parEdate !== null && parEdate > (prEdate || parEdate < prSdate)) {
 				this.toastr.error(
 					'Participatie einddatum moet tussen projectstart en project einddatum liggen'
 				);
@@ -143,7 +141,7 @@ export class CreateProjectComponent implements OnInit {
 						uri = url.path.trim();
 				});
 
-				if (this.project.pictureUri != null) {
+				if (this.project.pictureUri !== null) {
 					await this.uploadService
 						.deleteIfExists(this.project.pictureUri.documentUri ?? '')
 						.then();

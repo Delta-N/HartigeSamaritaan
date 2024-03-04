@@ -31,7 +31,6 @@ import {
 	faTrashAlt,
 	faUserFriends,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatCardTitle } from '@angular/material/card';
 import { MaterialModule } from '../../modules/material/material.module';
 
 @Component({
@@ -101,7 +100,7 @@ export class ProjectComponent implements OnInit {
 
 	async getProjectTasks() {
 		this.taskService.getAllProjectTasks(this.guid).then((res) => {
-			this.projectTasks = res?.filter((t) => t != null);
+			this.projectTasks = res?.filter((t) => t !== null);
 			this.projectTasks = this.projectTasks?.slice(0, this.itemsPerCard);
 			if (this.projectTasks && this.projectTasks.length >= 5) {
 				this.projectTasksExpandbtnDisabled = false;
@@ -212,7 +211,7 @@ export class ProjectComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(async (dialogResult) => {
 			this.loaded = false;
 			if (
-				dialogResult != null &&
+				dialogResult !== null &&
 				dialogResult !== this.participation.maxWorkingHoursPerWeek &&
 				dialogResult > 0 &&
 				dialogResult <= 40

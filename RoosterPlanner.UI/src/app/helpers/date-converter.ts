@@ -34,7 +34,7 @@ export class DateConverter {
 		project.participationStartDate = DateConverter.toReadableStringFromString(
 			project.participationStartDate
 		);
-		project.participationEndDate != null
+		project.participationEndDate !== null
 			? (project.participationEndDate =
 					DateConverter.toReadableStringFromString(
 						project.participationEndDate
@@ -54,7 +54,7 @@ export class DateConverter {
 	}
 
 	static dateToString(date: Date) {
-		if (date != null) {
+		if (date !== null) {
 			return moment(date).format('LL');
 		}
 		return null;

@@ -89,7 +89,7 @@ export class ScheduleManagerComponent implements OnInit {
 		this.dataSource.sortingDataAccessor = (item, property) => {
 			switch (property) {
 				case 'Taak':
-					return item.shift.task != null ? item.shift.task.name : null;
+					return item.shift.task !== null ? item.shift.task.name : null;
 				case 'Vanaf':
 					return item.shift.startTime;
 				case 'Tot':

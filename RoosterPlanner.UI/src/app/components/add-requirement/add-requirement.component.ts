@@ -37,7 +37,7 @@ export class AddRequirementComponent implements OnInit {
 
 		this.checkoutForm = this.formBuilder.group({
 			id: [
-				this.requirement.id != null
+				this.requirement.id !== null
 					? this.requirement.id
 					: EntityHelper.returnEmptyGuid(),
 			],

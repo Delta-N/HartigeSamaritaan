@@ -150,7 +150,7 @@ export class CalendarTaskLink implements PipeTransform {
 export class PlanTooltip implements PipeTransform {
 	transform(listOfShifts: Shift[] | null, event: CalendarEvent): string {
 		if (listOfShifts) {
-			const shift = listOfShifts.find((s) => s.id == event.id);
+			const shift = listOfShifts.find((s) => s.id === event.id);
 
 			let result: string = shift?.participantsRequired + ' Nodig ';
 

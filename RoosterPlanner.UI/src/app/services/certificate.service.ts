@@ -62,7 +62,7 @@ export class CertificateService {
 	async postCertificateType(
 		certificateType: CertificateType
 	): Promise<CertificateType | null> {
-		if (certificateType == null || certificateType.name == null) {
+		if (certificateType === null || certificateType.name === null) {
 			this.errorService.error('Ongeldige CertificateType');
 			return null;
 		}
@@ -94,7 +94,7 @@ export class CertificateService {
 			!updatedCertificateType ||
 			!updatedCertificateType.name ||
 			!updatedCertificateType ||
-			updatedCertificateType.id == EntityHelper.returnEmptyGuid()
+			updatedCertificateType.id === EntityHelper.returnEmptyGuid()
 		) {
 			this.errorService.error('Ongeldige CertificateType');
 			return null;
@@ -206,7 +206,7 @@ export class CertificateService {
 			!certificate.certificateType ||
 			!certificate.dateIssued ||
 			!certificate.id ||
-			certificate.id == EntityHelper.returnEmptyGuid()
+			certificate.id === EntityHelper.returnEmptyGuid()
 		) {
 			this.errorService.error('Ongeldig certificaat');
 			return null;

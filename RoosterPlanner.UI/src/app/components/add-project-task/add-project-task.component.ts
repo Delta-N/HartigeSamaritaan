@@ -67,14 +67,14 @@ export class AddProjectTaskComponent implements OnInit {
 	}
 
 	prevPage() {
-		if (this.currentPage != 1) {
+		if (this.currentPage !== 1) {
 			this.currentPage--;
 		}
 	}
 
 	nextPage() {
 		if (
-			this.currentPage != Math.ceil(this.allTasks?.length ?? 0 / this.pageSize)
+			this.currentPage !== Math.ceil(this.allTasks?.length ?? 0 / this.pageSize)
 		) {
 			this.currentPage++;
 		}

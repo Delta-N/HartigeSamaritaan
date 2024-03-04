@@ -15,7 +15,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { RouterLink } from '@angular/router';
-import { MatCardContent } from '@angular/material/card';
 import { MaterialModule } from '../../modules/material/material.module';
 
 @Component({

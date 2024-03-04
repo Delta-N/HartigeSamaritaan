@@ -46,7 +46,6 @@ import {
 	faQuestion,
 	faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatIcon } from '@angular/material/icon';
 import { MaterialModule } from '../../modules/material/material.module';
 import { ManageModule } from '../../modules/manage/manage.module';
 import { CalendarTaskLink } from '../../helpers/filter.pipe';
@@ -376,9 +375,9 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 	findShift(event: CalendarEvent): Shift | undefined {
 		return this.shifts?.find(
 			(s) =>
-				s.task.name == event.title &&
-				s.endTime == moment(event.end).format('HH:mm') &&
-				s.startTime == moment(event.start).format('HH:mm')
+				s.task.name === event.title &&
+				s.endTime === moment(event.end).format('HH:mm') &&
+				s.startTime === moment(event.start).format('HH:mm')
 		);
 	}
 
@@ -391,7 +390,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 					availability.type
 				);
 				const event: CalendarEvent | undefined = this.allEvents.find(
-					(e) => e.id == s.id
+					(e) => e.id === s.id
 				);
 				if (event && action) {
 					this.changeBorders(event, action);
@@ -409,7 +408,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 		if (!actionElement) return;
 		for (let k = 0; k < actionElement.children.length; k++) {
 			const child: any = actionElement.children[k];
-			if (child.ariaLabel == label) {
+			if (child.ariaLabel === label) {
 				child.style.border = 'solid 2px black';
 			} else {
 				child.style.border = 'none';
@@ -478,7 +477,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 		if (shifts) {
 			for (let hour = 0; hour < 24; hour++) {
 				let numberOfOverlappingShifts = 0;
-				if (hour == 17)
+				if (hour === 17)
 					shifts.forEach((s) => {
 						const start = moment(s.startTime, 'hh:mm');
 						const end = moment(s.endTime, 'hh:mm');
@@ -550,7 +549,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 		this.allEvents.forEach((e) => {
 			let contains: boolean = false;
 			this.displayedProjectTasks.forEach((d) => {
-				if (d.name == e.title) {
+				if (d.name === e.title) {
 					contains = true;
 				}
 			});
@@ -591,7 +590,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 
 	OnCheckboxChange($event: MatCheckboxChange) {
 		const task = this.availabilityData.projectTasks.find(
-			(pt) => pt.id == $event.source.id
+			(pt) => pt.id === $event.source.id
 		);
 
 		if (task && $event.checked) {
@@ -613,7 +612,7 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
 	colorStar(id) {
 		const element = document.getElementById(id);
 		const icon = element?.children[0].children[0];
-		if (icon?.innerHTML == 'star_border') {
+		if (icon?.innerHTML === 'star_border') {
 			icon.innerHTML = 'star';
 			icon.classList.add('yellow');
 		} else if (icon) {

@@ -15,7 +15,7 @@
 			class="custom-file-upload"
 			>{{PP!==null ? "Privacy policy toevoegen" : "Privacy policy vervangen"}}</label
 		>
-		<span *ngIf="this.files!=null">{{this.files[0].name}}</span>
+		<span *ngIf="this.files!==null">{{this.files[0].name}}</span>
 		<input #fileInput type="file" id="file" accept="application/pdf" (change)="uploadPP(fileInput.files)" />
 	</div>
 </mat-dialog-content>

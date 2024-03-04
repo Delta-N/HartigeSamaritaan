@@ -51,7 +51,7 @@
 				<div class="row-name">Website:</div>
 				<div class="user-data"><a href="{{viewProject.websiteUrl}}" target="_blank">Link</a></div>
 			</div>
-			<div *ngIf="this.participation!=null" class="row">
+			<div *ngIf="this.participation!==null" class="row">
 				<div class="row-name">Max uur per week:</div>
 				<div class="user-data">{{participation.maxWorkingHoursPerWeek}}</div>
 			</div>
@@ -101,7 +101,7 @@
 								>
 							</a>
 						</span>
-						<span *ngIf="!projectTasks || projectTasks.length==0">N.N.T.B.</span>
+						<span *ngIf="!projectTasks || projectTasks.length===0">N.N.T.B.</span>
 						<mat-card-actions class="action-anchor"></mat-card-actions>
 					</mat-card-content>
 					<mat-card-actions class="action-anchor" *ngIf="isAdmin || isManager">

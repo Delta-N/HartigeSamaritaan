@@ -8,7 +8,6 @@ import {
 	faUser,
 	faUserEdit,
 } from '@fortawesome/free-solid-svg-icons';
-import { User } from './models/user';
 import { Subject, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { AddProjectComponent } from './components/add-project/add-project.component';
@@ -33,7 +32,6 @@ import {
 	AuthenticationResult,
 	EventMessage,
 	EventType,
-	IdTokenClaims,
 	InteractionStatus,
 	InteractionType,
 	PopupRequest,
@@ -151,7 +149,6 @@ export class AppComponent implements OnInit, OnDestroy {
 				tapResponse(
 					(res) => {
 						this.user = res;
-						console.log(res);
 						if (
 							this.PP &&
 							(!this.user.termsOfUseConsented ||
@@ -197,8 +194,6 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.loggedIn = this.authService.instance.getAllAccounts().length > 0;
 		this.isAdmin = this.userService.userIsAdminFrontEnd();
 		this.isManager = this.userService.userIsProjectAdminFrontEnd();
-		console.log(this.isManager);
-		console.log(this.isAdmin);
 	}
 
 	openDialog() {

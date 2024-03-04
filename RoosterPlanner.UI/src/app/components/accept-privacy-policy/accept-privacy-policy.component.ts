@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -11,15 +11,13 @@ import { MaterialModule } from '../../modules/material/material.module';
 	imports: [NgxDocViewerModule, MatCheckbox, MaterialModule],
 	styleUrls: ['./accept-privacy-policy.component.scss'],
 })
-export class AcceptPrivacyPolicyComponent implements OnInit {
+export class AcceptPrivacyPolicyComponent {
 	checked: any;
 
 	constructor(
 		public dialogRef: MatDialogRef<AcceptPrivacyPolicyComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {}
-
-	async ngOnInit(): Promise<void> {}
 
 	save() {
 		this.dialogRef.close('true');

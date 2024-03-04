@@ -12,7 +12,6 @@ import { EntityHelper } from '../../helpers/entity-helper';
 import { ChangeProfileComponent } from '../../components/change-profile/change-profile.component';
 import { JwtHelper } from '../../helpers/jwt-helper';
 import { faHome, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MaterialModule } from '../../modules/material/material.module';
 import { ProjectCardComponent } from '../../components/project-card/project-card.component';
 
@@ -77,7 +76,7 @@ export class HomeComponent implements OnInit {
 		dialogRef.disableClose = true;
 
 		dialogRef.afterClosed().subscribe(async (result) => {
-			if (result != null) {
+			if (result !== null) {
 				userCheckedProfile = true;
 			}
 
@@ -86,7 +85,7 @@ export class HomeComponent implements OnInit {
 					projects = response;
 					projects.forEach((pro) => {
 						this.participations?.forEach((par) => {
-							if (pro.id == par.project.id) {
+							if (pro.id === par.project.id) {
 								projects = projects.filter((obj) => obj !== pro);
 							}
 						});

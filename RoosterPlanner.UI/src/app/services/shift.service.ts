@@ -7,7 +7,6 @@ import { HttpRoutes } from '../helpers/HttpRoutes';
 import { ErrorService } from './error.service';
 import { Scheduledata } from '../models/scheduledata';
 import { ShiftFilter } from '../models/filters/shift-filter';
-import { F } from '@angular/cdk/keycodes';
 import { Searchresult } from '../models/searchresult';
 import { Shiftdata } from '../models/helper-models/shiftdata';
 
@@ -36,7 +35,7 @@ export class ShiftService {
 				(res) => {
 					if (res?.ok) {
 						searchResult = res.body;
-						if (searchResult != null) {
+						if (searchResult !== null) {
 							searchResult.resultList.forEach(
 								(s) => (s.date = new Date(s.date))
 							);
@@ -98,7 +97,7 @@ export class ShiftService {
 				(res) => {
 					if (res?.ok) {
 						shifts = res.body;
-						if (shifts != null) {
+						if (shifts !== null) {
 							shifts.forEach((s) => (s.date = new Date(s.date)));
 						}
 					}
@@ -138,7 +137,7 @@ export class ShiftService {
 				(res) => {
 					if (res?.ok) {
 						shifts = res.body;
-						if (shifts != null) {
+						if (shifts !== null) {
 							shifts.forEach((s) => (s.date = new Date(s.date)));
 						}
 					}
@@ -173,7 +172,7 @@ export class ShiftService {
 				(res) => {
 					if (res?.ok) {
 						shifts = res.body;
-						if (shifts != null) {
+						if (shifts !== null) {
 							shifts.forEach((s) => (s.date = new Date(s.date)));
 						}
 					}
@@ -199,7 +198,7 @@ export class ShiftService {
 				(res) => {
 					if (res?.ok) {
 						shift = res.body;
-						shift?.date != null ? (shift.date = new Date(shift.date)) : null;
+						shift?.date !== null ? (shift.date = new Date(shift.date)) : null;
 					}
 				},
 				(Error) => {
@@ -292,7 +291,7 @@ export class ShiftService {
 				(res) => {
 					if (res?.ok) {
 						updatedShift = res.body;
-						updatedShift?.date != null
+						updatedShift?.date !== null
 							? (updatedShift.date = new Date(updatedShift.date))
 							: null;
 					}

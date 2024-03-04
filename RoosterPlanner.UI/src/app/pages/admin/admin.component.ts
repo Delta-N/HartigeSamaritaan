@@ -86,7 +86,7 @@ export class AdminComponent implements OnInit {
 			if (result !== 'false') {
 				setTimeout(() => {
 					this.getProjects(0, this.itemsPerCard).then(() => {
-						if (result != null) {
+						if (result !== null) {
 							this.toastr.success(
 								result.name + ' is toegevoegd als nieuw project'
 							);
@@ -103,7 +103,7 @@ export class AdminComponent implements OnInit {
 		});
 
 		dialogRef.disableClose = true;
-		dialogRef.afterClosed().subscribe((_) => {
+		dialogRef.afterClosed().subscribe(() => {
 			setTimeout(() => {
 				this.getAdministrators(0, this.itemsPerCard).then(
 					() => (this.loaded = true)
@@ -121,7 +121,7 @@ export class AdminComponent implements OnInit {
 				element.innerText = 'zoom_out_map';
 			else element.innerText = 'fullscreen_exit';
 		}
-		if (this.projectCardStyle == 'expanded-card') {
+		if (this.projectCardStyle === 'expanded-card') {
 			if (adminCardElement) adminCardElement.hidden = false;
 			if (dataCardElement) dataCardElement.hidden = false;
 			this.projectCardStyle = 'card';
@@ -148,7 +148,7 @@ export class AdminComponent implements OnInit {
 			else element.innerText = 'fullscreen_exit';
 		}
 
-		if (this.adminCardStyle == 'expanded-card') {
+		if (this.adminCardStyle === 'expanded-card') {
 			if (projectCardElement) projectCardElement.hidden = false;
 			if (dataCardElement) dataCardElement.hidden = false;
 

@@ -68,7 +68,7 @@ export class RequirementService {
 			!requirement ||
 			!requirement.task ||
 			!requirement.certificateType ||
-			requirement.id == EntityHelper.returnEmptyGuid()
+			requirement.id === EntityHelper.returnEmptyGuid()
 		) {
 			this.errorService.error('Ongeldig requirement');
 			return null;

@@ -32,8 +32,8 @@ export class AddCertificateComponent implements OnInit {
 		public dialogRef: MatDialogRef<AddCertificateComponent>,
 		private certificateService: CertificateService
 	) {
-		data.person != null ? (this.person = data.person) : null;
-		data.certificate != null
+		data.person !== null ? (this.person = data.person) : null;
+		data.certificate !== null
 			? (this.certificate = data.certificate)
 			: (this.certificate = new Certificate());
 		this.modifier = data.modifier;
@@ -43,18 +43,18 @@ export class AddCertificateComponent implements OnInit {
 
 		this.checkoutForm = this.formBuilder.group({
 			id: [
-				this.certificate.id != null
+				this.certificate.id !== null
 					? this.certificate.id
 					: EntityHelper.returnEmptyGuid(),
 			],
 			dateIssued: [
-				this.certificate.dateIssued != null
+				this.certificate.dateIssued !== null
 					? DateConverter.toReadableStringFromDate(this.certificate.dateIssued)
 					: today,
 				Validator.date,
 			],
 			dateExpired: [
-				this.certificate.dateExpired != null
+				this.certificate.dateExpired !== null
 					? DateConverter.toReadableStringFromDate(this.certificate.dateExpired)
 					: '',
 				[Validator.dateOrNull],

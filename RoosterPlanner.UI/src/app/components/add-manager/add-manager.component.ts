@@ -32,7 +32,7 @@ export class AddManagerComponent implements OnInit {
 	) {}
 
 	async ngOnInit(): Promise<void> {
-		this.data.projectId != null
+		this.data.projectId !== null
 			? (this.projectId = this.data.projectId)
 			: (this.projectId = null);
 
@@ -45,7 +45,7 @@ export class AddManagerComponent implements OnInit {
 		//get all users
 		await this.userService.getAllUsers().then((users) => {
 			users.forEach((user) => {
-				if (!this.managers.find((m) => m.personId == user.id)) {
+				if (!this.managers.find((m) => m.personId === user.id)) {
 					this.users.push(user);
 				}
 			});
@@ -108,7 +108,7 @@ export class AddManagerComponent implements OnInit {
 	}
 
 	prevPage() {
-		if (this.currentPage != 1) {
+		if (this.currentPage !== 1) {
 			this.currentPage--;
 		}
 		setTimeout(() => {
@@ -118,11 +118,13 @@ export class AddManagerComponent implements OnInit {
 
 	nextPage() {
 		if (this.currentTabIndex === 0) {
-			if (this.currentPage != Math.ceil(this.users.length / this.pageSize)) {
+			if (this.currentPage !== Math.ceil(this.users.length / this.pageSize)) {
 				this.currentPage++;
 			}
 		} else {
-			if (this.currentPage != Math.ceil(this.managers.length / this.pageSize)) {
+			if (
+				this.currentPage !== Math.ceil(this.managers.length / this.pageSize)
+			) {
 				this.currentPage++;
 			}
 		}

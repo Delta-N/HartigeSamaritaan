@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Breadcrumb } from '../../models/breadcrumb';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { RouterLink } from '@angular/router';
@@ -11,7 +11,7 @@ import { NgForOf, NgIf } from '@angular/common';
 	imports: [RouterLink, NgIf, NgForOf],
 	styleUrls: ['./breadcrumb.component.scss'],
 })
-export class BreadcrumbComponent implements OnInit {
+export class BreadcrumbComponent {
 	breadcrumbs: Breadcrumb[] = [];
 
 	constructor(private breadcrumbService: BreadcrumbService) {
@@ -19,6 +19,4 @@ export class BreadcrumbComponent implements OnInit {
 			this.breadcrumbs = values;
 		});
 	}
-
-	ngOnInit(): void {}
 }

@@ -17,7 +17,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ChangeProfilePictureComponent } from '../../components/change-profile-picture/change-profile-picture.component';
 import { NgStyle } from '@angular/common';
-import { MatCardActions } from '@angular/material/card';
 import { MaterialModule } from '../../modules/material/material.module';
 
 @Component({

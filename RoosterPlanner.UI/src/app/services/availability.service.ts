@@ -130,7 +130,7 @@ export class AvailabilityService {
 			!availability ||
 			!availability.participation ||
 			!availability.shift ||
-			availability.type == undefined
+			availability.type === undefined
 		) {
 			this.errorService.error('Ongeldige availability');
 			return null;
@@ -164,7 +164,7 @@ export class AvailabilityService {
 			!availability ||
 			!availability.participationId ||
 			!availability.shiftId ||
-			availability.type == undefined
+			availability.type === undefined
 		) {
 			this.errorService.error('Ongeldige availability');
 			return null;

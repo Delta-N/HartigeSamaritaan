@@ -3,7 +3,7 @@
 export class Validator {
 	static date(control: FormControl): { [p: string]: any } | null {
 		if (
-			control == null ||
+			control === null ||
 			control.value === null ||
 			control.value.match === null
 		) {
@@ -26,7 +26,7 @@ export class Validator {
 
 	static phoneNumber(control: FormControl): { [p: string]: any } | null {
 		if (
-			control == null ||
+			control === null ||
 			control.value === null ||
 			control.value.match === null
 		) {
@@ -42,7 +42,7 @@ export class Validator {
 
 	static postalCode(control: FormControl): { [p: string]: any } | null {
 		if (
-			control == null ||
+			control === null ||
 			control.value === null ||
 			control.value.match === null
 		) {
