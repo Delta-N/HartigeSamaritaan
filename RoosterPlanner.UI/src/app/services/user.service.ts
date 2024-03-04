@@ -3,10 +3,11 @@ import {HttpResponse} from "@angular/common/http";
 import {User} from "../models/user";
 import {ApiService} from "./api.service";
 import {HttpRoutes} from "../helpers/HttpRoutes";
-import {JwtHelper} from "../helpers/jwt-helper";
 import {Manager} from "../models/manager";
 import {Searchresult} from "../models/searchresult";
 import {ErrorService} from "./error.service";
+import {MsalService} from "@azure/msal-angular";
+import {JwtHelper} from "../helpers/jwt-helper";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class UserService {
   allUsers: User[] = [];
 
   constructor(private apiService: ApiService,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              private msalService: MsalService) {
   }
 
   async getUser(guid: string | null): Promise<User | null> {
@@ -100,8 +102,8 @@ export class UserService {
   }
 
 
-  async getAllParticipants(projectId: string):Promise<User[]> {
-    let users: User[] | null= [] ;
+  async getAllParticipants(projectId: string): Promise<User[]> {
+    let users: User[] | null = [];
     await this.apiService.get<HttpResponse<User[]>>(`${HttpRoutes.personApiUrl}/participants/${projectId}`)
       .toPromise()
       .then(res => {
@@ -118,7 +120,7 @@ export class UserService {
       this.errorService.error("ProjectId mag niet leeg zijn")
       return null;
     }
-    let managers: Manager[] | null= [];
+    let managers: Manager[] | null = [];
     await this.apiService.get<HttpResponse<Manager[]>>(`${HttpRoutes.personApiUrl}/managers/${projectId}`)
       .toPromise()
       .then(res => {
@@ -136,7 +138,7 @@ export class UserService {
       this.errorService.error("UserId mag niet leeg zijn")
       return null;
     }
-    let managers: Manager[] | null= [];
+    let managers: Manager[] | null = [];
     await this.apiService.get<HttpResponse<Manager[]>>(`${HttpRoutes.personApiUrl}/projectsmanagedby/${userId}`)
       .toPromise()
       .then(res => {
@@ -235,7 +237,7 @@ export class UserService {
 
   async getCurrentUser(): Promise<User | null> {
     let id = this.getCurrentUserId();
-    let user: User |null= null;
+    let user: User | null = null;
     if (id) {
       await this.getUser(id).then(res => {
         if (res)
@@ -246,15 +248,24 @@ export class UserService {
   }
 
   getIdToken(): any {
-    const idToken = JwtHelper.decodeToken(sessionStorage.getItem('msal.idtoken'))
-    if (idToken === null) {
-      return false;
+    for (let localStorageKey in localStorage) {
+      /*Find and Print the idtoken*/
+      if (localStorageKey.includes('idtoken')) {
+        let idToken = localStorage.getItem(localStorageKey);
+        //deserializing the token
+        if (idToken === null) return false;
+        let deserializedToken = JSON.parse(idToken);
+
+        return JwtHelper.decodeToken(deserializedToken.secret);
+      }
+
     }
-    return idToken;
+    return false;
   }
 
   getCurrentUserId() {
-    return this.getIdToken().oid;
+    let user = this.msalService.instance.getActiveAccount();
+    return user?.localAccountId
   }
 
   userIsAdminFrontEnd(): boolean {

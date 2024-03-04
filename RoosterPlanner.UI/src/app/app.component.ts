@@ -1,5 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {faHome, faUserLock, faUserCog, faSignOutAlt, faUser, faUserEdit} from '@fortawesome/free-solid-svg-icons';
 import {User} from "./models/user";
 import {Subject, takeUntil} from "rxjs";
@@ -31,7 +31,7 @@ import {UserService} from "./services/user.service";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MaterialModule, BreadcrumbComponent,
+  imports: [RouterOutlet, MaterialModule, BreadcrumbComponent, RouterLink, RouterLinkActive,
 
   ],
   providers: [],
@@ -109,6 +109,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.uploadService.apiUploadPrivacyPolicyGet().pipe(
       tapResponse(
         res => {
+
           this.PP = res;
         },
         (error: HttpErrorResponse) => {
@@ -117,17 +118,13 @@ export class AppComponent implements OnInit, OnDestroy {
       )
     ).subscribe();
 
-    // await this.uploadService.getPP().then(res => {
-    //   if (res)
-    //     this.PP = res;
-    // })
 
     const idToken = this.authService.instance.getActiveAccount()?.localAccountId;
-    console.log(this.authService.instance.getActiveAccount())
     this.personService.apiPersonsIdGet(idToken!).pipe(
       tapResponse(
         (res) => {
           this.user = res;
+          console.log(res)
           if (this.PP && (!this.user.termsOfUseConsented || moment(this.PP.lastEditDate) > moment(this.user.termsOfUseConsented)))
             this.promptPPAccept();
         },
@@ -167,6 +164,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.loggedIn = this.authService.instance.getAllAccounts().length > 0;
     this.isAdmin = this.userService.userIsAdminFrontEnd();
     this.isManager = this.userService.userIsProjectAdminFrontEnd();
+    console.log(this.isManager)
+    console.log(this.isAdmin)
   }
 
   openDialog() {

@@ -3,7 +3,6 @@ import {
 	MsalInterceptorConfiguration,
 } from '@azure/msal-angular';
 import {
-	BrowserCacheLocation,
 	InteractionType,
 	IPublicClientApplication,
 	LogLevel,
@@ -36,7 +35,7 @@ export function msalInstanceFactory(): IPublicClientApplication {
 		system: {
 			loggerOptions: {
 				loggerCallback,
-				logLevel: LogLevel.Verbose,
+				logLevel: LogLevel.Warning,
 				piiLoggingEnabled: false,
 			},
 		},
