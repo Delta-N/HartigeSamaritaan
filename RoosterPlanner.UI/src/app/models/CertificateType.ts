@@ -1,6 +1,6 @@
-﻿import {Entity} from "./entity.model";
+﻿import { Entity } from './entity.model';
 
-export class CertificateType extends Entity{
-  public name:string;
-  public level:string;
+export class CertificateType extends Entity {
+	name: string;
+	level: string;
 }

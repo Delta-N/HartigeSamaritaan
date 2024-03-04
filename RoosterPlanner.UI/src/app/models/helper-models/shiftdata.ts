@@ -1,10 +1,9 @@
-﻿import {Task} from '../task';
+﻿import { Task } from '../task';
 
 export class Shiftdata {
-
-  public tasks: Task[];
-  public dates: Date[];
-  public startTimes: string[];
-  public endTimes: string[];
-  public participantsRequired: number[];
+	tasks: Task[];
+	dates: Date[];
+	startTimes: string[];
+	endTimes: string[];
+	participantsRequired: number[];
 }

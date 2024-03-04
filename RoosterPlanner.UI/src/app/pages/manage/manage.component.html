@@ -1,34 +1,33 @@
 <div class="row bar">
-  <h1>Beheer</h1>
+	<h1>Beheer</h1>
 </div>
 <div class="spinner" *ngIf="!loaded">
-  <mat-spinner></mat-spinner>
+	<mat-spinner></mat-spinner>
 </div>
 <div class="row cardholder" *ngIf="projects.length > 0">
-         <span *ngFor="let item of projects" class="mobilecard">
-            <mat-card>
-               <div>
-                  <mat-card-title>{{item.name}}</mat-card-title>
-               </div>
-               <mat-card-content> <a [routerLink]="['/project', item.id]"><p>Details      </p></a>
-                  <a [routerLink]="['plan', item.id]"><p>Inroosteren</p></a>
-                  <a [routerLink]="['shifts', item.id]"><p>Shiften</p></a>
-                  <a [routerLink]="['schedule', item.id]"><p>Rooster</p></a>
-                  <a id="request" (click)="sendEmail(item.id)"><p>Verstuur algemeen bericht</p></a>
-                  <a id="schedule" (click)="sendSchedule(item.id)"><p>Verstuur rooster</p></a>
-                  <a [routerLink]="['employee', item.id]"><p>Medewerkers</p></a>
-               </mat-card-content>
-               <mat-card-actions class="action-anchor">
-               </mat-card-actions>
-            </mat-card>
-         </span>
+	<span *ngFor="let item of projects" class="mobilecard">
+		<mat-card>
+			<div>
+				<mat-card-title>{{item.name}}</mat-card-title>
+			</div>
+			<mat-card-content>
+				<a [routerLink]="['/project', item.id]"><p>Details </p></a>
+				<a [routerLink]="['plan', item.id]"><p>Inroosteren</p></a>
+				<a [routerLink]="['shifts', item.id]"><p>Shiften</p></a>
+				<a [routerLink]="['schedule', item.id]"><p>Rooster</p></a>
+				<a id="request" (click)="sendEmail(item.id)"><p>Verstuur algemeen bericht</p></a>
+				<a id="schedule" (click)="sendSchedule(item.id)"><p>Verstuur rooster</p></a>
+				<a [routerLink]="['employee', item.id]"><p>Medewerkers</p></a>
+			</mat-card-content>
+			<mat-card-actions class="action-anchor"> </mat-card-actions>
+		</mat-card>
+	</span>
 </div>
 
 <div *ngIf="projects.length === 0 && loaded">
-  <div>
-    <div class="row">
-      <p id="flavortext">Je beheert nog geen project</p>
-    </div>
-  </div>
+	<div>
+		<div class="row">
+			<p id="flavortext">Je beheert nog geen project</p>
+		</div>
+	</div>
 </div>
-

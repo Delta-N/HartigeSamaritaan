@@ -1,6 +1,6 @@
 export class Entity {
-  public id: string;
-  public lastEditBy: string;
-  public lastEditDate: string;
-  public rowVersion: string;
+	id: string;
+	lastEditBy: string;
+	lastEditDate: string;
+	rowVersion: string;
 }

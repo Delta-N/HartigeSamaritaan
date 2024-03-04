@@ -1,157 +1,163 @@
 <div class="row bar">
-  <h1>Profiel</h1>
-  <div id="push">
-    <a *ngIf="user!=null" (click)="edit()" mat-button class="override-button action-button">
-<!--      <fa-icon [icon]="faUserEdit"></fa-icon>-->
-      Profiel wijzigen</a>
-    <a *ngIf="user!=null" (click)="push()" mat-button
-       class="override-button">
-<!--      <fa-icon [icon]="user.pushDisabled?bell:slash"></fa-icon>-->
-      {{user.pushDisabled ? "E-mailberichten inschakelen" : "E-mailberichten uitschakelen"}}</a>
-  </div>
+	<h1>Profiel</h1>
+	<div id="push">
+		<a *ngIf="user!=null" (click)="edit()" mat-button class="override-button action-button">
+			<!--      <fa-icon [icon]="faUserEdit"></fa-icon>-->
+			Profiel wijzigen</a
+		>
+		<a *ngIf="user!=null" (click)="push()" mat-button class="override-button">
+			<!--      <fa-icon [icon]="user.pushDisabled?bell:slash"></fa-icon>-->
+			{{user.pushDisabled ? "E-mailberichten inschakelen" : "E-mailberichten uitschakelen"}}</a
+		>
+	</div>
 </div>
 
 <div class="spinner" *ngIf="!loaded">
-  <mat-spinner></mat-spinner>
+	<mat-spinner></mat-spinner>
 </div>
 <div *ngIf="loaded">
-  <div class="row">
-    <div class="col-md-6" id="left">
-      <div class="row">
-        <div class="row-name">Naam:</div>
-        <div class="user-data">{{user.firstName + " " + user.lastName}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Leeftijd:</div>
-        <div class="user-data">{{age}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Email:</div>
-        <div class="user-data">{{user.email}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Adres:</div>
-        <div class="user-data">{{user.streetAddress}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Postcode:</div>
-        <div class="user-data">{{user.postalCode}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Stad:</div>
-        <div class="user-data">{{user.city}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Telefoonnummer:</div>
-        <div class="user-data">{{user.phoneNumber}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Nationaliteit:</div>
-        <div class="user-data">{{user.nationality}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Moedertaal:</div>
-        <div class="user-data">{{user.nativeLanguage}}</div>
-      </div>
-      <div class="row">
-        <div class="row-name">Nederlands taalniveau:</div>
-        <div class="user-data">{{user.dutchProficiency}}</div>
-      </div>
-    </div>
-    <div hidden id="expanded-card">
-      <mat-card [ngClass]="[certificateStyle]">
-        <div>
-          <mat-card-title>
-<!--            <fa-icon [icon]="award"></fa-icon>-->
-            Certificaten
-            <button [disabled]="CertificateExpandbtnDisabled" class="card-title-icon" mat-icon-button
-                    (click)="expandCertificateCard()">
-              <mat-icon>fullscreen_exit</mat-icon>
-            </button>
-          </mat-card-title>
-        </div>
-        <mat-card-content>
-                  <span *ngFor="let item of certificates">
-                     <a [routerLink]="['/certificate', item.id]">
-                        <p>{{item.certificateType ? item.certificateType.name : "Onbekend"}}</p>
-                     </a>
-                  </span>
-          <span *ngIf="!user.certificates || user.certificates.length==0">N.N.T.B.</span>
-          <mat-card-actions class="action-anchor"></mat-card-actions>
-        </mat-card-content>
-        <mat-card-actions class="action-anchor" *ngIf="isAdmin">
-          <button mat-button (click)="modCertificate('toevoegen')">Nieuwe toevoegen</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+	<div class="row">
+		<div class="col-md-6" id="left">
+			<div class="row">
+				<div class="row-name">Naam:</div>
+				<div class="user-data">{{user.firstName + " " + user.lastName}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Leeftijd:</div>
+				<div class="user-data">{{age}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Email:</div>
+				<div class="user-data">{{user.email}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Adres:</div>
+				<div class="user-data">{{user.streetAddress}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Postcode:</div>
+				<div class="user-data">{{user.postalCode}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Stad:</div>
+				<div class="user-data">{{user.city}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Telefoonnummer:</div>
+				<div class="user-data">{{user.phoneNumber}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Nationaliteit:</div>
+				<div class="user-data">{{user.nationality}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Moedertaal:</div>
+				<div class="user-data">{{user.nativeLanguage}}</div>
+			</div>
+			<div class="row">
+				<div class="row-name">Nederlands taalniveau:</div>
+				<div class="user-data">{{user.dutchProficiency}}</div>
+			</div>
+		</div>
+		<div hidden id="expanded-card">
+			<mat-card [ngClass]="[certificateStyle]">
+				<div>
+					<mat-card-title>
+						<!--            <fa-icon [icon]="award"></fa-icon>-->
+						Certificaten
+						<button
+							[disabled]="CertificateExpandbtnDisabled"
+							class="card-title-icon"
+							mat-icon-button
+							(click)="expandCertificateCard()">
+							<mat-icon>fullscreen_exit</mat-icon>
+						</button>
+					</mat-card-title>
+				</div>
+				<mat-card-content>
+					<span *ngFor="let item of certificates">
+						<a [routerLink]="['/certificate', item.id]">
+							<p>{{item.certificateType ? item.certificateType.name : "Onbekend"}}</p>
+						</a>
+					</span>
+					<span *ngIf="!user.certificates || user.certificates.length==0">N.N.T.B.</span>
+					<mat-card-actions class="action-anchor"></mat-card-actions>
+				</mat-card-content>
+				<mat-card-actions class="action-anchor" *ngIf="isAdmin">
+					<button mat-button (click)="modCertificate('toevoegen')">Nieuwe toevoegen</button>
+				</mat-card-actions>
+			</mat-card>
+		</div>
 
-    <div class="right col-md-6" id="right">
-      <div id="card">
-        <mat-card [ngClass]="[certificateStyle]" id="CertificateCard">
-          <div>
-            <mat-card-title>
-<!--              <fa-icon [icon]="award"></fa-icon>-->
-              Certificaten
-              <button [disabled]="CertificateExpandbtnDisabled" class="card-title-icon" mat-icon-button
-                      (click)="expandCertificateCard()">
-                <mat-icon id="icon">zoom_out_map</mat-icon>
-              </button>
-            </mat-card-title>
-          </div>
-          <mat-card-content>
-                  <span *ngFor="let item of certificates">
-                     <a [routerLink]="['/certificate', item.id]">
-                        <p>{{item.certificateType ? item.certificateType.name : "Onbekend"}}</p>
-                     </a>
-                  </span>
-            <span *ngIf="!user.certificates || user.certificates.length==0">N.N.T.B.</span>
-            <mat-card-actions class="action-anchor"></mat-card-actions>
-          </mat-card-content>
-          <mat-card-actions class="action-anchor" *ngIf="isAdmin">
-            <button mat-button (click)="modCertificate('toevoegen')">Nieuwe toevoegen</button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+		<div class="right col-md-6" id="right">
+			<div id="card">
+				<mat-card [ngClass]="[certificateStyle]" id="CertificateCard">
+					<div>
+						<mat-card-title>
+							<!--              <fa-icon [icon]="award"></fa-icon>-->
+							Certificaten
+							<button
+								[disabled]="CertificateExpandbtnDisabled"
+								class="card-title-icon"
+								mat-icon-button
+								(click)="expandCertificateCard()">
+								<mat-icon id="icon">zoom_out_map</mat-icon>
+							</button>
+						</mat-card-title>
+					</div>
+					<mat-card-content>
+						<span *ngFor="let item of certificates">
+							<a [routerLink]="['/certificate', item.id]">
+								<p>{{item.certificateType ? item.certificateType.name : "Onbekend"}}</p>
+							</a>
+						</span>
+						<span *ngIf="!user.certificates || user.certificates.length==0">N.N.T.B.</span>
+						<mat-card-actions class="action-anchor"></mat-card-actions>
+					</mat-card-content>
+					<mat-card-actions class="action-anchor" *ngIf="isAdmin">
+						<button mat-button (click)="modCertificate('toevoegen')">Nieuwe toevoegen</button>
+					</mat-card-actions>
+				</mat-card>
+			</div>
 
-      <div id="pictureFrame">
-        <a (click)="changeProfilePicture()">
-          <img *ngIf="user.profilePicture && user.profilePicture.documentUri"
-               src="{{user.profilePicture.documentUri}}"
-               alt="Profile picture"/>
-          <img *ngIf="!user.profilePicture || !user.profilePicture.documentUri"
-               src="../../assets/avatar.png"
-               alt="Profile picture"/>
-        </a>
-      </div>
-    </div>
-  </div>
+			<div id="pictureFrame">
+				<a (click)="changeProfilePicture()">
+					<img
+						*ngIf="user.profilePicture && user.profilePicture.documentUri"
+						src="{{user.profilePicture.documentUri}}"
+						alt="Profile picture" />
+					<img
+						*ngIf="!user.profilePicture || !user.profilePicture.documentUri"
+						src="../../assets/avatar.png"
+						alt="Profile picture" />
+				</a>
+			</div>
+		</div>
+	</div>
 
-  <div class="row" id="remark">
-    <div class="col-6" >
-      <!--todo [ngStyle]="!isStaff&& {'flex':'inherit','max-width':'inherit'}"-->
+	<div class="row" id="remark">
+		<div class="col-6">
+			<!--todo [ngStyle]="!isStaff&& {'flex':'inherit','max-width':'inherit'}"-->
 
-      <div class="row-name" >
-        <!--[ngStyle]="!isStaff&& {'display':'flex', 'justify-content':'center'}"-->
-        Persoonlijke
-        opmerking:
-        <button mat-button class="override-button" id="personalbutton"
-                (click)="editRemark('personalbutton')">Aanpassen
-        </button>
-      </div>
-      <textarea id="personalremark" matInput disabled class="text-box">{{user.personalRemark}}</textarea> <!--todo [ngStyle]="!isAdmin&& {'width':'100%'}"-->
+			<div class="row-name">
+				<!--[ngStyle]="!isStaff&& {'display':'flex', 'justify-content':'center'}"-->
+				Persoonlijke opmerking:
+				<button mat-button class="override-button" id="personalbutton" (click)="editRemark('personalbutton')"
+					>Aanpassen
+				</button>
+			</div>
+			<textarea id="personalremark" matInput disabled class="text-box">{{user.personalRemark}}</textarea>
+			<!--todo [ngStyle]="!isAdmin&& {'width':'100%'}"-->
+		</div>
 
-    </div>
-
-    <div class="col-6" *ngIf="isStaff">
-
-      <div class="row-name">(Verborgen) opmerking:
-        <button mat-button class="override-button" id="staffbutton" (click)="editRemark('staffbutton')">Aanpassen
-        </button>
-      </div>
-      <textarea id="staffremark" disabled class="text-box" matInput>{{user.staffRemark}}</textarea>
-
-    </div>
-  </div>
+		<div class="col-6" *ngIf="isStaff">
+			<div class="row-name"
+				>(Verborgen) opmerking:
+				<button mat-button class="override-button" id="staffbutton" (click)="editRemark('staffbutton')"
+					>Aanpassen
+				</button>
+			</div>
+			<textarea id="staffremark" disabled class="text-box" matInput>{{user.staffRemark}}</textarea>
+		</div>
+	</div>
 </div>
-
-

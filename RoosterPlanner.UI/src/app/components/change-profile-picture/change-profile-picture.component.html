@@ -1,14 +1,20 @@
 <div id="pictureRow">
-  <img id="profile" class="dropimg"
-     [src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'" alt="Profile picture">
+	<img
+		id="profile"
+		class="dropimg"
+		[src]="user.profilePicture ? user.profilePicture.documentUri : '../../assets/avatar.png'"
+		alt="Profile picture" />
 
-  <label for="file"
-         class="custom-file-upload override-button action-button">Wijzig</label>
+	<label for="file" class="custom-file-upload override-button action-button">Wijzig</label>
 
-  <input #fileInput type="file" id="file" accept="image/x-png,image/gif,image/jpeg"
-         (change)="uploadPicture(fileInput.files)"/>
+	<input
+		#fileInput
+		type="file"
+		id="file"
+		accept="image/x-png,image/gif,image/jpeg"
+		(change)="uploadPicture(fileInput.files)" />
 
-
-
-  <button id="remove" mat-button class="override-button" (click)="remove()" [disabled]="!user.profilePicture">Verwijder</button>
+	<button id="remove" mat-button class="override-button" (click)="remove()" [disabled]="!user.profilePicture"
+		>Verwijder</button
+	>
 </div>

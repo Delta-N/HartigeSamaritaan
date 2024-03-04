@@ -28,8 +28,7 @@ export function msalInstanceFactory(): IPublicClientApplication {
 			knownAuthorities: [environment.msalConfig.auth.authorityDomain],
 		},
 		cache: {
-			cacheLocation: environment.msalConfig.cache
-				.cacheLocation,
+			cacheLocation: environment.msalConfig.cache.cacheLocation,
 			storeAuthStateInCookie: isIE,
 		},
 		system: {
@@ -44,12 +43,11 @@ export function msalInstanceFactory(): IPublicClientApplication {
 
 export function msalInterceptorConfigFactory(): MsalInterceptorConfiguration {
 	const protectedResourceMap = new Map<string, Array<string>>();
-  environment.protectedResourceMap.forEach(input => {
-    let string1 = input[0] as string
-    let string2 = input[1] as string[]
-    protectedResourceMap.set(string1, string2)
-
-  });
+	environment.protectedResourceMap.forEach((input) => {
+		const string1 = input[0] as string;
+		const string2 = input[1] as string[];
+		protectedResourceMap.set(string1, string2);
+	});
 
 	return {
 		interactionType: InteractionType.Redirect,

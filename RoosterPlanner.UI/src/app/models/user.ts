@@ -1,24 +1,24 @@
-import {Entity} from "./entity.model";
-import {Document} from "./document";
-import {Certificate} from "./Certificate";
+import { Entity } from './entity.model';
+import { Document } from './document';
+import { Certificate } from './Certificate';
 
 export class User extends Entity {
-  public city: string;
-  public dateOfBirth: string;
-  public dutchProficiency:string;
-  public email: string;
-  public firstName: string;
-  public lastName: string;
-  public nationality: string;
-  public nativeLanguage:string;
-  public personalRemark: string;
-  public phoneNumber: string;
-  public postalCode: string;
-  public profilePicture: Document;
-  public pushDisabled: boolean;
-  public staffRemark: string;
-  public streetAddress: string;
-  public termsOfUseConsented: string;
-  public userRole: string;
-  public certificates:Certificate[]
+	city: string;
+	dateOfBirth: string;
+	dutchProficiency: string;
+	email: string;
+	firstName: string;
+	lastName: string;
+	nationality: string;
+	nativeLanguage: string;
+	personalRemark: string;
+	phoneNumber: string;
+	postalCode: string;
+	profilePicture: Document;
+	pushDisabled: boolean;
+	staffRemark: string;
+	streetAddress: string;
+	termsOfUseConsented: string;
+	userRole: string;
+	certificates: Certificate[];
 }

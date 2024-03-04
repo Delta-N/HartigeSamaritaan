@@ -1,4 +1,4 @@
 ﻿export class Message {
-  public subject: string
-  public body: string
+	subject: string;
+	body: string;
 }
