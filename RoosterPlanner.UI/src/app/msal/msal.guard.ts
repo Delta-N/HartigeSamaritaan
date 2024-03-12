@@ -58,7 +58,7 @@ export class MsalGuard implements CanActivate {
         }),
         catchError((err) => {
           if (err.errorMessage.indexOf('AADB2C90118') > -1) {
-            window.location.href='https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_reset&client_id=23cbcba3-683e-4fea-bf57-f25d3dc4f0fc&nonce=defaultNonce&redirect_uri=https%3A%2F%2Frooster.hartigesamaritaan.nl&scope=openid&response_type=id_token&prompt=login'
+            window.location.href='https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_reset&client_id=23cbcba3-683e-4fea-bf57-f25d3dc4f0fc&nonce=defaultNonce&redirect_uri=https%3A%2F%2Froosterplanner-web-prd.azurewebsites.net&scope=openid&response_type=id_token&prompt=login'
             this.authService.loginRedirect({
               authority: environment.authorities.resetPassword.authority,
               scopes: environment.scopes
