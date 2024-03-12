@@ -3,7 +3,7 @@ name: Build the project
 on:
   push:
     branches:
-      - master
+      - main
       - develop
 
 env:
