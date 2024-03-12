@@ -34,9 +34,9 @@ jobs:
             ${{ runner.os }}-node-
             
       - name: Setup Node
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{env.NODE_VERSION}}
+          node-version: '14.20.0'
 
       - name: build front-end
         run: |
