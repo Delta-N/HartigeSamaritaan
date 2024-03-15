@@ -1,26 +1,28 @@
 <h2 mat-dialog-title>Upload privacy policy</h2>
 
-
 <mat-dialog-content>
+	<div *ngIf="PP" class="current">
+		<mat-label
+			><a [href]="PP.documentUri" target="_blank"
+				>Huidige privacy policy: <h5>{{date}}</h5></a
+			></mat-label
+		>
+	</div>
 
-    <div *ngIf="PP" class="current">
-      <mat-label><a [href]=PP.documentUri target="_blank">Huidige privacy policy: <h5>{{date}}</h5></a></mat-label>
-    </div>
-
-    <div>
-      <label for="file"
-             class="custom-file-upload">{{PP!==null ? "Privacy policy toevoegen" : "Privacy policy vervangen"}}</label>
-      <span *ngIf="this.files!=null">{{this.files[0].name}}</span>
-      <input #fileInput type="file" id="file" accept="application/pdf" (change)="uploadPP(fileInput.files)"/>
-    </div>
-
-
+	<div>
+		<label
+			for="file"
+			class="custom-file-upload"
+			>{{PP!==null ? "Privacy policy toevoegen" : "Privacy policy vervangen"}}</label
+		>
+		<span *ngIf="this.files!=null">{{this.files[0].name}}</span>
+		<input #fileInput type="file" id="file" accept="application/pdf" (change)="uploadPP(fileInput.files)" />
+	</div>
 </mat-dialog-content>
 
 <mat-dialog-actions id="actions">
-
-  <div class="align-right">
-    <button class="action-button override-button" (click)="save()" mat-button>Opslaan</button>
-    <button mat-button class="override-button" (click)="close()">Annuleren</button>
-  </div>
+	<div class="align-right">
+		<button class="action-button override-button" (click)="save()" mat-button>Opslaan</button>
+		<button mat-button class="override-button" (click)="close()">Annuleren</button>
+	</div>
 </mat-dialog-actions>

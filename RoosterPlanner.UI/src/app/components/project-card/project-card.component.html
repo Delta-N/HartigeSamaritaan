@@ -1,33 +1,31 @@
 <mat-card appearance="outlined">
-  <div>
-    <mat-card-title>{{participation.project.name}}</mat-card-title>
-  </div>
-  <mat-card-content>
-    <a [routerLink]="['/project', participation.project.id]">
-      <p>
-        <fa-icon [icon]="detailsIcon"></fa-icon>
-        Details
-      </p>
-    </a>
-    <a [routerLink]="['/availability', participation.project.id]">
-      <p>
-        <fa-icon [icon]="calendarIcon"></fa-icon>
-        Beschikbaarheid
-      </p>
-    </a>
-    <a [routerLink]="['/schedule', participation.id]">
-      <p>
-        <fa-icon [icon]="listIcon"></fa-icon>
-        Mijn Shifts
-      </p>
-    </a>
-
-
-  </mat-card-content>
-  <mat-card-actions class="action-anchor">
-    <button mat-button (click)="removeParticipation(participation)">
-      <fa-icon [icon]="signOut"></fa-icon>
-      Uitschrijven
-    </button>
-  </mat-card-actions>
+	<div>
+		<mat-card-title>{{participation.project.name}}</mat-card-title>
+	</div>
+	<mat-card-content>
+		<a [routerLink]="['/project', participation.project.id]">
+			<p>
+				<fa-icon [icon]="detailsIcon"></fa-icon>
+				Details
+			</p>
+		</a>
+		<a [routerLink]="['/availability', participation.project.id]">
+			<p>
+				<fa-icon [icon]="calendarIcon"></fa-icon>
+				Beschikbaarheid
+			</p>
+		</a>
+		<a [routerLink]="['/schedule', participation.id]">
+			<p>
+				<fa-icon [icon]="listIcon"></fa-icon>
+				Mijn Shifts
+			</p>
+		</a>
+	</mat-card-content>
+	<mat-card-actions class="action-anchor">
+		<button mat-button (click)="removeParticipation(participation)">
+			<fa-icon [icon]="signOut"></fa-icon>
+			Uitschrijven
+		</button>
+	</mat-card-actions>
 </mat-card>

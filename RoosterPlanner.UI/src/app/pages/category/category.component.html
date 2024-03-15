@@ -1,27 +1,27 @@
 <div class="spinner" *ngIf="!loaded">
-  <mat-spinner></mat-spinner>
+	<mat-spinner></mat-spinner>
 </div>
 <span *ngIf="loaded">
+	<div class="row bar">
+		<h1>Categorie</h1>
+	</div>
 
-  <div class="row bar">
-    <h1>Categorie</h1>
-  </div>
+	<div class="new-row">
+		<div class="row-name">Code:</div>
+		<div class="user-data">{{category.code}}</div>
+	</div>
 
-  <div class="new-row">
-    <div class="row-name">Code:</div>
-    <div class="user-data">{{category.code}}</div>
-  </div>
+	<div class="new-row">
+		<div class="row-name">Naam:</div>
+		<div class="user-data">{{category.name}}</div>
+	</div>
 
-  <div class="new-row">
-    <div class="row-name">Naam:</div>
-    <div class="user-data">{{category.name}}</div>
-  </div>
-
-
-  <div class="row">
-    <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editCategory"><fa-icon
-      [icon]="editIcon"></fa-icon>Categorie wijzigen</a>
-    <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="deleteCategory"><fa-icon
-      [icon]="deleteIcon"></fa-icon>Categorie verwijderen</a>
-  </div>
+	<div class="row">
+		<a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editCategory"
+			><fa-icon [icon]="editIcon"></fa-icon>Categorie wijzigen</a
+		>
+		<a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="deleteCategory"
+			><fa-icon [icon]="deleteIcon"></fa-icon>Categorie verwijderen</a
+		>
+	</div>
 </span>

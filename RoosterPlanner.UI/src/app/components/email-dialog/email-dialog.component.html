@@ -1,35 +1,28 @@
 <div class="container">
-  <div class="row"><h1 mat-dialog-title>
-    Verstuur email
-  </h1>
-  </div>
+	<div class="row"><h1 mat-dialog-title> Verstuur email </h1> </div>
 
-  <div mat-dialog-content>
-    <form (ngSubmit)="sendInput()" [formGroup]="checkoutForm">
-      <div class="row">
-        <mat-form-field>
-          <mat-label for="text">
-            Onderwerp
-          </mat-label>
-          <input formControlName="subject" matInput placeholder="Onderwerp" type="text" [(ngModel)]="subject">
-        </mat-form-field>
-      </div>
+	<div mat-dialog-content>
+		<form (ngSubmit)="sendInput()" [formGroup]="checkoutForm">
+			<div class="row">
+				<mat-form-field>
+					<mat-label for="text"> Onderwerp </mat-label>
+					<input formControlName="subject" matInput placeholder="Onderwerp" type="text" [(ngModel)]="subject" />
+				</mat-form-field>
+			</div>
 
-      <div class="row">
-        <mat-form-field>
-          <mat-label for="text">
-            Bericht
-          </mat-label>
-          <textarea formControlName="message" [(ngModel)]="message" matInput type="text" rows="20"></textarea>
-        </mat-form-field>
-      </div>
-    </form>
-  </div>
+			<div class="row">
+				<mat-form-field>
+					<mat-label for="text"> Bericht </mat-label>
+					<textarea formControlName="message" [(ngModel)]="message" matInput type="text" rows="20"></textarea>
+				</mat-form-field>
+			</div>
+		</form>
+	</div>
 
-  <div mat-dialog-actions>
-    <div class="align-right">
-      <button mat-raised-button class="action-button override-button" (click)="sendInput()">Verstuur bericht</button>
-      <button mat-button class="override-button" (click)="close()">Annuleren</button>
-    </div>
-  </div>
+	<div mat-dialog-actions>
+		<div class="align-right">
+			<button mat-raised-button class="action-button override-button" (click)="sendInput()">Verstuur bericht</button>
+			<button mat-button class="override-button" (click)="close()">Annuleren</button>
+		</div>
+	</div>
 </div>

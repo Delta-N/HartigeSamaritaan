@@ -1,104 +1,126 @@
 <div class="row bar">
-  <h1>Plannen - Overzicht</h1>
+	<h1>Plannen - Overzicht</h1>
 </div>
 <div class="row content-container">
+	<div class="col-4">
+		<div class="calendar">
+			<div class="calendar-wrapper">
+				<mat-calendar
+					#calendar
+					[(selected)]="selectedDate"
+					(selectedChange)="dateChanged()"
+					[minDate]="minDate"
+					[maxDate]="maxDate">
+				</mat-calendar>
+			</div>
+			<div class="row tasks-container">
+				<div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
+					<ng-template #popContent
+						>{{item.description}} <br />
+						<a href="task/{{item.id}}" style="text-decoration: underline; color: blue">details</a>
+					</ng-template>
 
-  <div class="col-4">
-    <div class="calendar">
-      <div class="calendar-wrapper">
-        <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged()" [minDate]="minDate"
-                      [maxDate]="maxDate">
-        </mat-calendar>
-      </div>
-      <div class="row tasks-container">
-        <div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
-          <ng-template #popContent>{{item.description}}
-            <br> <a href="task/{{item.id}}" style="text-decoration: underline; color: blue">details</a>
-          </ng-template>
+					<mat-checkbox
+						[ngbPopover]="popContent"
+						triggers="mouseenter:mouseleave"
+						[closeDelay]="1250"
+						[openDelay]="500"
+						popoverTitle="{{item.name}}"
+						class="checkBox"
+						id="{{item.id}}"
+						(change)="OnCheckboxChange($event)"
+						checked="true"
+						color="primary"
+						>{{item.name}}</mat-checkbox
+					>
+				</div>
+			</div>
+			<div class="row legend">
+				<div class="row legend-item">
+					<div class="mat-calendar-body-cell-content legend-button" style="background: red">
+						<fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>
+					</div>
+					Onvoldoende mensen beschikbaar op deze dag.
+				</div>
+				<div class="row legend-item">
+					<div class="mat-calendar-body-cell-content legend-button" style="background: green">
+						<fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>
+					</div>
+					Voldoende mensen beschikbaar op deze dag.
+				</div>
+				<div class="row legend-item">
+					<div class="mat-calendar-body-cell-content legend-button" style="background: blue">
+						<fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>
+					</div>
+					Alle diensten op deze dag zijn ingeroosterd.
+				</div>
+			</div>
+		</div>
+	</div>
 
-          <mat-checkbox [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
-                        [closeDelay]="1250" [openDelay]="500"
-                        popoverTitle="{{item.name}}" class="checkBox" id="{{item.id}}"
-                        (change)="OnCheckboxChange($event)"
-                        checked="true" color="primary">{{item.name}}</mat-checkbox>
-        </div>
-      </div>
-      <div class="row legend">
-        <div class="row legend-item">
-          <div class="mat-calendar-body-cell-content legend-button" style="background: red">
-            <fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>
-          </div>
-          Onvoldoende mensen beschikbaar op deze dag.
-        </div>
-        <div class="row legend-item">
-          <div class="mat-calendar-body-cell-content legend-button" style="background: green">
-            <fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>
-          </div>
-          Voldoende mensen beschikbaar op deze dag.
-        </div>
-        <div class="row legend-item">
-          <div class="mat-calendar-body-cell-content legend-button" style="background: blue">
-            <fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>
-          </div>
-          Alle diensten op deze dag zijn ingeroosterd.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-8">
-    <div class="row datebox">
-      <button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
-        <mat-icon>navigate_before</mat-icon>
-      </button>
-      <div class="date" id="date"> {{viewDate | datePipe}}</div>
-      <button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
-        <mat-icon>navigate_next</mat-icon>
-      </button>
-    </div>
-    <ng-template
-      #customEventTemplate
-      let-weekEvent="weekEvent">
-      <ng-template #planTooltip>
-        <h5>{{weekEvent.event.title}}</h5>
-        {{shifts|planTooltip:weekEvent.event}}
-      </ng-template>
-      <div
-        class="cal-event"
-        [ngStyle]="{backgroundColor: weekEvent.event.color?.secondary,borderColor: weekEvent.event.color?.primary}"
-        [ngbPopover]="planTooltip" triggers="mouseenter:mouseleave" container="body"
-        [closeDelay]="1250" [openDelay]="250"
-        [attr.aria-label]=" { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
-        <div class="flex-container">
-          <div class="row flex-container title" id="title-{{weekEvent.event.id}}">
-            <span class="cal-event-title" [ngStyle]="numberOfOverlappingShifts>4&&{'font-size':'16px'}">{{weekEvent.event.title}}</span>
-
-          </div>
-          <div class="row" id="spacer" [ngStyle]="numberOfOverlappingShifts>7&&{'font-size':'12px'}">
-            <div class="row" id="necessary-{{weekEvent.event.id}}"></div>
-            <div class="row" id="scheduled-{{weekEvent.event.id}}"></div>
-            <div class="row" id="available-{{weekEvent.event.id}}"></div>
-
-          </div>
-          <div class="row" id="actions">
-            <button mat-button aria-label="Plannen" class="custom-button scheduled" id="plan-{{weekEvent.event.id}}"
-                    (click)="Plan(weekEvent.event.id)"> Plannen
-            </button>
-          </div>
-        </div>
-      </div>
-    </ng-template>
-    <div class="calendarbox"
-         [ngStyle]="numberOfOverlappingShifts>2&&{'min-width':(numberOfOverlappingShifts-2)*75+300+'px'}">
-      <mwl-calendar-day-view #schedule
-                             [viewDate]="viewDate"
-                             [dayStartHour]="startHour"
-                             [dayEndHour]="endHour"
-                             [events]="filteredEvents"
-                             [refresh]="refresh"
-                             [eventTemplate]="customEventTemplate"
-                             [hourSegmentHeight]="15">
-      </mwl-calendar-day-view>
-    </div>
-  </div>
+	<div class="col-8">
+		<div class="row datebox">
+			<button mat-icon-button class="changeday cdhidden" (click)="decrement()" [disabled]="prevBtnDisabled">
+				<mat-icon>navigate_before</mat-icon>
+			</button>
+			<div class="date" id="date"> {{viewDate | datePipe}}</div>
+			<button mat-icon-button class="changeday cdhidden" (click)="increment()" [disabled]="nextBtnDisabled">
+				<mat-icon>navigate_next</mat-icon>
+			</button>
+		</div>
+		<ng-template #customEventTemplate let-weekEvent="weekEvent">
+			<ng-template #planTooltip>
+				<h5>{{weekEvent.event.title}}</h5>
+				{{shifts|planTooltip:weekEvent.event}}
+			</ng-template>
+			<div
+				class="cal-event"
+				[ngStyle]="{backgroundColor: weekEvent.event.color?.secondary,borderColor: weekEvent.event.color?.primary}"
+				[ngbPopover]="planTooltip"
+				triggers="mouseenter:mouseleave"
+				container="body"
+				[closeDelay]="1250"
+				[openDelay]="250"
+				[attr.aria-label]=" { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }| calendarA11y: 'eventDescription'">
+				<div class="flex-container">
+					<div class="row flex-container title" id="title-{{weekEvent.event.id}}">
+						<span
+							class="cal-event-title"
+							[ngStyle]="numberOfOverlappingShifts>4&&{'font-size':'16px'}"
+							>{{weekEvent.event.title}}</span
+						>
+					</div>
+					<div class="row" id="spacer" [ngStyle]="numberOfOverlappingShifts>7&&{'font-size':'12px'}">
+						<div class="row" id="necessary-{{weekEvent.event.id}}"></div>
+						<div class="row" id="scheduled-{{weekEvent.event.id}}"></div>
+						<div class="row" id="available-{{weekEvent.event.id}}"></div>
+					</div>
+					<div class="row" id="actions">
+						<button
+							mat-button
+							aria-label="Plannen"
+							class="custom-button scheduled"
+							id="plan-{{weekEvent.event.id}}"
+							(click)="Plan(weekEvent.event.id)">
+							Plannen
+						</button>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+		<div
+			class="calendarbox"
+			[ngStyle]="numberOfOverlappingShifts>2&&{'min-width':(numberOfOverlappingShifts-2)*75+300+'px'}">
+			<mwl-calendar-day-view
+				#schedule
+				[viewDate]="viewDate"
+				[dayStartHour]="startHour"
+				[dayEndHour]="endHour"
+				[events]="filteredEvents"
+				[refresh]="refresh"
+				[eventTemplate]="customEventTemplate"
+				[hourSegmentHeight]="15">
+			</mwl-calendar-day-view>
+		</div>
+	</div>
 </div>
