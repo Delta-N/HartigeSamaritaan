@@ -11,7 +11,7 @@ body {
 }
 
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 
 .custom-dialog-container .mat-dialog-container {
   border-radius: 10px;
@@ -315,7 +315,3 @@ button fa-icon {
 #searchbar {
   max-height: 25px;
 }
-
-
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
