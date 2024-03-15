@@ -1,6 +1,6 @@
 <div>
   <mat-toolbar color="primary">
-    <div fxShow="true" fxHide.gt-sm="true" id="toolbar">
+    <div class="lg:hidden sm:flex" id="toolbar">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -10,7 +10,7 @@
       <img src="../assets/Logo.png" alt="Hartige Samaritaan" class="logo"/>
     </a>
     <span class="sidenav-spacer"></span>
-    <div fxShow="true" fxHide.lt-md="true" id="buttons">
+    <div class="sm:hidden lg:flex items-center" id="buttons">
       <a mat-button class="toolbarbutton" routerLink="/home" routerLinkActive="active">
         <fa-icon [icon]="homeIcon"></fa-icon>
         Home</a>
@@ -43,8 +43,8 @@
 
   <div>
     <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #sidenav mode="side" opened="false" fxShow="true" fxHide.gt-sm="true">
-        <div fxLayout="column">
+      <mat-sidenav #sidenav mode="side" opened="false"  fxShow="true" fxHide.gt-sm="true">
+        <div class="flex flex-col flex-1">
           <div id="sidenavPicture">
             <a (click)="changeProfilePicture()">
               <img class="dropimg profile"
