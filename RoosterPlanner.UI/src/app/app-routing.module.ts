@@ -37,8 +37,6 @@ const isIframe = window !== window.parent && !window.opener;
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
     useHash: false,
-    // Don't perform initial navigation in iframes
-    initialNavigation: !isIframe ? 'enabled' : 'disabled',
   })],
   exports: [RouterModule]
 })
