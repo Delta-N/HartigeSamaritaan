@@ -31,6 +31,7 @@ import {
 import {ShiftComponent} from "../../pages/shift/shift.component";
 import {EmailDialogComponent} from "../../components/email-dialog/email-dialog.component";
 import {NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
+import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -59,27 +60,28 @@ export function momentAdapterFactory() {
     ScheduledPipe,
     AgePipe,
   ],
-  imports: [
-    CommonModule,
-    ManageRoutingModule,
-    MaterialModule,
-    NgxMaterialTimepickerModule,
-    NgxMultipleDatesModule,
-    CalendarModule.forRoot(
-      {
-        provide: CalendarDateAdapter,
-        useFactory: momentAdapterFactory,
-      },
-      {
-        dateFormatter: {
-          provide: CalendarDateFormatter,
-          useClass: CalendarMomentDateFormatter,
-        },
-      }
-    ),
-    NgbPopoverModule,
+    imports: [
+        CommonModule,
+        ManageRoutingModule,
+        MaterialModule,
+        NgxMaterialTimepickerModule,
+        NgxMultipleDatesModule,
+        CalendarModule.forRoot(
+            {
+                provide: CalendarDateAdapter,
+                useFactory: momentAdapterFactory,
+            },
+            {
+                dateFormatter: {
+                    provide: CalendarDateFormatter,
+                    useClass: CalendarMomentDateFormatter,
+                },
+            }
+        ),
+        NgbPopoverModule,
+        MatLegacyChipsModule,
 
-  ],
+    ],
     exports: [
         DatePipe,
         CalendarTooltip,
