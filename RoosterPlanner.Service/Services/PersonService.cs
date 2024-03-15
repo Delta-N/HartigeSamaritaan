@@ -107,27 +107,15 @@ namespace RoosterPlanner.Service.Services
         Task<TaskListResult<Manager>> GetProjectsManagedByAsync(Guid userId);
     }
 
-    public class PersonService : IPersonService
-    {
+    public class PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger<PersonService> logger) : IPersonService {
         #region Fields
 
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IPersonRepository personRepository;
-        private readonly IManagerRepository managerRepository;
-        private readonly IAzureB2CService azureB2CService;
-        private readonly ILogger<PersonService> logger;
+        private readonly IPersonRepository personRepository = unitOfWork.PersonRepository;
+        private readonly IManagerRepository managerRepository = unitOfWork.ManagerRepository;
 
         #endregion
 
         //Constructor
-        public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger<PersonService> logger)
-        {
-            this.unitOfWork = unitOfWork;
-            personRepository = unitOfWork.PersonRepository;
-            managerRepository = unitOfWork.ManagerRepository;
-            this.azureB2CService = azureB2CService;
-            this.logger = logger;
-        }
 
         private async Task AddPersonToLocalDbAsync(User user)
         {
