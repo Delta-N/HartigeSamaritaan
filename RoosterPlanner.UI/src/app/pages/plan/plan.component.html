@@ -13,7 +13,7 @@
 					[maxDate]="maxDate">
 				</mat-calendar>
 			</div>
-			<div class="row tasks-container">
+			<div class="tasks-container">
 				<div class="tasktoggle" *ngFor="let item of availabilityData.projectTasks">
 					<ng-template #popContent
 						>{{item.description}} <br />
@@ -35,8 +35,8 @@
 					>
 				</div>
 			</div>
-			<div class="row legend">
-				<div class="row legend-item">
+			<div class="legend">
+				<div class=" legend-item">
 					<div class="mat-calendar-body-cell-content legend-button" style="background: red">
 						<fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>
 					</div>

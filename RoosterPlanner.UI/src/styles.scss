@@ -67,6 +67,10 @@ fa-icon {
 button fa-icon {
   margin-left: 5px;
 }
+.action-row{
+  display: flex;
+  flex-direction: row;
+}
 
 .action-anchor {
   position: absolute !important;
