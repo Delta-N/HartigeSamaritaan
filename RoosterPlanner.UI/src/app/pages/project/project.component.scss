@@ -18,7 +18,7 @@ img {
   margin: 5px;
 }
 
-.mat-card {
+.mat-mdc-card {
   margin-right: auto;
   margin-top: 30px;
   margin-bottom: 10px;
@@ -54,7 +54,7 @@ img {
     display: flex;
     justify-content: center;
   }
-  .mat-card {
+  .mat-mdc-card {
     min-width: initial;
     width: 375px;
     margin-left: initial;
@@ -79,15 +79,15 @@ img {
     }
 
 
-    .mat-card-title {
+    .mat-mdc-card-title {
       font-size: 16px;
     }
 
-    .mat-card-content {
+    .mat-mdc-card-content {
       font-size: 14px;
     }
 
-    .mat-card-actions .mat-button {
+    .mat-mdc-card-actions .mat-mdc-button {
       font-size: 14px;
     }
 

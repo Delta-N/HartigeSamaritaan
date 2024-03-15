@@ -13,7 +13,7 @@ body {
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 
-.custom-dialog-container .mat-dialog-container {
+.custom-dialog-container .mat-mdc-dialog-container {
   border-radius: 10px;
   min-width: 30vw;
   min-height: 40vh;
@@ -132,7 +132,7 @@ button fa-icon {
   font-family: "Segoe UI", serif;
 }
 
-.mat-button {
+.mat-mdc-button {
   text-align: left;
   font: normal normal 400 18px/27px Segoe UI;
   letter-spacing: 0;
@@ -158,7 +158,7 @@ button fa-icon {
   border: initial;
 }
 
-.mat-card {
+.mat-mdc-card {
   margin-right: 30px;
   border-radius: 20px !important;
   background: #E8E8E8 0 0 no-repeat padding-box;
@@ -174,11 +174,11 @@ button fa-icon {
   max-height: 375px;
 }
 
-.mat-card-actions {
+.mat-mdc-card-actions {
   border: none;
 }
 
-.mat-card-content {
+.mat-mdc-card-content {
   font: normal normal 400 18px/27px Segoe UI;
   color: #434343;
   min-height: 240px;
@@ -187,12 +187,12 @@ button fa-icon {
   padding: 20px;
 }
 
-.mat-card-content.h6 {
+.mat-mdc-card-content.h6 {
   margin-top: 25px;
 }
 
 
-.mat-card-title {
+.mat-mdc-card-title {
   border-bottom: 1px solid gray;
   text-align: left;
   font: normal normal bold 21px/31px Segoe UI;
@@ -256,7 +256,7 @@ button fa-icon {
     display: flex;
     justify-content: center !important;
   }
-  .mat-card {
+  .mat-mdc-card {
     margin: 15px;
   }
 

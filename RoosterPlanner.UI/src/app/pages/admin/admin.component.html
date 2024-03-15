@@ -9,7 +9,7 @@
 <div class="row cardholder" *ngIf="loaded">
 
     <span *ngIf="projects.length===0">
-      <mat-card class="card">
+      <mat-card appearance="outlined" class="card">
         <div>
           <mat-card-title>Projecten</mat-card-title>
         </div>
@@ -22,7 +22,7 @@
     </span>
 
 
-  <mat-card [ngClass]="[projectCardStyle]" id="projectCard" [ngStyle]="projectCardStyle!=='card' && {'margin':'0'}">
+  <mat-card appearance="outlined" [ngClass]="[projectCardStyle]" id="projectCard" [ngStyle]="projectCardStyle!=='card' && {'margin':'0'}">
     <div>
       <mat-card-title>Projecten
         <button [disabled]="projectExpandbtnDisabled" class="card-title-icon" mat-icon-button
@@ -47,7 +47,7 @@
   </mat-card>
 
 
-  <mat-card [ngClass]="[adminCardStyle]" id="adminCard" [ngStyle]="adminCardStyle!=='card' && {'margin':'0'}">
+  <mat-card appearance="outlined" [ngClass]="[adminCardStyle]" id="adminCard" [ngStyle]="adminCardStyle!=='card' && {'margin':'0'}">
     <div>
       <mat-card-title>Administrators
         <button [disabled]="adminExpandbtnDisabled" class="card-title-icon" mat-icon-button (click)="expandAdminCard()">
@@ -68,7 +68,7 @@
     </mat-card-actions>
   </mat-card>
 
-  <mat-card class="card" id="dataCard">
+  <mat-card appearance="outlined" class="card" id="dataCard">
     <div>
       <mat-card-title>Gegevens</mat-card-title>
     </div>

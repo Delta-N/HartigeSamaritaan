@@ -11,13 +11,13 @@
 .cardholder {
   width: 100%;
 
-  .mat-card {
+  .mat-mdc-card {
     min-height: 405px;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .mat-card {
+  .mat-mdc-card {
     min-width: 275px;
   }
 }

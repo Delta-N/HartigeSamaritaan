@@ -1,5 +1,5 @@
 
-.mat-button {
+.mat-mdc-button {
   padding-top: 10px;
   padding-bottom: 10px;
 
@@ -17,7 +17,7 @@
   margin-bottom: 9px;
 }
 
-.mat-card {
+.mat-mdc-card {
   margin-right: auto;
   margin-top: 30px;
   margin-bottom: 10px;
@@ -40,18 +40,18 @@
     justify-content: center;
   }
 
-  .mat-card {
+  .mat-mdc-card {
     margin-right: 0;
   }
 }
 
 @media only screen and (max-width: 400px) {
-  .mat-card {
+  .mat-mdc-card {
     min-width: 250px;
     max-width: 250px;
     min-height: 325px;
   }
-  .mat-card-title {
+  .mat-mdc-card-title {
     font-size: 14px;
   }
   .override-button {

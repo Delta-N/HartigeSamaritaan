@@ -5,7 +5,7 @@
   <mat-spinner></mat-spinner>
 </div>
 <div class="row cardholder" *ngIf="loaded">
-  <mat-card [ngClass]="[taskCardStyle]" id="taskCard" [ngStyle]="taskCardStyle!=='card' && {'margin':'0'}">
+  <mat-card appearance="outlined" [ngClass]="[taskCardStyle]" id="taskCard" [ngStyle]="taskCardStyle!=='card' && {'margin':'0'}">
     <div>
       <mat-card-title>Taken
         <button [disabled]="tasksExpandbtnDisabled" class="card-title-icon" mat-icon-button
@@ -27,7 +27,7 @@
     </mat-card-actions>
   </mat-card>
 
-  <mat-card [ngClass]="[categoryCardStyle]" id="categoryCard" [ngStyle]="categoryCardStyle!=='card' && {'margin':'0'}">
+  <mat-card appearance="outlined" [ngClass]="[categoryCardStyle]" id="categoryCard" [ngStyle]="categoryCardStyle!=='card' && {'margin':'0'}">
     <div>
       <mat-card-title>Categorieën
         <button [disabled]="categoryExpandbtnDisabled" class="card-title-icon" mat-icon-button
@@ -49,7 +49,7 @@
     </mat-card-actions>
   </mat-card>
 
-  <mat-card [ngClass]="[certificateCardStyle]" id="certificateCard"
+  <mat-card appearance="outlined" [ngClass]="[certificateCardStyle]" id="certificateCard"
             [ngStyle]="certificateCardStyle!=='card' && {'margin':'0'}">
     <div>
       <mat-card-title>Certificaattypes

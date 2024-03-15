@@ -31,7 +31,7 @@ import {
 import {ShiftComponent} from "../../pages/shift/shift.component";
 import {EmailDialogComponent} from "../../components/email-dialog/email-dialog.component";
 import {NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
-import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
+import {MatChipsModule} from "@angular/material/chips";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -79,7 +79,7 @@ export function momentAdapterFactory() {
             }
         ),
         NgbPopoverModule,
-        MatLegacyChipsModule,
+        MatChipsModule,
 
     ],
     exports: [
