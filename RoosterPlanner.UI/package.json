@@ -42,7 +42,7 @@
     "ngx-doc-viewer": "^2.1.4",
     "ngx-material-timepicker": "^5.6.0",
     "ngx-multiple-dates": "^14.0.0",
-    "ngx-toastr": "^14.3.0",
+    "ngx-toastr": "^15.2.2",
     "path": "^0.12.7",
     "rxjs": "~6.6.6",
     "tslib": "^2.1.0",

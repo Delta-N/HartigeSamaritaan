@@ -176,7 +176,7 @@ export class AddShiftsComponent implements OnInit {
   remove(day: Date) {
     const index = this.shiftDates.indexOf(day)
     if (index >= 0) {
-      this.datepicker.remove(day);
+      this.datepicker.removeChip(day);
     }
   }
 
