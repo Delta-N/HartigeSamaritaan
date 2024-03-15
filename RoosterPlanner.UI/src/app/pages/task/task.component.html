@@ -7,28 +7,28 @@
    </div>
    <div class="row" id="holder">
       <div class="col-6" id="left">
-         <div class="row">
+         <div class="new-row">
             <div class="row-name">Naam:</div>
             <div class="user-data">{{task.name}}</div>
          </div>
-         <div class="row">
+         <div class="new-row">
             <div class="row-name">Categorie:</div>
             <div class="user-data">{{task.category != null ? task.category.name : null}}</div>
          </div>
-         <div class="row" *ngIf="isAdmin">
+         <div class="new-row" *ngIf="isAdmin">
             <div class="row-name">Shiftkleur:</div>
             <div class="user-data">{{task.color | colorPipe}}</div>
          </div>
-         <div class="row" *ngIf="task.instruction">
+         <div class="new-row" *ngIf="task.instruction">
             <div class="row-name">Instructiedocument:</div>
             <div class="user-data"><a [href]="task.instruction.documentUri"
                                       target="_blank">Klik hier om te lezen</a></div>
          </div>
-         <div class="row">
+         <div class="new-row">
             <div class="row-name">Omschrijving:</div>
             <div class="user-data">{{task.description}}</div>
          </div>
-         <div class="row">
+         <div class="new-row">
             <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="editTask"><fa-icon
               [icon]="editIcon"></fa-icon>Taak wijzigen</a>
             <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button"

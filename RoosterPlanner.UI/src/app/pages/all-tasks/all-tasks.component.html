@@ -4,7 +4,7 @@
 <div class="spinner" *ngIf="!loaded">
   <mat-spinner></mat-spinner>
 </div>
-<div class="row cardholder" *ngIf="loaded">
+<div class="cardholder" *ngIf="loaded">
   <mat-card appearance="outlined" [ngClass]="[taskCardStyle]" id="taskCard" [ngStyle]="taskCardStyle!=='card' && {'margin':'0'}">
     <div>
       <mat-card-title>Taken

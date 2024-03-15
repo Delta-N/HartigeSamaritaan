@@ -16,7 +16,7 @@
 
   </div>
   <span *ngIf="participations.length > 0">
-       <div class="row cardholder">
+       <div class="cardholder">
        <span *ngFor="let item of participations" class="mobilecard">
         <app-project-card [participation]="item"></app-project-card>
        </span>

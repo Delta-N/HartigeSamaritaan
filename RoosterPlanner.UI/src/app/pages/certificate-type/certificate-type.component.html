@@ -8,18 +8,18 @@
   </div>
 
 
-  <div class="row">
+  <div class="new-row">
     <div class="row-name">Naam:</div>
     <div class="user-data">{{certificateType.name}}</div>
   </div>
 
-  <div class="row">
+  <div class="new-row">
     <div class="row-name">Niveau:</div>
     <div class="user-data">{{certificateType.level}}</div>
   </div>
 
 
-  <div class="row">
+  <div class="">
     <a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button"><fa-icon
       [icon]="editIcon"></fa-icon>Wijzigen</a>
     <a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button"><fa-icon
