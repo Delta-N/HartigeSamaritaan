@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AvailabilityComponent} from "./pages/availability/availability.component";
 import {BreadcrumbComponent} from './components/breadcrumb/breadcrumb.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, REMOVE_STYLES_ON_COMPONENT_DESTROY} from '@angular/platform-browser';
 import {
   CalendarModule,
   DateAdapter as CalendarDateAdapter,
@@ -179,6 +179,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
       provide: MOMENT,
       useValue: moment,
     },
+    {provide: REMOVE_STYLES_ON_COMPONENT_DESTROY, useValue: false},
   ],
   bootstrap: [AppComponent],
 
