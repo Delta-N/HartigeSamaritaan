@@ -2,6 +2,10 @@
   min-height: 65vh;
 }
 
+.mat-mdc-button{
+  height: inherit;
+}
+
 .home {
   display: flex;
   flex-direction: column;
@@ -77,4 +81,5 @@
     }
   }
 }
+
 

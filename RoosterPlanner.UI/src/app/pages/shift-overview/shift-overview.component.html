@@ -37,7 +37,7 @@
              {{date | datePipe}}
              <mat-slider color="primary"
                          min="0"
-                         max="{{shiftData.dates.length-1}}" #ngSlider><input matSliderThumb (input)="setMinDate({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="filter()" /></mat-slider>
+                         max="{{shiftData.dates.length-1}}" #ngSlider><input matSliderThumb /><input matSliderThumb (input)="setMinDate({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="filter()" /></mat-slider>
             </mat-expansion-panel>
 
            <mat-expansion-panel>
@@ -49,7 +49,7 @@
              {{start}}
              <mat-slider color="primary"
                          min="0"
-                         max="{{shiftData.startTimes.length-1}}" #ngSlider><input matSliderThumb (input)="setMinStartTime({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="filter()" /></mat-slider>
+                         max="{{shiftData.startTimes.length-1}}" #ngSlider><input matSliderThumb /><input matSliderThumb (input)="setMinStartTime({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="filter()" /></mat-slider>
             </mat-expansion-panel>
 
            <mat-expansion-panel>
@@ -61,7 +61,7 @@
              {{end}}
              <mat-slider color="primary"
                          min="0"
-                         max="{{shiftData.endTimes.length-1}}" #ngSlider><input matSliderThumb (input)="setMinEndTime({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="filter()" /></mat-slider>
+                         max="{{shiftData.endTimes.length-1}}" #ngSlider><input matSliderThumb /><input matSliderThumb (input)="setMinEndTime({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="filter()" /></mat-slider>
             </mat-expansion-panel>
 
            <mat-expansion-panel>
@@ -73,7 +73,7 @@
              {{participantReq}}
              <mat-slider color="primary"
                          min="0"
-                         max="{{shiftData.participantsRequired.length-1}}" #ngSlider><input matSliderThumb (input)="setMinPar({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="filter()" /></mat-slider>
+                         max="{{shiftData.participantsRequired.length-1}}" #ngSlider><input matSliderThumb /><input matSliderThumb (input)="setMinPar({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="filter()" /></mat-slider>
             </mat-expansion-panel>
 
          </mat-accordion>
