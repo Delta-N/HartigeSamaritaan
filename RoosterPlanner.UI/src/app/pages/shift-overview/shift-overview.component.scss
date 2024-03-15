@@ -47,8 +47,7 @@ td, th {
 }
 
 @media only screen and (max-width: 992px) {
-  /* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
-  .mat-slider-horizontal {
+  .mat-slider {
     min-width: 75px;
   }
 }
@@ -59,8 +58,7 @@ td, th {
     padding-left: 15px;
     padding-right: 15px;
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
-  .mat-slider-horizontal {
+  .mat-slider {
     width: 100%
   }
 }
