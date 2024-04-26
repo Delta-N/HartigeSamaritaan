@@ -335,3 +335,5 @@ RoosterPlanner.Data.Test/appsettings.Test.json
 
 RoosterPlanner.Web/ClientApp/dist/*
 /RoosterPlanner.Api/${LOG_DIR}/
+/RoosterPlanner.UI/.angular/
+/RoosterPlanner.UI/.nx/
