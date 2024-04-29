@@ -36,28 +36,13 @@ namespace RoosterPlanner.Api {
             services.AddApplicationInsightsTelemetry(Configuration);
 
 
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(options => {
                 Configuration.Bind("AzureAuthentication", options);
-
-                // options.TokenValidationParameters.NameClaimType = "name";
-                // options.TokenValidationParameters.RoleClaimType = "groups";
             },
             options => { Configuration.Bind("AzureAuthentication", options); });
 
-            // services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
-            //     .AddJwtBearer(jwtOptions =>
-            //     {
-            //         jwtOptions.Authority =
-            //             $"{Configuration["AzureAuthentication:Instance"]}/tfp/{Configuration["AzureAuthentication:TenantId"]}/{Configuration["AzureAuthentication:SignUpSignInPolicyId"]}/v2.0/";
-            //         jwtOptions.TokenValidationParameters = new TokenValidationParameters
-            //         {
-            //             ValidateIssuer = true,
-            //             ValidateLifetime = true
-            //         };
-            //         jwtOptions.Audience = Configuration["AzureAuthentication:ClientId"];
-            //         jwtOptions.Events = new JwtBearerEvents();
-            //     });
 
             services.AddCors(options => {
                 options.AddPolicy("AllowSpecificOrigins", p => {
@@ -107,6 +92,7 @@ namespace RoosterPlanner.Api {
 
             services.AddHealthChecks()
             .AddSqlServer(Configuration.GetConnectionString("RoosterPlannerDatabase")!, tags: new[] { "database" });
+            AddCustomServices(services);
 
 
             services.AddLogging();
