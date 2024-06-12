@@ -72,7 +72,7 @@ jobs:
         with:
           app-name: ${{secrets.AZURE_DEV_WEB_RESOURCE_NAME}}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISHINGPROFILE_DEV  }}
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}staging/web.zip'
+          package: './staging/web.zip'
 
   build-back-end:
     runs-on: ubuntu-latest
@@ -114,4 +114,4 @@ jobs:
         with:
             app-name: ${{secrets.AZURE_DEV_API_RESOURCE_NAME}}
             publish-profile: ${{ secrets.AZURE_API_PUBLISHINGPROFILE_DEV  }}
-            package: '${{ env.AZURE_API_PACKAGE_PATH }}staging/api.zip'
+            package: './staging/api.zip'
