@@ -59,20 +59,20 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r ./web.zip .
+        run: zip -qq -r web.zip .
         working-directory: ./staging/web
 
       - uses: actions/upload-artifact@v4
         with:
           name: Web
-          path: ./staging/web.zip
+          path: ./web.zip
 
       - name: deploy
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{secrets.AZURE_DEV_WEB_RESOURCE_NAME}}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISHINGPROFILE_DEV  }}
-          package: './staging/web.zip'
+          package: './web.zip'
 
   build-back-end:
     runs-on: ubuntu-latest
@@ -81,7 +81,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup .NET core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -101,17 +101,17 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r .api.zip .
+        run: zip -qq -r api.zip .
         working-directory: ./staging/api
 
       - uses: actions/upload-artifact@v4
         with:
           name: Api
-          path: ./staging/api.zip
+          path: ./api.zip
 
       - name: deploy
         uses: azure/webapps-deploy@v2
         with:
             app-name: ${{secrets.AZURE_DEV_API_RESOURCE_NAME}}
             publish-profile: ${{ secrets.AZURE_API_PUBLISHINGPROFILE_DEV  }}
-            package: './staging/api.zip'
+            package: './api.zip'
