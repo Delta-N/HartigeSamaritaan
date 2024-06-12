@@ -65,14 +65,14 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Web
-          path: ./web.zip
+          path: web.zip
 
       - name: deploy
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{secrets.AZURE_DEV_WEB_RESOURCE_NAME}}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISHINGPROFILE_DEV  }}
-          package: './web.zip'
+          package: 'web.zip'
 
   build-back-end:
     runs-on: ubuntu-latest
@@ -107,11 +107,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Api
-          path: ./api.zip
+          path: api.zip
 
       - name: deploy
         uses: azure/webapps-deploy@v2
         with:
             app-name: ${{secrets.AZURE_DEV_API_RESOURCE_NAME}}
             publish-profile: ${{ secrets.AZURE_API_PUBLISHINGPROFILE_DEV  }}
-            package: './api.zip'
+            package: 'api.zip'
