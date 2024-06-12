@@ -61,7 +61,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: Web
-          path: ../staging/web.zip
+          path: ./staging/web.zip
 
   build-back-end:
     runs-on: ubuntu-latest
@@ -93,4 +93,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: Api
-          path: ../staging/api.zip
+          path: ./staging/api.zip
