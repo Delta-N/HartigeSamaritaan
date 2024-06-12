@@ -1,7 +1,7 @@
 ﻿import { BaseFilter } from './base';
 
 export class ShiftFilter extends BaseFilter {
-	projectId: string | undefined;
+	projectId: string;
 	tasks: string[];
 	date: Date;
 	start: string;

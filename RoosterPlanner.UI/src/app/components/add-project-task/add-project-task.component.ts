@@ -15,13 +15,13 @@ import { ToastrService } from 'ngx-toastr';
 export class AddProjectTaskComponent implements OnInit {
 	loaded: boolean;
 	project: Project;
-	allTasks: Task[] | null = [];
-	currentProjectTasks: Task[] | null;
+	allTasks: Task[] = [];
+	currentProjectTasks: Task[];
 	title: string;
 	reasonableMaxInteger = 10000;
-	currentPage: number = 1;
-	pageSize: number = 5;
-	searchText: string = '';
+	currentPage = 1;
+	pageSize = 5;
+	searchText = '';
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
@@ -43,9 +43,9 @@ export class AddProjectTaskComponent implements OnInit {
 			await this.taskService
 				.getAllTasks(0, this.reasonableMaxInteger)
 				.then((tasks) => {
-					tasks?.forEach((t) => {
-						if (!this.currentProjectTasks?.find((cpt) => cpt.id === t.id)) {
-							this.allTasks?.push(t);
+					tasks.forEach((t) => {
+						if (!this.currentProjectTasks.find((cpt) => cpt.id === t.id)) {
+							this.allTasks.push(t);
 						}
 					});
 				});
@@ -57,7 +57,7 @@ export class AddProjectTaskComponent implements OnInit {
 			this.allTasks = this.currentProjectTasks;
 			this.loaded = true;
 		}
-		this.allTasks?.sort((a, b) => (a.name > b.name ? 1 : -1));
+		this.allTasks.sort((a, b) => (a.name > b.name ? 1 : -1));
 	}
 
 	async getCurrentProjectTasks() {
@@ -67,15 +67,13 @@ export class AddProjectTaskComponent implements OnInit {
 	}
 
 	prevPage() {
-		if (this.currentPage !== 1) {
+		if (this.currentPage != 1) {
 			this.currentPage--;
 		}
 	}
 
 	nextPage() {
-		if (
-			this.currentPage !== Math.ceil(this.allTasks?.length ?? 0 / this.pageSize)
-		) {
+		if (this.currentPage != Math.ceil(this.allTasks.length / this.pageSize)) {
 			this.currentPage++;
 		}
 	}
@@ -89,15 +87,15 @@ export class AddProjectTaskComponent implements OnInit {
 	}
 
 	async modProjectTask(id: string) {
-		const task: Task | undefined = this.allTasks?.find((t) => t.id === id);
+		const task: Task = this.allTasks.find((t) => t.id === id);
 		if (this.data.modifier === 'add') {
 			const projectTask: Projecttask = new Projecttask();
 			projectTask.projectId = this.project.id;
-			projectTask.taskId = task?.id ?? '';
+			projectTask.taskId = task.id;
 			projectTask.id = EntityHelper.returnEmptyGuid();
 			await this.taskService.addTaskToProject(projectTask).then((res) => {
 				if (res) {
-					this.currentProjectTasks?.push(res);
+					this.currentProjectTasks.push(res);
 					this.toastr.success('Taak toegevoegd');
 					this.dialogRef.close();
 				}
@@ -108,8 +106,9 @@ export class AddProjectTaskComponent implements OnInit {
 				.removeTaskFromProject(this.project.id, id)
 				.then((res) => {
 					if (res) {
-						this.currentProjectTasks =
-							this.currentProjectTasks?.filter((cpt) => cpt.id !== id) ?? [];
+						this.currentProjectTasks = this.currentProjectTasks.filter(
+							(cpt) => cpt.id !== id
+						);
 						this.toastr.success('Taak verwijderd');
 						this.dialogRef.close(this.currentProjectTasks);
 					}

@@ -13,23 +13,19 @@ import {
 } from '../../components/confirm-dialog/confirm-dialog.component';
 import { AddRequirementComponent } from '../../components/add-requirement/add-requirement.component';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { NgIf } from '@angular/common';
 
 @Component({
 	selector: 'app-requirement',
 	templateUrl: './requirement.component.html',
-	standalone: true,
-	imports: [MatProgressSpinner, NgIf],
 	styleUrls: ['./requirement.component.scss'],
 })
 export class RequirementComponent implements OnInit {
 	deleteIcon = faTrashAlt;
 	editIcon = faEdit;
-	guid: string | null;
+	guid: string;
 	requirement: Requirement;
-	isAdmin: boolean = false;
-	loaded: boolean = false;
+	isAdmin = false;
+	loaded = false;
 
 	constructor(
 		private route: ActivatedRoute,

@@ -1,9 +1,9 @@
 ﻿export class Breadcrumb {
-	constructor(label: string | null, url: string | null) {
+	constructor(label: string, url: string) {
 		this.label = label;
 		this.url = url;
 	}
 
-	label: string | null;
-	url: string | null;
+	label: string;
+	url: string;
 }

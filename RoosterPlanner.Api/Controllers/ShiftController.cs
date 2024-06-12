@@ -24,35 +24,15 @@ namespace RoosterPlanner.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ShiftController : ControllerBase
-    {
-        private readonly ILogger<ShiftController> logger;
-        private readonly IShiftService shiftService;
-        private readonly IProjectService projectService;
-        private readonly IPersonService personService;
-        private readonly ITaskService taskService;
-        private readonly IAvailabilityService availabilityService;
-        private readonly string b2CExtentionApplicationId;
-
-        public ShiftController(
-            ILogger<ShiftController> logger,
-            IShiftService shiftService,
-            IProjectService projectService,
-            ITaskService taskService,
-            IPersonService personService,
-            IAvailabilityService availabilityService,
-            string b2CExtentionApplicationId)
-
-        {
-            this.logger = logger;
-            this.shiftService = shiftService;
-            this.projectService = projectService;
-            this.personService = personService;
-            this.taskService = taskService;
-            this.availabilityService = availabilityService;
-            this.b2CExtentionApplicationId = b2CExtentionApplicationId;
-        }
-
+    public class ShiftController(
+    ILogger<ShiftController> logger,
+    IShiftService shiftService,
+    IProjectService projectService,
+    ITaskService taskService,
+    IPersonService personService,
+    IAvailabilityService availabilityService,
+    string b2CExtentionApplicationId)
+    : ControllerBase {
         /// <summary>
         /// Makes a request towards the services layer to get distinct data from a project.
         /// Only Boardmembers and Committemember can request distinct data.

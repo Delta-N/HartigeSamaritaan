@@ -15,18 +15,18 @@ export class RequirementService {
 		private apiService: ApiService
 	) {}
 
-	async getRequirement(guid: string | null): Promise<Requirement | null> {
+	async getRequirement(guid: string): Promise<Requirement> {
 		if (!guid) {
 			this.errorService.error('requirementId mag niet leeg zijn');
 			return null;
 		}
-		let requirement: Requirement | null = null;
+		let requirement: Requirement = null;
 		await this.apiService
 			.get<HttpResponse<Requirement>>(`${HttpRoutes.requirementApiUrl}/${guid}`)
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) requirement = res.body;
+					if (res.ok) requirement = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -35,7 +35,7 @@ export class RequirementService {
 		return requirement;
 	}
 
-	async postRequirement(requirement: Requirement): Promise<Requirement | null> {
+	async postRequirement(requirement: Requirement): Promise<Requirement> {
 		if (!requirement || !requirement.task || !requirement.certificateType) {
 			this.errorService.error('Ongeldig requirement');
 			return null;
@@ -43,7 +43,7 @@ export class RequirementService {
 
 		if (!requirement.id) requirement.id = EntityHelper.returnEmptyGuid();
 
-		let resRequirement: Requirement | null = null;
+		let resRequirement: Requirement = null;
 		await this.apiService
 			.post<HttpResponse<Requirement>>(
 				`${HttpRoutes.requirementApiUrl}`,
@@ -52,7 +52,7 @@ export class RequirementService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) resRequirement = res.body;
+					if (res.ok) resRequirement = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -61,19 +61,17 @@ export class RequirementService {
 		return resRequirement;
 	}
 
-	async updateRequirement(
-		requirement: Requirement
-	): Promise<Requirement | null> {
+	async updateRequirement(requirement: Requirement): Promise<Requirement> {
 		if (
 			!requirement ||
 			!requirement.task ||
 			!requirement.certificateType ||
-			requirement.id === EntityHelper.returnEmptyGuid()
+			requirement.id == EntityHelper.returnEmptyGuid()
 		) {
 			this.errorService.error('Ongeldig requirement');
 			return null;
 		}
-		let resRequirement: Requirement | null = null;
+		let resRequirement: Requirement = null;
 		await this.apiService
 			.put<HttpResponse<Requirement>>(
 				`${HttpRoutes.requirementApiUrl}`,
@@ -82,7 +80,7 @@ export class RequirementService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) resRequirement = res.body;
+					if (res.ok) resRequirement = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -91,12 +89,12 @@ export class RequirementService {
 		return resRequirement;
 	}
 
-	async deleteRequirement(guid: string | null): Promise<boolean | null> {
+	async deleteRequirement(guid: string): Promise<boolean> {
 		if (!guid) {
 			this.errorService.error('RequirementId is leeg');
 			return null;
 		}
-		let result: boolean = false;
+		let result = false;
 		await this.apiService
 			.delete<HttpResponse<Requirement>>(
 				`${HttpRoutes.requirementApiUrl}/${guid}`
@@ -104,7 +102,7 @@ export class RequirementService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) result = true;
+					if (res.ok) result = true;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);

@@ -1,4 +1,4 @@
-.mat-button {
+.mat-mdc-button {
   margin-bottom: 5px;
   margin-left: 20px;
 }
@@ -8,7 +8,7 @@ a:hover {
 }
 
 @media only screen and (max-width: 400px) {
-  .mat-card {
+  .mat-mdc-card {
     min-width: 225px;
     min-height: 325px;
   }

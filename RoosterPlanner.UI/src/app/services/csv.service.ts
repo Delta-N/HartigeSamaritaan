@@ -14,8 +14,8 @@ export class CsvService {
 		const dwldLink = document.createElement('a');
 		const url = URL.createObjectURL(blob);
 		const isSafariBrowser =
-			navigator.userAgent.indexOf('Safari') !== -1 &&
-			navigator.userAgent.indexOf('Chrome') === -1;
+			navigator.userAgent.indexOf('Safari') != -1 &&
+			navigator.userAgent.indexOf('Chrome') == -1;
 		if (isSafariBrowser) {
 			//if Safari open in new window to save file with random filename.
 			dwldLink.setAttribute('target', '_blank');
@@ -29,8 +29,7 @@ export class CsvService {
 	}
 
 	ConvertToCSV(objArray, headerList) {
-		const array =
-			typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+		const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
 		let str = '';
 		let row = 'Id,';
 

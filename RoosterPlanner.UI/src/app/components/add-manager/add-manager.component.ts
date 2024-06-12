@@ -12,14 +12,14 @@ import { ToastrService } from 'ngx-toastr';
 	styleUrls: ['./add-manager.component.scss'],
 })
 export class AddManagerComponent implements OnInit {
-	loaded: boolean = false;
-	searchText: string = '';
+	loaded = false;
+	searchText = '';
 	users: User[] = [];
 	managers: Manager[] = [];
-	currentPage: number = 1;
-	pageSize: number = 5;
+	currentPage = 1;
+	pageSize = 5;
 	projectId: string;
-	currentTabIndex: number = 0;
+	currentTabIndex = 0;
 
 	addedManagers: string[] = [];
 	removedManagers: string[] = [];
@@ -32,7 +32,7 @@ export class AddManagerComponent implements OnInit {
 	) {}
 
 	async ngOnInit(): Promise<void> {
-		this.data.projectId !== null
+		this.data.projectId != null
 			? (this.projectId = this.data.projectId)
 			: (this.projectId = null);
 
@@ -45,7 +45,7 @@ export class AddManagerComponent implements OnInit {
 		//get all users
 		await this.userService.getAllUsers().then((users) => {
 			users.forEach((user) => {
-				if (!this.managers.find((m) => m.personId === user.id)) {
+				if (!this.managers.find((m) => m.personId == user.id)) {
 					this.users.push(user);
 				}
 			});
@@ -79,7 +79,7 @@ export class AddManagerComponent implements OnInit {
 		this.users.forEach((u) => {
 			const element = document.getElementById(u.id);
 			const checkElement = document.getElementById('check' + u.id);
-			if (element && checkElement) {
+			if (element) {
 				const index = this.addedManagers.find((m) => m === u.id);
 				if (index) {
 					element.style.background = 'whitesmoke';
@@ -94,7 +94,7 @@ export class AddManagerComponent implements OnInit {
 		this.managers.forEach((u) => {
 			const element = document.getElementById(u.personId);
 			const closeElement = document.getElementById('check' + u.id);
-			if (element && closeElement) {
+			if (element) {
 				const index = this.removedManagers.find((m) => m === u.personId);
 				if (index) {
 					element.style.background = 'whitesmoke';
@@ -108,7 +108,7 @@ export class AddManagerComponent implements OnInit {
 	}
 
 	prevPage() {
-		if (this.currentPage !== 1) {
+		if (this.currentPage != 1) {
 			this.currentPage--;
 		}
 		setTimeout(() => {
@@ -118,13 +118,11 @@ export class AddManagerComponent implements OnInit {
 
 	nextPage() {
 		if (this.currentTabIndex === 0) {
-			if (this.currentPage !== Math.ceil(this.users.length / this.pageSize)) {
+			if (this.currentPage != Math.ceil(this.users.length / this.pageSize)) {
 				this.currentPage++;
 			}
 		} else {
-			if (
-				this.currentPage !== Math.ceil(this.managers.length / this.pageSize)
-			) {
+			if (this.currentPage != Math.ceil(this.managers.length / this.pageSize)) {
 				this.currentPage++;
 			}
 		}
@@ -148,7 +146,7 @@ export class AddManagerComponent implements OnInit {
 			this.userService.makeManager(this.projectId, am).then((res) => {
 				if (res)
 					this.toastr.success(
-						this.users.find((u) => u.id === am)?.firstName +
+						this.users.find((u) => u.id === am).firstName +
 							' is succesvol toegevoegd'
 					);
 			});
@@ -157,7 +155,7 @@ export class AddManagerComponent implements OnInit {
 			this.userService.removeManager(this.projectId, rm).then((res) => {
 				if (res)
 					this.toastr.success(
-						this.managers.find((u) => u.personId === rm)?.person.firstName +
+						this.managers.find((u) => u.personId === rm).person.firstName +
 							' is succesvol verwijderd'
 					);
 			});

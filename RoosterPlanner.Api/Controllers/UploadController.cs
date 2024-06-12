@@ -21,22 +21,10 @@ namespace RoosterPlanner.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UploadController : ControllerBase
-    {
-        private readonly IBlobService blobService;
-        private readonly IDocumentService documentService;
-        private readonly ILogger<UploadController> logger;
-
-        public UploadController(
-            IBlobService blobService,
-            ILogger<UploadController> logger,
-            IDocumentService documentService)
-        {
-            this.blobService = blobService;
-            this.logger = logger;
-            this.documentService = documentService;
-        }
-
+    public class UploadController(
+    IBlobService blobService,
+    ILogger<UploadController> logger,
+    IDocumentService documentService) : ControllerBase {
         /// <summary>
         /// Upload a instruction pdf to Blobstorage.
         /// </summary>

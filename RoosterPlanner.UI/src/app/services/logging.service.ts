@@ -56,7 +56,7 @@ export class ErrorHandlerService extends ErrorHandler {
 		super();
 	}
 
-	override handleError(error: Error) {
+	handleError(error: Error) {
 		this.loggingService.logException(error); // Manually log exception
 	}
 }

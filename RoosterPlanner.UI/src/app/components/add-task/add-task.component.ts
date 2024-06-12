@@ -23,7 +23,7 @@ export class AddTaskComponent implements OnInit {
 	updatedTask: Task;
 
 	checkoutForm;
-	modifier: string = 'toevoegen';
+	modifier = 'toevoegen';
 	categories: Category[] = [];
 	colors: string[] = TextInjectorService.colors;
 	files: FileList;
@@ -37,37 +37,32 @@ export class AddTaskComponent implements OnInit {
 		private categoryService: CategoryService,
 		private uploadService: UploadService
 	) {
-		data.task !== null ? (this.task = data.task) : (this.task = new Task());
+		data.task != null ? (this.task = data.task) : (this.task = new Task());
 
 		this.modifier = data.modifier;
 		this.categoryControl = new FormControl('', Validators.required);
 		this.colorControl = new FormControl(
-			this.task.color !== null ? this.task.color : '',
+			this.task.color != null ? this.task.color : '',
 			Validators.required
 		);
 
 		this.checkoutForm = this.formBuilder.group({
 			id: [
-				this.task.id !== null ? this.task.id : EntityHelper.returnEmptyGuid(),
+				this.task.id != null ? this.task.id : EntityHelper.returnEmptyGuid(),
 			],
-			name: [
-				this.task.name !== null ? this.task.name : '',
-				Validators.required,
-			],
+			name: [this.task.name != null ? this.task.name : '', Validators.required],
 			category: this.categoryControl,
 			color: this.colorControl,
-			description: [
-				this.task.description !== null ? this.task.description : '',
-			],
+			description: [this.task.description != null ? this.task.description : ''],
 		});
 	}
 
 	ngOnInit(): void {
 		this.categoryService.getAllCategory().then((response) => {
 			this.categories = response;
-			if (this.task.category !== null) {
+			if (this.task.category != null) {
 				this.categoryControl.setValue(
-					this.categories.find((c) => c.name === this.task.category.name)
+					this.categories.find((c) => c.name == this.task.category.name)
 				);
 			}
 		});
@@ -82,7 +77,7 @@ export class AddTaskComponent implements OnInit {
 				const formData = new FormData();
 				formData.append(this.files[0].name, this.files[0]);
 
-				let uri: string | null = null;
+				let uri: string = null;
 				await this.uploadService.uploadInstruction(formData).then((url) => {
 					if (url && url.path && url.path.trim().length > 0)
 						uri = url.path.trim();
@@ -90,7 +85,7 @@ export class AddTaskComponent implements OnInit {
 
 				if (this.task.instruction) {
 					await this.uploadService
-						.deleteIfExists(this.task.instruction.documentUri ?? '')
+						.deleteIfExists(this.task.instruction.documentUri)
 						.then(); //delete blob if exists
 					this.task.instruction.documentUri = uri;
 					await this.uploadService
@@ -128,7 +123,7 @@ export class AddTaskComponent implements OnInit {
 	}
 
 	uploadInstructions(files: FileList) {
-		let correctExtention: boolean = true;
+		let correctExtention = true;
 		for (let i = 0; i < files.length; i++) {
 			if (
 				files[i].name.substring(files[i].name.lastIndexOf('.') + 1) !== 'pdf'

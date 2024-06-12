@@ -11,15 +11,11 @@ import { TextInjectorService } from '../../services/text-injector.service';
 import { ProjectService } from '../../services/project.service';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { Breadcrumb } from '../../models/breadcrumb';
-import moment from 'moment';
-import { MaterialModule } from '../../modules/material/material.module';
-import { ManageModule } from '../../modules/manage/manage.module';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-schedule-manager',
 	templateUrl: './schedule-manager.component.html',
-	standalone: true,
-	imports: [MaterialModule, ManageModule],
 	styleUrls: ['./schedule-manager.component.scss'],
 })
 export class ScheduleManagerComponent implements OnInit {
@@ -27,15 +23,15 @@ export class ScheduleManagerComponent implements OnInit {
 
 	selectedDate: Moment;
 	viewDate: Date = new Date();
-	minDate: Date | undefined;
-	maxDate: Date | undefined;
+	minDate: Date;
+	maxDate: Date;
 
 	displayedColumns: string[] = [];
 	dataSource: MatTableDataSource<Availability> =
 		new MatTableDataSource<Availability>();
 	paginator: MatPaginator;
 	sort: MatSort;
-	loaded: boolean = false;
+	loaded = false;
 
 	@ViewChild(MatSort) set matSort(ms: MatSort) {
 		this.sort = ms;
@@ -47,7 +43,7 @@ export class ScheduleManagerComponent implements OnInit {
 		this.setDataSourceAttributes();
 	}
 
-	projectId: string | null;
+	projectId: string;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -73,8 +69,8 @@ export class ScheduleManagerComponent implements OnInit {
 		this.route.paramMap.subscribe(async (params: ParamMap) => {
 			this.projectId = params.get('id');
 			this.projectService.getProject(this.projectId).then((res) => {
-				this.minDate = res?.participationStartDate;
-				this.maxDate = res?.participationEndDate;
+				this.minDate = res.participationStartDate;
+				this.maxDate = res.participationEndDate;
 			});
 			await this.getAvailabilities(this.viewDate).then(() => {
 				this.loaded = true;
@@ -89,7 +85,7 @@ export class ScheduleManagerComponent implements OnInit {
 		this.dataSource.sortingDataAccessor = (item, property) => {
 			switch (property) {
 				case 'Taak':
-					return item.shift.task !== null ? item.shift.task.name : null;
+					return item.shift.task != null ? item.shift.task.name : null;
 				case 'Vanaf':
 					return item.shift.startTime;
 				case 'Tot':
@@ -112,9 +108,9 @@ export class ScheduleManagerComponent implements OnInit {
 
 	async dateOrViewChanged(): Promise<void> {
 		await this.getAvailabilities(this.viewDate).then(() => {
-			if (this.minDate && this.viewDate < this.minDate) {
+			if (this.viewDate < this.minDate) {
 				this.changeDate(this.minDate);
-			} else if (this.maxDate && this.viewDate > this.maxDate) {
+			} else if (this.viewDate > this.maxDate) {
 				this.changeDate(this.maxDate);
 			}
 		});
@@ -127,9 +123,7 @@ export class ScheduleManagerComponent implements OnInit {
 				moment(viewDate).set('hour', 12).toDate()
 			)
 			.then((res) => {
-				if (res) {
-					this.setDatasource(res);
-				}
+				this.setDatasource(res);
 			});
 	}
 

@@ -36,13 +36,12 @@ namespace RoosterPlanner.Api {
             services.AddApplicationInsightsTelemetry(Configuration);
 
 
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(options => {
                 Configuration.Bind("AzureAuthentication", options);
-
             },
             options => { Configuration.Bind("AzureAuthentication", options); });
-
 
 
             services.AddCors(options => {
@@ -53,7 +52,6 @@ namespace RoosterPlanner.Api {
                 }
                 );
             });
-
 
             services.AddAuthorization(options => {
                 options.AddPolicy("Boardmember", policy =>
@@ -66,9 +64,6 @@ namespace RoosterPlanner.Api {
                 policy.RequireClaim("extension_UserRole", "1", "2"));
             });
 
-            services.AddHealthChecks()
-            .AddSqlServer(Configuration.GetConnectionString("RoosterPlannerDatabase")!, tags: new[] { "database" });
-            AddCustomServices(services);
 
             services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
@@ -94,6 +89,15 @@ namespace RoosterPlanner.Api {
 
 
             });
+
+            services.AddHealthChecks()
+            .AddSqlServer(Configuration.GetConnectionString("RoosterPlannerDatabase")!, tags: new[] { "database" });
+            AddCustomServices(services);
+
+
+            services.AddLogging();
+
+            ServiceContainer.Register(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -145,7 +149,6 @@ namespace RoosterPlanner.Api {
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<ICertificateService, CertificateService>();
             services.AddTransient<IRequirementService, RequirementService>();
-            ServiceContainer.Register(services, Configuration);
 
         }
 

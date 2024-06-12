@@ -20,7 +20,7 @@ export class BreadcrumbService {
 	constructor(private router: Router) {
 		router.events
 			.pipe(filter((event) => event instanceof NavigationStart))
-			.subscribe(() => {
+			.subscribe((event: NavigationStart) => {
 				this.clear();
 			});
 	}

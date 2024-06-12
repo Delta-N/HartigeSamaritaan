@@ -18,7 +18,7 @@ export class CertificateService {
 	) {}
 
 	async getAllCertificateTypes(): Promise<CertificateType[]> {
-		let certificateTypes: CertificateType[] | null = [];
+		let certificateTypes: CertificateType[] = [];
 		await this.apiService
 			.get<HttpResponse<CertificateType[]>>(
 				`${HttpRoutes.certificateApiUrl}/types`
@@ -26,7 +26,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) certificateTypes = res.body;
+					if (res.ok) certificateTypes = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -35,14 +35,12 @@ export class CertificateService {
 		return certificateTypes;
 	}
 
-	async getCertificateType(
-		guid: string | null
-	): Promise<CertificateType | null> {
+	async getCertificateType(guid: string): Promise<CertificateType> {
 		if (!guid) {
 			this.errorService.error('certificateTypeId mag niet leeg zijn');
 			return null;
 		}
-		let certificateType: CertificateType | null = null;
+		let certificateType: CertificateType = null;
 		await this.apiService
 			.get<HttpResponse<CertificateType>>(
 				`${HttpRoutes.certificateApiUrl}/types/${guid}`
@@ -50,7 +48,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) certificateType = res.body;
+					if (res.ok) certificateType = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -61,15 +59,15 @@ export class CertificateService {
 
 	async postCertificateType(
 		certificateType: CertificateType
-	): Promise<CertificateType | null> {
-		if (certificateType === null || certificateType.name === null) {
+	): Promise<CertificateType> {
+		if (certificateType == null || certificateType.name == null) {
 			this.errorService.error('Ongeldige CertificateType');
 			return null;
 		}
 		if (!certificateType.id)
 			certificateType.id = EntityHelper.returnEmptyGuid();
 
-		let resCertificateType: CertificateType | null = null;
+		let resCertificateType: CertificateType = null;
 		await this.apiService
 			.post<HttpResponse<CertificateType>>(
 				`${HttpRoutes.certificateApiUrl}/types`,
@@ -78,7 +76,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) resCertificateType = res.body;
+					if (res.ok) resCertificateType = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -89,17 +87,17 @@ export class CertificateService {
 
 	async updateCertificateType(
 		updatedCertificateType: CertificateType
-	): Promise<CertificateType | null> {
+	): Promise<CertificateType> {
 		if (
 			!updatedCertificateType ||
 			!updatedCertificateType.name ||
 			!updatedCertificateType ||
-			updatedCertificateType.id === EntityHelper.returnEmptyGuid()
+			updatedCertificateType.id == EntityHelper.returnEmptyGuid()
 		) {
 			this.errorService.error('Ongeldige CertificateType');
 			return null;
 		}
-		let resCertificateType: CertificateType | null = null;
+		let resCertificateType: CertificateType = null;
 		await this.apiService
 			.put<HttpResponse<CertificateType>>(
 				`${HttpRoutes.certificateApiUrl}/types`,
@@ -108,7 +106,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) resCertificateType = res.body;
+					if (res.ok) resCertificateType = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -117,12 +115,12 @@ export class CertificateService {
 		return resCertificateType;
 	}
 
-	async deleteCertificateType(guid: string | null): Promise<boolean | null> {
+	async deleteCertificateType(guid: string): Promise<boolean> {
 		if (!guid) {
 			this.errorService.error('Ongeldige CertificateType');
 			return null;
 		}
-		let result: boolean = false;
+		let result = false;
 		await this.apiService
 			.delete<HttpResponse<CertificateType>>(
 				`${HttpRoutes.certificateApiUrl}/types/${guid}`
@@ -130,7 +128,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) result = true;
+					if (res.ok) result = true;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -139,12 +137,12 @@ export class CertificateService {
 		return result;
 	}
 
-	async getCertificate(guid: string | null): Promise<Certificate | null> {
+	async getCertificate(guid: string): Promise<Certificate> {
 		if (!guid) {
 			this.errorService.error('certificateId mag niet leeg zijn');
 			return null;
 		}
-		let certificate: Certificate | null = null;
+		let certificate: Certificate = null;
 		await this.apiService
 			.get<HttpResponse<Certificate>>(
 				`${HttpRoutes.certificateApiUrl}/certificate/${guid}`
@@ -152,7 +150,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) certificate = res.body;
+					if (res.ok) certificate = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -161,7 +159,7 @@ export class CertificateService {
 		return certificate;
 	}
 
-	async postCertificate(certificate: Certificate): Promise<Certificate | null> {
+	async postCertificate(certificate: Certificate): Promise<Certificate> {
 		if (
 			!certificate ||
 			!certificate.person ||
@@ -179,7 +177,7 @@ export class CertificateService {
 		else certificate.dateExpired = null;
 		certificate.dateIssued = DateConverter.toDate(certificate.dateIssued);
 
-		let resCertificate: Certificate | null = null;
+		let resCertificate: Certificate = null;
 		await this.apiService
 			.post<HttpResponse<Certificate>>(
 				`${HttpRoutes.certificateApiUrl}/certificate`,
@@ -188,7 +186,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) resCertificate = res.body;
+					if (res.ok) resCertificate = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -197,16 +195,14 @@ export class CertificateService {
 		return resCertificate;
 	}
 
-	async updateCertificate(
-		certificate: Certificate
-	): Promise<Certificate | null> {
+	async updateCertificate(certificate: Certificate): Promise<Certificate> {
 		if (
 			!certificate ||
 			!certificate.person ||
 			!certificate.certificateType ||
 			!certificate.dateIssued ||
 			!certificate.id ||
-			certificate.id === EntityHelper.returnEmptyGuid()
+			certificate.id == EntityHelper.returnEmptyGuid()
 		) {
 			this.errorService.error('Ongeldig certificaat');
 			return null;
@@ -216,7 +212,7 @@ export class CertificateService {
 		else certificate.dateExpired = null;
 		certificate.dateIssued = DateConverter.toDate(certificate.dateIssued);
 
-		let resCertificate: Certificate | null = null;
+		let resCertificate: Certificate = null;
 		await this.apiService
 			.put<HttpResponse<Certificate>>(
 				`${HttpRoutes.certificateApiUrl}/certificate`,
@@ -225,7 +221,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) resCertificate = res.body;
+					if (res.ok) resCertificate = res.body;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);
@@ -234,12 +230,12 @@ export class CertificateService {
 		return resCertificate;
 	}
 
-	async deleteCertificate(guid: string | null): Promise<boolean | null> {
+	async deleteCertificate(guid: string): Promise<boolean> {
 		if (!guid) {
 			this.errorService.error('CertificateId is leeg');
 			return null;
 		}
-		let result: boolean = false;
+		let result = false;
 		await this.apiService
 			.delete<HttpResponse<Certificate>>(
 				`${HttpRoutes.certificateApiUrl}/certificate/${guid}`
@@ -247,7 +243,7 @@ export class CertificateService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) result = true;
+					if (res.ok) result = true;
 				},
 				(Error) => {
 					this.errorService.httpError(Error);

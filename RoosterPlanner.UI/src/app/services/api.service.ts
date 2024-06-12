@@ -4,9 +4,9 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { JwtHelper } from '../helpers/jwt-helper';
+import { MsalService } from '../msal';
 import { environment } from '../../environments/environment';
 import { SilentRequest } from '@azure/msal-browser';
-import { MsalService } from '@azure/msal-angular';
 
 export interface Options {
 	headers?: {
@@ -197,11 +197,11 @@ export class ApiService {
 	 */
 	private async refreshToken(): Promise<any> {
 		const authParameters = {
-			account: this.msalService.instance.getAllAccounts()[0],
-			authority: environment.msalConfig.auth.authority,
-			redirectUri: environment.msalConfig.auth.redirectUri,
-			scopes: environment.msalConfig.consentScopes,
+			account: this.msalService.getAllAccounts()[0],
+			authority: environment.auth.authority,
+			redirectUri: environment.auth.redirectUri,
+			scopes: environment.scopes,
 		} as SilentRequest;
-		this.msalService.acquireTokenSilent(authParameters);
+		await this.msalService.acquireTokenSilent(authParameters);
 	}
 }

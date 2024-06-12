@@ -4,7 +4,7 @@ import { CertificateType } from './CertificateType';
 
 export class Certificate extends Entity {
 	dateIssued: Date;
-	dateExpired: Date | null;
+	dateExpired: Date;
 	person: User;
 	certificateType: CertificateType;
 }

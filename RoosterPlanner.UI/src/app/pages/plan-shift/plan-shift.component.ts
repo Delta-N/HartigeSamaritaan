@@ -28,8 +28,8 @@ import { Shift } from '../../models/shift';
 })
 export class PlanShiftComponent implements OnInit {
 	guid: string;
-	loaded: boolean = false;
-	title: string = 'Plannen';
+	loaded = false;
+	title = 'Plannen';
 
 	dataSource: MatTableDataSource<Schedule> = new MatTableDataSource<Schedule>();
 	displayedColumns: string[] = [];
@@ -101,13 +101,13 @@ export class PlanShiftComponent implements OnInit {
 				DateConverter.calculateAge(data.person.dateOfBirth)
 					.toLocaleLowerCase()
 					.includes(filter) ||
-				(data.person !== null &&
+				(data.person != null &&
 					(data.person.firstName + ' ' + data.person.lastName)
 						.toLocaleLowerCase()
 						.includes(filter)) ||
-				(data.person.nationality === null &&
+				(data.person.nationality == null &&
 					'Onbekend'.toLocaleLowerCase().includes(filter)) ||
-				(data.person.nationality !== null &&
+				(data.person.nationality != null &&
 					data.person.nationality.toLocaleLowerCase().includes(filter)) ||
 				data.numberOfTimesScheduledThisProject
 					.toString()
@@ -119,13 +119,13 @@ export class PlanShiftComponent implements OnInit {
 		this.dataSource.sortingDataAccessor = (item, property) => {
 			switch (property) {
 				case 'Naam':
-					return item.person !== null
+					return item.person != null
 						? item.person.firstName + ' ' + item.person.lastName
 						: null;
 				case 'Leeftijd':
 					return DateConverter.calculateAge(item.person.dateOfBirth);
 				case 'Nationaliteit':
-					return item.person !== null ? item.person.nationality : null;
+					return item.person != null ? item.person.nationality : null;
 				case '#Ingeroosterd':
 					return item.numberOfTimesScheduledThisProject;
 				default:
@@ -157,7 +157,9 @@ export class PlanShiftComponent implements OnInit {
 		if (!row) {
 			return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
 		}
-		return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.availabilityId}`;
+		return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+			row.availabilityId
+		}`;
 	}
 
 	select(row: Schedule) {
@@ -195,8 +197,8 @@ export class PlanShiftComponent implements OnInit {
 		listOfAvailabilities: Availability[],
 		shift: Shift
 	): number {
-		let alreadyScheduled: boolean = false;
-		let scheduledOnConflictingTime: boolean = false;
+		let alreadyScheduled = false;
+		let scheduledOnConflictingTime = false;
 		listOfAvailabilities.forEach((a) => {
 			if (a.type === 3 && a.shiftId !== shift.id) {
 				alreadyScheduled = true;

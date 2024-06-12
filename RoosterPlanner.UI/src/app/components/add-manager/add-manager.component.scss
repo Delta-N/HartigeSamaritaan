@@ -1,7 +1,7 @@
 a {
   display: flex;
 }
-.mat-form-field {
+.mat-mdc-form-field {
   width: 100%;
 }
 
@@ -13,13 +13,14 @@ a {
   min-height: 225px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 ::ng-deep .mat-tab-body-wrapper {
   margin-top: 10px;
 }
 
-::ng-deep .mat-tab-body {
+::ng-deep .mat-mdc-tab-body {
   min-height: 300px;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   .mat-tab-body-content {
     overflow: hidden;
   }

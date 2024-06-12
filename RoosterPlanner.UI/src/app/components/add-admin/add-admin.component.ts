@@ -12,12 +12,12 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AddAdminComponent implements OnInit {
 	loaded: boolean;
-	searchText: string = '';
+	searchText = '';
 	users: User[] = [];
 	admins: User[] = [];
-	pageSize: number = 5;
-	currentPage: number = 1;
-	currentTabIndex: number = 0;
+	pageSize = 5;
+	currentPage = 1;
+	currentTabIndex = 0;
 
 	addedAdmins: string[] = [];
 	removedAdmins: string[] = [];
@@ -41,11 +41,11 @@ export class AddAdminComponent implements OnInit {
 
 	nextPage() {
 		if (this.currentTabIndex === 0) {
-			if (this.currentPage !== Math.ceil(this.users.length / this.pageSize)) {
+			if (this.currentPage != Math.ceil(this.users.length / this.pageSize)) {
 				this.currentPage++;
 			}
 		} else {
-			if (this.currentPage !== Math.ceil(this.admins.length / this.pageSize)) {
+			if (this.currentPage != Math.ceil(this.admins.length / this.pageSize)) {
 				this.currentPage++;
 			}
 		}
@@ -55,7 +55,7 @@ export class AddAdminComponent implements OnInit {
 	}
 
 	prevPage() {
-		if (this.currentPage !== 1) {
+		if (this.currentPage != 1) {
 			this.currentPage--;
 		}
 		setTimeout(() => {
@@ -94,7 +94,7 @@ export class AddAdminComponent implements OnInit {
 		this.users.forEach((u) => {
 			const element = document.getElementById(u.id);
 			const checkElement = document.getElementById('check' + u.id);
-			if (element && checkElement) {
+			if (element) {
 				const index = this.addedAdmins.find((m) => m === u.id);
 				if (index) {
 					element.style.background = 'whitesmoke';
@@ -109,7 +109,7 @@ export class AddAdminComponent implements OnInit {
 		this.admins.forEach((u) => {
 			const element = document.getElementById(u.id);
 			const closeElement = document.getElementById('check' + u.id);
-			if (element && closeElement) {
+			if (element) {
 				const index = this.removedAdmins.find((m) => m === u.id);
 				if (index) {
 					element.style.background = 'whitesmoke';
@@ -127,7 +127,7 @@ export class AddAdminComponent implements OnInit {
 			this.userService.makeAdmin(addedAdmin).then((res) => {
 				if (res)
 					this.toastr.success(
-						this.users.find((u) => u.id === addedAdmin)?.firstName +
+						this.users.find((u) => u.id === addedAdmin).firstName +
 							' is succesvol toegevoegd'
 					);
 			});
@@ -136,7 +136,7 @@ export class AddAdminComponent implements OnInit {
 			this.userService.removeAdmin(removedAdmin).then((res) => {
 				if (res)
 					this.toastr.success(
-						this.admins.find((u) => u.id === removedAdmin)?.firstName +
+						this.admins.find((u) => u.id === removedAdmin).firstName +
 							' is succesvol verwijderd'
 					);
 			});

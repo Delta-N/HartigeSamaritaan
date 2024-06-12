@@ -5,40 +5,37 @@
 	<div id="pdfTable" #pdfTable>
 		<div class="row bar">
 			<h1>Certificaat: {{certificate.certificateType ? certificate.certificateType.name : "Onbekend"}}</h1>
-			<button mat-button id="push" class="override-button action-button" (click)="pdf()">
-				<!--      <fa-icon      [icon]="awardIcon"></fa-icon>-->
-				Download PDF</button
+			<button mat-button id="push" class="override-button action-button" (click)="pdf()"
+				><fa-icon [icon]="awardIcon"></fa-icon>Download PDF</button
 			>
 		</div>
 
-		<div class="row">
+		<div class="new-row">
 			<div class="row-name">Uitgereikt aan:</div>
 			<div class="user-data">{{certificate.person?.firstName + " " + certificate.person?.lastName }}</div>
 		</div>
 
-		<div class="row">
+		<div class="new-row">
 			<div class="row-name">Op datum:</div>
 			<div class="user-data">{{certificate.dateIssued | datePipe}}</div>
 		</div>
 
-		<div class="row" *ngIf="certificate.dateExpired">
+		<div class="new-row" *ngIf="certificate.dateExpired">
 			<div class="row-name">Geldig tot:</div>
 			<div class="user-data">{{certificate.dateExpired | datePipe}}</div>
 		</div>
 
-		<div class="row" *ngIf="certificate&&certificate.certificateType&&certificate.certificateType.level">
+		<div class="new-row" *ngIf="certificate&&certificate.certificateType&&certificate.certificateType.level">
 			<div class="row-name">Niveau</div>
 			<div class="user-data">{{certificate.certificateType?.level}}</div>
 		</div>
 
 		<div class="row">
-			<a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button">
-				<!--      <fa-icon      [icon]="editIcon"></fa-icon>-->
-				Wijzigen</a
+			<a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button"
+				><fa-icon [icon]="editIcon"></fa-icon>Wijzigen</a
 			>
-			<a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button">
-				<!--      <fa-icon [icon]="deleteIcon"></fa-icon>-->
-				Verwijderen</a
+			<a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button"
+				><fa-icon [icon]="deleteIcon"></fa-icon>Verwijderen</a
 			>
 		</div>
 	</div>

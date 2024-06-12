@@ -22,7 +22,7 @@ export class EditShiftComponent implements OnInit {
 
 	shift: Shift;
 	tasks: Task[];
-	projectGuid: string | null;
+	projectGuid: string;
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
@@ -32,31 +32,29 @@ export class EditShiftComponent implements OnInit {
 		private taskService: TaskService,
 		private shiftService: ShiftService
 	) {
-		data.shift !== null
-			? (this.shift = data.shift)
-			: (this.shift = new Shift());
-		data.projectGuid !== null
+		data.shift != null ? (this.shift = data.shift) : (this.shift = new Shift());
+		data.projectGuid != null
 			? (this.projectGuid = data.projectGuid)
 			: (this.projectGuid = null);
 
 		this.taskControl = new FormControl('', Validators.required);
 		this.startTimeControl = new FormControl(
-			this.shift.startTime !== null ? this.shift.startTime : '',
+			this.shift.startTime != null ? this.shift.startTime : '',
 			Validators.required
 		);
 		this.endTimeControl = new FormControl(
-			this.shift.endTime !== null ? this.shift.endTime : '',
+			this.shift.endTime != null ? this.shift.endTime : '',
 			Validators.required
 		);
 		this.participantsRequiredControl = new FormControl(
-			this.shift.participantsRequired !== null
+			this.shift.participantsRequired != null
 				? this.shift.participantsRequired
 				: '',
 			Validators.required
 		);
 
 		this.checkoutForm = this.formBuilder.group({
-			id: [this.shift !== null ? this.shift.id : null],
+			id: [this.shift != null ? this.shift.id : null],
 			task: this.taskControl,
 			start: this.startTimeControl,
 			end: this.endTimeControl,
@@ -66,10 +64,10 @@ export class EditShiftComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.taskService.getAllProjectTasks(this.projectGuid).then((res) => {
-			this.tasks = res?.filter((t) => t !== null) ?? [];
+			this.tasks = res.filter((t) => t != null);
 			if (this.shift.task) {
 				this.taskControl.setValue(
-					this.tasks.find((t) => t.name === this.shift.task.name)
+					this.tasks.find((t) => t.name == this.shift.task.name)
 				);
 			}
 		});
@@ -77,16 +75,16 @@ export class EditShiftComponent implements OnInit {
 
 	timeBefore(startTime: string, endTime: string): boolean {
 		const start: Date = new Date(
-			0,
-			0,
-			0,
+			null,
+			null,
+			null,
 			parseInt(startTime.substring(0, 2)),
 			parseInt(startTime.substring(3, 5))
 		);
 		const end: Date = new Date(
-			0,
-			0,
-			0,
+			null,
+			null,
+			null,
 			parseInt(endTime.substring(0, 2)),
 			parseInt(endTime.substring(3, 5))
 		);

@@ -705,3 +705,5 @@ RoosterPlanner.Web/ClientApp/dist/*
 /RoosterPlanner.UI/.angular/cache/17.2.1/vite/deps_temp_f9f77d04/StandardController-CVWSRTWL.js
 /RoosterPlanner.UI/.angular/cache/17.2.1/vite/deps_temp_f9f77d04/StandardController-CVWSRTWL.js.map
 /RoosterPlanner.Api/${LOG_DIR}/
+/RoosterPlanner.UI/.angular/
+/RoosterPlanner.UI/.nx/

@@ -21,7 +21,7 @@ import { Breadcrumb } from '../../models/breadcrumb';
 })
 export class ShiftComponent implements OnInit {
 	guid: string;
-	loaded: boolean = false;
+	loaded = false;
 	shift: Shift;
 	authorized: boolean;
 

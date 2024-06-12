@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
 	MAT_DIALOG_DATA,
 	MatDialog,
@@ -17,7 +17,7 @@ import {
 	templateUrl: './email-dialog.component.html',
 	styleUrls: ['./email-dialog.component.scss'],
 })
-export class EmailDialogComponent {
+export class EmailDialogComponent implements OnInit {
 	message: string;
 	subject: string;
 	checkoutForm;
@@ -34,6 +34,8 @@ export class EmailDialogComponent {
 			message: ['', Validators.required],
 		});
 	}
+
+	ngOnInit(): void {}
 
 	close() {
 		this.dialogRef.close('false');

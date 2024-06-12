@@ -3,7 +3,7 @@ import { Document } from '../../models/document';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UploadService } from '../../services/upload.service';
 import { EntityHelper } from '../../helpers/entity-helper';
-import moment from 'moment';
+import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -45,7 +45,7 @@ export class UploadPrivacyPolicyComponent implements OnInit {
 			const formData = new FormData();
 			formData.append(this.files[0].name, this.files[0]);
 
-			let uri: string | null = null;
+			let uri: string = null;
 			await this.uploadService.uploadPP(formData).then((url) => {
 				if (url && url.path && url.path.trim().length > 0)
 					uri = url.path.trim();
@@ -71,7 +71,7 @@ export class UploadPrivacyPolicyComponent implements OnInit {
 	}
 
 	uploadPP(files: FileList) {
-		let correctExtention: boolean = true;
+		let correctExtention = true;
 		for (let i = 0; i < files.length; i++) {
 			if (
 				files[i].name.substring(files[i].name.lastIndexOf('.') + 1) !== 'pdf'

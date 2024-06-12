@@ -7,13 +7,10 @@ import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { DateConverter } from '../../helpers/date-converter';
 import { TextInjectorService } from '../../services/text-injector.service';
-import { MaterialModule } from '../../modules/material/material.module';
 
 @Component({
 	selector: 'app-change-profile',
 	templateUrl: './change-profile.component.html',
-	standalone: true,
-	imports: [MaterialModule],
 	styleUrls: ['./change-profile.component.scss'],
 })
 export class ChangeProfileComponent implements OnInit {
@@ -25,7 +22,7 @@ export class ChangeProfileComponent implements OnInit {
 	level: string[] = TextInjectorService.level;
 	nationalityControl: FormControl;
 	languagueControl: FormControl;
-	title: string = 'Profiel wijzigen';
+	title = 'Profiel wijzigen';
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
@@ -42,37 +39,34 @@ export class ChangeProfileComponent implements OnInit {
 		this.checkoutForm = this.formBuilder.group({
 			id: this.user.id,
 			firstName: [
-				this.user.firstName !== null ? this.user.firstName : '',
+				this.user.firstName != null ? this.user.firstName : '',
 				Validators.required,
 			],
 			lastName: [
-				this.user.lastName !== null ? this.user.lastName : '',
+				this.user.lastName != null ? this.user.lastName : '',
 				Validators.required,
 			],
 			dateOfBirth: [
-				this.user.dateOfBirth !== null ? this.user.dateOfBirth : '',
+				this.user.dateOfBirth != null ? this.user.dateOfBirth : '',
 				Validators.compose([Validators.required, Validator.date]),
 			],
 			streetAddress: [
-				this.user.streetAddress !== null ? this.user.streetAddress : '',
+				this.user.streetAddress != null ? this.user.streetAddress : '',
 				Validators.required,
 			],
 			postalCode: [
-				this.user.postalCode !== null ? this.user.postalCode : '',
+				this.user.postalCode != null ? this.user.postalCode : '',
 				Validator.postalCode,
 			],
-			city: [
-				this.user.city !== null ? this.user.city : '',
-				Validators.required,
-			],
+			city: [this.user.city != null ? this.user.city : '', Validators.required],
 			phoneNumber: [
-				this.user.phoneNumber !== null ? this.user.phoneNumber : '',
+				this.user.phoneNumber != null ? this.user.phoneNumber : '',
 				Validator.phoneNumber,
 			],
 			nationality: this.nationalityControl,
 
 			nativeLanguage: [
-				this.user.nativeLanguage !== null ? this.user.nativeLanguage : '',
+				this.user.nativeLanguage != null ? this.user.nativeLanguage : '',
 				Validators.required,
 			],
 			dutchProficiency: this.languagueControl,
@@ -81,15 +75,15 @@ export class ChangeProfileComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		if (this.user.nationality !== null) {
+		if (this.user.nationality != null) {
 			this.nationalityControl.setValue(
-				this.nationalities.find((n) => n === this.user.nationality)
+				this.nationalities.find((n) => n == this.user.nationality)
 			);
 		}
 
-		if (this.user.dutchProficiency !== null) {
+		if (this.user.dutchProficiency != null) {
 			this.languagueControl.setValue(
-				this.level.find((n) => n === this.user.dutchProficiency)
+				this.level.find((n) => n == this.user.dutchProficiency)
 			);
 		}
 	}

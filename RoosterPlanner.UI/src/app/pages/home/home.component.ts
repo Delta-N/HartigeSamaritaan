@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AddProjectComponent } from '../../components/add-project/add-project.component';
 import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
@@ -12,21 +12,17 @@ import { EntityHelper } from '../../helpers/entity-helper';
 import { ChangeProfileComponent } from '../../components/change-profile/change-profile.component';
 import { JwtHelper } from '../../helpers/jwt-helper';
 import { faHome, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import { MaterialModule } from '../../modules/material/material.module';
-import { ProjectCardComponent } from '../../components/project-card/project-card.component';
 
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
-	standalone: true,
-	imports: [MaterialModule, ProjectCardComponent],
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
 	homeIcon = faHome;
 	circleIcon = faPlusCircle;
-	loaded: boolean = false;
-	participations: Participation[] | null = [];
+	loaded = false;
+	participations: Participation[] = [];
 	@Input() user: User;
 	selectedProjects: Project[];
 
@@ -55,7 +51,7 @@ export class HomeComponent implements OnInit {
 			.getParticipations(this.user.id)
 			.then((response) => {
 				this.participations = response;
-				this.participations?.sort((a, b) =>
+				this.participations.sort((a, b) =>
 					a.project.name.toLowerCase() > b.project.name.toLowerCase() ? 1 : -1
 				);
 			});
@@ -63,7 +59,7 @@ export class HomeComponent implements OnInit {
 
 	async addParticipation() {
 		let projects: Project[] = [];
-		let userCheckedProfile: boolean = false;
+		let userCheckedProfile = false;
 		this.toastr.warning('Controleer je profiel en vul deze eventueel aan.');
 
 		const dialogRef = this.dialog.open(ChangeProfileComponent, {
@@ -76,7 +72,7 @@ export class HomeComponent implements OnInit {
 		dialogRef.disableClose = true;
 
 		dialogRef.afterClosed().subscribe(async (result) => {
-			if (result !== null) {
+			if (result != null) {
 				userCheckedProfile = true;
 			}
 
@@ -84,13 +80,13 @@ export class HomeComponent implements OnInit {
 				await this.projectService.getActiveProjects().then(async (response) => {
 					projects = response;
 					projects.forEach((pro) => {
-						this.participations?.forEach((par) => {
-							if (pro.id === par.project.id) {
+						this.participations.forEach((par) => {
+							if (pro.id == par.project.id) {
 								projects = projects.filter((obj) => obj !== pro);
 							}
 						});
 					});
-					let dialogRef: MatDialogRef<any> | null = null;
+					let dialogRef = null;
 					if (projects.length > 0) {
 						dialogRef = this.dialog.open(AddProjectComponent, {
 							data: projects,
@@ -100,30 +96,28 @@ export class HomeComponent implements OnInit {
 						this.toastr.warning('Geen (nieuwe) projecten gevonden.');
 					}
 
-					if (dialogRef) {
-						dialogRef.disableClose = true;
-						dialogRef.afterClosed().subscribe(async (result) => {
-							if (result !== 'false') {
-								this.selectedProjects = result;
-								for (const project of this.selectedProjects) {
-									const participation: Participation = new Participation();
-									participation.id = EntityHelper.returnEmptyGuid();
-									participation.person = this.user;
-									participation.project = project;
-									await this.participationService
-										.postParticipation(participation)
-										.then((res) => {
-											if (res) {
-												this.participations?.push(res);
-												this.toastr.success(
-													'Aangemeld voor project: ' + res.project.name
-												);
-											}
-										});
-								}
+					dialogRef.disableClose = true;
+					dialogRef.afterClosed().subscribe(async (result) => {
+						if (result !== 'false') {
+							this.selectedProjects = result;
+							for (const project of this.selectedProjects) {
+								const participation: Participation = new Participation();
+								participation.id = EntityHelper.returnEmptyGuid();
+								participation.person = this.user;
+								participation.project = project;
+								await this.participationService
+									.postParticipation(participation)
+									.then((res) => {
+										if (res) {
+											this.participations.push(res);
+											this.toastr.success(
+												'Aangemeld voor project: ' + res.project.name
+											);
+										}
+									});
 							}
-						});
-					}
+						}
+					});
 				});
 			}
 		});

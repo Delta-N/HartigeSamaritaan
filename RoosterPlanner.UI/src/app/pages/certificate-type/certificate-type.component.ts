@@ -22,10 +22,10 @@ import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 export class CertificateTypeComponent implements OnInit {
 	editIcon = faEdit;
 	deleteIcon = faTrashAlt;
-	loaded: boolean = false;
+	loaded = false;
 	certificateType: CertificateType;
-	guid: string | null;
-	isAdmin: boolean = false;
+	guid: string;
+	isAdmin = false;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -55,7 +55,7 @@ export class CertificateTypeComponent implements OnInit {
 			this.guid = params.get('id');
 		});
 		this.certificateService.getCertificateType(this.guid).then((response) => {
-			if (response) this.certificateType = response;
+			this.certificateType = response;
 			this.loaded = true;
 		});
 	}

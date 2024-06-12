@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AddTaskComponent } from '../../components/add-task/add-task.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
@@ -19,28 +19,24 @@ import {
 	faEdit,
 	faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { MaterialModule } from '../../modules/material/material.module';
-import { AdminModule } from '../../modules/admin/admin.module';
 
 @Component({
 	selector: 'app-task',
 	templateUrl: './task.component.html',
-	standalone: true,
-	imports: [MaterialModule, RouterLink, AdminModule],
 	styleUrls: ['./task.component.scss'],
 })
 export class TaskComponent implements OnInit {
 	circleIcon = faPlusCircle;
 	editIcon = faEdit;
 	deleteIcon = faTrashAlt;
-	guid: string | null;
+	guid: string;
 	task: Task;
-	isAdmin: boolean = false;
-	loaded: boolean = false;
+	isAdmin = false;
+	loaded = false;
 
 	displayRequirements: Requirement[];
 	requirementCardStyle = 'card';
-	requirementExpandbtnDisabled: boolean = true;
+	requirementExpandbtnDisabled = true;
 	itemsPerCard = 5;
 	reasonableMaxInteger = 10000;
 
@@ -68,15 +64,13 @@ export class TaskComponent implements OnInit {
 
 	getTask() {
 		this.taskService.getTask(this.guid).then((response) => {
-			if (response) {
-				this.task = response;
-				this.displayRequirements = this.task.requirements.slice(
-					0,
-					this.itemsPerCard
-				);
-				if (this.task.requirements.length >= 5) {
-					this.requirementExpandbtnDisabled = false;
-				}
+			this.task = response;
+			this.displayRequirements = this.task.requirements.slice(
+				0,
+				this.itemsPerCard
+			);
+			if (this.task.requirements.length >= 5) {
+				this.requirementExpandbtnDisabled = false;
 			}
 			this.loaded = true;
 		});

@@ -10,7 +10,6 @@ import { Document } from '../../models/document';
 @Component({
 	selector: 'app-change-profile-picture',
 	templateUrl: './change-profile-picture.component.html',
-	standalone: true,
 	styleUrls: ['./change-profile-picture.component.scss'],
 })
 export class ChangeProfilePictureComponent implements OnInit {
@@ -34,15 +33,15 @@ export class ChangeProfilePictureComponent implements OnInit {
 			const formData = new FormData();
 			formData.append(this.files[0].name, this.files[0]);
 
-			let uri: string | null = null;
+			let uri: string = null;
 			await this.uploadService.uploadProfilePicture(formData).then((url) => {
 				if (url && url.path && url.path.trim().length > 0)
 					uri = url.path.trim();
 			});
 
-			if (this.user.profilePicture !== null) {
+			if (this.user.profilePicture != null) {
 				await this.uploadService
-					.deleteIfExists(this.user.profilePicture.documentUri ?? '')
+					.deleteIfExists(this.user.profilePicture.documentUri)
 					.then();
 				this.user.profilePicture.documentUri = uri;
 				await this.uploadService
@@ -81,7 +80,7 @@ export class ChangeProfilePictureComponent implements OnInit {
 	}
 
 	uploadPicture(files: FileList) {
-		let correctExtention: boolean = true;
+		let correctExtention = true;
 		const acceptedExtentions = TextInjectorService.acceptedImageExtentions;
 		for (let i = 0; i < files.length; i++) {
 			const extention: string = files[i].name.substring(

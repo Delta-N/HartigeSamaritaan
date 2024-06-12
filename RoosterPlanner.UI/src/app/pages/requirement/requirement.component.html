@@ -6,24 +6,22 @@
 		<h1>Benodigde certificaten</h1>
 	</div>
 
-	<div class="row">
+	<div class="new-row">
 		<div class="row-name">Taak:</div>
 		<div class="user-data">{{requirement.task.name}}</div>
 	</div>
 
-	<div class="row">
+	<div class="new-row">
 		<div class="row-name">Certificaat:</div>
 		<div class="user-data">{{requirement.certificateType.name}}</div>
 	</div>
 
 	<div class="row">
 		<a *ngIf="isAdmin" (click)="edit()" mat-button class="override-button action-button" id="edit">
-			<!--      <fa-icon      [icon]="editIcon"></fa-icon> -->
-			Wijzigen</a
+			<fa-icon [icon]="editIcon"></fa-icon> Wijzigen</a
 		>
 		<a *ngIf="isAdmin" (click)="delete()" mat-button class="override-button" id="delete">
-			<!--      <fa-icon      [icon]="deleteIcon"></fa-icon>-->
-			Verwijderen</a
+			<fa-icon [icon]="deleteIcon"></fa-icon> Verwijderen</a
 		>
 	</div>
 </span>

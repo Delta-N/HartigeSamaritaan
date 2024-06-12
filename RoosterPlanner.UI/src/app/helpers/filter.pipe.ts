@@ -66,12 +66,12 @@ export class TaskFilterPipe implements PipeTransform {
 
 @Pipe({ name: 'datePipe' })
 export class DatePipe implements PipeTransform {
-	transform(value: Date): string | null {
+	transform(value: Date): string {
 		return DateConverter.dateToString(value);
 	}
 }
 
-@Pipe({ standalone: true, name: 'tableDatePipe' })
+@Pipe({ name: 'tableDatePipe' })
 export class TableDatePipe implements PipeTransform {
 	transform(value: Date): string {
 		return DateConverter.toReadableStringFromDate(value);
@@ -81,7 +81,7 @@ export class TableDatePipe implements PipeTransform {
 @Pipe({ name: 'scheduledPipe' })
 export class ScheduledPipe implements PipeTransform {
 	transform(value: Shift): number {
-		let result: number = 0;
+		let result = 0;
 		if (value.availabilities && value.availabilities.length > 0) {
 			value.availabilities.forEach((a) => {
 				if (a.type === 3) result += 1;
@@ -105,14 +105,13 @@ export class AgePipe implements PipeTransform {
 			}
 			return age;
 		}
-		return -1;
 	}
 }
 
 @Pipe({ name: 'scheduledCount' })
 export class ScheduledCount implements PipeTransform {
 	transform(value: Schedule[]): number {
-		let result: number = 0;
+		let result = 0;
 		if (value) {
 			value.forEach((v) => {
 				if (v.scheduledThisShift) result++;
@@ -132,47 +131,44 @@ export class CheckboxFilter implements PipeTransform {
 
 @Pipe({ name: 'calendarTooltip' })
 export class CalendarTooltip implements PipeTransform {
-	transform(listOfTasks: Task[], title: string): string | undefined {
+	transform(listOfTasks: Task[], title: string): string {
 		const result = listOfTasks.find((t) => t.name === title);
-		return result?.description;
+		return result.description;
 	}
 }
 
-@Pipe({ standalone: true, name: 'calendarTaskLink' })
+@Pipe({ name: 'calendarTaskLink' })
 export class CalendarTaskLink implements PipeTransform {
-	transform(listOfTasks: Task[], title: string): string | undefined {
+	transform(listOfTasks: Task[], title: string): string {
 		const result = listOfTasks.find((t) => t.name === title);
-		return result?.id;
+		return result.id;
 	}
 }
 
 @Pipe({ name: 'planTooltip' })
 export class PlanTooltip implements PipeTransform {
-	transform(listOfShifts: Shift[] | null, event: CalendarEvent): string {
-		if (listOfShifts) {
-			const shift = listOfShifts.find((s) => s.id === event.id);
+	transform(listOfShifts: Shift[], event: CalendarEvent): string {
+		const shift = listOfShifts.find((s) => s.id == event.id);
 
-			let result: string = shift?.participantsRequired + ' Nodig ';
+		let result: string = shift.participantsRequired + ' Nodig ';
 
-			const availableNumber = shift?.availabilities
-				? shift.availabilities.filter((a) => a.type === 2).length
-				: 0;
-			result += availableNumber + ' Beschikbaar ';
+		const availableNumber = shift.availabilities
+			? shift.availabilities.filter((a) => a.type === 2).length
+			: 0;
+		result += availableNumber + ' Beschikbaar ';
 
-			const scheduledNumber = shift?.availabilities
-				? shift.availabilities.filter((a) => a.type === 3).length
-				: 0;
-			result += scheduledNumber + ' Ingeroosterd ';
-			return result;
-		}
-		return '';
+		const scheduledNumber = shift.availabilities
+			? shift.availabilities.filter((a) => a.type === 3).length
+			: 0;
+		result += scheduledNumber + ' Ingeroosterd ';
+		return result;
 	}
 }
 
 @Pipe({ name: 'availabilityPipe' })
 export class AvailabilityPipe implements PipeTransform {
 	transform(listOfAvailabilities: Availability[]): string {
-		let result: string = 'Is vandaag beschikbaar voor: \n';
+		let result = 'Is vandaag beschikbaar voor: \n';
 		listOfAvailabilities.forEach((a) => {
 			if (a.preference === true && a.type === 2) result += '☆ ';
 			if (a.type === 2)
@@ -184,8 +180,8 @@ export class AvailabilityPipe implements PipeTransform {
 					a.shift.endTime +
 					'\n';
 		});
-		let found: boolean = false;
-		let append: string = 'Is vandaag ingeroosterd op: \n';
+		let found = false;
+		let append = 'Is vandaag ingeroosterd op: \n';
 
 		listOfAvailabilities.forEach((a) => {
 			if (a.type === 3) {

@@ -7,6 +7,7 @@ import { HttpRoutes } from '../helpers/HttpRoutes';
 import { ErrorService } from './error.service';
 import { Scheduledata } from '../models/scheduledata';
 import { ShiftFilter } from '../models/filters/shift-filter';
+import { F } from '@angular/cdk/keycodes';
 import { Searchresult } from '../models/searchresult';
 import { Shiftdata } from '../models/helper-models/shiftdata';
 
@@ -19,12 +20,12 @@ export class ShiftService {
 		private errorService: ErrorService
 	) {}
 
-	async getShifts(filter: ShiftFilter): Promise<Searchresult<Shift> | null> {
+	async getShifts(filter: ShiftFilter): Promise<Searchresult<Shift>> {
 		if (!filter || !filter.projectId) {
 			this.errorService.error('Ongeldige filter');
 			return null;
 		}
-		let searchResult: Searchresult<Shift> | null = null;
+		let searchResult: Searchresult<Shift> = null;
 		await this.apiService
 			.post<HttpResponse<Searchresult<Shift>>>(
 				`${HttpRoutes.shiftApiUrl}/search`,
@@ -33,9 +34,9 @@ export class ShiftService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						searchResult = res.body;
-						if (searchResult !== null) {
+						if (searchResult != null) {
 							searchResult.resultList.forEach(
 								(s) => (s.date = new Date(s.date))
 							);
@@ -50,12 +51,12 @@ export class ShiftService {
 		return searchResult;
 	}
 
-	async getShiftData(projectId: string | null): Promise<Shiftdata | null> {
+	async getShiftData(projectId: string): Promise<Shiftdata> {
 		if (!projectId || projectId === EntityHelper.returnEmptyGuid()) {
 			this.errorService.error('Ongeldige Id');
 			return null;
 		}
-		let data: Shiftdata | null = null;
+		let data: Shiftdata = null;
 		await this.apiService
 			.get<HttpResponse<Shiftdata>>(
 				`${HttpRoutes.shiftApiUrl}/unique/${projectId}`
@@ -63,9 +64,9 @@ export class ShiftService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						data = res.body;
-						if (data?.dates && data.dates.length > 0) {
+						if (data.dates && data.dates.length > 0) {
 							const dates: Date[] = [];
 							data.dates.forEach((d) => dates.push(new Date(d)));
 							data.dates = dates;
@@ -80,14 +81,12 @@ export class ShiftService {
 		return data;
 	}
 
-	async getAllShiftsWithAvailabilities(
-		projectId: string
-	): Promise<Shift[] | null> {
+	async getAllShiftsWithAvailabilities(projectId: string): Promise<Shift[]> {
 		if (!projectId) {
 			this.errorService.error('ProjectId mag niet leeg zijn');
 			return null;
 		}
-		let shifts: Shift[] | null = [];
+		let shifts: Shift[] = [];
 		await this.apiService
 			.get<HttpResponse<Shift[]>>(
 				`${HttpRoutes.shiftApiUrl}/withAvailabilities/${projectId}`
@@ -95,9 +94,9 @@ export class ShiftService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						shifts = res.body;
-						if (shifts !== null) {
+						if (shifts != null) {
 							shifts.forEach((s) => (s.date = new Date(s.date)));
 						}
 					}
@@ -111,10 +110,10 @@ export class ShiftService {
 	}
 
 	async getAllShiftsOnDateWithUserAvailability(
-		projectId: string | null,
+		projectId: string,
 		userId: string,
 		date: Date
-	): Promise<Shift[] | null> {
+	): Promise<Shift[]> {
 		if (!projectId) {
 			this.errorService.error('ProjectId mag niet leeg zijn');
 			return null;
@@ -127,7 +126,7 @@ export class ShiftService {
 			this.errorService.error('Datum mag niet leeg zijn');
 			return null;
 		}
-		let shifts: Shift[] | null = [];
+		let shifts: Shift[] = [];
 		await this.apiService
 			.get<HttpResponse<Shift[]>>(
 				`${HttpRoutes.shiftApiUrl}/${projectId}/${userId}/${date.toISOString()}`
@@ -135,9 +134,9 @@ export class ShiftService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						shifts = res.body;
-						if (shifts !== null) {
+						if (shifts != null) {
 							shifts.forEach((s) => (s.date = new Date(s.date)));
 						}
 					}
@@ -150,10 +149,7 @@ export class ShiftService {
 		return shifts;
 	}
 
-	async getAllShiftsOnDate(
-		projectId: string,
-		date: Date
-	): Promise<Shift[] | null> {
+	async getAllShiftsOnDate(projectId: string, date: Date): Promise<Shift[]> {
 		if (!projectId) {
 			this.errorService.error('ProjectId mag niet leeg zijn');
 			return null;
@@ -162,7 +158,7 @@ export class ShiftService {
 			this.errorService.error('Datum mag niet leeg zijn');
 			return null;
 		}
-		let shifts: Shift[] | null = [];
+		let shifts: Shift[] = [];
 		await this.apiService
 			.get<HttpResponse<Shift[]>>(
 				`${HttpRoutes.shiftApiUrl}/${projectId}/${date.toISOString()}`
@@ -170,9 +166,9 @@ export class ShiftService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						shifts = res.body;
-						if (shifts !== null) {
+						if (shifts != null) {
 							shifts.forEach((s) => (s.date = new Date(s.date)));
 						}
 					}
@@ -185,20 +181,20 @@ export class ShiftService {
 		return shifts;
 	}
 
-	async getShift(shiftId: string): Promise<Shift | null> {
+	async getShift(shiftId: string): Promise<Shift> {
 		if (!shiftId) {
 			this.errorService.error('ShiftId mag niet leeg zijn');
 			return null;
 		}
-		let shift: Shift | null = null;
+		let shift: Shift = null;
 		await this.apiService
 			.get<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}/${shiftId}`)
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						shift = res.body;
-						shift?.date !== null ? (shift.date = new Date(shift.date)) : null;
+						shift.date != null ? (shift.date = new Date(shift.date)) : null;
 					}
 				},
 				(Error) => {
@@ -208,12 +204,12 @@ export class ShiftService {
 		return shift;
 	}
 
-	async getScheduleData(shiftId: string): Promise<Scheduledata | null> {
+	async getScheduleData(shiftId: string): Promise<Scheduledata> {
 		if (!shiftId) {
 			this.errorService.error('ShiftId mag niet leeg zijn');
 			return null;
 		}
-		let scheduledata: Scheduledata | null = null;
+		let scheduledata: Scheduledata = null;
 		await this.apiService
 			.get<HttpResponse<Scheduledata>>(
 				`${HttpRoutes.shiftApiUrl}/schedule/${shiftId}`
@@ -221,7 +217,7 @@ export class ShiftService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						scheduledata = res.body;
 					}
 				},
@@ -232,7 +228,7 @@ export class ShiftService {
 		return scheduledata;
 	}
 
-	async postShifts(shifts: Shift[]): Promise<Shift[] | null> {
+	async postShifts(shifts: Shift[]): Promise<Shift[]> {
 		if (!shifts || !shifts.length) {
 			this.errorService.error('Geen shiften om te posten');
 			return null;
@@ -250,16 +246,16 @@ export class ShiftService {
 				!shift.participantsRequired
 			) {
 				this.errorService.error('Niet alle shiften zijn geldig');
-				return;
+				return null;
 			}
 		});
-		let postedShifts: Shift[] | null = null;
+		let postedShifts: Shift[] = null;
 		await this.apiService
 			.post<HttpResponse<Shift[]>>(`${HttpRoutes.shiftApiUrl}`, shifts)
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						postedShifts = res.body;
 					}
 				},
@@ -270,7 +266,7 @@ export class ShiftService {
 		return postedShifts;
 	}
 
-	async updateShift(shift: Shift): Promise<Shift | null> {
+	async updateShift(shift: Shift): Promise<Shift> {
 		if (
 			!shift ||
 			!shift.project ||
@@ -283,15 +279,15 @@ export class ShiftService {
 			this.errorService.error('Kan shift niet updaten: Ongeldig formaat');
 			return null;
 		}
-		let updatedShift: Shift | null = null;
+		let updatedShift: Shift = null;
 		await this.apiService
 			.put<HttpResponse<Shift>>(`${HttpRoutes.shiftApiUrl}`, shift)
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						updatedShift = res.body;
-						updatedShift?.date !== null
+						updatedShift.date != null
 							? (updatedShift.date = new Date(updatedShift.date))
 							: null;
 					}
@@ -303,12 +299,12 @@ export class ShiftService {
 		return updatedShift;
 	}
 
-	async deleteShift(shiftId: string): Promise<boolean | null> {
+	async deleteShift(shiftId: string): Promise<boolean> {
 		if (!shiftId) {
 			this.errorService.error('ShiftId mag niet leeg zijn');
 			return null;
 		}
-		let deleted: boolean = false;
+		let deleted = false;
 		await this.apiService
 			.delete<HttpResponse<Shift>>(
 				`${HttpRoutes.shiftApiUrl}?shiftId=${shiftId}`
@@ -316,7 +312,7 @@ export class ShiftService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						deleted = true;
 					}
 				},
@@ -327,12 +323,12 @@ export class ShiftService {
 		return deleted;
 	}
 
-	async GetExportableData(projectId: string): Promise<Shift[] | null> {
+	async GetExportableData(projectId: string): Promise<Shift[]> {
 		if (!projectId) {
 			this.errorService.error('ShiftId mag niet leeg zijn');
 			return null;
 		}
-		let data: Shift[] | null = null;
+		let data: Shift[] = null;
 		await this.apiService
 			.get<HttpResponse<Shift[]>>(
 				`${HttpRoutes.shiftApiUrl}/export/${projectId}`
@@ -340,7 +336,7 @@ export class ShiftService {
 			.toPromise()
 			.then(
 				(res) => {
-					if (res?.ok) {
+					if (res.ok) {
 						data = res.body;
 					}
 				},

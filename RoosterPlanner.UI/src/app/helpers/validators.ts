@@ -1,9 +1,9 @@
 ﻿import { FormControl } from '@angular/forms';
 
 export class Validator {
-	static date(control: FormControl): { [p: string]: any } | null {
+	static date(control: FormControl): { [key: string]: any } {
 		if (
-			control === null ||
+			control == null ||
 			control.value === null ||
 			control.value.match === null
 		) {
@@ -17,16 +17,16 @@ export class Validator {
 		return null;
 	}
 
-	static dateOrNull(control: FormControl): { [p: string]: any } | null {
+	static dateOrNull(control: FormControl): { [key: string]: any } {
 		if (!(control && control.value)) {
 			return null;
 		}
 		return Validator.date(control);
 	}
 
-	static phoneNumber(control: FormControl): { [p: string]: any } | null {
+	static phoneNumber(control: FormControl): { [key: string]: any } {
 		if (
-			control === null ||
+			control == null ||
 			control.value === null ||
 			control.value.match === null
 		) {
@@ -40,9 +40,9 @@ export class Validator {
 		return null;
 	}
 
-	static postalCode(control: FormControl): { [p: string]: any } | null {
+	static postalCode(control: FormControl): { [key: string]: any } {
 		if (
-			control === null ||
+			control == null ||
 			control.value === null ||
 			control.value.match === null
 		) {
@@ -55,7 +55,7 @@ export class Validator {
 		return null;
 	}
 
-	static email(control: FormControl): { [p: string]: any } | null {
+	static email(control: FormControl): { [key: string]: any } {
 		if (!(control && control.value)) {
 			return null;
 		}

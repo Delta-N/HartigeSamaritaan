@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
-import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Project } from '../../models/project';
 import { DateConverter } from '../../helpers/date-converter';
 import { CreateProjectComponent } from '../../components/create-project/create-project.component';
@@ -31,14 +31,10 @@ import {
 	faTrashAlt,
 	faUserFriends,
 } from '@fortawesome/free-solid-svg-icons';
-import { MaterialModule } from '../../modules/material/material.module';
 
 @Component({
 	selector: 'app-project',
 	templateUrl: './project.component.html',
-
-	standalone: true,
-	imports: [MaterialModule, RouterLink],
 	styleUrls: ['./project.component.scss'],
 })
 export class ProjectComponent implements OnInit {
@@ -49,20 +45,20 @@ export class ProjectComponent implements OnInit {
 	circle = faPlusCircle;
 	faTrash = faTrashAlt;
 
-	guid: string | null;
+	guid: string;
 	project: Project;
 	viewProject: Project;
-	loaded: boolean = false;
+	loaded = false;
 	title: string;
 	closeButtonText: string;
-	isAdmin: boolean = false;
+	isAdmin = false;
 	participation: Participation;
-	projectTasks: Task[] | undefined;
+	projectTasks: Task[];
 	taskCardStyle = 'card';
 	itemsPerCard = 5;
 	reasonableMaxInteger = 10000;
-	projectTasksExpandbtnDisabled: boolean = true;
-	isManager: boolean = false;
+	projectTasksExpandbtnDisabled = true;
+	isManager = false;
 
 	constructor(
 		private userService: UserService,
@@ -100,12 +96,12 @@ export class ProjectComponent implements OnInit {
 
 	async getProjectTasks() {
 		this.taskService.getAllProjectTasks(this.guid).then((res) => {
-			this.projectTasks = res?.filter((t) => t !== null);
-			this.projectTasks = this.projectTasks?.slice(0, this.itemsPerCard);
-			if (this.projectTasks && this.projectTasks.length >= 5) {
+			this.projectTasks = res.filter((t) => t != null);
+			this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
+			if (this.projectTasks.length >= 5) {
 				this.projectTasksExpandbtnDisabled = false;
 			}
-			this.projectTasks?.sort((a, b) => (a.name > b.name ? 1 : -1));
+			this.projectTasks.sort((a, b) => (a.name > b.name ? 1 : -1));
 		});
 	}
 
@@ -122,10 +118,8 @@ export class ProjectComponent implements OnInit {
 			});
 	}
 
-	displayProject(project: Project | null) {
-		if (project) {
-			this.project = project;
-		}
+	displayProject(project: Project) {
+		this.project = project;
 		this.viewProject = DateConverter.formatProjectDateReadable(this.project);
 		this.title = this.viewProject.name;
 		this.viewProject.closed
@@ -211,7 +205,7 @@ export class ProjectComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(async (dialogResult) => {
 			this.loaded = false;
 			if (
-				dialogResult !== null &&
+				dialogResult != null &&
 				dialogResult !== this.participation.maxWorkingHoursPerWeek &&
 				dialogResult > 0 &&
 				dialogResult <= 40
@@ -247,7 +241,7 @@ export class ProjectComponent implements OnInit {
 			if (pictureElement) pictureElement.hidden = false;
 			this.taskCardStyle = 'card';
 			this.itemsPerCard = 5;
-			this.projectTasks = this.projectTasks?.slice(0, this.itemsPerCard);
+			this.projectTasks = this.projectTasks.slice(0, this.itemsPerCard);
 		} else if (this.taskCardStyle === 'card') {
 			if (leftElement) leftElement.hidden = true;
 
@@ -327,7 +321,7 @@ export class ProjectComponent implements OnInit {
 		this.loaded = false;
 		await this.shiftService.GetExportableData(guid).then((res) => {
 			const statistics: any[] = [];
-			res?.forEach((shift) => {
+			res.forEach((shift) => {
 				shift.availabilities.forEach((avail) => {
 					const statistic = {
 						Taaknaam: shift.task
@@ -396,8 +390,8 @@ export class ProjectComponent implements OnInit {
 				NaamMedewerker:
 					u.firstName && u.lastName
 						? u.firstName?.replace(',', '.') +
-							' ' +
-							u.lastName?.replace(',', '.')
+						  ' ' +
+						  u.lastName?.replace(',', '.')
 						: 'Onbekend',
 				Leeftijd: u.dateOfBirth ? pipe.transform(u.dateOfBirth) : 'Onbekend',
 				Email: u.email ? u.email.replace(',', '.') : 'Onbekend',

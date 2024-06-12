@@ -21,18 +21,18 @@ export class AdminComponent implements OnInit {
 	editIcon = faEdit;
 
 	projects: Project[] = [];
-	loaded: boolean = false;
+	loaded = false;
 	administrators: User[] = [];
-	itemsPerCard: number = 5;
+	itemsPerCard = 5;
 
 	projectCardStyle = 'card';
 	projectsElementHeight: number;
 	adminCardStyle = 'card';
 	adminElementHeight: number;
 
-	reasonableMaxInteger: number = 10000; //aanpassen na 10k projecten/admins ;)
-	projectExpandbtnDisabled: boolean = true;
-	adminExpandbtnDisabled: boolean = true;
+	reasonableMaxInteger = 10000; //aanpassen na 10k projecten/admins ;)
+	projectExpandbtnDisabled = true;
+	adminExpandbtnDisabled = true;
 
 	constructor(
 		public dialog: MatDialog,
@@ -86,7 +86,7 @@ export class AdminComponent implements OnInit {
 			if (result !== 'false') {
 				setTimeout(() => {
 					this.getProjects(0, this.itemsPerCard).then(() => {
-						if (result !== null) {
+						if (result != null) {
 							this.toastr.success(
 								result.name + ' is toegevoegd als nieuw project'
 							);
@@ -103,7 +103,7 @@ export class AdminComponent implements OnInit {
 		});
 
 		dialogRef.disableClose = true;
-		dialogRef.afterClosed().subscribe(() => {
+		dialogRef.afterClosed().subscribe((_) => {
 			setTimeout(() => {
 				this.getAdministrators(0, this.itemsPerCard).then(
 					() => (this.loaded = true)
@@ -121,7 +121,7 @@ export class AdminComponent implements OnInit {
 				element.innerText = 'zoom_out_map';
 			else element.innerText = 'fullscreen_exit';
 		}
-		if (this.projectCardStyle === 'expanded-card') {
+		if (this.projectCardStyle == 'expanded-card') {
 			if (adminCardElement) adminCardElement.hidden = false;
 			if (dataCardElement) dataCardElement.hidden = false;
 			this.projectCardStyle = 'card';
@@ -148,7 +148,7 @@ export class AdminComponent implements OnInit {
 			else element.innerText = 'fullscreen_exit';
 		}
 
-		if (this.adminCardStyle === 'expanded-card') {
+		if (this.adminCardStyle == 'expanded-card') {
 			if (projectCardElement) projectCardElement.hidden = false;
 			if (dataCardElement) dataCardElement.hidden = false;
 

@@ -1,12 +1,12 @@
 <div class="row bar">
 	<h1>Profiel</h1>
 	<div id="push">
-		<a *ngIf="user!==null" (click)="edit()" mat-button class="override-button action-button">
-			<!--      <fa-icon [icon]="faUserEdit"></fa-icon>-->
+		<a *ngIf="user!=null" (click)="edit()" mat-button class="override-button action-button">
+			<fa-icon [icon]="faUserEdit"></fa-icon>
 			Profiel wijzigen</a
 		>
-		<a *ngIf="user!==null" (click)="push()" mat-button class="override-button">
-			<!--      <fa-icon [icon]="user.pushDisabled?bell:slash"></fa-icon>-->
+		<a *ngIf="user!=null" (click)="push()" mat-button class="override-button">
+			<fa-icon [icon]="user.pushDisabled?bell:slash"></fa-icon>
 			{{user.pushDisabled ? "E-mailberichten inschakelen" : "E-mailberichten uitschakelen"}}</a
 		>
 	</div>
@@ -18,52 +18,52 @@
 <div *ngIf="loaded">
 	<div class="row">
 		<div class="col-md-6" id="left">
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Naam:</div>
 				<div class="user-data">{{user.firstName + " " + user.lastName}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Leeftijd:</div>
 				<div class="user-data">{{age}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Email:</div>
 				<div class="user-data">{{user.email}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Adres:</div>
 				<div class="user-data">{{user.streetAddress}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Postcode:</div>
 				<div class="user-data">{{user.postalCode}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Stad:</div>
 				<div class="user-data">{{user.city}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Telefoonnummer:</div>
 				<div class="user-data">{{user.phoneNumber}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Nationaliteit:</div>
 				<div class="user-data">{{user.nationality}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Moedertaal:</div>
 				<div class="user-data">{{user.nativeLanguage}}</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Nederlands taalniveau:</div>
 				<div class="user-data">{{user.dutchProficiency}}</div>
 			</div>
 		</div>
 		<div hidden id="expanded-card">
-			<mat-card [ngClass]="[certificateStyle]">
+			<mat-card appearance="outlined" [ngClass]="[certificateStyle]">
 				<div>
 					<mat-card-title>
-						<!--            <fa-icon [icon]="award"></fa-icon>-->
+						<fa-icon [icon]="award"></fa-icon>
 						Certificaten
 						<button
 							[disabled]="CertificateExpandbtnDisabled"
@@ -80,7 +80,7 @@
 							<p>{{item.certificateType ? item.certificateType.name : "Onbekend"}}</p>
 						</a>
 					</span>
-					<span *ngIf="!user.certificates || user.certificates.length===0">N.N.T.B.</span>
+					<span *ngIf="!user.certificates || user.certificates.length==0">N.N.T.B.</span>
 					<mat-card-actions class="action-anchor"></mat-card-actions>
 				</mat-card-content>
 				<mat-card-actions class="action-anchor" *ngIf="isAdmin">
@@ -91,10 +91,10 @@
 
 		<div class="right col-md-6" id="right">
 			<div id="card">
-				<mat-card [ngClass]="[certificateStyle]" id="CertificateCard">
+				<mat-card appearance="outlined" [ngClass]="[certificateStyle]" id="CertificateCard">
 					<div>
 						<mat-card-title>
-							<!--              <fa-icon [icon]="award"></fa-icon>-->
+							<fa-icon [icon]="award"></fa-icon>
 							Certificaten
 							<button
 								[disabled]="CertificateExpandbtnDisabled"
@@ -111,7 +111,7 @@
 								<p>{{item.certificateType ? item.certificateType.name : "Onbekend"}}</p>
 							</a>
 						</span>
-						<span *ngIf="!user.certificates || user.certificates.length===0">N.N.T.B.</span>
+						<span *ngIf="!user.certificates || user.certificates.length==0">N.N.T.B.</span>
 						<mat-card-actions class="action-anchor"></mat-card-actions>
 					</mat-card-content>
 					<mat-card-actions class="action-anchor" *ngIf="isAdmin">
@@ -136,18 +136,21 @@
 	</div>
 
 	<div class="row" id="remark">
-		<div class="col-6">
-			<!--todo [ngStyle]="!isStaff&& {'flex':'inherit','max-width':'inherit'}"-->
-
-			<div class="row-name">
-				<!--[ngStyle]="!isStaff&& {'display':'flex', 'justify-content':'center'}"-->
-				Persoonlijke opmerking:
+		<div class="col-6" [ngStyle]="!isStaff&& {'flex':'inherit','max-width':'inherit'}">
+			<div class="row-name" [ngStyle]="!isStaff&& {'display':'flex', 'justify-content':'center'}"
+				>Persoonlijke opmerking:
 				<button mat-button class="override-button" id="personalbutton" (click)="editRemark('personalbutton')"
 					>Aanpassen
 				</button>
 			</div>
-			<textarea id="personalremark" matInput disabled class="text-box">{{user.personalRemark}}</textarea>
-			<!--todo [ngStyle]="!isAdmin&& {'width':'100%'}"-->
+			<textarea
+				id="personalremark"
+				matInput
+				disabled
+				class="text-box"
+				[ngStyle]="!isAdmin&& {'width':'100%'}"
+				>{{user.personalRemark}}</textarea
+			>
 		</div>
 
 		<div class="col-6" *ngIf="isStaff">

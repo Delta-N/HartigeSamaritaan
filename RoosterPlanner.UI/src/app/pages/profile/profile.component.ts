@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { JwtHelper } from '../../helpers/jwt-helper';
+import { MsalService } from '../../msal';
 import { DateConverter } from '../../helpers/date-converter';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeProfileComponent } from '../../components/change-profile/change-profile.component';
-import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Certificate } from '../../models/Certificate';
 import { AddCertificateComponent } from '../../components/add-certificate/add-certificate.component';
 import { ToastrService } from 'ngx-toastr';
@@ -16,14 +17,10 @@ import {
 	faBellSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { ChangeProfilePictureComponent } from '../../components/change-profile-picture/change-profile-picture.component';
-import { NgStyle } from '@angular/common';
-import { MaterialModule } from '../../modules/material/material.module';
 
 @Component({
 	selector: 'app-profile',
 	templateUrl: './profile.component.html',
-	standalone: true,
-	imports: [NgStyle, MaterialModule, RouterLink],
 	styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
@@ -34,7 +31,7 @@ export class ProfileComponent implements OnInit {
 	user: User;
 	age: string;
 	loaded: boolean;
-	guid: string | null;
+	guid: string;
 	isStaff: boolean;
 	isAdmin: boolean;
 
@@ -43,11 +40,12 @@ export class ProfileComponent implements OnInit {
 	itemsPerCard = 5;
 	reasonableMaxInteger = 10000;
 	certificateElementHeight: number;
-	CertificateExpandbtnDisabled: boolean = true;
+	CertificateExpandbtnDisabled = true;
 
 	constructor(
 		private route: ActivatedRoute,
 		private userService: UserService,
+		private authenticationService: MsalService,
 		private dialog: MatDialog,
 		private toastr: ToastrService
 	) {}
@@ -108,13 +106,11 @@ export class ProfileComponent implements OnInit {
 			textAreaId
 		) as HTMLInputElement;
 
-		if (element?.innerText === 'Aanpassen') {
+		if (element.innerText === 'Aanpassen') {
 			element.innerText = 'Opslaan';
 			textareaElement.disabled = false;
 		} else {
-			if (element) {
-				element.innerText = 'Aanpassen';
-			}
+			element.innerText = 'Aanpassen';
 			textareaElement.disabled = true;
 			if (textareaElement.value !== originalText) {
 				id === 'personalbutton'

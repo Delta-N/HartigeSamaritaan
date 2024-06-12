@@ -9,9 +9,12 @@
 	<div class="col-4">
 		<div class="calendar">
 			<div class="calendar-wrapper">
-				<mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged()">
-					<!--todo [minDate]="minDate"
-                      [maxDate]="maxDate"-->
+				<mat-calendar
+					#calendar
+					[(selected)]="selectedDate"
+					(selectedChange)="dateChanged()"
+					[minDate]="minDate"
+					[maxDate]="maxDate">
 				</mat-calendar>
 			</div>
 			<div class="row tasks-container">
@@ -30,35 +33,35 @@
 						>{{item.name}}
 					</mat-checkbox>
 					<span class="push" [ngbPopover]="popContent" [autoClose]="'inside'">
-						<!--            <fa-icon class="checkbox-icon" [icon]="questionCircleIcon"></fa-icon>-->
+						<fa-icon class="checkbox-icon" [icon]="questionCircleIcon"></fa-icon>
 					</span>
 				</div>
 			</div>
 			<div class="row legend">
 				<div class="row legend-item">
 					<div class="mat-calendar-body-cell-content legend-button" style="background: gray">
-						<!--            <fa-icon class="legend-icon" [icon]="questionIcon"></fa-icon>-->
+						<fa-icon class="legend-icon" [icon]="questionIcon"></fa-icon>
 					</div>
 					Geef je beschikbaarheid door
 				</div>
 
 				<div class="row legend-item">
 					<div class="mat-calendar-body-cell-content legend-button" style="background: red">
-						<!--            <fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>-->
+						<fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>
 					</div>
 					Onbeschikbaar voor shift(s)
 				</div>
 
 				<div class="row legend-item">
 					<div class="mat-calendar-body-cell-content legend-button" style="background: green">
-						<!--            <fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>-->
+						<fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>
 					</div>
 					Beschikbaar voor shift(s)
 				</div>
 
 				<div class="row legend-item">
 					<div class="mat-calendar-body-cell-content legend-button" style="background: blue">
-						<!--            <fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>-->
+						<fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>
 					</div>
 					Ingeroosterd voor shift(s)
 				</div>
@@ -74,7 +77,7 @@
 				matTooltip="Je bent de hele dag beschikbaar"
 				[disabled]="apiCall"
 				(click)="acceptDay()">
-				<!--        <fa-icon [icon]="checkIcon"></fa-icon>-->
+				<fa-icon [icon]="checkIcon"></fa-icon>
 				Dag beschikbaar
 			</button>
 			<div class="date-title">
@@ -92,17 +95,17 @@
 				matTooltip="Je bent de hele dag onbeschikbaar"
 				[disabled]="apiCall"
 				(click)="refuseDay()">
-				<!--        <fa-icon [icon]="crossIcon"></fa-icon>-->
+				<fa-icon [icon]="crossIcon"></fa-icon>
 				Dag onbeschikbaar
 			</button>
 		</div>
 		<div class="row rowhidden">
 			<button mat-button class="accept schedule-button" (click)="acceptDay()">
-				<!--        <fa-icon [icon]="checkIcon"></fa-icon>-->
+				<fa-icon [icon]="checkIcon"></fa-icon>
 				Dag beschikbaar
 			</button>
 			<button mat-button class="refuse schedule-button" (click)="refuseDay()">
-				<!--        <fa-icon [icon]="crossIcon"></fa-icon>-->
+				<fa-icon [icon]="crossIcon"></fa-icon>
 				Dag onbeschikbaar
 			</button>
 		</div>
@@ -168,8 +171,9 @@
 				</div>
 			</div>
 		</ng-template>
-		<div class="calendarbox">
-			<!--todo [ngStyle]="numberOfOverlappingShifts>2&&{'min-width':(numberOfOverlappingShifts-2)*75+300+'px'}"-->
+		<div
+			class="calendarbox"
+			[ngStyle]="numberOfOverlappingShifts>2&&{'min-width':(numberOfOverlappingShifts-2)*75+300+'px'}">
 			<mwl-calendar-day-view
 				#schedule
 				[viewDate]="viewDate"

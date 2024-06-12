@@ -17,7 +17,7 @@
 	<div class="row">
 		<div class="col-md-6 left">
 			<form [formGroup]="checkoutForm" (ngSubmit)="save(checkoutForm.value)">
-				<div class="row">
+				<div class="new-row">
 					<div class="row-name">Taak:</div>
 					<div class="user-data">
 						<div>
@@ -32,7 +32,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="new-row">
 					<div class="row-name">Vanaf:</div>
 					<div class="user-data">
 						<mat-form-field>
@@ -51,7 +51,7 @@
 						</mat-form-field>
 					</div>
 				</div>
-				<div class="row">
+				<div class="new-row">
 					<div class="row-name">Tot:</div>
 					<div class="user-data">
 						<mat-form-field>
@@ -64,7 +64,7 @@
 						</mat-form-field>
 					</div>
 				</div>
-				<div class="row">
+				<div class="new-row">
 					<div class="row-name">Aantal vrijwilligers:</div>
 					<div class="user-data">
 						<mat-form-field>
@@ -79,7 +79,7 @@
 					</div>
 				</div>
 			</form>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Dagen:</div>
 				<div class="user-data">
 					<mat-form-field>
@@ -99,7 +99,7 @@
 					</mat-form-field>
 				</div>
 			</div>
-			<div class="row">
+			<div class="new-row">
 				<div class="row-name">Dagen:</div>
 				<div class="user-data">
 					<mat-form-field>
@@ -116,13 +116,16 @@
 		</div>
 		<div class="col-md-6 right">
 			<h2>Gekozen dagen:</h2>
-			<p *ngIf="shiftDates.length===0">N.N.T.B</p>
-			<mat-chip-listbox
-				><!--todo check if this still works-->
-				<mat-chip *ngFor="let day of shiftDates" [removable]="removable" (removed)="remove(day)">
+			<p *ngIf="shiftDates.length==0">N.N.T.B</p>
+			<mat-chip-listbox>
+				<mat-chip-option
+					*ngFor="let day of shiftDates"
+					[selectable]="selectable"
+					[removable]="removable"
+					(removed)="remove(day)">
 					<span>{{day | datePipe}}</span>
 					<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-				</mat-chip>
+				</mat-chip-option>
 			</mat-chip-listbox>
 		</div>
 	</div>

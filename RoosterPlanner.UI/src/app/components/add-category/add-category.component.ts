@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Category } from '../../models/category';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -11,12 +11,12 @@ import { EntityHelper } from '../../helpers/entity-helper';
 	templateUrl: './add-category.component.html',
 	styleUrls: ['./add-category.component.scss'],
 })
-export class AddCategoryComponent {
+export class AddCategoryComponent implements OnInit {
 	category: Category;
 	updatedCategory: Category;
 
 	checkoutForm;
-	modifier: string = 'toevoegen';
+	modifier = 'toevoegen';
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
@@ -25,7 +25,7 @@ export class AddCategoryComponent {
 		public dialogRef: MatDialogRef<AddCategoryComponent>,
 		private categoryService: CategoryService
 	) {
-		data.category !== null
+		data.category != null
 			? (this.category = data.category)
 			: (this.category = new Category());
 
@@ -33,20 +33,22 @@ export class AddCategoryComponent {
 
 		this.checkoutForm = this.formBuilder.group({
 			id: [
-				this.category.id !== null
+				this.category.id != null
 					? this.category.id
 					: EntityHelper.returnEmptyGuid(),
 			],
 			code: [
-				this.category.code !== null ? this.category.code : '',
+				this.category.code != null ? this.category.code : '',
 				Validators.required,
 			],
 			name: [
-				this.category.name !== null ? this.category.name : '',
+				this.category.name != null ? this.category.name : '',
 				Validators.required,
 			],
 		});
 	}
+
+	ngOnInit(): void {}
 
 	async saveCategory(value: Category) {
 		this.updatedCategory = value;

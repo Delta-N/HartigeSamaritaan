@@ -4,51 +4,17 @@
 
 export const environment = {
 	production: false,
-	apiUrl: 'https://localhost:5001',
-	msalConfig: {
-		auth: {
-			clientId: '23cbcba3-683e-4fea-bf57-f25d3dc4f0fc',
-			authority:
-				'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi',
-			validateAuthority: false,
-			navigateToLoginRequestUrl: false,
-			redirectUri: '/',
-			postLogoutRedirectUri: '/',
-			authorityDomain: 'https://roosterplanneridp.b2clogin.com',
-		},
-		cache: {
-			cacheLocation: 'localStorage',
-		},
-		consentScopes: [
-			'https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read',
-		],
-	},
-	appInsights: {
-		instrumentationKey: '54c0fc49-0057-453d-bae6-e384d5f00ce4', //Dit is afhankelijk van de deploy omgeving
-	},
-	b2cPolicies: {
-		names: {
-			signUpSignIn: 'b2c_1_susi',
-			resetPassword: 'b2c_1_reset_pwd',
-			editProfile: 'b2c_1_edit',
-		},
-		authorities: {
-			signUpSignIn: {
-				authority:
-					'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi',
-			},
-			resetPassword: {
-				authority:
-					'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_reset_pwd',
-			},
-			editProfile: {
-				authority:
-					'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_edit',
-			},
-		},
-		authorityDomain: 'fabrikamb2c.b2clogin.com',
-	},
 
+	auth: {
+		clientId: '23cbcba3-683e-4fea-bf57-f25d3dc4f0fc',
+		authority:
+			'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi',
+		redirectUri: 'http://localhost:4200/',
+		postLogoutRedirectUri: 'http://localhost:4200/',
+		navigateToLoginRequestUrl: true,
+		validateAuthority: false,
+		knownAuthorities: ['https://roosterplanneridp.b2clogin.com'],
+	},
 	protectedResourceMap: [
 		[
 			'https://localhost:5001/api/',
@@ -81,6 +47,28 @@ export const environment = {
 			],
 		],
 	],
+	scopes: [
+		'https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read',
+	],
+	authorities: {
+		signUpSignIn: {
+			authority:
+				'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi',
+		},
+		resetPassword: {
+			authority:
+				'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_reset_pwd',
+		},
+		editProfile: {
+			authority:
+				'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_edit',
+		},
+	},
+	backendUrl: 'https://localhost:5001/',
+
+	appInsights: {
+		instrumentationKey: '54c0fc49-0057-453d-bae6-e384d5f00ce4', //Dit is afhankelijk van de deploy omgeving
+	},
 };
 
 /*

@@ -6,24 +6,20 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { TextInjectorService } from '../../services/text-injector.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { Breadcrumb } from '../../models/breadcrumb';
 import { Event } from '../../models/event';
 import { faCalendarPlus } from '@fortawesome/free-solid-svg-icons';
-import { MaterialModule } from '../../modules/material/material.module';
-import { TableDatePipe } from '../../helpers/filter.pipe';
 
 @Component({
 	selector: 'app-schedule',
 	templateUrl: './schedule.component.html',
-	standalone: true,
-	imports: [MaterialModule, TableDatePipe],
 	styleUrls: ['./schedule.component.scss'],
 })
 export class ScheduleComponent implements OnInit {
 	calendarIcon = faCalendarPlus;
-	loaded: boolean = false;
+	loaded = false;
 	today: Date = new Date();
 	displayedColumns: string[] = [];
 	dataSource: MatTableDataSource<Availability> =
@@ -72,10 +68,11 @@ export class ScheduleComponent implements OnInit {
 
 						this.dataSource = new MatTableDataSource<Availability>(all);
 
+						// @ts-ignore
 						this.dataSource.sortingDataAccessor = (item, property) => {
 							switch (property) {
 								case 'Taak':
-									return item.shift.task !== null ? item.shift.task.name : null;
+									return item.shift.task != null ? item.shift.task.name : null;
 								case 'Datum':
 									return item.shift.date;
 								case 'Vanaf':

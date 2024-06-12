@@ -3,7 +3,7 @@
   border: none;
 }
 
-.mat-button {
+.mat-mdc-button {
   padding-top: 10px;
   padding-bottom: 10px;
   border-radius: 5px;
@@ -30,7 +30,7 @@ img {
   height: 150px;
 }
 
-.mat-card {
+.mat-mdc-card {
   margin-right: auto;
   margin-top: 30px;
   margin-bottom: 10px;
@@ -68,7 +68,7 @@ img {
   img {
     max-width: 182px;
   }
-  .mat-card {
+  .mat-mdc-card {
     max-width: 250px;
     min-width: 250px;
   }
@@ -88,7 +88,7 @@ img {
   .row-name {
     font-size: 17px !important;
   }
-  .mat-card {
+  .mat-mdc-card {
     min-width: 200px;
   }
 }
@@ -100,7 +100,7 @@ img {
   img {
     max-width: 182px;
   }
-  .mat-card {
+  .mat-mdc-card {
     min-width: 275px;
   }
   .user-data {
@@ -128,19 +128,19 @@ img {
     font-size: 12px !important;
   }
 
-  .mat-card {
+  .mat-mdc-card {
 
     width: 375px;
 
-    .mat-card-title {
+    .mat-mdc-card-title {
       font-size: 16px;
     }
 
-    .mat-card-content {
+    .mat-mdc-card-content {
       font-size: 14px;
     }
 
-    .mat-card-actions .mat-button {
+    .mat-mdc-card-actions .mat-mdc-button {
       font-size: 16px;
     }
   }

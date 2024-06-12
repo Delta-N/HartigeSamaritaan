@@ -22,20 +22,20 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 })
 export class AllTasksComponent implements OnInit {
 	circleIcon = faPlusCircle;
-	loaded: boolean = false;
-	itemsPerCard: number = 5;
+	loaded = false;
+	itemsPerCard = 5;
 
-	reasonableMaxInteger: number = 10000; //aanpassen na 10k projecten/admins ;)
-	tasks: Task[] | null = [];
+	reasonableMaxInteger = 10000; //aanpassen na 10k projecten/admins ;)
+	tasks: Task[] = [];
 	taskCardStyle = 'card';
-	tasksExpandbtnDisabled: boolean = true;
+	tasksExpandbtnDisabled = true;
 
 	categoryCardStyle = 'card';
 	categories: Category[];
-	categoryExpandbtnDisabled: boolean = true;
+	categoryExpandbtnDisabled = true;
 
 	certificateCardStyle = 'card';
-	certificateExpandbtnDisabled: boolean = true;
+	certificateExpandbtnDisabled = true;
 	certificatesTypes: CertificateType[];
 
 	constructor(
@@ -66,9 +66,8 @@ export class AllTasksComponent implements OnInit {
 	async getTasks(offset: number, pageSize: number) {
 		await this.taskService.getAllTasks(offset, pageSize).then((tasks) => {
 			this.tasks = tasks;
-			this.tasks?.sort((a, b) => (a.name > b.name ? 1 : -1));
-			const length = this.tasks?.length ?? 0;
-			if (length >= 5) {
+			this.tasks.sort((a, b) => (a.name > b.name ? 1 : -1));
+			if (this.tasks.length >= 5) {
 				this.tasksExpandbtnDisabled = false;
 			}
 		});
@@ -161,12 +160,12 @@ export class AllTasksComponent implements OnInit {
 				element.innerText = 'zoom_out_map';
 			else element.innerText = 'fullscreen_exit';
 		}
-		if (this.taskCardStyle === 'expanded-card') {
+		if (this.taskCardStyle == 'expanded-card') {
 			if (categoryCardElement) categoryCardElement.hidden = false;
 			if (certificateCardElement) certificateCardElement.hidden = false;
 			this.taskCardStyle = 'card';
 			this.itemsPerCard = 5;
-			this.tasks = this.tasks?.slice(0, this.itemsPerCard) ?? [];
+			this.tasks = this.tasks.slice(0, this.itemsPerCard);
 		} else {
 			if (categoryCardElement) categoryCardElement.hidden = true;
 			if (certificateCardElement) certificateCardElement.hidden = true;
@@ -185,7 +184,7 @@ export class AllTasksComponent implements OnInit {
 				element.innerText = 'zoom_out_map';
 			else element.innerText = 'fullscreen_exit';
 		}
-		if (this.categoryCardStyle === 'expanded-card') {
+		if (this.categoryCardStyle == 'expanded-card') {
 			if (taskCardElement) taskCardElement.hidden = false;
 			if (certificateCardElement) certificateCardElement.hidden = false;
 
@@ -210,7 +209,7 @@ export class AllTasksComponent implements OnInit {
 				element.innerText = 'zoom_out_map';
 			else element.innerText = 'fullscreen_exit';
 		}
-		if (this.certificateCardStyle === 'expanded-card') {
+		if (this.certificateCardStyle == 'expanded-card') {
 			if (taskCardElement) taskCardElement.hidden = false;
 
 			if (categoryCardElement) categoryCardElement.hidden = false;
