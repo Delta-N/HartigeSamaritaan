@@ -67,6 +67,13 @@ jobs:
           name: Web
           path: ./staging/web.zip
 
+      - name: deploy
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{secrets.AZURE_DEV_WEB_RESOURCE_NAME}}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISHINGPROFILE_DEV  }}
+          package: './${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/staging/web'
+
   build-back-end:
     runs-on: ubuntu-latest
 
@@ -101,3 +108,10 @@ jobs:
         with:
           name: Api
           path: ./staging/api.zip
+
+      - name: deploy
+        uses: azure/webapps-deploy@v2
+        with:
+            app-name: ${{secrets.AZURE_DEV_API_RESOURCE_NAME}}
+            publish-profile: ${{ secrets.AZURE_API_PUBLISHINGPROFILE_DEV  }}
+            package: './${{ env.AZURE_API_PACKAGE_PATH }}/staging/api'
