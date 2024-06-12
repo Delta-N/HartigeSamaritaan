@@ -52,7 +52,7 @@ jobs:
       - name: Build front-end
         run: |
           pnpm install
-          ng build --configuration production --outputPath=../staging/web
+          ng build --configuration production --output-path=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
       - name: Zip the output
@@ -78,13 +78,14 @@ jobs:
         run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }}
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
 
-      - name: Test API
-        run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --collect "Code coverage" --logger trx
+      - name: Publish API
+        run: dotnet publish --configuration ${{ env.BUILD_CONFIGURATION }} --output ../staging/api -r linux-x64 --self-contained true /p:UseAppHost=true
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
 
-      - name: Publish API
-        run: dotnet publish --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --no-restore --output ../staging/api
+      - name: Test API
+        run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore --collect "Code coverage" --logger trx
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
+
 
       - name: Zip the output
         run: zip -r ../staging/api.zip . -i ../staging/api
