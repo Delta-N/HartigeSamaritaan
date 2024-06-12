@@ -60,7 +60,7 @@ jobs:
 
       - name: Zip output
         run: zip -qq -r ../staging/web.zip .
-        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}staging/web
+        working-directory: RoosterPlanner.Api/staging/web
 
       - uses: actions/upload-artifact@v4
         with:
@@ -102,7 +102,7 @@ jobs:
 
       - name: Zip output
         run: zip -qq -r ../staging/api.zip .
-        working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}staging/api
+        working-directory: RoosterPlanner.UI/staging/api
 
       - uses: actions/upload-artifact@v4
         with:
