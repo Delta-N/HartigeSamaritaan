@@ -59,8 +59,8 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r ./staging/web.zip .
-        working-directory: ../staging/web
+        run: zip -qq -r ../staging/web.zip ../staging/web
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -72,7 +72,7 @@ jobs:
         with:
           app-name: ${{secrets.AZURE_DEV_WEB_RESOURCE_NAME}}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISHINGPROFILE_DEV  }}
-          package: ../staging/web.zip
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}staging/web.zip'
 
   build-back-end:
     runs-on: ubuntu-latest
@@ -101,8 +101,8 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r ./staging/api.zip .
-        working-directory: ../staging/api
+        run: zip -qq -r ../staging/api.zip ../staging/api
+        working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -114,4 +114,4 @@ jobs:
         with:
             app-name: ${{secrets.AZURE_DEV_API_RESOURCE_NAME}}
             publish-profile: ${{ secrets.AZURE_API_PUBLISHINGPROFILE_DEV  }}
-            package: ../staging/api.zip
+            package: '${{ env.AZURE_API_PACKAGE_PATH }}staging/api.zip'
