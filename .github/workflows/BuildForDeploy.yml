@@ -10,6 +10,7 @@ env:
   DOTNET_VERSION: 8.0.x
   NODE_VERSION: 20.x
   ANGULAR_VERSION: 17.1.10
+  PNPM_VERSION: 8
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
 
@@ -20,21 +21,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: cache node modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: ${{env.NODE_VERSION}}
 
-      - name: Install PNPM
-        run: npm install -g pnpm
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
 
       - name: Install Angular CLI
         run: pnpm add -g @angular/cli@${{ env.ANGULAR_VERSION }}
