@@ -59,8 +59,8 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r ../staging/web.zip ../staging/web
-        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        run: zip -qq -r ../staging/web.zip .
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}staging/web
 
       - uses: actions/upload-artifact@v4
         with:
@@ -101,8 +101,8 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r ../staging/api.zip ../staging/api
-        working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
+        run: zip -qq -r ../staging/api.zip .
+        working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}staging/api
 
       - uses: actions/upload-artifact@v4
         with:
