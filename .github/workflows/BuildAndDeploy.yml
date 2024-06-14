@@ -1,9 +1,9 @@
-name: Build the project
+name: Build and Deploy
 
 on:
   push:
     branches:
-      - develop
+      - develop #["main", "develop"]
 
 env:
   BUILD_CONFIGURATION: Release
@@ -17,6 +17,8 @@ env:
 jobs:
   build-front-end:
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -67,11 +69,17 @@ jobs:
           name: Web
           path: web.zip
 
+      - name: Log in with Azure
+        uses: azure/login@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          enable-AzPSSession: true
+
       - name: deploy
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{secrets.AZURE_DEV_WEB_RESOURCE_NAME}}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISHINGPROFILE_DEV  }}
+          app-name: ${{secrets.AZURE_WEB_RESOURCE_NAME}}
+          resource-group: ${{secrets.AZURE_RG_NAME}}
           package: 'web.zip'
 
   build-back-end:
@@ -112,6 +120,6 @@ jobs:
       - name: deploy
         uses: azure/webapps-deploy@v2
         with:
-            app-name: ${{secrets.AZURE_DEV_API_RESOURCE_NAME}}
-            publish-profile: ${{ secrets.AZURE_API_PUBLISHINGPROFILE_DEV  }}
+            app-name: ${{secrets.AZURE_API_RESOURCE_NAME}}
+            resource-group: ${{secrets.AZURE_RG_NAME}}
             package: 'api.zip'
