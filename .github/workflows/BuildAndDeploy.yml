@@ -18,7 +18,7 @@ jobs:
   build-front-end:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.ref_name }}
+      name: ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -85,7 +85,7 @@ jobs:
   build-back-end:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.ref_name }}
+      name: ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' }}
 
     steps:
       - uses: actions/checkout@v4
