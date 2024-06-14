@@ -84,6 +84,8 @@ jobs:
 
   build-back-end:
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name }}
 
     steps:
       - uses: actions/checkout@v4
