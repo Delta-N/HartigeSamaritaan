@@ -88,9 +88,6 @@ jobs:
       name: ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' || 'other' }}
 
     steps:
-      - name: echo env
-        run: echo ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' || 'other' }}${{ env.AZURE_API_PACKAGE_PATH }}
-
       - uses: actions/checkout@v4
 
       - name: Setup .NET core
