@@ -117,6 +117,12 @@ jobs:
           name: Api
           path: api.zip
 
+      - name: Log in with Azure
+        uses: azure/login@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          enable-AzPSSession: true
+
       - name: deploy
         uses: azure/webapps-deploy@v2
         with:
