@@ -54,7 +54,7 @@ jobs:
       - name: Build front-end
         run: |
           pnpm install
-          ng build --configuration production --output-path=../staging/web
+          ng build --configuration ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'staging' }} --output-path=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
       - name: Install zip

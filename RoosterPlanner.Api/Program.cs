@@ -38,7 +38,7 @@ namespace RoosterPlanner.Api {
             })
             .ConfigureAppConfiguration((context, config) => {
                 var configuration = config.Build();
-                var azureServiceTokenProvider = new AzureServiceTokenProvider("RunAs=Developer; DeveloperTool=AzureCli");
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
                 var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
 
                 Console.WriteLine(configuration["KeyVaultName"]);
