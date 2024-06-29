@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -33,15 +38,16 @@ namespace RoosterPlanner.Api {
             })
             .ConfigureAppConfiguration((context, config) => {
                 var configuration = config.Build();
-                // var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                // var keyVaultClient = new KeyVaultClient(
-                //     new KeyVaultClient.AuthenticationCallback(
-                //         azureServiceTokenProvider.KeyVaultTokenCallback));
-                //
-                // config.AddAzureKeyVault(
-                //     $"https://{configuration["KeyVaultName"]}.vault.azure.net/",
-                //     keyVaultClient,
-                //     new DefaultKeyVaultSecretManager());
+                var azureServiceTokenProvider = new AzureServiceTokenProvider("RunAs=Developer; DeveloperTool=AzureCli");
+                var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+
+                Console.WriteLine(configuration["KeyVaultName"]);
+
+
+                config.AddAzureKeyVault(
+                $"https://{configuration["KeyVaultName"]}.vault.azure.net/",
+                keyVaultClient,
+                new DefaultKeyVaultSecretManager());
             }).ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
             ;
         }
