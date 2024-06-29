@@ -112,7 +112,7 @@ jobs:
 
       - uses: microsoft/variable-substitution@v1
         with:
-          files: ./staging/api/appSettings.json
+          files: './staging/api/appsettings.json,./staging/api/api/appsettings.json'
         env:
           KeyVaultName: ${{ secrets.AZURE_KEYVAULT_NAME }}
 
