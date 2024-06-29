@@ -99,6 +99,12 @@ jobs:
         run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }}
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
 
+      - uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.AZURE_API_PACKAGE_PATH }}'appSettings.json'
+        env:
+          KeyVaultName: ${{ secrets.AZURE_KEYVAULT_NAME }}
+
       - name: Publish API
         run: dotnet publish --configuration ${{ env.BUILD_CONFIGURATION }} --output ../staging/api -r linux-x64
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
