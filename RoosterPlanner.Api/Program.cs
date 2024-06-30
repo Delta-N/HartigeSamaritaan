@@ -20,7 +20,8 @@ namespace RoosterPlanner.Api {
 
             Log.Information("Starting Roosterplanner API");
 
-            CreateHostBuilder(args).UseSerilog((context, services, configuration) => configuration
+            CreateHostBuilder(args)
+            .UseSerilog((context, services, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration)
             .ReadFrom.Services(services)
             .Enrich.FromLogContext()

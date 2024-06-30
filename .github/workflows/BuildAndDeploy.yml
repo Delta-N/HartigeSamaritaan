@@ -100,7 +100,7 @@ jobs:
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
 
       - name: Publish API
-        run: dotnet publish --configuration ${{ env.BUILD_CONFIGURATION }} --output ../staging/api -r linux-x64
+        run: dotnet publish --configuration ${{ env.BUILD_CONFIGURATION }} --output ../staging/api -r win-x64
         working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
 
       - name: Test API
