@@ -34,6 +34,7 @@ resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
       name: 'standard'
     }
     tenantId: tenantId
+    accessPolicies: []
   }
 }
 
