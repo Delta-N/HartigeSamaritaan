@@ -89,6 +89,11 @@ jobs:
           template-file: ./.infra/api/main.bicep
           parameters-file: ./.infra/api/main.dev.bicepparam
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: api-infra
+          path: ./.infra/api/
+
   deploy-dev:
     if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
     runs-on: ubuntu-latest
@@ -102,6 +107,14 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: Api
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: api-infra
+          path: ./.infra/api/
+
+      - name: Show files
+        run: ls ./.infra/api/
 
       - name: Log in with Azure
         uses: azure/login@v2
