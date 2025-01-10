@@ -9,11 +9,11 @@ param projectPrefix string = 'roosterplanner'
 param aspSkuName string = 'B1'
 param aspSkuTier string = 'Basic'
 
-param dbSkuName string = 'GP_Gen5_2'
-param dbSkuTier string = 'GeneralPurpose'
+param dbSkuName string = 'Basic'
+param dbSkuTier string = 'Basic'
 
 param authAzureTenantName string
-param authB2CExtentionApplicationId string
+param authB2CExtensionApplicationId string
 param authClientId string
 param authGraphApiScopes string
 param authInstance string
@@ -111,7 +111,7 @@ resource webapi 'Microsoft.Web/sites@2024-04-01' = {
         }
         {
           name: 'AzureAuthentication__B2CExtentionApplicationId'
-          value: authB2CExtentionApplicationId
+          value: authB2CExtensionApplicationId
         }
         {
           name: 'AzureAuthentication__ClientId'
