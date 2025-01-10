@@ -20,6 +20,8 @@ env:
 
 jobs:
   build-back-end:
+    environment:
+      name: dev
     name: Build Back-end
     runs-on: ubuntu-latest
 
