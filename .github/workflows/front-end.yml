@@ -3,7 +3,12 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - develop #["main", "develop"]#
+      - main
+      - feature/bicep
+
+permissions:
+  id-token: write
+  contents: read
 
 env:
   BUILD_CONFIGURATION: Release
@@ -18,7 +23,7 @@ jobs:
   build-front-end:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' }}
+      name: dev
 
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +58,7 @@ jobs:
       - name: Build front-end
         run: |
           pnpm install
-          ng build --configuration ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'staging' }} --output-path=../staging/web
+          ng build --configuration production --output-path=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
       - name: Install zip
@@ -68,21 +73,42 @@ jobs:
           name: Web
           path: web.zip
 
-      - name: Log in with Azure
+  validate-bicep:
+    name: Validate Bicep
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+
+      - name: Log into Azure
         uses: azure/login@v2
         with:
-          creds: "${{ secrets.AZURE_CREDENTIALS }}"
-          enable-AzPSSession: true
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
 
-      - name: deploy
-        uses: azure/webapps-deploy@v2
+      - name: Validate Bicep
+        uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
         with:
-          app-name: ${{ secrets.AZURE_WEB_RESOURCE_NAME }}
-          resource-group-name: ${{ secrets.AZURE_RG_NAME}}
-          package: "web.zip"
+          name: "bicep-validation"
+          scope: resourceGroup
+          type: deployment
+          operation: validate
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/fe/main.bicep
+          parameters-file: ./.infra/fe/main.dev.bicepparam
 
-  deploy-front-end:
+  deploy-dev:
+    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
+    needs:
+      - build-front-end
+      - validate-bicep
     environment:
       name: ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' }}
 
