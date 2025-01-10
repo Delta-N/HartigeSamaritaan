@@ -78,6 +78,7 @@ jobs:
 
       - name: Validate Bicep
         uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
         with:
           name: "bicep-validation"
           scope: resourceGroup
@@ -89,7 +90,7 @@ jobs:
           parameters-file: ./.infra/api/main.dev.bicepparam
 
   deploy-tst:
-    if: github.ref_name == 'main'
+    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
     runs-on: ubuntu-latest
     environment:
       name: dev
@@ -112,6 +113,7 @@ jobs:
 
       - name: Deploy Infra
         uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
         with:
           name: "bicep-validation"
           scope: resourceGroup
