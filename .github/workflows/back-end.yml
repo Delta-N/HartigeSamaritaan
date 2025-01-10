@@ -87,7 +87,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
           resource-group-name: ${{ secrets.AZURE_RG_NAME }}
           template-file: ./.infra/api/main.bicep
-          parameters-file: ./.infra/api/parameters.dev.bicepparam
+          parameters-file: ./.infra/api/main.dev.bicepparam
 
   deploy-tst:
     if: github.ref_name == 'main'
@@ -122,7 +122,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
           resource-group-name: ${{ secrets.AZURE_RG_NAME }}
           template-file: ./.infra/api/main.bicep
-          parameters-file: ./.infra/api/parameters.dev.bicepparam
+          parameters-file: ./.infra/api/main.dev.bicepparam
 
       - name: deploy api
         uses: azure/webapps-deploy@v2
