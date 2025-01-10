@@ -28,6 +28,13 @@ var tenantId = subscription().tenantId
 resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: '${projectPrefix}-${environment}-kv'
   location: location
+  properties: {
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+    tenantId: tenantId
+  }
 }
 
 resource asp 'Microsoft.Web/serverfarms@2024-04-01' = {

@@ -80,7 +80,6 @@ jobs:
         uses: azure/bicep-deploy@v1
         with:
           name: "bicep-validation"
-          location: westeurope
           scope: resourceGroup
           type: deployment
           operation: validate
@@ -115,7 +114,6 @@ jobs:
         uses: azure/bicep-deploy@v1
         with:
           name: "bicep-validation"
-          location: westeurope
           scope: resourceGroup
           type: deployment
           operation: create
