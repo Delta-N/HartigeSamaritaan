@@ -5,11 +5,26 @@
 param environment string
 param location string = resourceGroup().location
 param projectPrefix string = 'roosterplanner'
+
 param aspSkuName string = 'B1'
 param aspSkuTier string = 'Basic'
 
 param dbSkuName string = 'GP_Gen5_2'
 param dbSkuTier string = 'GeneralPurpose'
+
+param authAzureTenantName string
+param authB2CExtentionApplicationId string
+param authClientId string
+param authGraphApiScopes string
+param authInstance string
+param authSignUpSignInPolicyId string
+param authTenantId string
+param authDomain string
+
+@secure()
+param dbLoginName string
+@secure()
+param dbLoginPassword string
 
 var tenantId = subscription().tenantId
 
@@ -90,8 +105,52 @@ resource webapi 'Microsoft.Web/sites@2024-04-01' = {
           value: '1'
         }
         {
-          name: 'KeyVault__Uri'
-          value: kv.properties.vaultUri
+          name: 'KeyVaultName'
+          value: kv.name
+        }
+        {
+          name: 'AzureAuthentication__AzureTenantName'
+          value: authAzureTenantName
+        }
+        {
+          name: 'AzureAuthentication__B2CExtentionApplicationId'
+          value: authB2CExtentionApplicationId
+        }
+        {
+          name: 'AzureAuthentication__ClientId'
+          value: authClientId
+        }
+        {
+          name: 'AzureAuthentication__GraphApiScopes'
+          value: authGraphApiScopes
+        }
+        {
+          name: 'AzureAuthentication__Instance'
+          value: authInstance
+        }
+        {
+          name: 'AzureAuthentication__SignUpSignInPolicyId'
+          value: authSignUpSignInPolicyId
+        }
+        {
+          name: 'AzureAuthentication__TenantId'
+          value: authTenantId
+        }
+        {
+          name: 'AzureAuthentication__Domain'
+          value: authDomain
+        }
+        {
+          name: 'AzureAuthentication__ClientSecret'
+          value: '@Microsoft.KeyVault(VaultName=${kv.name};SecretName=AzureAuthentication--ClientSecret)'
+        }
+        {
+          name: 'ConnectionStrings__RoosterPlannerDatabase'
+          value: '@Microsoft.KeyVault(SecretUri=${kv_secret_connectionstring.properties.secretUri})'
+        }
+        {
+          name: 'AzureBlob__AzureBlobConnectionstring'
+          value: '@Microsoft.KeyVault(SecretUri=${kv_secret_storageAccount.properties.secretUri})'
         }
       ]
     }
@@ -126,6 +185,8 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
   name: '${projectPrefix}-${environment}-sql'
   properties: {
     publicNetworkAccess: 'Enabled'
+    administratorLogin: dbLoginName
+    administratorLoginPassword: dbLoginPassword
   }
 }
 
@@ -142,11 +203,38 @@ resource sqldb 'Microsoft.Sql/servers/databases@2021-11-01' = {
   }
 }
 
-resource keyVaultDevHub_Secrets_DbCon 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: 'ConnectionStrings--HubDbContext'
-  parent: keyVaultDevHub
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: '${projectPrefix}${environment}st'
+  location: location
+  kind: 'StorageV2'
+
+  sku: {
+    name: 'Standard_LRS'
+  }
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
-    contentType: 'ARM - ConnectionString'
-    value: 'Server=tcp:${sqlServerDevHub.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlDbDevHub.name};Persist Security Info=False;User ID=${sqlDevHub_Settings.serverLoginName};Password=${sqlDevHub_Settings.serverLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+    allowBlobPublicAccess: false
+    supportsHttpsTrafficOnly: true
+    accessTier: 'Hot'
+  }
+}
+
+resource kv_secret_connectionstring 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: 'ConnectionStrings--RoosterPlannerDatabase'
+  parent: kv
+  properties: {
+    contentType: 'Bicep - Connection string'
+    value: 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqldb.name};Persist Security Info=False;User ID=${dbLoginName};Password=${dbLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+  }
+}
+
+resource kv_secret_storageAccount 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  name: 'AzureBlob--AzureBlobConnectionstring'
+  parent: kv
+  properties: {
+    contentType: 'Bicep - Connection string'
+    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${az.environment().suffixes.storage};AccountKey=${storageAccount.listKeys(storageAccount.apiVersion).keys[0].value}'
   }
 }

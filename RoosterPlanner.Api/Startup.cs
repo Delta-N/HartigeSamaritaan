@@ -16,16 +16,20 @@ using RoosterPlanner.Service;
 using RoosterPlanner.Service.Services;
 using Serilog;
 
-namespace RoosterPlanner.Api {
-    public class Startup {
+namespace RoosterPlanner.Api
+{
+    public class Startup
+    {
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration)
+        {
             Configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services) {
+        public void ConfigureServices(IServiceCollection services)
+        {
 #if DEBUG
             IdentityModelEventSource.ShowPII = true; // temp for more logging
 #endif
@@ -33,19 +37,24 @@ namespace RoosterPlanner.Api {
             services.AddDefaultCorrelationId();
 
             // Enable Application Insights telemetry collection.
-            services.AddApplicationInsightsTelemetry(Configuration);
-
+            services.AddApplicationInsightsTelemetry(options =>
+            {
+                options.ConnectionString = Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+            });
 
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApi(options => {
+            .AddMicrosoftIdentityWebApi(options =>
+            {
                 Configuration.Bind("AzureAuthentication", options);
             },
             options => { Configuration.Bind("AzureAuthentication", options); });
 
 
-            services.AddCors(options => {
-                options.AddPolicy("AllowSpecificOrigins", p => {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins", p =>
+                {
                     p.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod();
@@ -53,7 +62,8 @@ namespace RoosterPlanner.Api {
                 );
             });
 
-            services.AddAuthorization(options => {
+            services.AddAuthorization(options =>
+            {
                 options.AddPolicy("Boardmember", policy =>
                 policy.RequireClaim("extension_UserRole", "1")); //UserRole.Boardmember
 
@@ -67,12 +77,14 @@ namespace RoosterPlanner.Api {
 
             services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-            services.AddSwaggerGen(options => {
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
-                In = ParameterLocation.Header,
-                Description = "Please insert JWT with Bearer into field",
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey
+            services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
                 });
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement {
                 {
@@ -101,20 +113,24 @@ namespace RoosterPlanner.Api {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostEnvironment env) {
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
+        {
 
             app.UseCorrelationId();
-            if (env.IsDevelopment()) {
+            if (env.IsDevelopment())
+            {
                 IdentityModelEventSource.ShowPII = false;
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(options => {
+                app.UseSwaggerUI(options =>
+                {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                     options.RoutePrefix = string.Empty;
                 });
 
             }
-            else {
+            else
+            {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
@@ -127,12 +143,14 @@ namespace RoosterPlanner.Api {
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health").AllowAnonymous();
             });
         }
-        private void AddCustomServices(IServiceCollection services) {
+        private void AddCustomServices(IServiceCollection services)
+        {
             services.Configure<WebUrlConfig>(
             Configuration.GetSection(WebUrlConfig.ConfigSectionName));
 
