@@ -1,0 +1,148 @@
+name: ASP.NET Backend CI/CD
+
+on:
+  push:
+    branches:
+      - main #["main", "develop"]#
+      - feature/bicep
+  pull_request:
+    branches:
+      - main
+
+env:
+  BUILD_CONFIGURATION: Release
+  DOTNET_VERSION: 8.0.x
+  NODE_VERSION: 20.x
+  ANGULAR_VERSION: 18.0.3
+  PNPM_VERSION: 8
+  AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
+  AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
+
+jobs:
+  build-back-end:
+    name: Build Back-end
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build API
+        run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }}
+
+      - name: Test API
+        run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --no-restore --collect "Code coverage" --logger trx
+
+      - name: Publish API
+        run: dotnet publish --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --no-restore --output ../staging/api
+        working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
+
+      - name: Install zip
+        uses: montudor/action-zip@v1
+
+      - name: Zip output
+        run: zip -qq -r ../../api.zip .
+        working-directory: ./staging/api
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Api
+          path: api.zip
+
+  validate-bicep:
+    name: Validate Bicep
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+
+      - name: Log into Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Validate Bicep
+        uses: azure/bicep-deploy@v1
+        with:
+          name: "bicep-validation"
+          location: westeurope
+          scope: resourceGroup
+          type: deployment
+          operation: validate
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/api/main.bicep
+          parameters-file: ./.infra/api/parameters.dev.bicepparam
+
+  deploy-tst:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    needs:
+      - build-back-end
+      - validate-bicep
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Api
+
+      - name: Log in with Azure
+        uses: azure/login@v2
+        with:
+          creds: "${{ secrets.AZURE_CREDENTIALS }}"
+          enable-AzPSSession: true
+
+      - name: Deploy Infra
+        uses: azure/bicep-deploy@v1
+        with:
+          name: "bicep-validation"
+          location: westeurope
+          scope: resourceGroup
+          type: deployment
+          operation: create
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/api/main.bicep
+          parameters-file: ./.infra/api/parameters.dev.bicepparam
+
+      - name: deploy api
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_API_RESOURCE_NAME }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          package: "api.zip"
+
+  deploy-prd:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    environment:
+      name: prd
+    needs:
+      - deploy-tst
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Api
+
+      - name: Log in with Azure
+        uses: azure/login@v2
+        with:
+          creds: "${{ secrets.AZURE_CREDENTIALS }}"
+          enable-AzPSSession: true
+
+      - name: deploy api
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_API_RESOURCE_NAME }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          package: "api.zip"

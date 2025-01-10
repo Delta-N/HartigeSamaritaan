@@ -47,7 +47,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-
       - name: Install Angular CLI
         run: pnpm add -g @angular/cli@${{ env.ANGULAR_VERSION }}
 
@@ -72,68 +71,22 @@ jobs:
       - name: Log in with Azure
         uses: azure/login@v2
         with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          creds: "${{ secrets.AZURE_CREDENTIALS }}"
           enable-AzPSSession: true
 
       - name: deploy
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{secrets.AZURE_WEB_RESOURCE_NAME}}
-          resource-group: ${{secrets.AZURE_RG_NAME}}
-          package: 'web.zip'
+          app-name: ${{ secrets.AZURE_WEB_RESOURCE_NAME }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME}}
+          package: "web.zip"
 
-  build-back-end:
+  deploy-front-end:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' || 'other' }}
+      name: ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' }}
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup .NET core
-        uses: actions/setup-dotnet@v4
+      - uses: actions/download-artifact@v4
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Build API
-        run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }}
-        working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
-
-      - name: Publish API
-        run: dotnet publish --configuration ${{ env.BUILD_CONFIGURATION }} --output ../staging/api
-        working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
-
-      - name: Test API
-        run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore --collect "Code coverage" --logger trx
-        working-directory: ${{ env.AZURE_API_PACKAGE_PATH }}
-
-      - name: Install zip
-        uses: montudor/action-zip@v1
-
-      - uses: microsoft/variable-substitution@v1
-        with:
-          files: './staging/api/appsettings.json'
-        env:
-          KeyVaultName: ${{ secrets.AZURE_KEYVAULT_NAME }}
-
-      - name: Zip output
-        run: zip -qq -r ../../api.zip .
-        working-directory: ./staging/api
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Api
-          path: api.zip
-
-      - name: Log in with Azure
-        uses: azure/login@v2
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
-          enable-AzPSSession: true
-
-      - name: deploy
-        uses: azure/webapps-deploy@v2
-        with:
-            app-name: ${{secrets.AZURE_API_RESOURCE_NAME}}
-            resource-group: ${{secrets.AZURE_RG_NAME}}
-            package: 'api.zip'
+          name: Web

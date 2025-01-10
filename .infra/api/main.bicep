@@ -21,10 +21,7 @@ param authSignUpSignInPolicyId string
 param authTenantId string
 param authDomain string
 
-@secure()
-param dbLoginName string
-@secure()
-param dbLoginPassword string
+param sqlServerAdminGroup string
 
 var tenantId = subscription().tenantId
 
@@ -146,7 +143,7 @@ resource webapi 'Microsoft.Web/sites@2024-04-01' = {
         }
         {
           name: 'ConnectionStrings__RoosterPlannerDatabase'
-          value: '@Microsoft.KeyVault(SecretUri=${kv_secret_connectionstring.properties.secretUri})'
+          value: 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqldb.name};Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";'
         }
         {
           name: 'AzureBlob__AzureBlobConnectionstring'
@@ -185,8 +182,14 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
   name: '${projectPrefix}-${environment}-sql'
   properties: {
     publicNetworkAccess: 'Enabled'
-    administratorLogin: dbLoginName
-    administratorLoginPassword: dbLoginPassword
+    administrators: {
+      administratorType: 'ActiveDirectory'
+      principalType: 'Group'
+      sid: sqlServerAdminGroup
+      tenantId: subscription().tenantId
+      login: 'SqlServerAdmin'
+      azureADOnlyAuthentication: true
+    }
   }
 }
 
@@ -218,15 +221,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     allowBlobPublicAccess: false
     supportsHttpsTrafficOnly: true
     accessTier: 'Hot'
-  }
-}
-
-resource kv_secret_connectionstring 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  name: 'ConnectionStrings--RoosterPlannerDatabase'
-  parent: kv
-  properties: {
-    contentType: 'Bicep - Connection string'
-    value: 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqldb.name};Persist Security Info=False;User ID=${dbLoginName};Password=${dbLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
   }
 }
 
