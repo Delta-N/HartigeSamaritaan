@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Angular CI/CD
 
 on:
   push:
