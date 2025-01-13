@@ -7,7 +7,7 @@ param projectPrefix string
 
 resource emailService 'Microsoft.Communication/emailServices@2023-06-01-preview' = {
   location: 'global'
-  name: '${projectPrefix}-${environment}-acs'
+  name: '${projectPrefix}-${environment}-acse'
   properties: {
     dataLocation: 'europe'
   }
@@ -15,7 +15,7 @@ resource emailService 'Microsoft.Communication/emailServices@2023-06-01-preview'
 
 resource acsAzManagedDomain 'Microsoft.Communication/emailServices/domains@2023-06-01-preview' = {
   parent: emailService
-  name: 'AzureManagedDomain'
+  name: '${projectPrefix}-${environment}-acse-domain'
   location: 'Global'
   properties: {
     domainManagement: 'AzureManaged'
@@ -29,5 +29,16 @@ resource acsAzManagedDomainTestUser 'Microsoft.Communication/emailServices/domai
   properties: {
     username: 'happietariaroosterplanner'
     displayName: 'Happietarria Roosterplanner'
+  }
+}
+
+resource acsCommunicationService 'Microsoft.Communication/communicationServices@2023-06-01-preview' = {
+  name: '${projectPrefix}-${environment}-acs'
+  location: 'Global'
+  properties: {
+    dataLocation: 'europe'
+    linkedDomains: [
+      acsAzManagedDomain.id
+    ]
   }
 }
