@@ -31,7 +31,7 @@ resource acsAzManagedDomainTestUser 'Microsoft.Communication/emailServices/domai
   name: 'happietariaroosterplanner'
   properties: {
     username: 'happietariaroosterplanner'
-    displayName: 'Happietarria Roosterplanner'
+    displayName: 'Happietaria Roosterplanner'
   }
 }
 
