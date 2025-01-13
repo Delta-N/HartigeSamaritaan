@@ -249,3 +249,11 @@ resource kv_secret_storageAccount 'Microsoft.KeyVault/vaults/secrets@2021-11-01-
     value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${az.environment().suffixes.storage};AccountKey=${storageAccount.listKeys(storageAccount.apiVersion).keys[0].value}'
   }
 }
+
+resource emailService 'Microsoft.Communication/emailServices@2023-04-01' = {
+  location: location
+  name: '${projectPrefix}-${environment}-acs'
+  properties: {
+    dataLocation: location
+  }
+}
