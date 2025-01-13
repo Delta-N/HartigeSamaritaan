@@ -201,6 +201,15 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
   }
 }
 
+resource allowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@2021-02-01-preview' = {
+  parent: sqlServer
+  name: 'AllowAllWindowsAzureIps'
+  properties: {
+    endIpAddress: '0.0.0.0'
+    startIpAddress: '0.0.0.0'
+  }
+}
+
 resource sqldb 'Microsoft.Sql/servers/databases@2021-11-01' = {
   name: '${projectPrefix}-${environment}-sqldb'
   parent: sqlServer
