@@ -18,6 +18,7 @@ env:
   PNPM_VERSION: 8
   AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
   AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
+  APP_LOCATION: "./staging/web"
 
 jobs:
   build-front-end:
@@ -61,17 +62,10 @@ jobs:
           ng build --configuration production --output-path=../staging/web
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
-      - name: Install zip
-        uses: montudor/action-zip@v1
-
-      - name: Zip output
-        run: zip -qq -r ../../web.zip .
-        working-directory: ./staging/web
-
       - uses: actions/upload-artifact@v4
         with:
           name: Web
-          path: web.zip
+          path: ./staging/web
 
   validate-bicep:
     name: Validate Bicep
@@ -103,16 +97,61 @@ jobs:
           template-file: ./.infra/fe/main.bicep
           parameters-file: ./.infra/fe/main.dev.bicepparam
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fe-infra
+          path: ./.infra/fe/
+
   deploy-dev:
-    if: github.ref_name == 'main'
+    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
     runs-on: ubuntu-latest
     needs:
       - build-front-end
       - validate-bicep
     environment:
-      name: ${{ github.ref_name == 'main' && 'prd' || github.ref_name == 'develop' && 'dev' }}
+      name: dev
 
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: Web
+          path: ./staging/web
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["**/*.js"]'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fe-infra
+          path: ./.infra/fe/
+
+      - name: Log in with Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          enable-AzPSSession: true
+
+      - name: Deploy Infra
+        uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
+        with:
+          name: "bicep-validation"
+          scope: resourceGroup
+          type: deployment
+          operation: create
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/fe/main.bicep
+          parameters-file: ./.infra/fe/main.dev.bicepparam
+
+      - name: Deploy static web app
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: ${{ env.APP_LOCATION }}
+          skip_app_build: true
