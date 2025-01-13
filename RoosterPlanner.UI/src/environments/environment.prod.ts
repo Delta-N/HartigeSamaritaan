@@ -3,14 +3,15 @@ const environmentName = '#{environmentName}#';
 const feClientId = '#{feClientId}#';
 const apiClientId = '#{tenantId}#';
 const appInsightsKey = '#{appInsightsKey}#';
+const frontEndUrl = '#{frontEndUrl}#';
 
 export const environment = {
   production: true,
   auth: {
     clientId: `${feClientId}`,
     authority: `https://${hostName}.b2clogin.com/${hostName}.onmicrosoft.com/b2c_1_susi`,
-    redirectUri: `https://roosterplanner-${environmentName}-web.azurewebsites.net/`,
-    postLogoutRedirectUri: `https://roosterplanner-${environmentName}-web.azurewebsites.net/`,
+    redirectUri: `${frontEndUrl}/`,
+    postLogoutRedirectUri: `${frontEndUrl}/`,
     navigateToLoginRequestUrl: true,
     validateAuthority: false,
     knownAuthorities: [`https://${hostName}.b2clogin.com`],

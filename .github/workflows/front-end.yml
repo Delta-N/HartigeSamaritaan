@@ -126,6 +126,7 @@ jobs:
           feClientId: ${{ vars.FE_CLIENT_ID }}
           apiClientId: ${{ vars.API_CLIENT_ID }}
           appInsightsKey: ${{ vars.APPINSIGHTS_KEY }}
+          frontEndUrl: ${{ vars.FE_URL }}
 
       - uses: actions/download-artifact@v4
         with:
@@ -185,6 +186,7 @@ jobs:
           feClientId: ${{ vars.FE_CLIENT_ID }}
           apiClientId: ${{ vars.API_CLIENT_ID }}
           appInsightsKey: ${{ vars.APPINSIGHTS_KEY }}
+          redirectUri: ${{ vars.REDIRECT_URI }}
 
       - uses: actions/download-artifact@v4
         with:
