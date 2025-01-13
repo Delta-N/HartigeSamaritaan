@@ -254,6 +254,6 @@ resource emailService 'Microsoft.Communication/emailServices@2023-04-01' = {
   location: 'global'
   name: '${projectPrefix}-${environment}-acs'
   properties: {
-    dataLocation: location
+    dataLocation: 'europe'
   }
 }
