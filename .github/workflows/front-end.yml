@@ -120,6 +120,12 @@ jobs:
       - uses: cschleiden/replace-tokens@v1
         with:
           files: '["**/*.js"]'
+        env:
+          hostName: ${{ vars.HOSTNAME }}
+          environmentName: ${{ vars.ENVIRONMENTNAME }}
+          feClientId: ${{ vars.FE_CLIENT_ID }}
+          apiClientId: ${{ vars.API_CLIENT_ID }}
+          appInsightsKey: ${{ vars.APPINSIGHTS_KEY }}
 
       - uses: actions/download-artifact@v4
         with:
@@ -146,6 +152,65 @@ jobs:
           resource-group-name: ${{ secrets.AZURE_RG_NAME }}
           template-file: ./.infra/fe/main.bicep
           parameters-file: ./.infra/fe/main.dev.bicepparam
+
+      - name: Deploy static web app
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: ${{ env.APP_LOCATION }}
+          skip_app_build: true
+
+  deploy-prd:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    needs:
+      - deploy-dev
+    environment:
+      name: prd
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Web
+          path: ./staging/web
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["**/*.js"]'
+        env:
+          hostName: ${{ vars.HOSTNAME }}
+          environmentName: ${{ vars.ENVIRONMENTNAME }}
+          feClientId: ${{ vars.FE_CLIENT_ID }}
+          apiClientId: ${{ vars.API_CLIENT_ID }}
+          appInsightsKey: ${{ vars.APPINSIGHTS_KEY }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fe-infra
+          path: ./.infra/fe/
+
+      - name: Log in with Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          enable-AzPSSession: true
+
+      - name: Deploy Infra
+        uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
+        with:
+          name: "bicep-validation"
+          scope: resourceGroup
+          type: deployment
+          operation: create
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/fe/main.bicep
+          parameters-file: ./.infra/fe/main.prd.bicepparam
 
       - name: Deploy static web app
         uses: Azure/static-web-apps-deploy@v1

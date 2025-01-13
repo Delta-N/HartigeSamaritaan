@@ -1,43 +1,41 @@
-export const environment = {
-	production: true,
-	auth: {
-		clientId: '23cbcba3-683e-4fea-bf57-f25d3dc4f0fc',
-		authority:
-			'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi',
-		redirectUri: 'https://roosterplanner-web-prd.azurewebsites.net/',
-		postLogoutRedirectUri: 'https://roosterplanner-web-prd.azurewebsites.net/',
-		navigateToLoginRequestUrl: true,
-		validateAuthority: false,
-		knownAuthorities: ['https://roosterplanneridp.b2clogin.com'],
-	},
-	protectedResourceMap: [
-		[
-			'https://roosterplanner-api-prd.azurewebsites.net/api/',
-			[
-				'https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read',
-			],
-		],
-	],
-	scopes: [
-		'https://roosterplanneridp.onmicrosoft.com/4edc10b5-3274-4594-8116-ecd6860a2272/Read',
-	],
-	authorities: {
-		signUpSignIn: {
-			authority:
-				'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_susi',
-		},
-		resetPassword: {
-			authority:
-				'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_reset_pwd',
-		},
-		editProfile: {
-			authority:
-				'https://roosterplanneridp.b2clogin.com/roosterplanneridp.onmicrosoft.com/b2c_1_edit',
-		},
-	},
-	backendUrl: 'https://roosterplanner-api-prd.azurewebsites.net/',
+const hostName = '#{hostName}#';
+const environmentName = '#{environmentName}#';
+const feClientId = '#{feClientId}#';
+const apiClientId = '#{tenantId}#';
+const appInsightsKey = '#{appInsightsKey}#';
 
-	appInsights: {
-		instrumentationKey: '54c0fc49-0057-453d-bae6-e384d5f00ce4',
-	},
+export const environment = {
+  production: true,
+  auth: {
+    clientId: `${feClientId}`,
+    authority: `https://${hostName}.b2clogin.com/${hostName}.onmicrosoft.com/b2c_1_susi`,
+    redirectUri: `https://roosterplanner-${environmentName}-web.azurewebsites.net/`,
+    postLogoutRedirectUri: `https://roosterplanner-${environmentName}-web.azurewebsites.net/`,
+    navigateToLoginRequestUrl: true,
+    validateAuthority: false,
+    knownAuthorities: [`https://${hostName}.b2clogin.com`],
+  },
+  protectedResourceMap: [
+    [
+      `https://roosterplanner-${environmentName}-api.azurewebsites.net/api/`,
+      [`https://${hostName}.onmicrosoft.com/${apiClientId}/Read`],
+    ],
+  ],
+  scopes: [`https://${hostName}.onmicrosoft.com/${apiClientId}/Read`],
+  authorities: {
+    signUpSignIn: {
+      authority: `https://${hostName}.b2clogin.com/${hostName}.onmicrosoft.com/b2c_1_susi`,
+    },
+    resetPassword: {
+      authority: `https://${hostName}.b2clogin.com/${hostName}.onmicrosoft.com/b2c_1_reset_pwd`,
+    },
+    editProfile: {
+      authority: `https://${hostName}.b2clogin.com/${hostName}.onmicrosoft.com/b2c_1_edit`,
+    },
+  },
+  backendUrl: `https://roosterplanner-${environmentName}-api.azurewebsites.net/`,
+
+  appInsights: {
+    instrumentationKey: `${appInsightsKey}`,
+  },
 };
