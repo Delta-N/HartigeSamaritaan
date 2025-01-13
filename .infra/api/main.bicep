@@ -250,10 +250,10 @@ resource kv_secret_storageAccount 'Microsoft.KeyVault/vaults/secrets@2021-11-01-
   }
 }
 
-resource emailService 'Microsoft.Communication/emailServices@2023-04-01' = {
-  location: 'global'
-  name: '${projectPrefix}-${environment}-acs'
-  properties: {
-    dataLocation: 'europe'
+module email './modules/email.bicep' = {
+  name: 'email'
+  params: {
+    environment: environment
+    projectPrefix: projectPrefix
   }
 }
