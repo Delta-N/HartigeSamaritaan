@@ -157,6 +157,14 @@ resource webapi 'Microsoft.Web/sites@2024-04-01' = {
           name: 'AzureBlob__AzureBlobConnectionstring'
           value: '@Microsoft.KeyVault(SecretUri=${kv_secret_storageAccount.properties.secretUri})'
         }
+        {
+          name: 'ACSConfig__ConnectionString'
+          value: '@Microsoft.KeyVault(SecretUri=${email.outputs.emailConnectionStringUri})'
+        }
+        {
+          name: 'ACSConfig__SenderEmail'
+          value: email.outputs.senderEmail
+        }
       ]
     }
   }
