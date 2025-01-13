@@ -127,20 +127,7 @@ builder.Services.Configure<AzureBlobConfig>(options =>
 builder.Services.Configure<AzureAuthenticationConfig>(options =>
     builder.Configuration.GetSection(AzureAuthenticationConfig.ConfigSectionName).Bind(options));
 
-builder.Services.AddScoped<IEmailService>(sp =>
-{
-    var configuration = sp.GetRequiredService<IConfiguration>();
-    EmailConfig config = new();
-    configuration.Bind(EmailConfig.ConfigSectionName, config);
-    SmtpClient smtpClient = new(config.SMTPadres)
-    {
-        Port = config.Port,
-        Credentials = new NetworkCredential(config.Emailadres, config.Password),
-        EnableSsl = config.EnableSsl
-    };
-
-    return new SMTPEmailService(smtpClient, config.Emailadres);
-});
+builder.AddEmailServices();
 
 var app = builder.Build();
 
