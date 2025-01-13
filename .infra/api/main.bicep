@@ -263,5 +263,6 @@ module email './modules/email.bicep' = {
   params: {
     environment: environment
     projectPrefix: projectPrefix
+    kvName: kv.name
   }
 }

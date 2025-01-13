@@ -47,7 +47,7 @@ resource acsCommunicationService 'Microsoft.Communication/communicationServices@
 }
 
 resource kv 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
-  name: '${projectPrefix}-${environment}-kv'
+  name: kvName
 }
 
 resource kv_secret_emailConnectionString 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
