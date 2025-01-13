@@ -55,7 +55,7 @@ resource kv_secret_emailConnectionString 'Microsoft.KeyVault/vaults/secrets@2021
   parent: kv
   properties: {
     contentType: 'Bicep - Connection string'
-    value: acsCommunicationService.listKeys(acsCommunicationService.apiVersion).keys[0].value
+    value: acsCommunicationService.listKeys(acsCommunicationService.apiVersion).primaryConnectionString
   }
 }
 
