@@ -154,6 +154,11 @@ jobs:
         with:
           name: Api
 
+      - uses: actions/download-artifact@v4
+        with:
+          name: api-infra
+          path: ./.infra/api/
+
       - name: Log in with Azure
         uses: azure/login@v2
         with:
@@ -161,6 +166,19 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
           enable-AzPSSession: true
+
+      - name: Deploy Infra
+        uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
+        with:
+          name: "prd-api-deploy"
+          scope: resourceGroup
+          type: deployment
+          operation: create
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/api/main.bicep
+          parameters-file: ./.infra/api/main.prd.bicepparam
 
       - name: deploy api
         uses: azure/webapps-deploy@v2
