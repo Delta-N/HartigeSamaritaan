@@ -145,8 +145,9 @@ builder.Services.AddScoped<IEmailService>(sp =>
 var app = builder.Build();
 
 // This works perfectly fine for a simple application running on a single instance.
-using (var scope = app.Services.CreateScope())
+if (!string.IsNullOrEmpty(builder.Configuration.GetConnectionString("RoosterPlannerDatabase")))
 {
+    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<RoosterPlannerContext>();
     db.Database.Migrate();
 }
