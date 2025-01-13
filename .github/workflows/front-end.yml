@@ -88,7 +88,7 @@ jobs:
         uses: azure/bicep-deploy@v1
         # this gives an error but the deployment is on resource scope so we can't pass location
         with:
-          name: "bicep-validation"
+          name: "fe-bicep-validation"
           scope: resourceGroup
           type: deployment
           operation: validate
@@ -145,7 +145,7 @@ jobs:
         uses: azure/bicep-deploy@v1
         # this gives an error but the deployment is on resource scope so we can't pass location
         with:
-          name: "dev-deploy"
+          name: "dev-fe-deploy"
           scope: resourceGroup
           type: deployment
           operation: create
