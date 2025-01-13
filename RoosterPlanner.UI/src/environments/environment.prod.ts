@@ -1,7 +1,7 @@
 const hostName = '#{hostName}#';
 const environmentName = '#{environmentName}#';
 const feClientId = '#{feClientId}#';
-const apiClientId = '#{tenantId}#';
+const apiClientId = '#{apiClientId}#';
 const appInsightsKey = '#{appInsightsKey}#';
 const frontEndUrl = '#{frontEndUrl}#';
 
