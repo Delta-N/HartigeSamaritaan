@@ -60,4 +60,4 @@ resource kv_secret_emailConnectionString 'Microsoft.KeyVault/vaults/secrets@2021
 }
 
 output emailConnectionStringUri string = kv_secret_emailConnectionString.properties.secretUri
-output senderEmail string = acsAzManagedDomainTestUser.properties.username
+output senderEmail string = '${acsAzManagedDomainTestUser.properties.username}@${acsAzManagedDomain.properties.fromSenderDomain}'

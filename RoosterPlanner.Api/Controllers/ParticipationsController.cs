@@ -331,7 +331,7 @@ namespace RoosterPlanner.Api.Controllers
 
                     if (!user.Succeeded || !person.Succeeded || person.Data.PushDisabled) continue;
 
-                    string email = user.Data.Identities.FirstOrDefault()?.IssuerAssignedId;
+                    string email = user.Data.Identities.FirstOrDefault(x => x.SignInType == "emailAddress")?.IssuerAssignedId;
                     if (email == null) continue;
 
                     StringBuilder sb = new StringBuilder();
@@ -444,7 +444,7 @@ namespace RoosterPlanner.Api.Controllers
 
                     if (!user.Succeeded || !person.Succeeded || person.Data.PushDisabled) continue;
 
-                    string email = user.Data.Identities.FirstOrDefault()?.IssuerAssignedId;
+                    string email = user.Data.Identities.FirstOrDefault(x => x.SignInType == "emailAddress")?.IssuerAssignedId;
                     if (email == null) continue;
                     emailMessage.Body = emailMessage.Body.Replace("\n", "<br>");
 
