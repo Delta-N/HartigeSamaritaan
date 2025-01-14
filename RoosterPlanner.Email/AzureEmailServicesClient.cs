@@ -35,8 +35,9 @@ public class AzureEmailServicesClient(IOptions<ACSConfig> options, EmailClient e
             }
         );
 
-        using (var memoryStream = new System.IO.MemoryStream())
+        if (attachment != null)
         {
+            using var memoryStream = new System.IO.MemoryStream();
             attachment.ContentStream.CopyTo(memoryStream);
             var attachmentBytes = memoryStream.ToArray();
             emailMessage.Attachments.Add(new EmailAttachment(attachment.Name, attachment.ContentType.ToString(), new(attachmentBytes)));
