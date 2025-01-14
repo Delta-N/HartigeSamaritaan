@@ -142,7 +142,7 @@ jobs:
           package: "api.zip"
 
   deploy-prd:
-    if: github.ref_name == 'main'
+    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
     runs-on: ubuntu-latest
     environment:
       name: prd
