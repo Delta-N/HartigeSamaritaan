@@ -1,4 +1,4 @@
-name: ASP.NET Backend CI/CD
+name: Shared Infrastructure
 
 on:
   push:
@@ -91,6 +91,7 @@ jobs:
       name: shared-prd
     needs:
       - validate-bicep
+      - deploy-dev
 
     steps:
       - uses: actions/download-artifact@v4
