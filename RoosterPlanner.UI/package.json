@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng",
     "build": "pnpm run ng build -c production --base-href /",
-    "start": "pnpm run ng serve",
+    "start": "pnpm run ng serve --configuration development",
     "test": "pnpm run ng test",
     "test:dev": "pnpm run ng test --configuration development",
     "lint": "pnpm run ng lint --fix",
