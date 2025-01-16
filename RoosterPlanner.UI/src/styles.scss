@@ -4,10 +4,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 /* Importing Bootstrap SCSS file. */
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
 
-
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -15,8 +15,6 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-
-
 
 .custom-dialog-container .mat-mdc-dialog-container {
   border-radius: 10px;
@@ -33,7 +31,6 @@ a:hover {
 a {
   color: #434343;
   text-decoration-line: none !important;
-
 }
 
 input[type="file"] {
@@ -67,7 +64,7 @@ fa-icon {
 button fa-icon {
   margin-left: 5px;
 }
-.action-row{
+.action-row {
   display: flex;
   flex-direction: row;
 }
@@ -84,8 +81,15 @@ button fa-icon {
 }
 
 .action-button {
-  background: linear-gradient(90deg, rgba(221, 252, 224, 1) 0%, rgb(143 253 150 / 72%) 100%) !important;
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(
+    90deg,
+    rgba(221, 252, 224, 1) 0%,
+    rgb(143 253 150 / 72%) 100%
+  ) !important;
+  box-shadow:
+    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
 .active {
@@ -166,16 +170,18 @@ button fa-icon {
   border: 1px solid black;
 }
 
-.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(
+    .mat-calendar-body-comparison-identical
+  ) {
   border: initial;
 }
 
 .mat-mdc-card {
   margin-right: 30px;
   border-radius: 20px !important;
-  background: #E8E8E8 0 0 no-repeat padding-box!important;
-  box-shadow: 3px 3px 6px #0000001A !important;
-  border: 1px solid #D1D1D1!important;
+  background: #e8e8e8 0 0 no-repeat padding-box !important;
+  box-shadow: 3px 3px 6px #0000001a !important;
+  border: 1px solid #d1d1d1 !important;
   opacity: 1 !important;
   text-align: left !important;
   font: normal normal bold 21px/31px Segoe UI !important;
@@ -195,13 +201,13 @@ button fa-icon {
   color: #434343 !important;
   min-height: 240px;
   flex-direction: column;
-  justify-content: space-between;padding: 20px !important;
+  justify-content: space-between;
+  padding: 20px !important;
 }
 
 .mat-mdc-card-content.h6 {
   margin-top: 25px !important;
 }
-
 
 .mat-mdc-card-title {
   border-bottom: 1px solid gray !important;
@@ -213,7 +219,6 @@ button fa-icon {
   margin-left: 10px !important;
   padding-left: 10px !important;
   display: flex !important;
-
 }
 
 .mobilecard {
@@ -222,11 +227,10 @@ button fa-icon {
 
 .multiline-tooltip {
   white-space: pre-line;
-  background: #E74B3B;
+  background: #e74b3b;
   font-size: 20px;
   min-width: 300px;
 }
-
 
 #push {
   font: normal normal normal 17px/17px Segoe UI;
@@ -243,9 +247,8 @@ button fa-icon {
   letter-spacing: 0;
   color: #707070 !important;
   opacity: 1;
-
 }
-.new-row{
+.new-row {
   display: flex;
 }
 
@@ -265,7 +268,6 @@ button fa-icon {
   opacity: 1;
 }
 
-
 @media only screen and (max-width: 1200px) {
   .cardholder {
     display: flex;
@@ -274,11 +276,9 @@ button fa-icon {
   .mat-mdc-card {
     margin: 15px;
   }
-
 }
 
 @media only screen and (max-width: 576px) {
-
   .container {
     max-width: 540px;
     margin-right: 18px;
@@ -288,7 +288,6 @@ button fa-icon {
 }
 
 @media only screen and (max-width: 550px) {
-
   .row-name {
     font: normal normal normal 15px/30px Segoe UI !important;
   }
@@ -301,7 +300,6 @@ button fa-icon {
   h1 {
     font: normal normal normal 30px/50px Segoe UI;
   }
-
 }
 
 @media only screen and (max-width: 450px) {
@@ -315,16 +313,13 @@ button fa-icon {
   .bar {
     display: flex;
   }
-
 }
-
 
 @media only screen and (max-width: 350px) {
   h1 {
     font: normal normal normal 20px/30px Segoe UI;
     margin: 0;
   }
-
 }
 
 #searchbar {
@@ -335,8 +330,32 @@ button fa-icon {
   background-color: white !important;
 }
 
-
 // Manipulate background color on hover and focus
 .mat-mdc-form-field-focus-overlay {
   background-color: transparent !important;
+}
+
+.mat-small-icon-btn {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  & > *[role="img"] {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .mat-mdc-button-touch-target {
+    width: 24px !important;
+    height: 24px !important;
+  }
 }
