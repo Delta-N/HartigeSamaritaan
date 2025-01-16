@@ -14,6 +14,7 @@ using Microsoft.Graph;
 using RoosterPlanner.Api.Models.Constants;
 using RoosterPlanner.Api.Models.EntityViewModels;
 using RoosterPlanner.Api.Models.HelperViewModels;
+using RoosterPlanner.Email;
 using RoosterPlanner.Models.Models;
 using RoosterPlanner.Models.Models.Types;
 using RoosterPlanner.Service.DataModels;
@@ -27,28 +28,22 @@ namespace RoosterPlanner.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ParticipationsController : ControllerBase
+    public class ParticipationsController(
+        ILogger<ParticipationsController> logger,
+        IParticipationService participationService,
+        IAvailabilityService availabilityService,
+        IPersonService personService,
+        IOptions<WebUrlConfig> options,
+        IEmailService emailService
+        ) : ControllerBase
     {
-        private readonly ILogger<ParticipationsController> logger;
-        private readonly IParticipationService participationService;
-        private readonly IAvailabilityService availabilityService;
-        private readonly IPersonService personService;
-        private readonly WebUrlConfig webUrlConfig;
 
-        public ParticipationsController(
-            ILogger<ParticipationsController> logger,
-            IParticipationService participationService,
-            IAvailabilityService availabilityService,
-            IPersonService personService,
-            IOptions<WebUrlConfig> options
-        )
-        {
-            this.logger = logger;
-            this.participationService = participationService;
-            this.availabilityService = availabilityService;
-            this.personService = personService;
-            webUrlConfig = options.Value;
-        }
+        private readonly ILogger<ParticipationsController> logger = logger;
+        private readonly IParticipationService participationService = participationService;
+        private readonly IAvailabilityService availabilityService = availabilityService;
+        private readonly IPersonService personService = personService;
+        private readonly WebUrlConfig webUrlConfig = options.Value;
+        private readonly IEmailService emailService = emailService;
 
         /// <summary>
         /// Makes a request towards the services layer for all participations a user is involved in.
@@ -65,7 +60,7 @@ namespace RoosterPlanner.Api.Controllers
                 TaskListResult<Participation> result = await participationService.GetUserParticipationsAsync(personId);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                    return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = result.Message });
                 if (result.Data.Count == 0)
                     return Ok(new List<ParticipationViewModel>());
 
@@ -79,7 +74,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string message = GetType().Name + "Error in " + nameof(GetParticipationAsync);
                 logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+                return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = message });
             }
         }
 
@@ -110,7 +105,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string message = GetType().Name + "Error in " + nameof(GetParticipationAsync);
                 logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+                return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = message });
             }
         }
 
@@ -130,7 +125,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 TaskListResult<Participation> result = await participationService.GetParticipationsAsync(projectId);
                 if (!result.Succeeded)
-                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                    return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = result.Message });
 
                 if (result.Data.Count == 0)
                     return Ok(new List<ParticipationViewModel>());
@@ -145,7 +140,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string message = GetType().Name + "Error in " + nameof(GetParticipationsAsync);
                 logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+                return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = message });
             }
         }
 
@@ -186,7 +181,8 @@ namespace RoosterPlanner.Api.Controllers
                 if (result == null || !result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
                     {
-                        Type = Type.Error, Message = result?.Message
+                        Type = Type.Error,
+                        Message = result?.Message
                     });
                 return Ok(ParticipationViewModel.CreateVm(result.Data));
             }
@@ -194,7 +190,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string message = GetType().Name + "Error in " + nameof(SaveParticipationAsync);
                 logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+                return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = message });
             }
         }
         /// <summary>
@@ -246,7 +242,7 @@ namespace RoosterPlanner.Api.Controllers
                 result = await participationService.UpdateParticipationAsync(oldParticipation);
 
                 if (!result.Succeeded)
-                    return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
+                    return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = result.Message });
 
                 result.Data.Person = updatedParticipation.Person;
                 result.Data.Project = updatedParticipation.Project;
@@ -256,7 +252,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string message = GetType().Name + "Error in " + nameof(UpdateParticipationAsync);
                 logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+                return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = message });
             }
         }
         /// <summary>
@@ -295,14 +291,14 @@ namespace RoosterPlanner.Api.Controllers
                     await participationService.UpdateParticipationAsync(participation.Data);
 
                 return !result.Succeeded
-                    ? UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message})
+                    ? UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = result.Message })
                     : Ok(result);
             }
             catch (Exception ex)
             {
                 string message = GetType().Name + "Error in " + nameof(RemoveParticipationAsync);
                 logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+                return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = message });
             }
         }
         /// <summary>
@@ -324,7 +320,7 @@ namespace RoosterPlanner.Api.Controllers
                     await participationService.GetParticipationsWithAvailabilitiesAsync(projectId);
                 if (!participations.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
-                        {Type = Type.Error, Message = participations.Message});
+                    { Type = Type.Error, Message = participations.Message });
                 CultureInfo culture = new CultureInfo("en-US");
 
                 foreach (Participation participation in participations.Data.Where(participation =>
@@ -335,7 +331,7 @@ namespace RoosterPlanner.Api.Controllers
 
                     if (!user.Succeeded || !person.Succeeded || person.Data.PushDisabled) continue;
 
-                    string email = user.Data.Identities.FirstOrDefault()?.IssuerAssignedId;
+                    string email = user.Data.Identities.FirstOrDefault(x => x.SignInType == "emailAddress")?.IssuerAssignedId;
                     if (email == null) continue;
 
                     StringBuilder sb = new StringBuilder();
@@ -403,7 +399,7 @@ namespace RoosterPlanner.Api.Controllers
                     body += "Via deze pagina kun je ook de beschrijving en instructies voor je shift zien.<br><br>";
                     body += "Hartige groetjes en tot ziens!";
 
-                    participationService.SendEmail(email,
+                    await emailService.SendEmail(email,
                         "Je bent ingeroosterd",
                         body,
                         true, null, attachment);
@@ -415,7 +411,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string message = GetType().Name + "Error in " + nameof(SendEmailAsync);
                 logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+                return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = message });
             }
         }
         /// <summary>
@@ -439,7 +435,7 @@ namespace RoosterPlanner.Api.Controllers
                     await participationService.GetParticipationsAsync(projectId);
                 if (!participations.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel
-                        {Type = Type.Error, Message = participations.Message});
+                    { Type = Type.Error, Message = participations.Message });
 
                 foreach (Participation participation in participations.Data)
                 {
@@ -448,11 +444,11 @@ namespace RoosterPlanner.Api.Controllers
 
                     if (!user.Succeeded || !person.Succeeded || person.Data.PushDisabled) continue;
 
-                    string email = user.Data.Identities.FirstOrDefault()?.IssuerAssignedId;
+                    string email = user.Data.Identities.FirstOrDefault(x => x.SignInType == "emailAddress")?.IssuerAssignedId;
                     if (email == null) continue;
                     emailMessage.Body = emailMessage.Body.Replace("\n", "<br>");
 
-                    participationService.SendEmail(email,
+                    await emailService.SendEmail(email,
                         emailMessage.Subject,
                         emailMessage.Body,
                         true, null, null);
@@ -464,7 +460,7 @@ namespace RoosterPlanner.Api.Controllers
             {
                 string message = GetType().Name + "Error in " + nameof(SendEmailAsync);
                 logger.LogError(ex, message);
-                return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = message});
+                return UnprocessableEntity(new ErrorViewModel { Type = Type.Error, Message = message });
             }
         }
     }
