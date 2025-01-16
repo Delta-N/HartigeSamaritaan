@@ -95,7 +95,7 @@ jobs:
           path: ./.infra/api/
 
   deploy-dev:
-    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
     runs-on: ubuntu-latest
     environment:
       name: dev
@@ -142,7 +142,7 @@ jobs:
           package: "api.zip"
 
   deploy-prd:
-    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
     runs-on: ubuntu-latest
     environment:
       name: prd

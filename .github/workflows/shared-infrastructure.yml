@@ -50,7 +50,7 @@ jobs:
           path: ./.infra/shared/
 
   deploy-dev:
-    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
     runs-on: ubuntu-latest
     environment:
       name: shared-dev
@@ -85,7 +85,7 @@ jobs:
           parameters-file: ./.infra/shared/main.dev.bicepparam
 
   deploy-prd:
-    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
     runs-on: ubuntu-latest
     environment:
       name: shared-prd

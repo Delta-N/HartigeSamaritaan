@@ -103,7 +103,7 @@ jobs:
           path: ./.infra/fe/
 
   deploy-dev:
-    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
     runs-on: ubuntu-latest
     needs:
       - build-front-end
@@ -164,7 +164,7 @@ jobs:
           skip_app_build: true
 
   deploy-prd:
-    if: github.ref_name == 'main' || github.ref_name == 'feature/bicep'
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
     runs-on: ubuntu-latest
     needs:
       - deploy-dev
