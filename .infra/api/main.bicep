@@ -234,7 +234,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    allowBlobPublicAccess: false
+    allowBlobPublicAccess: true
     supportsHttpsTrafficOnly: true
     accessTier: 'Hot'
   }
