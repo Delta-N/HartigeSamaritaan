@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Participation : Entity
     {
         /// <summary>
         /// Gets or sets the PersonId
         /// </summary>
-        [Column(Order = 1)]
         public Guid PersonId { get; set; }
 
         /// <summary>
@@ -22,7 +20,6 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the ProjectId 
         /// </summary>
-        [Column(Order = 2)]
         public Guid ProjectId { get; set; }
 
         /// <summary>
@@ -34,19 +31,16 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the MaxWorkingHoursPerWeek 
         /// </summary>
-        [Column(Order = 3)]
         public int MaxWorkingHoursPerWeek { get; set; }
 
         /// <summary>
         /// Gets or sets the Active
         /// </summary>
-        [Column(Order = 4)]
         public bool Active { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the Remark 
         /// </summary>
-        [Column(Order = 5)]
         [MaxLength(256)]
         public string Remark { get; set; }
 

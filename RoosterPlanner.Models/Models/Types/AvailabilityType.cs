@@ -1,4 +1,4 @@
-﻿namespace RoosterPlanner.Models.Types
+﻿namespace RoosterPlanner.Models.Models.Types
 {
     public enum AvailibilityType
     {

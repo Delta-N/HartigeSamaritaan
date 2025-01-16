@@ -6,14 +6,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
-using RoosterPlanner.Models;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
-using RoosterPlanner.Service.Helpers;
-using Person = RoosterPlanner.Models.Person;
+using Person = RoosterPlanner.Models.Models.Person;
 using Task = System.Threading.Tasks.Task;
 
-namespace RoosterPlanner.Service
+namespace RoosterPlanner.Service.Services
 {
     public interface IPersonService
     {
@@ -108,27 +107,15 @@ namespace RoosterPlanner.Service
         Task<TaskListResult<Manager>> GetProjectsManagedByAsync(Guid userId);
     }
 
-    public class PersonService : IPersonService
-    {
+    public class PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger<PersonService> logger) : IPersonService {
         #region Fields
 
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IPersonRepository personRepository;
-        private readonly IManagerRepository managerRepository;
-        private readonly IAzureB2CService azureB2CService;
-        private readonly ILogger<PersonService> logger;
+        private readonly IPersonRepository personRepository = unitOfWork.PersonRepository;
+        private readonly IManagerRepository managerRepository = unitOfWork.ManagerRepository;
 
         #endregion
 
         //Constructor
-        public PersonService(IUnitOfWork unitOfWork, IAzureB2CService azureB2CService, ILogger<PersonService> logger)
-        {
-            this.unitOfWork = unitOfWork;
-            personRepository = unitOfWork.PersonRepository;
-            managerRepository = unitOfWork.ManagerRepository;
-            this.azureB2CService = azureB2CService;
-            this.logger = logger;
-        }
 
         private async Task AddPersonToLocalDbAsync(User user)
         {

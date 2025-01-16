@@ -1,51 +1,62 @@
 <div class="row bar">
-  <h1>Rooster - {{viewDate | datePipe}}</h1>
+	<h1>Rooster - {{viewDate | datePipe}}</h1>
 </div>
 <div class="row content-container">
+	<div class="col-4">
+		<div class="calendar">
+			<div class="calendar-wrapper">
+				<mat-calendar
+					#calendar
+					[(selected)]="selectedDate"
+					(selectedChange)="dateChanged()"
+					[minDate]="minDate"
+					[maxDate]="maxDate">
+				</mat-calendar>
+			</div>
+		</div>
+	</div>
 
-  <div class="col-4">
-    <div class="calendar">
-      <div class="calendar-wrapper">
-        <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged()" [minDate]="minDate"
-                      [maxDate]="maxDate">
-        </mat-calendar>
-      </div>
-    </div>
-  </div>
+	<div class="col-md-8">
+		<div>
+			<table
+				mat-table
+				[dataSource]="dataSource"
+				matSort
+				matSortActive="Vanaf"
+				matSortDirection="asc"
+				class="mat-elevation-z2">
+				<ng-container matColumnDef="Naam">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Naam</th>
+					<td
+						mat-cell
+						*matCellDef="let row"
+						>{{row.participation.person.firstName + " " + row.participation.person.lastName}}</td
+					>
+				</ng-container>
+				<ng-container matColumnDef="Taak">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Taak</th>
+					<td mat-cell *matCellDef="let row">{{row.shift.task != null ? row.shift.task.name : "n.n.t.b"}}</td>
+				</ng-container>
+				<ng-container matColumnDef="Vanaf">
+					<th mat-header-cell mat-sort-header *matHeaderCellDef>Vanaf</th>
+					<td mat-cell *matCellDef="let row">{{row.shift.startTime}}</td>
+				</ng-container>
+				<ng-container matColumnDef="Tot">
+					<th mat-header-cell mat-sort-header *matHeaderCellDef>Tot</th>
+					<td mat-cell *matCellDef="let row">{{row.shift.endTime}}</td>
+				</ng-container>
 
-  <div class="col-md-8">
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr
+					mat-row
+					*matRowDef="let row; columns: displayedColumns;"
+					(click)="details(row.participation.person.id)"></tr>
 
-    <div>
-      <table mat-table [dataSource]="dataSource" matSort matSortActive="Vanaf" matSortDirection="asc"
-             class="mat-elevation-z2">
-        <ng-container matColumnDef="Naam">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Naam</th>
-          <td mat-cell
-              *matCellDef="let row">{{row.participation.person.firstName + " " + row.participation.person.lastName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="Taak">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Taak</th>
-          <td mat-cell *matCellDef="let row">{{row.shift.task != null ? row.shift.task.name : "n.n.t.b"}}</td>
-        </ng-container>
-        <ng-container matColumnDef="Vanaf">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>Vanaf</th>
-          <td mat-cell *matCellDef="let row">{{row.shift.startTime}}</td>
-        </ng-container>
-        <ng-container matColumnDef="Tot">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>Tot</th>
-          <td mat-cell *matCellDef="let row">{{row.shift.endTime}}</td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="details(row.participation.person.id)"></tr>
-
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="5">Geen resultaten gevonden</td>
-        </tr>
-      </table>
-    </div>
-    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-  </div>
+				<tr class="mat-row" *matNoDataRow>
+					<td class="mat-cell" colspan="5">Geen resultaten gevonden</td>
+				</tr>
+			</table>
+		</div>
+		<mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+	</div>
 </div>
-
-

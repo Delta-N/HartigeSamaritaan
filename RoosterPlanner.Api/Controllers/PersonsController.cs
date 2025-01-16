@@ -7,16 +7,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
-using RoosterPlanner.Api.Models;
-using RoosterPlanner.Api.Models.Constants;
-using RoosterPlanner.Models;
+using RoosterPlanner.Api.Models.EntityViewModels;
+using RoosterPlanner.Api.Models.HelperViewModels;
 using RoosterPlanner.Models.FilterModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Models.Models.Enums;
-using RoosterPlanner.Service;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Person = RoosterPlanner.Models.Person;
-using Type = RoosterPlanner.Api.Models.Type;
+using RoosterPlanner.Service.Services;
+using Person = RoosterPlanner.Models.Models.Person;
+using Type = RoosterPlanner.Api.Models.HelperViewModels.Type;
+
+
 
 namespace RoosterPlanner.Api.Controllers
 {
@@ -89,7 +91,7 @@ namespace RoosterPlanner.Api.Controllers
                     return NotFound();
 
                 PersonViewModel personVm = PersonViewModel.CreateVmFromUserAndPerson(userResult.Data,
-                    personResult.Data, Extensions.GetInstance(b2CExtentionApplicationId));
+                    personResult.Data, RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId));
 
                 if (!userIsBoardmember && !userIsCommitteemember)
                     personVm.StaffRemark = null;
@@ -144,7 +146,7 @@ namespace RoosterPlanner.Api.Controllers
                 foreach (User user in result.Data)
                 {
                     personViewModels.Add(PersonViewModel.CreateVmFromUser(user,
-                        Extensions.GetInstance(b2CExtentionApplicationId)));
+                        RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId)));
                     if (personViewModels.Count == pageSize)
                     {
                         break;
@@ -187,7 +189,7 @@ namespace RoosterPlanner.Api.Controllers
                     TaskResult<User> userResult = await personService.GetUserAsync(participation.PersonId);
                     if (userResult != null)
                         persons.Add(PersonViewModel.CreateVmFromUser(userResult.Data,
-                            Extensions.GetInstance(b2CExtentionApplicationId)));
+                            RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId)));
                 }
 
                 return Ok(persons);
@@ -223,13 +225,13 @@ namespace RoosterPlanner.Api.Controllers
                     return BadRequest("Invalid User");
 
                 User user = PersonViewModel.CreateUser(personViewModel,
-                    Extensions.GetInstance(b2CExtentionApplicationId));
+                    RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId));
                 TaskResult<User> result = await personService.UpdatePersonAsync(user);
 
                 if (!result.Succeeded)
                     return Unauthorized();
                 return Ok(PersonViewModel.CreateVmFromUser(result.Data,
-                    Extensions.GetInstance(b2CExtentionApplicationId)));
+                    RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId)));
             }
             catch (Exception ex)
             {
@@ -328,13 +330,13 @@ namespace RoosterPlanner.Api.Controllers
                         modifier = 2;
                 }
 
-                user.AdditionalData.Add(Extensions.GetInstance(b2CExtentionApplicationId).UserRoleExtension, modifier);
+                user.AdditionalData.Add(RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId).UserRoleExtension, modifier);
                 result = await personService.UpdatePersonAsync(user);
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
 
                 PersonViewModel personVm =
-                    PersonViewModel.CreateVmFromUser(result.Data, Extensions.GetInstance(b2CExtentionApplicationId));
+                    PersonViewModel.CreateVmFromUser(result.Data, RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId));
                 return Ok(personVm);
             }
             catch (Exception ex)
@@ -366,7 +368,7 @@ namespace RoosterPlanner.Api.Controllers
                     if (temp == null)
                         continue;
                     PersonViewModel vm =
-                        PersonViewModel.CreateVmFromUser(temp, Extensions.GetInstance(b2CExtentionApplicationId));
+                        PersonViewModel.CreateVmFromUser(temp, RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId));
                     if (vm == null)
                         continue;
 
@@ -449,7 +451,7 @@ namespace RoosterPlanner.Api.Controllers
                     return BadRequest("User already manages this project");
 
                 PersonViewModel viewModel = PersonViewModel.CreateVmFromUserAndPerson(user, person,
-                    Extensions.GetInstance(b2CExtentionApplicationId));
+                    RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId));
                 if (viewModel == null)
                     return BadRequest("Unable to create manager");
 
@@ -469,7 +471,7 @@ namespace RoosterPlanner.Api.Controllers
 
                 if (!result.Succeeded)
                     return UnprocessableEntity(new ErrorViewModel {Type = Type.Error, Message = result.Message});
-                return Ok(PersonViewModel.CreateVmFromUser(user, Extensions.GetInstance(b2CExtentionApplicationId)));
+                return Ok(PersonViewModel.CreateVmFromUser(user, RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId)));
             }
             catch (Exception ex)
             {
@@ -503,7 +505,7 @@ namespace RoosterPlanner.Api.Controllers
                     return BadRequest("User is not a manager of this project");
 
                 PersonViewModel viewModel = PersonViewModel.CreateVmFromUserAndPerson(user, manager.Person,
-                    Extensions.GetInstance(b2CExtentionApplicationId));
+                    RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId));
                 if (viewModel == null)
                     return BadRequest("Unable to create manager");
 

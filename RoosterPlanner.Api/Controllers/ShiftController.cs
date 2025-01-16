@@ -7,53 +7,32 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
-using RoosterPlanner.Api.Models;
-using RoosterPlanner.Api.Models.Constants;
-using RoosterPlanner.Models;
+using RoosterPlanner.Api.Models.EntityViewModels;
+using RoosterPlanner.Api.Models.HelperViewModels;
 using RoosterPlanner.Models.FilterModels;
 using RoosterPlanner.Models.Models;
-using RoosterPlanner.Models.Types;
-using RoosterPlanner.Service;
+using RoosterPlanner.Models.Models.Types;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Shift = RoosterPlanner.Models.Shift;
-using Task = RoosterPlanner.Models.Task;
-using Type = RoosterPlanner.Api.Models.Type;
+using RoosterPlanner.Service.Services;
+using Shift = RoosterPlanner.Models.Models.Shift;
+using Task = RoosterPlanner.Models.Models.Task;
+using Type = RoosterPlanner.Api.Models.HelperViewModels.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ShiftController : ControllerBase
-    {
-        private readonly ILogger<ShiftController> logger;
-        private readonly IShiftService shiftService;
-        private readonly IProjectService projectService;
-        private readonly IPersonService personService;
-        private readonly ITaskService taskService;
-        private readonly IAvailabilityService availabilityService;
-        private readonly string b2CExtentionApplicationId;
-
-        public ShiftController(
-            ILogger<ShiftController> logger,
-            IShiftService shiftService,
-            IProjectService projectService,
-            ITaskService taskService,
-            IPersonService personService,
-            IAvailabilityService availabilityService,
-            string b2CExtentionApplicationId)
-
-        {
-            this.logger = logger;
-            this.shiftService = shiftService;
-            this.projectService = projectService;
-            this.personService = personService;
-            this.taskService = taskService;
-            this.availabilityService = availabilityService;
-            this.b2CExtentionApplicationId = b2CExtentionApplicationId;
-        }
-
+    public class ShiftController(
+    ILogger<ShiftController> logger,
+    IShiftService shiftService,
+    IProjectService projectService,
+    ITaskService taskService,
+    IPersonService personService,
+    IAvailabilityService availabilityService,
+    string b2CExtentionApplicationId)
+    : ControllerBase {
         /// <summary>
         /// Makes a request towards the services layer to get distinct data from a project.
         /// Only Boardmembers and Committemember can request distinct data.
@@ -280,7 +259,7 @@ namespace RoosterPlanner.Api.Controllers
                     schedules.Add(new ScheduleViewModel
                     {
                         Person = PersonViewModel.CreateVmFromUser(person.Data,
-                            Extensions.GetInstance(b2CExtentionApplicationId)),
+                            RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId)),
                         NumberOfTimesScheduledThisProject =
                             availabilities.Data.Count(a => a.Type == AvailibilityType.Scheduled),
                         ScheduledThisDay = numberOfTimeScheduledThisDay > 0,
@@ -523,7 +502,7 @@ namespace RoosterPlanner.Api.Controllers
                         {
                             TaskResult<User> person = await personService.GetUserAsync(id);
                             pvm = PersonViewModel.CreateVmFromUser(person.Data,
-                                Extensions.GetInstance(b2CExtentionApplicationId));
+                                RoosterPlanner.Api.Models.Constants.Extensions.GetInstance(b2CExtentionApplicationId));
                             personViewModels.Add(pvm);
                         }
                         else

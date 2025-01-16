@@ -1,6 +1,6 @@
 ﻿using System;
 using Moq;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
@@ -24,7 +24,7 @@ namespace RoosterPlanner.Data.Repositories
             //Arrange
 
             //Act
-            Models.Task t  =await taskRepositoryMock.Object.GetTaskAsync(Guid.Empty);
+            Models.Models.Task t  =await taskRepositoryMock.Object.GetTaskAsync(Guid.Empty);
 
             //Assert
             Assert.Null(t);
@@ -36,7 +36,7 @@ namespace RoosterPlanner.Data.Repositories
             //Arrange
             
             //Act
-            Models.Task t =
+            Models.Models.Task t =
                 await taskRepositoryMock.Object.GetTaskAsync(Guid.Parse("1316726a-a651-4cef-800d-a74746ca3d74"));
             //Assert
             Assert.NotNull(t);
@@ -57,7 +57,7 @@ namespace RoosterPlanner.Data.Repositories
             //Arrange
 
             //Act
-            Models.Task t =
+            Models.Models.Task t =
                 await taskRepositoryMock.Object.GetTaskAsync(Guid.Parse("1316726a-a651-4cef-800d-a74746ca3d74"));
             //Assert
             Assert.Null(t.Category.Tasks);
@@ -69,7 +69,7 @@ namespace RoosterPlanner.Data.Repositories
             //Arrange
 
             //Act
-            Models.Task t =
+            Models.Models.Task t =
                 await taskRepositoryMock.Object.GetTaskAsync(Guid.Parse("1316726a-a651-4cef-800d-a74746ca3d74"));
             //Assert
             foreach (Requirement tRequirement in t.Requirements)

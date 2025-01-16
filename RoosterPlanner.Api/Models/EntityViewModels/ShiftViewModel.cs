@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using RoosterPlanner.Models;
-
-namespace RoosterPlanner.Api.Models
+using RoosterPlanner.Models.Models;
+namespace RoosterPlanner.Api.Models.EntityViewModels
 {
     public class ShiftViewModel : EntityViewModel
     {

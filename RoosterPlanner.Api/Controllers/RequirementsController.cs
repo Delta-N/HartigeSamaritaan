@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using RoosterPlanner.Api.Models;
-using RoosterPlanner.Models;
-using RoosterPlanner.Service;
+using RoosterPlanner.Api.Models.EntityViewModels;
+using RoosterPlanner.Api.Models.HelperViewModels;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
-using Type = RoosterPlanner.Api.Models.Type;
+using RoosterPlanner.Service.Services;
+using Type = RoosterPlanner.Api.Models.HelperViewModels.Type;
 
 namespace RoosterPlanner.Api.Controllers
 {

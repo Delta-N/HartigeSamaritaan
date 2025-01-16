@@ -1,6 +1,5 @@
 ﻿using System;
-
-namespace RoosterPlanner.Api.Models
+namespace RoosterPlanner.Api.Models.EntityViewModels
 {
     public abstract class EntityViewModel
     {

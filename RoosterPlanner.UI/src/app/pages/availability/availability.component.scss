@@ -54,8 +54,7 @@
   background: white;
   font-size: 30px;
   margin-left: 3px;
-  margin-right: 3px
-
+  margin-right: 3px;
 }
 
 .rowhidden {
@@ -70,14 +69,14 @@
 }
 
 .refuse {
-  background: #E74B3B;
+  background: #e74b3b;
   margin-left: auto;
   margin-right: 15px;
   color: white;
 }
 
 .accept {
-  background: #DDFCE0;
+  background: #ddfce0;
   margin-right: auto;
   margin-left: 15px;
 }
@@ -90,9 +89,6 @@
 
 .star {
   color: #707070;
-  width: 25px;
-  height: 25px;
-
 }
 
 .scheduledBtnSmall {
@@ -100,7 +96,8 @@
   height: 20px;
   line-height: 14px;
   font-size: 14px;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   &::ng-deep .mat-button-wrapper {
     line-height: 14px;
     padding: 0;
@@ -139,7 +136,6 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-
 }
 
 ::ng-deep .custom-button {
@@ -166,17 +162,9 @@
   outline: none;
 }
 
-
 .calendarbox {
   max-height: 75vh;
   overflow: auto;
-}
-
-.cdhidden {
-  width: 25px;
-  height: 25px;
-  line-height: 0;
-  margin-top: 10px
 }
 
 .date {
@@ -191,6 +179,8 @@
 .date-title {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .datebox {
@@ -210,6 +200,7 @@
 .changeday {
   border: #707070 solid 1px;
   border-radius: 100%;
+  line-height: 0px;
 }
 
 ::ng-deep .cal-event {
@@ -225,16 +216,14 @@
 .event-title-row {
   margin: 0;
   justify-content: center;
-
 }
 
 .action-buttons-row {
   margin: 0;
   position: absolute;
   bottom: 5px;
-  left: 39%
+  left: 39%;
 }
-
 
 .tasktoggle {
   display: flex !important;
@@ -250,7 +239,6 @@
     font-size: 18px;
   }
   ::ng-deep .custom-button {
-
     font-size: 16px;
     line-height: 12px;
     width: 30px;
@@ -280,10 +268,6 @@
     max-width: 300px;
     margin: auto;
   }
-  .cdhidden {
-    display: initial;
-    margin-top: 10px;
-  }
   .row {
     display: initial;
   }
@@ -300,7 +284,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-
   }
 
   .calendarbox {
@@ -344,7 +327,6 @@
   .legend-item {
     min-width: 225px;
   }
-
 }
 
 @media only screen and (max-width: 525px) {
@@ -360,9 +342,6 @@
 @media only screen and (max-width: 500px) {
   .date {
     font-size: 20px;
-  }
-  .cdhidden {
-    margin-top: 5px;
   }
   .schedule-button {
     font-size: 14px;
@@ -415,6 +394,3 @@
     display: flex;
   }
 }
-
-
-

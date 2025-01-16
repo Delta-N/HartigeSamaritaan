@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Shift : Entity
     {
         /// <summary>
         /// Gets or sets the StartTime
         /// </summary>
-        [Column(Order = 1)]
         public TimeSpan StartTime { get; set; }
 
         /// <summary>
         /// Gets or sets the EndTime 
         /// </summary>
-        [Column(Order = 2)]
         public TimeSpan EndTime { get; set; }
 
         /// <summary>
         /// Gets or sets the TypeName 
         /// </summary>
-        [Column(Order = 3, TypeName = "date")]
+        [Column(TypeName = "date")]
         public DateTime Date { get; set; }
 
         /// <summary>
@@ -32,7 +29,6 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the TaskId 
         /// </summary>
-        [Column(Order = 4)]
         public Guid? TaskId { get; set; }
 
         /// <summary>
@@ -44,7 +40,6 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the ProjectId 
         /// </summary>
-        [Column(Order = 5)]
         public Guid ProjectId { get; set; }
 
         /// <summary>
@@ -56,7 +51,6 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the number of ParticipantsRequired 
         /// </summary>
-        [Column(Order = 6)]
         public int ParticipantsRequired { get; set; }
 
 

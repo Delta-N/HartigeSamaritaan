@@ -1,8 +1,7 @@
 ﻿using System;
-using RoosterPlanner.Models;
-using RoosterPlanner.Models.Types;
-
-namespace RoosterPlanner.Api.Models
+using RoosterPlanner.Models.Models;
+using RoosterPlanner.Models.Models.Types;
+namespace RoosterPlanner.Api.Models.EntityViewModels
 {
     public class AvailabilityViewModel : EntityViewModel
     {

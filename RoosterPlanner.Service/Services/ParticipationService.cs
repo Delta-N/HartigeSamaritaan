@@ -6,13 +6,13 @@ using Microsoft.Graph;
 using RoosterPlanner.Data.Common;
 using RoosterPlanner.Data.Repositories;
 using RoosterPlanner.Email;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 using RoosterPlanner.Service.DataModels;
 using RoosterPlanner.Service.Helpers;
 using Attachment = System.Net.Mail.Attachment;
-using Person = RoosterPlanner.Models.Person;
+using Person = RoosterPlanner.Models.Models.Person;
 
-namespace RoosterPlanner.Service
+namespace RoosterPlanner.Service.Services
 {
     public interface IParticipationService
     {
@@ -72,18 +72,6 @@ namespace RoosterPlanner.Service
         /// <param name="participation"></param>
         /// <returns></returns>
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
-
-        /// <summary>
-        /// Sends a email
-        /// </summary>
-        /// <param name="recipient"></param>
-        /// <param name="subject"></param>
-        /// <param name="body"></param>
-        /// <param name="isBodyHtml"></param>
-        /// <param name="sender"></param>
-        /// <param name="attachment"></param>
-        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
-            Attachment? attachment);
     }
 
     public class ParticipationService : IParticipationService
@@ -318,23 +306,6 @@ namespace RoosterPlanner.Service
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Sends a email
-        /// </summary>
-        /// <param name="recipient"></param>
-        /// <param name="subject"></param>
-        /// <param name="body"></param>
-        /// <param name="isBodyHtml"></param>
-        /// <param name="sender"></param>
-        /// <param name="attachment"></param>
-        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
-            Attachment? attachment)
-        {
-            if (recipient == null || subject == null || body == null)
-                throw new ArgumentNullException("Email parameters");
-            emailService.SendEmail(recipient, subject, body, isBodyHtml, sender, attachment);
         }
     }
 }

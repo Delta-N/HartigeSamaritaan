@@ -1,25 +1,35 @@
 <div *ngIf="loaded" class="container">
-  <h2 mat-dialog-title>Projecttaak {{title}}</h2>
+	<h2 mat-dialog-title>Projecttaak {{title}}</h2>
 
-  <div class="search">
-    <p>
-      <input class="form-control" type="text" name="search" [(ngModel)]="searchText" (ngModelChange)="resetPage()" autocomplete="off" placeholder="Zoek taak">
-    </p>
-  </div>
+	<div class="search">
+		<p>
+			<input
+				class="form-control"
+				type="text"
+				name="search"
+				[(ngModel)]="searchText"
+				(ngModelChange)="resetPage()"
+				autocomplete="off"
+				placeholder="Zoek taak" />
+		</p>
+	</div>
 
-  <mat-dialog-content id="content">
-<span *ngFor="let task of allTasks | taskFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
-  <p><a (click)="modProjectTask(task.id)" mat-dialog-close="{{task.name}}">{{task.name}} </a></p>
-</span>
-  </mat-dialog-content>
+	<mat-dialog-content id="content">
+		<span
+			*ngFor="let task of allTasks | taskFilter: searchText | slice: (currentPage-1)*pageSize:(currentPage-1)*pageSize+pageSize">
+			<p
+				><a (click)="modProjectTask(task.id)" mat-dialog-close="{{task.name}}">{{task.name}} </a></p
+			>
+		</span>
+	</mat-dialog-content>
 
-  <mat-dialog-actions id="actions-bar">
-    <div class="align-buttons">
-      <button mat-raised-button (click)="prevPage()"><</button>
-      <button mat-raised-button (click)="nextPage()">></button>
-    </div>
-    <div class="align-right">
-      <button mat-button class="override-button" (click)="close()">Annuleren</button>
-    </div>
-  </mat-dialog-actions>
+	<mat-dialog-actions id="actions-bar">
+		<div class="align-buttons">
+			<button mat-raised-button (click)="prevPage()"><</button>
+			<button mat-raised-button (click)="nextPage()">></button>
+		</div>
+		<div class="align-right">
+			<button mat-button class="override-button" (click)="close()">Annuleren</button>
+		</div>
+	</mat-dialog-actions>
 </div>

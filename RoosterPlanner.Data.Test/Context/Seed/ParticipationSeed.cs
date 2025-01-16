@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using RoosterPlanner.Models;
+﻿using System.Collections.Generic;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Data.Context.Seed
 {

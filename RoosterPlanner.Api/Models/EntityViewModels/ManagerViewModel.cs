@@ -1,7 +1,6 @@
 ﻿using System;
-using RoosterPlanner.Models;
-
-namespace RoosterPlanner.Api.Models
+using RoosterPlanner.Models.Models;
+namespace RoosterPlanner.Api.Models.EntityViewModels
 {
     public class ManagerViewModel : EntityViewModel
     {

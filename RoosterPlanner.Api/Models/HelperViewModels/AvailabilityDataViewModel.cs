@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using RoosterPlanner.Api.Models.EntityViewModels;
 using RoosterPlanner.Models.Models.Enums;
-
-namespace RoosterPlanner.Api.Models
+namespace RoosterPlanner.Api.Models.HelperViewModels
 {
     public class AvailabilityDataViewModel
     {

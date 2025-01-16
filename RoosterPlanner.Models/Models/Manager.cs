@@ -1,14 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RoosterPlanner.Models
+namespace RoosterPlanner.Models.Models
 {
     public class Manager : Entity
     {
         /// <summary>
         /// Gets or sets the PersonId
         /// </summary>
-        [Column(Order = 1)]
         public Guid PersonId { get; set; }
 
         /// <summary>
@@ -20,7 +18,6 @@ namespace RoosterPlanner.Models
         /// <summary>
         /// Gets or sets the ProjectId
         /// </summary>
-        [Column(Order = 2)]
         public Guid ProjectId { get; set; }
 
         /// <summary>

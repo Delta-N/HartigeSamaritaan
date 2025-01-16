@@ -5,7 +5,7 @@ using System.Linq;
 using Xunit;
 using Moq;
 using RoosterPlanner.Data.Context.Seed;
-using RoosterPlanner.Models;
+using RoosterPlanner.Models.Models;
 
 namespace RoosterPlanner.Data.Repositories
 {

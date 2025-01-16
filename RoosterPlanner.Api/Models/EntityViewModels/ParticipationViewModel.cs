@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using RoosterPlanner.Models;
-
-namespace RoosterPlanner.Api.Models
+using RoosterPlanner.Models.Models;
+namespace RoosterPlanner.Api.Models.EntityViewModels
 {
     public class ParticipationViewModel : EntityViewModel
     {

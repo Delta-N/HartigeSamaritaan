@@ -11,7 +11,7 @@ td, th {
   width: 25%;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   font-size: 14px;
   width: 100%;
 }
@@ -47,7 +47,7 @@ td, th {
 }
 
 @media only screen and (max-width: 992px) {
-  .mat-slider-horizontal {
+  .mat-mdc-slider {
     min-width: 75px;
   }
 }
@@ -58,7 +58,7 @@ td, th {
     padding-left: 15px;
     padding-right: 15px;
   }
-  .mat-slider-horizontal {
+  .mat-mdc-slider {
     width: 100%
   }
 }
