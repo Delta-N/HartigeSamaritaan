@@ -22,7 +22,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { ErrorHandler, NgModule } from '@angular/core';
 import { ErrorHandlerService } from './services/logging.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HomeComponent } from './pages/home/home.component';
 import {
 	InteractionType,
@@ -104,93 +104,84 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
 	};
 }
 
-@NgModule({
-	declarations: [
-		AddProjectComponent,
-		AppComponent,
-		AvailabilityComponent,
-		BreadcrumbComponent,
-		ChangeProfileComponent,
-		ConfirmDialogComponent,
-		HomeComponent,
-		NotFoundComponent,
-		ProfileComponent,
-		ProjectCardComponent,
-		ProjectComponent,
-		TaskComponent,
-		ScheduleComponent,
-		ScheduleManagerComponent,
-		AcceptPrivacyPolicyComponent,
-		PrivacyComponent,
-		ChangeProfilePictureComponent,
-		CertificateComponent,
-		CalendarTaskLink,
-		RequirementComponent,
-		TableDatePipe,
-	],
-	imports: [
-		AppRoutingModule,
-		BrowserAnimationsModule,
-		BrowserModule,
-		CommonModule,
-		FormsModule,
-		HttpClientModule,
-		MaterialModule,
-		NgbModule,
-		ReactiveFormsModule,
-		ToastrModule.forRoot(),
-		NgxDocViewerModule,
-		CalendarModule.forRoot(
-			{
-				provide: CalendarDateAdapter,
-				useFactory: momentAdapterFactory,
-			},
-			{
-				dateFormatter: {
-					provide: CalendarDateFormatter,
-					useClass: CalendarMomentDateFormatter,
-				},
-			}
-		),
-		ManageModule,
-		AdminModule,
-	],
-	providers: [
-		AuthorizationGuard,
-		ManageGuard,
-		MsalService,
-		MsalGuard,
-		MsalBroadcastService,
-		FormBuilder,
-		{
-			provide: HTTP_INTERCEPTORS,
-			useClass: MsalInterceptor,
-			multi: true,
-		},
-		{
-			provide: MSAL_INSTANCE,
-			useFactory: MSALInstanceFactory,
-		},
-		{
-			provide: MSAL_GUARD_CONFIG,
-			useValue: {
-				interactionType: InteractionType.Redirect,
-			} as MsalGuardConfiguration,
-		},
-		{
-			provide: MSAL_INTERCEPTOR_CONFIG,
-			useFactory: MSALInterceptorConfigFactory,
-		},
-		{
-			provide: ErrorHandler,
-			useClass: ErrorHandlerService,
-		},
-		{
-			provide: MOMENT,
-			useValue: moment,
-		},
-		{ provide: REMOVE_STYLES_ON_COMPONENT_DESTROY, useValue: false },
-	],
-	bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AddProjectComponent,
+        AppComponent,
+        AvailabilityComponent,
+        BreadcrumbComponent,
+        ChangeProfileComponent,
+        ConfirmDialogComponent,
+        HomeComponent,
+        NotFoundComponent,
+        ProfileComponent,
+        ProjectCardComponent,
+        ProjectComponent,
+        TaskComponent,
+        ScheduleComponent,
+        ScheduleManagerComponent,
+        AcceptPrivacyPolicyComponent,
+        PrivacyComponent,
+        ChangeProfilePictureComponent,
+        CertificateComponent,
+        CalendarTaskLink,
+        RequirementComponent,
+        TableDatePipe,
+    ],
+    bootstrap: [AppComponent], imports: [AppRoutingModule,
+        BrowserAnimationsModule,
+        BrowserModule,
+        CommonModule,
+        FormsModule,
+        MaterialModule,
+        NgbModule,
+        ReactiveFormsModule,
+        ToastrModule.forRoot(),
+        NgxDocViewerModule,
+        CalendarModule.forRoot({
+            provide: CalendarDateAdapter,
+            useFactory: momentAdapterFactory,
+        }, {
+            dateFormatter: {
+                provide: CalendarDateFormatter,
+                useClass: CalendarMomentDateFormatter,
+            },
+        }),
+        ManageModule,
+        AdminModule], providers: [
+        AuthorizationGuard,
+        ManageGuard,
+        MsalService,
+        MsalGuard,
+        MsalBroadcastService,
+        FormBuilder,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: MsalInterceptor,
+            multi: true,
+        },
+        {
+            provide: MSAL_INSTANCE,
+            useFactory: MSALInstanceFactory,
+        },
+        {
+            provide: MSAL_GUARD_CONFIG,
+            useValue: {
+                interactionType: InteractionType.Redirect,
+            } as MsalGuardConfiguration,
+        },
+        {
+            provide: MSAL_INTERCEPTOR_CONFIG,
+            useFactory: MSALInterceptorConfigFactory,
+        },
+        {
+            provide: ErrorHandler,
+            useClass: ErrorHandlerService,
+        },
+        {
+            provide: MOMENT,
+            useValue: moment,
+        },
+        { provide: REMOVE_STYLES_ON_COMPONENT_DESTROY, useValue: false },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}

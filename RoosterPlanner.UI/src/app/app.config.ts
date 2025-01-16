@@ -6,12 +6,7 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import {
-	HTTP_INTERCEPTORS,
-	provideHttpClient,
-	withFetch,
-	withInterceptorsFromDi,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import {
 	MSAL_GUARD_CONFIG,
 	MSAL_INSTANCE,
