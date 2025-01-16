@@ -1,0 +1,224 @@
+name: Angular CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - feature/bicep
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  BUILD_CONFIGURATION: Release
+  DOTNET_VERSION: 8.0.x
+  NODE_VERSION: 20.x
+  ANGULAR_VERSION: 18.0.3
+  PNPM_VERSION: 8
+  AZURE_WEBAPP_PACKAGE_PATH: ./RoosterPlanner.UI/
+  AZURE_API_PACKAGE_PATH: ./RoosterPlanner.Api/
+  APP_LOCATION: "./staging/web"
+
+jobs:
+  build-front-end:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Angular CLI
+        run: pnpm add -g @angular/cli@${{ env.ANGULAR_VERSION }}
+
+      - name: Build front-end
+        run: |
+          pnpm install
+          ng build --configuration production --output-path=../staging/web
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Web
+          path: ./staging/web
+
+  validate-bicep:
+    name: Validate Bicep
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+
+      - name: Log into Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+
+      - name: Validate Bicep
+        uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
+        with:
+          name: "fe-bicep-validation"
+          scope: resourceGroup
+          type: deployment
+          operation: validate
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/fe/main.bicep
+          parameters-file: ./.infra/fe/main.dev.bicepparam
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fe-infra
+          path: ./.infra/fe/
+
+  deploy-dev:
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    needs:
+      - build-front-end
+      - validate-bicep
+    environment:
+      name: dev
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Web
+          path: ./staging/web
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["**/*.js"]'
+        env:
+          hostName: ${{ vars.HOSTNAME }}
+          environmentName: ${{ vars.ENVIRONMENTNAME }}
+          feClientId: ${{ vars.FE_CLIENT_ID }}
+          apiClientId: ${{ vars.API_CLIENT_ID }}
+          appInsightsKey: ${{ vars.APPINSIGHTS_KEY }}
+          frontEndUrl: ${{ vars.FE_URL }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fe-infra
+          path: ./.infra/fe/
+
+      - name: Log in with Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          enable-AzPSSession: true
+
+      - name: Deploy Infra
+        uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
+        with:
+          name: "dev-fe-deploy"
+          scope: resourceGroup
+          type: deployment
+          operation: create
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/fe/main.bicep
+          parameters-file: ./.infra/fe/main.dev.bicepparam
+
+      - name: Deploy static web app
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: ${{ env.APP_LOCATION }}
+          skip_app_build: true
+
+  deploy-prd:
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    needs:
+      - deploy-dev
+    environment:
+      name: prd
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Web
+          path: ./staging/web
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["**/*.js"]'
+        env:
+          hostName: ${{ vars.HOSTNAME }}
+          environmentName: ${{ vars.ENVIRONMENTNAME }}
+          feClientId: ${{ vars.FE_CLIENT_ID }}
+          apiClientId: ${{ vars.API_CLIENT_ID }}
+          appInsightsKey: ${{ vars.APPINSIGHTS_KEY }}
+          frontEndUrl: ${{ vars.FE_URL }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fe-infra
+          path: ./.infra/fe/
+
+      - name: Log in with Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          enable-AzPSSession: true
+
+      - name: Deploy Infra
+        uses: azure/bicep-deploy@v1
+        # this gives an error but the deployment is on resource scope so we can't pass location
+        with:
+          name: "prd-fe-deploy"
+          scope: resourceGroup
+          type: deployment
+          operation: create
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resource-group-name: ${{ secrets.AZURE_RG_NAME }}
+          template-file: ./.infra/fe/main.bicep
+          parameters-file: ./.infra/fe/main.prd.bicepparam
+
+      - name: Deploy static web app
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: ${{ env.APP_LOCATION }}
+          skip_app_build: true

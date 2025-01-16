@@ -72,18 +72,6 @@ namespace RoosterPlanner.Service.Services
         /// <param name="participation"></param>
         /// <returns></returns>
         Task<TaskResult<Participation>> UpdateParticipationAsync(Participation participation);
-
-        /// <summary>
-        /// Sends a email
-        /// </summary>
-        /// <param name="recipient"></param>
-        /// <param name="subject"></param>
-        /// <param name="body"></param>
-        /// <param name="isBodyHtml"></param>
-        /// <param name="sender"></param>
-        /// <param name="attachment"></param>
-        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
-            Attachment? attachment);
     }
 
     public class ParticipationService : IParticipationService
@@ -318,23 +306,6 @@ namespace RoosterPlanner.Service.Services
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Sends a email
-        /// </summary>
-        /// <param name="recipient"></param>
-        /// <param name="subject"></param>
-        /// <param name="body"></param>
-        /// <param name="isBodyHtml"></param>
-        /// <param name="sender"></param>
-        /// <param name="attachment"></param>
-        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
-            Attachment? attachment)
-        {
-            if (recipient == null || subject == null || body == null)
-                throw new ArgumentNullException("Email parameters");
-            emailService.SendEmail(recipient, subject, body, isBodyHtml, sender, attachment);
         }
     }
 }

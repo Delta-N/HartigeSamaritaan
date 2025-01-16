@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System.Collections.Generic;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace RoosterPlanner.Email
 {
@@ -15,7 +16,7 @@ namespace RoosterPlanner.Email
         /// <param name="isBodyHtml"></param>
         /// <param name="sender"></param>
         /// <param name="attachment"></param>
-        void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
+        Task SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
             Attachment? attachment);
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace RoosterPlanner.Email
         /// <param name="isBodyHtml"></param>
         /// <param name="sender"></param>
         /// <param name="attachment"></param>
-        void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml, string? sender,
+        Task SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml, string? sender,
             Attachment? attachment);
     }
 
@@ -59,7 +60,7 @@ namespace RoosterPlanner.Email
         /// <param name="isBodyHtml"></param>
         /// <param name="sender"></param>
         /// <param name="attachment"></param>
-        public void SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
+        public async Task SendEmail(string recipient, string subject, string body, bool isBodyHtml, string? sender,
             Attachment? attachment)
         {
             sender ??= this.sender;
@@ -86,7 +87,7 @@ namespace RoosterPlanner.Email
         /// <param name="isBodyHtml"></param>
         /// <param name="sender"></param>
         /// <param name="attachment"></param>
-        public void SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml,
+        public async Task SendEmail(IEnumerable<string> recipients, string subject, string body, bool isBodyHtml,
             string? sender, Attachment? attachment)
         {
             sender ??= this.sender;
