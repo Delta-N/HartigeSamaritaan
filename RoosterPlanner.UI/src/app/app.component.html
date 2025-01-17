@@ -1,13 +1,14 @@
 <div>
-  <mat-toolbar color="primary">
+  <mat-toolbar class="toolbar">
     <div class="lg:hidden sm:flex" id="toolbar">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
     </div>
 
-    <a mat-button routerLink="/home">
-      <img src="../assets/Logo.png" alt="Hartige Samaritaan" class="logo" />
+    <a routerLink="/home" class="flex flex-row items-center gap-2 font-semibold">
+      <img class="h-10" src="../assets/TF_GLOBAL_LOGO_RGB.png" alt="Tearfund" />
+      Rooster Planner
     </a>
     <span class="sidenav-spacer"></span>
     <div class="sm:hidden lg:flex items-center" id="buttons">

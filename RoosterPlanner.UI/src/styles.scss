@@ -1,3 +1,6 @@
+@use "@angular/material" as mat;
+@use "./m3-theme";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +12,9 @@
 html,
 body {
   height: 100%;
+  // Apply the light theme by default
+  @include mat.core-theme(m3-theme.$light-theme);
+  @include mat.button-theme(m3-theme.$light-theme);
 }
 
 body {
