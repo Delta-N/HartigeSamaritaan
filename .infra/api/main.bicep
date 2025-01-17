@@ -164,12 +164,7 @@ resource webapi 'Microsoft.Web/sites@2024-04-01' = {
 resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   name: 'appsettings'
   parent: webapi
-  properties: union(webapi.properties.siteConfig.appSettings, [
-    {
-      name: 'WebUrl__Url'
-      value: webapi.properties.defaultHostName
-    }
-  ])
+  properties: union(webapi.properties.siteConfig.appSettings, [{ WebUrl__Url: webapi.properties.defaultHostName }])
 }
 
 resource kvAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-10-01' = {
