@@ -1,6 +1,6 @@
-# HartigeSamaritaan
+# Tearfund Roosterplanner
 
-Roosterplannersysteem voor de stichting Hartige Samaritaan.  
+Roosterplannersysteem voor de stichting Tearfund NL (Originally Charity Hartige Samaritaan).
 Bezoek: https://delta-n.github.io/HartigeSamaritaan/ voor de documentatie.
 
 ## Gebruikte technologieën:
