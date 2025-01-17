@@ -17,7 +17,7 @@ export const environment = {
   },
   protectedResourceMap: [
     [
-      'http://localhost:5003',
+      'https://roosterplanner-dev-api.azurewebsites.net',
       [
         'https://roosterplannerdev.onmicrosoft.com/24e46ae1-6114-444b-87cc-788d5380f819/Read',
       ],
@@ -40,7 +40,7 @@ export const environment = {
         'https://roosterplannerdev.b2clogin.com/roosterplannerdev.onmicrosoft.com/b2c_1_edit',
     },
   },
-  backendUrl: 'http://localhost:5003/',
+  backendUrl: 'https://roosterplanner-dev-api.azurewebsites.net/',
 
   appInsights: {
     instrumentationKey: '9001510e-6341-4bf0-b9c4-dbed80189dd8',
