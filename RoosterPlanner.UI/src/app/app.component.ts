@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
   editIcon = faUserEdit;
 
   hasUser = false;
-  title = 'Hartige Samaritaan';
+  title = 'Tearfund Roosterplanner';
   isIframe = false;
   loggedIn = false;
   isAdmin = false;

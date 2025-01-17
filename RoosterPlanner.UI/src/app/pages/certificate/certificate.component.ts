@@ -8,8 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import {
-	ConfirmDialogComponent,
-	ConfirmDialogModel,
+  ConfirmDialogComponent,
+  ConfirmDialogModel,
 } from '../../components/confirm-dialog/confirm-dialog.component';
 import jsPDF from 'jspdf';
 import { DateConverter } from '../../helpers/date-converter';
@@ -17,177 +17,177 @@ import { Breadcrumb } from '../../models/breadcrumb';
 import { faAward, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-	selector: 'app-certificate',
-	templateUrl: './certificate.component.html',
-	styleUrls: ['./certificate.component.scss'],
+  selector: 'app-certificate',
+  templateUrl: './certificate.component.html',
+  styleUrls: ['./certificate.component.scss'],
 })
 export class CertificateComponent implements OnInit {
-	editIcon = faEdit;
-	deleteIcon = faTrashAlt;
-	awardIcon = faAward;
+  editIcon = faEdit;
+  deleteIcon = faTrashAlt;
+  awardIcon = faAward;
 
-	guid: string;
-	certificate: Certificate;
-	isAdmin = false;
-	loaded = false;
+  guid: string;
+  certificate: Certificate;
+  isAdmin = false;
+  loaded = false;
 
-	@ViewChild('pdfTable', { static: false }) pdfTable: ElementRef;
+  @ViewChild('pdfTable', { static: false }) pdfTable: ElementRef;
 
-	constructor(
-		private route: ActivatedRoute,
-		private certificateService: CertificateService,
-		private userService: UserService,
-		public dialog: MatDialog,
-		private toastr: ToastrService,
-		private router: Router,
-		private breadcrumbService: BreadcrumbService
-	) {}
+  constructor(
+    private route: ActivatedRoute,
+    private certificateService: CertificateService,
+    private userService: UserService,
+    public dialog: MatDialog,
+    private toastr: ToastrService,
+    private router: Router,
+    private breadcrumbService: BreadcrumbService,
+  ) {}
 
-	ngOnInit(): void {
-		this.isAdmin = this.userService.userIsAdminFrontEnd();
-		this.route.paramMap.subscribe(async (params: ParamMap) => {
-			this.guid = params.get('id');
-			await this.getCertificate();
+  ngOnInit(): void {
+    this.isAdmin = this.userService.userIsAdminFrontEnd();
+    this.route.paramMap.subscribe(async (params: ParamMap) => {
+      this.guid = params.get('id');
+      await this.getCertificate();
 
-			const previousUrl = this.isAdmin
-				? 'admin/profile/' + this.certificate.person.id
-				: '/profile';
-			const previous: Breadcrumb = new Breadcrumb('Profiel', previousUrl);
-			const current: Breadcrumb = new Breadcrumb('Certificaat', null);
+      const previousUrl = this.isAdmin
+        ? 'admin/profile/' + this.certificate.person.id
+        : '/profile';
+      const previous: Breadcrumb = new Breadcrumb('Profiel', previousUrl);
+      const current: Breadcrumb = new Breadcrumb('Certificaat', null);
 
-			const breadcrumbs: Breadcrumb[] = [
-				this.breadcrumbService.dashboardcrumb,
-				previous,
-				current,
-			];
-			this.breadcrumbService.replace(breadcrumbs);
-		});
-	}
+      const breadcrumbs: Breadcrumb[] = [
+        this.breadcrumbService.dashboardcrumb,
+        previous,
+        current,
+      ];
+      this.breadcrumbService.replace(breadcrumbs);
+    });
+  }
 
-	async getCertificate() {
-		await this.certificateService.getCertificate(this.guid).then((res) => {
-			if (res) this.certificate = res;
-			this.loaded = true;
-		});
-	}
+  async getCertificate() {
+    await this.certificateService.getCertificate(this.guid).then((res) => {
+      if (res) this.certificate = res;
+      this.loaded = true;
+    });
+  }
 
-	edit() {
-		const dialogRef = this.dialog.open(AddCertificateComponent, {
-			width: '400px',
-			data: {
-				modifier: 'wijzigen',
-				certificate: this.certificate,
-			},
-		});
-		dialogRef.disableClose = true;
-		dialogRef.afterClosed().subscribe(async (result) => {
-			if (result && result !== 'false') {
-				this.getCertificate();
-				this.toastr.success('Certificaat is gewijzigd');
-			}
-		});
-	}
+  edit() {
+    const dialogRef = this.dialog.open(AddCertificateComponent, {
+      width: '400px',
+      data: {
+        modifier: 'wijzigen',
+        certificate: this.certificate,
+      },
+    });
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result && result !== 'false') {
+        this.getCertificate();
+        this.toastr.success('Certificaat is gewijzigd');
+      }
+    });
+  }
 
-	delete() {
-		const message = 'Weet je zeker dat je dit certificaat wilt verwijderen?';
-		const dialogData = new ConfirmDialogModel(
-			'Bevestig verwijderen',
-			message,
-			'ConfirmationInput',
-			null
-		);
-		const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-			maxWidth: '400px',
-			data: dialogData,
-		});
-		dialogRef.afterClosed().subscribe(async (dialogResult) => {
-			if (dialogResult === true) {
-				await this.certificateService
-					.deleteCertificate(this.guid)
-					.then(async (response) => {
-						if (response) {
-							window.history.back();
-						}
-					});
-			}
-		});
-	}
+  delete() {
+    const message = 'Weet je zeker dat je dit certificaat wilt verwijderen?';
+    const dialogData = new ConfirmDialogModel(
+      'Bevestig verwijderen',
+      message,
+      'ConfirmationInput',
+      null,
+    );
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: dialogData,
+    });
+    dialogRef.afterClosed().subscribe(async (dialogResult) => {
+      if (dialogResult === true) {
+        await this.certificateService
+          .deleteCertificate(this.guid)
+          .then(async (response) => {
+            if (response) {
+              window.history.back();
+            }
+          });
+      }
+    });
+  }
 
-	pdf() {
-		const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: [210, 297] });
+  pdf() {
+    const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: [210, 297] });
 
-		const img = new Image();
-		img.src = '../../../assets/Logo.background.png';
+    const img = new Image();
+    img.src = '../../../assets/TF_GLOBAL_LOGO_RGB.png';
 
-		let text: string;
+    let text: string;
 
-		doc.rect(
-			10,
-			10,
-			doc.internal.pageSize.width - 20,
-			doc.internal.pageSize.height - 20,
-			'S'
-		);
+    doc.rect(
+      10,
+      10,
+      doc.internal.pageSize.width - 20,
+      doc.internal.pageSize.height - 20,
+      'S',
+    );
 
-		const imgWidth = 100;
-		doc.addImage(img, 'png', this.getOffSet(doc, imgWidth), 20, imgWidth, 35);
+    const imgWidth = 100;
+    doc.addImage(img, 'png', this.getOffSet(doc, imgWidth), 20, imgWidth, 35);
 
-		doc.setFont('Century Schoolbook');
+    doc.setFont('Century Schoolbook');
 
-		doc.setFontSize(40);
-		text = 'CERTIFICAAT';
-		doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 80);
+    doc.setFontSize(40);
+    text = 'CERTIFICAAT';
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 80);
 
-		doc.setFontSize(16);
-		text = 'Hiermee bevestigen wij dat:';
-		doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 90);
+    doc.setFontSize(16);
+    text = 'Hiermee bevestigen wij dat:';
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 90);
 
-		doc.setFontSize(24);
-		text =
-			this.certificate.person.firstName +
-			' ' +
-			this.certificate.person.lastName;
-		doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 100);
+    doc.setFontSize(24);
+    text =
+      this.certificate.person.firstName +
+      ' ' +
+      this.certificate.person.lastName;
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 100);
 
-		doc.setFontSize(16);
-		text = 'Met goed resultaat kunde heeft laten zien op het gebied van';
-		doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 110);
+    doc.setFontSize(16);
+    text = 'Met goed resultaat kunde heeft laten zien op het gebied van';
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 110);
 
-		doc.setFontSize(24);
-		text = this.certificate.certificateType
-			? this.certificate.certificateType.name
-			: 'Onbekend';
-		doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 120);
+    doc.setFontSize(24);
+    text = this.certificate.certificateType
+      ? this.certificate.certificateType.name
+      : 'Onbekend';
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 120);
 
-		doc.setFontSize(16);
-		if (this.certificate.certificateType?.level) {
-			text = 'Niveau behaald: ' + this.certificate.certificateType.level;
-			doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 130);
-		}
+    doc.setFontSize(16);
+    if (this.certificate.certificateType?.level) {
+      text = 'Niveau behaald: ' + this.certificate.certificateType.level;
+      doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 130);
+    }
 
-		text =
-			'Afgiftedatum: ' +
-			DateConverter.toReadableStringFromDate(this.certificate.dateIssued);
-		doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 150);
+    text =
+      'Afgiftedatum: ' +
+      DateConverter.toReadableStringFromDate(this.certificate.dateIssued);
+    doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 150);
 
-		if (this.certificate.dateExpired) {
-			text =
-				'Verloopdatum: ' +
-				DateConverter.toReadableStringFromDate(this.certificate.dateExpired);
-			doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 160);
-		}
+    if (this.certificate.dateExpired) {
+      text =
+        'Verloopdatum: ' +
+        DateConverter.toReadableStringFromDate(this.certificate.dateExpired);
+      doc.text(text, this.getOffSet(doc, this.getTextWidth(doc, text)), 160);
+    }
 
-		doc.save('Certificaat.pdf');
-	}
+    doc.save('Certificaat.pdf');
+  }
 
-	getTextWidth(doc: jsPDF, text: string) {
-		return (
-			(doc.getStringUnitWidth(text) * doc.getFontSize()) /
-			doc.internal.scaleFactor
-		);
-	}
+  getTextWidth(doc: jsPDF, text: string) {
+    return (
+      (doc.getStringUnitWidth(text) * doc.getFontSize()) /
+      doc.internal.scaleFactor
+    );
+  }
 
-	getOffSet(doc: jsPDF, textWidth: number) {
-		return (doc.internal.pageSize.width - textWidth) / 2;
-	}
+  getOffSet(doc: jsPDF, textWidth: number) {
+    return (doc.internal.pageSize.width - textWidth) / 2;
+  }
 }
