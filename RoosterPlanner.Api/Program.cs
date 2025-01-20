@@ -132,12 +132,12 @@ builder.AddEmailServices();
 var app = builder.Build();
 
 // This works perfectly fine for a simple application running on a single instance.
-if (!string.IsNullOrEmpty(builder.Configuration.GetConnectionString("RoosterPlannerDatabase")))
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<RoosterPlannerContext>();
-    db.Database.Migrate();
-}
+// if (!string.IsNullOrEmpty(builder.Configuration.GetConnectionString("RoosterPlannerDatabase")))
+// {
+//     using var scope = app.Services.CreateScope();
+//     var db = scope.ServiceProvider.GetRequiredService<RoosterPlannerContext>();
+//     db.Database.Migrate();
+// }
 
 
 // Configure the HTTP request pipeline.
