@@ -75,102 +75,37 @@ resource webapi 'Microsoft.Web/sites@2024-04-01' = {
     siteConfig: {
       alwaysOn: true
       linuxFxVersion: 'DOTNETCORE|8.0'
-      appSettings: [
-        {
-          name: 'ASPNETCORE_ENVIRONMENT'
-          value: 'Production'
-        }
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: appi.properties.InstrumentationKey
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appi.properties.ConnectionString
-        }
-        {
-          name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
-          value: '~3'
-        }
-        {
-          name: 'XDT_MicrosoftApplicationInsights_Mode'
-          value: 'recommended'
-        }
-        {
-          name: 'XDT_MicrosoftApplicationInsights_PreemptSdk'
-          value: '1'
-        }
-        {
-          name: 'KeyVaultName'
-          value: kv.name
-        }
-        {
-          name: 'AzureAuthentication__AzureTenantName'
-          value: authAzureTenantName
-        }
-        {
-          name: 'AzureAuthentication__B2CExtentionApplicationId'
-          value: authB2CExtensionApplicationId
-        }
-        {
-          name: 'AzureAuthentication__ClientId'
-          value: authClientId
-        }
-        {
-          name: 'AzureAuthentication__GraphApiScopes'
-          value: authGraphApiScopes
-        }
-        {
-          name: 'AzureAuthentication__Instance'
-          value: authInstance
-        }
-        {
-          name: 'AzureAuthentication__SignUpSignInPolicyId'
-          value: authSignUpSignInPolicyId
-        }
-        {
-          name: 'AzureAuthentication__TenantId'
-          value: authTenantId
-        }
-        {
-          name: 'AzureAuthentication__Domain'
-          value: authDomain
-        }
-        {
-          name: 'AzureAuthentication__ClientSecret'
-          value: '@Microsoft.KeyVault(VaultName=${kv.name};SecretName=AzureAuthentication--ClientSecret)'
-        }
-        {
-          name: 'ConnectionStrings__RoosterPlannerDatabase'
-          value: 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqldb.name};Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";'
-        }
-        {
-          name: 'AzureBlob__AzureBlobConnectionstring'
-          value: '@Microsoft.KeyVault(SecretUri=${kv_secret_storageAccount.properties.secretUri})'
-        }
-        {
-          name: 'ACSConfig__ConnectionString'
-          value: '@Microsoft.KeyVault(SecretUri=${email.outputs.emailConnectionStringUri})'
-        }
-        {
-          name: 'ACSConfig__SenderEmail'
-          value: email.outputs.senderEmail
-        }
-      ]
     }
   }
 }
 
-// resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
-//   name: 'appsettings'
-//   parent: webapi
-//   properties: [
-//     {
-//       name: 'WebUrl__Url'
-//       value: webapi.properties.defaultHostName
-//     }
-//   ]
-// }
+resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
+  name: 'appsettings'
+  parent: webapi
+  properties: {
+    ASPNETCORE_ENVIRONMENT: 'Production'
+    APPINSIGHTS_INSTRUMENTATIONKEY: appi.properties.InstrumentationKey
+    APPLICATIONINSIGHTS_CONNECTION_STRING: appi.properties.ConnectionString
+    ApplicationInsightsAgent_EXTENSION_VERSION: '~3'
+    XDT_MicrosoftApplicationInsights_Mode: 'recommended'
+    XDT_MicrosoftApplicationInsights_PreemptSdk: '1'
+    KeyVaultName: kv.name
+    AzureAuthentication__AzureTenantName: authAzureTenantName
+    AzureAuthentication__B2CExtentionApplicationId: authB2CExtensionApplicationId
+    AzureAuthentication__ClientId: authClientId
+    AzureAuthentication__GraphApiScopes: authGraphApiScopes
+    AzureAuthentication__Instance: authInstance
+    AzureAuthentication__SignUpSignInPolicyId: authSignUpSignInPolicyId
+    AzureAuthentication__TenantId: authTenantId
+    AzureAuthentication__Domain: authDomain
+    AzureAuthentication__ClientSecret: '@Microsoft.KeyVault(VaultName=${kv.name};SecretName=AzureAuthentication--ClientSecret)'
+    ConnectionStrings__RoosterPlannerDatabase: 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName}1433;Initial Catalog=${sqldb.name};Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";'
+    AzureBlob__AzureBlobConnectionstring: '@Microsoft.KeyVault(SecretUri=${kv_secret_storageAccount.properties.secretUri})'
+    ACSConfig__ConnectionString: '@Microsoft.KeyVault(SecretUri=${email.outputs.emailConnectionStringUri})'
+    ACSConfig__SenderEmail: email.outputs.senderEmail
+    WebUrl__Url: webapi.properties.defaultHostName
+  }
+}
 
 resource kvAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-10-01' = {
   name: 'add'
