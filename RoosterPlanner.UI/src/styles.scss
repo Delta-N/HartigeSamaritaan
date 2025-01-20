@@ -1,6 +1,8 @@
 @use "@angular/material" as mat;
 @use "./m3-theme";
 
+@use "fonts";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -45,7 +47,7 @@ input[type="file"] {
 
 h1 {
   text-align: left;
-  font: normal normal normal 35px/50px Segoe UI;
+  font-family: "FSMeW01-Regular", sans-serif;
   letter-spacing: 0;
   color: #434343;
   opacity: 1;

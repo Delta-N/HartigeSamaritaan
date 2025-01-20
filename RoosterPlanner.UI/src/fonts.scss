@@ -1,0 +1,41 @@
+@font-face {
+  font-family: "FSMeW01-Light";
+  src:
+    url("assets/fonts/fsme/FSMeW01-Light.woff2") format("woff2"),
+    url("assets/fonts/fsme/FSMeW01-Light.woff") format("woff");
+}
+@font-face {
+  font-family: "FSMeW01-LightItalic";
+  src:
+    url("assets/fonts/fsme/FSMeW01-LightItalic.woff2") format("woff2"),
+    url("assets/fonts/fsme/FSMeW01-LightItalic.woff") format("woff");
+}
+@font-face {
+  font-family: "FSMeW01-Regular";
+  src:
+    url("assets/fonts/fsme/FSMeW01-Regular.woff2") format("woff2"),
+    url("assets/fonts/fsme/FSMeW01-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: "FSMeW01-Italic";
+  src:
+    url("assets/fonts/fsme/FSMeW01-Italic.woff2") format("woff2"),
+    url("assets/fonts/fsme/FSMeW01-Italic.woff") format("woff");
+}
+@font-face {
+  font-family: "FSMeW01-Bold";
+  src:
+    url("assets/fonts/fsme/FSMeW01-Bold.woff2") format("woff2"),
+    url("assets/fonts/fsme/FSMeW01-Bold.woff") format("woff");
+}
+@font-face {
+  font-family: "FSMeW01-BoldItalic";
+  src:
+    url("assets/fonts/fsme/FSMeW01-BoldItalic.woff2") format("woff2"),
+    url("assets/fonts/fsme/FSMeW01-BoldItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "TearfundSans";
+  src: url("assets/fonts/tf-sans/TearfundSans-Regular.ttf") format("ttf");
+}
