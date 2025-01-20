@@ -11,128 +11,128 @@ import { TextInjectorService } from '../../services/text-injector.service';
 import { ProjectService } from '../../services/project.service';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { Breadcrumb } from '../../models/breadcrumb';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
-	selector: 'app-schedule-manager',
-	templateUrl: './schedule-manager.component.html',
-	styleUrls: ['./schedule-manager.component.scss'],
+  selector: 'app-schedule-manager',
+  templateUrl: './schedule-manager.component.html',
+  styleUrls: ['./schedule-manager.component.scss'],
 })
 export class ScheduleManagerComponent implements OnInit {
-	@ViewChild('calendar') calendar: MatCalendar<Moment>;
+  @ViewChild('calendar') calendar: MatCalendar<Moment>;
 
-	selectedDate: Moment;
-	viewDate: Date = new Date();
-	minDate: Date;
-	maxDate: Date;
+  selectedDate: Moment;
+  viewDate: Date = new Date();
+  minDate: Date;
+  maxDate: Date;
 
-	displayedColumns: string[] = [];
-	dataSource: MatTableDataSource<Availability> =
-		new MatTableDataSource<Availability>();
-	paginator: MatPaginator;
-	sort: MatSort;
-	loaded = false;
+  displayedColumns: string[] = [];
+  dataSource: MatTableDataSource<Availability> =
+    new MatTableDataSource<Availability>();
+  paginator: MatPaginator;
+  sort: MatSort;
+  loaded = false;
 
-	@ViewChild(MatSort) set matSort(ms: MatSort) {
-		this.sort = ms;
-		this.setDataSourceAttributes();
-	}
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
 
-	@ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
-		this.paginator = mp;
-		this.setDataSourceAttributes();
-	}
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
 
-	projectId: string;
+  projectId: string;
 
-	constructor(
-		private route: ActivatedRoute,
-		private router: Router,
-		private availabilityService: AvailabilityService,
-		private projectService: ProjectService,
-		private breadcrumbService: BreadcrumbService
-	) {
-		const breadcrumb: Breadcrumb = new Breadcrumb('Rooster', null);
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private availabilityService: AvailabilityService,
+    private projectService: ProjectService,
+    private breadcrumbService: BreadcrumbService,
+  ) {
+    const breadcrumb: Breadcrumb = new Breadcrumb('Rooster', null);
 
-		const array: Breadcrumb[] = [
-			this.breadcrumbService.dashboardcrumb,
-			this.breadcrumbService.managecrumb,
-			breadcrumb,
-		];
+    const array: Breadcrumb[] = [
+      this.breadcrumbService.dashboardcrumb,
+      this.breadcrumbService.managecrumb,
+      breadcrumb,
+    ];
 
-		this.breadcrumbService.replace(array);
-	}
+    this.breadcrumbService.replace(array);
+  }
 
-	ngOnInit(): void {
-		this.displayedColumns = TextInjectorService.scheduleTableColumnNames;
+  ngOnInit(): void {
+    this.displayedColumns = TextInjectorService.scheduleTableColumnNames;
 
-		this.route.paramMap.subscribe(async (params: ParamMap) => {
-			this.projectId = params.get('id');
-			this.projectService.getProject(this.projectId).then((res) => {
-				this.minDate = res.participationStartDate;
-				this.maxDate = res.participationEndDate;
-			});
-			await this.getAvailabilities(this.viewDate).then(() => {
-				this.loaded = true;
-			});
-		});
-	}
+    this.route.paramMap.subscribe(async (params: ParamMap) => {
+      this.projectId = params.get('id');
+      this.projectService.getProject(this.projectId).then((res) => {
+        this.minDate = res.participationStartDate;
+        this.maxDate = res.participationEndDate;
+      });
+      await this.getAvailabilities(this.viewDate).then(() => {
+        this.loaded = true;
+      });
+    });
+  }
 
-	setDatasource(availabilaties: Availability[]) {
-		this.dataSource = new MatTableDataSource<Availability>(availabilaties);
-		this.setDataSourceAttributes();
+  setDatasource(availabilaties: Availability[]) {
+    this.dataSource = new MatTableDataSource<Availability>(availabilaties);
+    this.setDataSourceAttributes();
 
-		this.dataSource.sortingDataAccessor = (item, property) => {
-			switch (property) {
-				case 'Taak':
-					return item.shift.task != null ? item.shift.task.name : null;
-				case 'Vanaf':
-					return item.shift.startTime;
-				case 'Tot':
-					return item.shift.endTime;
-				default:
-					return item[property];
-			}
-		};
-	}
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'Taak':
+          return item.shift.task != null ? item.shift.task.name : null;
+        case 'Vanaf':
+          return item.shift.startTime;
+        case 'Tot':
+          return item.shift.endTime;
+        default:
+          return item[property];
+      }
+    };
+  }
 
-	dateChanged() {
-		this.calendar.activeDate = this.selectedDate;
-		this.changeDate(this.selectedDate.toDate());
-	}
+  dateChanged() {
+    this.calendar.activeDate = this.selectedDate;
+    this.changeDate(this.selectedDate.toDate());
+  }
 
-	changeDate(date: Date): void {
-		this.viewDate = date;
-		this.dateOrViewChanged();
-	}
+  changeDate(date: Date): void {
+    this.viewDate = date;
+    this.dateOrViewChanged();
+  }
 
-	async dateOrViewChanged(): Promise<void> {
-		await this.getAvailabilities(this.viewDate).then(() => {
-			if (this.viewDate < this.minDate) {
-				this.changeDate(this.minDate);
-			} else if (this.viewDate > this.maxDate) {
-				this.changeDate(this.maxDate);
-			}
-		});
-	}
+  async dateOrViewChanged(): Promise<void> {
+    await this.getAvailabilities(this.viewDate).then(() => {
+      if (this.viewDate < this.minDate) {
+        this.changeDate(this.minDate);
+      } else if (this.viewDate > this.maxDate) {
+        this.changeDate(this.maxDate);
+      }
+    });
+  }
 
-	async getAvailabilities(viewDate: Date) {
-		await this.availabilityService
-			.getScheduledAvailabilitiesOnDate(
-				this.projectId,
-				moment(viewDate).set('hour', 12).toDate()
-			)
-			.then((res) => {
-				this.setDatasource(res);
-			});
-	}
+  async getAvailabilities(viewDate: Date) {
+    await this.availabilityService
+      .getScheduledAvailabilitiesOnDate(
+        this.projectId,
+        moment(viewDate).set('hour', 12).toDate(),
+      )
+      .then((res) => {
+        this.setDatasource(res);
+      });
+  }
 
-	setDataSourceAttributes() {
-		this.dataSource.paginator = this.paginator;
-		this.dataSource.sort = this.sort;
-	}
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
-	details(personId: string) {
-		this.router.navigate(['manage/profile', personId]);
-	}
+  details(personId: string) {
+    this.router.navigate(['manage/profile', personId]);
+  }
 }
