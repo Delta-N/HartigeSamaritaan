@@ -8,7 +8,7 @@ import { MsalGuardConfiguration } from './msal/msal.guard.config';
 import { MsalBroadcastService, MsalService } from './msal';
 import { InteractionType } from '@azure/msal-browser';
 import { Subject } from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import { JwtHelper } from './helpers/jwt-helper';
 import { ChangeProfilePictureComponent } from './components/change-profile-picture/change-profile-picture.component';
 import { Document } from './models/document';

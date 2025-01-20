@@ -1,6 +1,8 @@
 @use "@angular/material" as mat;
 @use "./m3-theme";
 
+@use "fonts";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,7 +21,8 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "FS Me Web", sans-serif;
+  color: #333333;
 }
 
 .custom-dialog-container .mat-mdc-dialog-container {
@@ -29,13 +32,13 @@ body {
 }
 
 a:hover {
-  color: #434343;
+  color: #333333;
   text-decoration-line: none !important;
   cursor: pointer !important;
 }
 
 a {
-  color: #434343;
+  color: #333333;
   text-decoration-line: none !important;
 }
 
@@ -45,17 +48,15 @@ input[type="file"] {
 
 h1 {
   text-align: left;
-  font: normal normal normal 35px/50px Segoe UI;
   letter-spacing: 0;
-  color: #434343;
+  color: #333333;
   opacity: 1;
 }
 
 h2 {
   text-align: left;
-  font: normal normal normal 25px/50px Segoe UI;
   letter-spacing: 0;
-  color: #434343;
+  color: #333333;
   opacity: 1;
 }
 
@@ -144,27 +145,17 @@ button fa-icon {
 
 .instruction {
   margin-top: 15px;
-  font-style: normal;
-  font-variant-ligatures: normal;
-  font-variant-caps: normal;
-  font-variant-numeric: normal;
-  font-variant-east-asian: normal;
-  font-weight: normal;
-  font-stretch: normal;
-  font-family: "Segoe UI", serif;
 }
 
 .mat-mdc-button {
   text-align: left;
-  font: normal normal 400 18px/27px Segoe UI;
   letter-spacing: 0;
-  color: #434343;
+  color: #333333;
   opacity: 1;
   padding: 10px !important;
 }
 
 .override-button {
-  font: normal normal normal 17px/17px Segoe UI !important;
   padding-top: 5px !important;
   padding-bottom: 5px !important;
   border: 1px solid gray !important;
@@ -190,9 +181,8 @@ button fa-icon {
   border: 1px solid #d1d1d1 !important;
   opacity: 1 !important;
   text-align: left !important;
-  font: normal normal bold 21px/31px Segoe UI !important;
   letter-spacing: 0 !important;
-  color: #434343 !important;
+  color: #333333 !important;
   min-width: 325px;
   min-height: 375px;
   max-height: 375px;
@@ -203,8 +193,7 @@ button fa-icon {
 }
 
 .mat-mdc-card-content {
-  font: normal normal 400 18px/27px Segoe UI !important;
-  color: #434343 !important;
+  color: #333333 !important;
   min-height: 240px;
   flex-direction: column;
   justify-content: space-between;
@@ -218,9 +207,8 @@ button fa-icon {
 .mat-mdc-card-title {
   border-bottom: 1px solid gray !important;
   text-align: left !important;
-  font: normal normal bold 21px/31px Segoe UI !important;
   letter-spacing: 0;
-  color: #434343 !important;
+  color: #333333 !important;
   opacity: 1;
   margin-left: 10px !important;
   padding-left: 10px !important;
@@ -239,7 +227,6 @@ button fa-icon {
 }
 
 #push {
-  font: normal normal normal 17px/17px Segoe UI;
   margin-left: auto;
   border: gray 1px solid;
   padding-top: 10px;
@@ -249,7 +236,6 @@ button fa-icon {
 .row-name {
   text-align: left;
   padding-right: 10px;
-  font: normal normal normal 20px/35px Segoe UI !important;
   letter-spacing: 0;
   color: #707070 !important;
   opacity: 1;
@@ -268,9 +254,8 @@ button fa-icon {
 
 .user-data {
   text-align: left;
-  font: normal normal normal 20px/35px Segoe UI !important;
   letter-spacing: 0;
-  color: #000000 !important;
+  color: #333333 !important;
   opacity: 1;
 }
 
@@ -293,21 +278,6 @@ button fa-icon {
   }
 }
 
-@media only screen and (max-width: 550px) {
-  .row-name {
-    font: normal normal normal 15px/30px Segoe UI !important;
-  }
-  .user-data {
-    font: normal normal normal 14px/30px Segoe UI !important;
-  }
-  .data-row {
-    align-items: center;
-  }
-  h1 {
-    font: normal normal normal 30px/50px Segoe UI;
-  }
-}
-
 @media only screen and (max-width: 450px) {
   .cardholder {
     display: flex;
@@ -323,7 +293,6 @@ button fa-icon {
 
 @media only screen and (max-width: 350px) {
   h1 {
-    font: normal normal normal 20px/30px Segoe UI;
     margin: 0;
   }
 }

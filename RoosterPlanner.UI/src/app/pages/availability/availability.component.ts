@@ -17,7 +17,7 @@ import {
   CalendarEvent,
   CalendarView,
 } from 'angular-calendar';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Moment } from 'moment';
 import { CustomDateFormatter } from '../../helpers/custom-date-formatter.provider';
 import { MatCalendar } from '@angular/material/datepicker';

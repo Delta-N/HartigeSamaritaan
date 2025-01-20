@@ -145,6 +145,8 @@ $light-theme: mat.define-theme(
     ),
     typography: (
       use-system-variables: true,
+      brand-family: "'FS Me Web', sans-serif",
+      plain-family: "'FS Me Web', sans-serif",
     ),
   )
 );
