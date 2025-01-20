@@ -89,7 +89,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHealthChecks()
-    .AddSqlServer(builder.Configuration["ConnectionStrings__RoosterPlannerDatabase"]!, tags: new[] { "database" });
+    .AddSqlServer(builder.Configuration.GetConnectionString("RoosterPlannerDatabase")!, tags: new[] { "database" });
 
 builder.Services.AddLogging();
 
@@ -113,7 +113,7 @@ builder.Services.AddTransient<IRequirementService, RequirementService>();
 builder.Services.AddDbContext<RoosterPlannerContext>(options =>
 {
     options
-        .UseSqlServer(builder.Configuration["ConnectionStrings__RoosterPlannerDatabase"], o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+        .UseSqlServer(builder.Configuration.GetConnectionString("RoosterPlannerDatabase"), o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -132,7 +132,7 @@ builder.AddEmailServices();
 var app = builder.Build();
 
 // This works perfectly fine for a simple application running on a single instance.
-if (!string.IsNullOrEmpty(builder.Configuration["ConnectionStrings__RoosterPlannerDatabase"]))
+if (!string.IsNullOrEmpty(builder.Configuration.GetConnectionString("RoosterPlannerDatabase")))
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<RoosterPlannerContext>();
