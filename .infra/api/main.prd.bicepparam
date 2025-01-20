@@ -2,7 +2,7 @@ using './main.bicep'
 
 param environment = 'prd'
 param projectPrefix = 'roosterplanner'
-param aspSkuName = 'B1'
+param aspSkuName = 'B2'
 param aspSkuTier = 'Basic'
 param dbSkuName = 'Basic'
 param dbSkuTier = 'Basic'
