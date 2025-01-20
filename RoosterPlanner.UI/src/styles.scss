@@ -21,7 +21,7 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "FSMeW01-Regular", sans-serif;
 }
 
 .custom-dialog-container .mat-mdc-dialog-container {
@@ -47,7 +47,6 @@ input[type="file"] {
 
 h1 {
   text-align: left;
-  font-family: "FSMeW01-Regular", sans-serif;
   letter-spacing: 0;
   color: #434343;
   opacity: 1;
@@ -55,7 +54,6 @@ h1 {
 
 h2 {
   text-align: left;
-  font: normal normal normal 25px/50px Segoe UI;
   letter-spacing: 0;
   color: #434343;
   opacity: 1;
@@ -153,7 +151,6 @@ button fa-icon {
   font-variant-east-asian: normal;
   font-weight: normal;
   font-stretch: normal;
-  font-family: "Segoe UI", serif;
 }
 
 .mat-mdc-button {
