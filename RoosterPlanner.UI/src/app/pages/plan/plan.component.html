@@ -6,26 +6,18 @@
     <div class="calendar">
       <div class="calendar-wrapper">
         <mat-calendar
-          #calendar
-          [(selected)]="selectedDate"
-          (selectedChange)="dateChanged()"
+          id="calendar"
+          (selectedChange)="setSelectedCalenderDate($event)"
           [minDate]="minDate"
           [maxDate]="maxDate"
         >
         </mat-calendar>
       </div>
       <div class="tasks-container">
-        <div
-          class="tasktoggle"
-          *ngFor="let item of availabilityData.projectTasks"
-        >
+        <div class="tasktoggle" *ngFor="let item of availabilityData?.projectTasks ?? []">
           <ng-template #popContent
             >{{ item.description }} <br />
-            <a
-              href="task/{{ item.id }}"
-              style="text-decoration: underline; color: blue"
-              >details</a
-            >
+            <a href="task/{{ item.id }}" style="text-decoration: underline; color: blue">details</a>
           </ng-template>
 
           <mat-checkbox
@@ -45,28 +37,19 @@
       </div>
       <div class="legend">
         <div class="legend-item">
-          <div
-            class="mat-calendar-body-cell-content legend-button"
-            style="background: red"
-          >
+          <div class="mat-calendar-body-cell-content legend-button" style="background: red">
             <fa-icon class="legend-icon" [icon]="unavailableIcon"></fa-icon>
           </div>
           Onvoldoende mensen beschikbaar op deze dag.
         </div>
         <div class="row legend-item">
-          <div
-            class="mat-calendar-body-cell-content legend-button"
-            style="background: green"
-          >
+          <div class="mat-calendar-body-cell-content legend-button" style="background: green">
             <fa-icon class="legend-icon" [icon]="availableIcon"></fa-icon>
           </div>
           Voldoende mensen beschikbaar op deze dag.
         </div>
         <div class="row legend-item">
-          <div
-            class="mat-calendar-body-cell-content legend-button"
-            style="background: blue"
-          >
+          <div class="mat-calendar-body-cell-content legend-button" style="background: blue">
             <fa-icon class="legend-icon" [icon]="scheduledIcon"></fa-icon>
           </div>
           Alle diensten op deze dag zijn ingeroosterd.
@@ -77,21 +60,13 @@
 
   <div class="col-8">
     <div class="flex justify-center gap-2 my-4">
-      <button
-        mat-icon-button
-        class="changeday"
-        (click)="decrement()"
-        [disabled]="prevBtnDisabled"
-      >
+      <button mat-icon-button class="changeday" (click)="decrement()" [disabled]="prevBtnDisabled">
         <mat-icon>navigate_before</mat-icon>
       </button>
-      <div class="date" id="date">{{ viewDate | datePipe }}</div>
-      <button
-        mat-icon-button
-        class="changeday"
-        (click)="increment()"
-        [disabled]="nextBtnDisabled"
-      >
+      @if (currentDate) {
+        <div class="date" id="date">{{ currentDate.toDate() | datePipe }}</div>
+      }
+      <button mat-icon-button class="changeday" (click)="increment()" [disabled]="nextBtnDisabled">
         <mat-icon>navigate_next</mat-icon>
       </button>
     </div>
@@ -112,28 +87,16 @@
         [closeDelay]="1250"
         [openDelay]="250"
         [attr.aria-label]="
-          { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' }
-            | calendarA11y: 'eventDescription'
+          { event: weekEvent.tempEvent || weekEvent.event, locale: 'en' } | calendarA11y: 'eventDescription'
         "
       >
         <div class="flex-container">
-          <div
-            class="row flex-container title"
-            id="title-{{ weekEvent.event.id }}"
-          >
-            <span
-              class="cal-event-title"
-              [ngStyle]="
-                numberOfOverlappingShifts > 4 && { 'font-size': '16px' }
-              "
-              >{{ weekEvent.event.title }}</span
-            >
+          <div class="row flex-container title" id="title-{{ weekEvent.event.id }}">
+            <span class="cal-event-title" [ngStyle]="numberOfOverlappingShifts > 4 && { 'font-size': '16px' }">{{
+              weekEvent.event.title
+            }}</span>
           </div>
-          <div
-            class="row"
-            id="spacer"
-            [ngStyle]="numberOfOverlappingShifts > 7 && { 'font-size': '12px' }"
-          >
+          <div class="row" id="spacer" [ngStyle]="numberOfOverlappingShifts > 7 && { 'font-size': '12px' }">
             <div class="row" id="necessary-{{ weekEvent.event.id }}"></div>
             <div class="row" id="scheduled-{{ weekEvent.event.id }}"></div>
             <div class="row" id="available-{{ weekEvent.event.id }}"></div>
@@ -161,14 +124,13 @@
       "
     >
       <mwl-calendar-day-view
-        #schedule
-        [viewDate]="viewDate"
+        [viewDate]="currentDate"
         [dayStartHour]="startHour"
         [dayEndHour]="endHour"
-        [events]="filteredEvents"
         [refresh]="refresh"
         [eventTemplate]="customEventTemplate"
         [hourSegmentHeight]="15"
+        [events]="filteredEvents"
       >
       </mwl-calendar-day-view>
     </div>
