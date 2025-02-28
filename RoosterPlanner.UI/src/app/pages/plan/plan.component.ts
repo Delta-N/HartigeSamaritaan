@@ -1,10 +1,12 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  inject,
   OnInit,
   Renderer2,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { Breadcrumb } from '../../models/breadcrumb';
@@ -22,11 +24,11 @@ import { Moment } from 'moment';
 import { CustomDateFormatter } from '../../helpers/custom-date-formatter.provider';
 import { MatCalendar } from '@angular/material/datepicker';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { Subject } from 'rxjs';
+import { from, Subject } from 'rxjs';
 import { AvailabilityService } from '../../services/availability.service';
 import { AvailabilityData } from '../../models/availabilitydata';
 import { Task } from 'src/app/models/task';
-import { take } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
 import { TextInjectorService } from '../../services/text-injector.service';
@@ -50,11 +52,16 @@ import {
   ],
 })
 export class PlanComponent implements OnInit, AfterViewInit {
+  private readonly changeDetector = inject(ChangeDetectorRef);
   unavailableIcon = faCalendarTimes;
   availableIcon = faCalendarCheck;
   scheduledIcon = faHandsHelping;
-  @ViewChild('calendar') calendar: MatCalendar<Moment>;
-  @ViewChild('schedule') schedule: CalendarDayViewComponent;
+  readonly calendar = viewChild.required<MatCalendar<Moment>>(
+    MatCalendar<Moment>,
+  );
+  readonly schedule = viewChild.required<CalendarDayViewComponent>(
+    CalendarDayViewComponent,
+  );
 
   project: Project;
   availabilityData: AvailabilityData;
@@ -62,13 +69,11 @@ export class PlanComponent implements OnInit, AfterViewInit {
   shifts: Shift[] = [];
   numberOfOverlappingShifts = 0;
 
-  selectedDate: Moment;
-
   view: CalendarView = CalendarView.Day;
-  viewDate: Date;
+  currentDate: Moment;
 
-  minDate: Date;
-  maxDate: Date;
+  minDate: Moment;
+  maxDate: Moment;
 
   startHour = 12;
   endHour = 17;
@@ -89,40 +94,37 @@ export class PlanComponent implements OnInit, AfterViewInit {
     private router: Router,
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    this.route.paramMap.subscribe(async (params: ParamMap) => {
+  ngOnInit() {
+    this.route.paramMap.subscribe((params: ParamMap) => {
       const projectId: string = params.get('id');
       const date: string = params.get('date');
 
       //get basic data
-      await this.availabilityService
-        .getAvailabilityDataOfProject(projectId)
-        .then((res) => {
-          if (res) {
-            this.availabilityData = res;
-          }
-          this.displayedProjectTasks = this.availabilityData.projectTasks;
-        });
+      from(
+        this.availabilityService.getAvailabilityDataOfProject(projectId),
+      ).subscribe((res) => {
+        if (res) {
+          this.availabilityData = res;
+        }
+        this.displayedProjectTasks = this.availabilityData.projectTasks;
+        this.filterEvents();
+      });
 
-      //getproject
-      await this.projectService.getProject(projectId).then((res) => {
+      from(this.projectService.getProject(projectId)).subscribe((res) => {
         if (res) {
           this.project = res;
           this.minDate =
             moment(this.project.participationStartDate).toDate() >= new Date()
-              ? moment(this.project.participationStartDate).toDate()
-              : moment().startOf('day').toDate();
-          this.maxDate = this.project.participationEndDate;
-          this.calendar.minDate = moment(this.minDate);
-          this.calendar.maxDate = moment(this.maxDate);
-          if (date && date !== 'Invalid Date') {
-            this.viewDate = moment(date).toDate();
-          } else {
-            this.viewDate = this.minDate;
-          }
-          this.calendar.activeDate = moment(this.viewDate);
-          this.calendar.updateTodaysDate();
-          this.dateOrViewChanged();
+              ? moment(this.project.participationStartDate)
+              : moment().startOf('day');
+
+          this.maxDate = moment(this.project.participationEndDate);
+          this.currentDate = moment(
+            date && date !== 'Invalid Date' ? date : this.minDate,
+          );
+
+          this.syncMatCalender();
+          this.getShifts(this.currentDate.toDate()).subscribe();
         }
       });
 
@@ -142,6 +144,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
     const buttons = document.querySelectorAll(
       '.mat-calendar-previous-button, .mat-calendar-next-button',
     );
+
     if (buttons) {
       Array.from(buttons).forEach((button) => {
         this.renderer.listen(button, 'click', () => {
@@ -150,47 +153,54 @@ export class PlanComponent implements OnInit, AfterViewInit {
       });
     }
 
-    this.calendar.stateChanges.pipe(take(1)).subscribe(() => {
-      this.getShifts(this.viewDate).then(() => {
-        this.colorInMonth();
-      });
-    });
+    const calendar = this.calendar();
+
+    calendar.stateChanges
+      .pipe(
+        take(1),
+        switchMap(() => this.getShifts(this.currentDate.toDate())),
+        tap(() => this.colorInMonth()),
+      )
+      .subscribe();
   }
 
-  changeDate(date: Date): void {
-    this.viewDate = date;
-    this.calendar.selected = moment(this.viewDate);
-    this.calendar.activeDate = moment(this.viewDate);
-    this.dateOrViewChanged();
+  changeDate(date: Moment): void {
+    this.currentDate = date;
+    this.syncMatCalender();
+    this.updateShifts();
   }
 
-  dateChanged() {
-    this.calendar.activeDate = this.selectedDate;
-    this.changeDate(this.selectedDate.toDate());
+  setSelectedCalenderDate(newDate: Moment) {
+    this.changeDate(newDate);
   }
 
   increment(): void {
-    this.changeDate(moment(this.viewDate).add(1, 'day').toDate());
+    const newDate = this.currentDate.add(1, 'day');
+    this.changeDate(newDate);
   }
 
   decrement(): void {
-    this.changeDate(moment(this.viewDate).subtract(1, 'day').toDate());
+    const newDate = this.currentDate.subtract(1, 'day');
+    this.changeDate(newDate);
   }
 
-  async dateOrViewChanged(): Promise<void> {
-    await this.getShifts(this.viewDate).then(() => {
-      if (this.viewDate < this.minDate) {
-        this.changeDate(this.minDate);
-      } else if (this.viewDate > this.maxDate) {
-        this.changeDate(this.maxDate);
-      }
+  syncMatCalender() {
+    const calendar = this.calendar();
+    calendar.selected = this.currentDate;
+    calendar.activeDate = this.currentDate;
+    calendar.monthView.activeDate = this.currentDate;
+  }
+
+  updateShifts() {
+    if (this.currentDate < this.minDate) {
+      this.changeDate(this.minDate);
+    } else if (this.currentDate > this.maxDate) {
+      this.changeDate(this.maxDate);
+    }
+
+    this.getShifts(this.currentDate.toDate()).subscribe(() => {
+      this.changeDetector.detectChanges();
     });
-    this.prevBtnDisabled =
-      moment(this.viewDate).startOf('day').subtract(1, 'day') <
-      moment(this.minDate).startOf('day');
-    this.nextBtnDisabled =
-      moment(this.viewDate).startOf('day').add(1, 'day') >
-      moment(this.maxDate).startOf('day');
   }
 
   Plan(id: string | number) {
@@ -224,68 +234,65 @@ export class PlanComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async getShifts(date: Date) {
-    await this.shiftService
-      .getAllShiftsOnDate(
+  getShifts(date: Date) {
+    return from(
+      this.shiftService.getAllShiftsOnDate(
         this.project.id,
         moment(date).set('hour', 12).toDate(),
-      )
-      .then(async (res) => {
-        this.shifts = res;
-      });
-    if (this.shifts.length > 0) {
-      this.numberOfOverlappingShifts = AvailabilityComponent.calculateOverlap(
-        this.shifts,
-      );
-      this.addEvents();
-      setTimeout(() => {
-        this.fillSpacer();
-      }, 100);
-    } else {
-      this.setDefaultHours();
-    }
-  }
+      ),
+    ).pipe(
+      tap((shifts) => {
+        this.shifts = shifts;
 
-  addEvents() {
-    this.allEvents = [];
-    this.shifts.forEach((s) => {
-      const event: CalendarEvent = {
-        start: moment(s.date)
-          .set('hour', Number(s.startTime.substring(0, 2)))
-          .set('minutes', Number(s.startTime.substring(3, 6)))
-          .toDate(),
+        if (!this.shifts.length) {
+          this.setDefaultHours();
+        }
 
-        end: moment(s.date)
-          .set('hour', Number(s.endTime.substring(0, 2)))
-          .set('minutes', Number(s.endTime.substring(3, 6)))
-          .toDate(),
+        this.numberOfOverlappingShifts = AvailabilityComponent.calculateOverlap(
+          this.shifts,
+        );
 
-        title: s.task.name,
-        color: TextInjectorService.getColor(s.task.color),
-        id: s.id,
-      };
+        this.allEvents = this.shifts.map(
+          (s): CalendarEvent => ({
+            start: moment(s.date)
+              .set('hour', Number(s.startTime.substring(0, 2)))
+              .set('minutes', Number(s.startTime.substring(3, 6)))
+              .toDate(),
 
-      this.allEvents.push(event);
-    });
-    this.filterEvents();
-    this.refresh.next();
+            end: moment(s.date)
+              .set('hour', Number(s.endTime.substring(0, 2)))
+              .set('minutes', Number(s.endTime.substring(3, 6)))
+              .toDate(),
+
+            title: s.task.name,
+            color: TextInjectorService.getColor(s.task.color),
+            id: s.id,
+          }),
+        );
+
+        this.filterEvents();
+
+        this.prevBtnDisabled =
+          moment(this.currentDate).startOf('day').subtract(1, 'day') <
+          moment(this.minDate).startOf('day');
+        this.nextBtnDisabled =
+          moment(this.currentDate).startOf('day').add(1, 'day') >
+          moment(this.maxDate).startOf('day');
+
+        setTimeout(() => {
+          this.fillSpacer();
+        }, 100);
+      }),
+    );
   }
 
   filterEvents() {
-    this.filteredEvents = [];
-    this.allEvents.forEach((e) => {
-      let contains = false;
-      this.displayedProjectTasks.forEach((d) => {
-        if (d.name == e.title) {
-          contains = true;
-        }
-      });
-      if (contains) {
-        this.filteredEvents.push(e);
-      }
-    });
+    this.filteredEvents = this.allEvents.filter((e) =>
+      this.displayedProjectTasks.some((d) => d.name == e.title),
+    );
 
     this.setHours();
+    this.refresh.next();
   }
 
   setDefaultHours() {
@@ -295,12 +302,10 @@ export class PlanComponent implements OnInit, AfterViewInit {
   }
 
   setHours() {
-    const start: Date[] = [];
-    this.filteredEvents.forEach((fe) => start.push(fe.start));
-    start.sort();
+    const start = this.filteredEvents.map((e) => e.start);
+    const end = this.filteredEvents.map((e) => e.end);
 
-    const end: Date[] = [];
-    this.filteredEvents.forEach((fe) => end.push(fe.end));
+    start.sort();
     end.sort();
 
     if (start && start.length > 0) {

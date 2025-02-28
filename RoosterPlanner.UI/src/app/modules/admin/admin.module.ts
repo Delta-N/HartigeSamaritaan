@@ -7,10 +7,10 @@ import { AllTasksComponent } from '../../pages/all-tasks/all-tasks.component';
 import { AddCategoryComponent } from '../../components/add-category/add-category.component';
 import { AddAdminComponent } from '../../components/add-admin/add-admin.component';
 import {
-	ColorPipe,
-	FilterPipe,
-	ManagerFilterPipe,
-	ProjectClosedPipe,
+  ColorPipe,
+  FilterPipe,
+  ManagerFilterPipe,
+  ProjectClosedPipe,
 } from '../../helpers/filter.pipe';
 import { AddTaskComponent } from '../../components/add-task/add-task.component';
 import { AddManagerComponent } from '../../components/add-manager/add-manager.component';
@@ -25,28 +25,28 @@ import { AddCertificateComponent } from '../../components/add-certificate/add-ce
 import { AddRequirementComponent } from '../../components/add-requirement/add-requirement.component';
 
 @NgModule({
-	declarations: [
-		AdminComponent,
-		AllTasksComponent,
-		AddCategoryComponent,
-		AddAdminComponent,
-		FilterPipe,
-		ManagerFilterPipe,
-		AddTaskComponent,
-		AddManagerComponent,
-		CreateProjectComponent,
-		CategoryComponent,
-		UploadPrivacyPolicyComponent,
-		EmployeeComponent,
-		AddCertificatetypeComponent,
-		CertificateTypeComponent,
-		AddCertificateComponent,
-		ColorPipe,
-		ProjectClosedPipe,
-		AddRequirementComponent,
-	],
-	imports: [CommonModule, AdminRoutingModule, MaterialModule, ManageModule],
-	exports: [ColorPipe],
-	providers: [],
+  declarations: [
+    AdminComponent,
+    AllTasksComponent,
+    AddCategoryComponent,
+    AddAdminComponent,
+    FilterPipe,
+    ManagerFilterPipe,
+    AddTaskComponent,
+    AddManagerComponent,
+    CreateProjectComponent,
+    CategoryComponent,
+    UploadPrivacyPolicyComponent,
+    EmployeeComponent,
+    AddCertificatetypeComponent,
+    CertificateTypeComponent,
+    AddCertificateComponent,
+    ColorPipe,
+    ProjectClosedPipe,
+    AddRequirementComponent,
+  ],
+  imports: [CommonModule, AdminRoutingModule, MaterialModule, ManageModule],
+  exports: [ColorPipe],
+  providers: [],
 })
 export class AdminModule {}
