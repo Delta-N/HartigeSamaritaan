@@ -39,7 +39,7 @@
     "angular-calendar": "^0.31.1",
     "bootstrap": "^5.3.3",
     "date-fns": "^4.1.0",
-    "jspdf": "^2.5.1",
+    "jspdf": "^3.0.0",
     "luxon": "^3.4.4",
     "minimatch": "^9.0.4",
     "moment": "^2.30.1",
