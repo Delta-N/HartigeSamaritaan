@@ -50,10 +50,6 @@ import { MaterialModule } from '../material/material.module';
 import { ManageRoutingModule } from './manage-routing.module';
 import { calender } from '../shared/calendar.module';
 
-// export function momentAdapterFactory() {
-//   return adapterFactory(moment);
-// }
-
 @NgModule({
   declarations: [
     ManageComponent,
