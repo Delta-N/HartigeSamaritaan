@@ -718,7 +718,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       const child: HTMLElement = element.children[i] as HTMLElement;
       child.style.width = '26px';
       child.style.height = '26px';
-      child.style.fontSize = '0px';
+      child.style.fontSize = '16px !important';
+      child.style.padding = '0px';
     }
   }
 }
