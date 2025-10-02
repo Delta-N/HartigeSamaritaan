@@ -96,7 +96,6 @@
 							</a>
 						</span>
 						<span *ngIf="!projectTasks || projectTasks.length==0">N.N.T.B.</span>
-						<mat-card-actions class="action-anchor"></mat-card-actions>
 					</mat-card-content>
 					<mat-card-actions class="action-anchor " *ngIf="isAdmin || isManager">
 						<button mat-button (click)="modTask('add')"

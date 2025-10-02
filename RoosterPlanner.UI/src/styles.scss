@@ -77,7 +77,6 @@ button fa-icon {
 }
 
 .action-anchor {
-  position: absolute !important;
   bottom: 15px;
   font-weight: 300;
 
@@ -184,8 +183,6 @@ button fa-icon {
   letter-spacing: 0 !important;
   color: #333333 !important;
   min-width: 325px;
-  min-height: 375px;
-  max-height: 375px;
 }
 
 .mat-mdc-card-actions {

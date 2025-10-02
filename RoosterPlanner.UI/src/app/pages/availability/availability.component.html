@@ -72,6 +72,16 @@
 
   <div class="col-8">
     <div class="row datebox">
+      <div class="date-title">
+        <button mat-icon-button class="changeday" (click)="decrement()" [disabled]="prevBtnDisabled">
+          <mat-icon>navigate_before</mat-icon>
+        </button>
+        <div class="date" id="date">{{ viewDate | datePipe }}</div>
+        <button mat-icon-button class="changeday" (click)="increment()" [disabled]="nextBtnDisabled">
+          <mat-icon>navigate_next</mat-icon>
+        </button>
+      </div>
+      <div class="col">
       <button
         mat-button
         class="accept btnhidden schedule-button"
@@ -82,15 +92,7 @@
         <fa-icon [icon]="checkIcon"></fa-icon>
         Dag beschikbaar
       </button>
-      <div class="date-title">
-        <button mat-icon-button class="changeday" (click)="decrement()" [disabled]="prevBtnDisabled">
-          <mat-icon>navigate_before</mat-icon>
-        </button>
-        <div class="date" id="date">{{ viewDate | datePipe }}</div>
-        <button mat-icon-button class="changeday" (click)="increment()" [disabled]="nextBtnDisabled">
-          <mat-icon>navigate_next</mat-icon>
-        </button>
-      </div>
+      </div><div class="col">
       <button
         mat-button
         class="refuse btnhidden schedule-button"
@@ -101,6 +103,7 @@
         <fa-icon [icon]="crossIcon"></fa-icon>
         Dag onbeschikbaar
       </button>
+      </div>
     </div>
     <div class="row rowhidden">
       <button mat-button class="accept schedule-button" (click)="acceptDay()">
